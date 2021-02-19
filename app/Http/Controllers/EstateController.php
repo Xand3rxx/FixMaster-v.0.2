@@ -88,9 +88,9 @@ class EstateController extends Controller
      * @param  \App\Models\Estate  $estate
      * @return \Illuminate\Http\Response
      */
-    public function estateSummary($estate)
+    public function estateSummary($language, Estate $estate)
     {
-        dd($estate);
+        dd($language, $estate);
     }
 
     /**
