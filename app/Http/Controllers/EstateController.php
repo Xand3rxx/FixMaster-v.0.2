@@ -15,18 +15,18 @@ class EstateController extends Controller
      */
     public function index()
     {
-        $estates = Estate::select('estate_name', 'first_name', 'last_name', 'email', 'phone_number', 'state_id', 'lga_id', 'is_active', 'slug', 'created_at')
+        $estates = Estate::select('id', 'estate_name', 'first_name', 'last_name', 'email', 'phone_number', 'state_id', 'lga_id', 'is_active', 'slug', 'created_at')
             ->orderBy('estates.estate_name', 'ASC')
             ->latest('estates.created_at')
             ->get();
 
         $i = 0;
-        return response()->view('admin.estate.list', compact('estates','i'));
+        return view('admin.estate.list', compact('estates','i'));
     }
 
     public function showEstates()
     {
-        $estates = Estate::select('estate_name', 'first_name', 'last_name', 'email', 'phone_number', 'state_id', 'lga_id', 'is_active', 'slug', 'created_at')
+        $estates = Estate::select('id', 'estate_name', 'first_name', 'last_name', 'email', 'phone_number', 'state_id', 'lga_id', 'is_active', 'slug', 'created_at')
             ->orderBy('estates.estate_name', 'ASC')
             ->latest('estates.created_at')
             ->get();
@@ -88,9 +88,9 @@ class EstateController extends Controller
      * @param  \App\Models\Estate  $estate
      * @return \Illuminate\Http\Response
      */
-    public function show(Estate $estate)
+    public function estateSummary($estate)
     {
-        //
+        dd($estate);
     }
 
     /**
