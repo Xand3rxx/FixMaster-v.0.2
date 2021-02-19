@@ -43,12 +43,12 @@
     <ul class="nav nav-aside">
       <li class="nav-label">Components</li>
       <li class="nav-item {{ Route::currentRouteNamed('admin.index') ? 'active' : '' }}"><a href="{{ route('admin.index', app()->getLocale()) }}" class="nav-link"><i data-feather="airplay"></i> <span>Home</span></a></li>
-      
+
       <li class="nav-item"><a href="" class="nav-link"><i data-feather="activity"></i> <span>Activity Log</span></a></li>
 
       <li class="nav-item with-sub">
         <a href="" class="nav-link"><i data-feather="percent"></i> <span>Discount/Promotion</span></a>
-        <ul> 
+        <ul>
           <li class=""><a href="#">Add</a></li>
           <li class=""><a href="#">List</a></li>
         </ul>
@@ -56,10 +56,9 @@
 
       <li class="nav-item with-sub">
         <a href="" class="nav-link"><i data-feather="home"></i> <span>Estate Management</span></a>
-        <ul> 
-          <li class=""><a href="#">Email</a></li>
-          <li class=""><a href="#">In-app</a></li>
-          <li class=""><a href="#">SMS</a></li>
+        <ul>
+          <li class=""><a href="{{ route('admin.add_estate', app()->getLocale()) }}">Add</a></li>
+          <li class=""><a href="{{ route('admin.list_estate', app()->getLocale()) }}">List</a></li>
         </ul>
       </li>
 
@@ -71,7 +70,7 @@
 
       <li class="nav-item with-sub">
         <a href="" class="nav-link"><i data-feather="crop"></i> <span>Loyalty Management</span></a>
-        <ul> 
+        <ul>
           <li class=""><a href="#">Add</a></li>
           <li class=""><a href="#">List</a></li>
         </ul>
@@ -79,7 +78,7 @@
 
       <li class="nav-item with-sub">
         <a href="" class="nav-link"><i data-feather="message-circle"></i> <span>Messages</span></a>
-        <ul> 
+        <ul>
           <li class=""><a href="#">Inbox</a></li>
           <li class=""><a href="#">Sent</a></li>
         </ul>
@@ -87,31 +86,31 @@
 
       <li class="nav-item with-sub">
         <a href="" class="nav-link"><i data-feather="bell"></i> <span>Notification Management</span></a>
-        <ul> 
+        <ul>
           <li class=""><a href="#">Email</a></li>
           <li class=""><a href="#">In-app</a></li>
           <li class=""><a href="#">SMS</a></li>
         </ul>
       </li>
-      
+
         <li class="nav-item with-sub">
           <a href="" class="nav-link"><i data-feather="credit-card"></i> <span>Payments</span></a>
-          <ul> 
+          <ul>
             <li class=""><a href="#">Disbursed</a></li>
             <li class=""><a href="#">Received</a></li>
           </ul>
         </li>
-      
+
         <li class="nav-item with-sub ">
           <a href="#" class="nav-link"><i data-feather="credit-card"></i> <span>Payment Gateway</span></a>
-          <ul> 
+          <ul>
             <li class=""><a href="#">List</a></li>
           </ul>
         </li>
 
         <li class="nav-item with-sub">
           <a href="" class="nav-link"><i data-feather="star"></i> <span>Rating</span></a>
-          <ul> 
+          <ul>
             <li class=""><a href="#">Category Rating</a></li>
             <li class=""><a href="#">Job Rating</a></li>
           </ul>
@@ -119,7 +118,7 @@
 
         <li class="nav-item with-sub">
           <a href="" class="nav-link"><i data-feather="external-link"></i> <span>Referral</span></a>
-          <ul> 
+          <ul>
             <li class=""><a href="#">Add</a></li>
             <li class=""><a href="#">List</a></li>
           </ul>
@@ -177,11 +176,11 @@
       <li class="nav-item"><a href="#" class="nav-link"><i data-feather="thumbs-up"></i> <span>Warranty Management</span></a></li>
 
 
-      
+
       <li class="nav-label mg-t-25">Users</li>
       <li class="nav-item with-sub">
         <a href="" class="nav-link"><i data-feather="user-check"></i> <span>Adminstrators</span></a>
-        <ul> 
+        <ul>
           <li class=""><a href="#">Add</a></li>
           <li class=""><a href="#">List</a></li>
         </ul>
@@ -191,7 +190,7 @@
 
         <li class="nav-item with-sub">
           <a href="" class="nav-link"><i data-feather="wind"></i> <span>CSE</span></a>
-          <ul> 
+          <ul>
             <li class=""><a href="#">Add</a></li>
             <li class=""><a href="#">List</a></li>
           </ul>
@@ -199,7 +198,7 @@
 
         <li class="nav-item with-sub">
           <a href="" class="nav-link"><i data-feather="wind"></i> <span>Franchise</span></a>
-          <ul> 
+          <ul>
             <li class=""><a href="#">Add</a></li>
             <li class=""><a href="#">List</a></li>
           </ul>
@@ -207,14 +206,14 @@
 
         <li class="nav-item with-sub">
           <a href="" class="nav-link"><i data-feather="zap"></i> <span>Technicians</span></a>
-          <ul> 
+          <ul>
             <li class=""><a href="#">Add</a></li>
             <li class=""><a href="#">List</a></li>
           </ul>
         </li>
         <li class="nav-item with-sub">
           <a href="" class="nav-link"><i data-feather="zap"></i> <span>Quality Assurance</span></a>
-          <ul> 
+          <ul>
             <li class=""><a href="#">Add</a></li>
             <li class=""><a href="#">List</a></li>
           </ul>
