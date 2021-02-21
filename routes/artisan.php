@@ -16,6 +16,10 @@ Route::get('/', function () {
     return redirect(app()->getLocale());
 });
 
+Route::get('another', function () {
+    return dd(request()->url(), request()->path());
+});
+
 
 //Clear configurations:
 Route::get('/config-clear', function () {
