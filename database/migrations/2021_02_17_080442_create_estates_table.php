@@ -19,6 +19,7 @@ class CreateEstatesTable extends Migration
             $table->collation = 'utf8mb4_unicode_ci';
 
             $table->id();
+            $table->uuid('uuid')->unique();
             $table->foreignId('state_id');
             $table->foreignId('lga_id');
             $table->string('first_name');
@@ -33,6 +34,7 @@ class CreateEstatesTable extends Migration
             $table->text('full_address');
             $table->string('estate_name')->unique();
             $table->string('town');
+            $table->string('landmark');
             $table->enum('is_active', ['0', '1'])->default('0');
             $table->string('slug');
             $table->timestamps();

@@ -41,7 +41,7 @@ Route::prefix('/admin')->group(function () {
         Route::get('/estate/list',      [\App\Http\Controllers\EstateController::class, 'index'])->name('list_estate');
         Route::get('/estate/add',      [\App\Http\Controllers\EstateController::class, 'create'])->name('add_estate');
         Route::post('/estate/add',      [\App\Http\Controllers\EstateController::class, 'store'])->name('store_estate');
-        Route::get('/estate/summary/{estate}',      [\App\Http\Controllers\EstateController::class, 'estateSummary'])->name('estate_summary');
+        Route::get('/estate/summary/{estate:uuid}',      [\App\Http\Controllers\EstateController::class, 'estateSummary'])->name('estate_summary');
     });
 });
 

@@ -51,7 +51,7 @@
                                 <tbody>
                                 @foreach ($estates as $estate)
                                         <tr>
-                                            <td class="tx-color-03 tx-center">{{ ++$i }}</td>
+                                            <td class="tx-color-03 tx-center">{{ $loop->iteration }}</td>
                                             <td class="tx-medium">{{ $estate['estate_name'] }}</td>
                                             <td class="tx-medium">{{ $estate['first_name'] .' '.$estate['last_name'] }}</td>
                                             <td class="tx-medium">{{ $estate['email'] }}</td>
@@ -68,7 +68,7 @@
                                                 <div class="dropdown-file">
                                                     <a href="" class="dropdown-link" data-toggle="dropdown"><i data-feather="more-vertical"></i></a>
                                                     <div class="dropdown-menu dropdown-menu-right">
-                                                        <a href="{{ route('admin.estate_summary', [ 'estate'=>$estate->id, 'locale'=>app()->getLocale() ]) }}" class="dropdown-item details text-primary"><i class="far fa-user"></i> Summary</a>
+                                                        <a href="{{ route('admin.estate_summary', [ 'estate'=>$estate['uuid'], 'locale'=>app()->getLocale() ]) }}" class="dropdown-item details text-primary"><i class="far fa-user"></i> Summary</a>
                                                         <a href="" class="dropdown-item details text-secondary"><i class="fa fa-percent"></i> Discount </a>
                                                         <a href="" class="dropdown-item details text-info"><i class="far fa-edit"></i> Edit</a>
                                                         @if($estate['is_active'] == '1')

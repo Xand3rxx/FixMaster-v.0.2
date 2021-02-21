@@ -8,9 +8,9 @@
                 <div>
                     <nav aria-label="breadcrumb">
                         <ol class="breadcrumb breadcrumb-style1 mg-b-10">
-                            <li class="breadcrumb-item"><a href="">Dashboard</a></li>
-                            <li class="breadcrumb-item"><a href="">Administrators List</a></li>
-                            <li class="breadcrumb-item active" aria-current="page">{{ $admin->estate_name }}</li>
+                            <li class="breadcrumb-item"><a href="{{ route('admin.index', app()->getLocale()) }}">Dashboard</a></li>
+                            <li class="breadcrumb-item"><a href="{{ route('admin.list_estate', app()->getLocale()) }}">Estate List</a></li>
+                            <li class="breadcrumb-item active" aria-current="page">{{ $estate->estate_name }}</li>
                         </ol>
                     </nav>
                     {{-- <h4 class="mg-b-0 tx-spacing--1">Administrators List</h4> --}}
@@ -19,7 +19,7 @@
                 <div class="d-md-block">
                     <a href="" class="btn btn-primary"><i class="fas fa-arrow-left"></i> Back</a>
                     <a href="" class="btn btn-warning"><i class="fas fa-edit"></i> Edit</a>
-                    @if($admin->is_active == 0)
+                    @if($estate->is_active == 0)
                         <a href="" class="btn btn-success"><i class="fas fa-undo"></i> Reinstate</a>
                     @endif
                     <a href="" class="btn btn-danger"><i class="fas fa-trash"></i> Delete</a>
@@ -30,7 +30,7 @@
                 <div class="col-sm-12 col-lg-12">
                     <div class="card mg-b-20 mg-lg-b-25">
                         <div class="card-header pd-y-15 pd-x-20 d-flex align-items-center justify-content-between">
-                            <h6 class="tx-uppercase tx-semibold mg-b-0">{{ $admin->estate_name }} Summary</h6>
+                            <h6 class="tx-uppercase tx-semibold mg-b-0">{{ $estate->estate_name }} Summary</h6>
                             <nav class="nav nav-with-icon tx-13">
                                 <!-- <a href="" class="nav-link"><i data-feather="plus"></i> Add New</a> -->
                             </nav>

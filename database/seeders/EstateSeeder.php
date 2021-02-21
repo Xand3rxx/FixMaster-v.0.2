@@ -4,6 +4,7 @@ namespace Database\Seeders;
 
 use App\Models\Estate;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Str;
 
 class EstateSeeder extends Seeder
 {
@@ -16,6 +17,7 @@ class EstateSeeder extends Seeder
     {
 
         $estate = new Estate();
+        $estate->uuid = Str::uuid('uuid');
         $estate->state_id = 25;
         $estate->lga_id = 362;
         $estate->first_name = 'Joe';
@@ -29,11 +31,13 @@ class EstateSeeder extends Seeder
         $estate->full_address = 'Ikeja GRA';
         $estate->estate_name = 'Parkview Estate';
         $estate->town = 'Ikeja';
+        $estate->landmark = 'House of Assembly';
         $estate->is_active = '1';
         $estate->slug = 'parkview-estate';
         $estate->save();
 
         $estate = new Estate();
+        $estate->uuid = Str::uuid('uuid');
         $estate->state_id = 25;
         $estate->lga_id = 365;
         $estate->first_name = 'Tommy';
@@ -47,11 +51,13 @@ class EstateSeeder extends Seeder
         $estate->full_address = 'Lekki Phase 1 HE';
         $estate->estate_name = 'Beach Resort Estate';
         $estate->town = 'Lekki';
+        $estate->landmark = 'Toll-gate';
         $estate->is_active = '1';
         $estate->slug = 'beach-resort-estate';
         $estate->save();
 
         $estate = new Estate();
+        $estate->uuid = Str::uuid('uuid');
         $estate->state_id = 25;
         $estate->lga_id = 360;
         $estate->first_name = 'Frances';
@@ -65,6 +71,7 @@ class EstateSeeder extends Seeder
         $estate->full_address = 'Agric, Ikorodu';
         $estate->estate_name = 'Gateway Estate';
         $estate->town = 'Ikorodu';
+        $estate->landmark = 'BRT Terminal';
         $estate->is_active = '0';
         $estate->slug = 'gateway-estate';
         $estate->save();
