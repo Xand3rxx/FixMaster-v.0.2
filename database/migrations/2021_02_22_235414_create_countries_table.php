@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateUserTypesTable extends Migration
+class CreateCountriesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,23 +13,17 @@ class CreateUserTypesTable extends Migration
      */
     public function up()
     {
-        Schema::create('user_types', function (Blueprint $table) {
-            $table->id();
+        Schema::create('countries', function (Blueprint $table) {
             $table->engine = 'InnoDB';
             $table->charset = 'utf8mb4';
             $table->collation = 'utf8mb4_unicode_ci';
 
-            $table->foreignId('user_id')
-                ->constrained()
-                ->onUpdate('cascade')
-                ->onDelete('cascade');
+            $table->id();
+            $table->string('name')->unique();
+            $table->string('phonecode', 30)->nullable()->unique();
+            $table->string('currency', 30);
+            $table->string('flagname')->nullable()->unique();
 
-            $table->foreignId('role_id')
-                ->constrained()
-                ->onUpdate('cascade')
-                ->onDelete('cascade');
-
-            $table->string('url', 15);
             $table->timestamps();
         });
     }
@@ -41,6 +35,6 @@ class CreateUserTypesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('user_types');
+        Schema::dropIfExists('countries');
     }
 }
