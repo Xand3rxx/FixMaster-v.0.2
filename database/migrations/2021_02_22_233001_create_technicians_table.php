@@ -29,7 +29,8 @@ class CreateTechniciansTable extends Migration
             $table->foreignId('town_id')->index();
             $table->foreignId('bank_id')->index();
 
-            $table->foreignId('account_id')->index();
+            $table->foreignId('franchisee_id')->nullable();
+
             $table->timestamps();
         });
     }

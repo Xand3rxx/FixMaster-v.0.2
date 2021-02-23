@@ -23,17 +23,14 @@ class CreateCsesTable extends Migration
             $table->string('unique_id')->unique();
 
             $table->foreignId('user_id')->index();
-            $table->foreignId('account_id')->index();
-
-            
+            $table->foreignId('account_id')->index();            
             $table->foreignId('referral_id')->index();
             $table->foreignId('bank_id')->index();
             
             $table->foreignId('franchisee_id')->nullable();
 
-            
-
             $table->timestamps();
+            
             $table->softDeletes();
         });
     }
