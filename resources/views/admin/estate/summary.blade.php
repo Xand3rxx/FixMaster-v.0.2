@@ -17,8 +17,8 @@
                 </div>
 
                 <div class="d-md-block">
-                    <a href="" class="btn btn-primary"><i class="fas fa-arrow-left"></i> Back</a>
-                    <a href="" class="btn btn-warning"><i class="fas fa-edit"></i> Edit</a>
+                    <a href="{{ route('admin.list_estate', app()->getLocale()) }}" class="btn btn-primary"><i class="fas fa-arrow-left"></i> Back</a>
+                    <a href="{{ route('admin.edit_estate', [ 'estate'=>$estate['uuid'], 'locale'=>app()->getLocale() ]) }}" class="btn btn-warning"><i class="fas fa-edit"></i> Edit</a>
                     @if($estate->is_active == 0)
                         <a href="" class="btn btn-success"><i class="fas fa-undo"></i> Reinstate</a>
                     @endif
@@ -48,68 +48,68 @@
                                             <tbody>
                                             <tr>
                                                 <td class="tx-medium">Estate Name</td>
-                                                <td class="tx-color-03"></td>
+                                                <td class="tx-color-03">{{ $estate->estate_name }}</td>
                                             </tr>
                                             <tr>
-                                                <td class="tx-medium">E-Mail</td>
-                                                <td class="tx-color-03"></td>
+                                                <td class="tx-medium">Author</td>
+                                                <td class="tx-color-03"> {{ $estate->first_name .' '. $estate->last_name }} </td>
                                             </tr>
                                             <tr>
                                                 <td class="tx-medium">Phone Number</td>
-                                                <td class="tx-color-03"></td>
+                                                <td class="tx-color-03"> {{ $estate->phone_number }} </td>
                                             </tr>
                                             <tr>
-                                                <td class="tx-medium">Designation</td>
-                                                <td class="tx-color-03"></td>
+                                                <td class="tx-medium">Email</td>
+                                                <td class="tx-color-03"> {{ $estate->email }} </td>
                                             </tr>
                                             <tr>
                                                 <td class="tx-medium">Status</td>
-                                                <td class="tx-color-03"></td>
+                                                <td class="tx-color-03"> @if($estate->is_active == '1') Active @else Inactive @endif </td>
                                             </tr>
                                             <tr>
-                                                <td class="tx-medium">Created By</td>
-                                                <td class="tx-color-03"></td>
+                                                <td class="tx-medium">Date of Birth</td>
+                                                <td class="tx-color-03"> {{ Carbon\Carbon::parse($estate->date_of_birth, 'UTC')->isoFormat('MMMM Do YYYY, h:mm:ssa') }} </td>
+                                            </tr>
+                                            <tr>
+                                                <td class="tx-medium">Identification Type</td>
+                                                <td class="tx-color-03"> {{ $estate->identification_type }} </td>
+                                            </tr>
+                                            <tr>
+                                                <td class="tx-medium">Identification Number</td>
+                                                <td class="tx-color-03"> {{ $estate->identification_number }} </td>
+                                            </tr>
+                                            <tr>
+                                                <td class="tx-medium">Expiry Date</td>
+                                                <td class="tx-color-03"> {{ $estate->expiry_date }} </td>
+                                            </tr>
+                                            <tr>
+                                                <td class="tx-medium">Full Address</td>
+                                                <td class="tx-color-03"> {{ $estate->full_address }} </td>
+                                            </tr>
+                                             <tr>
+                                              <td class="tx-medium">State</td>
+                                              <td class="tx-color-03"> {{ $estate->state->name }} </td>
+                                            </tr>
+                                            <tr>
+                                                <td class="tx-medium">L.G.A</td>
+                                                <td class="tx-color-03"> {{ $estate->lga->name }} </td>
+                                            </tr>
+                                            <tr>
+                                                <td class="tx-medium">Town</td>
+                                                <td class="tx-color-03"> {{ $estate->town }} </td>
+                                            </tr>
+                                            <tr>
+                                              <td class="tx-medium">Landmark</td>
+                                              <td class="tx-color-03"> {{ $estate->landmark }} </td>
                                             </tr>
                                             <tr>
                                                 <td class="tx-medium">Date Created</td>
-                                                <td class="tx-color-03"></td>
+                                                <td class="tx-color-03"> {{ Carbon\Carbon::parse($estate->created_at, 'UTC')->isoFormat('MMMM Do YYYY, h:mm:ssa') }} ({{ $estate->created_at->diffForHumans() }}) </td>
                                             </tr>
                                             <tr>
                                                 <td class="tx-medium">Last Edited</td>
-                                                <td class="tx-color-03"></td>
+                                                <td class="tx-color-03"> @if(!empty($estate->updated_at)) {{ Carbon\Carbon::parse($estate->updated_at, 'UTC')->isoFormat('MMMM Do YYYY, h:mm:ssa') }} @else Never @endif </td>
                                             </tr>
-                                            <tr>
-                                                <td class="tx-medium">Requests Supervised</td>
-                                                <td class="tx-color-03"></td>
-                                            </tr>
-                                            <tr>
-                                                <td class="tx-medium">Payments Disbursed</td>
-                                                <td class="tx-color-03"></td>
-                                            </tr>
-                                            <tr>
-                                                <td class="tx-medium">Messages Sent</td>
-                                                <td class="tx-color-03"></td>
-                                            </tr>
-                                            <tr>
-                                                <td class="tx-medium">Login Count</td>
-                                                <td class="tx-color-03"></td>
-                                            </tr>
-                                            <tr>
-                                                <td class="tx-medium">Last Seen</td>
-                                                <td class="tx-color-03"></td>
-                                            </tr>
-                                            {{-- <tr>
-                                              <td class="tx-medium">Loss Date</td>
-                                              <td class="tx-color-03">March 4 2020</td>
-                                            </tr>
-                                            <tr>
-                                              <td class="tx-medium">Reported Date</td>
-                                              <td class="tx-color-03">June 28 2020</td>
-                                            </tr>
-                                            <tr>
-                                              <td class="tx-medium">Status</td>
-                                              <td class="tx-color-03">Ongoing</td>
-                                            </tr> --}}
                                             </tbody>
                                         </table>
                                     </div>

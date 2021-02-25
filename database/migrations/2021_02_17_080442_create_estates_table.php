@@ -25,11 +25,11 @@ class CreateEstatesTable extends Migration
             $table->string('first_name');
             $table->string('middle_name')->nullable();
             $table->string('last_name');
-            $table->string('email')->unique();
-            $table->string('phone_number', '11')->unique();
+            $table->string('email');
+            $table->string('phone_number', '11');
             $table->string('date_of_birth');
             $table->string('identification_type');
-            $table->string('identification_number')->unique();
+            $table->string('identification_number');
             $table->string('expiry_date');
             $table->text('full_address');
             $table->string('estate_name')->unique();

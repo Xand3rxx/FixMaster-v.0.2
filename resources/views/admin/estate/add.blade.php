@@ -84,7 +84,7 @@
                     </div>
                     <div class="form-row">
                         <div class="form-group col-md-4">
-                            <label>Identification Type <span class="text-danger">*</span></label>
+                            <label>Identification <strong>(ID)</strong> Type <span class="text-danger">*</span></label>
                             <select class="custom-select @error('identification_type') is-invalid @enderror" name="identification_type">
                                 <option>Select...</option>
                                 <option value="National ID">National ID</option>
@@ -100,7 +100,7 @@
                         </div>
 
                         <div class="form-group col-md-4">
-                            <label>Identification Number <span class="text-danger">*</span></label>
+                            <label>Identification <strong>(ID)</strong> Number <span class="text-danger">*</span></label>
                             <input type="text" class="form-control @error('identification_number') is-invalid @enderror" id="identification_number" name="identification_number" placeholder="Identification Number">
                             @error('identification_number')
                             <span class="invalid-feedback" role="alert">
@@ -138,7 +138,7 @@
                     <div class="row row-xs">
                         <div class="col-md-12">
                             <div class="form-row">
-                                <div class="form-group col-md-12">
+                                <div class="form-group col-md-6">
                                     <label for="estate_name">Estate name <span class="text-danger">*</span></label>
                                     <input type="text" class="form-control @error('estate_name') is-invalid @enderror" id="estate_name" name="estate_name" placeholder="Estate name">
                                     @error('estate_name')
@@ -147,9 +147,7 @@
                                             </span>
                                     @enderror
                                 </div>
-                            </div>
-                            <div class="form-row">
-                                <div class="form-group col-md-4">
+                                <div class="form-group col-md-6">
                                     <label for="state_id">State <span class="text-danger">*</span></label>
                                     <select class="custom-select @error('state_id') is-invalid @enderror" id="state_id" name="state_id">
                                         <option>Select...</option>
@@ -163,6 +161,8 @@
                                             </span>
                                     @enderror
                                 </div>
+                            </div>
+                            <div class="form-row">
                                 <div class="form-group col-md-4">
                                     <label for="lga_id">L.G.A <span class="text-danger">*</span></label>
                                     <select class="custom-select @error('lga_id') is-invalid @enderror" id="lga_id" name="lga_id">
@@ -178,6 +178,15 @@
                                     <label for="town">Town <span class="text-danger">*</span></label>
                                     <input type="text" class="form-control @error('town') is-invalid @enderror" id="town" name="town" placeholder="Town">
                                     @error('town')
+                                    <span class="invalid-feedback" role="alert">
+                                                <strong>{{ $message }}</strong>
+                                            </span>
+                                    @enderror
+                                </div>
+                                <div class="form-group col-md-4">
+                                    <label for="landmark">Nearest Landmark <span class="text-danger">*</span></label>
+                                    <input type="text" class="form-control @error('landmark') is-invalid @enderror" id="landmark" name="landmark" placeholder="Nearest Landmark">
+                                    @error('landmark')
                                     <span class="invalid-feedback" role="alert">
                                                 <strong>{{ $message }}</strong>
                                             </span>

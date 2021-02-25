@@ -9,7 +9,7 @@
                 <div>
                     <nav aria-label="breadcrumb">
                         <ol class="breadcrumb breadcrumb-style1 mg-b-10">
-                            <li class="breadcrumb-item"><a href="">Dashboard</a></li>
+                            <li class="breadcrumb-item"><a href="{{ route('admin.index', app()->getLocale()) }}">Dashboard</a></li>
                             <li class="breadcrumb-item active" aria-current="page">Estates List</li>
                         </ol>
                     </nav>
@@ -38,13 +38,10 @@
                                 <tr>
                                     <th class="text-center">#</th>
                                     <th>Estate Name</th>
-                                    <th>Created By</th>
-                                    <th>E-Mail</th>
+                                    <th>Author</th>
                                     <th>Phone Number</th>
-                                    <th>State</th>
-                                    <th>L.G.A</th>
+                                    <th>Clients</th>
                                     <th>Status</th>
-                                    <th>Date Created</th>
                                     <th>Action</th>
                                 </tr>
                                 </thead>
@@ -54,29 +51,26 @@
                                             <td class="tx-color-03 tx-center">{{ $loop->iteration }}</td>
                                             <td class="tx-medium">{{ $estate['estate_name'] }}</td>
                                             <td class="tx-medium">{{ $estate['first_name'] .' '.$estate['last_name'] }}</td>
-                                            <td class="tx-medium">{{ $estate['email'] }}</td>
                                             <td class="tx-medium">{{ $estate['phone_number'] }}</td>
-                                            <td class="tx-medium">{{ $estate['state']->name }}</td>
-                                            <td class="tx-medium">{{ $estate->lga->name }}</td>
+                                            <td class="text-medium">5</td>
                                             @if($estate['is_active'] === '1')
                                                 <td class="text-medium text-success">Active</td>
                                             @else
-                                                <td class="text-medium text-danger">Pending</td>
+                                                <td class="text-medium text-danger">Inactive</td>
                                             @endif
-                                            <td class="text-medium">{{ Carbon\Carbon::parse($estate['created_at'], 'UTC')->isoFormat('MMMM Do YYYY, h:mm:ssa') }}</td>
                                             <td class=" text-center">
                                                 <div class="dropdown-file">
                                                     <a href="" class="dropdown-link" data-toggle="dropdown"><i data-feather="more-vertical"></i></a>
                                                     <div class="dropdown-menu dropdown-menu-right">
                                                         <a href="{{ route('admin.estate_summary', [ 'estate'=>$estate['uuid'], 'locale'=>app()->getLocale() ]) }}" class="dropdown-item details text-primary"><i class="far fa-user"></i> Summary</a>
                                                         <a href="" class="dropdown-item details text-secondary"><i class="fa fa-percent"></i> Discount </a>
-                                                        <a href="" class="dropdown-item details text-info"><i class="far fa-edit"></i> Edit</a>
+                                                        <a href="{{ route('admin.edit_estate', [ 'estate'=>$estate['uuid'], 'locale'=>app()->getLocale() ]) }}" class="dropdown-item details text-info"><i class="far fa-edit"></i> Edit</a>
                                                         @if($estate['is_active'] == '1')
-                                                            <a href="" class="dropdown-item details text-warning"><i class="fas fa-ban"></i> Deactivate</a>
+                                                            <a href="{{ route('admin.deactivate_estate', ['estate'=>$estate->uuid, 'locale'=>app()->getLocale()]) }}" class="dropdown-item details text-warning"><i class="fas fa-ban"></i> Deactivate</a>
                                                         @else
-                                                            <a href="" class="dropdown-item details text-success"><i class="fas fa-undo"></i> Reinstate</a>
+                                                            <a href="{{ route('admin.reinstate_estate', ['estate'=>$estate->uuid, 'locale'=>app()->getLocale()]) }}" class="dropdown-item details text-success"><i class="fas fa-undo"></i> Reinstate</a>
                                                         @endif
-                                                        <a href="" class="dropdown-item details text-danger"><i class="fas fa-trash"></i> Delete</a>
+                                                        <a href="{{ route('admin.delete_estate', ['estate'=>$estate->uuid, 'locale'=>app()->getLocale()]) }}" class="dropdown-item details text-danger"><i class="fas fa-trash"></i> Delete</a>
                                                     </div>
                                                 </div>
                                             </td>

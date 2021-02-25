@@ -42,6 +42,11 @@ Route::prefix('/admin')->group(function () {
         Route::get('/estate/add',      [\App\Http\Controllers\EstateController::class, 'create'])->name('add_estate');
         Route::post('/estate/add',      [\App\Http\Controllers\EstateController::class, 'store'])->name('store_estate');
         Route::get('/estate/summary/{estate:uuid}',      [\App\Http\Controllers\EstateController::class, 'estateSummary'])->name('estate_summary');
+        Route::get('/estate/edit/{estate:uuid}',      [\App\Http\Controllers\EstateController::class, 'edit'])->name('edit_estate');
+        Route::patch('/estate/edit/{estate:uuid}',      [\App\Http\Controllers\EstateController::class, 'update'])->name('update_estate');
+        Route::get('/estate/reinstate/{estate:uuid}',      [\App\Http\Controllers\EstateController::class, 'reinstate'])->name('reinstate_estate');
+        Route::get('/estate/deactivate/{estate:uuid}',      [\App\Http\Controllers\EstateController::class, 'deactivate'])->name('deactivate_estate');
+        Route::get('/estate/delete/{estate:uuid}',      [\App\Http\Controllers\EstateController::class, 'delete'])->name('delete_estate');
     });
 });
 
