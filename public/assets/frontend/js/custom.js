@@ -1,8 +1,8 @@
 $(document).ready(function(){
 
     $(document).on('click', '.register-cse', function(){
-        $('.cse-registration').removeClass('d-none');    
-        $('.technician-registration, .supplier-registration').addClass('d-none');
+        $('.cse-registration').removeClass('d-none');
+        $('.technician-registration, .supplier-registration, .estate-registration').addClass('d-none');
         // scrollDown();
         $('html, body').animate({
             scrollTop: $(".down").offset().top
@@ -10,16 +10,24 @@ $(document).ready(function(){
     });
 
     $(document).on('click', '.register-technician', function(){
-        $('.technician-registration').removeClass('d-none');    
-        $('.cse-registration, .supplier-registration').addClass('d-none');
+        $('.technician-registration').removeClass('d-none');
+        $('.cse-registration, .supplier-registration, .estate-registration').addClass('d-none');
         $('html, body').animate({
             scrollTop: $(".down-1").offset().top
         }, 1500);
     });
 
     $(document).on('click', '.register-supplier', function(){
-        $('.supplier-registration').removeClass('d-none');    
-        $('.cse-registration, .technician-registration').addClass('d-none');
+        $('.supplier-registration').removeClass('d-none');
+        $('.cse-registration, .technician-registration, .estate-registration').addClass('d-none');
+        $('html, body').animate({
+            scrollTop: $(".down-2").offset().top
+        }, 1500);
+    });
+
+    $(document).on('click', '.register-estate', function(){
+        $('.estate-registration').removeClass('d-none');
+        $('.cse-registration, .technician-registration, .supplier-registration').addClass('d-none');
         $('html, body').animate({
             scrollTop: $(".down-2").offset().top
         }, 1500);
@@ -42,26 +50,26 @@ $(document).ready(function(){
     //Hide and Unhide Work Experience form
     $('#work_experience_yes').change(function () {
         if ($(this).prop('checked')) {
-            $('.previous-employment').removeClass('d-none');    
+            $('.previous-employment').removeClass('d-none');
         }
     });
 
     $('#work_experience_no').change(function () {
         if ($(this).prop('checked')) {
-            $('.previous-employment').addClass('d-none');    
+            $('.previous-employment').addClass('d-none');
         }
     });
 
     //Hide and Unhide Work Experience form
     $('#convicted_yes').change(function () {
         if ($(this).prop('checked')) {
-            $('.convicted').removeClass('d-none');    
+            $('.convicted').removeClass('d-none');
         }
     });
 
     $('#convicted_no').change(function () {
         if ($(this).prop('checked')) {
-            $('.convicted').addClass('d-none');    
+            $('.convicted').addClass('d-none');
         }
     });
 });
@@ -80,9 +88,9 @@ function scrollDown(){
     }, 1500);
 }
     // $(".down").click(function() {
-        
+
     //  });
-    
+
     // $(".up").click(function() {
     //      $('html, body').animate({
     //          scrollTop: $(".down").offset().top

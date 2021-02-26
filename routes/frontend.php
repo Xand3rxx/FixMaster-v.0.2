@@ -29,7 +29,8 @@ Route::view('/', 'frontend.index')->name('frontend.index');
 Route::view('/about',                         'frontend.about')->name('frontend.about');
 Route::view('/how-it-works',                 'frontend.how_it_works')->name('frontend.how_it_works');
 Route::view('/why-home-fix',                 'frontend.why_home_fix')->name('frontend.why_home_fix');
-Route::view('/join-us',                     'frontend.careers.index')->name('frontend.careers');
+Route::get('/join-us',                     [App\Http\Controllers\PageController::class, 'index'])->name('frontend.careers');
+Route::post('/estate/add',      [\App\Http\Controllers\EstateController::class, 'store'])->name('frontend.store_estate');
 Route::view('/faq',                         'frontend.faq')->name('frontend.faq');
 
 // Route::view('/service-details', 			'frontend.service_details')->name('frontend.services_details');
