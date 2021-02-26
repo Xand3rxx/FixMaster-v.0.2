@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateUserTypesTable extends Migration
+class CreateClientsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,23 +13,18 @@ class CreateUserTypesTable extends Migration
      */
     public function up()
     {
-        Schema::create('user_types', function (Blueprint $table) {
-            $table->id();
+        Schema::create('clients', function (Blueprint $table) {
             $table->engine = 'InnoDB';
             $table->charset = 'utf8mb4';
             $table->collation = 'utf8mb4_unicode_ci';
 
-            $table->foreignId('user_id')
-                ->constrained()
-                ->onUpdate('cascade')
-                ->onDelete('cascade');
+            $table->id();
 
-            $table->foreignId('role_id')
-                ->constrained()
-                ->onUpdate('cascade')
-                ->onDelete('cascade');
+            $table->foreignId('user_id')->index();
+            $table->foreignId('account_id')->index();
+            $table->foreignId('estate_id')->index();
+            $table->foreignId('profession_id')->index();
 
-            $table->string('url', 15);
             $table->timestamps();
         });
     }
@@ -41,6 +36,6 @@ class CreateUserTypesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('user_types');
+        Schema::dropIfExists('clients');
     }
 }

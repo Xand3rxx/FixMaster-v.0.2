@@ -14,6 +14,7 @@ class PermissionSeeder extends Seeder
      */
     public function run()
     {
+        // Permission::truncate();
         $manageUser = new Permission();
         $manageUser->name = 'Create New Administrator';
         $manageUser->slug = 'create-admin';
@@ -42,6 +43,11 @@ class PermissionSeeder extends Seeder
         $createTasks = new Permission();
         $createTasks->name = 'View Technicians';
         $createTasks->slug = 'view-technicians';
+        $createTasks->save();
+
+        $createTasks = new Permission();
+        $createTasks->name = 'View Clients';
+        $createTasks->slug = 'view-clients';
         $createTasks->save();
     }
 }

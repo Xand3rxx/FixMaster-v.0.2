@@ -54,10 +54,6 @@ class User extends Authenticatable
         static::creating(function ($user) {
             $user->uuid = (string) Str::uuid(); // Create uuid when a new user is to be created 
         });
-
-        static::created(queueable(function ($user) {
-            // dd($user); //
-        }));
     }
 
      /**
