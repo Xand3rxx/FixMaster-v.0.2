@@ -1,6 +1,5 @@
 # FixMaster-v.0.2
-<p align="center"><a href="http://temp.homefix.ng/" target="_blank"><img src="http://temp.homefix.ng/assets/images/home-fix-logo-new.png" height="10em"></a></p>
-
+![FixMaster Logo](http://temp.homefix.ng/)
 
 ## About FixMaster
 
@@ -10,7 +9,7 @@ FixMaster is your best trusted one-call solution for a wide range of home mainte
 ## Fix Master Application Development Procedures
 
 1. CD into the application root directory
-2. Run un  cp .env.example .env
+2. Run un cp .env.example .env
 3. Inside .env file, setup database configurations
 4. Run composer install
 5. Run php artisan key:generate command
@@ -23,7 +22,7 @@ FixMaster is your best trusted one-call solution for a wide range of home mainte
 Step-by-step instruction on how to create permissions for various actions in a feature will appear here. Thanks.
 
 ## Route Procedures
-For the purpose of this app going international in a long run, FixMaster has decided to add languasges in this Phase One.
+For the purpose of this app going international in a long run, FixMaster has decided to add languages option in this Phase One.
 
 1. Creating your sidebar routes alwasys add app()->getLocale() e.g <a href="{{ route('admin.index', app()->getLocale()) }}" <span>Home</span></a> else the application will throw an error.
 2. All users routes should be defined in web.php under the respective User Role prefix.

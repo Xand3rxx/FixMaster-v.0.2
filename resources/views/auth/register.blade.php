@@ -15,11 +15,11 @@
             <div class="col-lg-12 col-md-6 mt-4 mt-sm-0 pt-2 pt-sm-0">
                 <div class="card login_page shadow rounded border-0">
                     <div class="card-body">
-                        {{-- <div class="align-items-center text-center justify-content-center">   
+                        {{-- <div class="align-items-center text-center justify-content-center">
                             <img src="{{ asset('assets/images/home-fix-logo-colored.png')}}" class="img-fluid d-block mx-auto" alt="FixMaster Logo" style="width: 8em; height: auto; margin-top: -70px !important; margin-bottom: -60px !important;">
                         </div> --}}
                         <h4 class="card-title text-center texty"> <img src="{{ asset('assets/images/home-fix-logo-colored.png')}}" class="img-fluid d-block mx-auto" alt="FixMaster Logo" style="width: 6em; height: auto;">Registration</h4>
-                        <form class="login-form mt-4" method="POST" action="{{ route('client.register') }}">
+                        <form class="login-form mt-4" method="POST" action="">
                             @csrf
                             <div class="row">
                                 <div class="col-md-3">
@@ -137,7 +137,7 @@
                                     </div>
                                 </div>
 
-                                <div class="col-md-4">
+                                <div class="col-md-3">
                                     <div class="form-group position-relative">
                                         <label>Town/City <span class="text-danger">*</span></label>
                                         <i data-feather="navigation" class="fea icon-sm icons"></i>
@@ -150,7 +150,20 @@
                                     </div>
                                 </div>
 
-                                <div class="col-md-4">
+                                <div class="col-md-3">
+                                <div class="form-group position-relative">
+                                    <label>Estate </label>
+                                    <i data-feather="navigation" class="fea icon-sm icons"></i>
+                                    <select class="form-control pl-5" name="estate_name" id="estate_name">
+                                        <option selected value="">Select...</option>
+                                        @foreach($activeEstates as $estate)
+                                            <option value="{{ $estate->id }}">{{ $estate->estate_name }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                            </div>
+
+                                <div class="col-md-3">
                                     <div class="form-group position-relative">
                                         <label>Password <span class="text-danger">*</span></label>
                                         <i data-feather="key" class="fea icon-sm icons"></i>
@@ -165,7 +178,7 @@
                                     </div>
                                 </div>
 
-                                <div class="col-md-4">
+                                <div class="col-md-3">
                                     <div class="form-group position-relative">
                                         <label>Confirm Password <span class="text-danger">*</span></label>
                                         <i data-feather="key" class="fea icon-sm icons"></i>
@@ -232,7 +245,7 @@
                     <h5>Service Terms & Conditions</h5>
 
                 </div>
-                
+
             </div>
         </div>
     </div>
@@ -247,14 +260,14 @@
         $('#state_id').on('change',function () {
             let stateId = $('#state_id').find('option:selected').val();
             let stateName = $('#state_id').find('option:selected').text();
-            
+
             // $.ajaxSetup({
             //         headers: {
             //             'X-CSRF_TOKEN':$('meta[name="csrf-token"]').attr('content')
             //         }
             //     });
             $.ajax({
-                url: "{{ route('lga_list') }}",
+                url: "{{ route('lga_list', app()->getLocale()) }}",
                 method: "POST",
                 dataType: "JSON",
                 data: {"_token": "{{ csrf_token() }}", "state_id":stateId},
@@ -268,7 +281,7 @@
                         displayMessage(message, type);
                     }
                 },
-            })  
+            })
         });
     });
 </script>
