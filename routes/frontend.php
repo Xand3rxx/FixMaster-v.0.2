@@ -32,7 +32,7 @@ Route::view('/why-home-fix',                 'frontend.why_home_fix')->name('fro
 Route::view('/join-us',                     'frontend.careers.index')->name('frontend.careers');
 Route::view('/faq',                         'frontend.faq')->name('frontend.faq');
 
-// Route::view('/service-details', 			'frontend.service_details')->name('frontend.services_details');
+Route::view('/service-details', 			'frontend.service_details')->name('frontend.services_details');
 Route::get('/services',                     [App\Http\Controllers\PageController::class, 'services'])->name('frontend.services');
 Route::get('/services/details/{url}',       [App\Http\Controllers\PageController::class, 'serviceDetails'])->name('frontend.services_details');
 Route::post('/services/search',              [App\Http\Controllers\PageController::class, 'searchCategories'])->name('frontend.services_search');

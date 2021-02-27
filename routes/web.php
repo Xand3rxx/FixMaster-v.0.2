@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Admin\User\AdministratorController;
 
 /*
 |--------------------------------------------------------------------------
@@ -24,47 +25,39 @@ use Illuminate\Support\Facades\Route;
 */
 
 
-// Route::prefix('{type}')->group(function () {
-//     Route::get('/',function () {
-//         return dd('i am admin user');
-//     });
+Route::prefix('admin')->group(function () {
+    Route::name('admin.')->group(function () {
+        Route::view('/', 'admin.index')->name('index'); //Take me to Admin Dashboard
+        Route::prefix('users')->name('users.')->group(function () {
+            Route::resource('administrator', AdministratorController::class);
+        });
+    });
+});
 
-//     Route::get('another',function () {
-//         return dd('i am admin user insideer');
+// Route::prefix('/client')->group(function () {
+//     Route::name('client.')->group(function () {
+//         //All routes regarding clients should be in here
 //     });
 // });
 
-Route::prefix('/admin')->group(function () {
-    Route::name('admin.')->group(function () {
-        Route::view('/',           		'admin.index')->name('index'); //Take me to Admin Dashboard
-    });
-});
+// Route::prefix('/cse')->group(function () {
+//     Route::name('cse.')->group(function () {
+//         //All routes regarding CSE's should be in here
+//         Route::view('/',           		'cse.index')->name('index'); //Take me to CSE Dashboard
+//     });
+// });
 
-Route::prefix('/client')->group(function () {
-    Route::name('client.')->group(function () {
-        //All routes regarding clients should be in here
-    });
-});
+// Route::prefix('/supplier')->group(function () {
+//     Route::name('supplier.')->group(function () {
+//         //All routes regarding suppliers should be in here
+//         Route::view('/',           		'supplier.index')->name('index'); //Take me to Supplier Dashboard
 
-Route::prefix('/cse')->group(function () {
-    Route::name('cse.')->group(function () {
-        //All routes regarding CSE's should be in here
-        Route::view('/',           		'cse.index')->name('index'); //Take me to CSE Dashboard
-    });
-});
+//     });
+// });
 
-Route::prefix('/supplier')->group(function () {
-    Route::name('supplier.')->group(function () {
-        //All routes regarding suppliers should be in here
-        Route::view('/',           		'supplier.index')->name('index'); //Take me to Supplier Dashboard
-
-    });
-});
-
-Route::prefix('/technician')->group(function () {
-    Route::name('technician.')->group(function () {
-        //All routes regarding technicians should be in here
-        Route::view('/',           		'technician.index')->name('index'); //Take me to Technician Dashboard
-    });
-});
-
+// Route::prefix('/technician')->group(function () {
+//     Route::name('technician.')->group(function () {
+//         //All routes regarding technicians should be in here
+//         Route::view('/',           		'technician.index')->name('index'); //Take me to Technician Dashboard
+//     });
+// });

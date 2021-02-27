@@ -5,8 +5,6 @@ namespace App\Models;
 use Illuminate\Support\Str;
 use App\Traits\RolesAndPermissions;
 use Illuminate\Notifications\Notifiable;
-use function Illuminate\Events\queueable;
-use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 
@@ -56,11 +54,27 @@ class User extends Authenticatable
         });
     }
 
-     /**
-     * Get the user that belongs to this role
+    /**
+     * Get the Type associated with the user.
      */
     public function type()
     {
         return $this->hasOne(UserType::class);
+    }
+
+    /**
+     * Get the Account associated with the user.
+     */
+    public function account()
+    {
+        return $this->hasOne(Account::class);
+    }
+
+    /**
+     * Get the phone associated with the user.
+     */
+    public function phone()
+    {
+        return $this->hasMany(Phone::class);
     }
 }
