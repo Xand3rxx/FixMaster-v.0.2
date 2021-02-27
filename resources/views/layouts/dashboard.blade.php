@@ -37,21 +37,21 @@
     <link rel="stylesheet" href="{{ asset('assets/client/css/jquery.datetimepicker.min.css') }}">
 
   </head>
-  
+
   <body class="app-mail">
 
     @include('layouts.partials._dashboard_sidebar')
 
     <div class="content ht-100v pd-0">
       @include('layouts.partials._dashboard_header')
-      
+
       @yield('content')
 
-      
+
 
     {{-- </div> --}}
     </div>
-    
+
     <script src="{{ asset('assets/dashboard/lib/jquery/jquery.min.js') }}"></script>
     {{-- <script src="{{ asset('assets/frontend/js/jquery-3.5.1.min.js') }}"></script> --}}
     <script src="{{ asset('assets/dashboard/lib/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
@@ -83,7 +83,7 @@
     <script src="{{ asset('assets/client/js/moment.js') }}"></script>
 
     <script src="{{ asset('assets/dashboard/assets/js/jquery.tinymce.min.js') }}"></script>
-    
+
     <script>
       tinymce.init({
         selector: '#message_body',
@@ -103,7 +103,7 @@
 
     <script>
       function displayMessage(message, type){
-    
+
         const Toast = swal.mixin({
             toast: true,
             position: 'top-end',
@@ -120,7 +120,7 @@
               //   type: 'success',
                 title: message
         });
-    
+
       }
     </script>
 
@@ -153,13 +153,13 @@
         });
 
 
-        //Prevent characters or string asides number in ohone number input field 
+        //Prevent characters or string asides number in ohone number input field
         $("#phone_number, #other_phone_number, #account_number, .amount").on("keypress keyup blur", function(event) {
             $(this).val($(this).val().replace(/[^\d].+/, ""));
             if ((event.which < 48 || event.which > 57)) {
                 event.preventDefault();
             }
-        });  
+        });
 
       });
     </script>
@@ -393,6 +393,8 @@
 
       })
     </script>
-   
+    @yield('scripts')
+    @stack('scripts')
+
   </body>
 </html>

@@ -1,9 +1,10 @@
+
 <!-- START ADMIN SIDEBAR MENU -->
 <aside class="aside aside-fixed" id="sidebarMenu">
   <div class="aside-header">
-    <a href="{{ route('admin.index', app()->getLocale()) }}" class="aside-logo">
+      <a href="{{ route('admin.index', app()->getLocale()) }}" class="aside-logo">
       {{-- dash<span>forge</span> --}}
-      {{-- <img src="{{ asset('assets/images/home-fix-logo.png') }}" alt="FixMaster Logo" height="160" style="margin-top: -40px; margin-bottom: -38px;"> --}}
+      {{-- <img src="{{ asset('assets/images/home-fix-logo.png') }}" alt="FixMaster Logo" height="160"  style="margin-top: -40px; margin-bottom: -38px;"> --}}
       {{-- <img src="{{ asset('assets/images/home-fix-logo-colored.png') }}" alt="FixMaster Logo" height="120"> --}}
 
     </a>
@@ -18,14 +19,14 @@
       <div class="d-flex align-items-center justify-content-start">
         <a href="" class="avatar"><img src="{{ asset('assets/images/home-fix-logo-coloredd.png') }}" class="rounded-circle" alt="Male Avatar"></a>
         <div class="aside-alert-link">
-          <a href="#" class="new" data-toggle="tooltip" title="You have 0 unread messages"><i data-feather="message-square"></i></a>
+        <a href="#" class="new" data-toggle="tooltip" title="You have 0 unread messages"><i data-feather="message-square"></i></a>
           {{-- <a href="" class="new" data-toggle="tooltip" title="You have 4 new notifications"><i data-feather="bell"></i></a> --}}
-          <a href="{{ route('logout', app()->getLocale()) }}" data-toggle="tooltip" title="Sign out"><i data-feather="log-out"></i></a>
+        <a href="{{ route('logout', app()->getLocale()) }}" data-toggle="tooltip" title="Sign out"><i data-feather="log-out"></i></a>
         </div>
       </div>
       <div class="aside-loggedin-user">
         <a href="#loggedinMenu" class="d-flex align-items-center justify-content-between mg-b-2" data-toggle="collapse">
-          <h6 class="tx-semibold mg-b-0"> Charles Famoriyo</h6>
+        <h6 class="tx-semibold mg-b-0"> Charles Famoriyo</h6>
           <i data-feather="chevron-down"></i>
         </a>
         <p class="tx-color-03 tx-12 mg-b-0">Adminstrator</p>
@@ -56,9 +57,8 @@
       <li class="nav-item with-sub">
         <a href="" class="nav-link"><i data-feather="home"></i> <span>Estate Management</span></a>
         <ul>
-          <li class=""><a href="#">Email</a></li>
-          <li class=""><a href="#">In-app</a></li>
-          <li class=""><a href="#">SMS</a></li>
+          <li class=""><a href="{{ route('admin.add_estate', app()->getLocale()) }}">Add</a></li>
+          <li class=""><a href="{{ route('admin.list_estate', app()->getLocale()) }}">List</a></li>
         </ul>
       </li>
 
@@ -93,76 +93,76 @@
         </ul>
       </li>
 
-      <li class="nav-item with-sub">
-        <a href="" class="nav-link"><i data-feather="credit-card"></i> <span>Payments</span></a>
-        <ul>
-          <li class=""><a href="#">Disbursed</a></li>
-          <li class=""><a href="#">Received</a></li>
-        </ul>
-      </li>
+        <li class="nav-item with-sub">
+          <a href="" class="nav-link"><i data-feather="credit-card"></i> <span>Payments</span></a>
+          <ul>
+            <li class=""><a href="#">Disbursed</a></li>
+            <li class=""><a href="#">Received</a></li>
+          </ul>
+        </li>
 
-      <li class="nav-item with-sub ">
-        <a href="#" class="nav-link"><i data-feather="credit-card"></i> <span>Payment Gateway</span></a>
-        <ul>
-          <li class=""><a href="#">List</a></li>
-        </ul>
-      </li>
+        <li class="nav-item with-sub ">
+          <a href="#" class="nav-link"><i data-feather="credit-card"></i> <span>Payment Gateway</span></a>
+          <ul>
+            <li class=""><a href="#">List</a></li>
+          </ul>
+        </li>
 
-      <li class="nav-item with-sub">
-        <a href="" class="nav-link"><i data-feather="star"></i> <span>Rating</span></a>
-        <ul>
-          <li class=""><a href="#">Category Rating</a></li>
-          <li class=""><a href="#">Job Rating</a></li>
-        </ul>
-      </li>
+        <li class="nav-item with-sub">
+          <a href="" class="nav-link"><i data-feather="star"></i> <span>Rating</span></a>
+          <ul>
+            <li class=""><a href="#">Category Rating</a></li>
+            <li class=""><a href="#">Job Rating</a></li>
+          </ul>
+        </li>
 
-      <li class="nav-item with-sub">
-        <a href="" class="nav-link"><i data-feather="external-link"></i> <span>Referral</span></a>
-        <ul>
-          <li class=""><a href="#">Add</a></li>
-          <li class=""><a href="#">List</a></li>
-        </ul>
-      </li>
+        <li class="nav-item with-sub">
+          <a href="" class="nav-link"><i data-feather="external-link"></i> <span>Referral</span></a>
+          <ul>
+            <li class=""><a href="#">Add</a></li>
+            <li class=""><a href="#">List</a></li>
+          </ul>
+        </li>
 
       <li class="nav-item"><a href="" class="nav-link"><i data-feather="pie-chart"></i> <span>Reports</span></a></li>
 
-      <li class="nav-item with-sub">
-        <a href="" class="nav-link"><i data-feather="git-pull-request"></i> <span>Requests</span></a>
-        <ul>
-          <li class=""><a href="#">New</a></li>
-          <li class=""><a href="#">Ongoing</a></li>
-          <li class=""><a href="#">Completed</a></li>
-          <li class=""><a href="#">Cancelled</a></li>
-        </ul>
-      </li>
+        <li class="nav-item with-sub">
+          <a href="" class="nav-link"><i data-feather="git-pull-request"></i> <span>Requests</span></a>
+          <ul>
+            <li class=""><a href="#">New</a></li>
+            <li class=""><a href="#">Ongoing</a></li>
+            <li class=""><a href="#">Completed</a></li>
+            <li class=""><a href="#">Cancelled</a></li>
+          </ul>
+        </li>
 
-      <li class="nav-item"><a href="#" class="nav-link"><i data-feather="file-text"></i> <span>RFQ's</span></a></li>
+        <li class="nav-item"><a href="#" class="nav-link"><i data-feather="file-text"></i> <span>RFQ's</span></a></li>
 
-      <li class="nav-item with-sub">
-        <a href="" class="nav-link"><i data-feather="aperture"></i> <span>Service & Category</span></a>
-        <ul>
-          <li class=""><a href="#">Add Category</a></li>
-          <li class=""><a href="#">Category List</a></li>
-          <li class=""><a href="#">Category Review</a></li>
-          <li class=""><a href="#">Services</a></li>
-        </ul>
-      </li>
+        <li class="nav-item with-sub">
+          <a href="" class="nav-link"><i data-feather="aperture"></i> <span>Service & Category</span></a>
+          <ul>
+            <li class=""><a href="#">Add Category</a></li>
+            <li class=""><a href="#">Category List</a></li>
+            <li class=""><a href="#">Category Review</a></li>
+            <li class=""><a href="#">Services</a></li>
+            </ul>
+        </li>
 
-      <li class="nav-item with-sub">
-        <a href="" class="nav-link"><i data-feather="git-pull-request"></i> <span>Special Project</span></a>
-        <ul>
-          <li class=""><a href="#">Inventory</a></li>
-          <li class=""><a href="#">Requests</a></li>
-        </ul>
-      </li>
+        <li class="nav-item with-sub">
+          <a href="" class="nav-link"><i data-feather="git-pull-request"></i> <span>Special Project</span></a>
+          <ul>
+            <li class=""><a href="#">Inventory</a></li>
+            <li class=""><a href="#">Requests</a></li>
+          </ul>
+        </li>
 
-      <li class="nav-item with-sub">
-        <a href="" class="nav-link"><i data-feather="box"></i> <span>Tools</span></a>
-        <ul>
-          <li class=""><a href="#">Inventory</a></li>
-          <li class=""><a href="#">Requests</a></li>
-        </ul>
-      </li>
+        <li class="nav-item with-sub">
+          <a href="" class="nav-link"><i data-feather="box"></i> <span>Tools</span></a>
+          <ul>
+            <li class=""><a href="#">Inventory</a></li>
+            <li class=""><a href="#">Requests</a></li>
+          </ul>
+        </li>
 
       <li class="nav-item with-sub">
         <a href="" class="nav-link"><i data-feather="sliders"></i> <span>Utilities</span></a>
@@ -181,43 +181,43 @@
       <li class="nav-item with-sub">
         <a href="" class="nav-link"><i data-feather="user-check"></i> <span>Adminstrators</span></a>
         <ul>
-          <li class=""><a href="{{route('admin.users.administrator.create', app()->getLocale())}}">Add</a></li>
-          <li class=""><a href="{{route('admin.users.administrator.index', app()->getLocale())}}">List</a></li>
-        </ul>
-      </li>
-
-      <li class="nav-item"><a href="#" class="nav-link"><i data-feather="users"></i> <span>Clients</span></a></li>
-
-      <li class="nav-item with-sub">
-        <a href="" class="nav-link"><i data-feather="wind"></i> <span>CSE</span></a>
-        <ul>
           <li class=""><a href="#">Add</a></li>
           <li class=""><a href="#">List</a></li>
         </ul>
       </li>
 
-      <li class="nav-item with-sub">
-        <a href="" class="nav-link"><i data-feather="wind"></i> <span>Franchise</span></a>
-        <ul>
-          <li class=""><a href="#">Add</a></li>
-          <li class=""><a href="#">List</a></li>
-        </ul>
-      </li>
+        <li class="nav-item"><a href="#" class="nav-link"><i data-feather="users"></i> <span>Clients</span></a></li>
 
-      <li class="nav-item with-sub">
-        <a href="" class="nav-link"><i data-feather="zap"></i> <span>Technicians</span></a>
-        <ul>
-          <li class=""><a href="#">Add</a></li>
-          <li class=""><a href="#">List</a></li>
-        </ul>
-      </li>
-      <li class="nav-item with-sub">
-        <a href="" class="nav-link"><i data-feather="zap"></i> <span>Quality Assurance</span></a>
-        <ul>
-          <li class=""><a href="#">Add</a></li>
-          <li class=""><a href="#">List</a></li>
-        </ul>
-      </li>
+        <li class="nav-item with-sub">
+          <a href="" class="nav-link"><i data-feather="wind"></i> <span>CSE</span></a>
+          <ul>
+            <li class=""><a href="#">Add</a></li>
+            <li class=""><a href="#">List</a></li>
+          </ul>
+        </li>
+
+        <li class="nav-item with-sub">
+          <a href="" class="nav-link"><i data-feather="wind"></i> <span>Franchise</span></a>
+          <ul>
+            <li class=""><a href="#">Add</a></li>
+            <li class=""><a href="#">List</a></li>
+          </ul>
+        </li>
+
+        <li class="nav-item with-sub">
+          <a href="" class="nav-link"><i data-feather="zap"></i> <span>Technicians</span></a>
+          <ul>
+            <li class=""><a href="#">Add</a></li>
+            <li class=""><a href="#">List</a></li>
+          </ul>
+        </li>
+        <li class="nav-item with-sub">
+          <a href="" class="nav-link"><i data-feather="zap"></i> <span>Quality Assurance</span></a>
+          <ul>
+            <li class=""><a href="#">Add</a></li>
+            <li class=""><a href="#">List</a></li>
+          </ul>
+        </li>
 
       <li class="nav-label mg-t-25">Applicant Users</li>
       <li class="nav-item"><a href="#" class="nav-link"><i data-feather="users"></i> <span>CSE</span></a></li>
