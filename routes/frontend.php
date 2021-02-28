@@ -18,7 +18,6 @@ use Illuminate\Support\Facades\Route;
 Auth::routes([
     'login'    => true,
     'logout'   => true,
-    'register' => true,
     'reset'    => false,   // for resetting passwords
     'confirm'  => false,  // for additional password confirmations
     'verify'   => false,  // for email verification
@@ -32,6 +31,10 @@ Route::view('/why-home-fix',                 'frontend.why_home_fix')->name('fro
 Route::get('/join-us',                     [App\Http\Controllers\PageController::class, 'index'])->name('frontend.careers');
 Route::post('/estate/add',      [\App\Http\Controllers\EstateController::class, 'store'])->name('frontend.store_estate');
 Route::view('/faq',                         'frontend.faq')->name('frontend.faq');
+Route::view('/register',                         'auth.register')->name('frontend.register');
+Route::view('/messaging',           		'frontend.template')->name('template');
+
+
 
 // Route::view('/service-details', 			'frontend.service_details')->name('frontend.services_details');
 Route::get('/services',                     [App\Http\Controllers\PageController::class, 'services'])->name('frontend.services');
