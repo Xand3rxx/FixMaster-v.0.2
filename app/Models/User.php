@@ -63,4 +63,19 @@ class User extends Authenticatable
     {
         return $this->hasOne(UserType::class);
     }
+
+    public function service()
+    {
+        return $this->hasOne(Service::class);
+    }
+
+    public function services()
+    {
+        return $this->hasMany(Service::class);
+    }
+
+    public function category()
+    {
+        return $this->hasOne(Category::class);
+    }
 }

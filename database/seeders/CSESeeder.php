@@ -39,8 +39,11 @@ class CSESeeder extends Seeder
         // CSE Account
         $cseAccount = \App\Models\Account::create([
             'user_id' =>  $cse->id,
-            'first_name' => "cse",
-            'gender' => 'others'
+            'first_name'    => "Benedict",
+            'middle_name'   => "Mayowa",
+            'last_name'     => "Olaoye",
+            'gender'        => 'male',
+            'avatar'        => 'default-male-avatar.png'
         ]);
 
         // CSE Table
