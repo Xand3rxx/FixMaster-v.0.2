@@ -29,8 +29,6 @@ class CreateUserTypesTable extends Migration
                 ->onUpdate('cascade')
                 ->onDelete('cascade');
 
-            // $table->string('user_id');
-            // $table->string('role_id');
             $table->string('url', 15);
             $table->timestamps();
         });

@@ -18,9 +18,6 @@ class CreateUsersRolesTable extends Migration
             $table->charset = 'utf8mb4';
             $table->collation = 'utf8mb4_unicode_ci';
 
-            // $table->unsignedInteger('user_id');
-            // $table->unsignedInteger('role_id');
-
             $table->foreignId('user_id')
                 ->constrained()
                 ->onUpdate('cascade')
@@ -30,9 +27,6 @@ class CreateUsersRolesTable extends Migration
                 ->constrained()
                 ->onUpdate('cascade')
                 ->onDelete('cascade');
-
-            // $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
-            // $table->foreign('role_id')->references('id')->on('roles')->onDelete('cascade');
 
             $table->primary(['user_id', 'role_id']);
             $table->timestamps();
