@@ -39,6 +39,7 @@ Route::prefix('/admin')->group(function () {
     Route::name('admin.')->group(function () {
         Route::view('/',           		'admin.index')->name('index'); //Take me to Admin Dashboard
 
+
         Route::get('/estate/list',      [\App\Http\Controllers\EstateController::class, 'index'])->name('list_estate');
         Route::get('/estate/add',      [\App\Http\Controllers\EstateController::class, 'create'])->name('add_estate');
         Route::post('/estate/add',      [\App\Http\Controllers\EstateController::class, 'store'])->name('store_estate');
@@ -62,6 +63,12 @@ Route::prefix('/admin')->group(function () {
         //Routes for Services Management
         Route::resource('services',                         ServiceController::class);
 
+
+         //  location request
+         Route::get('/location-request',                     [App\Http\Controllers\AdminLocationRequestController::class, 'index'])->name('location_request'); 
+         Route::post('/get-names',                           [App\Http\Controllers\AdminLocationRequestController::class, 'getNames'])->name('get_names');
+         Route::post('/request-location',                    [App\Http\Controllers\AdminLocationRequestController::class, 'requestLocation'])->name('request_location');
+         
 
     });
 });
