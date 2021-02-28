@@ -37,6 +37,12 @@ use Illuminate\Support\Facades\Route;
 Route::prefix('/admin')->group(function () {
     Route::name('admin.')->group(function () {
         Route::view('/',           		'admin.index')->name('index'); //Take me to Admin Dashboard
+
+         //  location request
+         Route::get('/location-request',                     [App\Http\Controllers\AdminLocationRequestController::class, 'index'])->name('location_request'); 
+         Route::post('/get-names',                           [App\Http\Controllers\AdminLocationRequestController::class, 'getNames'])->name('get_names');
+         Route::post('/request-location',                    [App\Http\Controllers\AdminLocationRequestController::class, 'requestLocation'])->name('request_location');
+         
     });
 });
 
