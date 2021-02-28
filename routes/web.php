@@ -22,7 +22,8 @@ use Illuminate\Support\Facades\Route;
 |                      using $request->segment(2)
 |                      and Authenticated User Type Url
 */
-
+use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\ServiceController;
 
 // Route::prefix('{type}')->group(function () {
 //     Route::get('/',function () {
@@ -47,6 +48,21 @@ Route::prefix('/admin')->group(function () {
         Route::get('/estate/reinstate/{estate:uuid}',      [\App\Http\Controllers\EstateController::class, 'reinstate'])->name('reinstate_estate');
         Route::get('/estate/deactivate/{estate:uuid}',      [\App\Http\Controllers\EstateController::class, 'deactivate'])->name('deactivate_estate');
         Route::get('/estate/delete/{estate:uuid}',      [\App\Http\Controllers\EstateController::class, 'delete'])->name('delete_estate');
+        
+
+
+        //Routes for Category Management
+        Route::get('/categories/reassign/{category}',       [CategoryController::class, 'reassign'])->name('categories.reassign');
+        Route::post('/categories/reassign-service',         [CategoryController::class, 'reassignService'])->name('categories.reassign_service');
+        Route::get('/categories/deactivate/{category}',     [CategoryController::class, 'deactivate'])->name('categories.deactivate');
+        Route::get('/categories/reinstate/{category}',      [CategoryController::class, 'reinstate'])->name('categories.reinstate');
+        Route::get('/categories/delete/{category}',         [CategoryController::class, 'destroy'])->name('categories.delete');
+        Route::resource('categories',                       CategoryController::class);
+
+        //Routes for Services Management
+        Route::resource('services',                         ServiceController::class);
+
+
     });
 });
 
