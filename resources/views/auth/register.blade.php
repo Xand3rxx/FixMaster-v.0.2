@@ -15,7 +15,7 @@
             <div class="col-lg-12 col-md-6 mt-4 mt-sm-0 pt-2 pt-sm-0">
                 <div class="card login_page shadow rounded border-0">
                     <div class="card-body">
-                        {{-- <div class="align-items-center text-center justify-content-center">   
+                        {{-- <div class="align-items-center text-center justify-content-center">
                             <img src="{{ asset('assets/images/home-fix-logo-colored.png')}}" class="img-fluid d-block mx-auto" alt="FixMaster Logo" style="width: 8em; height: auto; margin-top: -70px !important; margin-bottom: -60px !important;">
                         </div> --}}
                         <h4 class="card-title text-center texty"> <img src="{{ asset('assets/images/home-fix-logo-colored.png')}}" class="img-fluid d-block mx-auto" alt="FixMaster Logo" style="width: 6em; height: auto;">Registration</h4>
@@ -232,7 +232,7 @@
                     <h5>Service Terms & Conditions</h5>
 
                 </div>
-                
+
             </div>
         </div>
     </div>
@@ -247,7 +247,7 @@
         $('#state_id').on('change',function () {
             let stateId = $('#state_id').find('option:selected').val();
             let stateName = $('#state_id').find('option:selected').text();
-            
+
             // $.ajaxSetup({
             //         headers: {
             //             'X-CSRF_TOKEN':$('meta[name="csrf-token"]').attr('content')
@@ -268,7 +268,7 @@
                         displayMessage(message, type);
                     }
                 },
-            })  
+            })
         });
     });
 </script>
