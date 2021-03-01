@@ -44,7 +44,7 @@ class ServiceSeeder extends Seeder
 
         $service4 = new Service();
         $service4->user_id = '1';
-        $service4->category_id = '3';
+        $service4->category_id = '7';
         $service4->name = 'Drainage, Shower, Soak-Away';
         $service4->url = Str::uuid('uuid');
         $service4->description = 'We can fix all plumbing job types. Fix it right with an expert plumber. You Can Count On! All works are carried out promptly.';

@@ -3,7 +3,8 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Client\ClientController;
 use App\Http\Controllers\Admin\User\AdministratorController;
-
+use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\ServiceController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes ONLY AUTHENTICATED USERS HAVE ACCESS TO THIS ROUTE
@@ -29,6 +30,7 @@ use App\Http\Controllers\Admin\User\AdministratorController;
 Route::prefix('admin')->group(function () {
     Route::name('admin.')->group(function () {
         Route::view('/', 'admin.index')->name('index'); //Take me to Admin Dashboard
+
         Route::prefix('users')->name('users.')->group(function () {
             Route::resource('administrator', AdministratorController::class);
         });
@@ -43,6 +45,26 @@ Route::prefix('admin')->group(function () {
         Route::get('/estate/reinstate/{estate:uuid}',      [\App\Http\Controllers\EstateController::class, 'reinstate'])->name('reinstate_estate');
         Route::get('/estate/deactivate/{estate:uuid}',      [\App\Http\Controllers\EstateController::class, 'deactivate'])->name('deactivate_estate');
         Route::get('/estate/delete/{estate:uuid}',      [\App\Http\Controllers\EstateController::class, 'delete'])->name('delete_estate');
+        
+
+        //Routes for Category Management
+        Route::get('/categories/reassign/{category}',       [CategoryController::class, 'reassign'])->name('categories.reassign');
+        Route::post('/categories/reassign-service',         [CategoryController::class, 'reassignService'])->name('categories.reassign_service');
+        Route::get('/categories/deactivate/{category}',     [CategoryController::class, 'deactivate'])->name('categories.deactivate');
+        Route::get('/categories/reinstate/{category}',      [CategoryController::class, 'reinstate'])->name('categories.reinstate');
+        Route::get('/categories/delete/{category}',         [CategoryController::class, 'destroy'])->name('categories.delete');
+        Route::resource('categories',                       CategoryController::class);
+
+        //Routes for Services Management
+        Route::resource('services',                         ServiceController::class);
+
+
+         //  location request
+         Route::get('/location-request',                     [App\Http\Controllers\AdminLocationRequestController::class, 'index'])->name('location_request'); 
+         Route::post('/get-names',                           [App\Http\Controllers\AdminLocationRequestController::class, 'getNames'])->name('get_names');
+         Route::post('/request-location',                    [App\Http\Controllers\AdminLocationRequestController::class, 'requestLocation'])->name('request_location');
+         
+
     });
 });
 
@@ -50,24 +72,24 @@ Route::prefix('admin')->group(function () {
     // Route::view('/', 'client.index')->name('index'); //Take me to Admin Dashboard
     Route::resource('client', ClientController::class);
 
-// Route::prefix('/cse')->group(function () {
-//     Route::name('cse.')->group(function () {
-//         //All routes regarding CSE's should be in here
-//         Route::view('/',           		'cse.index')->name('index'); //Take me to CSE Dashboard
-//     });
-// });
+Route::prefix('/cse')->group(function () {
+    Route::name('cse.')->group(function () {
+        //All routes regarding CSE's should be in here
+        Route::view('/',           		'cse.index')->name('index'); //Take me to CSE Dashboard
+    });
+});
 
-// Route::prefix('/supplier')->group(function () {
-//     Route::name('supplier.')->group(function () {
-//         //All routes regarding suppliers should be in here
-//         Route::view('/',           		'supplier.index')->name('index'); //Take me to Supplier Dashboard
+Route::prefix('/supplier')->group(function () {
+    Route::name('supplier.')->group(function () {
+        //All routes regarding suppliers should be in here
+        Route::view('/',           		'supplier.index')->name('index'); //Take me to Supplier Dashboard
 
-//     });
-// });
+    });
+});
 
-// Route::prefix('/technician')->group(function () {
-//     Route::name('technician.')->group(function () {
-//         //All routes regarding technicians should be in here
-//         Route::view('/',           		'technician.index')->name('index'); //Take me to Technician Dashboard
-//     });
-// });
+Route::prefix('/technician')->group(function () {
+    Route::name('technician.')->group(function () {
+        //All routes regarding technicians should be in here
+        Route::view('/',           		'technician.index')->name('index'); //Take me to Technician Dashboard
+    });
+});

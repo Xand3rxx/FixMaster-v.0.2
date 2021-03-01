@@ -65,7 +65,11 @@
 
       <li class="nav-item"><a href="" class="nav-link"><i data-feather="briefcase"></i> <span>Job Card</span></a></li>
 
-      <li class="nav-item"><a href="hello" class="nav-link"><i data-feather="map-pin"></i> <span>Location Request</span></a></li>
+<<<<<<< Updated upstream
+      <li class="nav-item"><a href="{{ route('admin.location_request', app()->getLocale()) }}" class="nav-link"><i data-feather="map-pin"></i> <span>Location Request</span></a></li>
+=======
+      <li class="nav-item"><a href="{{ route('admin.location_request') }}" class="nav-link"><i data-feather="map-pin"></i> <span>Location Request</span></a></li>
+>>>>>>> Stashed changes
 
       <li class="nav-item with-sub">
         <a href="" class="nav-link"><i data-feather="crop"></i> <span>Loyalty Management</span></a>

@@ -63,6 +63,38 @@ class User extends Authenticatable
     }
 
     /**
+     * Get the Category associated with the user who created it.
+     */
+    public function category()
+    {
+        return $this->hasOne(Category::class);
+    }
+
+    /**
+     * Get the Categories associated with the user who created it.
+     */
+    public function categories()
+    {
+        return $this->hasMany(Category::class);
+    }
+
+    /**
+     * Get the Sercice associated with the user who created it.
+     */
+    public function service()
+    {
+        return $this->hasOne(Service::class);
+    }
+
+    /**
+     * Get the Services associated with the user who created it.
+     */
+    public function services()
+    {
+        return $this->hasMany(Service::class);
+    }
+
+    /**
      * Get the Account associated with the user.
      */
     public function account()

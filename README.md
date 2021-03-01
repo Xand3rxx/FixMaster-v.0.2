@@ -1,5 +1,5 @@
 # FixMaster-v.0.2
-![FixMaster Logo](http://temp.homefix.ng/)
+![FixMaster Logo](http://temp.homefix.ng/assets/images/home-fix-logo-colored.png)
 
 ## About FixMaster
 

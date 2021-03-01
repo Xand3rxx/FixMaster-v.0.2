@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateCategoriesTable extends Migration
+class CreateMessage extends Migration
 {
     /**
      * Run the migrations.
@@ -13,23 +13,18 @@ class CreateCategoriesTable extends Migration
      */
     public function up()
     {
-        Schema::create('categories', function (Blueprint $table) {
-
+        Schema::create('message', function (Blueprint $table) {
             $table->engine = 'InnoDB';
             $table->charset = 'utf8mb4';
             $table->collation = 'utf8mb4_unicode_ci';
 
             $table->id();
             $table->uuid('uuid')->unique();
-            $table->foreignId('user_id')
-                ->constrained()
-                ->onUpdate('CASCADE')
-                ->onDelete('NO ACTION');
-                
-            $table->string('name')->unique();
-            $table->softDeletes();
+            $table->string('title');
+            $table->text('content');
+            $table->string('recipient');
             $table->timestamps();
-
+            $table->softDeletes();
         });
     }
 
@@ -40,6 +35,6 @@ class CreateCategoriesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('categories');
+        Schema::dropIfExists('message');
     }
 }
