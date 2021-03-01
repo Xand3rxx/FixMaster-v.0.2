@@ -35,26 +35,17 @@
     <link href="{{ asset('assets/dashboard/lib/select2/css/select2.min.css') }}" rel="stylesheet">
     <link href="{{ asset('assets/dashboard/lib/prismjs/themes/prism-vs.css') }}" rel="stylesheet">
     <link rel="stylesheet" href="{{ asset('assets/client/css/jquery.datetimepicker.min.css') }}">
-    <link rel="stylesheet" href="https://cdn.datatables.net/buttons/1.6.5/css/buttons.dataTables.min.css">
-    
 
   </head>
 
   <body class="app-mail">
-    <style>
-      div.dt-buttons {
-        margin-top: 1em;
-        margin-left: 1.5em;
-      }
-    </style>
+
     @include('layouts.partials._dashboard_sidebar')
 
     <div class="content ht-100v pd-0">
       @include('layouts.partials._dashboard_header')
 
       @yield('content')
-
-
 
     {{-- </div> --}}
     </div>
@@ -90,17 +81,6 @@
     <script src="{{ asset('assets/client/js/moment.js') }}"></script>
 
     <script src="{{ asset('assets/dashboard/assets/js/jquery.tinymce.min.js') }}"></script>
-    <script src="https://cdn.datatables.net/buttons/1.6.5/js/dataTables.buttons.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
-    <script src="https://cdn.datatables.net/buttons/1.6.5/js/buttons.html5.min.js"></script>
-    <script src="https://cdn.datatables.net/buttons/1.6.5/js/buttons.print.min.js"></script>
-
-    
-
-
-
 
     <script>
       tinymce.init({
@@ -149,24 +129,12 @@
 
         // Basic DataTable
         $('#basicExample, #demoRequests #paymentExample').DataTable({
-          "iDisplayLength": 10,
-          "language": {
-                "searchPlaceholder": 'Search...',
-                "sSearch": '',
-                "lengthMenu": '_MENU_ items/page',
-                // "lengthMenu": "Display _MENU_ records per page",
-                "zeroRecords": "No matching records found",
-                // "info": "Showing page _PAGE_ of _PAGES_",
-                "infoEmpty": "No records available",
-                "infoFiltered": "(filtered from _MAX_ total records)"
-              },
-          "dom": 'Bfrtip',
-          "buttons": [
-              'copy', 'csv', 'excel', 'pdf', 'print'
-          ],
-          "processing": true,
-          // "scrollY":        "200px",
-          // "scrollCollapse": true,
+          'iDisplayLength': 10,
+          language: {
+                searchPlaceholder: 'Search...',
+                sSearch: '',
+                lengthMenu: '_MENU_ items/page',
+              }
         });
 
         // Url for more info on datepicker options https://xdsoft.net/jqplugins/datetimepicker/
@@ -423,8 +391,6 @@
 
       })
     </script>
-    @yield('scripts')
-    @stack('scripts')
 
   </body>
 </html>

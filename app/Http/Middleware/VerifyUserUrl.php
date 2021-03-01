@@ -25,10 +25,10 @@ class VerifyUserUrl
             })->toArray();
         });
 
-        // Check if Request Segment(2) exist in roles table
-        if (!array_key_exists($request->segment(2), $roles)) {
-            return abort(404);
-        }
+        //Check if Request Segment(2) exist in roles table
+        // if (!array_key_exists($request->segment(2), $roles)) {
+        //     return abort(404);
+        // }
 
         // Check if Request Segment(2) is equal to Authenticated User url
         if ($request->segment(2) !== auth()->user()->type->url) {

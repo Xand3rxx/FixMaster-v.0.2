@@ -35,12 +35,9 @@ class ClientSeeder extends Seeder
 
         // Client Account
         $clientAccount = \App\Models\Account::create([
-            'user_id'       =>  $client->id,
-            'first_name'    => "Kelvin",
-            'middle_name'   => "Israel",
-            'last_name'     => "Adesanya",
-            'gender'        => 'male',
-            'avatar'        => 'default-male-avatar.png'
+            'user_id' =>  $client->id,
+            'first_name' => "Client",
+            'gender' => 'others'
         ]);
 
         // Client Table

@@ -51,6 +51,6 @@ class LoginController extends Controller
      */
     protected function authenticated(Request $request, $user)
     {
-        $this->log('Login', 'Informational', Route::currentRouteAction(), $user->email . ' logged in.');
+        $this->log('Login', 'Informational', Route::currentRouteAction(), $user->email . ' is logged in.');
     }
 }
