@@ -63,7 +63,7 @@
                                     </ul><!--end icon-->
                                 </div> --}}
                                 <div class="col-12 text-center">
-                                    <p class="mb-0 mt-3"><small class="text-dark mr-2">Don't have an account ?</small> <a href="{{ route('register', app()->getLocale()) }}" class="text-dark font-weight-bold">Register</a></p>
+                                    <p class="mb-0 mt-3"><small class="text-dark mr-2">Don't have an account ?</small> <a href="{{ route('frontend.registration.client.index', app()->getLocale()) }}" class="text-dark font-weight-bold">Register</a></p>
                                 </div>
                             </div>
                         </form>

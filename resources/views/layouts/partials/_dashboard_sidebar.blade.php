@@ -20,7 +20,15 @@
         <div class="aside-alert-link">
           <a href="#" class="new" data-toggle="tooltip" title="You have 0 unread messages"><i data-feather="message-square"></i></a>
           {{-- <a href="" class="new" data-toggle="tooltip" title="You have 4 new notifications"><i data-feather="bell"></i></a> --}}
-          <a href="{{ route('logout', app()->getLocale()) }}" data-toggle="tooltip" title="Sign out"><i data-feather="log-out"></i></a>
+          <a href="#" data-toggle="tooltip" onclick="event.preventDefault();
+          document.getElementById('logout-form').submit();" href="{{ route('logout', app()->getLocale()) }}" title="Sign out"><i data-feather="log-out"></i></a>
+
+          
+                        
+          <form id="logout-form" action="{{ route('logout', app()->getLocale()) }}" method="POST" style="display: none;">
+              @csrf
+          </form>
+
         </div>
       </div>
       <div class="aside-loggedin-user">
@@ -53,11 +61,11 @@
         </ul>
       </li>
 
-      <li class="nav-item with-sub">
+      <li class="nav-item with-sub {{ Route::currentRouteNamed('admin.add_estate', 'admin.list_estate') ? 'active show' : '' }}">
         <a href="" class="nav-link"><i data-feather="home"></i> <span>Estate Management</span></a>
         <ul>
-          <li class=""><a href="{{ route('admin.add_estate', app()->getLocale()) }}">Add</a></li>
-          <li class=""><a href="{{ route('admin.list_estate', app()->getLocale()) }}">List</a></li>
+          <li class="{{ Route::currentRouteNamed('admin.add_estate') ? 'active' : '' }}"><a href="{{ route('admin.add_estate', app()->getLocale()) }}">Add</a></li>
+          <li class="{{ Route::currentRouteNamed('admin.list_estate') ? 'active' : '' }}"><a href="{{ route('admin.list_estate', app()->getLocale()) }}">List</a></li>
         </ul>
       </li>
 
@@ -65,11 +73,7 @@
 
       <li class="nav-item"><a href="" class="nav-link"><i data-feather="briefcase"></i> <span>Job Card</span></a></li>
 
-<<<<<<< Updated upstream
-      <li class="nav-item"><a href="{{ route('admin.location_request', app()->getLocale()) }}" class="nav-link"><i data-feather="map-pin"></i> <span>Location Request</span></a></li>
-=======
-      <li class="nav-item"><a href="{{ route('admin.location_request') }}" class="nav-link"><i data-feather="map-pin"></i> <span>Location Request</span></a></li>
->>>>>>> Stashed changes
+      <li class="nav-item {{ Route::currentRouteNamed('admin.location_request') ? 'active' : '' }}"><a href="{{ route('admin.location_request', app()->getLocale()) }}" class="nav-link"><i data-feather="map-pin"></i> <span>Location Request</span></a></li>
 
       <li class="nav-item with-sub">
         <a href="" class="nav-link"><i data-feather="crop"></i> <span>Loyalty Management</span></a>
@@ -141,13 +145,15 @@
 
       <li class="nav-item"><a href="#" class="nav-link"><i data-feather="file-text"></i> <span>RFQ's</span></a></li>
 
-      <li class="nav-item with-sub">
+      <li class="nav-item with-sub {{ Route::currentRouteNamed('admin.categories.index') ? 'active show' : '' }}">
         <a href="" class="nav-link"><i data-feather="aperture"></i> <span>Service & Category</span></a>
         <ul>
-          <li class=""><a href="#">Add Category</a></li>
-          <li class=""><a href="#">Category List</a></li>
-          <li class=""><a href="#">Category Review</a></li>
-          <li class=""><a href="#">Services</a></li>
+          <li class=""><a href="{{ route('admin.categories.index', app()->getLocale()) }}">Category List</a></li>
+          {{-- <hr> --}}
+          <li class="{{ Route::currentRouteNamed('admin.categories.index') ? 'active' : '' }}"><a href="#">Add Category Service</a></li>
+          <li class=""><a href="#">Category Services List</a></li>
+          <li class=""><a href="#">Category Service Review</a></li>
+
         </ul>
       </li>
 

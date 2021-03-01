@@ -5,6 +5,9 @@ namespace App\Http\Controllers\Client;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
+use App\Models\Category;
+use App\Models\Service;
+
 class ClientController extends Controller
 {
     /**
@@ -14,6 +17,9 @@ class ClientController extends Controller
      */
     public function index()
     {
+        
+        $popularRequests = Service::select('id', 'name', 'url', 'image')->take(10)->get()->random(3);
+        
         return view('client.home', [
             // data
             'totalRequests' => rand(1, 1),
@@ -23,6 +29,7 @@ class ClientController extends Controller
             'client' => [
                 'phone_number' => '0909078888'
             ],
+            'popularRequests'   =>  $popularRequests,
             // JoeBoy Fill this data
             // 1. 'userServiceRequests'
             // 2. 'popularRequests'
