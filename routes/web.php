@@ -1,7 +1,9 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-
+use App\Http\Controllers\Admin\User\AdministratorController;
+use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\ServiceController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes ONLY AUTHENTICATED USERS HAVE ACCESS TO THIS ROUTE
@@ -22,23 +24,15 @@ use Illuminate\Support\Facades\Route;
 |                      using $request->segment(2)
 |                      and Authenticated User Type Url
 */
-use App\Http\Controllers\CategoryController;
-use App\Http\Controllers\ServiceController;
 
-// Route::prefix('{type}')->group(function () {
-//     Route::get('/',function () {
-//         return dd('i am admin user');
-//     });
 
-//     Route::get('another',function () {
-//         return dd('i am admin user insideer');
-//     });
-// });
-
-Route::prefix('/admin')->group(function () {
+Route::prefix('admin')->group(function () {
     Route::name('admin.')->group(function () {
-        Route::view('/',           		'admin.index')->name('index'); //Take me to Admin Dashboard
+        Route::view('/', 'admin.index')->name('index'); //Take me to Admin Dashboard
 
+        Route::prefix('users')->name('users.')->group(function () {
+            Route::resource('administrator', AdministratorController::class);
+        });
 
         Route::get('/estate/list',      [\App\Http\Controllers\EstateController::class, 'index'])->name('list_estate');
         Route::get('/estate/add',      [\App\Http\Controllers\EstateController::class, 'create'])->name('add_estate');
@@ -50,7 +44,6 @@ Route::prefix('/admin')->group(function () {
         Route::get('/estate/deactivate/{estate:uuid}',      [\App\Http\Controllers\EstateController::class, 'deactivate'])->name('deactivate_estate');
         Route::get('/estate/delete/{estate:uuid}',      [\App\Http\Controllers\EstateController::class, 'delete'])->name('delete_estate');
         
-
 
         //Routes for Category Management
         Route::get('/categories/reassign/{category}',       [CategoryController::class, 'reassign'])->name('categories.reassign');
@@ -73,11 +66,15 @@ Route::prefix('/admin')->group(function () {
     });
 });
 
-Route::prefix('/client')->group(function () {
-    Route::name('client.')->group(function () {
-        //All routes regarding clients should be in here
-    });
-});
+    //All routes regarding clients should be in here
+    // Route::view('/', 'client.index')->name('index'); //Take me to Admin Dashboard
+    Route::resource('client', ClientController::class);
+
+// Route::prefix('/client')->group(function () {
+//     Route::name('client.')->group(function () {
+//         //All routes regarding clients should be in here
+//     });
+// });
 
 Route::prefix('/cse')->group(function () {
     Route::name('cse.')->group(function () {
@@ -100,4 +97,3 @@ Route::prefix('/technician')->group(function () {
         Route::view('/',           		'technician.index')->name('index'); //Take me to Technician Dashboard
     });
 });
-
