@@ -22,8 +22,7 @@ use Illuminate\Support\Facades\Route;
 |                      using $request->segment(2)
 |                      and Authenticated User Type Url
 */
-use App\Http\Controllers\CategoryController;
-use App\Http\Controllers\ServiceController;
+
 
 // Route::prefix('{type}')->group(function () {
 //     Route::get('/',function () {
@@ -38,38 +37,6 @@ use App\Http\Controllers\ServiceController;
 Route::prefix('/admin')->group(function () {
     Route::name('admin.')->group(function () {
         Route::view('/',           		'admin.index')->name('index'); //Take me to Admin Dashboard
-
-
-        Route::get('/estate/list',      [\App\Http\Controllers\EstateController::class, 'index'])->name('list_estate');
-        Route::get('/estate/add',      [\App\Http\Controllers\EstateController::class, 'create'])->name('add_estate');
-        Route::post('/estate/add',      [\App\Http\Controllers\EstateController::class, 'store'])->name('store_estate');
-        Route::get('/estate/summary/{estate:uuid}',      [\App\Http\Controllers\EstateController::class, 'estateSummary'])->name('estate_summary');
-        Route::get('/estate/edit/{estate:uuid}',      [\App\Http\Controllers\EstateController::class, 'edit'])->name('edit_estate');
-        Route::patch('/estate/edit/{estate:uuid}',      [\App\Http\Controllers\EstateController::class, 'update'])->name('update_estate');
-        Route::get('/estate/reinstate/{estate:uuid}',      [\App\Http\Controllers\EstateController::class, 'reinstate'])->name('reinstate_estate');
-        Route::get('/estate/deactivate/{estate:uuid}',      [\App\Http\Controllers\EstateController::class, 'deactivate'])->name('deactivate_estate');
-        Route::get('/estate/delete/{estate:uuid}',      [\App\Http\Controllers\EstateController::class, 'delete'])->name('delete_estate');
-        
-
-
-        //Routes for Category Management
-        Route::get('/categories/reassign/{category}',       [CategoryController::class, 'reassign'])->name('categories.reassign');
-        Route::post('/categories/reassign-service',         [CategoryController::class, 'reassignService'])->name('categories.reassign_service');
-        Route::get('/categories/deactivate/{category}',     [CategoryController::class, 'deactivate'])->name('categories.deactivate');
-        Route::get('/categories/reinstate/{category}',      [CategoryController::class, 'reinstate'])->name('categories.reinstate');
-        Route::get('/categories/delete/{category}',         [CategoryController::class, 'destroy'])->name('categories.delete');
-        Route::resource('categories',                       CategoryController::class);
-
-        //Routes for Services Management
-        Route::resource('services',                         ServiceController::class);
-
-
-         //  location request
-         Route::get('/location-request',                     [App\Http\Controllers\AdminLocationRequestController::class, 'index'])->name('location_request'); 
-         Route::post('/get-names',                           [App\Http\Controllers\AdminLocationRequestController::class, 'getNames'])->name('get_names');
-         Route::post('/request-location',                    [App\Http\Controllers\AdminLocationRequestController::class, 'requestLocation'])->name('request_location');
-         
-
     });
 });
 
@@ -98,6 +65,22 @@ Route::prefix('/technician')->group(function () {
     Route::name('technician.')->group(function () {
         //All routes regarding technicians should be in here
         Route::view('/',           		'technician.index')->name('index'); //Take me to Technician Dashboard
+    });
+});
+
+Route::prefix('/qa')->group(function () {
+    Route::name('qa.')->group(function () {
+        //All routes regarding quality_assurance should be in here
+        Route::view('/', 'qa.index')->name('index'); //Take me to quality_assurance Dashboard
+        //Route::view('/profile', 'qa.view_profile')->name('view_profile');
+        Route::get('/profile', [App\Http\Controllers\QualityAssurance\QualityAssuranceProfileController::class,'view_profile'])->name('view_profile');
+        Route::get('/profile/edit_profile', [App\Http\Controllers\QualityAssurance\QualityAssuranceProfileController::class,'edit'])->name('edit_profile');
+        Route::patch('/profile/update_profile', [App\Http\Controllers\QualityAssurance\QualityAssuranceProfileController::class,'update'])->name('update_profile');
+        Route::patch('/profile/update_password', [App\Http\Controllers\QualityAssurance\QualityAssuranceProfileController::class,'update_password'])->name('update_password');
+        Route::view('/requests', 'qa.requests')->name('requests');
+        Route::view('/payments', 'qa.payments')->name('payments');
+        Route::view('/messages/inbox', 'qa.messages.inbox')->name('messages.inbox');
+        Route::view('/messages/sent', 'qa.messages.sent')->name('messages.sent');
     });
 });
 

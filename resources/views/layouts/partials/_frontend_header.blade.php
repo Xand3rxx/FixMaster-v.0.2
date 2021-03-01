@@ -29,7 +29,7 @@
             {{-- <img src="{{ asset('assets/images/home-fix-logo.png') }}" style="margin-top: -38px !important; margin-bottom: -38px !important;" height="160" alt="FixMaster Logo"> --}}
 
             {{-- <img src="{{ asset('assets/images/home-fix-logo-colored.png') }}" style="margin-top: -38px !important; margin-bottom: -38px !important;" height="140" alt="FixMaster Logo"> --}}
-
+            
             <img src="{{ asset('assets/images/home-fix-logo-colored.png') }}" style="margin-top: -40px !important; margin-bottom: -38px !important; margin-left: 50px !important" height="70" alt="FixMaster Logo">
 
             </a>
@@ -58,12 +58,12 @@
         </div>
 
         <div id="navigation">
-            <!-- Navigation Menu-->
+            <!-- Navigation Menu-->   
             <ul class="navigation-menu">
                 <li><a class="{{ Route::currentRouteNamed('frontend.index') ? 'selected' : '' }}" href="{{ route('frontend.index', app()->getLocale()) }}">Home</a></li>
                 <li><a class="{{ Route::currentRouteNamed('frontend.about') ? 'selected' : '' }}" href="{{ route('frontend.about', app()->getLocale()) }}">About Us</a></li>
 
-
+              
 
                 <li class="has-submenu {{ Route::currentRouteNamed('frontend.how_it_works', 'frontend.faq') ? 'selected' : '' }}">
                     <a href="javascript:void(0)">How it works</a><span class="menu-arrow"></span>
@@ -72,11 +72,11 @@
                         <li><a class="{{ Route::currentRouteNamed('frontend.faq') ? 'selected' : '' }}" href="{{ route('frontend.faq', app()->getLocale()) }}">FAQ</a></li>
                     </ul>
                 </li>
-
+                
                 <li><a class="{{ Route::currentRouteNamed('frontend.contact') ? 'selected' : '' }}" href="{{ route('frontend.contact', app()->getLocale()) }}">Contact</a></li>
 
-
-                <li class="has-submenu {{ Route::currentRouteNamed('frontend.careers', 'login', 'register') ? 'selected' : '' }}">
+                
+                <li class="has-submenu {{ Route::currentRouteNamed('frontend.careers', 'login', 'register') ? 'selected' : '' }}"">
                     <a href="javascript:void(0)">Get started</a><span class="menu-arrow"></span>
                     <ul class="submenu">
                         <li><a href="{{ route('register', app()->getLocale()) }}">Register</a></li>
@@ -89,15 +89,14 @@
                                 <li><a href="{{ route('frontend.careers') }}">Service Partner</a></li> --}}
                                 <li><a href="{{ route('frontend.careers', app()->getLocale()) }}">Supplier</a></li>
                                 {{-- <li><a href="{{ route('frontend.careers') }}">Trainee</a></li> --}}
-                                <li><a href="{{ route('frontend.careers', app()->getLocale()) }}">Add Estate</a></li>
                                 <li><a href="{{ route('frontend.careers', app()->getLocale()) }}">Technician</a></li>
-                            </ul>
+                            </ul> 
                         </li>
                     </ul>
                 </li>
-
+                
             </ul><!--end navigation menu-->
-
+            
         </div><!--end navigation-->
     </div><!--end container-->
 </header><!--end header-->
