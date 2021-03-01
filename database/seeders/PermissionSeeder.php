@@ -49,10 +49,5 @@ class PermissionSeeder extends Seeder
         $createTasks->name = 'View Clients';
         $createTasks->slug = 'view-clients';
         $createTasks->save();
-
-        $createTasks = new Permission();
-        $createTasks->name = 'View QualityAssurance';
-        $createTasks->slug = 'view-qa';
-        $createTasks->save();
     }
 }

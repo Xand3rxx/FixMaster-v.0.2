@@ -19,7 +19,7 @@
                             <img src="{{ asset('assets/images/home-fix-logo-colored.png')}}" class="img-fluid d-block mx-auto" alt="FixMaster Logo" style="width: 8em; height: auto; margin-top: -70px !important; margin-bottom: -60px !important;">
                         </div> --}}
                         <h4 class="card-title text-center texty"> <img src="{{ asset('assets/images/home-fix-logo-colored.png')}}" class="img-fluid d-block mx-auto" alt="FixMaster Logo" style="width: 6em; height: auto;">Registration</h4>
-                        <form class="login-form mt-4" method="POST" action="{{ route('client.register', app()->getLocale()) }}">
+                        <form class="login-form mt-4" method="POST" action="">
                             @csrf
                             <div class="row">
                                 <div class="col-md-3">
@@ -137,7 +137,7 @@
                                     </div>
                                 </div>
 
-                                <div class="col-md-4">
+                                <div class="col-md-3">
                                     <div class="form-group position-relative">
                                         <label>Town/City <span class="text-danger">*</span></label>
                                         <i data-feather="navigation" class="fea icon-sm icons"></i>
@@ -150,7 +150,20 @@
                                     </div>
                                 </div>
 
-                                <div class="col-md-4">
+                                <div class="col-md-3">
+                                <div class="form-group position-relative">
+                                    <label>Estate </label>
+                                    <i data-feather="navigation" class="fea icon-sm icons"></i>
+                                    <select class="form-control pl-5" name="estate_name" id="estate_name">
+                                        <option selected value="">Select...</option>
+                                        @foreach($activeEstates as $estate)
+                                            <option value="{{ $estate->id }}">{{ $estate->estate_name }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                            </div>
+
+                                <div class="col-md-3">
                                     <div class="form-group position-relative">
                                         <label>Password <span class="text-danger">*</span></label>
                                         <i data-feather="key" class="fea icon-sm icons"></i>
@@ -165,7 +178,7 @@
                                     </div>
                                 </div>
 
-                                <div class="col-md-4">
+                                <div class="col-md-3">
                                     <div class="form-group position-relative">
                                         <label>Confirm Password <span class="text-danger">*</span></label>
                                         <i data-feather="key" class="fea icon-sm icons"></i>
@@ -254,7 +267,7 @@
             //         }
             //     });
             $.ajax({
-                url: "{{ route('lga_list') }}",
+                url: "{{ route('lga_list', app()->getLocale()) }}",
                 method: "POST",
                 dataType: "JSON",
                 data: {"_token": "{{ csrf_token() }}", "state_id":stateId},

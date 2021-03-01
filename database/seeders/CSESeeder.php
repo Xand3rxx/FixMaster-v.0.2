@@ -15,7 +15,7 @@ class CSESeeder extends Seeder
      */
     public function run()
     {
-
+        
         // CSE User
         $cse = new \App\Models\User;
         $cse->email = 'cse@fix-master.com';
@@ -39,8 +39,11 @@ class CSESeeder extends Seeder
         // CSE Account
         $cseAccount = \App\Models\Account::create([
             'user_id' =>  $cse->id,
-            'first_name' => "cse",
-            'gender' => 'others'
+            'first_name'    => "Benedict",
+            'middle_name'   => "Mayowa",
+            'last_name'     => "Olaoye",
+            'gender'        => 'male',
+            'avatar'        => 'default-male-avatar.png'
         ]);
 
         // CSE Table
@@ -50,5 +53,5 @@ class CSESeeder extends Seeder
         $cseTable->referral_id = '1';
         $cseTable->bank_id = '1';
         $cseTable->save();
-    }
+    }   
 }
