@@ -183,7 +183,7 @@
                                 <div class="form-group position-relative">
                                     <label>Confirm Password <span class="text-danger">*</span></label>
                                     <i data-feather="key" class="fea icon-sm icons"></i>
-                                    <input type="password" class="form-control pl-5 @error('confirm_password') is-invalid @enderror" placeholder="Confirm Password"" name=" confirm_password" id="confirm_password" required>
+                                    <input type="password" class="form-control pl-5 @error('confirm_password') is-invalid @enderror" placeholder="Confirm Password" name=" confirm_password" id="confirm_password" required>
                                     @error('confirm_password')
                                     <span class="invalid-feedback" role="alert">
                                         <strong>{{ $message }}</strong>
@@ -196,7 +196,9 @@
                                 <div class="form-group position-relative">
                                     <label>Residential Address <span class="text-danger">*</span></label>
                                     <i data-feather="map-pin" class="fea icon-sm icons"></i>
-                                    <textarea class="form-control pl-5 @error('full_address') is-invalid @enderror" rows="2" name="full_address" id="full_address" placeholder="e.g. 284B, Ajose Adeogun Street, Victoria Island, Lagos, Nigeria.">{{ old('full_address') }}</textarea>
+                                    <input type="text" class="form-control pl-5 user_address @error('full_address') is-invalid @enderror" placeholder="e.g. 284B, Ajose Adeogun Street, Victoria Island, Lagos, Nigeria." name="full_address" id="full_address" value="{{ old('full_address') }}" required>
+
+                                    {{-- <textarea class="form-control pl-5 user_address @error('full_address') is-invalid @enderror" rows="2" name="full_address" id="full_address" placeholder="e.g. 284B, Ajose Adeogun Street, Victoria Island, Lagos, Nigeria.">{{ old('full_address') }}</textarea> --}}
                                     @error('full_address')
                                     <span class="invalid-feedback" role="alert">
                                         <strong>{{ $message }}</strong>
@@ -220,7 +222,7 @@
 
                             <div class="mx-auto">
                                 <p class="mb-0 mt-3"><small class="text-dark mr-2">Already have an account?</small>
-                                    <a href="{{url('login')}}" class="text-dark font-weight-bold">Login</a>
+                                    <a href="{{ url(app()->getLocale(), 'login') }}" class="text-dark font-weight-bold">Login</a>
                                 </p>
                             </div>
                         </div>
@@ -257,6 +259,8 @@
 </section>
 
 @push('scripts')
+<script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDeDLVAiaU13p2O0d3jfcPjscsbVsCQUzc&v=3.exp&libraries=places"></script> 
+
 <script>
     $(document).ready(function() {
         //Get list of L.G.A's in a particular state.
@@ -290,6 +294,32 @@
             })
         });
     });
+
+    (function($) {
+        "use strict";
+        var autocomplete;
+        initialize();
+        
+        $( document ).ready(function() {
+            $('.current_location').on('click',function(){
+                var id=$(this).attr('data-id');
+                current_location(id);
+            }); 
+        });
+        
+        function initialize() {
+            // Create the autocomplete object, restricting the search
+            // to geographical location types.
+            autocomplete = new google.maps.places.Autocomplete(
+                /** @type {HTMLInputElement} */
+                (document.querySelector('.user_address')), {
+                    types: ['geocode']
+                });
+
+            google.maps.event.addDomListener(document.querySelector('.user_address'), 'focus');
+        }
+
+    })(jQuery);
 </script>
 @endpush
 @endsection

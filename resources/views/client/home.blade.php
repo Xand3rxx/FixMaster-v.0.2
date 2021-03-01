@@ -103,8 +103,36 @@
 
             <div class="col-md-6 mt-4 pt-2 pt-sm-0">
                 <h5>Recent Requests :</h5>
+                    <div class="media key-feature align-items-center p-3 rounded shadow mt-4">
+                        <img src="images/job/Circleci.svg" class="avatar avatar-ex-sm" alt="">
+                        <div class="media-body content ml-3">
+                            <h4 class="title mb-0">Electronics(Computer & Laptops)</h4>
+                            <p class="text-muted mb-0"><span>Amount:</span>₦{{ number_format(5000) }}</p>
+                            <p class="mb-0"><a href="#" style="color: #161c2d" title="View Service request details">CSE: <span class="text-muted">Andrew Nkwankwo</span></a></p>    
+                            <p class="mb-0">Status: <span class="text-warning">Pending</span></p>    
+                        </div>
+                    </div>
 
-                @foreach ($userServiceRequests as $userServiceRequest)
+                    <div class="media key-feature align-items-center p-3 rounded shadow mt-4">
+                        <img src="images/job/Circleci.svg" class="avatar avatar-ex-sm" alt="">
+                        <div class="media-body content ml-3">
+                            <h4 class="title mb-0">Plumbing(Bath-Tubs, Pipes, Kitchen Sink)</h4>
+                            <p class="text-muted mb-0"><span>Amount:</span>₦{{ number_format(3500) }}</p>
+                            <p class="mb-0"><a href="#" style="color: #161c2d" title="View Service request details">CSE: <span class="text-muted">Jubril Diwa</span></a></p>    
+                            <p class="mb-0">Status: <span class="text-info">Ongoing</span></p>    
+                        </div>
+                    </div>
+
+                    <div class="media key-feature align-items-center p-3 rounded shadow mt-4">
+                        <img src="images/job/Circleci.svg" class="avatar avatar-ex-sm" alt="">
+                        <div class="media-body content ml-3">
+                            <h4 class="title mb-0">Plumbing(Drainage, Shower, Soak-Away)</h4>
+                            <p class="text-muted mb-0"><span>Amount:</span>₦{{ number_format(7500) }}</p>
+                            <p class="mb-0"><a href="#" style="color: #161c2d" title="View Service request details">CSE: <span class="text-muted">Mayowa Benedict</span></a></p>    
+                            <p class="mb-0">Status: <span class="text-success">Completed</span></p>    
+                        </div>
+                    </div>
+                {{-- @foreach ($userServiceRequests as $userServiceRequest)
                 <div class="media key-feature align-items-center p-3 rounded shadow mt-4">
                     <img src="images/job/Circleci.svg" class="avatar avatar-ex-sm" alt="">
                     <div class="media-body content ml-3">
@@ -134,7 +162,7 @@
                         </p>    
                     </div>
                 </div>
-                @endforeach
+                @endforeach --}}
             </div><!--end col-->
         </div><!--end row-->
     </div>
@@ -149,8 +177,8 @@
                     @if(empty($popularRequest->image))
                         <img src="{{ asset('assets/images/no-image-available.png') }}" alt="Image not available" class="card-img-top rounded-top">
                     @else
-                        @if(file_exists(public_path().'/assets/category-images/'.$popularRequest->image))
-                            <img src="{{ asset('assets/category-images/'.$popularRequest->image) }}" alt="{{ $popularRequest->name }}" class="card-img-top rounded-top">
+                        @if(file_exists(public_path().'/assets/service-images/'.$popularRequest->image))
+                            <img src="{{ asset('assets/service-images/'.$popularRequest->image) }}" alt="{{ $popularRequest->name }}" class="card-img-top rounded-top">
                         @else
                             <img src="{{ asset('assets/images/no-image-available.png') }}" alt="Image not available" class="card-img-top rounded-top">
                         @endif
@@ -158,18 +186,14 @@
                 <div class="overlay rounded-top bg-dark"></div>
                 </div>
                 <div class="card-body content">
-                <h5><a href="javascript:void(0)" class="card-title title text-dark">{{ $popularRequest->name }}</a> <a href="{{ route('client.services_details', $popularRequest->url) }}" title="View {{ $popularRequest->name }} service details"> <i data-feather="info" class="text-primary"></i></a></h5>
+                <h5><a href="javascript:void(0)" class="card-title title text-dark">{{ $popularRequest->name }}</a> <a href="#" title="View {{ $popularRequest->name }} service details"> <i data-feather="info" class="text-primary"></i></a></h5>
                     <div class="post-meta d-flex justify-content-between mt-3">
-                        {{-- <ul class="list-unstyled mb-0">
-                            <li class="list-inline-item mr-2 mb-0"><a href="javascript:void(0)" class="text-muted like"><i class="mdi mdi-heart-outline mr-1"></i>33</a></li>
-                            <li class="list-inline-item"><a href="javascript:void(0)" class="text-muted comments"><i class="mdi mdi-comment-outline mr-1"></i>08</a></li>
-                        </ul> --}}
-                        <a href="{{ route('client.service_quote', $popularRequest->url) }}" class="text-muted readmore">Request Service <i class="mdi mdi-chevron-right"></i></a>
+                        <a href="#" class="text-muted readmore">Request Service <i class="mdi mdi-chevron-right"></i></a>
                     </div>
                 </div>
                 <div class="author">
-                <small class="text-light date"><i class="mdi mdi-calendar"></i> Requests: {{ $popularRequest->requests()->count() }}</small><br>
-                <small class="text-light date"><i class="mdi mdi-credit-card"></i> Basic Price: ₦{{ number_format($popularRequest->standard_fee) }}</small>
+                <small class="text-light date"><i class="mdi mdi-calendar"></i> Requests: 12</small><br>
+                <small class="text-light date"><i class="mdi mdi-credit-card"></i> Basic Price: ₦{{ number_format(3500) }}</small>
 
                 </div>
             </div>
