@@ -1,6 +1,7 @@
 @extends('layouts.app')
 @section('title', 'Join Us')
 @section('contents')
+    @include('layouts.partials._messages')
 
 <section class="section bg-light">
     <div class="container" style="margin-top: 3rem;">
@@ -31,7 +32,7 @@
                     </div>
                 </div>
             </div><!--end col-->
-            
+
             <div class="col-md-4 mt-md-5 pt-md-3 mt-4 pt-2">
                 <div class="card features work-process bg-transparent process-arrow border-0 text-center">
                     <div class="icons rounded h1 text-center text-primary px-3">
@@ -47,7 +48,7 @@
                     </div>
                 </div>
             </div><!--end col-->
-            
+
             <div class="col-md-4 mt-md-5 pt-md-5 mt-4 pt-2">
                 <div class="card features work-process bg-transparent d-none-arrow border-0 text-center">
                     <div class="icons rounded h1 text-center text-primary px-3">
@@ -66,7 +67,7 @@
         </div><!--end row--> --}}
 
         <div class="row float-center text-center justify-content-center align-items-center mt-100">
-            <div class="col-md-4 col-12">
+            <div class="col-md-3 col-12">
                 <div class="features">
                     <div class="icons rounded h1 text-center text-primary px-3 position-relative d-inline-block">
                         <i class="uil uil-channel-add"></i>
@@ -83,7 +84,7 @@
             </div>
             <!--end col-->
 
-            <div class="col-md-4 col-12 mt-5 mt-sm-0">
+            <div class="col-md-3 col-12 mt-5 mt-sm-0">
                 <div class="features">
                     <div class="icons rounded h1 text-center text-primary px-3 position-relative d-inline-block">
                         <i class="uil uil-truck-loading"></i>
@@ -100,7 +101,7 @@
             </div>
             <!--end col-->
 
-            <div class="col-md-4 col-12 mt-5 mt-sm-0">
+            <div class="col-md-3 col-12 mt-5 mt-sm-0">
                 <div class="features">
                     <div class="icons rounded h1 text-center text-primary px-3 position-relative d-inline-block">
                         <i class="uil uil-shopping-cart"></i>
@@ -111,6 +112,22 @@
                         <p class="text-muted mb-0">Brief job description here...</p>
                         <div class="mt-4">
                             <button type="button" class="btn btn-prim mt-2 mr-2 js-scroll-trigger register-supplier">Apply</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-3 col-12 mt-5 mt-sm-0">
+                <div class="features">
+                    <div class="icons rounded h1 text-center text-primary px-3 position-relative d-inline-block">
+                        <i class="uil uil-shopping-cart"></i>
+                    </div>
+
+                    <div class="content mt-4">
+                        <h4 class="title-2">Estate</h4>
+                        <p class="text-muted mb-0">Estate description here...</p>
+                        <div class="mt-4">
+                            <button type="button" class="btn btn-prim mt-2 mr-2 js-scroll-trigger register-estate">Apply</button>
                         </div>
                     </div>
                 </div>
@@ -654,6 +671,207 @@
             </div>
         </div>
 
+        <div class="row justify-content-center estate-registration d-none down-3">
+            <div class="col-lg-10 col-md-12">
+                <div class="card custom-form border-0">
+                    <div class="card-body">
+                        <h4 class="title mb-4">Estate Registration Form</h4>
+                        <form action="{{ route('frontend.store_estate', app()->getLocale()) }}" method="POST" class="rounded shadow p-4">
+                            @csrf
+                            <fieldset class="form-group border p-4">
+                                <legend class="w-auto px-2">Personal Details</legend>
+                                <div class="row row-xs">
+                                    <div class="col-md-12">
+                                        <div class="form-row">
+                                            <div class="form-group col-md-4">
+                                                <label for="first_name">First name <span class="text-danger">*</span></label>
+                                                <input type="text" class="form-control @error('first_name') is-invalid @enderror" id="first_name" name="first_name" placeholder="First name">
+                                                @error('first_name')
+                                                <span class="invalid-feedback" role="alert">
+                                                <strong>{{ $message }}</strong>
+                                            </span>
+                                                @enderror
+                                            </div>
+                                            <div class="form-group col-md-4">
+                                                <label for="middle_name">Middle name</label>
+                                                <input type="text" class="form-control @error('middle_name') is-invalid @enderror" id="middle_name" name="middle_name" placeholder="Middle name">
+                                                @error('middle_name')
+                                                <span class="invalid-feedback" role="alert">
+                                                <strong>{{ $message }}</strong>
+                                            </span>
+                                                @enderror
+                                            </div>
+                                            <div class="form-group col-md-4">
+                                                <label for="last_name">Last name <span class="text-danger">*</span></label>
+                                                <input type="text" class="form-control @error('last_name') is-invalid @enderror" id="last_name" name="last_name" placeholder="Last name">
+                                                @error('last_name')
+                                                <span class="invalid-feedback" role="alert">
+                                                <strong>{{ $message }}</strong>
+                                            </span>
+                                                @enderror
+                                            </div>
+                                        </div>
+                                        <div class="form-row">
+                                            <div class="form-group col-md-4">
+                                                <label for="email">E-mail <span class="text-danger">*</span></label>
+                                                <input type="email" class="form-control @error('email') is-invalid @enderror" id="email" name="email" placeholder="E-mail" >
+                                                @error('email')
+                                                <span class="invalid-feedback" role="alert">
+                                                <strong>{{ $message }}</strong>
+                                            </span>
+                                                @enderror
+                                            </div>
+                                            <div class="form-group col-md-4">
+                                                <label for="phone_number">Phone Number <span class="text-danger">*</span></label>
+                                                <input type="tel" class="form-control @error('phone_number') is-invalid @enderror" id="phone_number" name="phone_number" placeholder="Phone Number" >
+                                                @error('phone_number')
+                                                <span class="invalid-feedback" role="alert">
+                                                <strong>{{ $message }}</strong>
+                                            </span>
+                                                @enderror
+                                            </div>
+                                            <div class="form-group col-md-4">
+                                                <label for="date_of_birth">Date of Birth <span class="text-danger">*</span></label>
+                                                <input type="date" class="form-control @error('date_of_birth') is-invalid @enderror" id="date_of_birth" name="date_of_birth" placeholder="Date of Birth" >
+                                                @error('date_of_birth')
+                                                <span class="invalid-feedback" role="alert">
+                                                <strong>{{ $message }}</strong>
+                                            </span>
+                                                @enderror
+                                            </div>
+                                        </div>
+                                        <div class="form-row">
+                                            <div class="form-group col-md-4">
+                                                <label>Identification <strong>(ID)</strong> Type <span class="text-danger">*</span></label>
+                                                <select class="custom-select @error('identification_type') is-invalid @enderror" name="identification_type">
+                                                    <option>Select...</option>
+                                                    <option value="National ID">National ID</option>
+                                                    <option value="International Passport">Internation Passport</option>
+                                                    <option value="Voters Card">Voters Card</option>
+                                                    <option value="Drivers License">Drivers License</option>
+                                                </select>
+                                                @error('identification_type')
+                                                <span class="invalid-feedback" role="alert">
+                                                <strong>{{ $message }}</strong>
+                                            </span>
+                                                @enderror
+                                            </div>
+
+                                            <div class="form-group col-md-4">
+                                                <label>Identification <strong>(ID)</strong> Number <span class="text-danger">*</span></label>
+                                                <input type="text" class="form-control @error('identification_number') is-invalid @enderror" id="identification_number" name="identification_number" placeholder="Identification Number">
+                                                @error('identification_number')
+                                                <span class="invalid-feedback" role="alert">
+                                                <strong>{{ $message }}</strong>
+                                            </span>
+                                                @enderror
+                                            </div>
+
+                                            <div class="form-group col-md-4">
+                                                <label for="expiry_date">Expiry Date <span class="text-danger">*</span></label>
+                                                <input type="date" class="form-control @error('expiry_date') is-invalid @enderror" id="expiry_date" name="expiry_date" placeholder="Expiry Date" >
+                                                @error('expiry_date')
+                                                <span class="invalid-feedback" role="alert">
+                                                <strong>{{ $message }}</strong>
+                                            </span>
+                                                @enderror
+                                            </div>
+                                        </div>
+                                        <div class="form-row">
+                                            <div class="form-group col-md-12">
+                                                <label for="full_address">Address <span class="text-danger">*</span></label>
+                                                <textarea class="form-control @error('full_address') is-invalid @enderror" id="full_address" name="full_address" placeholder="Address"></textarea>
+                                                @error('full_address')
+                                                <span class="invalid-feedback" role="alert">
+                                                <strong>{{ $message }}</strong>
+                                            </span>
+                                                @enderror
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </fieldset>
+                            <fieldset class="form-group border p-4">
+                                <legend class="w-auto px-2">Estate Details</legend>
+                                <div class="row row-xs">
+                                    <div class="col-md-12">
+                                        <div class="form-row">
+                                            <div class="form-group col-md-6">
+                                                <label for="estate_name">Estate name <span class="text-danger">*</span></label>
+                                                <input type="text" class="form-control @error('estate_name') is-invalid @enderror" id="estate_name" name="estate_name" placeholder="Estate name">
+                                                @error('estate_name')
+                                                <span class="invalid-feedback" role="alert">
+                                                <strong>{{ $message }}</strong>
+                                            </span>
+                                                @enderror
+                                            </div>
+                                            <div class="form-group col-md-6">
+                                                <label for="state_id">State <span class="text-danger">*</span></label>
+                                                <select class="custom-select @error('state_id') is-invalid @enderror" id="state_id" name="state_id">
+                                                    <option>Select...</option>
+                                                    @foreach($states as $state)
+                                                        <option value="{{ $state->id }}">{{ $state->name }}</option>
+                                                    @endforeach
+                                                </select>
+                                                @error('state_id')
+                                                <span class="invalid-feedback" role="alert">
+                                                <strong>{{ $message }}</strong>
+                                            </span>
+                                                @enderror
+                                            </div>
+                                        </div>
+                                        <div class="form-row">
+                                            <div class="form-group col-md-4">
+                                                <label for="lga_id">L.G.A <span class="text-danger">*</span></label>
+                                                <select class="custom-select @error('lga_id') is-invalid @enderror" id="lga_id" name="lga_id">
+                                                    <option>Select...</option>
+                                                    @error('lga_id')
+                                                    <span class="invalid-feedback" role="alert">
+                                                <strong>{{ $message }}</strong>
+                                            </span>
+                                                    @enderror
+                                                </select>
+                                            </div>
+                                            <div class="form-group col-md-4">
+                                                <label for="town">Town <span class="text-danger">*</span></label>
+                                                <input type="text" class="form-control @error('town') is-invalid @enderror" id="town" name="town" placeholder="Town">
+                                                @error('town')
+                                                <span class="invalid-feedback" role="alert">
+                                                <strong>{{ $message }}</strong>
+                                            </span>
+                                                @enderror
+                                            </div>
+                                            <div class="form-group col-md-4">
+                                                <label for="landmark">Nearest Landmark <span class="text-danger">*</span></label>
+                                                <input type="text" class="form-control @error('landmark') is-invalid @enderror" id="landmark" name="landmark" placeholder="Nearest Landmark">
+                                                @error('landmark')
+                                                <span class="invalid-feedback" role="alert">
+                                                <strong>{{ $message }}</strong>
+                                            </span>
+                                                @enderror
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </fieldset>
+                            <!--end row-->
+
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <input type="submit" id="submit" name="send" class="submitBnt btn btn-primary" value="Register">
+                                </div>
+                                <!--end col-->
+                            </div>
+                            <!--end row-->
+
+                        </form>
+                        <!--end form-->
+                    </div>
+                </div>
+                <!--end custom-form-->
+            </div>
+        </div>
+
     </div>
     <!--end container-->
 </section>
@@ -693,5 +911,39 @@
     </div>
 </div>
 <!-- Modal Content End -->
+
+@push('scripts')
+    <script>
+        $(document).ready(function (){
+            //Get list of L.G.A's in a particular state.
+            $('#state_id').on('change',function () {
+                let stateId = $('#state_id').find('option:selected').val();
+                let stateName = $('#state_id').find('option:selected').text();
+
+                // $.ajaxSetup({
+                //         headers: {
+                //             'X-CSRF_TOKEN':$('meta[name="csrf-token"]').attr('content')
+                //         }
+                //     });
+                $.ajax({
+                    url: "{{ route('lga_list', app()->getLocale()) }}",
+                    method: "POST",
+                    dataType: "JSON",
+                    data: {"_token": "{{ csrf_token() }}", "state_id":stateId},
+                    success: function(data){
+                        if(data){
+
+                            $('#lga_id').html(data.lgaList);
+                        }else{
+                            var message = 'Error occured while trying to get L.G.A`s in '+ stateName +' state';
+                            var type = 'error';
+                            displayMessage(message, type);
+                        }
+                    },
+                })
+            });
+        });
+    </script>
+@endpush
 
 @endsection
