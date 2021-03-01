@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\URL;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 
+use App\Models\User;
 use App\Models\Estate;
 use App\Models\State;
 use App\Traits\Loggable;
@@ -22,7 +23,7 @@ class EstateController extends Controller
      */
     public function index()
     {
-        $estates = Estate::select('id', 'uuid', 'estate_name', 'first_name', 'last_name', 'email', 'phone_number', 'state_id', 'lga_id', 'is_active', 'slug', 'created_at')
+        $estates = Estate::select('id', 'uuid', 'estate_name', 'first_name', 'last_name', 'email', 'phone_number', 'state_id', 'lga_id', 'is_active', 'created_by', 'approved_by', 'slug', 'created_at')
             ->orderBy('estates.estate_name', 'ASC')
             ->latest('estates.created_at')
             ->get();
@@ -256,6 +257,57 @@ class EstateController extends Controller
             $this->log($type, $severity, $actionUrl, $message);
             return back()->with('error', 'An error occurred');
         }
+    }
+
+    public function approve($language, Estate $estate, User $user) {
+        $approveEstate = $estate->update([
+            'approved_by'   =>      Auth::user()->id,
+            'is_active'     =>      '1'
+        ]);
+
+        $approvedBy = User::where('id', $estate->approved_by)->get();
+
+        if($approveEstate) {
+            $type = 'Request';
+            $severity = 'Informational';
+            $actionUrl = Route::currentRouteAction();
+            $message = Auth::user()->email.' approved '.$estate->estate_name;
+            $this->log($type, $severity, $actionUrl, $message);
+            return redirect()->route('admin.list_estate', ['locale' => app()->getLocale(), $approvedBy])->with('success', 'Estate has been approved')->with($approvedBy);
+        }
+        else {
+            $type = 'Errors';
+            $severity = 'Error';
+            $actionUrl = Route::currentRouteAction();
+            $message = 'An Error Occured while '. Auth::user()->email. ' was trying to approve '.$estate->estate_name;
+            $this->log($type, $severity, $actionUrl, $message);
+            return back()->with('error', 'An error occurred');
+        }
+
+    }
+
+    public function decline($language, Estate $estate) {
+        $declineEstate = $estate->update([
+            'approved_by'   =>      Auth::user()->id
+        ]);
+
+        if($declineEstate) {
+            $type = 'Request';
+            $severity = 'Informational';
+            $actionUrl = Route::currentRouteAction();
+            $message = Auth::user()->email.' declined '.$estate->estate_name;
+            $this->log($type, $severity, $actionUrl, $message);
+            return redirect()->route('admin.list_estate', app()->getLocale())->with('success', 'Estate has been declined');
+        }
+        else {
+            $type = 'Errors';
+            $severity = 'Error';
+            $actionUrl = Route::currentRouteAction();
+            $message = 'An Error Occured while '. Auth::user()->email. ' was trying to decline '.$estate->estate_name;
+            $this->log($type, $severity, $actionUrl, $message);
+            return back()->with('error', 'An error occurred');
+        }
+
     }
 
     private function validateRequest() {
