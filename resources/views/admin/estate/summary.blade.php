@@ -9,7 +9,7 @@
                     <nav aria-label="breadcrumb">
                         <ol class="breadcrumb breadcrumb-style1 mg-b-10">
                             <li class="breadcrumb-item"><a href="{{ route('admin.index', app()->getLocale()) }}">Dashboard</a></li>
-                            <li class="breadcrumb-item"><a href="{{ route('admin.list_estate', app()->getLocale()) }}">Estate List</a></li>
+                            <li class="breadcrumb-item"><a href="{{ route('admin.list_estate', app()->getLocale()) }}">Estates</a></li>
                             <li class="breadcrumb-item active" aria-current="page">{{ $estate->estate_name }}</li>
                         </ol>
                     </nav>
@@ -18,11 +18,13 @@
 
                 <div class="d-md-block">
                     <a href="{{ route('admin.list_estate', app()->getLocale()) }}" class="btn btn-primary"><i class="fas fa-arrow-left"></i> Back</a>
-                    <a href="{{ route('admin.edit_estate', [ 'estate'=>$estate['uuid'], 'locale'=>app()->getLocale() ]) }}" class="btn btn-warning"><i class="fas fa-edit"></i> Edit</a>
+                    <a href="{{ route('admin.edit_estate', [ 'estate'=>$estate->uuid, 'locale'=>app()->getLocale() ]) }}" class="btn btn-warning"><i class="fas fa-edit"></i> Edit</a>
                     @if($estate->is_active == 0)
-                        <a href="" class="btn btn-success"><i class="fas fa-undo"></i> Reinstate</a>
+                        <a href="{{ route('admin.reinstate_estate', ['estate'=>$estate->uuid, 'locale'=>app()->getLocale()]) }}" class="btn btn-success"><i class="fas fa-undo"></i>Reinstate</a>
+                    @else
+                    <a href="{{ route('admin.deactivate_estate', ['estate'=>$estate->uuid, 'locale'=>app()->getLocale()]) }}" class="btn btn-warning"><i class="fas fa-ban"></i> Deactivate</a>
                     @endif
-                    <a href="" class="btn btn-danger"><i class="fas fa-trash"></i> Delete</a>
+                    <a href="{{ route('admin.delete_estate', ['estate'=>$estate->uuid, 'locale'=>app()->getLocale()]) }}" class="btn btn-danger"><i class="fas fa-trash"></i> Delete</a>
                 </div>
             </div>
 

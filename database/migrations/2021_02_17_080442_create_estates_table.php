@@ -36,7 +36,10 @@ class CreateEstatesTable extends Migration
             $table->string('town');
             $table->string('landmark');
             $table->enum('is_active', ['0', '1'])->default('0');
+            $table->string('created_by');
+            $table->integer('approved_by')->nullable();
             $table->string('slug');
+            $table->softDeletes();
             $table->timestamps();
         });
     }
