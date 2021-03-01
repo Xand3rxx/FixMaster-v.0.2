@@ -16,7 +16,7 @@ class AdministratorController extends Controller
      */
     public function index()
     {
-        // dd(\App\Models\Administrator::with('account','roles')->get());
+        dd(\App\Models\Administrator::with('user','account','phones','roles')->get());
         // Users with Role of Admin or Super Admin
         // Find their Accounts
         return view('admin.users.administrator.index')->with([

@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Client\ClientController;
 use App\Http\Controllers\Admin\User\AdministratorController;
 
 /*
@@ -31,7 +32,7 @@ Route::prefix('admin')->group(function () {
         Route::prefix('users')->name('users.')->group(function () {
             Route::resource('administrator', AdministratorController::class);
         });
-        Route::view('/',           		'admin.index')->name('index'); //Take me to Admin Dashboard
+        Route::view('/',                   'admin.index')->name('index'); //Take me to Admin Dashboard
 
         Route::get('/estate/list',      [\App\Http\Controllers\EstateController::class, 'index'])->name('list_estate');
         Route::get('/estate/add',      [\App\Http\Controllers\EstateController::class, 'create'])->name('add_estate');
@@ -45,11 +46,9 @@ Route::prefix('admin')->group(function () {
     });
 });
 
-// Route::prefix('/client')->group(function () {
-//     Route::name('client.')->group(function () {
-//         //All routes regarding clients should be in here
-//     });
-// });
+    //All routes regarding clients should be in here
+    // Route::view('/', 'client.index')->name('index'); //Take me to Admin Dashboard
+    Route::resource('client', ClientController::class);
 
 // Route::prefix('/cse')->group(function () {
 //     Route::name('cse.')->group(function () {

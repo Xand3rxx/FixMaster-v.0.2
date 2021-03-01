@@ -162,7 +162,7 @@
                     <li class="has-submenu {{ Route::currentRouteNamed('frontend.careers', 'login', 'register') ? 'selected' : '' }}"">
                     <a href=" javascript:void(0)">Get started</a><span class="menu-arrow"></span>
                         <ul class="submenu">
-                            <li><a href="{{ route('register', app()->getLocale()) }}">Register</a></li>
+                            <li><a href="{{ route('frontend.registration.client.index', app()->getLocale()) }}">Register</a></li>
                             <li><a href="{{ route('login', app()->getLocale()) }}">Login</a></li>
                             <li class="has-submenu"><a href="javascript:void(0)"> Apply <span class="submenu-arrow"></span>
                                     <ul class="submenu">

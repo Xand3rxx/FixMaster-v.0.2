@@ -35,7 +35,7 @@ class Administrator extends Model
      */
     public function roles()
     {
-        return $this->belongsToMany(Role::class, 'users_roles', 'user_id', 'user_id');
+        return $this->belongsToMany(Role::class, 'users_roles', 'user_id','user_id');
         // return $this->hasMany(Role::class, 'user_id', 'user_id');
     }
 
