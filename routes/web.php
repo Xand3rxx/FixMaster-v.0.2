@@ -45,7 +45,7 @@ Route::prefix('admin')->group(function () {
         Route::get('/estate/reinstate/{estate:uuid}',      [\App\Http\Controllers\EstateController::class, 'reinstate'])->name('reinstate_estate');
         Route::get('/estate/deactivate/{estate:uuid}',      [\App\Http\Controllers\EstateController::class, 'deactivate'])->name('deactivate_estate');
         Route::get('/estate/delete/{estate:uuid}',      [\App\Http\Controllers\EstateController::class, 'delete'])->name('delete_estate');
-        
+
 
         //Routes for Category Management
         Route::get('/categories/reassign/{category}',       [CategoryController::class, 'reassign'])->name('categories.reassign');
@@ -60,10 +60,10 @@ Route::prefix('admin')->group(function () {
 
 
          //  location request
-         Route::get('/location-request',                     [App\Http\Controllers\AdminLocationRequestController::class, 'index'])->name('location_request'); 
+         Route::get('/location-request',                     [App\Http\Controllers\AdminLocationRequestController::class, 'index'])->name('location_request');
          Route::post('/get-names',                           [App\Http\Controllers\AdminLocationRequestController::class, 'getNames'])->name('get_names');
          Route::post('/request-location',                    [App\Http\Controllers\AdminLocationRequestController::class, 'requestLocation'])->name('request_location');
-         
+
 
     });
 });
@@ -91,5 +91,20 @@ Route::prefix('/technician')->group(function () {
     Route::name('technician.')->group(function () {
         //All routes regarding technicians should be in here
         Route::view('/',           		'technician.index')->name('index'); //Take me to Technician Dashboard
+    });
+});
+
+Route::prefix('/qa')->group(function () {
+    Route::name('qa.')->group(function () {
+        //All routes regarding quality_assurance should be in here
+        Route::view('/', 'qa.index')->name('index'); //Take me to quality_assurance Dashboard
+        //Route::view('/profile', 'qa.view_profile')->name('view_profile');
+        Route::get('/profile', [App\Http\Controllers\QualityAssurance\QualityAssuranceProfileController::class,'view_profile'])->name('view_profile');
+        Route::get('/profile/edit_profile', [App\Http\Controllers\QualityAssurance\QualityAssuranceProfileController::class,'edit'])->name('edit_profile');
+        Route::patch('/profile/update_profile', [App\Http\Controllers\QualityAssurance\QualityAssuranceProfileController::class,'update'])->name('update_profile');
+        Route::view('/requests', 'qa.requests')->name('requests');
+        Route::view('/payments', 'qa.payments')->name('payments');
+        Route::view('/messages/inbox', 'qa.messages.inbox')->name('messages.inbox');
+        Route::view('/messages/sent', 'qa.messages.sent')->name('messages.sent');
     });
 });
