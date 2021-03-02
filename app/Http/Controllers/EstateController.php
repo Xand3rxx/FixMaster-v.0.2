@@ -30,10 +30,7 @@ class EstateController extends Controller
             ->get();
 
         $getAdminId = Estate::select('approved_by')->pluck('approved_by');
-
         $approvedBy = User::find($getAdminId);
-        // dd($approvedBy);
-
 
         return view('admin.estate.list', compact('estates', 'approvedBy'));
     }

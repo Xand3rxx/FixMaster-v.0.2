@@ -32,17 +32,29 @@
               <div class="col-sm-12 col-lg-12">
                   <div class="card mg-b-20 mg-lg-b-25">
                       <div class="card-header">
-                          <div class="row float-center text-center justify-content-center align-items-center mt-100">
+                          {{-- <div class="row float-center text-center justify-content-center align-items-center mt-100">
                               <h6 class="tx-uppercase tx-semibold mg-b-0 col-md-4 col-12 btn btn-outline-primary btn-sm estate-summary">{{ $estate->estate_name }} Summary</h6>
                               <h6 class="tx-uppercase tx-semibold mg-b-0 col-md-4 col-12 btn btn-outline-primary btn-sm estate-discount">{{ $estate->estate_name }} Discount History</h6>
                               <h6 class="tx-uppercase tx-semibold mg-b-0 col-md-4 col-12 btn btn-outline-primary btn-sm estate-client">{{ $estate->estate_name }} Registered Clients</h6>
+                          </div> --}}
+
+                          <div class="contact-content-header mt-4">
+                            <nav class="nav">
+                              <a href="#summary" class="nav-link active" data-toggle="tab">Summary</a>
+                              <a href="#discount" class="nav-link" data-toggle="tab"><span>Discount History</a>
+                              <a href="#client" class="nav-link" data-toggle="tab"><span>Registered Clients</a>
+                              {{-- <a href="#activityLog" class="nav-link" data-toggle="tab"><span>Activity Log</a> --}}
+                            </nav>
+                            <a href="" id="contactOptions" class="text-secondary mg-l-auto d-xl-none"><i data-feather="more-horizontal"></i></a>
                           </div>
                           <nav class="nav nav-with-icon tx-13">
                               <!-- <a href="" class="nav-link"><i data-feather="plus"></i> Add New</a> -->
                           </nav>
                       </div><!-- card-header -->
-                      <div class="card-body pd-25">
-                          <div class="media down summary">
+                      <div class="contact-content-body">
+                        <div class="tab-content">
+                      {{-- <div class="card-body pd-25"> --}}
+                          <div class="tab-pane show active pd-20 pd-xl-25" id="summary">
 {{--                                <div class="pos-relative d-inline-block mg-b-20">--}}
 {{--                                    <div class="avatar avatar-xxl"><span class="avatar-initial rounded-circle bg-gray-700 tx-normal"><i class="icon ion-md-person"></i></span></div>--}}
 {{--                                    --}}{{-- <a href="" class="contact-edit-photo"><i data-feather="edit-2"></i></a> --}}
@@ -121,7 +133,7 @@
                                   </div>
                               </div>
                           </div>
-                          <div class="media d-none discount down-1">
+                          <div class="tab-pane pd-20 pd-xl-25" id="discount">
                             <div class="col-lg-12 col-xl-12">
                                 <div class="card">
                                 <div class="card-header pd-t-20 d-sm-flex align-items-start justify-content-between bd-b-0 pd-b-0">
@@ -170,7 +182,7 @@
 
                           </div>
                           </div>
-                          <div class="media d-none client down-2">
+                          <div class="tab-pane pd-20 pd-xl-25" id="client">
                             <div class="col-lg-12 col-xl-12">
                             <div class="card">
                             <div class="card-header pd-t-20 d-sm-flex align-items-start justify-content-between bd-b-0 pd-b-0">
@@ -248,11 +260,9 @@
                           </div>
 
                       </div>
-                  </div><!-- card -->
-              {{-- </div><!-- col -->
-              </div><!-- col -->
-              </div><!-- col --> --}}
-
+                  </div>
+          {{-- </div><!-- row --> --}}
+          </div><!-- row -->
           </div><!-- row -->
 
       </div>
