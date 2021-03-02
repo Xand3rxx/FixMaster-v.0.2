@@ -115,6 +115,14 @@
         </ul>
       </li>
 
+      <li class="nav-item with-sub ">
+        <a href="#" class="nav-link"><i data-feather="cpu"></i> <span>Price Management</span></a>
+        <ul>
+          <li class=""><a href="#">Add</a></li>
+          <li class=""><a href="#">List</a></li>
+        </ul>
+      </li>
+
       <li class="nav-item with-sub">
         <a href="" class="nav-link"><i data-feather="star"></i> <span>Rating</span></a>
         <ul>
@@ -162,6 +170,14 @@
         <ul>
           <li class=""><a href="#">Inventory</a></li>
           <li class=""><a href="#">Requests</a></li>
+        </ul>
+      </li>
+
+      <li class="nav-item with-sub">
+        <a href="" class="nav-link"><i data-feather="percent"></i> <span>Tax Management</span></a>
+        <ul>
+          <li class=""><a href="#">Add</a></li>
+          <li class=""><a href="#">List</a></li>
         </ul>
       </li>
 
