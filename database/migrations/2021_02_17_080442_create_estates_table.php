@@ -35,7 +35,7 @@ class CreateEstatesTable extends Migration
             $table->string('estate_name')->unique();
             $table->string('town');
             $table->string('landmark');
-            $table->enum('is_active', ['0', '1'])->default('0');
+            $table->enum('is_active', ['approved', 'declined', 'pending', 'deactivated', 'reinstated'])->default('pending');
             $table->string('created_by');
             $table->integer('approved_by')->nullable();
             $table->string('slug');
