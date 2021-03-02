@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Frontend\Registration\ClientRegistrationController;
 
 /*
 |--------------------------------------------------------------------------
@@ -18,7 +19,6 @@ use Illuminate\Support\Facades\Route;
 Auth::routes([
     'login'    => true,
     'logout'   => true,
-    'register' => true,
     'reset'    => false,   // for resetting passwords
     'confirm'  => false,  // for additional password confirmations
     'verify'   => false,  // for email verification
@@ -26,14 +26,22 @@ Auth::routes([
 
 Route::view('/', 'frontend.index')->name('frontend.index');
 
-Route::view('/about',                         'frontend.about')->name('frontend.about');
-Route::view('/how-it-works',                 'frontend.how_it_works')->name('frontend.how_it_works');
-Route::view('/why-home-fix',                 'frontend.why_home_fix')->name('frontend.why_home_fix');
-Route::get('/join-us',                     [App\Http\Controllers\PageController::class, 'index'])->name('frontend.careers');
-Route::post('/estate/add',      [\App\Http\Controllers\EstateController::class, 'store'])->name('frontend.store_estate');
-Route::view('/faq',                         'frontend.faq')->name('frontend.faq');
+Route::prefix('registration')->name('frontend.registration.')->group(function () {
+    Route::resource('client', ClientRegistrationController::class);
+});
 
-// Route::view('/service-details', 			'frontend.service_details')->name('frontend.services_details');
+Route::view('/about',                       'frontend.about')->name('frontend.about');
+Route::view('/how-it-works',                'frontend.how_it_works')->name('frontend.how_it_works');
+Route::view('/why-home-fix',                'frontend.why_home_fix')->name('frontend.why_home_fix');
+Route::get('/join-us',                      [App\Http\Controllers\PageController::class, 'index'])->name('frontend.careers');
+Route::post('/estate/add',                  [\App\Http\Controllers\EstateController::class, 'store'])->name('frontend.store_estate');
+Route::view('/faq',                         'frontend.faq')->name('frontend.faq');
+Route::view('/register',                    'auth.register')->name('frontend.register');
+Route::view('/messaging',           		'frontend.template')->name('template');
+
+
+
+Route::view('/service-details',             'frontend.service_details')->name('frontend.services_details');
 Route::get('/services',                     [App\Http\Controllers\PageController::class, 'services'])->name('frontend.services');
 Route::get('/services/details/{url}',       [App\Http\Controllers\PageController::class, 'serviceDetails'])->name('frontend.services_details');
 Route::post('/services/search',              [App\Http\Controllers\PageController::class, 'searchCategories'])->name('frontend.services_search');

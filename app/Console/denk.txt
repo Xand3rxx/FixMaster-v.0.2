@@ -1,0 +1,2 @@
+1. location table model and migration
+2. 

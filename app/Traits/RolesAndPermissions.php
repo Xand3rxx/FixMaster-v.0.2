@@ -7,8 +7,7 @@ use App\Models\Permission;
 
 trait RolesAndPermissions
 {
-    
-    
+
     /**
      * The roles relationship.
      * @return mixed
@@ -25,5 +24,19 @@ trait RolesAndPermissions
     public function permissions()
     {
         return $this->belongsToMany(Permission::class, 'users_permissions');
+    }
+
+    /**
+     * @param mixed ...$roles
+     * @return bool
+     */
+    public function hasRole(...$roles)
+    {
+        foreach ($roles as $role) {
+            if ($this->roles->contains('slug', $role)) {
+                return true;
+            }
+        }
+        return false;
     }
 }
