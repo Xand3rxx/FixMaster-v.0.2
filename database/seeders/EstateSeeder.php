@@ -34,7 +34,7 @@ class EstateSeeder extends Seeder
         $estate->town = 'Ikeja';
         $estate->landmark = 'House of Assembly';
         $estate->is_active = 'pending';
-        $estate->created_by = 'user';
+        $estate->created_by = 'Tope Odunlesi';
         $estate->slug = 'parkview-estate';
         $estate->save();
 
@@ -55,7 +55,7 @@ class EstateSeeder extends Seeder
         $estate->town = 'Lekki';
         $estate->landmark = 'Toll-gate';
         $estate->is_active = 'pending';
-        $estate->created_by = 'admin';
+        $estate->created_by = 'Kemi Martins';
         $estate->slug = 'beach-resort-estate';
         $estate->save();
 
@@ -76,7 +76,7 @@ class EstateSeeder extends Seeder
         $estate->town = 'Ikorodu';
         $estate->landmark = 'BRT Terminal';
         $estate->is_active = 'pending';
-        $estate->created_by = 'admin';
+        $estate->created_by = 'Joshua Tobiloba';
         $estate->slug = 'gateway-estate';
         $estate->save();
 
