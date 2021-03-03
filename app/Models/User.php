@@ -50,7 +50,7 @@ class User extends Authenticatable
     protected static function booted()
     {
         static::creating(function ($user) {
-            $user->uuid = (string) Str::uuid(); // Create uuid when a new user is to be created 
+            $user->uuid = (string) Str::uuid(); // Create uuid when a new user is to be created
         });
     }
 
@@ -109,4 +109,5 @@ class User extends Authenticatable
     {
         return $this->hasMany(Phone::class);
     }
+
 }

@@ -99,7 +99,7 @@ Route::prefix('/qa')->group(function () {
         //All routes regarding quality_assurance should be in here
         Route::view('/', 'qa.index')->name('index'); //Take me to quality_assurance Dashboard
         //Route::view('/profile', 'qa.view_profile')->name('view_profile');
-        Route::get('/profile', [App\Http\Controllers\QualityAssurance\QualityAssuranceProfileController::class,'view_profile'])->name('view_profile');
+        Route::get('/profile',    [App\Http\Controllers\QualityAssurance\QualityAssuranceProfileController::class,'view_profile'])->name('view_profile');
         Route::get('/profile/edit_profile', [App\Http\Controllers\QualityAssurance\QualityAssuranceProfileController::class,'edit'])->name('edit_profile');
         Route::patch('/profile/update_profile', [App\Http\Controllers\QualityAssurance\QualityAssuranceProfileController::class,'update'])->name('update_profile');
         Route::view('/requests', 'qa.requests')->name('requests');
