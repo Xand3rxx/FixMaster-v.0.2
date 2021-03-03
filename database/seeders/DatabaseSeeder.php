@@ -30,6 +30,8 @@ class DatabaseSeeder extends Seeder
             ServiceRequestSeeder::class,
             ServiceRequestStatusSeeder::class,
             CountrySeeder::class,
+            PaymentModeSeeder::class,
+            PaymentDisbursedSeeder::class,
         ]);
     }
 }
