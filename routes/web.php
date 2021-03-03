@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Client\ClientController;
 use App\Http\Controllers\Admin\User\AdministratorController;
 use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\EstateController;
 use App\Http\Controllers\ServiceController;
 /*
 |--------------------------------------------------------------------------
@@ -36,16 +37,18 @@ Route::prefix('admin')->group(function () {
         });
         Route::view('/',                   'admin.index')->name('index'); //Take me to Admin Dashboard
 
-        Route::get('/estate/list',      [\App\Http\Controllers\EstateController::class, 'index'])->name('list_estate');
-        Route::get('/estate/add',      [\App\Http\Controllers\EstateController::class, 'create'])->name('add_estate');
-        Route::post('/estate/add',      [\App\Http\Controllers\EstateController::class, 'store'])->name('store_estate');
-        Route::get('/estate/summary/{estate:uuid}',      [\App\Http\Controllers\EstateController::class, 'estateSummary'])->name('estate_summary');
-        Route::get('/estate/edit/{estate:uuid}',      [\App\Http\Controllers\EstateController::class, 'edit'])->name('edit_estate');
-        Route::patch('/estate/edit/{estate:uuid}',      [\App\Http\Controllers\EstateController::class, 'update'])->name('update_estate');
-        Route::get('/estate/reinstate/{estate:uuid}',      [\App\Http\Controllers\EstateController::class, 'reinstate'])->name('reinstate_estate');
-        Route::get('/estate/deactivate/{estate:uuid}',      [\App\Http\Controllers\EstateController::class, 'deactivate'])->name('deactivate_estate');
-        Route::get('/estate/delete/{estate:uuid}',      [\App\Http\Controllers\EstateController::class, 'delete'])->name('delete_estate');
-        
+        Route::get('/estate/list',      [EstateController::class, 'index'])->name('list_estate');
+        Route::get('/estate/add',      [EstateController::class, 'create'])->name('add_estate');
+        Route::post('/estate/add',      [EstateController::class, 'store'])->name('store_estate');
+        Route::get('/estate/summary/{estate:uuid}',      [EstateController::class, 'estateSummary'])->name('estate_summary');
+        Route::get('/estate/edit/{estate:uuid}',      [EstateController::class, 'edit'])->name('edit_estate');
+        Route::patch('/estate/edit/{estate:uuid}',      [EstateController::class, 'update'])->name('update_estate');
+        Route::get('/estate/reinstate/{estate:uuid}',      [EstateController::class, 'reinstate'])->name('reinstate_estate');
+        Route::get('/estate/deactivate/{estate:uuid}',      [EstateController::class, 'deactivate'])->name('deactivate_estate');
+        Route::get('/estate/approve/{estate:uuid}',      [EstateController::class, 'approve'])->name('approve_estate');
+        Route::get('/estate/decline/{estate:uuid}',      [EstateController::class, 'decline'])->name('decline_estate');
+        Route::get('/estate/delete/{estate:uuid}',      [EstateController::class, 'delete'])->name('delete_estate');
+
 
         //Routes for Category Management
         Route::get('/categories/reassign/{category}',       [CategoryController::class, 'reassign'])->name('categories.reassign');
@@ -60,10 +63,10 @@ Route::prefix('admin')->group(function () {
 
 
          //  location request
-         Route::get('/location-request',                     [App\Http\Controllers\AdminLocationRequestController::class, 'index'])->name('location_request'); 
+         Route::get('/location-request',                     [App\Http\Controllers\AdminLocationRequestController::class, 'index'])->name('location_request');
          Route::post('/get-names',                           [App\Http\Controllers\AdminLocationRequestController::class, 'getNames'])->name('get_names');
          Route::post('/request-location',                    [App\Http\Controllers\AdminLocationRequestController::class, 'requestLocation'])->name('request_location');
-         
+
 
     });
 });

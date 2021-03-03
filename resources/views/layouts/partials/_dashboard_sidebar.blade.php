@@ -23,8 +23,8 @@
           <a href="#" data-toggle="tooltip" onclick="event.preventDefault();
           document.getElementById('logout-form').submit();" href="{{ route('logout', app()->getLocale()) }}" title="Sign out"><i data-feather="log-out"></i></a>
 
-          
-                        
+
+
           <form id="logout-form" action="{{ route('logout', app()->getLocale()) }}" method="POST" style="display: none;">
               @csrf
           </form>

@@ -15,11 +15,6 @@ class DatabaseSeeder extends Seeder
     {
         // \App\Models\User::factory(10)->create();
         // $this->call(RoleSeeder::class);
-        // $this->call(PermissionSeeder::class);
-        // $this->call(UserSeeder::class);
-        // $this->call(CSESeeder::class);
-        // $this->call(ClientSeeder::class);
-        // $this->call(EstateSeeder::class);
 
         $this->call([
             RoleSeeder::class,
@@ -30,6 +25,11 @@ class DatabaseSeeder extends Seeder
             EstateSeeder::class,
             CategorySeeder::class,
             ServiceSeeder::class,
+            StateSeeder::class,
+            LgaSeeder::class,
+            ServiceRequestSeeder::class,
+            ServiceRequestStatusSeeder::class,
+            CountrySeeder::class,
         ]);
     }
 }

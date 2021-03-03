@@ -15,6 +15,7 @@ class EstateSeeder extends Seeder
      */
     public function run()
     {
+        Estate::truncate();
 
         $estate = new Estate();
         $estate->uuid = Str::uuid('uuid');
@@ -32,7 +33,8 @@ class EstateSeeder extends Seeder
         $estate->estate_name = 'Parkview Estate';
         $estate->town = 'Ikeja';
         $estate->landmark = 'House of Assembly';
-        $estate->is_active = '1';
+        $estate->is_active = 'pending';
+        $estate->created_by = 'Tope Odunlesi';
         $estate->slug = 'parkview-estate';
         $estate->save();
 
@@ -52,7 +54,8 @@ class EstateSeeder extends Seeder
         $estate->estate_name = 'Beach Resort Estate';
         $estate->town = 'Lekki';
         $estate->landmark = 'Toll-gate';
-        $estate->is_active = '1';
+        $estate->is_active = 'pending';
+        $estate->created_by = 'Kemi Martins';
         $estate->slug = 'beach-resort-estate';
         $estate->save();
 
@@ -72,7 +75,8 @@ class EstateSeeder extends Seeder
         $estate->estate_name = 'Gateway Estate';
         $estate->town = 'Ikorodu';
         $estate->landmark = 'BRT Terminal';
-        $estate->is_active = '0';
+        $estate->is_active = 'pending';
+        $estate->created_by = 'Joshua Tobiloba';
         $estate->slug = 'gateway-estate';
         $estate->save();
 
