@@ -4,12 +4,11 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Str;
 
-class ServiceRequest extends Model
+class ServiceRequestCancellation extends Model
 {
-    use HasFactory, SoftDeletes;
+    use HasFactory;
 
     // column name of key
     protected $primaryKey = 'uuid';
@@ -20,13 +19,8 @@ class ServiceRequest extends Model
     // whether the key is automatically incremented or not
     public $incrementing = false;
 
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var array
-     */
     protected $fillable = [
-        'user_id', 'admin_id', 'cse_id', 'technician_id', 'service_id', 'category_id', 'job_reference', 'security_code', 'service_request_status_id', 'total_amount',
+        'uuid', 'user_id', 'service_request_id', 'reason'
     ];
 
     /**
@@ -45,7 +39,7 @@ class ServiceRequest extends Model
      */
     protected static function booted()
     {
-        // Create a uuid when a new Serivce Request is to be created 
+        // Create a uuid when a new Serivce Request Cancellation is to be created 
         static::creating(function ($serviceRequest) {
             $serviceRequest->uuid = (string) Str::uuid(); 
         });
