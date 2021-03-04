@@ -30,7 +30,7 @@ class Service extends Model
      * @var array
      */
     protected $hidden = [
-        'id'
+        // 'id'
     ];
 
     /**
@@ -49,11 +49,11 @@ class Service extends Model
 
     public function category()
     {
-        return $this->hasOne(Category::class);
+        return $this->hasOne(Category::class, 'id', 'category_id');
     }
 
     public function categories()
     {
-        return $this->hasMany(Category::class);
+        return $this->hasMany(Category::class, 'id', 'category_id');
     }
 }

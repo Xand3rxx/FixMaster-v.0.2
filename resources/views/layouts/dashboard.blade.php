@@ -47,15 +47,12 @@
         margin-left: 1.5em;
       }
     </style>
+
     @include('layouts.partials._dashboard_sidebar')
 
     <div class="content ht-100v pd-0">
       @include('layouts.partials._dashboard_header')
-
       @yield('content')
-
-
-
     {{-- </div> --}}
     </div>
 
@@ -84,7 +81,7 @@
     <script src="{{ asset('assets/dashboard/lib/jquery-steps/build/jquery.steps.min.js') }}"></script>
     {{-- <script src="{{ asset('assets/dashboard/assets/js/custom.js') }}"></script> --}}
     <script src="{{ asset('assets/client/js/sweetalert2.min.js') }}"></script>
-    <input type="hidden" id="path_backEnd" value="{{url('/')}}">
+    <input type="hidden" class="d-none" id="path_backEnd" value="{{ url('/') }}">
 
     <script src="{{ asset('assets/client/js/jquery.datetimepicker.full.min.js') }}"></script>
     <script src="{{ asset('assets/client/js/moment.js') }}"></script>
@@ -98,104 +95,7 @@
     <script src="https://cdn.datatables.net/buttons/1.6.5/js/buttons.print.min.js"></script>
     <script src="{{asset('assets/frontend/js/custom.js')}}"></script>
 
-
-
-
-
-
-    <script>
-      tinymce.init({
-        selector: '#message_body',
-        height: 200,
-        theme: 'modern',
-        plugins: [
-          'advlist autolink lists charmap hr anchor pagebreak',
-          'searchreplace wordcount visualblocks visualchars',
-          'insertdatetime nonbreaking save table contextmenu directionality',
-          'emoticons paste textcolor colorpicker textpattern'
-        ],
-        toolbar1: 'undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent',
-        toolbar2: 'forecolor backcolor emoticons',
-        image_advtab: true
-      });
-    </script>
-
-    <script>
-      function displayMessage(message, type){
-
-        const Toast = swal.mixin({
-            toast: true,
-            position: 'top-end',
-            showConfirmButton: false,
-            timer: 8000,
-            timerProgressBar: true,
-            didOpen: (toast) => {
-                toast.addEventListener('mouseenter', Swal.stopTimer)
-                toast.addEventListener('mouseleave', Swal.resumeTimer)
-            }
-        });
-        Toast.fire({
-                icon: type,
-              //   type: 'success',
-                title: message
-        });
-
-      }
-    </script>
-
-    @yield('scripts')
-    @stack('scripts')
-    <script>
-      $(document).ready(function () {
-
-        // Basic DataTable
-        $('#basicExample, #demoRequests #paymentExample').DataTable({
-          "iDisplayLength": 10,
-          "language": {
-                "searchPlaceholder": 'Search...',
-                "sSearch": '',
-                "lengthMenu": '_MENU_ items/page',
-                // "lengthMenu": "Display _MENU_ records per page",
-                "zeroRecords": "No matching records found",
-                // "info": "Showing page _PAGE_ of _PAGES_",
-                "infoEmpty": "No records available",
-                "infoFiltered": "(filtered from _MAX_ total records)"
-              },
-          "dom": 'Bfrtip',
-          "buttons": [
-              'copy', 'csv', 'excel', 'pdf', 'print'
-          ],
-          "processing": true,
-          // "scrollY":        "200px",
-          // "scrollCollapse": true,
-        });
-
-        // Url for more info on datepicker options https://xdsoft.net/jqplugins/datetimepicker/
-        $(document).on('click', '#service-date-time', function(){
-          $('#service-date-time').datetimepicker({
-              // format: 'L', //LT for time only
-              // inline: true,
-              // sideBySide: true,
-              format:'Y/m/d H:i',
-              formatDate:'Y/m/d',
-              minDate:'-1970/01/02', // yesterday is minimum date
-              mask: true,
-          });
-        });
-
-
-        //Prevent characters or string asides number in ohone number input field
-        $("#phone_number, #other_phone_number, #account_number, .amount").on("keypress keyup blur", function(event) {
-            $(this).val($(this).val().replace(/[^\d].+/, ""));
-            if ((event.which < 48 || event.which > 57)) {
-                event.preventDefault();
-            }
-        });
-
-      });
-    </script>
-
-
+    <script src="{{ asset('assets/dashboard/assets/js/48a9782e-3e2b-4055-a9bb-8a926a937e2c.js') }}"></script>
 
     <script>
       $(function(){

@@ -3,9 +3,11 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Client\ClientController;
 use App\Http\Controllers\Admin\User\AdministratorController;
-use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\EstateController;
-use App\Http\Controllers\ServiceController;
+use App\Http\Controllers\Admin\ServiceController;
+use App\Http\Controllers\Admin\ActivityLogController;
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes ONLY AUTHENTICATED USERS HAVE ACCESS TO THIS ROUTE
@@ -59,14 +61,23 @@ Route::prefix('admin')->group(function () {
         Route::resource('categories',                       CategoryController::class);
 
         //Routes for Services Management
+        Route::get('/services/deactivate/{service}',        [ServiceController::class, 'deactivate'])
+        ->name('services.deactivate');
+        Route::get('/services/reinstate/{service}',              [ServiceController::class, 'reinstate'])->name('services.reinstate');
+        Route::get('/services/delete/{service}',            [ServiceController::class, 'destroy'])->name('services.delete');
         Route::resource('services',                         ServiceController::class);
 
 
-         //  location request
-         Route::get('/location-request',                     [App\Http\Controllers\AdminLocationRequestController::class, 'index'])->name('location_request');
-         Route::post('/get-names',                           [App\Http\Controllers\AdminLocationRequestController::class, 'getNames'])->name('get_names');
-         Route::post('/request-location',                    [App\Http\Controllers\AdminLocationRequestController::class, 'requestLocation'])->name('request_location');
+        //  location request
+        Route::get('/location-request',                     [App\Http\Controllers\AdminLocationRequestController::class, 'index'])->name('location_request');
+        Route::post('/get-names',                           [App\Http\Controllers\AdminLocationRequestController::class, 'getNames'])->name('get_names');
+        Route::post('/request-location',                    [App\Http\Controllers\AdminLocationRequestController::class, 'requestLocation'])->name('request_location');
 
+
+        //Routes for Activity Log Management
+        Route::post('/activity-log/sorting',                [ActivityLogController::class, 'sortActivityLog'])->name('activity-log.sorting_users');
+        Route::get('/activity-log/details/{activity_log}',  [ActivityLogController::class, 'activityLogDetails'])->name('activity-log.details');
+        Route::resource('activity-log',                     ActivityLogController::class);
 
     });
 });

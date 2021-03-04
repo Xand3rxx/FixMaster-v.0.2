@@ -51,7 +51,7 @@
       <li class="nav-label">Components</li>
       <li class="nav-item {{ Route::currentRouteNamed('admin.index') ? 'active' : '' }}"><a href="{{ route('admin.index', app()->getLocale()) }}" class="nav-link"><i data-feather="airplay"></i> <span>Home</span></a></li>
 
-      <li class="nav-item"><a href="" class="nav-link"><i data-feather="activity"></i> <span>Activity Log</span></a></li>
+    <li class="nav-item {{ Route::currentRouteNamed('admin.activity-log.index') ? 'active' : '' }}"><a href="{{ route('admin.activity-log.index', app()->getLocale()) }}" class="nav-link"><i data-feather="activity"></i> <span>Activity Log</span></a></li>
 
       <li class="nav-item with-sub">
         <a href="" class="nav-link"><i data-feather="percent"></i> <span>Discount/Promotion</span></a>
@@ -153,13 +153,13 @@
 
       <li class="nav-item"><a href="#" class="nav-link"><i data-feather="file-text"></i> <span>RFQ's</span></a></li>
 
-      <li class="nav-item with-sub {{ Route::currentRouteNamed('admin.categories.index') ? 'active show' : '' }}">
+      <li class="nav-item with-sub {{ Route::currentRouteNamed('admin.categories.index', 'admin.services.index') ? 'active show' : '' }}">
         <a href="" class="nav-link"><i data-feather="aperture"></i> <span>Service & Category</span></a>
         <ul>
           <li class=""><a href="{{ route('admin.categories.index', app()->getLocale()) }}">Category List</a></li>
           {{-- <hr> --}}
           <li class="{{ Route::currentRouteNamed('admin.categories.index') ? 'active' : '' }}"><a href="#">Add Category Service</a></li>
-          <li class=""><a href="#">Category Services List</a></li>
+        <li class="{{ Route::currentRouteNamed('admin.services.index') ? 'active' : '' }}"><a href="{{ route('admin.services.index', app()->getLocale()) }}">Category Services List</a></li>
           <li class=""><a href="#">Category Service Review</a></li>
 
         </ul>

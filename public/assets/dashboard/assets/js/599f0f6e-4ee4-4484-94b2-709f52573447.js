@@ -1,5 +1,35 @@
 $(document).ready(function() {
 
+    //Sort Activity Log view
+    $(document).on('click', '#activity-log-details', function(event) {
+        event.preventDefault();
+        let route = $(this).attr('data-url');
+        $.ajax({
+            url: route,
+            beforeSend: function() {
+              $("#sort_table_details").html('<div class="d-flex justify-content-center mt-4 mb-4"><span class="loadingspinner"></span></div>');
+            },
+            // return the result
+            success: function(result) {
+                $('#modal-body').modal("show");
+                $('#modal-body').html(result).show();
+            },
+            complete: function() {
+                $("#sort_table_details").hide();
+            },
+            error: function(jqXHR, testStatus, error) {
+                // console.log(error);
+                // alert("Page " + route + " cannot open. Error:" + error);
+                // var message = "Page " + route + " cannot open. Error:" + error;
+                var message = error+ ' An error occured while trying to retireve Activity Log details.';
+                var type = 'error';
+                displayMessage(message, type);
+                $("#sort_table_details").hide();
+            },
+            timeout: 8000
+        })
+    });
+
     $('#sort_by_range').on('change', function (){        
             let option = $("#sort_by_range").find("option:selected").val();
 
