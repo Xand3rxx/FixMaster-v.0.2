@@ -1,5 +1,4 @@
 <!-- START ADMIN SIDEBAR MENU -->
-{{Auth::user()->roles}}
 <aside class="aside aside-fixed" id="sidebarMenu">
   <div class="aside-header">
     <a href="{{ route('admin.index', app()->getLocale()) }}" class="aside-logo">
