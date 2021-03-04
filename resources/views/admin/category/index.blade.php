@@ -131,11 +131,6 @@
 
 @push('scripts')
   <script src="{{ asset('assets/dashboard/assets/js/253d5420-ccbe-4671-89f8-956cd70c42bc.js') }}"></script>
-  <script>
-    $('.close').click(function (){
-        $(".modal-backdrop").remove();
-      });
-  </script>
 @endpush
 
 @endsection
