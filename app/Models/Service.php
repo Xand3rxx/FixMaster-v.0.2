@@ -4,11 +4,12 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Str;
 
 class Service extends Model
 {
-    use HasFactory;
+    use HasFactory, SoftDeletes;
 
     // column name of key
     protected $primaryKey = 'uuid';
@@ -39,9 +40,10 @@ class Service extends Model
      */
     protected static function booted()
     {
-        // Create a uuid when a new Serivce is to be created 
+        // Create a uuid when a new serivce uuid and url is to be created 
         static::creating(function ($service) {
             $service->uuid = (string) Str::uuid(); 
+            $service->url = (string) Str::uuid(); 
         });
     }
 

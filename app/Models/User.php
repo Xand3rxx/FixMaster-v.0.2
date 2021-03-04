@@ -110,4 +110,14 @@ class User extends Authenticatable
         return $this->hasMany(Phone::class);
     }
 
+    public function estate()
+    {
+        return $this->hasOne(Estate::class);
+    }
+
+    public function estates()
+    {
+        return $this->hasMany(Estate::class);
+    }
+
 }

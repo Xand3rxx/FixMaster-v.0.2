@@ -10,7 +10,7 @@
                     <nav aria-label="breadcrumb">
                         <ol class="breadcrumb breadcrumb-style1 mg-b-10">
                             <li class="breadcrumb-item"><a href="{{ route('admin.index', app()->getLocale()) }}">Dashboard</a></li>
-                            <li class="breadcrumb-item active" aria-current="page">Estates List</li>
+                            <li class="breadcrumb-item active" aria-current="page">Estates</li>
                         </ol>
                     </nav>
                     <h4 class="mg-b-0 tx-spacing--1">Estates List</h4>
@@ -42,6 +42,8 @@
                                     <th>Phone Number</th>
                                     <th>Clients</th>
                                     <th>Status</th>
+                                    <th>Created By</th>
+                                    <th>Approved / Declined By</th>
                                     <th>Action</th>
                                 </tr>
                                 </thead>
@@ -53,22 +55,42 @@
                                             <td class="tx-medium">{{ $estate['first_name'] .' '.$estate['last_name'] }}</td>
                                             <td class="tx-medium">{{ $estate['phone_number'] }}</td>
                                             <td class="text-medium">5</td>
-                                            @if($estate['is_active'] === '1')
-                                                <td class="text-medium text-success">Active</td>
+                                            @if($estate['approved_by'] == null)
+                                                <td class="text-medium text-danger">Pending</td>
                                             @else
-                                                <td class="text-medium text-danger">Inactive</td>
+                                                <td class="text-medium text-@if($estate['is_active'] == 'approved' || $estate['is_active'] == 'reinstated')success @elseif($estate['is_active'] == 'declined' || $estate['is_active'] == 'deactivated')danger @endif">
+                                                    {{ Str::ucfirst($estate['is_active']) }}
+                                                </td>
+                                            @endif
+                                            <td class="text-medium">{{ $estate['created_by'] }}</td>
+                                            @if($estate['approved_by'] == null)
+                                            <td class="text-medium text-danger">Pending</td>
+                                            @else
+                                            @foreach($approvedBy as $item)
+                                            <td class="text-medium">{{ $item->email }}</td>
+                                            @endforeach
                                             @endif
                                             <td class=" text-center">
                                                 <div class="dropdown-file">
                                                     <a href="" class="dropdown-link" data-toggle="dropdown"><i data-feather="more-vertical"></i></a>
                                                     <div class="dropdown-menu dropdown-menu-right">
                                                         <a href="{{ route('admin.estate_summary', [ 'estate'=>$estate['uuid'], 'locale'=>app()->getLocale() ]) }}" class="dropdown-item details text-primary"><i class="far fa-user"></i> Summary</a>
-                                                        <a href="" class="dropdown-item details text-secondary"><i class="fa fa-percent"></i> Discount </a>
                                                         <a href="{{ route('admin.edit_estate', [ 'estate'=>$estate['uuid'], 'locale'=>app()->getLocale() ]) }}" class="dropdown-item details text-info"><i class="far fa-edit"></i> Edit</a>
-                                                        @if($estate['is_active'] == '1')
+                                                        <a href="" class="dropdown-item details text-secondary"><i class="fa fa-percent"></i> Discount </a>
+
+
+                                                        @if($estate['approved_by'] == null || $estate['is_active'] == 'declined' || $estate['is_active'] == 'pending')
+                                                        @if($estate['approved_by'] != null || $estate['is_active'] == 'declined' || $estate['is_active'] == 'pending')
+                                                            <a href="{{ route('admin.approve_estate', ['estate'=>$estate->uuid, 'locale'=>app()->getLocale()]) }}" class="dropdown-item details text-success"><i class="fas fa-ban"></i> Approve</a>
+                                                            <a href="{{ route('admin.decline_estate', ['estate'=>$estate->uuid, 'locale'=>app()->getLocale()]) }}" class="dropdown-item details text-warning"><i class="fas fa-ban"></i> Decline</a>
+                                                        @endif
+
+                                                        @elseif($estate['is_active'] == 'approved' || $estate['is_active'] == 'reinstated' || $estate['is_active'] == 'deactived')
+                                                        @if($estate['is_active'] == 'reinstated' )
                                                             <a href="{{ route('admin.deactivate_estate', ['estate'=>$estate->uuid, 'locale'=>app()->getLocale()]) }}" class="dropdown-item details text-warning"><i class="fas fa-ban"></i> Deactivate</a>
                                                         @else
                                                             <a href="{{ route('admin.reinstate_estate', ['estate'=>$estate->uuid, 'locale'=>app()->getLocale()]) }}" class="dropdown-item details text-success"><i class="fas fa-undo"></i> Reinstate</a>
+                                                        @endif
                                                         @endif
                                                         <a href="{{ route('admin.delete_estate', ['estate'=>$estate->uuid, 'locale'=>app()->getLocale()]) }}" class="dropdown-item details text-danger"><i class="fas fa-trash"></i> Delete</a>
                                                     </div>
