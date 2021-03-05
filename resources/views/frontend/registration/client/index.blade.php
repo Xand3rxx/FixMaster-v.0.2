@@ -206,6 +206,22 @@
                                     @enderror
                                 </div>
                             </div>
+                            <!-- hidden input field for long, and lat -->
+                            <input type="hidden" class="form-control" value="" name="user_address" id="user_address" placeholder="Your Location">
+                            <input type="hidden" value="" name="user_latitude" id="user_latitude">
+                            <input type="hidden" value="" name="user_longitude" id="user_longitude">
+
+                            <input type="hidden" id="user_address_values" value="">
+                            <input type="hidden" id="user_latitude_values" value="">
+                            <input type="hidden" id="user_longitude_values" value="">
+                            
+                            <!-- <div class="col-md-12">
+                             <a class="current-loc-icon current_location" data-id="1" href="javascript:void(0);"><i class="fas fa-crosshairs"></i></a>
+                            </div> -->
+
+                            <div class="mx-auto">
+                                <a class="current-loc-icon current_location" data-id="1" class="text-dark font-weight-bold">myLocation</a>                           
+                            </div>
 
                             <div class="col-md-12">
                                 <div class="form-group">
@@ -259,7 +275,6 @@
 </section>
 
 @push('scripts')
-<script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDeDLVAiaU13p2O0d3jfcPjscsbVsCQUzc&v=3.exp&libraries=places"></script> 
 
 <script>
     $(document).ready(function() {
@@ -295,31 +310,6 @@
         });
     });
 
-    (function($) {
-        "use strict";
-        var autocomplete;
-        initialize();
-        
-        $( document ).ready(function() {
-            $('.current_location').on('click',function(){
-                var id=$(this).attr('data-id');
-                current_location(id);
-            }); 
-        });
-        
-        function initialize() {
-            // Create the autocomplete object, restricting the search
-            // to geographical location types.
-            autocomplete = new google.maps.places.Autocomplete(
-                /** @type {HTMLInputElement} */
-                (document.querySelector('.user_address')), {
-                    types: ['geocode']
-                });
-
-            google.maps.event.addDomListener(document.querySelector('.user_address'), 'focus');
-        }
-
-    })(jQuery);
 </script>
 @endpush
 @endsection
