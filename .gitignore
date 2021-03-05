@@ -15,3 +15,5 @@ yarn-error.log
 _ide_helper.php
 Dockerfile
 docker-compose.yml
+.history/
+.idea/*
