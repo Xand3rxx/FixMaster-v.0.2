@@ -140,12 +140,11 @@ class DiscountController extends Controller
 
     public function edit($language, $discount)
     {
-        $status = Discount::findOrFail($discount);
-        $data = ['status' => $status, ];
+        $status = Discount::select('*')->where('uuid', $discount)->first();
+        $data = ['status' => $status];
         $data['entities'] = $this->entityArray();
         $data['states'] = State::select('id', 'name')->orderBy('name', 'ASC')
             ->get();
-        $data['parameters'] = $this->parameterList(['states' => $data['states']]);
         return response()->view('admin.discount.edit', $data);
     }
 

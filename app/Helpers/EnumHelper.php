@@ -19,5 +19,7 @@ class EnumHelper{
         // Return matches
         return isset($matches[1]) ? $matches[1] : [];
     }
+
+    
 }
 ?>

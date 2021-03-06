@@ -60,10 +60,7 @@
                                     <td class="tx-medium">{{ ucfirst($discount->entity)}}</td>
                                     <td class="tx-medium text-center">{{ucfirst('super admin')}}</td>
                                     <td class="tx-medium text-center">{{$discount->rate.'%'}}</td>
-                                    <td class="tx-medium">
-                                        {{ \Carbon\Carbon::parse( $discount->duration_start )->diffInDays($discount->duration_end) > 1 ?
-                       \Carbon\Carbon::parse( $discount->duration_start )->diffInDays($discount->duration_end) .' days': ( \Carbon\Carbon::parse( $discount->duration_start )->diffInDays($discount->duration_end) == 1?
-                        \Carbon\Carbon::parse( $discount->duration_start )->diffInDays($discount->duration_end).' day' : '1 day') }}</td>
+                               <td class="tx-medium text-center">{{CustomHelpers::displayTime($discount->duration_start, $discount->duration_end) }}</td>
                                     <td class="tx-medium">{{$discount->description}}</td>
                                     <td class="tx-medium text-center">{{$discount->notify == 0 ? ' Sent': 'Not Sent'}}
                                     </td>
@@ -86,7 +83,7 @@
                                                     class="dropdown-item details text-primary" title="View  details"
                                                     data-url="" data-category-name="" id="category-details"><i
                                                         class="far fa-clipboard"></i> Summary</a>
-                                                <a href="{{ route('admin.edit_discount', [ 'discount'=>$discount->id, 'locale'=>app()->getLocale() ]) }}"
+                                                <a href="{{ route('admin.edit_discount', [ 'discount'=>$discount->uuid, 'locale'=>app()->getLocale() ]) }}"
                                                     class="dropdown-item details text-info"><i class="far fa-edit"></i>
                                                     Edit</a>
                                                 @if($discount->status == 'activate')

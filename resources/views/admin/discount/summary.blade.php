@@ -51,9 +51,8 @@
                 </tr>
                 <tr>
                   <td class="tx-medium">Duration</td>
-                  <td class="tx-color-03">{{ \Carbon\Carbon::parse( $discount->duration_start )->diffInDays($discount->duration_end) > 1 ?
-                       \Carbon\Carbon::parse( $discount->duration_start )->diffInDays($discount->duration_end) .' days': ( \Carbon\Carbon::parse( $discount->duration_start )->diffInDays($discount->duration_end) == 1?
-                        \Carbon\Carbon::parse( $discount->duration_start )->diffInDays($discount->duration_end).' day' : '1 day') }}</td>
+ 
+                        <td class="tx-color-03">{{CustomHelpers::displayTime($discount->duration_start, $discount->duration_end) }}</td>   
                 </tr>
                 <tr>
                   <td class="tx-medium">Notification</td>
