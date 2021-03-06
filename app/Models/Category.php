@@ -21,7 +21,7 @@ class Category extends Model
     public $incrementing = false;
 
     public $fillable = [
-        'user_id', 'name',
+        'uuid', 'user_id', 'name',
     ];
 
     /**

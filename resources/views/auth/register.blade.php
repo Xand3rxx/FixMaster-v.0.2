@@ -219,7 +219,7 @@
 
                                 <div class="mx-auto">
                                     <p class="mb-0 mt-3"><small class="text-dark mr-2">Already have an account?</small>
-                                    <a href="{{url('login')}}" class="text-dark font-weight-bold">Login</a>
+                                    <a href="{{ route('login', app()->getLocale()) }}" class="text-dark font-weight-bold">Login</a>
                                     </p>
                                 </div>
                             </div>

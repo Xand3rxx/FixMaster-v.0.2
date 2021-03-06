@@ -18,11 +18,19 @@ class CreateCountriesTable extends Migration
             $table->charset = 'utf8mb4';
             $table->collation = 'utf8mb4_unicode_ci';
 
+            // $table->id();
+            // $table->string('name')->unique();
+            // $table->string('phonecode', 30)->nullable()->unique();
+            // $table->string('currency', 30);
+            // $table->string('flagname')->nullable()->unique();
+
             $table->id();
-            $table->string('name')->unique();
-            $table->string('phonecode', 30)->nullable()->unique();
-            $table->string('currency', 30);
-            $table->string('flagname')->nullable()->unique();
+            $table->char('iso', 2);
+            $table->string('name', 80);
+            $table->string('nicename', 80);
+            $table->char('iso3', 3  )->nullable();
+            $table->smallinteger('numcode')->nullable();
+            $table->integer('phonecode');
 
             $table->timestamps();
         });

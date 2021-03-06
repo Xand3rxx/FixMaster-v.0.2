@@ -63,6 +63,7 @@ class CategoryController extends Controller
     {
         try{
 
+            // return $request->name;
             $request->validate([
                 'name'      => 'required|unique:categories,name',
             ]);
@@ -74,7 +75,8 @@ class CategoryController extends Controller
                 'updated_at'   =>  null
             ]);
 
-            // $createCategory = Category::updateOrCreate(
+            // $createCategory = Category::updateOrInsert(
+            //     ['uuid'         =>  Str::uuid()],
             //     ['user_id'      =>  Auth::id()],
             //     ['name'         =>  ucwords($request->name)],
             //     ['updated_at'   =>  null]
