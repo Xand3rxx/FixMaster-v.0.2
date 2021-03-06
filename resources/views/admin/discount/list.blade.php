@@ -91,19 +91,19 @@
                                                     Edit</a>
                                                 @if($discount->status == 'activate')
                                                 <a href="#" id="deactivate"
-                                                    data-url="{{ route('admin.deactivate_discount', [ 'discount'=>$discount->id, 'locale'=>app()->getLocale() ]) }}"
+                                                    data-url="{{ route('admin.deactivate_discount', [ 'discount'=>$discount->uuid, 'locale'=>app()->getLocale() ]) }}"
                                                     class="dropdown-item details text-warning deactivate"
                                                     title="Deactivate "><i class="fas fa-ban"></i> Deactivate</a>
                                                 @else
 
                                                 <a href="#" id="activate"
-                                                    data-url="{{ route('admin.activate_discount', [ 'discount'=>$discount->id, 'locale'=>app()->getLocale() ]) }}"
+                                                    data-url="{{ route('admin.activate_discount', [ 'discount'=>$discount->uuid, 'locale'=>app()->getLocale() ]) }}"
                                                     class="dropdown-item details text-success" title="Reinstate"><i
                                                         class="fas fa-undo"></i> Reinstate</a>
                                                 @endif
 
                                                 <a href="#" id="delete" 
-                                                    data-url="{{ route('admin.delete_discount', [ 'discount'=>$discount->id, 'locale'=>app()->getLocale() ]) }}"
+                                                    data-url="{{ route('admin.delete_discount', [ 'discount'=>$discount->uuid, 'locale'=>app()->getLocale() ]) }}"
                                                     class="dropdown-item details text-danger" title="Delete Discount"><i
                                                         class="fas fa-trash"></i> Delete</a>
 

@@ -53,7 +53,7 @@
 
                         <div class="form-group col-md-12 show-estate">
                             <label>Select Estate</label>
-                            <select class="custom-select cs-select" name="estate_type" id="estate_id">
+                            <select class="custom-select cs-select" name="estate_name" id="estate_id">
                                 <option selected value="">Select...</option>
                             </select>
                         </div>
@@ -67,7 +67,7 @@
                                 data-live-search="true">
                                 <option value="">Select...</option>
                             </select>
-                          
+
 
                         </div>
 
@@ -82,7 +82,7 @@
                         </div>
 
 
-                    
+
 
                         <div class="form-group col-md-12 parameter"> <strong>Fill Additional Fields based on the Entity
                                 Parameter
@@ -162,17 +162,12 @@
                         </div>
                         <div class="form-group col-md-10 parameter">
 
-                            <label class='add-page'>Users</label>
-                            <select class="cat-selectpicker show-tick select-all" id="users" name="users[]"
+                            <label class='add-page'>Add Users</label>
+                            <select class="selectpicker show-tick select-user" id="users" name="users[]"
                                 title="select..." multiple="multiple" data-selected-text-format="count>3"
                                 data-live-search="true">
                                 <option value="">Select...</option>
                             </select>
-                            @error('users.0')
-                            <span class="invalid-feedback-err">
-                                <strong>{{ $message }}</strong>
-                            </span>
-                            @enderror
 
                         </div>
 
@@ -272,7 +267,7 @@
 
 <script>
 $('.selectpicker').selectpicker();
-$('.cat-selectpicker').selectpicker();
+
 
 $(document).ready(function() {
     $('.custom-select.cs-select').change(function() {
@@ -305,7 +300,7 @@ $(document).ready(function() {
 <script>
 $(document).ready(function() {
 
-    $('.selectpicker.select-all').on('change', function() {
+    $('.selectpicker.select-user').on('change', function() {
         var selectPicker = $(this);
         var selectAllOption = selectPicker.find('option.select-all');
         var checkedAll = selectAllOption.prop('selected');
@@ -360,12 +355,12 @@ $(document).ready(function() {
 
 
 
-$('.selectpicker.select-services').on('change', function() {
+    $('.selectpicker.select-services').on('change', function() {
         var selectPicker = $(this);
         var selectAllOption = selectPicker.find('option.select-all');
         var checkedAll = selectAllOption.prop('selected');
         var optionValues = selectPicker.find('option[value!="all-services"][data-divider!="true"]');
-   
+
 
         if (checkedAll) {
             // Process 'all/none' checking
@@ -386,7 +381,7 @@ $('.selectpicker.select-services').on('change', function() {
             selectAllOption.data("all", allSelected);
         }
     }).trigger('change');
-}); 
+});
 </script>
 
 <script>
@@ -443,24 +438,25 @@ $(document).ready(function() {
     });
 
 
-   
-  
 
-    $('.selectpicker.select-all-service').on('changed.bs.select', function (e, clickedIndex, isSelected, previousValue) {
-     var categoryid = $(this).val();
-             $.ajax({
+
+
+    $('.selectpicker.select-all-service').on('changed.bs.select', function(e, clickedIndex, isSelected,
+        previousValue) {
+        var categoryid = $(this).val();
+        $.ajax({
             url: "{{ route('admin.category.services',app()->getLocale()) }}",
             method: "POST",
             dataType: "JSON",
             data: {
                 "_token": "{{ csrf_token() }}",
-                data: categoryid.length > 0 ? categoryid: '1'
+                data: categoryid.length > 0 ? categoryid : '1'
             },
-            beforeSend: function(){
+            beforeSend: function() {
                 $("#service_id").html();
             },
             success: function(data) {
-                if (data) {                 
+                if (data) {
                     $("#service_id").html(data.service).selectpicker('refresh');
                 } else {
                     var message =
@@ -471,8 +467,8 @@ $(document).ready(function() {
             },
         })
 
-       
-		});
+
+    });
 
 
 });
@@ -482,9 +478,15 @@ $(document).ready(function() {
 <script>
 $(document).ready(function() {
     var entity = $('#entity_id').children("option:selected").val();
+    if (entity === 'user') {
+        $('.show-estate').show();
+        $('.show-service').hide();
+        $('.parameter').show();
+    }
     if (entity === 'estate') {
         $('.show-estate').show();
         $('.show-service').hide();
+        $('.parameter').show()
 
         $.ajax({
             url: "{{ route('admin.all_estates',app()->getLocale()) }}",
@@ -514,6 +516,7 @@ $(document).ready(function() {
     if (entity === 'service') {
         $('.show-estate').hide();
         $('.show-service').show();
+        $('.parameter').hide();
         $.ajax({
             url: "{{ route('admin.categories',app()->getLocale()) }}",
             method: "POST",
@@ -567,9 +570,15 @@ $(document).ready(function() {
 $(document).ready(function() {
     $('#entity_id').on("change", function() {
         var entity = $(this).children("option:selected").val();
+        if (entity === 'user') {
+            $('.show-estate').show();
+            $('.show-service').hide();
+            $('.parameter').show();
+        }
         if (entity === 'estate') {
             $('.show-estate').show();
             $('.show-service').hide();
+            $('.parameter').show();
             $.ajax({
                 url: "{{ route('admin.all_estates',app()->getLocale()) }}",
                 method: "POST",
@@ -596,6 +605,7 @@ $(document).ready(function() {
         if (entity === 'service') {
             $('.show-service').show();
             $('.show-estate').hide();
+            $('.parameter').hide();
             $.ajax({
                 url: "{{ route('admin.categories',app()->getLocale()) }}",
                 method: "POST",
