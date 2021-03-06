@@ -19,9 +19,9 @@
       <a href="{{ route('admin.discount_list',app()->getLocale()) }}" class="btn btn-primary"><i class="fas fa-arrow-left"></i> Back</a>
         <a href="#" class="btn btn-warning"><i class="fas fa-edit"></i> Edit</a>
         @if($discount->status == 'activate') 
-        <a href="#"  id="deactivate" data-toggle="modal" data-url="{{ route('admin.deactivate_discount', [ 'discount'=>$discount->id, 'locale'=>app()->getLocale() ]) }}"   class="btn btn-warning" title="Deactivate "><i class="fas fa-ban"></i> Deactivate</a>
+        <a href="#"  id="deactivate" data-toggle="modal" data-url="{{ route('admin.deactivate_discount', [ 'discount'=>$discount->uuid, 'locale'=>app()->getLocale() ]) }}"   class="btn btn-warning" title="Deactivate "><i class="fas fa-ban"></i> Deactivate</a>
         @else 
-        <a href="#" id="activate" data-toggle="modal" data-url="{{ route('admin.activate_discount', [ 'discount'=>$discount->id, 'locale'=>app()->getLocale() ]) }}"  class="btn btn-success" title="Reinstate"><i class="fas fa-undo"></i> Reinstate</a>
+        <a href="#" id="activate" data-toggle="modal" data-url="{{ route('admin.activate_discount', [ 'discount'=>$discount->uuid, 'locale'=>app()->getLocale() ]) }}"  class="btn btn-success" title="Reinstate"><i class="fas fa-undo"></i> Reinstate</a>
         @endif                 
         <a href="#" id="delete" class="btn btn-danger"><i class="fas fa-trash"></i> Delete</a>
       </div>

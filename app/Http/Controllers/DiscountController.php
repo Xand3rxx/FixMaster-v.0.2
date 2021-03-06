@@ -42,13 +42,14 @@ class DiscountController extends Controller
     {
         //Validate discount input
         $this->validateRequest($request);
+        if($request->entity == 'service' && !isset($request->category))return back()->with('error', 'Select category');
+    
 
-        
         $fields = ['specified_request_count_morethan' => $request->specified_request_count_morethan, 'specified_request_count_equalto' => $request->specified_request_count_equalto, 'specified_request_amount_from' => $request->specified_request_amount_from, 'specified_request_amount_to' => $request->specified_request_amount_to, 'specified_request_start_date' => $request->specified_request_start_date, 'specified_request_end_date' => $request->specified_request_end_date, ];
         $entity = $request->input('entity');
-        $users = array_filter($request->users);
+        $users = $this->filterEntity($request);
         $update = '';
-        $parameterArray = ['field' => array_filter($fields) , 'users' => $request->users];
+        $parameterArray = ['field' => array_filter($fields) , 'users' => $request->entity !='service'? $request->users:(isset($request->services)?$request->services: $request->category ) ];
 
         $discount = Discount::create(['name' => $request->input('discount_name') , 'entity' => $request->input('entity') , 'notify' => $request->input('notify') , 'rate' => $request->input('rate') , 'duration_start' => $request->input('start_date') , 'duration_end' => $request->input('end_date') , 'description' => $request->input('description') , 'parameter' => json_encode($parameterArray) , 'created_by' => Auth::user()->email, 'status' => 'activate']);
 
@@ -70,6 +71,14 @@ class DiscountController extends Controller
                         $update = $this->updateEstateTypeUsersDiscoun($request, $discount, $request->estate_name);
                     }
                     $this->updateEstateHistory($request, $discount);
+                break;
+                case 'service':
+                    if (!empty($request->services)){
+                        $update = $this->updateServiceDiscount($request, $discount);
+                    }if(!empty($request->category)){
+                        $update = $this->updateAllServiceDiscount($request, $discount);
+                    }
+                 
                 break;
                 default:
                     # code...
@@ -104,6 +113,18 @@ class DiscountController extends Controller
 
         }
 
+    }
+
+
+    private function validateRequest($request)
+    {
+        if($request->entity == 'service'){
+           
+            return request()->validate(['discount_name' => 'required|unique:discounts,name|max:250', 'entity' => 'required', 'rate' => 'required', 'start_date' => 'required', 'category.*' => 'required', 'end_date' => 'required', 'description' => 'max:250']);
+        }else{
+            return request()->validate(['discount_name' => 'required|unique:discounts,name|max:250', 'entity' => 'required', 'rate' => 'required', 'start_date' => 'required', 'users.*' => 'required', 'end_date' => 'required', 'description' => 'max:250']);
+
+        }
     }
 
     public function show($language, $discount)
@@ -535,10 +556,6 @@ class DiscountController extends Controller
         return response()->json($data);
     }
 
-    private function validateRequest($request)
-    {
-        return request()->validate(['discount_name' => 'required|unique:discounts,name|max:250', 'entity' => 'required', 'rate' => 'required', 'start_date' => 'required', 'users.*' => 'required', 'end_date' => 'required', 'description' => 'max:250']);
-    }
 
     private function updateUsersDiscount($request, $discount)
     {
@@ -643,5 +660,71 @@ class DiscountController extends Controller
 
     }
 
+    private function updateServiceDiscount($request, $discount)
+    {       
+        $discount_arr = [];
+        $service_discount = [];
+        $new_discount_array = [];
+
+        foreach ($request->services as $service)
+        {
+            $client = Service::where(['id' =>  $service])->first();
+            if ($client->discounted)
+            {
+                $discount_arr = json_decode($client->discounted, true);
+                foreach ($discount_arr as $key => $value)
+                {
+                    $new_discount_array[] = $value;
+                }
+                $new_discount_array[] = ['id' => $discount->id, 'rate' => $request->input('rate') ];
+                $data = ['id' =>  $service, 'discounted' => json_encode($new_discount_array) ];
+                Service::where(['id' => $service])->update($data);
+            }
+            else
+            {
+                $service_discount[] = ['id' => $discount->id, 'rate' => $request->input('rate') ];
+                $data = ['id' =>  $service, 'discounted' => json_encode($service_discount) ];
+                Service::where(['id' =>  $service])->update($data);
+            }
+
+        }
+        return true;
+    }
+
+
+    private function updateAllServiceDiscount($request, $discount)
+    {       
+        $discount_arr = [];
+        $service_discount = [];
+        $new_discount_array = [];
+        $all_services = Service::select('id')->whereIn('category_id', $request->category)
+        ->orderBy('name', 'ASC')
+        ->get();
+   
+
+        foreach ($all_services as $service)
+        {
+            $client = Service::where(['id' =>  $service->id])->first();
+            if ($client->discounted)
+            {
+                $discount_arr = json_decode($client->discounted, true);
+                foreach ($discount_arr as $key => $value)
+                {
+                    $new_discount_array[] = $value;
+                }
+                $new_discount_array[] = ['id' => $discount->id, 'rate' => $request->input('rate') ];
+                $data = ['id' =>  $service->id, 'discounted' => json_encode($new_discount_array) ];
+                Service::where(['id' => $service->id])->update($data);
+            }
+            else
+            {
+                $service_discount[] = ['id' => $discount->id, 'rate' => $request->input('rate') ];
+                $data = ['id' =>  $service->id, 'discounted' => json_encode($service_discount) ];
+                Service::where(['id' =>  $service->id])->update($data);
+            }
+
+        }
+        return true;
+    }
 }
 

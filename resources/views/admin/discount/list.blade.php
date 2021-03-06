@@ -103,7 +103,7 @@
                                                 @endif
 
                                                 <a href="#" id="delete" 
-                                                    data-url="{{ route('admin.delete_discount', [ 'discount'=>$discount->uuid, 'locale'=>app()->getLocale() ]) }}"
+                                                    data-url="{{ route('admin.delete_discount', [ 'discount'=>$discount->id, 'locale'=>app()->getLocale() ]) }}"
                                                     class="dropdown-item details text-danger" title="Delete Discount"><i
                                                         class="fas fa-trash"></i> Delete</a>
 

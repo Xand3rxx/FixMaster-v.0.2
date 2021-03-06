@@ -39,7 +39,7 @@ class CreateEstatesTable extends Migration
             $table->string('created_by');
             $table->integer('approved_by')->nullable();
             $table->string('slug');
-            $table->integer('discounted')->nullable();
+            $table->json('discounted')->nullable();
             $table->softDeletes();
             $table->timestamps();
         });
