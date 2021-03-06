@@ -1,12 +1,7 @@
 <!-- START ADMIN SIDEBAR MENU -->
 <aside class="aside aside-fixed" id="sidebarMenu">
   <div class="aside-header">
-    <a href="{{ route('admin.index', app()->getLocale()) }}" class="aside-logo">
-      {{-- dash<span>forge</span> --}}
-      {{-- <img src="{{ asset('assets/images/home-fix-logo.png') }}" alt="FixMaster Logo" height="160" style="margin-top: -40px; margin-bottom: -38px;"> --}}
-      {{-- <img src="{{ asset('assets/images/home-fix-logo-colored.png') }}" alt="FixMaster Logo" height="120"> --}}
-
-    </a>
+    <a href="{{ route('admin.index', app()->getLocale()) }}" class="aside-logo"></a>
     <a href="" class="aside-menu-link">
       <i data-feather="menu"></i>
       <i data-feather="x"></i>
@@ -51,7 +46,15 @@
       <li class="nav-label">Components</li>
       <li class="nav-item {{ Route::currentRouteNamed('admin.index') ? 'active' : '' }}"><a href="{{ route('admin.index', app()->getLocale()) }}" class="nav-link"><i data-feather="airplay"></i> <span>Home</span></a></li>
 
-    <li class="nav-item {{ Route::currentRouteNamed('admin.activity-log.index') ? 'active' : '' }}"><a href="{{ route('admin.activity-log.index', app()->getLocale()) }}" class="nav-link"><i data-feather="activity"></i> <span>Activity Log</span></a></li>
+      <li class="nav-item {{ Route::currentRouteNamed('admin.activity-log.index') ? 'active' : '' }}"><a href="{{ route('admin.activity-log.index', app()->getLocale()) }}" class="nav-link"><i data-feather="activity"></i> <span>Activity Log</span></a></li>
+
+      <li class="nav-item with-sub {{ Route::currentRouteNamed('admin.categories.index', 'admin.services.index') ? 'active show' : '' }}">
+        <a href="" class="nav-link"><i data-feather="aperture"></i> <span>Category & Service</span></a>
+        <ul>
+          <li class="{{ Route::currentRouteNamed('admin.categories.index') ? 'active' : '' }}"><a href="{{ route('admin.categories.index', app()->getLocale()) }}">Category List</a></li>
+          <li class="{{ Route::currentRouteNamed('admin.services.index') ? 'active' : '' }}"><a href="{{ route('admin.services.index', app()->getLocale()) }}">Services List</a></li>
+        </ul>
+      </li>
 
       <li class="nav-item with-sub">
         <a href="" class="nav-link"><i data-feather="percent"></i> <span>Discount/Promotion</span></a>
@@ -153,18 +156,6 @@
 
       <li class="nav-item"><a href="#" class="nav-link"><i data-feather="file-text"></i> <span>RFQ's</span></a></li>
 
-      <li class="nav-item with-sub {{ Route::currentRouteNamed('admin.categories.index', 'admin.services.index') ? 'active show' : '' }}">
-        <a href="" class="nav-link"><i data-feather="aperture"></i> <span>Service & Category</span></a>
-        <ul>
-          <li class=""><a href="{{ route('admin.categories.index', app()->getLocale()) }}">Category List</a></li>
-          {{-- <hr> --}}
-          <li class="{{ Route::currentRouteNamed('admin.categories.index') ? 'active' : '' }}"><a href="#">Add Category Service</a></li>
-        <li class="{{ Route::currentRouteNamed('admin.services.index') ? 'active' : '' }}"><a href="{{ route('admin.services.index', app()->getLocale()) }}">Category Services List</a></li>
-          <li class=""><a href="#">Category Service Review</a></li>
-
-        </ul>
-      </li>
-
       <li class="nav-item with-sub">
         <a href="" class="nav-link"><i data-feather="git-pull-request"></i> <span>Special Project</span></a>
         <ul>
@@ -173,18 +164,14 @@
         </ul>
       </li>
 
-      <li class="nav-item with-sub">
-        <a href="" class="nav-link"><i data-feather="percent"></i> <span>Tax Management</span></a>
-        <ul>
-          <li class=""><a href="#">Add</a></li>
-          <li class=""><a href="#">List</a></li>
-        </ul>
-      </li>
+      
+      <li class="nav-item {{ Route::currentRouteNamed('admin.taxes.index') ? 'active' : '' }}"><a href="{{ route('admin.taxes.index', app()->getLocale()) }}" class="nav-link"><i data-feather="percent"></i> <span>Tax Management</span></a></li>
 
-      <li class="nav-item with-sub">
+      
+      <li class="nav-item with-sub {{ Route::currentRouteNamed('admin.tools.index') ? 'active show' : '' }}">
         <a href="" class="nav-link"><i data-feather="box"></i> <span>Tools</span></a>
         <ul>
-          <li class=""><a href="#">Inventory</a></li>
+        <li class="{{ Route::currentRouteNamed('admin.tools.index') ? 'active' : '' }}"><a href="{{ route('admin.tools.index', app()->getLocale()) }}">Inventory</a></li>
           <li class=""><a href="#">Requests</a></li>
         </ul>
       </li>
@@ -222,7 +209,15 @@
       </li>
 
       <li class="nav-item with-sub">
-        <a href="" class="nav-link"><i data-feather="wind"></i> <span>Franchise</span></a>
+        <a href="" class="nav-link"><i data-feather="home"></i> <span>Franchise</span></a>
+        <ul>
+          <li class=""><a href="#">Add</a></li>
+          <li class=""><a href="#">List</a></li>
+        </ul>
+      </li>
+
+      <li class="nav-item with-sub">
+        <a href="" class="nav-link"><i data-feather="hard-drive"></i> <span>Suppliers</span></a>
         <ul>
           <li class=""><a href="#">Add</a></li>
           <li class=""><a href="#">List</a></li>
@@ -237,17 +232,17 @@
         </ul>
       </li>
       <li class="nav-item with-sub">
-        <a href="" class="nav-link"><i data-feather="zap"></i> <span>Quality Assurance</span></a>
+        <a href="" class="nav-link"><i data-feather="check-square"></i> <span>Quality Assurance</span></a>
         <ul>
           <li class=""><a href="#">Add</a></li>
           <li class=""><a href="#">List</a></li>
         </ul>
       </li>
 
-      <li class="nav-label mg-t-25">Applicant Users</li>
-      <li class="nav-item"><a href="#" class="nav-link"><i data-feather="users"></i> <span>CSE</span></a></li>
-      <li class="nav-item"><a href="#" class="nav-link"><i data-feather="users"></i> <span>Supplier</span></a></li>
-      <li class="nav-item"><a href="#" class="nav-link"><i data-feather="users"></i> <span>Technicians</span></a></li>
+      <li class="nav-label mg-t-25">Prospective FixMaster Users</li>
+      <li class="nav-item"><a href="#" class="nav-link"><i data-feather="wind"></i> <span>CSE</span></a></li>
+      <li class="nav-item"><a href="#" class="nav-link"><i data-feather="hard-drive"></i> <span>Supplier</span></a></li>
+      <li class="nav-item"><a href="#" class="nav-link"><i data-feather="zap"></i> <span>Technicians</span></a></li>
 
 
     </ul>

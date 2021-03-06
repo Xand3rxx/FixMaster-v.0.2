@@ -11,10 +11,10 @@
           <nav aria-label="breadcrumb">
             <ol class="breadcrumb breadcrumb-style1 mg-b-10">
             <li class="breadcrumb-item"><a href="{{ route('admin.index', app()->getLocale()) }}">Dashboard</a></li>
-              <li class="breadcrumb-item active" aria-current="page">Category Services List</li>
+              <li class="breadcrumb-item active" aria-current="page">Services List</li>
             </ol>
           </nav>
-          <h4 class="mg-b-0 tx-spacing--1">Category Services List</h4>
+          <h4 class="mg-b-0 tx-spacing--1">Services List</h4>
         </div>
       </div>
 
@@ -27,7 +27,7 @@
             <div class="card mg-b-10">
               <div class="card-header pd-t-20 d-sm-flex align-items-start justify-content-between bd-b-0 pd-b-0">
                 <div>
-                  <h6 class="mg-b-5">Category Services as of {{ date('M, d Y') }}</h6>
+                  <h6 class="mg-b-5">Services as of {{ date('M, d Y') }}</h6>
                   <p class="tx-13 tx-color-03 mg-b-0">This table displays a list of all FixMaster core Services.</p>
                 </div>
                 
@@ -47,6 +47,82 @@
     </div>
 </div>
 
+<div class="modal fade" id="addService" tabindex="-1" role="dialog" aria-hidden="true" data-keyboard="false" data-backdrop="static">
+  <div class="modal-dialog modal-dialog-centered modal-xl" role="document">
+    <div class="modal-content">
+      <div class="modal-body pd-x-25 pd-sm-x-30 pd-t-40 pd-sm-t-20 pd-b-15 pd-sm-b-20">
+        <a href="" role="button" class="close pos-absolute t-15 r-15" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </a>
+        <form method="POST" action="{{ route('admin.services.store', app()->getLocale()) }}" enctype="multipart/form-data">
+          @csrf
+        <h5 class="mg-b-2"><strong>Create New Service</strong></h5>
+        <div class="row row-xs">
+          <div class="col-md-12">
+            <div class="form-row mt-4">
+                <div class="form-group col-md-4">
+                    <label for="name">Name</label>
+                    <input type="text" class="form-control @error('name') is-invalid @enderror" name="name" id="name" placeholder="Name" value="{{ old('name') }}" autocomplete="off">
+                    @error('name')
+                      <span class="invalid-feedback" role="alert">
+                          <strong>{{ $message }}</strong>
+                      </span>
+                    @enderror
+                </div>
+                <div class="form-group col-md-4">
+                  <label>Service</label>
+                  <select class="custom-select @error('category_id') is-invalid @enderror" name="category_id">
+                    <option selected value="">Select...</option>
+                    @foreach($categories as $category)
+                      @if($category->id != 1)
+                        <option value="{{ $category->id }}" {{ old('category_id') == $category->id ? 'selected' : ''}}>{{ $category->name }}</option>
+                      @endif
+                    @endforeach
+                  </select>
+                  @error('category_id')
+                    <span class="invalid-feedback" role="alert">
+                        <strong>{{ $message }}</strong>
+                    </span>
+                  @enderror
+                </div>
+                <div class="form-group col-md-4">
+                  <label>Category Cover Image</label>
+                  <div class="custom-file">
+                    <input type="file" accept="image/*" class="custom-file-input @error('image') is-invalid @enderror" name="image" id="image">
+                    <label class="custom-file-label" id="image-name" for="image">Upload Category Image</label>
+                    
+                  </div>
+                  {{-- <small class="text-danger"> Preferred category cover image size is 350x259.</small> --}}
+                  @error('image')
+                    <span class="invalid-feedback" role="alert">
+                        <strong>{{ $message }}</strong>
+                    </span>
+                  @enderror
+                </div>
+                
+            </div>
+            
+            <div class="form-row">
+              <div class="form-group col-md-12">
+                <label for="inputEmail4">Description</label>
+                <textarea rows="3" class="form-control @error('description') is-invalid @enderror" name="description" id="description">{{ old('description') }}</textarea>
+                @error('description')
+                  <span class="invalid-feedback" role="alert">
+                      <strong>{{ $message }}</strong>
+                  </span>
+                @enderror
+              </div>
+            </div>
+            <button type="submit" class="btn btn-primary">Create</button>
+          </div>
+        </div>
+      </form>
+      </div><!-- modal-body -->
+    </div><!-- modal-content -->
+  </div><!-- modal-dialog -->
+</div><!-- modal -->
+
+
 <div class="modal fade" id="serviceCategoryDetails" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel2" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
     <div class="modal-content tx-14">
@@ -56,11 +132,9 @@
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
-      <div class="modal-body">
-        <div class="modal-body" id="modal-body">
+      <div class="modal-body pd-x-25 pd-sm-x-30 pd-t-40 pd-sm-t-20 pd-b-15 pd-sm-b-20" id="modal-body">
           <!-- Modal displays here -->
-          <div id="spinner-icon"></div>
-      </div>
+          <div id="spinner-icon" style="display: block !important"></div>
       </div>
     </div>
   </div>
@@ -69,14 +143,15 @@
 <div class="modal fade" id="editService" tabindex="-1" role="dialog" aria-hidden="true" data-keyboard="false" data-backdrop="static">
   <div class="modal-dialog modal-dialog-centered modal-xl" role="document">
     <div class="modal-content tx-14">
-      <div class="modal-body pd-x-25 pd-sm-x-30 pd-t-40 pd-sm-t-20 pd-b-15 pd-sm-b-20">
-        <a href="" role="button" class="close pos-absolute t-15 r-15" data-dismiss="modal" aria-label="Close">
+      <div class="modal-header">
+        <h6 class="modal-title" id="exampleModalLabel2"><span class="edit-title"></span> Service</h6>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
-        </a>
-        <div class="modal-body" id="modal-edit-body">
-          <!-- Modal displays here -->
-          <div id="spinner-icon-3"></div>
-        </div>
+        </button>
+      </div>
+      <div class="modal-body pd-x-25 pd-sm-x-30 pd-t-40 pd-sm-t-20 pd-b-15 pd-sm-b-20" id="modal-edit-body">
+        <!-- Modal displays here -->
+        <div id="spinner-icon-3"></div>
       </div><!-- modal-body -->
     </div><!-- modal-content -->
   </div><!-- modal-dialog -->
@@ -84,84 +159,7 @@
 
 
 @push('scripts')
-<script>
-  $(document).ready(function() {
-
-    $(document).on('click', '#category-details', function(event) {
-      event.preventDefault();
-      let route = $(this).attr('data-url');
-      let categoryeName = $(this).attr('data-category-name');
-      
-      $.ajax({
-          url: route,
-          beforeSend: function() {
-            $("#spinner-icon").html('<div class="d-flex justify-content-center mt-4 mb-4"><span class="loadingspinner"></span></div>');
-          },
-          // return the result
-          success: function(result) {
-              $('#modal-body').html('');
-              $('#modal-body').modal("show");
-              $('#modal-body').html(result).show();
-          },
-          complete: function() {
-              $("#spinner-icon").hide();
-          },
-          error: function(jqXHR, testStatus, error) {
-              var message = error+ ' An error occured while trying to retireve '+ categoryeName +' service details.';
-              var type = 'error';
-              displayMessage(message, type);
-              $("#spinner-icon").hide();
-          },
-          timeout: 8000
-      })
-    });
-
-    $(document).on('click', '#service-edit', function(event) {
-        event.preventDefault();
-
-        let route = $(this).attr('data-url');
-        let id = $(this).attr('data-id');
-        let serviceName = $(this).attr('data-service-name');
-
-        $.ajaxSetup({
-            headers: {
-            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-            }
-        });
-        
-        $.ajax({
-        url: route,
-        method: 'GET',
-        data: {"id": id, "serviceName": serviceName },
-        beforeSend : function(){
-            $("#spinner-icon-3").html('<div class="d-flex justify-content-center mt-4 mb-4"><span class="loadingspinner"></span></div>'); 
-        },
-        success: function (result){
-            $('#modal-edit-body').modal("show");
-            $('#modal-edit-body').html('');
-            $('#modal-edit-body').html(result).show();
-        },
-        complete: function() {
-              $("#spinner-icon-3").hide();
-        },
-        error: function(jqXHR, testStatus, error) {
-            var message = error+ ' An error occured while trying to edit '+ serviceName+' category';
-            var type = 'error';
-            displayMessage(message, type);
-            $("#spinner-icon-3").hide();
-        },
-        timeout: 8000
-        });
-
-    });
-
-    // $('.close').click(function (){
-    //   $(".modal-backdrop").remove();
-    // });
-
-  });
- 
-</script>
+  <script src="{{ asset('assets/dashboard/assets/js/1e65edf0-c8e5-432c-8bbf-a7ed7847990f.js') }}"></script>
 @endpush
 
 @endsection

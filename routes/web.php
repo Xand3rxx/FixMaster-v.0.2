@@ -7,6 +7,8 @@ use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\EstateController;
 use App\Http\Controllers\Admin\ServiceController;
 use App\Http\Controllers\Admin\ActivityLogController;
+use App\Http\Controllers\Admin\ToolInventoryController;
+use App\Http\Controllers\Admin\TaxController;
 
 /*
 |--------------------------------------------------------------------------
@@ -63,7 +65,7 @@ Route::prefix('admin')->group(function () {
         //Routes for Services Management
         Route::get('/services/deactivate/{service}',        [ServiceController::class, 'deactivate'])
         ->name('services.deactivate');
-        Route::get('/services/reinstate/{service}',              [ServiceController::class, 'reinstate'])->name('services.reinstate');
+        Route::get('/services/reinstate/{service}',         [ServiceController::class, 'reinstate'])->name('services.reinstate');
         Route::get('/services/delete/{service}',            [ServiceController::class, 'destroy'])->name('services.delete');
         Route::resource('services',                         ServiceController::class);
 
@@ -78,6 +80,15 @@ Route::prefix('admin')->group(function () {
         Route::post('/activity-log/sorting',                [ActivityLogController::class, 'sortActivityLog'])->name('activity-log.sorting_users');
         Route::get('/activity-log/details/{activity_log}',  [ActivityLogController::class, 'activityLogDetails'])->name('activity-log.details');
         Route::resource('activity-log',                     ActivityLogController::class);
+
+        //Routes for Tools & Tools Request Management
+        Route::get('/tools/delete/{tool}',                  [ToolInventoryController::class, 'destroy'])->name('tools.delete');
+        Route::resource('tools',                            ToolInventoryController::class);
+
+
+        //Routes for Tax Management
+        Route::get('/taxes/delete/{tax}',                  [TaxController::class, 'destroy'])->name('taxes.delete');
+        Route::resource('taxes',                            TaxController::class);
 
     });
 });

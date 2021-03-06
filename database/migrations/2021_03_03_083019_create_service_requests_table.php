@@ -26,11 +26,6 @@ class CreateServiceRequestsTable extends Migration
 		    $table->foreignId('cse_id')->default(null);
             $table->foreignId('technician_id')->default(null);
 
-            $table->foreignId('category_id')
-            ->constrained()
-            ->onUpdate('CASCADE')
-            ->onDelete('NO ACTION');
-
             $table->foreignId('service_id')
             ->constrained()
             ->onUpdate('CASCADE')

@@ -3,11 +3,10 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-// use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Str;
 
-class Category extends Model
+class Tax extends Model
 {
     use HasFactory;
 
@@ -19,9 +18,9 @@ class Category extends Model
 
     // whether the key is automatically incremented or not
     public $incrementing = false;
-
-    public $fillable = [
-        'uuid', 'user_id', 'name',
+    
+    protected $fillable = [
+        'uuid', 'user_id', 'name', 'percentage', 'applicable', 'description',
     ];
 
     /**
@@ -34,51 +33,40 @@ class Category extends Model
     ];
 
     /**
-    * The attributes that should be mutated to dates.
-    *
-    * @var array
-    */
-    protected $dates = ['deleted_at'];
-
-    /**
      * The "booted" method of the model.
      *
      * @return void
      */
     protected static function booted()
     {
-        // Create a uuid when a new Category is to be created 
-        static::creating(function ($category) {
-            $category->uuid = (string) Str::uuid(); 
+        // Create a uuid when a new Tax is to be created 
+        static::creating(function ($tax) {
+            $tax->uuid = (string) Str::uuid(); 
         });
     }
 
     /** 
-     * Scope a query to only include active banches
+     * Scope a query to only include availaible tools
      * 
      * @param \Illuminate\Database\Eloquent\Builder $query
      * @return \Illuminate\Database\Eloquent\Builder
      */    
-    //Scope to return all categories  
-    public function scopeCategories($query){
+    public function scopeAllTools($query){
         return $query->select('*')
+        // ->where('available', '>', '0')
         ->orderBy('name', 'ASC');
     }
 
     /** 
-     * Scope a query to only include active banches
+     * Scope a query to only include availaible tools
      * 
      * @param \Illuminate\Database\Eloquent\Builder $query
      * @return \Illuminate\Database\Eloquent\Builder
      */    
-    //Scope to return all active categories  
-    public function scopeActiveCategories($query){
+    public function scopeTaxes($query){
         return $query->select('*')
-        // ->where('id', '>', 1)
-        ->whereNull('deleted_at')
         ->orderBy('name', 'ASC');
     }
-
 
     public function user()
     {
@@ -90,14 +78,14 @@ class Category extends Model
         return $this->hasMany(User::class, 'user_id')->withDefault();
     }
 
-    public function service()
+    public function taxHistory()
     {
-        return $this->hasOne(Service::class, 'category_id', 'id');
+        return $this->belongsTo(TaxHistory::class, 'tax_id', 'id');
     }
 
-    public function services()
+    public function taxHistories()
     {
-        return $this->hasMany(Service::class, 'category_id', 'id');
+        return $this->hasMany(TaxHistory::class, 'tax_id', 'id');
     }
-    
+
 }

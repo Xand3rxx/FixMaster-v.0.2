@@ -34,6 +34,7 @@ class CreateServicesTable extends Migration
             $table->string('name')->unique();
             $table->uuid('url')->unique();
             $table->text('description');
+            $table->boolean('status')->default(1);
             $table->string('image')->unique();
             $table->softDeletes();
             $table->timestamps();

@@ -26,7 +26,7 @@ class ServiceRequest extends Model
      * @var array
      */
     protected $fillable = [
-        'user_id', 'admin_id', 'cse_id', 'technician_id', 'service_id', 'category_id', 'job_reference', 'security_code', 'service_request_status_id', 'total_amount',
+        'user_id', 'admin_id', 'cse_id', 'technician_id', 'service_id', 'job_reference', 'security_code', 'service_request_status_id', 'total_amount',
     ];
 
     /**

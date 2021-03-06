@@ -1,6 +1,6 @@
-<form method="POST" action="{{ route('admin.services.update', ['service'=>$category->id, 'locale'=>app()->getLocale()]) }}" enctype="multipart/form-data">
+<form method="POST" action="{{ route('admin.services.update', ['service'=>$category->uuid, 'locale'=>app()->getLocale()]) }}" enctype="multipart/form-data">
     @csrf @method('PUT')
-  <h5 class="mg-b-2"><strong>Editing {{ $category->name }} Category Service</strong></h5>
+  {{-- <h5 class="mg-b-2"><strong>Editing {{ $category->name }} Service</strong></h5> --}}
   <div class="form-row mt-4"></div>
 
   <div class="row row-xs">
@@ -17,15 +17,15 @@
           </div>
           <div class="form-group col-md-4">
             <label>Service</label>
-            <select class="custom-select @error('service_id') is-invalid @enderror" name="service_id">
+            <select class="custom-select @error('category_id') is-invalid @enderror" name="category_id">
               <option selected value="">Select...</option>
               @foreach($categories as $item)
                 @if($item->id != 1)
-                    <option value="{{ $item->id }}" {{ old('service_id') == $item->id ? 'selected' : ''}} @if($category->category_id == $item->id) selected @endif>{{ $item->name }}</option>
+                    <option value="{{ $item->id }}" {{ old('category_id') == $item->id ? 'selected' : ''}} @if($category->category_id == $item->id) selected @endif>{{ $item->name }}</option>
                 @endif
               @endforeach
             </select>
-            @error('service_id')
+            @error('category_id')
               <span class="invalid-feedback" role="alert">
                   <strong>{{ $message }}</strong>
               </span>
@@ -35,7 +35,7 @@
             <label>Category Cover Image</label>
             <div class="custom-file">
               <input type="file" accept="image/*" class="custom-file-input @error('image') is-invalid @enderror" name="image" id="image">
-            <label class="custom-file-label" id="image-name" for="image">Upload Cover Image</label>
+            <label class="custom-file-label" id="new-image-name" for="image">Upload Cover Image</label>
               <input type="hidden" id="old-post-image" name="old_post_image" value="{{ $category->image }}">
             </div>
             <small class="text-muted">Current Image: {{ $category->image }}</small>
