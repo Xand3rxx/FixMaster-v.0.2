@@ -69,7 +69,7 @@
 <<<<<<< Updated upstream
       <li class="nav-item"><a href="{{ route('admin.location_request', app()->getLocale()) }}" class="nav-link"><i data-feather="map-pin"></i> <span>Location Request</span></a></li>
 =======
-      <li class="nav-item"><a href="{{ route('admin.location_request') }}" class="nav-link"><i data-feather="map-pin"></i> <span>Location Request</span></a></li>
+      <li class="nav-item"><a href="{{ route('admin.location_request', app()->getLocale()) }}" class="nav-link"><i data-feather="map-pin"></i> <span>Location Request</span></a></li>
 >>>>>>> Stashed changes
 
       <li class="nav-item with-sub">
@@ -190,8 +190,17 @@
         </ul>
       </li>
 
-        <li class="nav-item"><a href="#" class="nav-link"><i data-feather="users"></i> <span>Clients</span></a></li>
-
+       <li class="nav-item with-sub">
+          <a href="" class="nav-link"><i data-feather="credit-card"></i> <span>E-Wallet</span></a>
+          <ul>
+            <li class=""><a href="{{ route('admin.wallet_transaction', app()->getLocale()) }}">List</a></li>
+            <li class=""><a href="{{ route('admin.all_user_wallet_payment', app()->getLocale()) }}">Admin Service Request List</a></li>
+            <li class=""><a href="{{ route('admin.wallet_refund', app()->getLocale()) }}">Refund Request</a></li>
+            <li class=""><a href="{{ route('client.user_wallet_transaction', app()->getLocale()) }}">List Client</a></li>
+            <li class=""><a href="{{ route('client.fund_wallet', app()->getLocale()) }}">Fund Wallet</a></li>
+            <li class=""><a href="{{ route('client.user_wallet_payment', app()->getLocale()) }}">Service Request</a></li>
+          </ul>
+        </li>
         <li class="nav-item with-sub">
           <a href="" class="nav-link"><i data-feather="wind"></i> <span>CSE</span></a>
           <ul>

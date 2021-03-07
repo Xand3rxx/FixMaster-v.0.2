@@ -24,7 +24,10 @@ use Illuminate\Support\Facades\Route;
 */
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\ServiceController;
-
+use App\Http\Controllers\TransactionController;
+use App\Http\Controllers\PaymentServices\Paystack;
+use App\Http\Controllers\WalletController;
+use Illuminate\Http\Request;
 // Route::prefix('{type}')->group(function () {
 //     Route::get('/',function () {
 //         return dd('i am admin user');
@@ -49,8 +52,19 @@ Route::prefix('/admin')->group(function () {
         Route::get('/estate/reinstate/{estate:uuid}',      [\App\Http\Controllers\EstateController::class, 'reinstate'])->name('reinstate_estate');
         Route::get('/estate/deactivate/{estate:uuid}',      [\App\Http\Controllers\EstateController::class, 'deactivate'])->name('deactivate_estate');
         Route::get('/estate/delete/{estate:uuid}',      [\App\Http\Controllers\EstateController::class, 'delete'])->name('delete_estate');
+       
+        //Routes for E-Wallet Related Services
+        Route::get('/client/transaction', 	[\App\Http\Controllers\TransactionController::class, 'adminUserTransaction'])->name('wallet_transaction');
         
-
+        Route::get('/client/approval/{transaction:id}', 	[\App\Http\Controllers\TransactionController::class, 'transactionApproval'])->name('approve_transaction');
+        Route::get('/client/pending/{transaction:id}', 	[\App\Http\Controllers\TransactionController::class, 'transactionPending'])->name('pending_transaction');
+        Route::get('/client/delete/{transaction:id}',      [\App\Http\Controllers\TransactionController::class, 'deleteTransaction'])->name('delete_transaction');
+        Route::get('/client/wallet_transaction', 	[\App\Http\Controllers\TransactionController::class, 'userTransaction'])->name('user_wallet_transaction');
+        Route::get('/client/all_wallet_payments', 	[\App\Http\Controllers\TransactionController::class, 'allUserEwalletPayment'])->name('all_user_wallet_payment');
+        Route::get('/client/transaction_summary/{transaction:id}',      [\App\Http\Controllers\TransactionController::class, 'adminTransactionSummary'])->name('summary');
+        Route::get('/client/ewallet_refund', 	[\App\Http\Controllers\WalletController::class, 'walletServiceRequestRefund'])->name('wallet_refund');
+        Route::post('/client/ewallet_refund_summary/{transaction:id}', 	[\App\Http\Controllers\WalletController::class, 'walletServiceRequestRefundSummary'])->name('wallet_refund_summary');
+        Route::get('/client/refund_approval/{transaction:id}', 	[\App\Http\Controllers\WalletController::class, 'approveRefund'])->name('approve_refund');
 
         //Routes for Category Management
         Route::get('/categories/reassign/{category}',       [CategoryController::class, 'reassign'])->name('categories.reassign');
@@ -75,6 +89,13 @@ Route::prefix('/admin')->group(function () {
 
 Route::prefix('/client')->group(function () {
     Route::name('client.')->group(function () {
+        Route::view('/',           		'client.index')->name('index'); //Take me to Admin Dashboard(To be replaced by the client index view)
+        Route::get('/client/wallet', 	[\App\Http\Controllers\TransactionController::class, 'eWallet'])->name('fund_wallet');
+        Route::get('/client/wallet_transactions', 	[\App\Http\Controllers\TransactionController::class, 'userTransaction'])->name('user_wallet_transaction');
+        Route::post('/client/initiate_transactions', 	[\App\Http\Controllers\TransactionController::class, 'initiateTransaction'])->name('initiate_wallet_transaction');
+        Route::get('/client/reQuery', 	[\App\Http\Controllers\PaymentService\Paystack::class, 'reQuery'])->name('verify_transaction');
+        Route::get('/client/wallet_payments', 	[\App\Http\Controllers\TransactionController::class, 'userEwalletPayment'])->name('user_wallet_payment');
+        Route::get('/client/service_summary/{transaction:id}',      [\App\Http\Controllers\TransactionController::class, 'eWalletServiceRequestSummary'])->name('summary');
         //All routes regarding clients should be in here
     });
 });

@@ -30,6 +30,7 @@ class DatabaseSeeder extends Seeder
             EstateSeeder::class,
             CategorySeeder::class,
             ServiceSeeder::class,
+            WalletSeeder::class,
         ]);
     }
 }

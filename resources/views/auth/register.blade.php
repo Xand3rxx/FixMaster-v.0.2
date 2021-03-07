@@ -110,7 +110,7 @@
                                         <i data-feather="map-pin" class="fea icon-sm icons"></i>
                                         <select class="form-control pl-5 @error('state_id') is-invalid @enderror" name="state_id" id="state_id">
                                             <option selected value="">Select...</option>
-                                            @foreach($states as $state)
+                                            @foreach($states ?? '' as $state)
                                                 <option value="{{ $state->id }}">{{ $state->name }}</option>
                                             @endforeach
                                         </select>
