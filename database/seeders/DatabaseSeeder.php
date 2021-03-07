@@ -35,6 +35,8 @@ class DatabaseSeeder extends Seeder
             ToolInventorySeeder::class,
             TaxSeeder::class,
             TaxHistorySeeder::class,
+            QASeeder::class,
+            DiscountSeeder::class,
         ]);
     }
 }

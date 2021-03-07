@@ -1,4 +1,5 @@
 <!-- START ADMIN SIDEBAR MENU -->
+{{Auth::user()->roles}}
 <aside class="aside aside-fixed" id="sidebarMenu">
   <div class="aside-header">
     <a href="{{ route('admin.index', app()->getLocale()) }}" class="aside-logo"></a>
@@ -164,9 +165,7 @@
         </ul>
       </li>
 
-      
       <li class="nav-item {{ Route::currentRouteNamed('admin.taxes.index') ? 'active' : '' }}"><a href="{{ route('admin.taxes.index', app()->getLocale()) }}" class="nav-link"><i data-feather="percent"></i> <span>Tax Management</span></a></li>
-
       
       <li class="nav-item with-sub {{ Route::currentRouteNamed('admin.tools.index') ? 'active show' : '' }}">
         <a href="" class="nav-link"><i data-feather="box"></i> <span>Tools</span></a>
@@ -186,8 +185,6 @@
       </li>
 
       <li class="nav-item"><a href="#" class="nav-link"><i data-feather="thumbs-up"></i> <span>Warranty Management</span></a></li>
-
-
 
       <li class="nav-label mg-t-25">Users</li>
       <li class="nav-item with-sub">
