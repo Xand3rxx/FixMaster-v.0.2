@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\URL;
 use App\Traits\Loggable;
 use Auth;
 use Route;
+use DB;
 
 class TaxController extends Controller
 {
@@ -63,6 +64,11 @@ class TaxController extends Controller
 
             //Validate user input fields
             $this->validateRequest();
+
+            //Update colum to `No => 0` if `Yes = 1` is selected
+            if((int)$request->applicable == 1){
+                DB::table('taxes')->update(array('applicable' => 0));
+            }
 
             //Create record for a new tax
             $createTax = Tax::create([

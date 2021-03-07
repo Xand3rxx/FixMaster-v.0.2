@@ -1,5 +1,5 @@
 @extends('layouts.dashboard')
-@section('title', 'Category List')
+@section('title', 'Tax List')
 @include('layouts.partials._messages')
 @section('content')
 <input class="d-none" id="locale" type="hidden" value="{{ app()->getLocale() }}">
@@ -87,6 +87,7 @@
                     <option value="1">Yes</option>
                     <option value="0">No</option>
                   </select>
+                  <small class="text-danger">If "Apply" is set to yes, other taxes will be set to no</small>
                   @error('applicable')
                     <span class="invalid-feedback" role="alert">
                         <strong>{{ $message }}</strong>
