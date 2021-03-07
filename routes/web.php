@@ -90,12 +90,28 @@ Route::prefix('admin')->group(function () {
         Route::get('/taxes/delete/{tax}',                  [TaxController::class, 'destroy'])->name('taxes.delete');
         Route::resource('taxes',                            TaxController::class);
 
+
+         //Routes for Discount Management 
+         Route::get('/discount/add',                     [App\Http\Controllers\DiscountController::class, 'create'])->name('add_discount');
+         Route::get('/discount/list',                       [App\Http\Controllers\DiscountController::class, 'index'])->name('discount_list');
+         Route::post('/discount/add',                    [App\Http\Controllers\DiscountController::class, 'store'])->name('store_discount');
+        Route::post('/LGA',                             [App\Http\Controllers\DiscountController::class, 'getLGA'])->name('getLGA');
+        Route::post('/estates',                             [App\Http\Controllers\DiscountController::class, 'estates'])->name('all_estates');
+        Route::post('/categories',                             [App\Http\Controllers\DiscountController::class, 'category'])->name('categories');
+        Route::post('/category-services',                             [App\Http\Controllers\DiscountController::class, 'categoryServices'])->name('category.services');
+        Route::post('/discount-users',                    [App\Http\Controllers\DiscountController::class, 'discountUsers'])->name('discount_users');
+        Route::get('/discount/edit/{discount:id}',                    [App\Http\Controllers\DiscountController::class, 'edit'])->name('edit_discount');
+        Route::get('/discount/summary/{discount:id}',                    [App\Http\Controllers\DiscountController::class, 'show'])->name('summary');
+        Route::get('/discount/delete/{discount:id}',                    [App\Http\Controllers\DiscountController::class, 'delete'])->name('delete_discount');
+        Route::get('/discount/deactivate/{discount:id}',                    [App\Http\Controllers\DiscountController::class, 'deactivate'])->name('deactivate_discount');
+        Route::get('/discount/activate/{discount:id}',                    [App\Http\Controllers\DiscountController::class, 'reinstate'])->name('activate_discount');
+
     });
 });
 
-    //All routes regarding clients should be in here
-    // Route::view('/', 'client.index')->name('index'); //Take me to Admin Dashboard
-    Route::resource('client', ClientController::class);
+//All routes regarding clients should be in here
+// Route::view('/', 'client.index')->name('index'); //Take me to Admin Dashboard
+Route::resource('client', ClientController::class);
 
 Route::prefix('/cse')->group(function () {
     Route::name('cse.')->group(function () {

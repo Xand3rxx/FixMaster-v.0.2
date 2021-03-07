@@ -37,6 +37,7 @@ class CreateAccountsTable extends Migration
             $table->string('account_number', '30')->unique()->nullable();
 
             $table->string('avatar')->nullable();
+            $table->json('discounted')->nullable();
             $table->timestamps();
         });
     }
