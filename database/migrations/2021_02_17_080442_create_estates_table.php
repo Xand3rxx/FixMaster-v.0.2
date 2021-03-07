@@ -22,6 +22,8 @@ class CreateEstatesTable extends Migration
             $table->uuid('uuid')->unique();
             $table->foreignId('state_id');
             $table->foreignId('lga_id');
+            $table->string('created_by');
+            $table->integer('approved_by')->nullable();
             $table->string('first_name');
             $table->string('middle_name')->nullable();
             $table->string('last_name');
@@ -36,8 +38,6 @@ class CreateEstatesTable extends Migration
             $table->string('town');
             $table->string('landmark');
             $table->enum('is_active', ['approved', 'declined', 'pending', 'deactivated', 'reinstated'])->default('pending');
-            $table->string('created_by');
-            $table->integer('approved_by')->nullable();
             $table->string('slug');
             $table->json('discounted')->nullable();
             $table->softDeletes();

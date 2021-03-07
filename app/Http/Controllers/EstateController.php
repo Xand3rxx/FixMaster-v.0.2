@@ -32,6 +32,9 @@ class EstateController extends Controller
         $getAdminId = Estate::select('approved_by')->pluck('approved_by');
         $approvedBy = User::find($getAdminId);
 
+        $userRole = Auth::user()->type->role->url;
+        // dd($userRole);
+
         return view('admin.estate.list', compact('estates', 'approvedBy'));
     }
 
@@ -64,16 +67,28 @@ class EstateController extends Controller
      */
     public function store(Request $request)
     {
+        //Get users url
+        $userRole = '';
+
+        if(Auth::user()){
+            $userRole = Auth::user()->type->role->url;
+        }
+
         //Validate users input
         $this->validateRequest();
         $is_active = '';
+        $created_by = '';
+        $approved_by = null;
 
-        //Get users url
-        $userRole = Auth::user()->type->role->url;
+
         if($userRole === 'admin') {
             $is_active = 'reinstated';
+            $created_by = Auth::user()->email;
+            $approved_by = Auth::user()->id;
         }else{
             $is_active = 'pending';
+            $created_by = $request->input('first_name').' '.$request->input('last_name');
+            $approved_by = null;
         }
 
         //Create new estate record
@@ -81,6 +96,8 @@ class EstateController extends Controller
             'uuid' => Str::uuid('uuid'),
             'state_id' => $request->input('state_id'),
             'lga_id' => $request->input('lga_id'),
+            'created_by' => $created_by,
+            'approved_by' => $approved_by,
             'first_name' => $request->input('first_name'),
             'middle_name' => $request->input('middle_name'),
             'last_name' => $request->input('last_name'),
