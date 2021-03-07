@@ -77,7 +77,7 @@
       <li class="nav-item"><a href="" class="nav-link"><i data-feather="briefcase"></i> <span>Job Card</span></a></li>
 
       <li class="nav-item {{ Route::currentRouteNamed('admin.location_request') ? 'active' : '' }}"><a href="{{ route('admin.location_request', app()->getLocale()) }}" class="nav-link"><i data-feather="map-pin"></i> <span>Location Request</span></a></li>
-
+      
       <li class="nav-item with-sub">
         <a href="" class="nav-link"><i data-feather="crop"></i> <span>Loyalty Management</span></a>
         <ul>

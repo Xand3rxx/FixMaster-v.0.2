@@ -80,6 +80,11 @@
         <script src="{{ asset('assets/frontend/js/unicons.js') }}"></script>
         <script src="{{ asset('assets/client/js/sweetalert2.min.js') }}"></script>
 
+        <!-- geolocation asset starts here -->
+        <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDeDLVAiaU13p2O0d3jfcPjscsbVsCQUzc&v=3.exp&libraries=places"></script>
+        <script src="{{asset('assets/frontend/js/geolocation.js')}}"></script>
+        <!-- geolocation asset starts here -->
+        
         <script>
             //Prevent characters or string asides number in ohone number input field 
             $("#number, #phone_number").on("keypress keyup blur", function(event) {
