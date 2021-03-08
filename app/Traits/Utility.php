@@ -22,7 +22,7 @@ trait Utility
     }
 
     public function filterEntity($request){
-      $user=[];
+      $user='';
       if($request->entity != 'service'){
         $user= array_filter($request->users);
       }

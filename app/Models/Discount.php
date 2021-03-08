@@ -10,6 +10,8 @@ class Discount extends Model
 {
     use HasFactory;
 
+  
+
     protected $fillable = [
         'name',  'entity', 'rate', 'notify', 'duration_start', 'duration_end', 'description','parameter','created_by','status'
     ];
