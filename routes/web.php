@@ -67,6 +67,8 @@ Route::prefix('admin')->group(function () {
          Route::post('/get-names',                           [App\Http\Controllers\AdminLocationRequestController::class, 'getNames'])->name('get_names');
          Route::post('/request-location',                    [App\Http\Controllers\AdminLocationRequestController::class, 'requestLocation'])->name('request_location');
 
+        // messaging routes
+         Route::view('/messaging',           		'admin.template')->name('template');
 
     });
 });
