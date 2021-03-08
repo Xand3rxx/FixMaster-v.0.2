@@ -2,6 +2,11 @@
 @section('title', 'Admin Dashboard')
 @include('layouts.partials._messages')
 @section('content')
+<style>
+ .btn-placeholder{
+   margin-bottom:5px;
+ }
+</style>
 <link href="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.css" rel="stylesheet">
 {{-- <script src="{{ asset('assets/dashboard/lib/jquery/jquery.min.js') }}"></script> --}}
 <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
@@ -308,7 +313,38 @@ function insertTextArea(areaId,text) {
         <div>
             <button type="button" class="btn btn-xs btn-placeholder btn-secondary" data-val="firstname">Firstname</button>
             <button type="button" class="btn btn-xs btn-placeholder btn-secondary" data-val="lastname">Lastname</button>
+            <button type="button" class="btn btn-xs btn-placeholder btn-secondary" data-val="address">Address</button>
+            <button type="button" class="btn btn-xs btn-placeholder btn-secondary" data-val="email">Email</button>
+            <button type="button" class="btn btn-xs btn-placeholder btn-secondary" data-val="password">Password</button>
             <button type="button" class="btn btn-xs btn-placeholder btn-secondary" data-val="url">URL</button>
+            <button type="button" class="btn btn-xs btn-placeholder btn-secondary" data-val="customer_name">Customer Name</button>
+            <button type="button" class="btn btn-xs btn-placeholder btn-secondary" data-val="customer_email">Customer Email</button>
+            <button type="button" class="btn btn-xs btn-placeholder btn-secondary" data-val="customer_phone">Customer Phone</button>
+            <button type="button" class="btn btn-xs btn-placeholder btn-secondary" data-val="customer_address">Customer Address</button>
+            <button type="button" class="btn btn-xs btn-placeholder btn-secondary" data-val="customer_whatsapp">Whatsapp</button>
+            <button type="button" class="btn btn-xs btn-placeholder btn-secondary" data-val="preferred_communication">Communication</button>
+            <button type="button" class="btn btn-xs btn-placeholder btn-secondary" data-val="booking_fee">Booking Fee</button>
+            <button type="button" class="btn btn-xs btn-placeholder btn-secondary" data-val="diagnosis_fee">Diagnosis Fee</button>
+            <button type="button" class="btn btn-xs btn-placeholder btn-secondary" data-val="service">Service</button>
+            <button type="button" class="btn btn-xs btn-placeholder btn-secondary" data-val="job_ref">Job Ref</button>
+            <button type="button" class="btn btn-xs btn-placeholder btn-secondary" data-val="invoice">Invoice</button>
+            <button type="button" class="btn btn-xs btn-placeholder btn-secondary" data-val="date">Date</button>
+            <button type="button" class="btn btn-xs btn-placeholder btn-secondary" data-val="time">Time</button>
+            <button type="button" class="btn btn-xs btn-placeholder btn-secondary" data-val="passport">Passport</button>
+            <button type="button" class="btn btn-xs btn-placeholder btn-secondary" data-val="technician_id">Technician ID</button>
+            <button type="button" class="btn btn-xs btn-placeholder btn-secondary" data-val="technician_name">Technician Name</button>
+            <button type="button" class="btn btn-xs btn-placeholder btn-secondary" data-val="completed_jobs">Completed Jobs</button>
+            <button type="button" class="btn btn-xs btn-placeholder btn-secondary" data-val="technician_rating">Technician Rating</button>
+            <button type="button" class="btn btn-xs btn-placeholder btn-secondary" data-val="cse_name">CSE Name</button>
+
+
+
+
+
+
+
+
+
 
         </div>
       </div>
