@@ -97,7 +97,7 @@ Route::prefix('admin')->group(function () {
          Route::post('/discount/add',                    [App\Http\Controllers\DiscountController::class, 'store'])->name('store_discount');
         Route::post('/LGA',                             [App\Http\Controllers\DiscountController::class, 'getLGA'])->name('getLGA');
         Route::post('/estates',                             [App\Http\Controllers\DiscountController::class, 'estates'])->name('all_estates');
-        Route::post('/categories',                             [App\Http\Controllers\DiscountController::class, 'category'])->name('categories');
+        Route::post('/categories-list',                             [App\Http\Controllers\DiscountController::class, 'category'])->name('categories');
         Route::post('/category-services',                             [App\Http\Controllers\DiscountController::class, 'categoryServices'])->name('category.services');
         Route::post('/discount-users',                    [App\Http\Controllers\DiscountController::class, 'discountUsers'])->name('discount_users');
         Route::get('/discount/edit/{discount:id}',                    [App\Http\Controllers\DiscountController::class, 'edit'])->name('edit_discount');

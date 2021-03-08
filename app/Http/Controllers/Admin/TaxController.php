@@ -156,9 +156,15 @@ class TaxController extends Controller
      * @param  \App\Models\Tax  $tax
      * @return \Illuminate\Http\Response
      */
-    public function edit(Tax $tax)
+    public function edit($language, $uuid)
     {
-        //
+        $tax = Tax::findOrFail($uuid);
+
+        $data = [
+            'tax'    =>  $tax,
+        ];
+
+        return view('admin.tax._edit', $data);
     }
 
     /**
@@ -168,9 +174,63 @@ class TaxController extends Controller
      * @param  \App\Models\Tax  $tax
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Tax $tax)
+    public function update($language, $uuid, Request $request)
     {
-        //
+        //Validate user input fields
+        $request->validate([
+            'name'          =>   'required',
+            'percentage'    =>   'required|numeric|between:0,99.99',
+            'applicable'    =>   'required', 
+            'description'   =>   '', 
+        ]);
+
+        //Update colum to `No => 0` if `Yes = 1` is selected
+        if((int)$request->applicable == 1){
+            DB::table('taxes')->update(array('applicable' => 0));
+        }
+
+        //Create record for a new tax history if percentage is different from the previous tax percentage
+        if(strcmp($request->percentage, Tax::findOrFail($uuid)->percentage) != 0){
+
+            // return 'true';
+            $updateTaxHistory = TaxHistory::create([
+                'user_id'       =>  Auth::id(),
+                'tax_id'        =>  Tax::findOrFail($uuid)->id,
+                'percentage'    =>  $request->percentage,
+            ]);
+        }
+
+        //Update tax
+        $updateTax = Tax::where('uuid', $uuid)->update([
+            'name'          =>   ucwords($request->name),
+            'percentage'    =>   $request->percentage,
+            'applicable'    =>   $request->applicable, 
+            'description'   =>   $request->description,
+        ]);
+        
+        if($updateTax){
+
+            //Record crurrenlty logged in user activity
+            $type = 'Others';
+            $severity = 'Informational';
+            $actionUrl = Route::currentRouteAction();
+            $message = Auth::user()->email.' updated '.ucwords($request->input('name')).' tax';
+            $this->log($type, $severity, $actionUrl, $message);
+
+            return redirect()->route('admin.taxes.index', app()->getLocale())->with('success', ucwords($request->input('name')).' tax was successfully updated.');
+
+        }else{
+            //Record Unauthorized user activity
+            $type = 'Errors';
+            $severity = 'Error';
+            $actionUrl = Route::currentRouteAction();
+            $message = 'An error occurred while '.Auth::user()->email.' was trying to update tax.';
+            $this->log($type, $severity, $actionUrl, $message);
+
+            return back()->with('error', 'An error occurred while trying to update '.ucwords($request->input('name')).' tax.');
+        }
+
+        return back()->withInput();
     }
 
     /**

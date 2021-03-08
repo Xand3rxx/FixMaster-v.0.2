@@ -85,7 +85,7 @@ class Tax extends Model
 
     public function taxHistories()
     {
-        return $this->hasMany(TaxHistory::class, 'tax_id', 'id');
+        return $this->hasMany(TaxHistory::class, 'tax_id', 'id')->orderBy('created_at', 'DESC');
     }
 
 }

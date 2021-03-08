@@ -136,7 +136,7 @@
 
 
 <div class="modal fade" id="editTax" tabindex="-1" role="dialog" aria-hidden="true" data-keyboard="false" data-backdrop="static">
-    <div class="modal-dialog modal-dialog-centered wd-sm-650" role="document">
+    <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
       <div class="modal-content">
         <div class="modal-body pd-x-25 pd-sm-x-30 pd-t-40 pd-sm-t-20 pd-b-15 pd-sm-b-20">
           <a href="" role="button" class="close pos-absolute t-15 r-15" data-dismiss="modal" aria-label="Close">
@@ -194,7 +194,7 @@
 
         let route = $(this).attr('data-url');
         let id = $(this).attr('data-id');
-        let serviceName = $(this).attr('data-tax-name');
+        let taxName = $(this).attr('data-tax-name');
 
         $.ajaxSetup({
             headers: {
@@ -205,7 +205,7 @@
         $.ajax({
         url: route,
         method: 'GET',
-        data: {"id": id, "serviceName": serviceName },
+        data: {"id": id, "taxName": taxName },
         beforeSend : function(){
             $("#modal-edit-body").html('<div class="d-flex justify-content-center mt-4 mb-4"><span class="loadingspinner"></span></div>'); 
         },
@@ -218,7 +218,7 @@
               $("#spinner-icon-3").hide();
         },
         error: function(jqXHR, testStatus, error) {
-            var message = error+ ' An error occured while trying to edit '+ serviceName+' tax';
+            var message = error+ ' An error occured while trying to edit '+ taxName+' tax';
             var type = 'error';
             displayMessage(message, type);
             $("#spinner-icon-3").hide();

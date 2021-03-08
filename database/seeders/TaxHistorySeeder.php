@@ -21,6 +21,11 @@ class TaxHistorySeeder extends Seeder
             array(
                 'user_id'       =>  1,
                 'tax_id'        =>  1,
+                'percentage'    =>  5,
+            ),
+            array(
+                'user_id'       =>  1,
+                'tax_id'        =>  1,
                 'percentage'    =>  7.5,
             ),
         );
