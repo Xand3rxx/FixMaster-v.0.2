@@ -112,6 +112,10 @@ Route::prefix('admin')->group(function () {
         Route::post('/paystack/update',                     [GatewayController::class, 'paystackUpdate'])->name('paystack_update');        
         Route::post('/flutter/update',                      [GatewayController::class, 'flutterUpdate'])->name('flutter_update');
 
+        // messaging routes
+         Route::view('/messaging/templates',           		'admin.messaging.template')->name('template');
+         Route::view('/messaging/outbox',      'admin.messaging.email.outbox')->name('inbox');
+         Route::view('/messaging/new',      'admin.messaging.email.new')->name('new_email');
     });
 });
 

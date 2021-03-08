@@ -29,7 +29,7 @@ class CreateServiceRequestCancellationsTable extends Migration
                 ->onUpdate('CASCADE')
                 ->onDelete('NO ACTION');
 
-            $table->text('reason')->unique();
+            $table->text('reason');
             $table->timestamps();
         });
     }

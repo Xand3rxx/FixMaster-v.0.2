@@ -37,8 +37,6 @@ Route::get('/join-us',                      [App\Http\Controllers\PageController
 Route::post('/estate/add',                  [\App\Http\Controllers\EstateController::class, 'store'])->name('frontend.store_estate');
 Route::view('/faq',                         'frontend.faq')->name('frontend.faq');
 Route::view('/register',                    'auth.register')->name('frontend.register');
-Route::view('/messaging',           		'frontend.template')->name('template');
-
 
 
 Route::view('/service-details',             'frontend.service_details')->name('frontend.services_details');
