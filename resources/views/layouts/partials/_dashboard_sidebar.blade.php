@@ -105,20 +105,12 @@
         </ul>
       </li>
 
-      <li class="nav-item with-sub">
-        <a href="" class="nav-link"><i data-feather="credit-card"></i> <span>Payments</span></a>
-        <ul>
-          <li class=""><a href="#">Disbursed</a></li>
-          <li class=""><a href="#">Received</a></li>
-        </ul>
-      </li>
-
-      <li class="nav-item with-sub ">
-        <a href="#" class="nav-link"><i data-feather="credit-card"></i> <span>Payment Gateway</span></a>
-        <ul>
-          <li class=""><a href="#">List</a></li>
-        </ul>
-      </li>
+      <li class="nav-item with-sub {{ Route::currentRouteNamed('list_payment_gateway') ? 'active show' : '' }}">
+          <a href="" class="nav-link"><i data-feather="credit-card"></i> <span>Payment Gateway</span></a>  
+          <ul> 
+            <li class="{{ Route::currentRouteNamed('list_payment_gateway') ? 'active' : '' }}"><a href="{{ route('admin.list_payment_gateway', app()->getLocale()) }}">List</a></li>
+          </ul>
+        </li>
 
       <li class="nav-item with-sub ">
         <a href="#" class="nav-link"><i data-feather="cpu"></i> <span>Price Management</span></a>

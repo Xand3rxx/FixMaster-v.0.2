@@ -87,7 +87,6 @@
 
                             // console.log('position',position); 
                             // console.log('results',results[3]); 
-    
                            
                         }
                         else {
