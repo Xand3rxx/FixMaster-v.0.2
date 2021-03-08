@@ -10,6 +10,34 @@ use App\Models\Service;
 
 class ClientController extends Controller
 {
+
+
+    //call the profile page with credentials
+    public function edit_profile(Request $request)
+    {
+
+    }
+
+    public function update_profile(Request $request)
+    {
+      
+    }
+
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function updatePassword(Request $request){
+
+
+    }
+
+    public function view_profile(Request $request){
+       
+
+    }
+    
     /**
      * Display a listing of the resource.
      *

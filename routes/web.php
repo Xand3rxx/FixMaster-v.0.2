@@ -5,8 +5,9 @@ use App\Http\Controllers\Client\ClientController;
 use App\Http\Controllers\Admin\User\AdministratorController;
 use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\EstateController;
-use App\Http\Controllers\Admin\ServiceController;
+use App\Http\Controllers\Admin\ServiceController; 
 use App\Http\Controllers\Admin\ActivityLogController;
+use App\Http\Controllers\Admin\GatewayController;
 
 /*
 |--------------------------------------------------------------------------
@@ -68,10 +69,10 @@ Route::prefix('admin')->group(function () {
         Route::resource('services',                         ServiceController::class);
 
 
-        //  location request
-        Route::get('/location-request',                     [App\Http\Controllers\AdminLocationRequestController::class, 'index'])->name('location_request');
-        Route::post('/get-names',                           [App\Http\Controllers\AdminLocationRequestController::class, 'getNames'])->name('get_names');
-        Route::post('/request-location',                    [App\Http\Controllers\AdminLocationRequestController::class, 'requestLocation'])->name('request_location');
+        //  location request 
+        Route::get('/location-request',                     [AdminLocationRequestController::class, 'index'])->name('location_request');
+        Route::post('/get-names',                           [AdminLocationRequestController::class, 'getNames'])->name('get_names');
+        Route::post('/request-location',                    [AdminLocationRequestController::class, 'requestLocation'])->name('request_location');
 
 
         //Routes for Activity Log Management
@@ -79,17 +80,43 @@ Route::prefix('admin')->group(function () {
         Route::get('/activity-log/details/{activity_log}',  [ActivityLogController::class, 'activityLogDetails'])->name('activity-log.details');
         Route::resource('activity-log',                     ActivityLogController::class);
 
+
+        //Admin payment Routes
+        Route::get('/payment-gateway/list',                 [GatewayController::class, 'index'])->name('list_payment_gateway');                
+        Route::post('/paystack/update',                     [GatewayController::class, 'paystackUpdate'])->name('paystack_update');        
+        Route::post('/flutter/update',                      [GatewayController::class, 'flutterUpdate'])->name('flutter_update');
+
     });
 });
 
     //All routes regarding clients should be in here
     // Route::view('/', 'client.index')->name('index'); //Take me to Admin Dashboard
-    Route::resource('client', ClientController::class);
+    // Route::resource('client', ClientController::class);
+
+    Route::prefix('/client')->group(function () {
+        Route::name('client.')->group(function () {
+            //All routes regarding clients should be in here
+            Route::get('/',           		[ClientController::class, 'index'])->name('index'); //Take me to Supplier Dashboard
+            
+            // Route::get('password',          [ClientController::class, 'changePassword'])->name('client.password');
+            // Route::post('password',         [ClientController::class, 'submitPassword'])->name('change.password');
+
+            // Route::get('/profile/view',             [ClientController::class, 'view_profile'])->name('client.view_profile');
+            // Route::get('/profile/edit',             [ClientController::class, 'edit_profile'])->name('client.edit_profile');
+            // Route::post('/profile/update',          [ClientController::class, 'update_profile'])->name('client.updateProfile');
+            // Route::post('/profile/updatePassword',  [ClientController::class, 'updatePassword'])->name('client.updatePassword');
+            // Route::post('/password/upadte',         [ClientController::class, 'update_password'])->name('client.update_password');
+
+            Route::get('/requests',                    [ClientRequestController::class, 'index'])->name('client.requests');
+        });
+    });
+
 
 Route::prefix('/cse')->group(function () {
     Route::name('cse.')->group(function () {
         //All routes regarding CSE's should be in here
         Route::view('/',           		'cse.index')->name('index'); //Take me to CSE Dashboard
+
     });
 });
 
