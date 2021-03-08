@@ -19,7 +19,7 @@ class Account extends Model
      *
      * @var array
      */
-    protected $with = ['user'];
+    // protected $with = ['user'];
 
     /**
      * Get the user that owns the Account.

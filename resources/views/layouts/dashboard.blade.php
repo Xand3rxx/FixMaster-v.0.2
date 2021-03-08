@@ -1,46 +1,46 @@
 <!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 
-  <head>
+<head>
 
-    <!-- Required meta tags -->
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <!-- Required meta tags -->
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-    <title>@yield('title') | FixMaster.ng - We Fix, You Relax!</title>
-    <meta name="csrf-token" content="{{ csrf_token() }}">
+  <title>@yield('title') | FixMaster.ng - We Fix, You Relax!</title>
+  <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    {{-- <meta name="Author" content="Anthony Joboy (Lagos, Nigeria)" />
+  {{-- <meta name="Author" content="Anthony Joboy (Lagos, Nigeria)" />
     <meta name="Telephone" content="Tel: +234 903 554 7107" /> --}}
-    <meta name="description" content="FixMaster is your best trusted one-call solution for a wide range of home maintenance, servicing and repair needs. Our well-trained & certified uniformed technicians are fully insured professionals with robust experience to provide home services to fully meet your needs with singular objective to make you totally relax while your repair requests are professionally handled." />
-    <meta name="keywords" content="Home-fix, Home-improvement, Home-repairs, Cleaning-services, Modern" />
-    <meta name="email" content="info@homefix.ng" />
-    <meta name="website" content="https://www.fixmaster.com.ng" />
-    <meta name="Version" content="v0.0.1" />
+  <meta name="description" content="FixMaster is your best trusted one-call solution for a wide range of home maintenance, servicing and repair needs. Our well-trained & certified uniformed technicians are fully insured professionals with robust experience to provide home services to fully meet your needs with singular objective to make you totally relax while your repair requests are professionally handled." />
+  <meta name="keywords" content="Home-fix, Home-improvement, Home-repairs, Cleaning-services, Modern" />
+  <meta name="email" content="info@homefix.ng" />
+  <meta name="website" content="https://www.fixmaster.com.ng" />
+  <meta name="Version" content="v0.0.1" />
 
-    <!-- Favicon -->
-    <link rel="icon" href="{{ asset('assets/images/favicon.png') }}" type="image/png" sizes="16x16">
+  <!-- Favicon -->
+  <link rel="icon" href="{{ asset('assets/images/favicon.png') }}" type="image/png" sizes="16x16">
 
-    <!-- vendor css -->
-    <link href="{{ asset('assets/dashboard/lib/fontawesome/fontawesome-free/css/all.min.css') }}" rel="stylesheet">
-    <link href="{{ asset('assets/dashboard/lib/ionicons/css/ionicons.min.css') }}" rel="stylesheet">
+  <!-- vendor css -->
+  <link href="{{ asset('assets/dashboard/lib/fontawesome/fontawesome-free/css/all.min.css') }}" rel="stylesheet">
+  <link href="{{ asset('assets/dashboard/lib/ionicons/css/ionicons.min.css') }}" rel="stylesheet">
 
-    <!-- DashForge CSS -->
-    <link rel="stylesheet" href="{{ asset('assets/dashboard/assets/css/dashforge.css') }}">
-    <link rel="stylesheet" href="{{ asset('assets/dashboard/assets/css/dashforge.demo.css') }}">
-    <link rel="stylesheet" href="{{ asset('assets/dashboard/assets/css/dashforge.dashboard.css') }}">
+  <!-- DashForge CSS -->
+  <link rel="stylesheet" href="{{ asset('assets/dashboard/assets/css/dashforge.css') }}">
+  <link rel="stylesheet" href="{{ asset('assets/dashboard/assets/css/dashforge.demo.css') }}">
+  <link rel="stylesheet" href="{{ asset('assets/dashboard/assets/css/dashforge.dashboard.css') }}">
 
-    <link rel="stylesheet" href="{{ asset('assets/dashboard/assets/datatables/dataTables.bs4.css') }}" />
-    <link rel="stylesheet" href="{{ asset('assets/dashboard/assets/datatables/dataTables.bs4-custom.css') }}" />
-    <link href="{{ asset('assets/dashboard/lib/select2/css/select2.min.css') }}" rel="stylesheet">
-    <link href="{{ asset('assets/dashboard/lib/prismjs/themes/prism-vs.css') }}" rel="stylesheet">
-    <link rel="stylesheet" href="{{ asset('assets/client/css/jquery.datetimepicker.min.css') }}">
-    <link rel="stylesheet" href="https://cdn.datatables.net/buttons/1.6.5/css/buttons.dataTables.min.css">
+  <link rel="stylesheet" href="{{ asset('assets/dashboard/assets/datatables/dataTables.bs4.css') }}" />
+  <link rel="stylesheet" href="{{ asset('assets/dashboard/assets/datatables/dataTables.bs4-custom.css') }}" />
+  <link href="{{ asset('assets/dashboard/lib/select2/css/select2.min.css') }}" rel="stylesheet">
+  <link href="{{ asset('assets/dashboard/lib/prismjs/themes/prism-vs.css') }}" rel="stylesheet">
+  <link rel="stylesheet" href="{{ asset('assets/client/css/jquery.datetimepicker.min.css') }}">
+  <link rel="stylesheet" href="https://cdn.datatables.net/buttons/1.6.5/css/buttons.dataTables.min.css">
+    @yield('css')
 
+</head>
 
-  </head>
-
-  <body class="app-mail">
+<body class="app-mail">
     <style>
       div.dt-buttons {
         margin-top: 1em;
@@ -99,9 +99,6 @@
 
     <script src="{{ asset('assets/dashboard/assets/js/48a9782e-3e2b-4055-a9bb-8a926a937e2c.js') }}"></script>
 
-    <script>
-      
-    </script>
     @yield('scripts')
     @stack('scripts')
 

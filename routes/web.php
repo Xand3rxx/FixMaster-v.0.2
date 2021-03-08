@@ -10,6 +10,12 @@ use App\Http\Controllers\Admin\ActivityLogController;
 use App\Http\Controllers\Admin\ToolInventoryController;
 use App\Http\Controllers\Admin\TaxController;
 use App\Http\Controllers\Admin\GatewayController;
+use App\Http\Controllers\Admin\User\SupplierController;
+use App\Http\Controllers\Admin\User\FranchiseeController;
+use App\Http\Controllers\Admin\User\TechnicianArtisanController;
+use App\Http\Controllers\Admin\User\QualityAssuranceController;
+use App\Http\Controllers\Admin\User\CustomerServiceExecutiveController;
+use App\Http\Controllers\Admin\User\ClientController as AdministratorClientController;
 
 /*
 |--------------------------------------------------------------------------
@@ -39,8 +45,13 @@ Route::prefix('admin')->group(function () {
 
         Route::prefix('users')->name('users.')->group(function () {
             Route::resource('administrator', AdministratorController::class);
+            Route::resource('clients', AdministratorClientController::class);
+            Route::resource('supplier', SupplierController::class);
+            Route::resource('cse', CustomerServiceExecutiveController::class);
+            Route::resource('franchisee', FranchiseeController::class);
+            Route::resource('technician-artisan', TechnicianArtisanController::class);
+            Route::resource('quality-assurance', QualityAssuranceController::class);
         });
-        Route::view('/',                   'admin.index')->name('index'); //Take me to Admin Dashboard
 
         Route::get('/estate/list',      [EstateController::class, 'index'])->name('list_estate');
         Route::get('/estate/add',      [EstateController::class, 'create'])->name('add_estate');

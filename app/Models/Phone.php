@@ -10,6 +10,13 @@ class Phone extends Model
     use HasFactory;
 
     /**
+     * The attributes that are mass assignable.
+     *
+     * @var array
+     */
+    protected $fillable = ['country_id', 'account_id','number'];
+
+    /**
      * Get the user that owns the phone.
      */
     public function user()
