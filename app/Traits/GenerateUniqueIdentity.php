@@ -17,7 +17,7 @@ trait GenerateUniqueIdentity
      * 
      * @return string
      */
-    public static function cse(string $table, string $abbr)
+    public static function generate(string $table, string $abbr)
     {
         return static::uniqueIdentity($table, $abbr);
     }

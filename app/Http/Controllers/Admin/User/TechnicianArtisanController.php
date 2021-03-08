@@ -2,13 +2,13 @@
 
 namespace App\Http\Controllers\Admin\User;
 
-use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use App\Traits\RegisterAdministrator;
+use App\Http\Controllers\Controller;
+use App\Traits\RegisterTechnicianArtisan;
 
-class AdministratorController extends Controller
+class TechnicianArtisanController extends Controller
 {
-    use RegisterAdministrator;
+    use RegisterTechnicianArtisan;
     /**
      * Display a listing of the resource.
      *
@@ -16,9 +16,8 @@ class AdministratorController extends Controller
      */
     public function index()
     {
-        // Find Administrators and use the user relationship
-        return view('admin.users.administrator.index')->with([
-            'users' => \App\Models\Administrator::with('user')->get(),
+        return view('admin.users.technician-artisan.index')->with([
+            'users' => \App\Models\Technician::with('user')->get(),
         ]);
     }
 
@@ -29,21 +28,17 @@ class AdministratorController extends Controller
      */
     public function create()
     {
-        return view('admin.users.administrator.create')->with([
-            'roles' => \App\Models\Role::where('url', 'admin')->get(),
-            'permissions' => [
-                'administrators'        => 'Administrators',
-                'clients'               => 'Clients',
-                'location_request'      => 'Location Request',
-                'cses'                  => "CSE's",
-                'payments'              => 'Payments',
-                'ratings'               => 'Rating',
-                'requests'              => 'Requests',
-                'rfqs'                  => "RFQ's",
-                'service_categories'    => "Service & Category",
-                'technicians'           => "Technicians",
-                'tools'                 => "Tools",
-                'utilities'             => "Utilities",
+        return view('admin.users.technician-artisan.create')->with([
+            'states' => \App\Models\State::select('id', 'name')->orderBy('name', 'ASC')->get(),
+            'banks' => \App\Models\Bank::select('id', 'name')->orderBy('name', 'ASC')->get(),
+            // services
+            'services' => [
+                'Electronics'        => [
+                    '1' => 'Computer & Laptops'
+                ],
+                'Household Appliances' => [
+                    '1' => 'Dish & Washing Machine'
+                ]
             ],
         ]);
     }
@@ -57,12 +52,12 @@ class AdministratorController extends Controller
     public function store(Request $request)
     {
         // Validate Request
-        $valid = $this->validateCreateAdministrator($request);
-        // Register an Administrator
+        $valid = $this->validateCreateTechnicianArtisan($request);
+        // Register a Technician-Artisan
         $registered = $this->register($valid);
 
         return ($registered == true)
-            ? redirect()->route('admin.users.administrator.index', app()->getLocale())->with('success', "An Administrator Created Successfully!!")
+            ? redirect()->route('admin.users.technician-artisan.index', app()->getLocale())->with('success', "A Technician/Artisan Created Successfully!!")
             : back()->with('error', "An error occurred while creating User");
     }
 
@@ -119,19 +114,28 @@ class AdministratorController extends Controller
      *
      * @throws \Illuminate\Validation\ValidationException
      */
-    protected function validateCreateAdministrator(Request $request)
+    protected function validateCreateTechnicianArtisan(Request $request)
     {
         return $request->validate([
             'first_name'                =>   'required|string|max:180',
             'middle_name'               =>   'sometimes|max:180',
             'last_name'                 =>   'required|string|max:180',
             'email'                     =>   'required|email|unique:users,email',
-            'phone_number'              =>   'required|numeric',
-            'role_id'                   =>   'required|numeric',
+            'phone_number'              =>   'required|numeric|unique:phones,number',
+            'other_phone_number'        =>   'sometimes|numeric|unique:phones,number',
+            'gender'                    =>   'required|in:Male,Female,Others',
             'password'                  =>   'required|min:8',
             'confirm_password'          =>   'required|same:password',
-            'permission'                => 'required|array',
-            'permission.*'                => 'sometimes|required|string|in:on,off'
+            'technician_category'       =>   'required|array',
+            'technician_category.*'     =>   'required|string',
+
+            'bank_id'                   =>   'required|numeric',
+            'state_id'                  =>   'required|numeric',
+            'lga_id'                    =>   'required|numeric',
+            'town'                      =>   'required|string',
+            'full_address'              =>   'required|string',
+            'account_number'            =>   'required|numeric',
+
         ]);
     }
 }

@@ -283,7 +283,6 @@
                 },
                 success: function(data) {
                     if (data) {
-
                         $('#lga_id').html(data.lgaList);
                     } else {
                         var message = 'Error occured while trying to get L.G.A`s in ' + stateName + ' state';

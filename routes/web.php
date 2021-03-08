@@ -1,11 +1,17 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\Client\ClientController;
-use App\Http\Controllers\Admin\User\AdministratorController;
-use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\EstateController;
 use App\Http\Controllers\ServiceController;
+use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\Client\ClientController;
+use App\Http\Controllers\Admin\User\SupplierController;
+use App\Http\Controllers\Admin\User\FranchiseeController;
+use App\Http\Controllers\Admin\User\TechnicianArtisanController;
+use App\Http\Controllers\Admin\User\AdministratorController;
+use App\Http\Controllers\Admin\User\QualityAssuranceController;
+use App\Http\Controllers\Admin\User\CustomerServiceExecutiveController;
+use App\Http\Controllers\Admin\User\ClientController as AdministratorClientController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes ONLY AUTHENTICATED USERS HAVE ACCESS TO THIS ROUTE
@@ -34,8 +40,13 @@ Route::prefix('admin')->group(function () {
 
         Route::prefix('users')->name('users.')->group(function () {
             Route::resource('administrator', AdministratorController::class);
+            Route::resource('clients', AdministratorClientController::class);
+            Route::resource('supplier', SupplierController::class);
+            Route::resource('cse', CustomerServiceExecutiveController::class);
+            Route::resource('franchisee', FranchiseeController::class);
+            Route::resource('technician-artisan', TechnicianArtisanController::class);
+            Route::resource('quality-assurance', QualityAssuranceController::class);
         });
-        Route::view('/',                   'admin.index')->name('index'); //Take me to Admin Dashboard
 
         Route::get('/estate/list',      [EstateController::class, 'index'])->name('list_estate');
         Route::get('/estate/add',      [EstateController::class, 'create'])->name('add_estate');

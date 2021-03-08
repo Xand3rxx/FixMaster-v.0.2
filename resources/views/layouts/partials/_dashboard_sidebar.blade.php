@@ -211,36 +211,36 @@
         </ul>
       </li>
 
-      <li class="nav-item"><a href="#" class="nav-link"><i data-feather="users"></i> <span>Clients</span></a></li>
+      <li class="nav-item"><a href="{{route('admin.users.clients.index', app()->getLocale())}}" class="nav-link"><i data-feather="users"></i> <span>Clients</span></a></li>
 
       <li class="nav-item with-sub">
         <a href="" class="nav-link"><i data-feather="wind"></i> <span>CSE</span></a>
         <ul>
-          <li class=""><a href="#">Add</a></li>
-          <li class=""><a href="#">List</a></li>
+          <li class=""><a href="{{route('admin.users.cse.create', app()->getLocale())}}">Add</a></li>
+          <li class=""><a href="{{route('admin.users.cse.index', app()->getLocale())}}">List</a></li>
         </ul>
       </li>
 
       <li class="nav-item with-sub">
-        <a href="" class="nav-link"><i data-feather="wind"></i> <span>Franchise</span></a>
+        <a href="" class="nav-link"><i data-feather="wind"></i> <span>Franchisee</span></a>
         <ul>
-          <li class=""><a href="#">Add</a></li>
-          <li class=""><a href="#">List</a></li>
+          <li class=""><a href="{{route('admin.users.franchisee.create', app()->getLocale())}}">Add</a></li>
+          <li class=""><a href="{{route('admin.users.franchisee.index', app()->getLocale())}}">List</a></li>
         </ul>
       </li>
 
       <li class="nav-item with-sub">
-        <a href="" class="nav-link"><i data-feather="zap"></i> <span>Technicians</span></a>
+        <a href="" class="nav-link"><i data-feather="zap"></i> <span>Technicians & Artisan</span></a>
         <ul>
-          <li class=""><a href="#">Add</a></li>
-          <li class=""><a href="#">List</a></li>
+          <li class=""><a href="{{route('admin.users.technician-artisan.create', app()->getLocale())}}">Add</a></li>
+          <li class=""><a href="{{route('admin.users.technician-artisan.index', app()->getLocale())}}">List</a></li>
         </ul>
       </li>
       <li class="nav-item with-sub">
         <a href="" class="nav-link"><i data-feather="zap"></i> <span>Quality Assurance</span></a>
         <ul>
-          <li class=""><a href="#">Add</a></li>
-          <li class=""><a href="#">List</a></li>
+          <li class=""><a href="{{route('admin.users.quality-assurance.create', app()->getLocale())}}">Add</a></li>
+          <li class=""><a href="{{route('admin.users.quality-assurance.index', app()->getLocale())}}">List</a></li>
         </ul>
       </li>
 

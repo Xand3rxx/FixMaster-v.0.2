@@ -6,7 +6,7 @@ use App\Models\User;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 
-trait RegisterAdministrator
+trait RegisterTechnicianArtisan
 {
     /**
      * Handle registration of an Administartor request for the application.
@@ -19,31 +19,35 @@ trait RegisterAdministrator
         DB::transaction(function () use ($valid, &$registred) {
             // Register the User
             $user = $this->createUser($valid);
-            // find the selected Role
-            $role = \App\Models\Role::where('id', $valid['role_id'])->firstOrFail();
+            // find the Role of a Technicain
+            $role = \App\Models\Role::where('slug', 'technician-artisans')->firstOrFail();
             // Attach the given role to the User
             $user->roles()->attach($role);
             // Attach the User Type for url path
-            \App\Models\UserType::store($user->id, $role->id, 'admin');
+            \App\Models\UserType::store($user->id, $role->id, $role->url);
             // Register the User Account
             $account = $user->account()->create([
+                'state_id' => $valid['state_id'],
+                'lga_id ' => $valid['lga_id '],
+                'town_id ' => 2,
+
                 'first_name' => $valid['first_name'],
                 'middle_name' => $valid['middle_name'] ?: "",
                 'last_name' => $valid['last_name'] ?: "",
-                'gender' => $valid['gender'] ?? 'others'
+                'gender' => $valid['gender'],
+
+                'account_number' => $valid['account_number'],
+                'avatar' => !empty($valid['avatar']) ? $valid['avatar']->store('avatar', 'public') : NULL,
             ]);
-            // Register the User Phone Number
-            $user->phones()->create([
+            // Register Address
+            $user->addresses()->create([
                 'account_id' => $account->id,
-                'country_id' => $account->id,
-                'number' => $valid['phone_number'],
+                'country_id' => 156,
+                'name' => $valid['full_address']
             ]);
-            // Register the Administartor Account
-            \App\Models\Administrator::create([
-                'user_id' => $user->id,
-                'account_id' => $account->id,
-            ]);
-            $registred = true;
+            
+
+            dd($user, $valid);
         });
         return $registred;
     }
