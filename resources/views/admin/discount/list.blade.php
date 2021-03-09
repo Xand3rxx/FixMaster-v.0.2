@@ -62,7 +62,7 @@
                                     <td class="tx-medium text-center">{{$discount->rate.'%'}}</td>
                                <td class="tx-medium text-center">{{CustomHelpers::displayTime($discount->duration_start, $discount->duration_end) }}</td>
                                     <td class="tx-medium">{{$discount->description}}</td>
-                                    <td class="tx-medium text-center">{{$discount->notify == 0 ? ' Sent': 'Not Sent'}}
+                                    <td class="tx-medium text-center">{{$discount->notify == 1 ? ' Sent': 'Not Sent'}}
                                     </td>
                                     @if($discount->status == 'activate')
                                     <td class="text-medium text-success">Active</td>
@@ -79,7 +79,7 @@
                                             <a href="" class="dropdown-link" data-toggle="dropdown"><i
                                                     data-feather="more-vertical"></i></a>
                                             <div class="dropdown-menu dropdown-menu-right">
-                                                <a href="{{ route('admin.summary', [ 'discount'=>$discount->id, 'locale'=>app()->getLocale() ]) }}"
+                                                <a href="{{ route('admin.summary', [ 'discount'=>$discount->uuid, 'locale'=>app()->getLocale() ]) }}"
                                                     class="dropdown-item details text-primary" title="View  details"
                                                     data-url="" data-category-name="" id="category-details"><i
                                                         class="far fa-clipboard"></i> Summary</a>
@@ -100,7 +100,7 @@
                                                 @endif
 
                                                 <a href="#" id="delete" 
-                                                    data-url="{{ route('admin.delete_discount', [ 'discount'=>$discount->id, 'locale'=>app()->getLocale() ]) }}"
+                                                    data-url="{{ route('admin.delete_discount', [ 'discount'=>$discount->uuid, 'locale'=>app()->getLocale() ]) }}"
                                                     class="dropdown-item details text-danger" title="Delete Discount"><i
                                                         class="fas fa-trash"></i> Delete</a>
 

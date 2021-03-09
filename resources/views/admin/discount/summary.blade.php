@@ -23,7 +23,7 @@
         @else 
         <a href="#" id="activate" data-toggle="modal" data-url="{{ route('admin.activate_discount', [ 'discount'=>$discount->uuid, 'locale'=>app()->getLocale() ]) }}"  class="btn btn-success" title="Reinstate"><i class="fas fa-undo"></i> Reinstate</a>
         @endif                 
-        <a href="#" id="delete" class="btn btn-danger"><i class="fas fa-trash"></i> Delete</a>
+        <a href="#"  data-url="{{ route('admin.delete_discount', [ 'discount'=>$discount->uuid, 'locale'=>app()->getLocale() ]) }}" id="delete" class="btn btn-danger"><i class="fas fa-trash"></i> Delete</a>
       </div>
     </div>
 
@@ -56,7 +56,7 @@
                 </tr>
                 <tr>
                   <td class="tx-medium">Notification</td>
-                  <td class="tx-color-03">{{$discount->notify == 0 ? ' Sent': 'Not Sent'}}</td>
+                  <td class="tx-color-03">{{$discount->notify == 1 ? ' Sent': 'Not Sent'}}</td>
                 </tr>
 
                 <tr>

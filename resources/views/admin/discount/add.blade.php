@@ -67,8 +67,11 @@
                                 data-live-search="true">
                                 <option value="">Select...</option>
                             </select>
-
-
+                            @error('category')
+                            <span class="invalid-feedback-err">
+                                <strong>{{ $message }}</strong>
+                            </span>
+                            @enderror
                         </div>
 
 
@@ -168,7 +171,11 @@
                                 data-live-search="true">
                                 <option value="">Select...</option>
                             </select>
-
+                            @error('users')
+                            <span class="invalid-feedback-err">
+                                <strong>{{ $message }}</strong>
+                            </span>
+                            @enderror
                         </div>
 
                         <div class="form-group col-md-12">
@@ -205,7 +212,7 @@
                             <input type="date" class="form-control custom-input-1" id="start_date"
                                 min=<?= date('Y-m-d'); ?> name="start_date" value="{{ old('start_date') }}"
                                 autocomplete="off">
-                            @error('from_date')
+                            @error('start_date')
                             <span class="invalid-feedback-err">
                                 <strong>{{ $message }}</strong>
                             </span>
@@ -216,7 +223,7 @@
                             <input type="date" class="form-control custom-input-1" id="end_date"
                                 min=<?= date('Y-m-d');?> name="end_date" value="{{ old('end_date') }}"
                                 autocomplete="off">
-                            @error('discount_name')
+                            @error('end_date')
                             <span class="invalid-feedback-err">
                                 <strong>{{ $message }}</strong>
                             </span>
@@ -238,7 +245,7 @@
                             <span class="">
                                 <label class="contain">
                                     Yes
-                                    <input type="radio" checked="{{ old('notify') == 1 ? 'checked' : ''}}" value="1"
+                                    <input type="radio" {{ old('notify') == 1 ? 'checked' : ''}} value="1"
                                         name="notify">
                                     <span class="checkmark"></span>
                                 </label>
@@ -246,7 +253,7 @@
 
                                 <label class="contain">
                                     No
-                                    <input type="radio" checked="{{ old('notify') == 0 ? 'checked' : ''}}" value="0"
+                                    <input type="radio" {{ old('notify') == 0 ? 'checked' : ''}} value="0"
                                         name="notify">
                                     <span class="checkmark"></span>
                                 </label></span>
@@ -427,7 +434,7 @@ $(document).ready(function() {
                         var message =
                             'Error occured while trying to get Enity Parameter List`s in ';
                         var type = 'error';
-                        displayMessage(message, type);
+                        displayMessage(message, type);ory
                     }
                 },
             })
@@ -445,7 +452,7 @@ $(document).ready(function() {
         previousValue) {
         var categoryid = $(this).val();
         $.ajax({
-            url: "{{ route('admin.category.services',app()->getLocale()) }}",
+            url: "{{ route('admin.category_services',app()->getLocale()) }}",
             method: "POST",
             dataType: "JSON",
             data: {
