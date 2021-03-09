@@ -47,7 +47,9 @@
         margin-left: 1.5em;
       }
     </style>
-    @include('layouts.partials._dashboard_sidebar')
+    {{-- @include('layouts.partials._dashboard_sidebar') --}}
+
+    @include('layouts.partials._qa_sidebar')
 
     <div class="content ht-100v pd-0">
       @include('layouts.partials._dashboard_header')

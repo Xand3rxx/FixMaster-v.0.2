@@ -38,9 +38,9 @@
                             <div class="mg-sm-r-30">
                                 <div class="pos-relative d-inline-block mg-b-20">
                                   <a href="#">
-                                    <div class="avatar avatar-xxl">
+                                    <div class="avatar avatar-xxl">  {{--{{!empty($result->account->$avatar) ? asset('assets/qa_images/'.$result->account->$avatar) : asset('assets/images/no-image-available.png')}}--}}
                                       <div class="user-img">
-                                        <img class="rounded-circle wh-150p img-fluid image profile_image_preview" src="{{!empty($avatar) ? asset('assets/cse-technician-images/'.$avatar) : asset('assets/images/no-image-available.png')}}" alt="user-image">
+                                        <img class="rounded-circle wh-150p img-fluid image profile_image_preview" src='{{asset("/assets/qa_images/".$result->account->avartar)}}' alt="user-image">
                                       </div>
                                     </div>
                                   </a>
@@ -100,20 +100,20 @@
                           <!-- Phone Number -->
                           <div class="form-group col-md-3">
                             <label for="inputEmail4">Phone Number</label>
-                            <input type="tel" class="form-control @error('phone_number') is-invalid @enderror" id="phone_number" name="phone_number" maxlength="11" value="{{ old('phone_number')?? $result->phone->number }}" required> 
+                            <input type="tel" class="form-control @error('phone_number') is-invalid @enderror" id="phone_number" name="phone_number" maxlength="11" value="{{ old('phone_number')?? $result->phone->number }}" required>
                             @error('phone_number')
                               <span class="invalid-feedback" role="alert">
                                   <strong>{{ $message }}</strong>
                               </span>
                             @enderror
                           </div>
-                          
+
 
                               <!-- Profile Avatar -->
                               <div class="form-group col-md-3">
                                 <label>Profile Avatar</label>
                                 <div class="custom-file">
-                                  <input type="file" accept="image/*" class="custom-file-input @error('image') is-invalid @enderror" name="profile_avater" id="profile_image" required>
+                                  <input type="file" accept="image/*" class="custom-file-input @error('image') is-invalid @enderror" name="profile_avater" id="profile_image">
                                   <label class="custom-file-label" id="imagelabel" for="profile_image">Upload Profile Avatar</label>
 
                                   @error('image')

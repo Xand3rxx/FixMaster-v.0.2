@@ -162,11 +162,11 @@
                       {{-- <span class="tx-10 tx-color-04">85% goal reached</span> --}}
                     </div>
                     <div class="d-flex justify-content-between mg-b-5">
-                      <h5 class="tx-normal tx-rubik mg-b-0">8</h5>
+                      <h5 class="tx-normal tx-rubik mg-b-0">{{Auth::user()->payments->count()}}</h5>
                       {{-- <h5 class="tx-normal tx-rubik tx-color-03 mg-b-0"><small>30.50%</small></h5> --}}
                     </div>
                     <div class="progress ht-4 mg-b-0 op-5">
-                      <div class="progress-bar bg-primary wd-85p" role="progressbar" aria-valuenow="85" aria-valuemin="0" aria-valuemax="100"></div>
+                      <div class="progress-bar bg-primary wd-{{Auth::user()->payments->count()}}p" role="progressbar" aria-valuenow="85" aria-valuemin="0" aria-valuemax="100"></div>
                     </div>
                   </div>
                 </div><!-- row -->
@@ -186,66 +186,30 @@
               <a href="" class="link-03 lh-0 mg-l-10"><i class="icon ion-md-more"></i></a>
             </div> --}}
           </div>
+          @if(Auth::user()->payments->count() > 0)
           <ul class="list-group list-group-flush tx-13">
+       @foreach(Auth::user()->payments as $payment)
             <li class="list-group-item d-flex pd-sm-x-20">
               <div class="avatar d-none d-sm-block"><span class="avatar-initial rounded-circle bg-teal"><i class="icon ion-md-checkmark"></i></span></div>
               <div class="pd-sm-l-10">
-                <p class="tx-medium mg-b-0">Payment from FixMaster for REF-234094623496 job</p>
-                <small class="tx-12 tx-color-03 mg-b-0">Apr 3, 2020, 12:56pm</small>
+                <p class="tx-medium mg-b-0">Payment from FixMaster for {{$payment->service_request->job_reference}} job</p>
+                <small class="tx-12 tx-color-03 mg-b-0">{{$payment->payment_date}}</small>
               </div>
               <div class="mg-l-auto text-right">
-                <p class="tx-medium mg-b-0"> ₦7,000</p>
+                <p class="tx-medium mg-b-0"> ₦{{number_format($payment->amount)}}</p>
                 <small class="tx-12 tx-success mg-b-0">Completed</small>
               </div>
             </li>
-            <li class="list-group-item d-flex pd-sm-x-20">
-              <div class="avatar d-none d-sm-block"><span class="avatar-initial rounded-circle bg-teal"><i class="icon ion-md-checkmark"></i></span></div>
-              <div class="pd-sm-l-10">
-                <p class="tx-medium mg-b-0">Payment from FixMaster for REF-094009623412 job</p>
-                <small class="tx-12 tx-color-03 mg-b-0">Mar 21, 2020, 3:30pm</small>
-              </div>
-              <div class="mg-l-auto text-right">
-                <p class="tx-medium mg-b-0"> ₦4,800</p>
-                <small class="tx-12 tx-success mg-b-0">Completed</small>
-              </div>
-            </li>
-            <li class="list-group-item d-flex pd-sm-x-20">
-              <div class="avatar d-none d-sm-block"><span class="avatar-initial rounded-circle bg-teal"><i class="icon ion-md-checkmark"></i></span></div>
-              <div class="pd-sm-l-10">
-                <p class="tx-medium mg-b-0">Payment from FixMaster for REF-237290223123</p>
-                <small class="tx-12 tx-color-03 mg-b-0">Feb 25, 2020, 8:17am</small>
-              </div>
-              <div class="mg-l-auto text-right">
-                <p class="tx-medium mg-b-0"> ₦2,500</p>
-                <small class="tx-12 tx-success mg-b-0">Completed</small>
-              </div>
-            </li>
-            <li class="list-group-item d-flex pd-sm-x-20">
-              <div class="avatar d-none d-sm-block"><span class="avatar-initial rounded-circle bg-teal"><i class="icon ion-md-checkmark"></i></span></div>
-              <div class="pd-sm-l-10">
-                <p class="tx-medium mg-b-0">Payment from FixMaster for REF-234094623496 job</p>
-                <small class="tx-12 tx-color-03 mg-b-0">Jan 18, 2020, 7:30pm</small>
-              </div>
-              <div class="mg-l-auto text-right">
-                <p class="tx-medium mg-b-0"> ₦1,950</p>
-                <small class="tx-12 tx-success mg-b-0">Completed</small>
-              </div>
-            </li>
-            <li class="list-group-item d-flex pd-sm-x-20">
-              <div class="avatar d-none d-sm-block"><span class="avatar-initial rounded-circle bg-teal"><i class="icon ion-md-checkmark"></i></span></div>
-              <div class="pd-sm-l-10">
-                <p class="tx-medium mg-b-0">Payment from FixMaster for REF-544199238409 job</p>
-                <small class="tx-12 tx-color-03 mg-b-0">Jan 8, 2020, 6:18am</small>
-              </div>
-              <div class="mg-l-auto text-right">
-                <p class="tx-medium mg-b-0"> ₦6,000</p>
-                <small class="tx-12 tx-success mg-b-0">Completed</small>
-              </div>
-            </li>
+        @endforeach
           </ul>
           <div class="card-footer text-center tx-13">
           <a href="{{ route('qa.payments',app()->getLocale()) }}" class="link-03">View All Transactions <i class="icon ion-md-arrow-down mg-l-5"></i></a>
           </div><!-- card-footer -->
+          @else
+          <div class="card-footer text-center tx-13">
+            <h6 class="text-center">No Recent Payments</h6>
+          </div>
+          @endif
         </div><!-- card -->
       </div>
 

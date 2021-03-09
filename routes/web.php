@@ -6,6 +6,7 @@ use App\Http\Controllers\Admin\User\AdministratorController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\EstateController;
 use App\Http\Controllers\ServiceController;
+use App\Http\Controllers\QualityAssurance\PaymentController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes ONLY AUTHENTICATED USERS HAVE ACCESS TO THIS ROUTE
@@ -31,6 +32,9 @@ use App\Http\Controllers\ServiceController;
 Route::prefix('admin')->group(function () {
     Route::name('admin.')->group(function () {
         Route::view('/', 'admin.index')->name('index'); //Take me to Admin Dashboard
+
+        Route::view('/ratings/category', 'admin.ratings.category')->name('category');
+        Route::view('/ratings/job', 	 'admin.ratings.job')->name('job');
 
         Route::prefix('users')->name('users.')->group(function () {
             Route::resource('administrator', AdministratorController::class);
@@ -101,12 +105,12 @@ Route::prefix('/qa')->group(function () {
     Route::name('qa.')->group(function () {
         //All routes regarding quality_assurance should be in here
         Route::view('/', 'qa.index')->name('index'); //Take me to quality_assurance Dashboard
-        //Route::view('/profile', 'qa.view_profile')->name('view_profile');
+
         Route::get('/profile',    [App\Http\Controllers\QualityAssurance\QualityAssuranceProfileController::class,'view_profile'])->name('view_profile');
         Route::get('/profile/edit_profile', [App\Http\Controllers\QualityAssurance\QualityAssuranceProfileController::class,'edit'])->name('edit_profile');
         Route::patch('/profile/update_profile', [App\Http\Controllers\QualityAssurance\QualityAssuranceProfileController::class,'update'])->name('update_profile');
         Route::view('/requests', 'qa.requests')->name('requests');
-        Route::view('/payments', 'qa.payments')->name('payments');
+        Route::get('/payments', [PaymentController::class, 'get_qa_disbursed_payments'])->name('payments');
         Route::view('/messages/inbox', 'qa.messages.inbox')->name('messages.inbox');
         Route::view('/messages/sent', 'qa.messages.sent')->name('messages.sent');
     });

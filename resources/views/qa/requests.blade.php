@@ -51,6 +51,7 @@
                   <th>Client</th>
                   <th>Supervised By</th>
                   <th>CSE</th>
+                  <th>Technician</th>
                   <th class="text-center">Amount</th>
                   <th>Status</th>
                   <th class="text-center">Date</th>

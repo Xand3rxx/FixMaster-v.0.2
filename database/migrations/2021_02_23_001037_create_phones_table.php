@@ -24,7 +24,7 @@ class CreatePhonesTable extends Migration
             $table->foreignId('account_id')->index();
             $table->foreignId('country_id')->index();
 
-            $table->integer('number')->unique();
+            $table->string('number')->unique();
 
             $table->timestamps();
         });

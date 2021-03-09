@@ -35,7 +35,7 @@
                 </div>
                 <div class="media-body">
                   <h6 class="tx-sans tx-uppercase tx-10 tx-spacing-1 tx-color-03 tx-semibold tx-nowrap mg-b-5 mg-md-b-8">Total Payments</h6>
-                  <h4 class="tx-20 tx-sm-18 tx-md-20 tx-normal tx-rubik mg-b-0">8</h4>
+                  <h4 class="tx-20 tx-sm-18 tx-md-20 tx-normal tx-rubik mg-b-0">{{$payments->count()}}</h4>
                 </div>
               </div>
 
@@ -58,7 +58,7 @@
                 <div class="col-md-4 specific-date d-none">
                     <div class="form-group position-relative">
                         <label>Specify Date <span class="text-danger">*</span></label>
-                        <input name="name" id="name" type="date" class="form-control pl-5">
+                        <input name="name" id="" type="date" class="form-control s_date pl-5">
                     </div>
                 </div>
 
@@ -123,30 +123,21 @@
                 </tr>
               </thead>
               <tbody>
-                {{-- @foreach ($payments as $payment) --}}
-                  <tr>
-                  <td class="tx-color-03 tx-center"></td>
-                  <td class="tx-medium"></td>
-                    <td class="tx-medium"></td>
-                    <td class="tx-medium">
-                      {{-- @if($payment->payment_mode == 1)
-                        ATM Transfer
-                      @elseif($payment->payment_mode == 2)
-                        Bank Transfer
-                      @elseif($payment->payment_mode == 3)
-                        Internet Banking
-                      @else
-                        USSD Transfer
-                      @endif --}}
-                    </td>
-                    <td class="tx-medium"></td>
+                @php $sn = 1; @endphp
+                @foreach ($payments as $result)
 
-                    <td class="tx-medium"></td>
-                    <td class="text-medium"></td>
-                    {{-- <td class="text-medium tx-center">{{ $payment->payment_date }}</td> --}}
-                    <td class="text-medium tx-center"></td>
+                  <tr>
+                  <td class="tx-color-03 tx-center">{{ $sn++ }}</td>
+                  <td class="tx-medium">{{$result->service_request->job_reference}}</td>
+                    <td class="tx-medium">{{$result->payment_reference}}</td>
+                    <td class="tx-medium">Admin</td>
+                    <td class="tx-medium">₦{{ number_format($result->amount)}}</td>
+                    <td class="tx-medium">{{$result->mode->name}}</td>
+                    <td class="tx-medium">{{$result->comment}}</td>
+                    <td class="text-medium tx-center">{{ Carbon\Carbon::parse($result->created_at, 'UTC')->isoFormat('MMMM Do YYYY, h:mm:ssa') }}</td>
+
                   </tr>
-                {{-- @endforeach --}}
+                @endforeach
               </tbody>
             </table>
           </div><!-- table-responsive -->
@@ -187,6 +178,21 @@
         });
     });
 
+    //  $(document).on('keyup', '#s_date', function(){
+
+    //  alert('date clicked');
+
+    //  });
+
+//     $('.s_date input').change(function(){
+//   var dt = new Date( $(this).val());
+//   var year = dt.getFullYear();
+//   var month =  (dt.getMonth() < 10 ? '0' : '') + (dt.getMonth()+1);
+//   var day = (dt.getDate() < 10 ? '0' : '') + dt.getDate();
+
+//   alert(dt);
+
+//     });
 </script>
 @endsection
 

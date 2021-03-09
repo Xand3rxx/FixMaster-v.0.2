@@ -12,6 +12,8 @@ class Phone extends Model
     /**
      * Get the user that owns the phone.
      */
+    protected $fillable = ['user_id', 'account_id', 'country_id', 'number'];
+
     public function user()
     {
         return $this->belongsTo(User::class);

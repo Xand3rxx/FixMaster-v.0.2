@@ -123,11 +123,11 @@
         </ul>
       </li>
 
-      <li class="nav-item with-sub">
+      <li class="nav-item with-sub {{ Route::currentRouteNamed('admin.ratings.category', 'admin.ratings.job') ? 'active' : '' }}">
         <a href="" class="nav-link"><i data-feather="star"></i> <span>Rating</span></a>
         <ul>
-          <li class=""><a href="#">Category Rating</a></li>
-          <li class=""><a href="#">Job Rating</a></li>
+          <li class="{{ Route::currentRouteNamed('admin.category') ? 'active' : '' }}"><a href="{{ route('admin.category', app()->getLocale()) }}">Category Rating</a></li>
+          <li class="{{ Route::currentRouteNamed('admin.job') ? 'active' : '' }}"><a href="{{ route('admin.job', app()->getLocale()) }}">Job Rating</a></li>
         </ul>
       </li>
 

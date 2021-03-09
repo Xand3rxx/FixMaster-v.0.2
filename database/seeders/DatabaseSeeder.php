@@ -32,6 +32,7 @@ class DatabaseSeeder extends Seeder
             CountrySeeder::class,
             PaymentModeSeeder::class,
             PaymentDisbursedSeeder::class,
+            QASeeder::class,
         ]);
     }
 }

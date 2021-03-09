@@ -11,7 +11,7 @@ class PaymentDisbursed extends Model
     use HasFactory;
 
     // column name of key
-    protected $primaryKey = 'uuid';
+    //protected $primaryKey = 'uuid';
 
     // type of key
     protected $keyType = 'string';
@@ -46,9 +46,17 @@ class PaymentDisbursed extends Model
      */
     protected static function booted()
     {
-        // Create a uuid when a new Payment Disbursed is to be created 
+        // Create a uuid when a new Payment Disbursed is to be created
         static::creating(function ($serviceRequest) {
-            $serviceRequest->uuid = (string) Str::uuid(); 
+            $serviceRequest->uuid = (string) Str::uuid();
         });
+    }
+
+    public function service_request(){
+        return $this->hasOne(ServiceRequest::class,'id');
+    }
+
+    public function mode(){
+        return $this->hasOne(PaymentMode::class, 'id');
     }
 }

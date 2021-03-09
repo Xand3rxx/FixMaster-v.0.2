@@ -36,8 +36,20 @@ class QASeeder extends Seeder
         // QA Account
         $qaAccount = \App\Models\Account::create([
             'user_id' =>  $qa->id,
-            'first_name' => "Wale",
-            'gender' => 'female'
+            'first_name'    => "John",
+            'middle_name'   => "Doe",
+            'last_name'     => "Smart",
+            'gender'        => 'male',
+            'avatar'        => 'default-male-avatar.png'
+        ]);
+
+        // QA Account
+        $qaAccount = \App\Models\Phone::create([
+            'user_id' =>  $qa->id,
+            'account_id'  => $qaAccount->id,
+            'country_id'  => 2,
+            'number'   => "09033319908"
+
         ]);
 
         // QA Table
