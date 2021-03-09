@@ -51,12 +51,12 @@
                                 @foreach($users as $administrator)
                                 <tr>
                                     <td class="tx-color-03 tx-center">{{ $loop->iteration }}</td>
-                                    <td class="tx-medium">{{ Str::title($administrator['account']['last_name'] ." ". $administrator['account']['first_name']) }}</td>
+                                    <td class="tx-medium">{{ Str::title($administrator['user']['account']['last_name'] ." ". $administrator['user']['account']['first_name']) }}</td>
                                     <td class="tx-medium">{{ $administrator['user']['email'] }}</td>
                                     <td class="tx-medium">{{ $administrator['created_by'] }}</td>
-                                    <td class="tx-medium">{{ $administrator['phones'][0]['number'] ?? 'UNAVAILABLE' }}</td>
-                                    <td class="tx-medium text-info">{{ $administrator['roles'][0]['name']}}</td>
-                                    <td class="text-medium text-success">Active</td>
+                                    <td class="tx-medium">{{ $administrator['user']['phones'][0]['number'] ?? 'UNAVAILABLE' }}</td>
+                                    <td class="tx-medium text-info">{{ $administrator['user']['roles'][0]['name']}}</td>
+                                    <td class="text-medium text-success">{{is_null($administrator['user']['deleted_at']) ? 'Active' : InActive}}</td>
                                     <td class="text-medium">{{ Carbon\Carbon::parse($administrator->created_at, 'UTC')->isoFormat('MMMM Do YYYY, h:mm:ssa') }}</td>
                                     <td class=" text-center">
                                         <div class="dropdown-file">

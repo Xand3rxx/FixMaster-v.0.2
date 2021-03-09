@@ -3,10 +3,20 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Client\ClientController;
 use App\Http\Controllers\Admin\User\AdministratorController;
-use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\EstateController;
-use App\Http\Controllers\ServiceController;
-use App\Http\Controllers\QualityAssurance\PaymentController;
+use App\Http\Controllers\Admin\ServiceController;
+use App\Http\Controllers\Admin\ActivityLogController;
+use App\Http\Controllers\Admin\ToolInventoryController;
+use App\Http\Controllers\Admin\TaxController;
+use App\Http\Controllers\Admin\GatewayController;
+use App\Http\Controllers\Admin\User\SupplierController;
+use App\Http\Controllers\Admin\User\FranchiseeController;
+use App\Http\Controllers\Admin\User\TechnicianArtisanController;
+use App\Http\Controllers\Admin\User\QualityAssuranceController;
+use App\Http\Controllers\Admin\User\CustomerServiceExecutiveController;
+use App\Http\Controllers\Admin\User\ClientController as AdministratorClientController;
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes ONLY AUTHENTICATED USERS HAVE ACCESS TO THIS ROUTE
@@ -38,8 +48,13 @@ Route::prefix('admin')->group(function () {
 
         Route::prefix('users')->name('users.')->group(function () {
             Route::resource('administrator', AdministratorController::class);
+            Route::resource('clients', AdministratorClientController::class);
+            Route::resource('supplier', SupplierController::class);
+            Route::resource('cse', CustomerServiceExecutiveController::class);
+            Route::resource('franchisee', FranchiseeController::class);
+            Route::resource('technician-artisan', TechnicianArtisanController::class);
+            Route::resource('quality-assurance', QualityAssuranceController::class);
         });
-        Route::view('/',                   'admin.index')->name('index'); //Take me to Admin Dashboard
 
         Route::get('/estate/list',      [EstateController::class, 'index'])->name('list_estate');
         Route::get('/estate/add',      [EstateController::class, 'create'])->name('add_estate');
@@ -63,26 +78,87 @@ Route::prefix('admin')->group(function () {
         Route::resource('categories',                       CategoryController::class);
 
         //Routes for Services Management
+        Route::get('/services/deactivate/{service}',        [ServiceController::class, 'deactivate'])
+        ->name('services.deactivate');
+        Route::get('/services/reinstate/{service}',         [ServiceController::class, 'reinstate'])->name('services.reinstate');
+        Route::get('/services/delete/{service}',            [ServiceController::class, 'destroy'])->name('services.delete');
         Route::resource('services',                         ServiceController::class);
 
 
-         //  location request
-         Route::get('/location-request',                     [App\Http\Controllers\AdminLocationRequestController::class, 'index'])->name('location_request');
-         Route::post('/get-names',                           [App\Http\Controllers\AdminLocationRequestController::class, 'getNames'])->name('get_names');
-         Route::post('/request-location',                    [App\Http\Controllers\AdminLocationRequestController::class, 'requestLocation'])->name('request_location');
+        //  location request
+        Route::get('/location-request',                     [AdminLocationRequestController::class, 'index'])->name('location_request');
+        Route::post('/get-names',                           [AdminLocationRequestController::class, 'getNames'])->name('get_names');
+        Route::post('/request-location',                    [AdminLocationRequestController::class, 'requestLocation'])->name('request_location');
 
 
+        //Routes for Activity Log Management
+        Route::post('/activity-log/sorting',                [ActivityLogController::class, 'sortActivityLog'])->name('activity-log.sorting_users');
+        Route::get('/activity-log/details/{activity_log}',  [ActivityLogController::class, 'activityLogDetails'])->name('activity-log.details');
+        Route::resource('activity-log',                     ActivityLogController::class);
+
+        //Routes for Tools & Tools Request Management
+        Route::get('/tools/delete/{tool}',                  [ToolInventoryController::class, 'destroy'])->name('tools.delete');
+        Route::resource('tools',                            ToolInventoryController::class);
+
+
+        //Routes for Tax Management
+        Route::get('/taxes/delete/{tax}',                  [TaxController::class, 'destroy'])->name('taxes.delete');
+        Route::resource('taxes',                            TaxController::class);
+
+
+         //Routes for Discount Management
+         Route::get('/discount/add',                     [App\Http\Controllers\DiscountController::class, 'create'])->name('add_discount');
+         Route::get('/discount/list',                       [App\Http\Controllers\DiscountController::class, 'index'])->name('discount_list');
+         Route::post('/discount/add',                    [App\Http\Controllers\DiscountController::class, 'store'])->name('store_discount');
+        Route::post('/LGA',                             [App\Http\Controllers\DiscountController::class, 'getLGA'])->name('getLGA');
+        Route::post('/estates',                             [App\Http\Controllers\DiscountController::class, 'estates'])->name('all_estates');
+        Route::post('/categories-list',                             [App\Http\Controllers\DiscountController::class, 'category'])->name('categories');
+        Route::post('/category-services',                             [App\Http\Controllers\DiscountController::class, 'categoryServices'])->name('category.services');
+        Route::post('/discount-users',                    [App\Http\Controllers\DiscountController::class, 'discountUsers'])->name('discount_users');
+        Route::get('/discount/edit/{discount:id}',                    [App\Http\Controllers\DiscountController::class, 'edit'])->name('edit_discount');
+        Route::get('/discount/summary/{discount:id}',                    [App\Http\Controllers\DiscountController::class, 'show'])->name('summary');
+        Route::get('/discount/delete/{discount:id}',                    [App\Http\Controllers\DiscountController::class, 'delete'])->name('delete_discount');
+        Route::get('/discount/deactivate/{discount:id}',                    [App\Http\Controllers\DiscountController::class, 'deactivate'])->name('deactivate_discount');
+        Route::get('/discount/activate/{discount:id}',                    [App\Http\Controllers\DiscountController::class, 'reinstate'])->name('activate_discount');
+
+        //Admin payment Routes
+        Route::get('/payment-gateway/list',                 [GatewayController::class, 'index'])->name('list_payment_gateway');
+        Route::post('/paystack/update',                     [GatewayController::class, 'paystackUpdate'])->name('paystack_update');
+        Route::post('/flutter/update',                      [GatewayController::class, 'flutterUpdate'])->name('flutter_update');
+
+        // messaging routes
+         Route::view('/messaging/templates',           		'admin.messaging.template')->name('template');
+         Route::view('/messaging/outbox',      'admin.messaging.email.outbox')->name('inbox');
+         Route::view('/messaging/new',      'admin.messaging.email.new')->name('new_email');
     });
 });
 
+// Route::resource('client', ClientController::class);
     //All routes regarding clients should be in here
-    // Route::view('/', 'client.index')->name('index'); //Take me to Admin Dashboard
-    Route::resource('client', ClientController::class);
+    Route::prefix('/client')->group(function () {
+        Route::name('client.')->group(function () {
+            //All routes regarding clients should be in here
+            Route::get('/',           		[ClientController::class, 'index'])->name('index'); //Take me to Supplier Dashboard
+
+            // Route::get('password',          [ClientController::class, 'changePassword'])->name('client.password');
+            // Route::post('password',         [ClientController::class, 'submitPassword'])->name('change.password');
+
+            // Route::get('/profile/view',             [ClientController::class, 'view_profile'])->name('client.view_profile');
+            // Route::get('/profile/edit',             [ClientController::class, 'edit_profile'])->name('client.edit_profile');
+            // Route::post('/profile/update',          [ClientController::class, 'update_profile'])->name('client.updateProfile');
+            // Route::post('/profile/updatePassword',  [ClientController::class, 'updatePassword'])->name('client.updatePassword');
+            // Route::post('/password/upadte',         [ClientController::class, 'update_password'])->name('client.update_password');
+
+            Route::get('/requests',                    [ClientRequestController::class, 'index'])->name('client.requests');
+        });
+    });
+
 
 Route::prefix('/cse')->group(function () {
     Route::name('cse.')->group(function () {
         //All routes regarding CSE's should be in here
         Route::view('/',           		'cse.index')->name('index'); //Take me to CSE Dashboard
+
     });
 });
 

@@ -56,7 +56,7 @@
         </a>
         <form method="POST" action="{{ route('admin.categories.store', app()->getLocale()) }}">
           @csrf
-          <h5 class="mg-b-2"><strong>Create New Service</strong></h5>
+          <h5 class="mg-b-2"><strong>Create New Category</strong></h5>
           <div class="form-row mt-4">
             <div class="form-group col-md-12">
                 <label for="name">Name</label>
@@ -84,7 +84,7 @@
             <span aria-hidden="true">&times;</span>
           </button>
         </div>
-        <div class="modal-body" id="modal-body">
+        <div class="modal-body pd-x-25 pd-sm-x-30 pd-t-40 pd-sm-t-20 pd-b-15 pd-sm-b-20" id="modal-body">
             <!-- Modal displays here -->
             <div id="spinner-icon"></div>
         </div>
@@ -102,7 +102,7 @@
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
-      <div class="modal-body" id="modal-reassign-body">
+      <div class="modal-body pd-x-25 pd-sm-x-30 pd-t-40 pd-sm-t-20 pd-b-15 pd-sm-b-20" id="modal-reassign-body">
           <!-- Modal displays here -->
           <div id="spinner-icon-2"></div>
       </div>
@@ -131,11 +131,6 @@
 
 @push('scripts')
   <script src="{{ asset('assets/dashboard/assets/js/253d5420-ccbe-4671-89f8-956cd70c42bc.js') }}"></script>
-  <script>
-    $('.close').click(function (){
-        $(".modal-backdrop").remove();
-      });
-  </script>
 @endpush
 
 @endsection

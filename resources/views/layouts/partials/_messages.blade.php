@@ -83,7 +83,7 @@
   <strong>Heads Up!</strong> {{ Session::get('light') }}
   <button type="button" class="close" data-dismiss="alert" aria-label="Close">
     <span>&times;</span>
-  </button>
+  </button>Sfdump
 </div>
 @endif
 
