@@ -14,8 +14,7 @@ class Phone extends Model
      *
      * @var array
      */
-    protected $fillable = ['country_id', 'account_id','number'];
-
+    
     /**
      * Get the user that owns the phone.
      */

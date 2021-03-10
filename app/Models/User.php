@@ -104,7 +104,7 @@ class User extends Authenticatable
     /**
      * Get the phone associated with the user.
      */
-    public function phones()
+    public function phone()
     {
         return $this->hasOne(Phone::class, 'user_id');
     }
@@ -125,5 +125,9 @@ class User extends Authenticatable
     public function estates()
     {
         return $this->hasMany(Estate::class);
+    }
+
+    public function payments(){
+        return $this->hasMany(PaymentDisbursed::class,'recipient_id');
     }
 }

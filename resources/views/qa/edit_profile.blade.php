@@ -38,9 +38,10 @@
                             <div class="mg-sm-r-30">
                                 <div class="pos-relative d-inline-block mg-b-20">
                                   <a href="#">
-                                    <div class="avatar avatar-xxl">  {{--{{!empty($result->account->$avatar) ? asset('assets/qa_images/'.$result->account->$avatar) : asset('assets/images/no-image-available.png')}}--}}
+                                  {{-- {{asset('assets/qa_images/'.$result->account->avatar)}} --}}
+                                    <div class="avatar avatar-xxl">  
                                       <div class="user-img">
-                                        <img class="rounded-circle wh-150p img-fluid image profile_image_preview" src='{{asset("/assets/qa_images/".$result->account->avartar)}}' alt="user-image">
+                                        <img class="rounded-circle wh-150p img-fluid image profile_image_preview" src="{{!empty($result->account->avatar) ? asset('assets/qa_images/'.$result->account->avatar) : asset('assets/images/no-image-available.png')}}" alt="user-image">
                                       </div>
                                     </div>
                                   </a>
@@ -90,7 +91,7 @@
                             <!-- Email -->
                             <div class="form-group col-md-3">
                               <label for="inputEmail4">Email</label>
-                              <input type="email" class="form-control @error('email') is-invalid @enderror" id="email" name="email" value="{{$result->email}}" required>
+                              <input type="email" class="form-control @error('email') is-invalid @enderror" id="email" name="email" value="{{$result->email}}" required readonly>
                               @error('email')
                               <span class="invalid-feedback" role="alert">
                                   <strong>{{ $message }}</strong>
@@ -147,8 +148,9 @@
                   <h6>CHANGE PASSWORD</h6>
                   <p class="mg-b-0 text-danger">In order to change your password, you need to provide the current password.</p>
                   <div class="card-body pd-20 pd-lg-25">
-                    <form action="{{url('qa.updatePassword')}}" method="post">
+                    <form action="{{route('qa.update_password', app()->getLocale())}}" method="post">
                       {{ csrf_field() }}
+                      @method('PATCH')
                       <div class="form-row">
                         <div class="form-group col-md-4">
                           <label for="current_password">Current Password</label>

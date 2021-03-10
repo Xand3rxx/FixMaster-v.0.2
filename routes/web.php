@@ -11,6 +11,7 @@ use App\Http\Controllers\Admin\ToolInventoryController;
 use App\Http\Controllers\Admin\TaxController;
 use App\Http\Controllers\Admin\GatewayController;
 use App\Http\Controllers\Admin\User\SupplierController;
+use App\Http\Controllers\QualityAssurance\PaymentController;
 use App\Http\Controllers\Admin\User\FranchiseeController;
 use App\Http\Controllers\Admin\User\TechnicianArtisanController;
 use App\Http\Controllers\Admin\User\QualityAssuranceController;
@@ -45,6 +46,7 @@ Route::prefix('admin')->group(function () {
 
         Route::view('/ratings/category', 'admin.ratings.category')->name('category');
         Route::view('/ratings/job', 	 'admin.ratings.job')->name('job');
+        Route::view('/ratings/category_reviews', 	 'admin.ratings.category_reviews')->name('category_reviews');
 
         Route::prefix('users')->name('users.')->group(function () {
             Route::resource('administrator', AdministratorController::class);
@@ -185,6 +187,7 @@ Route::prefix('/qa')->group(function () {
         Route::get('/profile',    [App\Http\Controllers\QualityAssurance\QualityAssuranceProfileController::class,'view_profile'])->name('view_profile');
         Route::get('/profile/edit_profile', [App\Http\Controllers\QualityAssurance\QualityAssuranceProfileController::class,'edit'])->name('edit_profile');
         Route::patch('/profile/update_profile', [App\Http\Controllers\QualityAssurance\QualityAssuranceProfileController::class,'update'])->name('update_profile');
+        Route::patch('/update_password', [App\Http\Controllers\QualityAssurance\QualityAssuranceProfileController::class,'update_password'])->name('update_password');
         Route::view('/requests', 'qa.requests')->name('requests');
         Route::get('/payments', [PaymentController::class, 'get_qa_disbursed_payments'])->name('payments');
         Route::view('/messages/inbox', 'qa.messages.inbox')->name('messages.inbox');
