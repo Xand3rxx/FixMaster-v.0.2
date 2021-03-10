@@ -1,5 +1,5 @@
 @extends('layouts.dashboard')
-@section('title', 'Admin Dashboard')
+@section('title', Auth::user()->type->role->name.' Dashboard' ?? 'Technicians & Artisans Dashboard')
 @include('layouts.partials._messages')
 @section('content')
 

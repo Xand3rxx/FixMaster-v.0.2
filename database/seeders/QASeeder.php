@@ -43,6 +43,14 @@ class QASeeder extends Seeder
             'avatar'        => 'default-female-avatar.png',
         ]);
 
+        // QA Account
+        $qaAccount = \App\Models\Phone::create([
+            'user_id' =>  $qa->id,
+            'account_id'  => $qaAccount->id,
+            'country_id'  => 156, //Nigeria
+            'number'   => "09033319908"
+        ]);
+
         // QA Table
         $qaTable = new \App\Models\QA();
         $qaTable->user_id = $qa->id;

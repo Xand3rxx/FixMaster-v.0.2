@@ -38,9 +38,10 @@
                             <div class="mg-sm-r-30">
                                 <div class="pos-relative d-inline-block mg-b-20">
                                   <a href="#">
-                                    <div class="avatar avatar-xxl">
+                                  {{-- {{asset('assets/qa_images/'.$result->account->avatar)}} --}}
+                                    <div class="avatar avatar-xxl">  
                                       <div class="user-img">
-                                        <img class="rounded-circle wh-150p img-fluid image profile_image_preview" src="{{!empty($avatar) ? asset('assets/cse-technician-images/'.$avatar) : asset('assets/images/no-image-available.png')}}" alt="user-image">
+                                        <img class="rounded-circle wh-150p img-fluid image profile_image_preview" src="{{!empty($result->account->avatar) ? asset('assets/qa_images/'.$result->account->avatar) : asset('assets/images/no-image-available.png')}}" alt="user-image">
                                       </div>
                                     </div>
                                   </a>
@@ -82,13 +83,13 @@
                             <select name="gender" id="gender" class="form-control @error('gender') is-invalid @enderror" required>
                               <option value="{{$result->account->gender}}">{{$result->account->gender}}</option>
                               <option value="">Choose....</option>
-                              <option value="Male"}>Male</option>
-                              <option value="Female">Female</option>
-                              <option value="Others">Others</option>
+                              <option value="male"}>Male</option>
+                              <option value="female">Female</option>
+                              <option value="others">Others</option>
                            </select>
                           </div>
                             <!-- Email -->
-                            <div class="form-group col-md-3">
+                            <div class="form-group col-md-4">
                               <label for="inputEmail4">Email</label>
                               <input type="email" class="form-control @error('email') is-invalid @enderror" id="email" name="email" value="{{$result->email}}" required>
                               @error('email')
@@ -98,22 +99,22 @@
                             @enderror
                           </div>
                           <!-- Phone Number -->
-                          <div class="form-group col-md-3">
+                          <div class="form-group col-md-4">
                             <label for="inputEmail4">Phone Number</label>
-                            <input type="tel" class="form-control @error('phone_number') is-invalid @enderror" id="phone_number" name="phone_number" maxlength="11" value="{{ old('phone_number')?? $result->phone->number }}" required> 
+                            <input type="tel" class="form-control @error('phone_number') is-invalid @enderror" id="phone_number" name="phone_number" maxlength="11" value="{{ old('phone_number')?? $result->phone->number }}" required>
                             @error('phone_number')
                               <span class="invalid-feedback" role="alert">
                                   <strong>{{ $message }}</strong>
                               </span>
                             @enderror
                           </div>
-                          
+
 
                               <!-- Profile Avatar -->
-                              <div class="form-group col-md-3">
+                              <div class="form-group col-md-4">
                                 <label>Profile Avatar</label>
                                 <div class="custom-file">
-                                  <input type="file" accept="image/*" class="custom-file-input @error('image') is-invalid @enderror" name="profile_avater" id="profile_image" required>
+                                  <input type="file" accept="image/*" class="custom-file-input @error('image') is-invalid @enderror" name="profile_avater" id="profile_image">
                                   <label class="custom-file-label" id="imagelabel" for="profile_image">Upload Profile Avatar</label>
 
                                   @error('image')
@@ -147,8 +148,9 @@
                   <h6>CHANGE PASSWORD</h6>
                   <p class="mg-b-0 text-danger">In order to change your password, you need to provide the current password.</p>
                   <div class="card-body pd-20 pd-lg-25">
-                    <form action="{{url('qa.updatePassword')}}" method="post">
+                    <form action="{{route('qa.update_password', app()->getLocale())}}" method="post">
                       {{ csrf_field() }}
+                      @method('PATCH')
                       <div class="form-row">
                         <div class="form-group col-md-4">
                           <label for="current_password">Current Password</label>

@@ -8,7 +8,7 @@
         <div>
           <nav aria-label="breadcrumb">
             <ol class="breadcrumb breadcrumb-style1 mg-b-10">
-            <li class="breadcrumb-item"><a href="{{ route('technician.home') }}">Dashboard</a></li>
+            <li class="breadcrumb-item"><a href="{{ route('qa.index', app()->getLocale()) }}">Dashboard</a></li>
               <li class="breadcrumb-item active" aria-current="page">Edit Profile</li>
             </ol>
           </nav>
@@ -31,16 +31,18 @@
                 <div class="tab-pane fade show active" id="description3" role="tabpanel" aria-labelledby="description-tab3">
                   <h6>UPDATE PROFILE</h6>
                   <div class="card-body pd-20 pd-lg-25">
-                    <form action="{{route('technician.updateProfile')}}" method="post" role="form" enctype="multipart/form-data">
-                      {{ csrf_field() }} 
+                    <form action="{{route('qa.update_profile', app()->getLocale())}}" method="post" role="form" enctype="multipart/form-data">
+                      {{ csrf_field() }}
+                      @method('PATCH')
                       <div class="d-sm-flex float-left">
                             <div class="mg-sm-r-30">
                                 <div class="pos-relative d-inline-block mg-b-20">
                                   <a href="#">
-                                    <div class="avatar avatar-xxl">
+                                  {{-- {{asset('assets/qa_images/'.$result->account->avatar)}} --}}
+                                    <div class="avatar avatar-xxl">  
                                       <div class="user-img">
-                                        <img class="rounded-circle wh-150p img-fluid image profile_image_preview" src="{{!empty($avatar) ? asset('assets/cse-technician-images/'.$avatar) : asset('assets/images/no-image-available.png')}}" alt="user-image">
-                                      </div>                                      
+                                        <img class="rounded-circle wh-150p img-fluid image profile_image_preview" src="{{ asset('assets/images/no-image-available.png') }}" alt="user-image">
+                                      </div>
                                     </div>
                                   </a>
                                 </div>
@@ -49,7 +51,7 @@
                         <div class="form-row">
                           <div class="form-group col-md-3">
                             <label for="inputEmail4">First Name</label>
-                            <input type="text" class="form-control @error('first_name') is-invalid @enderror" name="first_name" id="first_name" value="{{ $firstName }}">
+                            <input type="text" class="form-control @error('first_name') is-invalid @enderror" name="first_name" id="first_name" value="" required>
                             @error('first_name')
                             <span class="invalid-feedback" role="alert">
                                 <strong>{{ $message }}</strong>
@@ -58,8 +60,8 @@
                         </div>
                         <div class="form-group col-md-3">
                           <label for="inputEmail4">Middle Name</label>
-                          <input type="text" class="form-control" id="middle_name" name="middle_name" value="{{ $middleName }}">
-                          @error('first_name')
+                          <input type="text" class="form-control" id="middle_name" name="middle_name" value="" required>
+                          @error('middle_name')
                           <span class="invalid-feedback" role="alert">
                               <strong>{{ $message }}</strong>
                           </span>
@@ -68,7 +70,7 @@
                             <!-- Last Name -->
                             <div class="form-group col-md-3">
                               <label for="inputEmail4">Last Name</label>
-                              <input type="text" class="form-control @error('last_name') is-invalid @enderror" id="last_name" name="last_name" value="{{ $lastName }}">
+                              <input type="text" class="form-control @error('last_name') is-invalid @enderror" id="last_name" name="last_name" value="" required>
                               @error('last_name')
                               <span class="invalid-feedback" role="alert">
                                   <strong>{{ $message }}</strong>
@@ -80,14 +82,15 @@
                             <label>Gender</label>
                             <select name="gender" id="gender" class="form-control @error('gender') is-invalid @enderror" required>
                               <option value="">Choose....</option>
-                              <option value="Male" {{ $gender == 'Male' ? 'selected' : ''}}>Male</option>
-                              <option value="Female" {{ $gender == 'Female' ? 'selected' : ''}}>Female</option>                                                         
-                           </select> 
+                              <option value="male"}>Male</option>
+                              <option value="female">Female</option>
+                              <option value="others">Others</option>
+                           </select>
                           </div>
                             <!-- Email -->
-                            <div class="form-group col-md-3">
+                            <div class="form-group col-md-4">
                               <label for="inputEmail4">Email</label>
-                              <input type="email" class="form-control @error('email') is-invalid @enderror" id="email" name="email" value="{{ $email }}">
+                              <input type="email" class="form-control @error('email') is-invalid @enderror" id="email" name="email" value="" required>
                               @error('email')
                               <span class="invalid-feedback" role="alert">
                                   <strong>{{ $message }}</strong>
@@ -95,50 +98,46 @@
                             @enderror
                           </div>
                           <!-- Phone Number -->
-                          <div class="form-group col-md-3">
+                          <div class="form-group col-md-4">
                             <label for="inputEmail4">Phone Number</label>
-                            <input type="tel" class="form-control @error('phone_number') is-invalid @enderror" id="phone_number" name="phone_number" maxlength="11" value="{{ old('phone_number')?? $phoneNumber }}">
+                            <input type="tel" class="form-control @error('phone_number') is-invalid @enderror" id="phone_number" name="phone_number" maxlength="11" value="" required>
                             @error('phone_number')
                               <span class="invalid-feedback" role="alert">
                                   <strong>{{ $message }}</strong>
                               </span>
                             @enderror
                           </div>
-                          <!-- Other Phone Number -->
-                          <div class="form-group col-md-3">
-                            <label for="inputEmail4">Other Phone Number</label>
-                            <input type="tel" class="form-control" id="other_phone_number" maxlength="11" maxlength="11" value="{{ old('other_phone_number')?? $otherPhoneNumber }}">
-                          </div>
+
 
                               <!-- Profile Avatar -->
-                              <div class="form-group col-md-3">
+                              <div class="form-group col-md-4">
                                 <label>Profile Avatar</label>
                                 <div class="custom-file">
                                   <input type="file" accept="image/*" class="custom-file-input @error('image') is-invalid @enderror" name="profile_avater" id="profile_image">
                                   <label class="custom-file-label" id="imagelabel" for="profile_image">Upload Profile Avatar</label>
-                                 
+
                                   @error('image')
                                   <span class="invalid-feedback" role="alert">
                                       <strong>{{ $message }}</strong>
                                   </span>
                                   @enderror
                                 </div>
-  
+
                               </div>
 
 
                             <!-- Full Address -->
                             <div class="form-group col-md-6">
-                              <label for="inputAddress2">Full Address</label> 
-                              <textarea rows="3" class="form-control" id="inputAddress2" name="full_address">{{ old('full_address')?? $fullAddress }}</textarea>
+                              <label for="inputAddress2">Full Address</label>
+                              <textarea rows="3" class="form-control" id="inputAddress2" name="full_address" required></textarea>
                             </div>
                             <div class="form-group col-md-6">
                                 <label for="inputAddress2">Work Address</label>
-                                <textarea rows="3" class="form-control" id="inputAddress2"></textarea>
+                                <textarea rows="3" class="form-control" id="inputAddress2" name="work_address" required></textarea>
                             </div>
 
                         </div>
-    
+
                         <button type="submit" class="btn btn-primary">Update Profile</button>
                     </form>
                   </div>
@@ -148,8 +147,7 @@
                   <h6>CHANGE PASSWORD</h6>
                   <p class="mg-b-0 text-danger">In order to change your password, you need to provide the current password.</p>
                   <div class="card-body pd-20 pd-lg-25">
-                    <form action="{{route('technician.updatePassword')}}" method="post">
-                      {{ csrf_field() }}
+                    <form action="" method="">
                       <div class="form-row">
                         <div class="form-group col-md-4">
                           <label for="current_password">Current Password</label>
@@ -162,7 +160,7 @@
                           </div>
                         <div class="form-group col-md-4">
                           <label for="new_password">New Password</label>
-                          <input type="password" class="form-control @error('new_password') is-invalid @enderror" id="new_password" name="new_password">
+                          <input type="password" class="form-control @error('new_password') is-invalid @enderror" id="new_password" name="new_password" required>
                           @error('new_password')
                             <span class="invalid-feedback" role="alert">
                                 <strong>{{ $message }}</strong>
@@ -171,7 +169,7 @@
                         </div>
                         <div class="form-group col-md-4">
                           <label for="new_confirm_password">Confirm Password</label>
-                          <input type="password" class="form-control @error('confirm_password') is-invalid @enderror" id="new_confirm_password" name="new_confirm_password">
+                          <input type="password" class="form-control @error('confirm_password') is-invalid @enderror" id="new_confirm_password" name="new_confirm_password" required>
                           @error('new_confirm_password')
                             <span class="invalid-feedback" role="alert">
                                 <strong>{{ $message }}</strong>
@@ -198,7 +196,7 @@
   (function($){
     "use scrict";
     $(document).ready(function(){
-    
+
       $(document).on('change','#profile_image', function(){
         readURL(this);
       })
@@ -228,7 +226,7 @@
       function getExtension(filename) {
           var parts = filename.split('.');
           return parts[parts.length - 1];
-      }  
+      }
 
       function isImage(filename) {
           var ext = getExtension(filename);

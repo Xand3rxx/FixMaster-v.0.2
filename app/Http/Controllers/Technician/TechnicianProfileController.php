@@ -54,7 +54,23 @@ class TechnicianProfileController extends Controller
      */
     public function serviceRequestDetails($language){
 
-        return view('technician.request_details')->with('i');
+        return view('technician.request_details');
+    }
+
+    /**
+     * Return View Profile Page 
+     */
+    public function viewProfile(){
+
+        return view('technician.view_profile');
+    }
+
+    /**
+     * Return Account Settings Page 
+     */
+    public function editProfile(){
+
+        return view('technician.edit_profile');
     }
 
     

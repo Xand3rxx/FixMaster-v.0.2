@@ -49,5 +49,13 @@ class TechnicianSeeder extends Seeder
         $technicianTable->account_id = $technicianAccount->id;
         $technicianTable->bank_id = 2;
         $technicianTable->save();
+
+        // Technician Phone record Account
+        $qaAccount = \App\Models\Phone::create([
+            'user_id' =>  $technician->id,
+            'account_id'  => $technicianAccount->id,
+            'country_id'  => 156, //Nigeria
+            'number'   => "08132667823"
+        ]);
     }
 }

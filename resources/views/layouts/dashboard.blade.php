@@ -49,6 +49,7 @@
     </style>
 
     @include('layouts.partials._dashboard_sidebar')
+    {{-- @include('layouts.partials._qa_sidebar') --}}
 
     <div class="content ht-100v pd-0">
       @include('layouts.partials._dashboard_header')
@@ -94,8 +95,6 @@
     <script src="https://cdn.datatables.net/buttons/1.6.5/js/buttons.html5.min.js"></script>
     <script src="https://cdn.datatables.net/buttons/1.6.5/js/buttons.print.min.js"></script>
     <script src="{{asset('assets/frontend/js/custom.js')}}"></script>
-
-
 
     <script src="{{ asset('assets/dashboard/assets/js/48a9782e-3e2b-4055-a9bb-8a926a937e2c.js') }}"></script>
 
