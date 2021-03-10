@@ -18,3 +18,4 @@ docker-compose.yml
 .idea
 .history/
 .idea/*
+.env.production

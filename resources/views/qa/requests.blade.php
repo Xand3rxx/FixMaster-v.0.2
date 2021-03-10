@@ -23,7 +23,7 @@
           <div class="card-header pd-t-20 d-sm-flex align-items-start justify-content-between bd-b-0 pd-b-0">
             <div>
               <h6 class="mg-b-5">Your Most Recent Requests</h6>
-              <p class="tx-13 tx-color-03 mg-b-0">This table displays a list of <strong>New Requests</strong> assigned by FixMaster Admin after careful understudy of each request and with assumed initial payments made by the clients.</p>
+              <p class="tx-13 tx-color-03 mg-b-0">This table displays a list of all <strong>Service Requests</strong> assigned to you by FixMaster Administrator or Customer Service Executive after careful understudy of each request and with assumed initial payments made by the clients.</p>
             </div>
 
           </div><!-- card-header -->

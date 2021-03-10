@@ -16,6 +16,8 @@ use App\Http\Controllers\Admin\User\TechnicianArtisanController;
 use App\Http\Controllers\Admin\User\QualityAssuranceController;
 use App\Http\Controllers\Admin\User\CustomerServiceExecutiveController;
 use App\Http\Controllers\Admin\User\ClientController as AdministratorClientController;
+use App\Http\Controllers\Technician\TechnicianProfileController;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -174,7 +176,12 @@ Route::prefix('/supplier')->group(function () {
 Route::prefix('/technician')->group(function () {
     Route::name('technician.')->group(function () {
         //All routes regarding technicians should be in here
-        Route::view('/',           		'technician.index')->name('index'); //Take me to Technician Dashboard
+        Route::get('/',                                 [TechnicianProfileController::class, 'index'])->name('index');    //Take me to Technician Dashboard            
+        Route::get('/location-request',                 [TechnicianProfileController::class, 'locationRequest'])->name('location_request'); 
+        Route::get('/payments',                         [TechnicianProfileController::class, 'payments'])->name('payments');                
+        Route::get('/requests',                         [TechnicianProfileController::class, 'serviceRequests'])->name('requests');                
+        Route::get('/requests/details',                 [TechnicianProfileController::class, 'serviceRequestDetails'])->name('request_details');                
+        
     });
 });
 

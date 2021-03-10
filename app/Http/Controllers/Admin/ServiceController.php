@@ -73,7 +73,7 @@ class ServiceController extends Controller
         $imageDirectory = public_path('assets/service-images').'/';
 
         //Validate if an image file was selected 
-        $imageName = $this->verifyAndStoreImage($request, $imageDirectory);
+        $imageName = $this->verifyAndStoreImage($request, $imageDirectory, $width = 350, $height = 259);
 
         //Create record for a new service
         $createService = Service::create([
@@ -190,7 +190,7 @@ class ServiceController extends Controller
          //Validate if an image file was selected 
          if($request->hasFile('image')){
             //Validate and update image with ImageUpload Trait
-            $imageName = $this->verifyAndStoreImage($request, $imageDirectory);
+            $imageName = $this->verifyAndStoreImage($request, $imageDirectory, $width = 350, $height = 259);
 
             //Delete old service image if new image name is given
             if(!empty($imageName) && ($imageName != $oldImageName)){

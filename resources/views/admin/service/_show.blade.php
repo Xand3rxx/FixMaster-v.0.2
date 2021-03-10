@@ -10,7 +10,7 @@
 
 <h5>{{ $category->name }} Category</h5>
 
-@if(empty($category->image))
+@if(empty($category->image) || !\File::exists($category->image))
     <img src="{{ asset('assets/images/no-image-available.png') }}" class="wd-sm-200 rounded" alt="No image found">
 @else
     <img src="{{ asset('assets/service-images/'.$category->image) }}" class="wd-sm-200 rounded" alt="{{ $category->name }}">

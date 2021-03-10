@@ -35,16 +35,20 @@ class QASeeder extends Seeder
 
         // QA Account
         $qaAccount = \App\Models\Account::create([
-            'user_id' =>  $qa->id,
-            'first_name' => "Wale",
-            'gender' => 'female'
+            'user_id'       =>  $qa->id,
+            'first_name'    => "Yvonne",
+            'middle_name'   => "Obuchi",
+            'last_name'     => "Okoye",
+            'gender'        => 'female',
+            'avatar'        => 'default-female-avatar.png',
         ]);
 
         // QA Table
         $qaTable = new \App\Models\QA();
         $qaTable->user_id = $qa->id;
         $qaTable->account_id = $qaAccount->id;
-        //$qaTable->unique_id = '19807654';
+        $qaTable->unique_id = 'QA-19807654';
+        $qaTable->bank_id = 3;
         $qaTable->save();
     }
 }

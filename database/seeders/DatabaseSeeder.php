@@ -37,6 +37,7 @@ class DatabaseSeeder extends Seeder
             TaxHistorySeeder::class,
             QASeeder::class,
             DiscountSeeder::class,
+            TechnicianSeeder::class,
         ]);
     }
 }

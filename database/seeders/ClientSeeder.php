@@ -48,7 +48,7 @@ class ClientSeeder extends Seeder
         $cseTable->user_id = $client->id;
         $cseTable->account_id = $clientAccount->id;
         $cseTable->estate_id = '1';
-        $cseTable->	profession_id = '1';
+        $cseTable->	profession_id = '18';
         $cseTable->save();
     }
 }

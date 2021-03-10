@@ -418,10 +418,10 @@
         </div>
         <div class="aside-loggedin-user">
           <a href="#loggedinMenu" class="d-flex align-items-center justify-content-between mg-b-2" data-toggle="collapse">
-          <h6 class="tx-semibold mg-b-0"> David Akinsola</h6>
+          <h6 class="tx-semibold mg-b-0"> {{ Auth::user()->account->first_name.' '.Auth::user()->account->last_name ?? 'Jamal Diwa' }}</h6>
             <i data-feather="chevron-down"></i>
           </a>
-          <p class="tx-color-03 tx-12 mg-b-0">Technician</p>
+          <p class="tx-color-03 tx-12 mg-b-0">{{ Auth::user()->type->role->name ?? 'Technicians & Artisans' }}</p>
         </div>
         <div class="collapse" id="loggedinMenu">
           <ul class="nav nav-aside mg-b-0">
@@ -431,9 +431,9 @@
       </div><!-- aside-loggedin -->
       <ul class="nav nav-aside">
         <li class="nav-label">Components</li>
-        <li class="nav-item"><a href="#" class="nav-link"><i data-feather="airplay"></i> <span>Home</span></a></li>
+        <li class="nav-item {{ Route::currentRouteNamed('technician.index') ? 'active' : '' }}"><a href="{{ route('technician.index', app()->getLocale()) }}" class="nav-link"><i data-feather="airplay"></i> <span>Home</span></a></li>
 
-        <li class="nav-item"><a href="#" class="nav-link"><i data-feather="map-pin"></i> <span>Location Request</span></a></li>
+        <li class="nav-item {{ Route::currentRouteNamed('technician.location_request') ? 'active' : '' }}"><a href="{{ route('technician.location_request', app()->getLocale()) }}" class="nav-link"><i data-feather="map-pin"></i> <span>Location Request</span></a></li>
 
         <li class="nav-item with-sub">
           <a href="" class="nav-link"><i data-feather="message-circle"></i> <span>Messages</span></a>
@@ -443,9 +443,9 @@
           </ul>
         </li>
 
-        <li class="nav-item"><a href="#" class="nav-link"><i data-feather="credit-card"></i> <span>Payments</span></a></li>
+        <li class="nav-item {{ Route::currentRouteNamed('technician.payments') ? 'active' : '' }}"><a href="{{ route('technician.payments', app()->getLocale()) }}" class="nav-link"><i data-feather="credit-card"></i> <span>Payments</span></a></li>
 
-        <li class="nav-item"><a href="#" class="nav-link"><i data-feather="git-pull-request"></i> <span>Requests</span></a></li>
+        <li class="nav-item {{ Route::currentRouteNamed('technician.requests', 'technician.request_details') ? 'active' : '' }}"><a href="{{ route('technician.requests', app()->getLocale()) }}" class="nav-link"><i data-feather="git-pull-request"></i> <span>Requests</span></a></li>
 
       </ul>
   </aside>

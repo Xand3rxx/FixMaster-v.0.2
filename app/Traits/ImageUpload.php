@@ -16,7 +16,7 @@ trait ImageUpload
      * @param string directory
      * @return $this|false|string
      */
-    public function verifyAndStoreImage(Request $request, string $imageDirectory) {
+    public function verifyAndStoreImage(Request $request, string $imageDirectory, int $width, int $height) {
  
         if($request->hasFile('image')) {
  
@@ -35,7 +35,7 @@ trait ImageUpload
             $imageName = (string) Str::uuid() .'.'.$image->getClientOriginalExtension();
 
             //Reduce image size and save to directory
-            Image::make($image->getRealPath())->resize(350, 259)->save($imageDirectory.$imageName);
+            Image::make($image->getRealPath())->resize($width, $height)->save($imageDirectory.$imageName);
 
             //Return image name
             return $imageName;
