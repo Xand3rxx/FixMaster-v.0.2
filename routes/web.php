@@ -143,7 +143,7 @@ Route::prefix('admin')->group(function () {
 
         //Routes for E-Wallet Admin Management
         Route::get('/ewallet/clients',                      [EWalletController::class, 'clients'])->name('ewallet.clients'); 
-        Route::get('/ewallet/client/history',              [EWalletController::class, 'clientHistory'])->name('ewallet.client_history'); 
+        Route::get('/ewallet/client/history',               [EWalletController::class, 'clientHistory'])->name('ewallet.client_history'); 
         Route::get('/ewallet/transactions',                 [EWalletController::class, 'transactions'])->name('ewallet.transactions'); 
 
     });
@@ -166,6 +166,9 @@ Route::prefix('admin')->group(function () {
             // Route::post('/password/upadte',         [ClientController::class, 'update_password'])->name('client.update_password');
 
             // Route::get('/requests',                    [ClientRequestController::class, 'index'])->name('client.requests');
+
+            Route::get('/wallet',           		[ClientController::class, 'wallet'])->name('wallet'); //Take me to Supplier Dashboard
+
         });
     });
 

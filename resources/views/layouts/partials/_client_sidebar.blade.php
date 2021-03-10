@@ -37,7 +37,7 @@
                     <div class="widget">
                         <div class="row">
                             <div class="col-6 mt-4 pt-2">
-                            <a href="#" class="accounts rounded d-block shadow text-center py-3 {{ Route::currentRouteNamed('') ? 'active' : '' }}">
+                            <a href="{{ route('client.index', app()->getLocale()) }}" class="accounts rounded d-block shadow text-center py-3 {{ Route::currentRouteNamed('client.index') ? 'active' : '' }}">
                                     <span class="pro-icons h3 text-muted"><i class="uil uil-user"></i></span>
                                     <h6 class="title text-dark h6 my-0">Dashboard</h6>
                                 </a>
@@ -57,7 +57,7 @@
                             </div><!--end col-->
 
                             <div class="col-6 mt-4 pt-2">
-                            <a href="#" class="accounts rounded d-block shadow text-center py-3 {{ Route::currentRouteNamed('') ? 'active' : '' }}">
+                            <a href="{{ route('client.wallet', app()->getLocale()) }}" class="accounts rounded d-block shadow text-center py-3 {{ Route::currentRouteNamed('client.wallet') ? 'active' : '' }}">
                                     <span class="pro-icons h3 text-muted"><i class="uil uil-file"></i></span>
                                     <h6 class="title text-dark h6 my-0">E-Wallet</h6>
                                 </a>
