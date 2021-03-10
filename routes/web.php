@@ -18,6 +18,8 @@ use App\Http\Controllers\Admin\User\QualityAssuranceController;
 use App\Http\Controllers\Admin\User\CustomerServiceExecutiveController;
 use App\Http\Controllers\Admin\User\ClientController as AdministratorClientController;
 use App\Http\Controllers\Technician\TechnicianProfileController;
+use App\Http\Controllers\Admin\EWalletController;
+use App\Http\Controllers\AdminLocationRequestController;
 
 
 /*
@@ -106,7 +108,7 @@ Route::prefix('admin')->group(function () {
 
 
         //Routes for Tax Management
-        Route::get('/taxes/delete/{tax}',                  [TaxController::class, 'destroy'])->name('taxes.delete');
+        Route::get('/taxes/delete/{tax}',                   [TaxController::class, 'destroy'])->name('taxes.delete');
         Route::resource('taxes',                            TaxController::class);
 
 
@@ -138,6 +140,12 @@ Route::prefix('admin')->group(function () {
          Route::view('/messaging/templates',           		'admin.messaging.template')->name('template');
          Route::view('/messaging/outbox',      'admin.messaging.email.outbox')->name('inbox');
          Route::view('/messaging/new',      'admin.messaging.email.new')->name('new_email');
+
+        //Routes for E-Wallet Admin Management
+        Route::get('/ewallet/clients',                      [EWalletController::class, 'clients'])->name('ewallet.clients'); 
+        Route::get('/ewallet/client/history',              [EWalletController::class, 'clientHistory'])->name('ewallet.client_history'); 
+        Route::get('/ewallet/transactions',                 [EWalletController::class, 'transactions'])->name('ewallet.transactions'); 
+
     });
 });
 
@@ -157,7 +165,7 @@ Route::prefix('admin')->group(function () {
             // Route::post('/profile/updatePassword',  [ClientController::class, 'updatePassword'])->name('client.updatePassword');
             // Route::post('/password/upadte',         [ClientController::class, 'update_password'])->name('client.update_password');
 
-            Route::get('/requests',                    [ClientRequestController::class, 'index'])->name('client.requests');
+            // Route::get('/requests',                    [ClientRequestController::class, 'index'])->name('client.requests');
         });
     });
 
@@ -189,8 +197,8 @@ Route::prefix('/technician')->group(function () {
 
         Route::get('/profile/',                         [TechnicianProfileController::class, 'viewProfile'])->name('view_profile');
         Route::get('/profile/edit',                     [TechnicianProfileController::class, 'editProfile'])->name('edit_profile');
-        Route::view('/messages/inbox', 'technician.messages.inbox')->name('messages.inbox');
-        Route::view('/messages/sent', 'technician.messages.outbox')->name('messages.outbox');
+        Route::view('/messages/inbox',                  'technician.messages.inbox')->name('messages.inbox');
+        Route::view('/messages/sent',                   'technician.messages.outbox')->name('messages.outbox');
     });
 });
 

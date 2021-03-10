@@ -265,7 +265,9 @@
                                   {{-- {{ dd(pathInfo($requestDetail->serviceRequestDetail->media_file, PATHINFO_EXTENSION)) }} --}}
                                   
                                   {{-- Media file design will come in here afterwrds --}}
-                                  
+                                  <div class="placeholder-media wd-100p wd-sm-55p wd-md-45p">
+                                    <div class="line"></div>
+                                  </div>
                                 </div>
                               </div><!-- col -->
                               

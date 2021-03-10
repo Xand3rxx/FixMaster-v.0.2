@@ -19,3 +19,4 @@ docker-compose.yml
 .history/
 .idea/*
 .env.production
+htaccess.prod

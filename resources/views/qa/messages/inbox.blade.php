@@ -53,133 +53,58 @@
   </div><!-- mail-group -->
 
   <div class="mail-content" id="mail-content">
-    <!-- Message body displays here -->
-    <div id="spinner-icon"></div>
+
   </div><!-- mail-content -->
 </div><!-- mail-wrapper -->
 
-{{-- @include('admin.messages._admin_message_composer') --}}
 
 @push('scripts')
+  <script src="{{ asset('assets/dashboard/assets/js/dashforge.mail.js') }}"></script>
 
-<script src="{{ asset('assets/dashboard/assets/js/dashforge.mail.js') }}"></script>
+  <script>
+    $(document).ready(function (){
+      //Onclick to view message
+      $(document).on('click', '.mail-group-body .media', function(){
+        // e.preventDefault();
+        let route = $(this).attr('data-url');
 
-<script>
-  $(document).ready(function (){
+        $.ajax({
+            url: route,
+            beforeSend: function() {
+              $("#mail-content").html('<div class="d-flex justify-content-center mt-4 mb-4" style="margin-top: 200px !important"><span class="loadingspinner"></span></div>');
+            },
+            // return the result
+            success: function(result) {
+                $('#mail-content').html('');
+                $('#mail-content').html(result);
+                $('.mail-content-header, .mail-content-body').removeClass('d-none');
 
-    $(document).on('click', '.mail-group-body .media', function(){
-      // e.preventDefault();
-      let route = $(this).attr('data-url');
+                if(window.matchMedia('(max-width: 1199px)').matches) {
+                  $('body').addClass('mail-content-show');
+                }
 
-      $.ajax({
-          url: route,
-          beforeSend: function() {
-            $("#spinner-icon").html('<div class="d-flex justify-content-center mt-4 mb-4" style="margin-top: 200px !important"><span class="loadingspinner"></span></div>');
-          },
-          // return the result
-          success: function(result) {
-              $('#mail-content').html('');
-              $('#mail-content').html(result);
-              $('.mail-content-header, .mail-content-body').removeClass('d-none');
+                if(window.matchMedia('(min-width: 768px)').matches) {
+                  $('#mailSidebar').removeClass('d-md-none');
+                  $('#mainMenuOpen').removeClass('d-md-flex');
+                }
+            },
+            complete: function() {
+                $("#mail-content").hide();
+            },
+            error: function(jqXHR, testStatus, error) {
+                var message = error+ ' occured while trying to retireve message details.';
+                var type = 'error';
+                displayMessage(message, type);
+                $("#mail-content").hide();
+            },
+            timeout: 8000
+        });
 
-              if(window.matchMedia('(max-width: 1199px)').matches) {
-                $('body').addClass('mail-content-show');
-              }
-
-              if(window.matchMedia('(min-width: 768px)').matches) {
-                $('#mailSidebar').removeClass('d-md-none');
-                $('#mainMenuOpen').removeClass('d-md-flex');
-              }
-          },
-          complete: function() {
-              $("#spinner-icon").hide();
-          },
-          error: function(jqXHR, testStatus, error) {
-              var message = error+ ' occured while trying to retireve message details.';
-              var type = 'error';
-              displayMessage(message, type);
-              $("#spinner-icon").hide();
-          },
-          timeout: 8000
       });
 
+
     });
-
-    //Get list of users by a particular designation
-    $('#user-type').on('change',function () {
-        let user = $(this).find('option:selected').val();
-        let route = $(this).find('option:selected').data('url');
-
-        $.ajaxSetup({
-            headers: {
-                'X-CSRF_TOKEN':$('meta[name="csrf-token"]').attr('content')
-            }
-        });
-
-        $.ajax({
-            url: route,
-            beforeSend: function() {
-                $("#spinner-icon-admin").html('<div class="d-flex justify-content-center mt-4 mb-4" style="margin-left: 40px !important"><span class="loadingspinner"></span></div>');
-            },
-            // return the result
-            success: function(result) {
-
-                // $('.admin-list').removeClass('d-none');
-                $('#admin-list').html('');
-                $('#admin-list').html(result);
-            },
-            complete: function() {
-                $("#spinner-icon").hide();
-            },
-            error: function(jqXHR, testStatus, error) {
-                var message = error+ ' occured while trying to retireve '+ user +' list.';
-                var type = 'error';
-                displayMessage(message, type);
-                $("#spinner-icon-admin").hide();
-            },
-            timeout: 8000
-        })  
-    });
-
-    //Get list of users by a particular service request reference
-    $('#ongoing_requests').on('change',function () {
-        let user = $(this).find('option:selected').val();
-        let route = $(this).find('option:selected').data('url');
-
-        $.ajaxSetup({
-            headers: {
-                'X-CSRF_TOKEN':$('meta[name="csrf-token"]').attr('content')
-            }
-        });
-
-        $.ajax({
-            url: route,
-            beforeSend: function() {
-                $("#spinner-icon-admin").html('<div class="d-flex justify-content-center mt-4 mb-4" style="margin-left: 40px !important"><span class="loadingspinner"></span></div>');
-            },
-            // return the result
-            success: function(result) {
-
-                // $('.admin-list').removeClass('d-none');
-                $('#admin-list').html('');
-                $('#admin-list').html(result);
-            },
-            complete: function() {
-                $("#spinner-icon").hide();
-            },
-            error: function(jqXHR, testStatus, error) {
-                var message = error+ ' occured while trying to retireve '+ user +' list.';
-                var type = 'error';
-                displayMessage(message, type);
-                $("#spinner-icon-admin").hide();
-            },
-            timeout: 8000
-        })  
-    });
-
-
-  });
-</script>
-
+  </script>
 @endpush
+
 @endsection

@@ -72,11 +72,11 @@
           </ul>
         </li>
 
-        <li class="nav-item with-sub">
+        <li class="nav-item with-sub {{ Route::currentRouteNamed('admin.ewallet.clients', 'admin.ewallet.transactions', 'admin.ewallet.client_history') ? 'active show' : '' }}">
           <a href="" class="nav-link"><i data-feather="credit-card"></i> <span>E-Wallet Management</span></a>
           <ul>
-            <li class=""><a href="#">Funding List </a></li>
-            <li class=""><a href="#">Service Requests List</a></li>
+            <li class="{{ Route::currentRouteNamed('admin.ewallet.clients', 'admin.ewallet.client_history') ? 'active' : '' }}"><a href="{{ route('admin.ewallet.clients', app()->getLocale()) }}">Clients</a></li>
+            <li class="{{ Route::currentRouteNamed('admin.ewallet.transactions') ? 'active' : '' }}"><a href="{{ route('admin.ewallet.transactions', app()->getLocale()) }}">Transactions</a></li>
           </ul>
         </li>
 

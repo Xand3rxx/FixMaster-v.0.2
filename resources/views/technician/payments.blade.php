@@ -108,7 +108,7 @@
                         <input name="name" id="name" type="date" class="form-control pl-5">
                     </div>
                 </div>
-              </div>
+            </div>
             <table class="table table-hover mg-b-0" id="basicExample">
               <thead class="thead-primary">
                 <tr>
