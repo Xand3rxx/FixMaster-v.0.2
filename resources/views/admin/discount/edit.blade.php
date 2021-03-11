@@ -13,20 +13,19 @@
                     <ol class="breadcrumb breadcrumb-style1 mg-b-10">
                         <li class="breadcrumb-item"><a
                                 href="{{ route('admin.index', app()->getLocale()) }}">Dashboard</a></li>
-                        <li class="breadcrumb-item active" aria-current="page">Edit Discout/Promotion</li>
+                        <li class="breadcrumb-item active" aria-current="page">Edit Discount/ Edit Promotion</li>
                     </ol>
                 </nav>
                 <h4 class="mg-b-0 tx-spacing--1">Edit Discount</h4>
             </div>
             <div class="d-md-block">
-      <a href="{{ route('admin.discount_list',app()->getLocale()) }}" class="btn btn-primary"><i class="fas fa-arrow-left"></i> Discout List</a>
-        <a href="{{ route('admin.add_discount',app()->getLocale()) }}" class="btn btn-warning"><i class="fas fa-plus"></i> Create New Discount</a>
-      
-      </div>
-        </div>
+                <a href="{{ route('admin.discount_list',app()->getLocale()) }}" class="btn btn-primary"><i
+                        class="fas fa-arrow-left"></i> Discount List</a>
+                <a href="{{ route('admin.add_discount',app()->getLocale()) }}" class="btn btn-warning"><i
+                        class="fas fa-plus"></i> Create New Discount</a>
 
-  
-    
+            </div>
+        </div>
 
 
         <form id="discountForm" method="POST" action="{{ route('admin.store_discount_edit', app()->getLocale()) }}"
@@ -39,7 +38,7 @@
                         <div class="form-group col-md-12">
                             <label for="entity">Select Entity</label>
                             <select id="entity_id" name="entity" class="custom-select cs-select" id>
-                                <option value="{{ $status->entity }}"> {{$status->entity }} </option> 
+                                <option value="{{ $status->entity }}"> {{$status->entity }} </option>
                                 @foreach($entities as $key => $value)
                                 <option value="{{ strtolower($value->name) }}"
                                     {{ $status->entity ==  strtolower($value->name) ? 'selected' : ''}}>
@@ -56,16 +55,43 @@
                         </div>
 
 
-                        <div class="form-group col-md-12">
-                            <hr />
+                        <div class="form-group col-md-12 parameter" id="add-users">
+                            <label class='add-page'>Add Users</label>
+                            <select class="selectpicker show-tick select-user" id="users" name="users[]"
+                                title="select..." multiple="multiple" data-selected-text-format="count>3"
+                                data-live-search="true">
+                                <option value="">Select...</option>
+                            </select>
+
+                            @error('users')
+                            <span class="invalid-feedback-err">
+                                <strong>{{ $message }}</strong>
+                            </span>
+                            @enderror
+                            <input type="hidden" name="edit_users[]" value="{{$users}}" id="edit_users" />
                         </div>
 
-                        <div class="form-group col-md-12 show-estate">
+
+                        <div class="form-group col-md-6 show-estate">
                             <label>Select Estate</label>
                             <select class="custom-select cs-select" name="estate_name" id="estate_id">
                                 <option selected value="">Select...</option>
                             </select>
                             <input type="hidden" id="estate_value" name="estate_value" value="{{$estate}}" />
+                        </div>
+
+                        <div class="form-group col-md-6 parameter show-estate" id="estate-users">
+                            <label class='add-page not-users'>Add Estate Users</label>
+                            <select class="selectpicker show-tick select-user" id="estate-user" name="users[]"
+                                title="select..." multiple="multiple" data-selected-text-format="count>3"
+                                data-live-search="true">
+                                <option value="">Select...</option>
+                            </select>
+                            @error('users')
+                            <span class="invalid-feedback-err">
+                                <strong>{{ $message }}</strong>
+                            </span>
+                            @enderror
                         </div>
 
 
@@ -78,8 +104,8 @@
                                 <option value="">Select...</option>
                             </select>
 
-                            <input type="hidden" name="edit_category[]" value="{{$category}}" id="edit_category"/>
-                            <input type="hidden" name="edit_services[]" value="{{$services}}" id="edit_services"/>
+                            <input type="hidden" name="edit_category[]" value="{{$category}}" id="edit_category" />
+                            <input type="hidden" name="edit_services[]" value="{{$services}}" id="edit_services" />
                         </div>
 
 
@@ -95,114 +121,114 @@
 
 
 
-                        <div class="form-group col-md-12 parameter"> <strong>Fill Additional Fields based on the Entity
-                                Parameter
-                                Requirements Below</strong>
-
-                        </div>
-
-                        <div class="form-group col-md-3 parameter">
-                        @php $specified_request_count_morethan = isset($field->specified_request_count_morethan)? $field->specified_request_count_morethan : ''; @endphp
-                            <label for="specified_request_count_morethan">Total Count of Services Requests(more
-                                than)</label>
-                            <input type="text" class="form-control custom-input-1" id="specified_request_count_morethan"
-                                name="specified_request_count_morethan"
-                                value="{{$specified_request_count_morethan}}" autocomplete="off">
-                        </div>
-                        <div class="form-group col-md-3 parameter">
-                        @php $specified_request_count_equalto = isset($field->specified_request_count_equalto)? $field->specified_request_count_equalto : ''; @endphp
-                            <label for="specified_request_count_equalto">Total Count of Services Requests(equal
-                                to)</label>
-                            <input type="text" class="form-control custom-input-1" id="specified_request_count_equalto"
-                                name="specified_request_count_equalto"
-                                value="{{$specified_request_count_equalto}}" autocomplete="off">
-                        </div>
-                        <div class="form-group col-md-3 parameter">
-                        @php $specified_request_amount_from = isset($field->specified_request_amount_from)? $field->specified_request_amount_from : ''; @endphp
-                            <label for="specified_request_amount_from">Total Sum of Services Requests
-                                Amount(from)</label>
-                            <input type="text" class="form-control custom-input-1" id="specified_request_amount_from"
-                                name="specified_request_amount_from" value="{{ $specified_request_amount_from }}"
-                                autocomplete="off">
-                        </div>
-
-                        <div class="form-group col-md-3 parameter">
-                        @php $specified_request_amount_to = isset($field->specified_request_amount_to)? $field->specified_request_amount_to : ''; @endphp
-                            <label for="specified_request_amount_to">Total Sum of Services Requests Amount(To)</label>
-                            <input type="text" class="form-control custom-input-1" id="specified_request_amount_to"
-                                name="specified_request_amount_to" value="{{ $specified_request_amount_to }}"
-                                autocomplete="off">
-                        </div>
-
-                        <div class="form-group col-md-3 parameter">
-                        @php $specified_request_start_date = isset($field->specified_request_start_date)?
-                         Carbon\Carbon::parse( $field->specified_request_start_date, 'UTC')->isoFormat("Y-MM-DD") : ''; @endphp
-                            <label for="sspecified_request_start_date">Date Range(from)</label>
-                            <input type="date" class="form-control custom-input-1" id="specified_request_start_date"
-                                name="specified_request_start_date"
-                                value="{{$specified_request_start_date}}"
-                                autocomplete="off">
-                        </div>
-
-
-                        <div class="form-group col-md-3 parameter">
-                        @php $specified_request_end_date = isset($field->specified_request_end_date)?
-                        Carbon\Carbon::parse($specified_request_end_date, 'UTC')->isoFormat("Y-MM-DD") : ''; @endphp
-                            <label for="sspecified_request_end_date">Date Range(to)</label>
-                            <input type="date" class="form-control custom-input-1" id="specified_request_end_date"
-                                name="specified_request_end_date" value="{{$specified_request_end_date}}"
-                                autocomplete="off">
-                        </div>
-
-
-                        <div class="form-group col-md-3 parameter">
-                            <label for="entity">States</label>
-                            @php  $name = isset($request_state->name)? $request_state->name : ''; @endphp 
-                            @php  $id = isset($request_state->id)? $request_state->id : ''; @endphp 
-                            <select id="state_id" name="state" class="custom-select cs-select">
-                            <option value="{{$id }}"> {{$name}} </option>
-                                @foreach($states as $state)
-                                <option value="{{ $state->id }}" {{ old('state') == $state->id ? 'selected' : ''}}>
-                                    {{ $state->name }}</option>
-                                @endforeach
-                            </select>
-
-                        </div>
-                        <div class="form-group col-md-3 parameter">
-                        @php $specified_request_lga = isset($field->specified_request_lga)? $field->specified_request_lga : ''; @endphp
-                        @php  $name = isset($request_lga->name)?$request_lga->name : ''; @endphp 
-
-                            <label>L.G.A</label>
-                            <select class="custom-select cs-select" name="specified_request_lga" id="lga_id">
-                            <option value="{{ $specified_request_lga }}"> {{$name}} </option>
-                            </select>
-                        </div>
-
-
-
-
-                        <div class="form-group col-md-2 parameter">
-                            <br />
-                            <button id="get_users" type="button" class="btn btn-primary">Get Users</button>
-                        </div>
-                        <div class="form-group col-md-10 parameter">
-
-                            <label class='add-page'>Add Users</label>
-                            <select class="selectpicker show-tick select-user" id="users" name="users[]"
-                                title="select..." multiple="multiple" data-selected-text-format="count>3"
-                                data-live-search="true">
-                                <option value="">Select...</option>
-                            </select>
-
-                            @error('users')
-                            <span class="invalid-feedback-err">
-                                <strong>{{ $message }}</strong>
-                            </span>
-                            @enderror
-                         <input type="hidden" name="edit_users[]" value="{{$users}}" id="edit_users"/>
-                        </div>
-
                         <div class="form-group col-md-12">
+                            <hr />
+                        </div>
+
+
+                        <fieldset class="form-fieldset col-md-12">
+                            <legend>Filter By Additional Fields</legend>
+
+                            <div class="form-row">
+
+                                <div class="form-group col-md-3 parameter">
+                                    @php $specified_request_count_morethan =
+                                    isset($field->specified_request_count_morethan)?
+                                    $field->specified_request_count_morethan : ''; @endphp
+                                    <label for="specified_request_count_morethan">Total Count of Services Requests(more
+                                        than)</label>
+                                    <input type="text" class="form-control custom-input-1"
+                                        id="specified_request_count_morethan" name="specified_request_count_morethan"
+                                        value="{{$specified_request_count_morethan}}" autocomplete="off">
+                                </div>
+                                <div class="form-group col-md-3 parameter">
+                                    @php $specified_request_count_equalto =
+                                    isset($field->specified_request_count_equalto)?
+                                    $field->specified_request_count_equalto : ''; @endphp
+                                    <label for="specified_request_count_equalto">Total Count of Services Requests(equal
+                                        to)</label>
+                                    <input type="text" class="form-control custom-input-1"
+                                        id="specified_request_count_equalto" name="specified_request_count_equalto"
+                                        value="{{$specified_request_count_equalto}}" autocomplete="off">
+                                </div>
+                                <div class="form-group col-md-3 parameter">
+                                    @php $specified_request_amount_from = isset($field->specified_request_amount_from)?
+                                    $field->specified_request_amount_from : ''; @endphp
+                                    <label for="specified_request_amount_from">Total Sum of Services Requests
+                                        Amount(from)</label>
+                                    <input type="text" class="form-control custom-input-1"
+                                        id="specified_request_amount_from" name="specified_request_amount_from"
+                                        value="{{ $specified_request_amount_from }}" autocomplete="off">
+                                </div>
+
+                                <div class="form-group col-md-3 parameter">
+                                    @php $specified_request_amount_to = isset($field->specified_request_amount_to)?
+                                    $field->specified_request_amount_to : ''; @endphp
+                                    <label for="specified_request_amount_to">Total Sum of Services Requests
+                                        Amount(To)</label>
+                                    <input type="text" class="form-control custom-input-1"
+                                        id="specified_request_amount_to" name="specified_request_amount_to"
+                                        value="{{ $specified_request_amount_to }}" autocomplete="off">
+                                </div>
+
+                                <div class="form-group col-md-3 parameter">
+                                    @php $specified_request_start_date = isset($field->specified_request_start_date)?
+                                    Carbon\Carbon::parse( $field->specified_request_start_date,
+                                    'UTC')->isoFormat("Y-MM-DD") : ''; @endphp
+                                    <label for="sspecified_request_start_date">Date Range(from)</label>
+                                    <input type="date" class="form-control custom-input-1"
+                                        id="specified_request_start_date" name="specified_request_start_date"
+                                        value="{{$specified_request_start_date}}" autocomplete="off">
+                                </div>
+
+
+                                <div class="form-group col-md-3 parameter">
+                                    @php $specified_request_end_date = isset($field->specified_request_end_date)?
+                                    Carbon\Carbon::parse($specified_request_end_date, 'UTC')->isoFormat("Y-MM-DD") : '';
+                                    @endphp
+                                    <label for="sspecified_request_end_date">Date Range(to)</label>
+                                    <input type="date" class="form-control custom-input-1"
+                                        id="specified_request_end_date" name="specified_request_end_date"
+                                        value="{{$specified_request_end_date}}" autocomplete="off">
+                                </div>
+
+
+                                <div class="form-group col-md-3 parameter">
+                                    <label for="entity">States</label>
+                                    @php $name = isset($request_state->name)? $request_state->name : ''; @endphp
+                                    @php $id = isset($request_state->id)? $request_state->id : ''; @endphp
+                                    <select id="state_id" name="state" class="custom-select cs-select">
+                                        <option value="{{$id }}"> {{$name}} </option>
+                                        @foreach($states as $state)
+                                        <option value="{{ $state->id }}"
+                                            {{ old('state') == $state->id ? 'selected' : ''}}>
+                                            {{ $state->name }}</option>
+                                        @endforeach
+                                    </select>
+
+                                </div>
+                                <div class="form-group col-md-3 parameter">
+                                    @php $specified_request_lga = isset($field->specified_request_lga)?
+                                    $field->specified_request_lga : ''; @endphp
+                                    @php $name = isset($request_lga->name)?$request_lga->name : ''; @endphp
+
+                                    <label>L.G.A</label>
+                                    <select class="custom-select cs-select" name="specified_request_lga" id="lga_id">
+                                        <option value="{{ $specified_request_lga }}"> {{$name}} </option>
+                                    </select>
+                                </div>
+
+                                <div class="form-group col-md-12 parameter">
+                                    <br />
+                                    <button id="get_users" type="button" class="btn btn-primary btn-block">Get
+                                        Users</button>
+                                </div>
+
+                            </div>
+                        </fieldset>
+
+
+                        <div class="form-group col-md-12 parameter">
                             <hr />
                         </div>
 
@@ -219,22 +245,30 @@
                         </div>
 
 
-                        <div class="form-group col-md-6">
-                            <label for="rate">Rate (%)</label>
-                            <input type="number" min='1' class="form-control custom-input-1" id="rate" name="rate"
-                                value="{{ $status->rate }}" autocomplete="off">
 
-                            @error('rate')
-                            <span class="invalid-feedback-err">
-                                <strong>{{ $message }}</strong>
-                            </span>
-                            @enderror
-                            <span id="percentage" style="font-size:12px; color:#8392a5"></span>
+
+                        <div class="form-group col-md-6">
+                            <label for="rate">Rate</label>
+                            <div class="input-group">
+                                <input type="number" min='1' id="rate" class="form-control" name="rate"
+                                    aria-label="Dollar amount" value="{{ $status->rate }}">
+                                <div class="input-group-append">
+                                    <span id="percentage" class="input-group-text">0.00</span>
+                                    <span class="input-group-text">%</span>
+
+                                </div>
+                                @error('rate')
+                                <span class="invalid-feedback-err">
+                                    <strong>{{ $message }}</strong>
+                                </span>
+                                @enderror
+                            </div>
                         </div>
                         <div class="form-group col-md-6">
                             <label for="start_date">Duaration(Start)</label>
                             <input type="date" class="form-control custom-input-1" id="start_date"
-                                min=<?= date('Y-m-d'); ?> name="start_date" value="{{ Carbon\Carbon::parse($status->duration_start, 'UTC')->isoFormat("Y-MM-DD") }}"
+                                min=<?= date('Y-m-d'); ?> name="start_date"
+                                value="{{ Carbon\Carbon::parse($status->duration_start, 'UTC')->isoFormat("Y-MM-DD") }}"
                                 autocomplete="off">
                             @error('from_date')
                             <span class="invalid-feedback-err">
@@ -245,7 +279,8 @@
                         <div class="form-group col-md-6">
                             <label for="end_date">Duration(End)</label>
                             <input type="date" class="form-control custom-input-1" id="end_date"
-                                min=<?= date('Y-m-d');?> name="end_date" value="{{ Carbon\Carbon::parse($status->duration_end, 'UTC')->isoFormat("Y-MM-DD") }}"
+                                min=<?= date('Y-m-d');?> name="end_date"
+                                value="{{ Carbon\Carbon::parse($status->duration_end, 'UTC')->isoFormat("Y-MM-DD") }}"
                                 autocomplete="off">
                             @error('discount_name')
                             <span class="invalid-feedback-err">
@@ -266,26 +301,26 @@
                     <div class="col-md-12">
                         <label> Notify Users</label>
                         <div class="flex-this">
-                            <span class="">
-                                <label class="contain">
-                                    Yes
-                                    <input type="radio" {{ $status->notify == 1 ? 'checked' : ''}}  value="1"
-                                        name="notify">
-                                    <span class="checkmark"></span>
-                                </label>
+                            <span class="f" style="display:flex">
+                                <div class="custom-control custom-radio">
+                                    <input type="radio" id="customRadio1" name="notify" class="custom-control-input"
+                                        {{ $status->notify == '1' ? 'checked' : ""}} value="1" name="notify">
+                                    <label class="custom-control-label" for="customRadio1">Yes</label>
+                                </div>
 
+                                <div class="custom-control custom-radio" style="padding-left: 50px">
+                                    <input type="radio" id="customRadio2" name="notify" class="custom-control-input"
+                                        {{ $status->notify == 0 ? 'checked' : ''}} value="0">
+                                    <label class="custom-control-label" for="customRadio2">No</label>
+                                </div>
+                            </span>
 
-                                <label class="contain">
-                                    No
-                                    <input type="radio" {{ $status->notify == 0 ? 'checked' : ''}} value="0"
-                                        name="notify">
-                                    <span class="checkmark"></span>
-                                </label></span>
-
-                            <button type="submit" class="btn btn-primary pull-right-1">Update</button>
+                            <button type="submit" class="btn btn-primary pull-right-1">Create</button>
                         </div>
 
                     </div>
+
+
                 </div>
             </div>
         </form>
@@ -298,7 +333,11 @@
 
 <script>
 $('.selectpicker').selectpicker();
-
+$('.show-estate').hide();
+$('.show-service').hide();
+$('.parameter').hide();
+$('#add-users').hide();
+$('.add-page').hide();
 
 $(document).ready(function() {
     $('.custom-select.cs-select').change(function() {
@@ -319,12 +358,17 @@ $(document).ready(function() {
         });
     });
 
-
     $('#rate').keyup(function() {
         let rate = $(this).val();
         let newrate = parseFloat(rate) / 100;
         $('#percentage').text(newrate);
     });
+
+    let rate = $('#rate').val();
+    if (rate) {
+        let newrate = parseFloat(rate) / 100;
+        $('#percentage').text(newrate);
+    }
 
 });
 </script>
@@ -469,32 +513,57 @@ $(document).ready(function() {
     });
 
 
-    $('.selectpicker.select-all-service').on('changed.bs.select', function(e, clickedIndex, isSelected,
-        previousValue) {
-        var categoryid = $(this).val();
-        if(categoryid.length > 0){
+    $('#estate_id').on("change", function() {
         $.ajax({
-            url: "{{ route('admin.category_services_edit',app()->getLocale()) }}",
+            url: "{{ route('admin.discount_users',app()->getLocale()) }}",
             method: "POST",
             dataType: "JSON",
             data: {
                 "_token": "{{ csrf_token() }}",
-                data: $('.selectpicker.select-all-service').val()
-            },
-            beforeSend: function() {
-                $("#service_id").html();
+                data: $('#discountForm').serialize()
             },
             success: function(data) {
                 if (data) {
-                    $("#service_id").html(data.service).selectpicker('refresh');
+                    $("#estate-user").html(data.options).selectpicker('refresh');
                 } else {
                     var message =
-                        'Error occured while trying to get Category List`s in ';
+                        'Error occured while trying to get Enity Parameter List`s in ';
                     var type = 'error';
                     displayMessage(message, type);
+                    ory
                 }
             },
-        })
+        });
+
+    });
+
+
+    $('.selectpicker.select-all-service').on('changed.bs.select', function(e, clickedIndex, isSelected,
+        previousValue) {
+        var categoryid = $(this).val();
+        if (categoryid.length > 0) {
+            $.ajax({
+                url: "{{ route('admin.category_services_edit',app()->getLocale()) }}",
+                method: "POST",
+                dataType: "JSON",
+                data: {
+                    "_token": "{{ csrf_token() }}",
+                    data: $('.selectpicker.select-all-service').val()
+                },
+                beforeSend: function() {
+                    $("#service_id").html();
+                },
+                success: function(data) {
+                    if (data) {
+                        $("#service_id").html(data.service).selectpicker('refresh');
+                    } else {
+                        var message =
+                            'Error occured while trying to get Category List`s in ';
+                        var type = 'error';
+                        displayMessage(message, type);
+                    }
+                },
+            })
         }
 
     });
@@ -510,19 +579,22 @@ $(document).ready(function() {
 <script>
 $(document).ready(function() {
     var entity = $('#entity_id').children("option:selected").val();
-    var editUsers ='';
+    var categories = $('#edit_category').val();
+    var editUsers = '';
     if (entity === 'user') {
-        $('.show-estate').show();
         $('.show-service').hide();
         $('.parameter').show();
+        $('#add-users').show();
+        $('.add-page').show();
         editUsers = $('#edit_users').val();
-   
     }
 
     if (entity === 'estate') {
         $('.show-estate').show();
         $('.show-service').hide();
-        $('.parameter').show()
+        $('.parameter').show();
+        $('#add-users').hide();
+        $('.not-users').show();
 
         $.ajax({
             url: "{{ route('admin.all_estates',app()->getLocale()) }}",
@@ -530,7 +602,7 @@ $(document).ready(function() {
             dataType: "JSON",
             data: {
                 "_token": "{{ csrf_token() }}",
-                 'estate_name': $('#estate_value').val()
+                'estate_name': $('#estate_value').val()
             },
             success: function(data) {
                 if (data) {
@@ -551,17 +623,19 @@ $(document).ready(function() {
 
 
     if (entity === 'service') {
-        var categories = $('.selectpicker.select-all-service').val()
         $('.show-estate').hide();
         $('.show-service').show();
         $('.parameter').hide();
+
         $.ajax({
             url: "{{ route('admin.categories_edit',app()->getLocale()) }}",
             method: "POST",
             dataType: "JSON",
             data: {
                 "_token": "{{ csrf_token() }}",
-                data: {form:$('#discountForm').serialize()}
+                data: {
+                    form: $('#discountForm').serialize()
+                }
             },
             success: function(data) {
                 if (data) {
@@ -575,62 +649,67 @@ $(document).ready(function() {
                 }
             },
         })
-
-        var categoryid = $('.selectpicker.select-all-service').val();
-        if(categoryid.length > 0){
-        $.ajax({
-            url: "{{ route('admin.category_services_edit',app()->getLocale()) }}",
-            method: "POST",
-            dataType: "JSON",
-            data: {
-                "_token": "{{ csrf_token() }}",
-                data: $('.selectpicker.select-all-service').val()
-            },
-            beforeSend: function() {
-                $("#service_id").html();
-            },
-            success: function(data) {
-                if (data) {
-                    $("#service_id").html(data.service).selectpicker('refresh');
-                } else {
-                    var message =
-                        'Error occured while trying to get Category List`s in ';
-                    var type = 'error';
-                    displayMessage(message, type);
-                }
-            },
-        })
-        }
-
-    
-
     }
 
 
-
-  
-
     if (entity) {
-
         $.ajax({
             url: "{{ route('admin.discount_users_edit',app()->getLocale()) }}",
             method: "POST",
             dataType: "JSON",
             data: {
                 "_token": "{{ csrf_token() }}",
-                data: {form:$('#discountForm').serialize(), edit:true}
+                data: {
+                    form: $('#discountForm').serialize(),
+                    edit: true
+                }
             },
             success: function(data) {
-                if (data) {
+                if (data && entity == 'user') {
                     $("#users").html(data.options).selectpicker('refresh');
-                } else {
+                }
+                if (data && entity == 'estate') {
+                    $("#estate-user").html(data.options).selectpicker('refresh');
+                }
+
+                if (!data) {
                     var message =
-                        'Error occured while trying to get Enity Parameter List`s in ';
+                        'Error occured while trying to get Enity Parameter List`s in 444 ';
                     var type = 'error';
                     displayMessage(message, type);
                 }
             },
         })
+    }
+    console.log(categories, '12');
+
+    if (entity === 'service') {
+
+        if (categories.length > 0) {
+            $.ajax({
+                url: "{{ route('admin.category_services_edit',app()->getLocale()) }}",
+                method: "POST",
+                dataType: "JSON",
+                data: {
+                    "_token": "{{ csrf_token() }}",
+                    form: $('#discountForm').serialize()
+                },
+                beforeSend: function() {
+                    $("#service_id").html();
+                },
+                success: function(data) {
+                    if (data) {
+                        $("#service_id").html(data.service).selectpicker('refresh');
+                    } else {
+                        var message =
+                            'Error occured while trying to get Category List`s in ';
+                        var type = 'error';
+                        displayMessage(message, type);
+                    }
+                },
+            })
+        }
+
     }
 
 })
@@ -642,14 +721,18 @@ $(document).ready(function() {
     $('#entity_id').on("change", function() {
         var entity = $(this).children("option:selected").val();
         if (entity === 'user') {
-            $('.show-estate').show();
             $('.show-service').hide();
             $('.parameter').show();
+            $('#add-users').show();
+            $('.add-page').show();
         }
         if (entity === 'estate') {
             $('.show-estate').show();
             $('.show-service').hide();
             $('.parameter').show();
+            $('#add-users').hide();
+            $('.not-users').show();
+
             $.ajax({
                 url: "{{ route('admin.all_estates',app()->getLocale()) }}",
                 method: "POST",
@@ -683,7 +766,9 @@ $(document).ready(function() {
                 dataType: "JSON",
                 data: {
                     "_token": "{{ csrf_token() }}",
-                    data: {form:$('#discountForm').serialize()}
+                    data: {
+                        form: $('#discountForm').serialize()
+                    }
                 },
                 success: function(data) {
                     if (data) {
@@ -713,9 +798,13 @@ $(document).ready(function() {
                     data: $('#discountForm').serialize()
                 },
                 success: function(data) {
-                    if (data) {
+                    if (data && entity == 'user') {
                         $("#users").html(data.options).selectpicker('refresh');
-                    } else {
+                    }
+                    if (data && entity == 'estate') {
+                        $("#estate-user").html(data.options).selectpicker('refresh');
+                    }
+                    if (!data) {
                         var message =
                             'Error occured while trying to get Enity Users List`s in ';
                         var type = 'error';

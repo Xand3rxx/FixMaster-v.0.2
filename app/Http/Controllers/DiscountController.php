@@ -463,10 +463,10 @@ class DiscountController extends Controller
                     );
 
                 break;
+              
              
                 default:
-                    # code...
-                    
+                $data =[];
                 break;
             }
             return response()->json($data);
@@ -530,12 +530,13 @@ class DiscountController extends Controller
         if ($request->ajax())
         {
             $category = [];
-            $category = Category::select('id', 'name')->orderBy('name', 'ASC')
+            $category = Category::select('id', 'name', )->orderBy('name', 'ASC')
                 ->get();
             $optionValue = '';
             $optionValue .= "<option value='all' class='select-all'>All Service Category </option>";
             foreach ($category as $row)
             {
+                if($row->name != 'Uncategorized')
                 $optionValue .= "<option value='$row->id' >$row->name</option>";
             }
 
@@ -552,6 +553,7 @@ class DiscountController extends Controller
     {
         if ($request->ajax())
         {
+           
             $service = []; 
             if (in_array("all", $request->data))
             {

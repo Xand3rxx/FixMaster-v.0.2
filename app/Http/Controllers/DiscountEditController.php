@@ -79,15 +79,22 @@ class DiscountEditController extends Controller
     {
         if ($request->ajax())
         {
+            // dd($request->data);
+            // $data = json_decode($request->form);
+            parse_str($request->form, $fields);
+            // dd($fields);
+            $services = json_decode($fields['edit_services'][0]);
+            $category =  json_decode($fields['edit_category'][0]);
+            // $category = explode(" ",  $category);
             $service = []; 
-            if (in_array("all", $request->data))
+            if (in_array("all", $category))
             {
                 $service = Service::select('id', 'name')->orderBy('name', 'ASC')
                     ->get();
             }
             else
             {
-                $service = Service::select('id', 'name')->whereIn('category_id', $request->data)
+                $service = Service::select('id', 'name')->whereIn('category_id', $category)
                     ->orderBy('name', 'ASC')
                     ->get();
             }
@@ -95,8 +102,8 @@ class DiscountEditController extends Controller
             $optionValue .= "<option value='all-services' class='select-all'>All services </option>";
             foreach ($service as $row)
             {
-              
-                $optionValue .= "<option value='$row->id' >$row->name</option>";
+                $selected = in_array($row->id, $services)? 'selected': '';
+                $optionValue .= "<option value='$row->id' $selected >$row->name</option>";
             }
             $data = array(
                 'service' => $optionValue
