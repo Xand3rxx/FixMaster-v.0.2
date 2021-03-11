@@ -137,9 +137,15 @@
                                     $field->specified_request_count_morethan : ''; @endphp
                                     <label for="specified_request_count_morethan">Total Count of Services Requests(more
                                         than)</label>
-                                    <input type="text" class="form-control custom-input-1"
+                                    <input type="number" min="1" class="form-control custom-input-1"
                                         id="specified_request_count_morethan" name="specified_request_count_morethan"
                                         value="{{$specified_request_count_morethan}}" autocomplete="off">
+
+                                        @error('specified_request_count_morethan')
+                                        <span class="invalid-feedback-err">
+                                            <strong>{{ $message }}</strong>
+                                        </span>
+                                        @enderror
                                 </div>
                                 <div class="form-group col-md-3 parameter">
                                     @php $specified_request_count_equalto =
@@ -147,18 +153,28 @@
                                     $field->specified_request_count_equalto : ''; @endphp
                                     <label for="specified_request_count_equalto">Total Count of Services Requests(equal
                                         to)</label>
-                                    <input type="text" class="form-control custom-input-1"
+                                    <input type="number" min="1" class="form-control custom-input-1"
                                         id="specified_request_count_equalto" name="specified_request_count_equalto"
                                         value="{{$specified_request_count_equalto}}" autocomplete="off">
+                                        @error('specified_request_count_equalto')
+                                        <span class="invalid-feedback-err">
+                                            <strong>{{ $message }}</strong>
+                                        </span>
+                                        @enderror
                                 </div>
                                 <div class="form-group col-md-3 parameter">
                                     @php $specified_request_amount_from = isset($field->specified_request_amount_from)?
                                     $field->specified_request_amount_from : ''; @endphp
                                     <label for="specified_request_amount_from">Total Sum of Services Requests
                                         Amount(from)</label>
-                                    <input type="text" class="form-control custom-input-1"
+                                    <input type="number" min="1" class="form-control custom-input-1"
                                         id="specified_request_amount_from" name="specified_request_amount_from"
                                         value="{{ $specified_request_amount_from }}" autocomplete="off">
+                                        @error('specified_request_amount_from')
+                                        <span class="invalid-feedback-err">
+                                            <strong>{{ $message }}</strong>
+                                        </span>
+                                        @enderror
                                 </div>
 
                                 <div class="form-group col-md-3 parameter">
@@ -166,9 +182,14 @@
                                     $field->specified_request_amount_to : ''; @endphp
                                     <label for="specified_request_amount_to">Total Sum of Services Requests
                                         Amount(To)</label>
-                                    <input type="text" class="form-control custom-input-1"
+                                    <input type="number" min="1" class="form-control custom-input-1"
                                         id="specified_request_amount_to" name="specified_request_amount_to"
                                         value="{{ $specified_request_amount_to }}" autocomplete="off">
+                                        @error('specified_request_amount_to')
+                                        <span class="invalid-feedback-err">
+                                            <strong>{{ $message }}</strong>
+                                        </span>
+                                        @enderror
                                 </div>
 
                                 <div class="form-group col-md-3 parameter">
@@ -581,7 +602,7 @@ $(document).ready(function() {
     var entity = $('#entity_id').children("option:selected").val();
     var categories = $('#edit_category').val();
     var editUsers = '';
-    if (entity === 'user') {
+    if (entity === 'client') {
         $('.show-service').hide();
         $('.parameter').show();
         $('#add-users').show();
@@ -665,7 +686,7 @@ $(document).ready(function() {
                 }
             },
             success: function(data) {
-                if (data && entity == 'user') {
+                if (data && entity == 'client') {
                     $("#users").html(data.options).selectpicker('refresh');
                 }
                 if (data && entity == 'estate') {
@@ -720,7 +741,7 @@ $(document).ready(function() {
 $(document).ready(function() {
     $('#entity_id').on("change", function() {
         var entity = $(this).children("option:selected").val();
-        if (entity === 'user') {
+        if (entity === 'client') {
             $('.show-service').hide();
             $('.parameter').show();
             $('#add-users').show();
@@ -798,7 +819,7 @@ $(document).ready(function() {
                     data: $('#discountForm').serialize()
                 },
                 success: function(data) {
-                    if (data && entity == 'user') {
+                    if (data && entity == 'client') {
                         $("#users").html(data.options).selectpicker('refresh');
                     }
                     if (data && entity == 'estate') {

@@ -45,7 +45,10 @@ class DiscountController extends Controller
     public function store(Request $request)
     {
         //Validate discount input
+      
         $this->validateRequest($request);
+        $this->validateFieldRequest($request);
+      
     
         $fields = [
         'specified_request_count_morethan' => $request->specified_request_count_morethan,
@@ -87,7 +90,7 @@ class DiscountController extends Controller
 
             switch ($entity)
             {
-                case 'user':
+                case 'client':
                     $update = $this->createUsersDiscount($request, $discount);
                 break;
                 case 'estate':
@@ -154,6 +157,17 @@ class DiscountController extends Controller
             return request()->validate(['discount_name' => 'required|unique:discounts,name|max:250', 'entity' => 'required', 'rate' => 'required', 'start_date' => 'required', 'users' => 'required|array|min:1', 'end_date' => 'required', 'description' => 'max:250']);
 
         }
+    }
+
+    private function validateFieldRequest($request)
+    {
+            return request()->validate([
+            'specified_request_count_morethan' => 'numeric',
+            'specified_request_count_equalto' => 'numeric',
+            'specified_request_amount_from'  => 'numeric',
+            'specified_request_amount_to'   => 'numeric',
+           ]);
+        
     }
 
     public function show($language, $discount)
@@ -404,7 +418,7 @@ class DiscountController extends Controller
 
             switch ($entity)
             {
-                case 'user':
+                case 'client':
                     if (count(array_filter($chk_fields)) > 0)
                     {
                         $dataArry = ServiceRequest::select('sr.user_id', $replace_amount, 'first_name', 'last_name')->from(ServiceRequest::raw("(select  $replace_user, count(user_id) as users from service_requests $groupby)

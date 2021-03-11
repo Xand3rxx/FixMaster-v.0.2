@@ -122,16 +122,26 @@
                                 <div class="form-group col-md-3 parameter">
                                     <label for="specified_request_count_morethan">Total Count of Services Requests(more
                                         than)</label>
-                                    <input type="text" class="form-control custom-input-1"
+                                    <input type="number" min="1" class="form-control custom-input-1"
                                         id="specified_request_count_morethan" name="specified_request_count_morethan"
                                         value="{{ old('specified_request_count_morethan') }}" autocomplete="off">
+                                        @error('specified_request_count_morethan')
+                                        <span class="invalid-feedback-err">
+                                            <strong>{{ $message }}</strong>
+                                        </span>
+                                        @enderror
                                 </div>
                                 <div class="form-group col-md-3 parameter">
                                     <label for="specified_request_count_equalto">Total Count of Services Requests(equal
                                         to)</label>
-                                    <input type="text" class="form-control custom-input-1"
+                                    <input type="number" min="1" class="form-control custom-input-1"
                                         id="specified_request_count_equalto" name="specified_request_count_equalto"
                                         value="{{ old('specified_request_count_equalto') }}" autocomplete="off">
+                                        @error('specified_request_count_equalto')
+                                        <span class="invalid-feedback-err">
+                                            <strong>{{ $message }}</strong>
+                                        </span>
+                                        @enderror
                                 </div>
                                 <div class="form-group col-md-3 parameter">
                                     <label for="specified_request_amount_from">Total Sum of Services Requests
@@ -139,14 +149,24 @@
                                     <input type="text" class="form-control custom-input-1"
                                         id="specified_request_amount_from" name="specified_request_amount_from"
                                         value="{{ old('specified_request_amount_from') }}" autocomplete="off">
+                                        @error('specified_request_amount_from')
+                                        <span class="invalid-feedback-err">
+                                            <strong>{{ $message }}</strong>
+                                        </span>
+                                        @enderror
                                 </div>
 
                                 <div class="form-group col-md-3 parameter">
                                     <label for="specified_request_amount_to">Total Sum of Services Requests
                                         Amount(To)</label>
-                                    <input type="text" class="form-control custom-input-1"
+                                    <input type="number" min="1" class="form-control custom-input-1"
                                         id="specified_request_amount_to" name="specified_request_amount_to"
                                         value="{{ old('specified_request_amount_to') }}" autocomplete="off">
+                                        @error('specified_request_amount_to')
+                                        <span class="invalid-feedback-err">
+                                            <strong>{{ $message }}</strong>
+                                        </span>
+                                        @enderror
                                 </div>
 
                                 <div class="form-group col-md-3 parameter">
@@ -209,7 +229,7 @@
                         <div class="form-group col-md-6">
                             <label for="rate">Rate</label>
                             <div class="input-group">
-                                <input type="number" min='1' id="rate" class="form-control" name="rate"
+                                <input type="number" min='0' id="rate" class="form-control" name="rate"
                                     aria-label="Dollar amount (with dot and two decimal places)">
                                 <div class="input-group-append">
                                     <span id="percentage" class="input-group-text">0.00</span>
@@ -537,7 +557,7 @@ $(document).ready(function() {
 //when pages loads
 $(document).ready(function() {
     var entity = $('#entity_id').children("option:selected").val();
-    if (entity === 'user') {
+    if (entity === 'client') {
         $('.show-service').hide();
         $('.parameter').show();
         $('#add-users').show();
@@ -635,7 +655,7 @@ $(document).ready(function() {
 $(document).ready(function() {
     $('#entity_id').on("change", function() {
         var entity = $(this).children("option:selected").val();
-        if (entity === 'user') {
+        if (entity === 'client') {
             $('.show-service').hide();
             $('.parameter').show();
             $('#add-users').show();

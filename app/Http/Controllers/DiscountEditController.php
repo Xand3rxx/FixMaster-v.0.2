@@ -79,13 +79,10 @@ class DiscountEditController extends Controller
     {
         if ($request->ajax())
         {
-            // dd($request->data);
-            // $data = json_decode($request->form);
+           
             parse_str($request->form, $fields);
-            // dd($fields);
             $services = json_decode($fields['edit_services'][0]);
             $category =  json_decode($fields['edit_category'][0]);
-            // $category = explode(" ",  $category);
             $service = []; 
             if (in_array("all", $category))
             {
@@ -239,7 +236,7 @@ class DiscountEditController extends Controller
 
             switch ($entity)
             {
-                case 'user':
+                case 'client':
                     if (count(array_filter($chk_fields)) > 0)
                     {
                      $dataArry = ServiceRequest::select('sr.user_id', $replace_amount, 'first_name', 'last_name')->from(ServiceRequest::raw("(select  $replace_user, count(user_id) as users from service_requests $groupby)
@@ -316,6 +313,7 @@ class DiscountEditController extends Controller
     {
 
         $this->validateRequestEdit($request);
+        $this->validateFieldRequest($request);
 
         $fields = [
         'specified_request_count_morethan' => $request->specified_request_count_morethan,
@@ -357,7 +355,7 @@ class DiscountEditController extends Controller
     
                 switch ($entity)
                 {
-                    case 'user':
+                    case 'client':
                         $update = $this->updateUsersDiscount($request,  $discount);
                     break;
                     case 'estate':
@@ -432,6 +430,16 @@ class DiscountEditController extends Controller
         }
     }
 
+    private function validateFieldRequest($request)
+    {
+            return request()->validate([
+            'specified_request_count_morethan' => 'numeric',
+            'specified_request_count_equalto' => 'numeric',
+            'specified_request_amount_from'  => 'numeric',
+            'specified_request_amount_to'   => 'numeric',
+           ]);
+        
+    }
 
 
 
