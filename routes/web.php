@@ -194,14 +194,19 @@ Route::prefix('/technician')->group(function () {
         //All routes regarding technicians should be in here
         Route::get('/',                                 [TechnicianProfileController::class, 'index'])->name('index');    //Take me to Technician Dashboard            
         Route::get('/location-request',                 [TechnicianProfileController::class, 'locationRequest'])->name('location_request'); 
-        Route::get('/payments',                         [TechnicianProfileController::class, 'payments'])->name('payments');                
+        //Route::get('/payments',                         [TechnicianProfileController::class, 'payments'])->name('payments');                
         Route::get('/requests',                         [TechnicianProfileController::class, 'serviceRequests'])->name('requests');                
-        Route::get('/requests/details',                 [TechnicianProfileController::class, 'serviceRequestDetails'])->name('request_details');     
+        Route::get('/requests/details/{serviceRequest:id}',                 [TechnicianProfileController::class, 'serviceRequestDetails'])->name('request_details');     
 
         Route::get('/profile/',                         [TechnicianProfileController::class, 'viewProfile'])->name('view_profile');
         Route::get('/profile/edit',                     [TechnicianProfileController::class, 'editProfile'])->name('edit_profile');
         Route::view('/messages/inbox',                  'technician.messages.inbox')->name('messages.inbox');
         Route::view('/messages/sent',                   'technician.messages.outbox')->name('messages.outbox');
+        Route::patch('/update_profile',                     [TechnicianProfileController::class, 'updateProfile'])->name('update_profile');
+        Route::PATCH('/update_password',                     [TechnicianProfileController::class, 'updatePassword'])->name('update_password');
+        Route::get('/payments', [PaymentController::class, 'get_technician_disbursed_payments'])->name('payments');
+        Route::view('/messages/inbox', 'technician.messages.inbox')->name('messages.inbox');
+        Route::view('/messages/sent', 'technician.messages.outbox')->name('messages.outbox');
     });
 });
 

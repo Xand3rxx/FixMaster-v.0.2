@@ -57,24 +57,34 @@
                 </tr>
               </thead>
               <tbody>
+              @foreach ($serviceRequest as $serviceRequest)
                 <tr>
-                  <td class="tx-color-03 tx-center">{{ ++$i }}</td>
-                  <td class="tx-medium">REF-234234723</td>
+                  <td class="tx-color-03 tx-center">{{ $loop->iteration }}</td>
+                  <td class="tx-medium">{{ $serviceRequest['job_reference'] }}</td>
                   <td class="tx-medium">Kelvin Adesanya</td>
                   <td class="tx-medium">David Akinsola</td>
-                  <td class="text-medium text-center">₦{{ number_format(10000) }}</td>
-                  <td class="text-medium text-info">Ongoing</td>
-                  <td class="text-medium">{{ Carbon\Carbon::parse('2020-12-28 16:58:54', 'UTC')->isoFormat('MMMM Do YYYY') }}</td>
+                  <td class="text-medium text-center">₦{{ number_format($serviceRequest['total_amount'] )}}</td>
+                  @if($serviceRequest->service_request_status_id === 4)
+                    <td class="text-medium text-danger">Ongoing</td>
+                  @elseif($serviceRequest->service_request_status_id === 3)
+                    <td class="text-medium text-success">Completed</td>
+                  @elseif($serviceRequest->service_request_status_id === 5)
+                   <td class="text-medium text-danger">Enroute to Client's Location</td>
+                  @elseif($serviceRequest->service_request_status_id === 6)
+                    <td class="text-medium text-pending">Performing Diagnosis</td>
+                  @endif
+                  
+                  <td class="text-medium">{{ Carbon\Carbon::parse($serviceRequest->created_at, 'UTC')->isoFormat('MMMM Do YYYY, h:mm:ssa') }} ({{ $serviceRequest->created_at->diffForHumans() }})</td>
                   <td class=" text-center">
                     <div class="dropdown-file">
                       <a href="" class="dropdown-link" data-toggle="dropdown"><i data-feather="more-vertical"></i></a>
                       <div class="dropdown-menu dropdown-menu-right">
-                      <a href="{{ route('technician.request_details', app()->getLocale()) }}" class="dropdown-item details"><i class="far fa-clipboard"></i> Details</a>
+                      <a href="{{ route('technician.request_details',['serviceRequest'=>$serviceRequest['id'], app()->getLocale()]) }}" class="dropdown-item details"><i class="far fa-clipboard"></i> Details</a>
                       </div>
                     </div>
                   </td>
                 </tr>
-
+                @endforeach
               </tbody>
             </table>
           </div><!-- table-responsive -->

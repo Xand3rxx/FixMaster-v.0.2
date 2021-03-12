@@ -123,29 +123,6 @@
                 </tr>
               </thead>
               <tbody>
-                {{-- @foreach ($payments as $payment)
-                  <tr>
-                  <td class="tx-color-03 tx-center">{{ ++$i }}</td>
-                  <td class="tx-medium">{{ $payment->serviceRequest->job_reference }}</td>
-                    <td class="tx-medium">{{ $payment->payment_reference }}</td>
-                    <td class="tx-medium">{{ $payment->user->fullName->name }}</td>
-                    <td class="tx-medium">
-                      @if($payment->payment_mode == 1)
-                        ATM Transfer
-                      @elseif($payment->payment_mode == 2)
-                        Bank Transfer
-                      @elseif($payment->payment_mode == 3)
-                        Internet Banking
-                      @else
-                        USSD Transfer
-                      @endif
-                    </td>
-
-                    <td class="tx-medium">₦{{ number_format($payment->amount) }}</td>
-                    <td class="text-medium">{{ $payment->comment }}</td>
-                    <td class="text-medium tx-center">{{ Carbon\Carbon::parse($payment->payment_date, 'UTC')->isoFormat('MMMM Do YYYY') }}</td>
-                  </tr>
-                @endforeach --}}
                   <tr>
                   <td class="tx-color-03 tx-center">{{ ++$i }}</td>
                   <td class="tx-medium">REF-234234723</td>

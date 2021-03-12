@@ -8,7 +8,7 @@
         <div>
           <nav aria-label="breadcrumb">
             <ol class="breadcrumb breadcrumb-style1 mg-b-10">
-            <li class="breadcrumb-item"><a href="{{ route('qa.index', app()->getLocale()) }}">Dashboard</a></li>
+            <li class="breadcrumb-item"><a href="{{ route('technician.index', app()->getLocale()) }}">Dashboard</a></li>
               <li class="breadcrumb-item active" aria-current="page">Edit Profile</li>
             </ol>
           </nav>
@@ -31,14 +31,14 @@
                 <div class="tab-pane fade show active" id="description3" role="tabpanel" aria-labelledby="description-tab3">
                   <h6>UPDATE PROFILE</h6>
                   <div class="card-body pd-20 pd-lg-25">
-                    <form action="{{route('qa.update_profile', app()->getLocale())}}" method="post" role="form" enctype="multipart/form-data">
+                    <form action="{{route('technician.update_profile', app()->getLocale())}}" method="post" role="form" enctype="multipart/form-data">
                       {{ csrf_field() }}
                       @method('PATCH')
                       <div class="d-sm-flex float-left">
                             <div class="mg-sm-r-30">
                                 <div class="pos-relative d-inline-block mg-b-20">
                                   <a href="#">
-                                  {{-- {{asset('assets/qa_images/'.$result->account->avatar)}} --}}
+                                  {{-- {{asset('assets/technician_images/'.$result->account->avatar)}} --}}
                                     <div class="avatar avatar-xxl">  
                                       <div class="user-img">
                                         <img class="rounded-circle wh-150p img-fluid image profile_image_preview" src="{{ asset('assets/images/no-image-available.png') }}" alt="user-image">
@@ -51,7 +51,7 @@
                         <div class="form-row">
                           <div class="form-group col-md-3">
                             <label for="inputEmail4">First Name</label>
-                            <input type="text" class="form-control @error('first_name') is-invalid @enderror" name="first_name" id="first_name" value="" required>
+                            <input type="text" class="form-control @error('first_name') is-invalid @enderror" name="first_name" id="first_name" value="{{$result->account->first_name}}" required>
                             @error('first_name')
                             <span class="invalid-feedback" role="alert">
                                 <strong>{{ $message }}</strong>
@@ -60,7 +60,7 @@
                         </div>
                         <div class="form-group col-md-3">
                           <label for="inputEmail4">Middle Name</label>
-                          <input type="text" class="form-control" id="middle_name" name="middle_name" value="" required>
+                          <input type="text" class="form-control" id="middle_name" name="middle_name" value="{{$result->account->middle_name}}" required>
                           @error('middle_name')
                           <span class="invalid-feedback" role="alert">
                               <strong>{{ $message }}</strong>
@@ -70,7 +70,7 @@
                             <!-- Last Name -->
                             <div class="form-group col-md-3">
                               <label for="inputEmail4">Last Name</label>
-                              <input type="text" class="form-control @error('last_name') is-invalid @enderror" id="last_name" name="last_name" value="" required>
+                              <input type="text" class="form-control @error('last_name') is-invalid @enderror" id="last_name" name="last_name" value="{{$result->account->last_name}}" required>
                               @error('last_name')
                               <span class="invalid-feedback" role="alert">
                                   <strong>{{ $message }}</strong>
@@ -81,6 +81,7 @@
                           <div class="form-group col-md-3">
                             <label>Gender</label>
                             <select name="gender" id="gender" class="form-control @error('gender') is-invalid @enderror" required>
+                              <option value="{{$result->account->gender}}">{{$result->account->gender}}</option>
                               <option value="">Choose....</option>
                               <option value="male"}>Male</option>
                               <option value="female">Female</option>
@@ -90,7 +91,7 @@
                             <!-- Email -->
                             <div class="form-group col-md-4">
                               <label for="inputEmail4">Email</label>
-                              <input type="email" class="form-control @error('email') is-invalid @enderror" id="email" name="email" value="" required>
+                              <input type="email" class="form-control @error('email') is-invalid @enderror" id="email" name="email" value="{{$result->account->email}}" required>
                               @error('email')
                               <span class="invalid-feedback" role="alert">
                                   <strong>{{ $message }}</strong>
@@ -100,7 +101,7 @@
                           <!-- Phone Number -->
                           <div class="form-group col-md-4">
                             <label for="inputEmail4">Phone Number</label>
-                            <input type="tel" class="form-control @error('phone_number') is-invalid @enderror" id="phone_number" name="phone_number" maxlength="11" value="" required>
+                            <input type="tel" class="form-control @error('phone_number') is-invalid @enderror" id="phone_number" name="phone_number" maxlength="11" value="{{ old('phone_number')?? $result->phone->number }}" required>
                             @error('phone_number')
                               <span class="invalid-feedback" role="alert">
                                   <strong>{{ $message }}</strong>
@@ -147,7 +148,7 @@
                   <h6>CHANGE PASSWORD</h6>
                   <p class="mg-b-0 text-danger">In order to change your password, you need to provide the current password.</p>
                   <div class="card-body pd-20 pd-lg-25">
-                    <form action="" method="">
+                  <form action="{{route('technician.update_password', app()->getLocale())}}" method="post">
                       <div class="form-row">
                         <div class="form-group col-md-4">
                           <label for="current_password">Current Password</label>

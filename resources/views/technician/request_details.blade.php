@@ -15,7 +15,8 @@
               <li class="breadcrumb-item active" aria-current="page">Request Details</li>
             </ol>
           </nav>
-          <h4 class="mg-b-0 tx-spacing--1">Job: REF-234234723</h4><hr>
+          @foreach ($serviceRequest as $serviceRequest)
+          <h4 class="mg-b-0 tx-spacing--1">Job: {{ $serviceRequest['job_reference'] }}</h4><hr>
           <div class="media align-items-center">
             <span class="tx-color-03 d-none d-sm-block">
               {{-- <i data-feather="credit-card" class="wd-60 ht-60"></i> --}}
@@ -28,7 +29,7 @@
           </div><!-- media -->
         </div>
       </div>
-
+     
       <div class="row row-xs">
         <div class="col-lg-12 col-xl-12">
           <div class="card">
@@ -55,14 +56,14 @@
                         </tr>
                       </thead>
                       <tbody>
-                        {{-- @foreach ($serviceRequestProgreses as $progress) --}}
+                    
                           <tr>
-                            <td class="tx-color-03 tx-center">{{ ++$i }}</td>
+                            <td class="tx-color-03 tx-center">{{$loop->iteration }}</td>
                             <td class="tx-medium">David Akinsola (CSE)</td>
                             <td class="tx-medium text-success">Enroute to Clien't house</td>
                             <td class="text-center">{{ Carbon\Carbon::parse('2020-12-28 16:58:54', 'UTC')->isoFormat('MMMM Do YYYY, h:mm:ssa') }}</td>
                           </tr>
-                        {{-- @endforeach --}}
+                          @endforeach
                       </tbody>
                     </table>
                   </div><!-- table-responsive -->
@@ -141,28 +142,6 @@
                         </tr>
                       </thead>
                       <tbody>
-                        {{-- @foreach($requestDetail->rfqs as $rfq )
-                        <?php  $y = 0; ?>
-                        <tr>
-                          <td class="tx-color-03 tx-center">{{ ++$y }}</td>
-                          <td class="tx-medium">{{ $rfq->batch_number }}</td>
-                          <td class="tx-medium">{{ $rfq->issuer->fullName->name }}</td>
-                          <td class="tx-medium">{{ $rfq->client->fullName->name }}</td>
-                          @if($rfq->status == 0)
-                            <td class="text-medium text-warning">Awaiting total amount</td>
-                          @elseif($rfq->status == 1)
-                            <td class="text-medium text-info">Awaiting Client's payment</td>
-                          @else
-                            <td class="text-medium text-success">Payment received</td>
-                          @endif
-                          <td class="tx-medium text-center">₦{{ number_format($rfq->total_amount) ?? 'Null'}}</td>
-                          <td class="text-medium">{{ Carbon\Carbon::parse($rfq->created_at, 'UTC')->isoFormat('MMMM Do YYYY, h:mm:ssa') }}</td>
-                          <td class=" text-center">
-                            <a href="#rfqDetails" data-toggle="modal" class="btn btn-sm btn-primary" title="View {{ $rfq->batch_number}} details" data-batch-number="{{ $rfq->batch_number}}" data-url="{{ route('rfq_details', $rfq->id) }}" id="rfq-details"></i> Details</a>
-                          </td>
-                        </tr>
-                        @endforeach --}}
-
                         @php  $y = 0; @endphp
                         <tr>
                           <td class="tx-color-03 tx-center">{{ ++$y }}</td>
