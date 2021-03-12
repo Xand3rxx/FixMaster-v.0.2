@@ -22,6 +22,16 @@ class CSESeeder extends Seeder
         $cse->password = bcrypt('admin12345');
         $cse->save();
 
+        $cse1 = new \App\Models\User;
+        $cse1->email = 'grace.anjiola@gmail.com';
+        $cse1->password = bcrypt('admin12345');
+        $cse1->save();
+
+        $cse2 = new \App\Models\User;
+        $cse2->email = 'jackson.okoye@gmail.com';
+        $cse2->password = bcrypt('admin12345');
+        $cse2->save();
+
         // CSE Roles and Permissions
         $cseRole = \App\Models\Role::where('slug', 'cse-user')->first();
         $cse->roles()->attach($cseRole);
@@ -36,7 +46,37 @@ class CSESeeder extends Seeder
         $cseType->url = $cseRole->url;
         $cseType->save();
 
+        $cseType = new UserType();
+        $cseType->user_id = $cse1->id;
+        $cseType->role_id = $cseRole->id;
+        $cseType->url = $cseRole->url;
+        $cseType->save();
+
+        $cseType = new UserType();
+        $cseType->user_id = $cse2->id;
+        $cseType->role_id = $cseRole->id;
+        $cseType->url = $cseRole->url;
+        $cseType->save();
+
         // CSE Account
+        $cseAccount = \App\Models\Account::create([
+            'user_id' =>  $cse->id,
+            'first_name'    => "Benedict",
+            'middle_name'   => "Mayowa",
+            'last_name'     => "Olaoye",
+            'gender'        => 'male',
+            'avatar'        => 'default-male-avatar.png'
+        ]);
+
+        $cseAccount = \App\Models\Account::create([
+            'user_id' =>  $cse->id,
+            'first_name'    => "Benedict",
+            'middle_name'   => "Mayowa",
+            'last_name'     => "Olaoye",
+            'gender'        => 'male',
+            'avatar'        => 'default-male-avatar.png'
+        ]);
+
         $cseAccount = \App\Models\Account::create([
             'user_id' =>  $cse->id,
             'first_name'    => "Benedict",

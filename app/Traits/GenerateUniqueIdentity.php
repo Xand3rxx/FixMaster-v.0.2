@@ -8,7 +8,7 @@ trait GenerateUniqueIdentity
     protected $random;
     protected $exist;
     protected $tested;
-    protected $table;
+    protected $tableName;
     protected $abbr;
     protected $unique;
 
@@ -17,19 +17,19 @@ trait GenerateUniqueIdentity
      * 
      * @return string
      */
-    public static function generate(string $table, string $abbr)
+    public static function generate(string $tableName, string $abbr)
     {
-        return static::uniqueIdentity($table, $abbr);
+        return static::uniqueIdentity($tableName, $abbr);
     }
 
     /**
      * Generate Unique ID in related to given table
      * 
-     * @param string $table
+     * @param string $tableName
      *
      * @return string
      */
-    protected static function uniqueIdentity(string $table, string $abbr, $unique = false)
+    protected static function uniqueIdentity(string $tableName, string $abbr, $unique = false)
     {
         // Store tested results in array to not test them again
         $tested = [];
@@ -45,7 +45,7 @@ trait GenerateUniqueIdentity
             }
 
             // Check if it is unique in the database
-            $exist = \Illuminate\Support\Facades\DB::table($table)->where('unique_id', $random)->exists();
+            $exist = \Illuminate\Support\Facades\DB::table($tableName)->where('unique_id', $random)->exists();
 
             // Store the random characters in the tested array
             // To keep track which ones are already tested

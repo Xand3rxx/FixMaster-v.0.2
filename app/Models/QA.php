@@ -2,13 +2,13 @@
 
 namespace App\Models;
 
-// use App\Traits\GenerateUniqueIdentity as Generator;
+use App\Traits\GenerateUniqueIdentity as Generator;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class QA extends Model
 {
-    use HasFactory;
+    use Generator;
 
     protected $table = "quality_assurances";
 
@@ -27,12 +27,12 @@ class QA extends Model
      *
      * @return void
      */
-    // protected static function booted()
-    // {
-    //     static::creating(function ($qa) {
-    //         $qa->unique_id = static::generate('quality_assurances', 'QA-'); // Create a Unique Quality Assurance id
-    //     });
-    // }
+    protected static function booted()
+    {
+        static::creating(function ($qa) {
+            $qa->unique_id = static::generate('quality_assurances', 'QA-'); // Create a Unique Quality Assurance id
+        });
+    }
 
     /**
      * Get the user that owns the Account.

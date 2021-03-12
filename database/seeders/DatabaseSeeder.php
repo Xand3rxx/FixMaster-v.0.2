@@ -31,7 +31,7 @@ class DatabaseSeeder extends Seeder
             ServiceRequestStatusSeeder::class,
             CountrySeeder::class,
             PaymentModeSeeder::class,
-            PaymentDisbursedSeeder::class,
+            // PaymentDisbursedSeeder::class,
             ToolInventorySeeder::class,
             TaxSeeder::class,
             TaxHistorySeeder::class,

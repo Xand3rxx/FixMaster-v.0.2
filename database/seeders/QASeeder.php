@@ -55,7 +55,7 @@ class QASeeder extends Seeder
         $qaTable = new \App\Models\QA();
         $qaTable->user_id = $qa->id;
         $qaTable->account_id = $qaAccount->id;
-        $qaTable->unique_id = 'QA-19807654';
+        // $qaTable->unique_id = 'QA-19807654';
         $qaTable->bank_id = 3;
         $qaTable->save();
     }

@@ -54,5 +54,20 @@ class CategorySeeder extends Seeder
         $category8->name = 'Refrigeration';
         $category8->save();
 
+        $category8 = new Category();
+        $category8->user_id = '1';
+        $category8->name = 'Communication';
+        $category8->save();
+
+        $category8 = new Category();
+        $category8->user_id = '1';
+        $category8->name = 'Mechanical';
+        $category8->save();
+
+        $category8 = new Category();
+        $category8->user_id = '1';
+        $category8->name = 'Interiror Decoration';
+        $category8->save();
+
     }
 }

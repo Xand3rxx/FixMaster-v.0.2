@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateServiceRequestCancellationsTable extends Migration
+class CreateServiceRequestAssignedTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,24 +13,22 @@ class CreateServiceRequestCancellationsTable extends Migration
      */
     public function up()
     {
-        Schema::create('service_request_cancellations', function (Blueprint $table) {
+        Schema::create('service_request_assigned', function (Blueprint $table) {
             $table->engine = 'InnoDB';
             $table->charset = 'utf8mb4';
             $table->collation = 'utf8mb4_unicode_ci';
 
-            $table->id();
-            $table->uuid('uuid')->unique();
             $table->foreignId('user_id')
                 ->constrained()
-                ->onUpdate('CASCADE')
-                ->onDelete('NO ACTION');
+                ->onUpdate('cascade')
+                ->onDelete('cascade');
 
             $table->foreignId('service_request_id')
                 ->constrained()
-                ->onUpdate('CASCADE')
-                ->onDelete('NO ACTION');
+                ->onUpdate('cascade')
+                ->onDelete('cascade');
 
-            $table->text('reason');
+            $table->primary(['user_id', 'service_request_id']);
             $table->timestamps();
         });
     }
@@ -42,6 +40,6 @@ class CreateServiceRequestCancellationsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('service_request_cancellations');
+        Schema::dropIfExists('service_request_assigned');
     }
 }

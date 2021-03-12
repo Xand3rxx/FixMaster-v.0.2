@@ -23,7 +23,7 @@ class CreatePaymentsTable extends Migration
             $table->integer('amount')->unsigned();
             $table->enum('payment_channel', ['paystack','flutterwave','offline','wallet']);
             $table->enum('payment_for', ['e-wallet','service-request']);
-            $table->string('unique_id');
+            $table->string('unique_id')->comment('e.g. REF-330CB862 or WAL-23782382');
             $table->string('reference_id', 191)->unique();
             $table->string('transaction_id', 191)->nullable();
 
