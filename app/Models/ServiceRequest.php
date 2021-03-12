@@ -12,7 +12,7 @@ class ServiceRequest extends Model
     use HasFactory, SoftDeletes;
 
     // column name of key
-    protected $primaryKey = 'uuid';
+    //protected $primaryKey = 'uuid';
 
     // type of key
     protected $keyType = 'string';
@@ -26,7 +26,7 @@ class ServiceRequest extends Model
      * @var array
      */
     protected $fillable = [
-        'user_id', 'admin_id', 'cse_id', 'technician_id', 'service_id', 'category_id', 'job_reference', 'security_code', 'service_request_status_id', 'total_amount',
+        'user_id', 'admin_id', 'cse_id', 'technician_id', 'service_id', 'job_reference', 'security_code', 'service_request_status_id', 'total_amount',
     ];
 
     /**
@@ -45,10 +45,14 @@ class ServiceRequest extends Model
      */
     protected static function booted()
     {
-        // Create a uuid when a new Serivce Request is to be created 
+        // Create a uuid when a new Serivce Request is to be created
         static::creating(function ($serviceRequest) {
-            $serviceRequest->uuid = (string) Str::uuid(); 
+            $serviceRequest->uuid = (string) Str::uuid();
         });
+    }
+
+    public function payment_disbursed(){
+        return $this->belongsTo(PaymentDisbursed::class);
     }
 
 }

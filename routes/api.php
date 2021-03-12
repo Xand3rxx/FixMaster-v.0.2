@@ -3,8 +3,9 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Messaging\Template;
+use App\Http\Controllers\Messaging\MessageController;
 use App\Http\Controllers\Messaging\Message;
-use App\Models\MessageTemplate;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -63,12 +64,32 @@ Route::post('message/send', function(Request $request) {
 
 });
 
+Route::get('messaging/outbox', function() {
+   $messageController = new MessageController();
+    return $messageController->mailList();
+ 
+ });
+
+Route::get('inbox', function() {
+   $messageController = new MessageController();
+   $user = Auth::user();
+    return $messageController->mailList($user);
+ 
+ });
+
+Route::get('messaging/roles', function() {
+   $messageController = new MessageController();
+    return $messageController->userRoles();
+ 
+ });
+
+ Route::post('messaging/save_email', function(Request $request) {
+   $messageController = new MessageController();
+    return $messageController->saveEmail($request);
+ 
+ });
 
 
-
-//Route::middleware('auth:api')->get('/user', function (Request $request) {
-//    return $request->user();
-//});
 Route::get('/',      [\App\Http\Controllers\EstateController::class, 'showEstates'])->name('list_estate');
 
 

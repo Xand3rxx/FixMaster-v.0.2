@@ -39,9 +39,9 @@ class ServiceRequestCancellation extends Model
      */
     protected static function booted()
     {
-        // Create a uuid when a new Serivce Request Cancellation is to be created 
+        // Create a uuid when a new Serivce Request Cancellation is to be created
         static::creating(function ($serviceRequest) {
-            $serviceRequest->uuid = (string) Str::uuid(); 
+            $serviceRequest->uuid = (string) Str::uuid();
         });
     }
 

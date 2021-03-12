@@ -47,9 +47,9 @@ class Category extends Model
      */
     protected static function booted()
     {
-        // Create a uuid when a new Serivce is to be created 
-        static::creating(function ($user) {
-            $user->uuid = (string) Str::uuid(); 
+        // Create a uuid when a new Category is to be created 
+        static::creating(function ($category) {
+            $category->uuid = (string) Str::uuid(); 
         });
     }
 

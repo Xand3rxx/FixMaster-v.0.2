@@ -44,9 +44,12 @@ class PaymentMode extends Model
      */
     protected static function booted()
     {
-        // Create a uuid when a new Payment Mode is to be created 
+        // Create a uuid when a new Payment Mode is to be created
         static::creating(function ($serviceRequest) {
-            $serviceRequest->uuid = (string) Str::uuid(); 
+            $serviceRequest->uuid = (string) Str::uuid();
         });
     }
+
+
+
 }

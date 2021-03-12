@@ -19,34 +19,9 @@ class Administrator extends Model
      */
     public function user()
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(User::class)->with(['account','phones','roles']);
     }
-
-    /**
-     * Get the user that owns the Account.
-     */
-    public function phones()
-    {
-        return $this->hasMany(Phone::class, 'user_id', 'user_id');
-    }
-
-    /**
-     * Get the Administrator that role
-     */
-    public function roles()
-    {
-        return $this->belongsToMany(Role::class, 'users_roles', 'user_id','user_id');
-        // return $this->hasMany(Role::class, 'user_id', 'user_id');
-    }
-
-    /**
-     * Get the Account associated with the user.
-     */
-    public function account()
-    {
-        return $this->hasOne(Account::class, 'user_id', 'user_id');
-    }
-
+   
     /**
      * The "booted" method of the model.
      *
