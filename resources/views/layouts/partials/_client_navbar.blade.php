@@ -114,13 +114,13 @@
             <ul class="navigation-menu nav-light">
                 <li ><a href="{{ route('frontend.home', app()->getLocale()) }}">FixMaster Home</a></li>
 
-                <li><a class="{{ Route::currentRouteNamed('frontend.about') ? 'selected' : '' }}" href="{{ route('frontend.about', app()->getLocale()) }}">About us</a></li>
+                <li><a class="" href="{{ route('frontend.about', app()->getLocale()) }}">About us</a></li>
                 
-                <li class="has-submenu {{ Route::currentRouteNamed('frontend.how_it_works', 'frontend.faq') ? 'selected' : '' }}">
+                <li class="has-submenu">
                     <a href="javascript:void(0)">How it works</a><span class="menu-arrow"></span>
                     <ul class="submenu">
-                        <li><a class="{{ Route::currentRouteNamed('frontend.how_it_works') ? 'selected' : '' }}" href="{{ route('frontend.how_it_works', app()->getLocale()) }}">How It Works</a></li>
-                        <li><a class="{{ Route::currentRouteNamed('frontend.faq') ? 'selected' : '' }}" href="{{ route('frontend.faq', app()->getLocale()) }}">FAQ</a></li>
+                        <li><a class="" href="{{ route('frontend.how_it_works', app()->getLocale()) }}">How It Works</a></li>
+                        <li><a class="" href="{{ route('frontend.faq', app()->getLocale()) }}">FAQ</a></li>
                     </ul>
                 </li>
                 

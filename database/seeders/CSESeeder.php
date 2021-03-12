@@ -22,6 +22,16 @@ class CSESeeder extends Seeder
         $cse->password = bcrypt('admin12345');
         $cse->save();
 
+        $cse1 = new \App\Models\User;
+        $cse1->email = 'susan.simpson@gmail.com';
+        $cse1->password = bcrypt('admin12345');
+        $cse1->save();
+
+        $cse2 = new \App\Models\User;
+        $cse2->email = 'jackson.okoye@gmail.com';
+        $cse2->password = bcrypt('admin12345');
+        $cse2->save();
+
         // CSE Roles and Permissions
         $cseRole = \App\Models\Role::where('slug', 'cse-user')->first();
         $cse->roles()->attach($cseRole);
@@ -36,6 +46,18 @@ class CSESeeder extends Seeder
         $cseType->url = $cseRole->url;
         $cseType->save();
 
+        $cseType = new UserType();
+        $cseType->user_id = $cse1->id;
+        $cseType->role_id = $cseRole->id;
+        $cseType->url = $cseRole->url;
+        $cseType->save();
+
+        $cseType = new UserType();
+        $cseType->user_id = $cse2->id;
+        $cseType->role_id = $cseRole->id;
+        $cseType->url = $cseRole->url;
+        $cseType->save();
+
         // CSE Account
         $cseAccount = \App\Models\Account::create([
             'user_id' =>  $cse->id,
@@ -46,12 +68,44 @@ class CSESeeder extends Seeder
             'avatar'        => 'default-male-avatar.png'
         ]);
 
+        $cseAccount1 = \App\Models\Account::create([
+            'user_id' =>  $cse1->id,
+            'first_name'    => "Susan",
+            'middle_name'   => "Ngozi",
+            'last_name'     => "Simpson",
+            'gender'        => 'male',
+            'avatar'        => 'default-female-avatar.png'
+        ]);
+
+        $cseAccount2 = \App\Models\Account::create([
+            'user_id' =>  $cse2->id,
+            'first_name'    => "Jackson",
+            'middle_name'   => "Chisom",
+            'last_name'     => "Okoye",
+            'gender'        => 'male',
+            'avatar'        => 'default-male-avatar.png'
+        ]);
+
         // CSE Table
         $cseTable = new Cse();
         $cseTable->user_id = $cse->id;
         $cseTable->account_id = $cseAccount->id;
         $cseTable->referral_id = '1';
         $cseTable->bank_id = '1';
+        $cseTable->save();
+
+        $cseTable = new Cse();
+        $cseTable->user_id = $cse1->id;
+        $cseTable->account_id = $cseAccount1->id;
+        $cseTable->referral_id = '2';
+        $cseTable->bank_id = '2';
+        $cseTable->save();
+
+        $cseTable = new Cse();
+        $cseTable->user_id = $cse2->id;
+        $cseTable->account_id = $cseAccount2->id;
+        $cseTable->referral_id = '3';
+        $cseTable->bank_id = '3';
         $cseTable->save();
     }   
 }

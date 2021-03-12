@@ -27,6 +27,7 @@ class CreateServiceRequestStatusesTable extends Migration
             ->onDelete('NO ACTION');
 
             $table->string('name')->unique();
+            $table->json('discounted')->nullable();
             $table->softDeletes('deleted_at', 0);
             $table->timestamps();
         });

@@ -21,7 +21,7 @@ class Service extends Model
     public $incrementing = false;
     
     protected $fillable = [
-        'user_id', 'category_id', 'name', 'url', 'description', 'image'
+        'user_id', 'category_id', 'name', 'url', 'description', 'status', 'image'
     ];
 
     /**
@@ -30,7 +30,7 @@ class Service extends Model
      * @var array
      */
     protected $hidden = [
-        // 'id'
+        'id'
     ];
 
     /**
@@ -47,6 +47,51 @@ class Service extends Model
         });
     }
 
+     /** 
+     * Scope a query to only include active banches
+     * 
+     * @param \Illuminate\Database\Eloquent\Builder $query
+     * @return \Illuminate\Database\Eloquent\Builder
+     */    
+    //Scope to return all services  
+    public function scopeServicies($query){
+        return $query->select('*')
+        ->orderBy('name', 'ASC');
+        // ->withTrashed();
+    }
+
+    /** 
+     * Scope a query to only include active banches
+     * 
+     * @param \Illuminate\Database\Eloquent\Builder $query
+     * @return \Illuminate\Database\Eloquent\Builder
+     */    
+    //Scope to return all active services  
+    public function scopeActiveServicies($query){
+        return $query->select('*')
+        ->where('status', '=', 1)
+        // ->whereNull('deleted_at')
+        ->orderBy('name', 'ASC');
+    }
+
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'user_id')->withDefault();
+    }
+
+    public function users()
+    {
+        return $this->hasMany(User::class, 'user_id')->withDefault();
+    }
+    
+    /**
+     * Get the Account associated with the user.
+     */
+    public function account()
+    {
+        return $this->hasOne(Account::class, 'user_id', 'user_id');
+    }
+    
     public function category()
     {
         return $this->hasOne(Category::class, 'id', 'category_id');

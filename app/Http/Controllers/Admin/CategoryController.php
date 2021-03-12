@@ -225,14 +225,13 @@ class CategoryController extends Controller
                     'category_id'    => 1
                 ]);
             }
-
             //Delete Category
-            $deleteCategory = Category::where('uuid', $uuid)->delete();
+            $deleteCategory = $category->delete();
 
         }else{
 
             //Delete Category if assigned services count is zero
-            $deleteCategory = Category::where('uuid', $uuid)->delete();
+            $deleteCategory = $category->delete();
         }
 
         if($deleteCategory){
@@ -287,6 +286,8 @@ class CategoryController extends Controller
         //Get category record
         $category = Category::findOrFail($uuid);
 
+        // $deactivateCategory = $category->delete();
+
         //Update category record with softDelete
         $deactivateCategory = Category::where('uuid', $uuid)->update([
             'deleted_at'    => \Carbon\Carbon::now()
@@ -300,7 +301,7 @@ class CategoryController extends Controller
             $message = Auth::user()->email.' deactivated '.$category->name.' category';
             $this->log($type, $severity, $actionUrl, $message);
 
-            return redirect()->route('admin.categories.index', app()->getLocale())->with('success', 'Category has been deactivated.');
+            return redirect()->route('admin.categories.index', app()->getLocale())->with('success', $category->name.' category has been deactivated.');
             
         }else{
             //Record crurrenlty logged in user activity
@@ -333,7 +334,7 @@ class CategoryController extends Controller
             $message = Auth::user()->email.' reinstated '.$category->name.' category';
             $this->log($type, $severity, $actionUrl, $message);
 
-            return redirect()->route('admin.categories.index', app()->getLocale())->with('success', 'Category has been reinstated.');
+            return redirect()->route('admin.categories.index', app()->getLocale())->with('success', $category->name.' category has been reinstated.');
             
         }else{
             //Record crurrenlty logged in user activity

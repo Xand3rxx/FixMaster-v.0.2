@@ -5,12 +5,11 @@ namespace App\Models;
 use Illuminate\Support\Str;
 use App\Traits\RolesAndPermissions;
 use Illuminate\Notifications\Notifiable;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 
 class User extends Authenticatable
 {
-    use HasFactory, Notifiable, RolesAndPermissions;
+    use Notifiable, RolesAndPermissions;
 
     /**
      * The attributes that are mass assignable.
@@ -107,7 +106,15 @@ class User extends Authenticatable
      */
     public function phone()
     {
-        return $this->hasMany(Phone::class);
+        return $this->hasOne(Phone::class, 'user_id');
+    }
+
+    /**
+     * Get the phone associated with the user.
+     */
+    public function addresses()
+    {
+        return $this->hasMany(Address::class);
     }
 
     public function estate()
@@ -118,5 +125,9 @@ class User extends Authenticatable
     public function estates()
     {
         return $this->hasMany(Estate::class);
+    }
+
+    public function payments(){
+        return $this->hasMany(PaymentDisbursed::class,'recipient_id');
     }
 }

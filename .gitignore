@@ -16,3 +16,7 @@ _ide_helper.php
 Dockerfile
 docker-compose.yml
 .idea
+.history/
+.idea/*
+.env.production
+htaccess.prod

@@ -6,16 +6,18 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\URL;
 use App\Traits\Loggable;
+use App\Traits\ImageUpload;
 use Illuminate\Support\Str;
 use Auth;
 use Route;
+use Image;
 
 use App\Models\Category;
 use App\Models\Service;
 
 class ServiceController extends Controller
 {
-    use Loggable;
+    use Loggable, ImageUpload;
     
     /**
      * This method will redirect users back to the login page if not properly authenticated
@@ -32,10 +34,15 @@ class ServiceController extends Controller
      */
     public function index()
     {
-        $services = Service::orderBy('name', 'ASC')->get();
+        //Return all services,including inactive ones
+        $services = Service::Servicies()->get();
+
+        //Return all active categories
+        $categories = Category::ActiveCategories()->get();
 
         $data = [
-            'services'  =>  $services,
+            'services'      =>  $services,
+            'categories'    =>  $categories,
         ];
 
         return view('admin.service.index', $data)->with('i');
@@ -59,7 +66,66 @@ class ServiceController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        //Validate user input fields
+        $this->validateRequest();
+
+        //Image storage directory
+        $imageDirectory = public_path('assets/service-images').'/';
+
+        //Validate if an image file was selected 
+        $imageName = $this->verifyAndStoreImage($request, $imageDirectory, $width = 350, $height = 259);
+
+        //Create record for a new service
+        $createService = Service::create([
+           'user_id'        =>  Auth::id(),
+           'category_id'    =>  $request->category_id,
+           'name'           =>  ucwords($request->name),
+           'description'    =>  $request->description,
+           'image'          =>  $imageName,
+           'updated_at'     =>  null,
+        ]);
+
+       if($createService){
+
+           //Record crurrenlty logged in user activity
+           $type = 'Others';
+           $severity = 'Informational';
+           $actionUrl = Route::currentRouteAction();
+           $message = Auth::user()->email.' created '.ucwords($request->input('name')).' service.';
+           $this->log($type, $severity, $actionUrl, $message);
+
+           return redirect()->route('admin.services.index', app()->getLocale())->with('success', ucwords($request->name).' service was successfully created.');
+
+       }else{
+
+            if(\File::exists($imageDirectory.$imageName)){
+
+                \File::delete($imageDirectory.$imageName);
+            }
+
+           //Record Unauthorized user activity
+           $type = 'Errors';
+           $severity = 'Error';
+           $actionUrl = Route::currentRouteAction();
+           $message = 'An error occurred while '.Auth::user()->email.' was trying to create service.';
+           $this->log($type, $severity, $actionUrl, $message);
+
+           return back()->with('error', 'An error occurred while trying to create service.');
+       }
+
+       return back()->withInput();
+    }
+
+    /**
+     * Validate user input fields
+     */
+    private function validateRequest(){
+        return request()->validate([
+            'name'              =>   'required|unique:services,name',
+            'category_id'       =>   'required',
+            'image'             =>   'required|mimes:jpg,png,jpeg,gif,svg|max:1014',
+            'description'       =>   'required', 
+        ]);
     }
 
     /**
@@ -106,9 +172,68 @@ class ServiceController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update($language, Request $request, $uuid)
     {
-        //
+        //Validate user input fields
+        $request->validate([
+            'name'              =>   'required',
+            'category_id'       =>   'required',
+            'description'       =>   'required', 
+        ]);
+
+        //Image storage directory
+        $imageDirectory = public_path('assets/service-images').'/';
+
+        //Get old service image name
+        $oldImageName = $request->old_post_image;
+
+         //Validate if an image file was selected 
+         if($request->hasFile('image')){
+            //Validate and update image with ImageUpload Trait
+            $imageName = $this->verifyAndStoreImage($request, $imageDirectory, $width = 350, $height = 259);
+
+            //Delete old service image if new image name is given
+            if(!empty($imageName) && ($imageName != $oldImageName)){
+                if(\File::exists($imageDirectory.$oldImageName)){
+
+                    \File::delete($imageDirectory.$oldImageName);
+                }
+            }
+            
+        }else{
+            $imageName = $oldImageName;
+        }
+
+         $updateCategory = Service::where('uuid', $uuid)->update([
+            'category_id'   =>  $request->input('category_id'),
+            'name'          =>  ucwords($request->input('name')),
+            'description'   =>  $request->input('description'),
+            'image'         =>  $imageName,
+        ]);
+
+        if($updateCategory){
+
+            //Record crurrenlty logged in user activity
+            $type = 'Others';
+            $severity = 'Informational';
+            $actionUrl = Route::currentRouteAction();
+            $message = Auth::user()->email.' updated '.ucwords($request->input('name')).' service';
+            $this->log($type, $severity, $actionUrl, $message);
+
+            return redirect()->route('admin.services.index', app()->getLocale())->with('success', ucwords($request->input('name')).' service was successfully updated.');
+
+        }else{
+            //Record Unauthorized user activity
+            $type = 'Errors';
+            $severity = 'Error';
+            $actionUrl = Route::currentRouteAction();
+            $message = 'An error occurred while '.Auth::user()->email.' was trying to update service.';
+            $this->log($type, $severity, $actionUrl, $message);
+
+            return back()->with('error', 'An error occurred while trying to update '.ucwords($request->input('name')).' service.');
+        }
+
+        return back()->withInput();
     }
 
     /**
@@ -120,115 +245,94 @@ class ServiceController extends Controller
     public function destroy($language, $uuid)
     {
         //Verify if uuid exists
-        $category = Category::findOrFail($uuid);
+        $service = Service::findOrFail($uuid);
 
-        //Get number of services assigned to a Category
-        $assignedServices = $category->services()->count();
+        $deleteService = $service->delete();
 
-        //If services count is greater than 0, reassign to Uncategorized Category
-        if((int)$assignedServices > 0){
-
-            //Get ID for each service assgined to a Category
-            foreach($category->services as $service){
-                Service::where('id', $service->id)->update([
-                    'category_id'    => 1
-                ]);
-            }
-
-            //Delete Category
-            $deleteCategory = Category::where('uuid', $uuid)->delete();
-
-        }else{
-
-            //Delete Category if assigned services count is zero
-            $deleteCategory = Category::where('uuid', $uuid)->delete();
-        }
-
-        if($deleteCategory){
-            
+        if($deleteService){
             //Record crurrenlty logged in user activity
             $type = 'Others';
             $severity = 'Informational';
             $actionUrl = Route::currentRouteAction();
-            $message = Auth::user()->email.' deleted '.$category->name.' category';
+            $message = Auth::user()->email.' deleted '.$service->name.' service';
             $this->log($type, $severity, $actionUrl, $message);
 
-            return back()->with('success', $category->name. ' category has been deleted and services have been moved to Uncategorized Category.');
+            return back()->with('success', $service->name. ' service has been deleted.');
             
         }else{
             //Record crurrenlty logged in user activity
             $type = 'Errors';
             $severity = 'Error';
             $actionUrl = Route::currentRouteAction();
-            $message = 'An error occurred while '.Auth::user()->email.' was trying to delete '.$category->name.' category.';
+            $message = 'An error occurred while '.Auth::user()->email.' was trying to delete '.$service->name.' service.';
             $this->log($type, $severity, $actionUrl, $message);
 
-            return back()->with('error', 'An error occurred while trying to delete '.$category->name);
+            return back()->with('error', 'An error occurred while trying to delete '.$service->name);
         } 
     }
 
     public function deactivate($language, $uuid)
     {
-        //Get category record
-        $category = Category::findOrFail($uuid);
+        //Get service record
+        $service = Service::findOrFail($uuid);
 
-        //Update category record with softDelete
-        $deactivateCategory = Category::where('uuid', $uuid)->update([
-            'deleted_at'    => \Carbon\Carbon::now()
+        //Update service status to 0, indicating inactive
+        $deactivateService = Service::where('uuid', $uuid)->update([
+            'status'    => 0
         ]);
 
-        if($deactivateCategory){
+        if($deactivateService){
             //Record crurrenlty logged in user activity
             $type = 'Others';
             $severity = 'Informational';
             $actionUrl = Route::currentRouteAction();
-            $message = Auth::user()->email.' deactivated '.$category->name.' category';
+            $message = Auth::user()->email.' deactivated '.$service->name.' service';
             $this->log($type, $severity, $actionUrl, $message);
 
-            return redirect()->route('admin.categories.index', app()->getLocale())->with('success', 'Category has been deactivated.');
+            return redirect()->route('admin.services.index', app()->getLocale())->with('success', $service->name.' service has been deactivated.');
             
         }else{
             //Record crurrenlty logged in user activity
             $type = 'Errors';
             $severity = 'Error';
             $actionUrl = Route::currentRouteAction();
-            $message = 'An error occurred while '.Auth::user()->email.' was trying to deactivate '.$category->name.' service.';
+            $message = 'An error occurred while '.Auth::user()->email.' was trying to deactivate '.$service->name.' service.';
             $this->log($type, $severity, $actionUrl, $message);
 
-            return back()->with('error', 'An error occurred while trying to deactivate category.');
+            return back()->with('error', 'An error occurred while trying to deactivate service.');
         } 
         
     }
 
     public function reinstate($language, $uuid)
     {
-        //Get category record
-        $category = Category::findOrFail($uuid);
+        //Get service record
+        $service = Service::findOrFail($uuid);
 
-        //Update category record with softDelete
-        $reinstateCategory = Category::where('uuid', $uuid)->update([
-            'deleted_at'    => null
+        //Update service status to 1, indicating active
+        $reinstateService = Service::where('uuid', $uuid)->update([
+            'status'    => 1
         ]);
 
-        if($reinstateCategory){
+        if($reinstateService){
             //Record crurrenlty logged in user activity
             $type = 'Others';
             $severity = 'Informational';
             $actionUrl = Route::currentRouteAction();
-            $message = Auth::user()->email.' reinstated '.$category->name.' category';
+            $message = Auth::user()->email.' reinstated '.$service->name.' service';
             $this->log($type, $severity, $actionUrl, $message);
 
-            return redirect()->route('admin.categories.index', app()->getLocale())->with('success', 'Category has been reinstated.');
+            return redirect()->route('admin.services.index', app()->getLocale())->with('success', $service->name.' service has been reinstated.');
             
         }else{
             //Record crurrenlty logged in user activity
             $type = 'Errors';
             $severity = 'Error';
             $actionUrl = Route::currentRouteAction();
-            $message = 'An error occurred while '.Auth::user()->email.' was trying to reinstate '.$category->name.' service.';
+            $message = 'An error occurred while '.Auth::user()->email.' was trying to reinstate '.$service->name.' service.';
             $this->log($type, $severity, $actionUrl, $message);
 
-            return back()->with('error', 'An error occurred while trying to reinstate category.');
+            return back()->with('error', 'An error occurred while trying to reinstate service.');
         } 
     }
 }

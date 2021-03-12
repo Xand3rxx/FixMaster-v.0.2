@@ -22,27 +22,61 @@ class PaymentDisbursedSeeder extends Seeder
             'user_id'               =>  1,
             'recipient_id'          =>  4,
             'service_request_id'    =>  1,
-            'payment_mode_id'          =>  2,
-            'payment_reference'     =>  '239482347372',
+            'payment_mode_id'          =>  1,
+            'payment_reference'     =>  'ebicab1rp0ylc5j',
             'amount'                =>  1500,
             'payment_date'          =>  '2020-12-31',
             'comment'               =>  'No comment',
-            'created_at'            =>  '2021-01-06 19:53:37',
-            'updated_at'            =>  NULL
         ]);
-                        
+
         PaymentDisbursed::create(
         [
             'user_id'               =>  1,
             'recipient_id'          =>  5,
             'service_request_id'    =>  2,
-            'payment_mode_id'          =>  3,
-            'payment_reference'     =>  '898582347097',
+            'payment_mode_id'       =>  3,
+            'payment_reference'     =>  'ewiblpq1tslb71m',
             'amount'                =>  1500,
-            'payment_date'          =>  '2020-12-31',
+            'payment_date'          =>  '2021-01-09',
             'comment'               =>  'Payment for additional supervison',
-            'created_at'            =>  '2021-01-06 19:53:37',
-            'updated_at'            =>  NULL
         ]);
+
+        PaymentDisbursed::create(
+        [
+            'user_id'               =>  1,
+            'recipient_id'          =>  4,
+            'service_request_id'    =>  3,
+            'payment_mode_id'          =>  2,
+            'payment_reference'     =>  'b6okvlkyjxkbgqf',
+            'amount'                =>  8000,
+            'payment_date'          =>  '2021-02-31',
+            'comment'               =>  'No comment',
+        ]);
+
+        PaymentDisbursed::create(
+        [
+            'user_id'               =>  1,
+            'recipient_id'          =>  2,
+            'service_request_id'    =>  3,
+            'payment_mode_id'       =>  2,
+            'payment_reference'     =>  'o4zydovezhjv0d3',
+            'amount'                =>  10000,
+            'payment_date'          =>  '2021-02-31',
+            'comment'               =>  'No comment',
+        ]);
+
+        PaymentDisbursed::create(
+        [
+            'user_id'               =>  1,
+            'recipient_id'          =>  2,
+            'service_request_id'    =>  1,
+            'payment_mode_id'       =>  2,
+            'payment_reference'     =>  '0iye1ttve9cyod7',
+            'amount'                =>  7500,
+            'payment_date'          =>  '2021-02-31',
+            'comment'               =>  'No comment',
+        ]);
+
+       
    }
 }
