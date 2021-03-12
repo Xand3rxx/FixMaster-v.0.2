@@ -229,7 +229,7 @@
                         <div class="form-group col-md-6">
                             <label for="rate">Rate</label>
                             <div class="input-group">
-                                <input type="number" min='0' id="rate" class="form-control" name="rate"
+                                <input type="number" min="0.1" step="any" id="rate" class="form-control" name="rate" value="{{ old('rate') }}"
                                     aria-label="Dollar amount (with dot and two decimal places)">
                                 <div class="input-group-append">
                                     <span id="percentage" class="input-group-text">0.00</span>
@@ -339,7 +339,12 @@ $(document).ready(function() {
     $('#rate').keyup(function() {
         let rate = $(this).val();
         let newrate = parseFloat(rate) / 100;
+        if (rate) {
+        let newrate = parseFloat(rate) / 100;
         $('#percentage').text(newrate);
+    }else{
+        $('#percentage').text('0'); 
+    }
     });
 
 
@@ -347,6 +352,8 @@ $(document).ready(function() {
     if (rate) {
         let newrate = parseFloat(rate) / 100;
         $('#percentage').text(newrate);
+    }else{
+        $('#percentage').text('0'); 
     }
 
 });

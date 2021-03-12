@@ -246,8 +246,11 @@ class DiscountEditController extends Controller
                     }
                     else
                     {
-                        $dataArry = Account::select('user_id', 'first_name', 'last_name')->orderBy('accounts.user_id', 'ASC')
-                        ->get();  
+                        $dataArry = Account::select('accounts.user_id', 'first_name', 'last_name')
+                        ->join('clients', 'accounts.user_id', '=', 'clients.account_id')
+                        ->join('users', 'users.id', '=', 'accounts.user_id')
+                        ->orderBy('accounts.user_id', 'ASC')
+                    ->get(); 
                     }
                     $name = '';
                     $optionValue = '';
@@ -433,10 +436,10 @@ class DiscountEditController extends Controller
     private function validateFieldRequest($request)
     {
             return request()->validate([
-            'specified_request_count_morethan' => 'numeric',
-            'specified_request_count_equalto' => 'numeric',
-            'specified_request_amount_from'  => 'numeric',
-            'specified_request_amount_to'   => 'numeric',
+            'specified_request_count_morethan' => 'nullable|numeric',
+            'specified_request_count_equalto' => 'nullable|numeric',
+            'specified_request_amount_from'  => 'nullable|numeric',
+            'specified_request_amount_to'   => 'nullable|numeric',
            ]);
         
     }
