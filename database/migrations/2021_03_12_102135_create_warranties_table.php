@@ -22,7 +22,7 @@ class CreateWarrantiesTable extends Migration
             $table->foreignId('service_request_id')->unique();
             $table->dateTime('start_date');
             $table->dateTime('expiration_date')->nullable();
-            $table->enum('warranty_type', );
+            $table->enum('warranty_type', ['free', 'extended']);
             $table->text('reason')->nullable();
         });
     }

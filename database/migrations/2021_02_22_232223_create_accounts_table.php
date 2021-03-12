@@ -20,6 +20,7 @@ class CreateAccountsTable extends Migration
 
             $table->id();
             $table->foreignId('user_id')
+                ->unique()
                 ->constrained()
                 ->onUpdate('cascade')
                 ->onDelete('cascade');

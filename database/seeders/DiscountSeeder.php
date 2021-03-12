@@ -26,8 +26,8 @@ class DiscountSeeder extends Seeder
 
         $discount = new Discount();
         $discount->uuid = Str::uuid('uuid');
-        $discount->name = 'Registration User Discount';
-        $discount->entity = 'user';
+        $discount->name = 'Client Registration Discount';
+        $discount->entity = 'client';
         $discount->notify = '1';
         $discount->rate = 10;
         $discount->duration_start =  date('d-m-y');

@@ -23,7 +23,7 @@ class CSESeeder extends Seeder
         $cse->save();
 
         $cse1 = new \App\Models\User;
-        $cse1->email = 'grace.anjiola@gmail.com';
+        $cse1->email = 'susan.simpson@gmail.com';
         $cse1->password = bcrypt('admin12345');
         $cse1->save();
 
@@ -68,20 +68,20 @@ class CSESeeder extends Seeder
             'avatar'        => 'default-male-avatar.png'
         ]);
 
-        $cseAccount = \App\Models\Account::create([
-            'user_id' =>  $cse->id,
-            'first_name'    => "Benedict",
-            'middle_name'   => "Mayowa",
-            'last_name'     => "Olaoye",
+        $cseAccount1 = \App\Models\Account::create([
+            'user_id' =>  $cse1->id,
+            'first_name'    => "Susan",
+            'middle_name'   => "Ngozi",
+            'last_name'     => "Simpson",
             'gender'        => 'male',
-            'avatar'        => 'default-male-avatar.png'
+            'avatar'        => 'default-female-avatar.png'
         ]);
 
-        $cseAccount = \App\Models\Account::create([
-            'user_id' =>  $cse->id,
-            'first_name'    => "Benedict",
-            'middle_name'   => "Mayowa",
-            'last_name'     => "Olaoye",
+        $cseAccount2 = \App\Models\Account::create([
+            'user_id' =>  $cse2->id,
+            'first_name'    => "Jackson",
+            'middle_name'   => "Chisom",
+            'last_name'     => "Okoye",
             'gender'        => 'male',
             'avatar'        => 'default-male-avatar.png'
         ]);
@@ -92,6 +92,20 @@ class CSESeeder extends Seeder
         $cseTable->account_id = $cseAccount->id;
         $cseTable->referral_id = '1';
         $cseTable->bank_id = '1';
+        $cseTable->save();
+
+        $cseTable = new Cse();
+        $cseTable->user_id = $cse1->id;
+        $cseTable->account_id = $cseAccount1->id;
+        $cseTable->referral_id = '2';
+        $cseTable->bank_id = '2';
+        $cseTable->save();
+
+        $cseTable = new Cse();
+        $cseTable->user_id = $cse2->id;
+        $cseTable->account_id = $cseAccount2->id;
+        $cseTable->referral_id = '3';
+        $cseTable->bank_id = '3';
         $cseTable->save();
     }   
 }

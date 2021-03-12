@@ -172,7 +172,7 @@ class DiscountController extends Controller
 
     public function show($language, $discount)
     {
-        $status = Discount::findOrFail($discount);
+        $status = Discount::where('uuid', $discount)->first();
         $data = ['discount' => $status, ];
         $data['entities'] = $this->entityArray();
         $data['states'] = State::select('id', 'name')->orderBy('name', 'ASC')
