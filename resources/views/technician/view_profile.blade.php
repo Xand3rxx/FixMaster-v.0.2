@@ -26,15 +26,15 @@
               <div class="row">
                 <div class="col-6 col-sm">
                   <label class="tx-10 tx-medium tx-spacing-1 tx-color-03 tx-uppercase tx-sans mg-b-10">Firstname</label>
-                  <p class="mg-b-0"></p>
+                  <p class="mg-b-0">{{$user->account->first_name}}</p></p>
                 </div><!-- col -->
                 <div class="col-6 col-sm">
                   <label class="tx-10 tx-medium tx-spacing-1 tx-color-03 tx-uppercase tx-sans mg-b-10">Middlename</label>
-                  <p class="mg-b-0"></p>
+                  <p class="mg-b-0">{{$user->account->middle_name}}</p>
                 </div><!-- col -->
                 <div class="col-sm mg-t-20 mg-sm-t-0">
                   <label class="tx-10 tx-medium tx-spacing-1 tx-color-03 tx-uppercase tx-sans mg-b-10">Lastname</label>
-                  <p class="mg-b-0"></p>
+                  <p class="mg-b-0">{{$user->account->last_name}}</p>
                 </div><!-- col -->
               </div><!-- row -->
 
@@ -43,32 +43,32 @@
               <div class="row row-sm">
                 <div class="col-6 col-sm-4">
                   <label class="tx-10 tx-medium tx-spacing-1 tx-color-03 tx-uppercase tx-sans mg-b-10">Email Address</label>
-                  <p class="tx-primary mg-b-0"></p>
+                  <p class="tx-primary mg-b-0">{{$user->email}}</p>
                 </div>
                 <div class="col-6 col-sm-4">
                   <label class="tx-10 tx-medium tx-spacing-1 tx-color-03 tx-uppercase tx-sans mg-b-10">Mobile Phone</label>
-                  <p class="tx-primary tx-rubik mg-b-0"></p>
+                  <p class="tx-primary tx-rubik mg-b-0">{{$user->phone->number}}</p>
                 </div>
                 <div class="col-6 col-sm-4 mg-t-20 mg-sm-t-0">
                   <label class="tx-10 tx-medium tx-spacing-1 tx-color-03 tx-uppercase tx-sans mg-b-10">Work Phone</label>
                   {{-- <p class="tx-primary tx-rubik mg-b-0">{{$otherPhoneNumber?$otherPhoneNumber:'+234097865410'}}</p> --}}
-                  <p class="tx-primary tx-rubik mg-b-0"></p>
+                  <p class="tx-primary tx-rubik mg-b-0">{{$user->phone->number}}</p>
                 </div>
                 <div class="col-sm-4 mg-t-20 mg-sm-t-30">
                   <label class="tx-10 tx-medium tx-spacing-1 tx-color-03 tx-uppercase tx-sans mg-b-10">Company</label>
-                  <p class="mg-b-0"></p>
+                  <p class="mg-b-0">Fix-Master</p>
                 </div>
                 <div class="col-sm-4 mg-t-20 mg-sm-t-30">
                   <label class="tx-10 tx-medium tx-spacing-1 tx-color-03 tx-uppercase tx-sans mg-b-10">Job Position</label>
-                  <p class="mg-b-0"></p>
+                  <p class="mg-b-0">Technician</p>
                 </div>
                 <div class="col-sm-6 mg-t-20 mg-sm-t-30">
                   <label class="tx-10 tx-medium tx-spacing-1 tx-color-03 tx-uppercase tx-sans mg-b-10">Home Address</label>
-                  <p class="mg-b-0"></p>
+                  <p class="mg-b-0">8284 Ajose Adeogun Street, Victoria Island, Lagos, Nigeria</p>
                 </div>
                 <div class="col-sm-6 mg-t-20 mg-sm-t-30">
                   <label class="tx-10 tx-medium tx-spacing-1 tx-color-03 tx-uppercase tx-sans mg-b-10">Work Address</label>
-                  <p class="mg-b-0"></p>
+                  <p class="mg-b-0">8284 Ajose Adeogun Street, Victoria Island, Lagos, Nigeria</p>
                 </div>
                 <div class="col-sm-6 mg-t-20 mg-sm-t-30">
                     <label class="tx-10 tx-medium tx-spacing-1 tx-color-03 tx-uppercase tx-sans mg-b-10">Rating</label>

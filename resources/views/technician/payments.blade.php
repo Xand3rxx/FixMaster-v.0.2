@@ -123,10 +123,10 @@
                 </tr>
               </thead>
               <tbody>
-                {{-- @foreach ($payments as $payment)
+                @foreach ($payments as $payment)
                   <tr>
-                  <td class="tx-color-03 tx-center">{{ ++$i }}</td>
-                  <td class="tx-medium">{{ $payment->serviceRequest->job_reference }}</td>
+                  <td class="tx-color-03 tx-center">{{ $loop->iteration }}</td>
+                  <td class="tx-medium">{{ $payment['job_reference'] }}</td>
                     <td class="tx-medium">{{ $payment->payment_reference }}</td>
                     <td class="tx-medium">{{ $payment->user->fullName->name }}</td>
                     <td class="tx-medium">
@@ -145,7 +145,7 @@
                     <td class="text-medium">{{ $payment->comment }}</td>
                     <td class="text-medium tx-center">{{ Carbon\Carbon::parse($payment->payment_date, 'UTC')->isoFormat('MMMM Do YYYY') }}</td>
                   </tr>
-                @endforeach --}}
+                @endforeach }}
                   <tr>
                   <td class="tx-color-03 tx-center">{{ ++$i }}</td>
                   <td class="tx-medium">REF-234234723</td>

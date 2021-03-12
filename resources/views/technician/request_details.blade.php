@@ -15,7 +15,8 @@
               <li class="breadcrumb-item active" aria-current="page">Request Details</li>
             </ol>
           </nav>
-          <h4 class="mg-b-0 tx-spacing--1">Job: REF-234234723</h4><hr>
+          @foreach ($serviceRequest as $serviceRequest)
+          <h4 class="mg-b-0 tx-spacing--1">Job: {{ $serviceRequest['job_reference'] }}</h4><hr>
           <div class="media align-items-center">
             <span class="tx-color-03 d-none d-sm-block">
               {{-- <i data-feather="credit-card" class="wd-60 ht-60"></i> --}}
@@ -28,7 +29,7 @@
           </div><!-- media -->
         </div>
       </div>
-
+     
       <div class="row row-xs">
         <div class="col-lg-12 col-xl-12">
           <div class="card">
@@ -55,14 +56,14 @@
                         </tr>
                       </thead>
                       <tbody>
-                        {{-- @foreach ($serviceRequestProgreses as $progress) --}}
+                    
                           <tr>
-                            <td class="tx-color-03 tx-center">{{ ++$i }}</td>
+                            <td class="tx-color-03 tx-center">{{$loop->iteration }}</td>
                             <td class="tx-medium">David Akinsola (CSE)</td>
                             <td class="tx-medium text-success">Enroute to Clien't house</td>
                             <td class="text-center">{{ Carbon\Carbon::parse('2020-12-28 16:58:54', 'UTC')->isoFormat('MMMM Do YYYY, h:mm:ssa') }}</td>
                           </tr>
-                        {{-- @endforeach --}}
+                          @endforeach
                       </tbody>
                     </table>
                   </div><!-- table-responsive -->
