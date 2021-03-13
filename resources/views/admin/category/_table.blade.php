@@ -11,41 +11,41 @@
       </tr>
     </thead>
     <tbody>
-      @foreach ($categories as $service)
+      @foreach ($categories as $category )
         <tr>
           <td class="tx-color-03 tx-center">{{ ++$i }}</td>
-          <td class="tx-medium">{{ $service->name }}</td>
-          <td>{{ $service->user->email }}</td>
-          <td class="tx-medium text-center">{{ $service->services()->count() }}</td>
-          @if(empty($service->deleted_at)) 
+          <td class="tx-medium">{{ $category->name }}</td>
+          <td>{{ $category->user->email }}</td>
+          <td class="tx-medium text-center">{{ $category->services()->count() }}</td>
+          @if(empty($category->deleted_at)) 
           <td class="text-success">Active</td>
           @else 
             <td class="text-danger">Inactive</td>
           @endif
-          <td>{{ Carbon\Carbon::parse($service->created_at, 'UTC')->isoFormat('MMMM Do YYYY, h:mm:ssa') }}</td>
+          <td>{{ Carbon\Carbon::parse($category->created_at, 'UTC')->isoFormat('MMMM Do YYYY, h:mm:ssa') }}</td>
           <td class=" text-center">
             <div class="dropdown-file">
               <a href="" class="dropdown-link" data-toggle="dropdown"><i data-feather="more-vertical"></i></a>
               <div class="dropdown-menu dropdown-menu-right">
              
-              @if($service->id > '1')
-                <a href="#serviceDetails" data-toggle="modal" class="dropdown-item details text-primary" title="View {{ $service->name}} details" data-url="{{ route('admin.categories.show', ['category'=>$service->uuid, 'locale'=>app()->getLocale()] ) }}" data-service-name="{{ $service->name}}" id="service-details"><i class="far fa-clipboard"></i> Details</a>
+              @if($category->id > '1')
+                <a href="#serviceDetails" data-toggle="modal" class="dropdown-item details text-primary" title="View {{ $category->name}} details" data-url="{{ route('admin.categories.show', ['category'=>$category->uuid, 'locale'=>app()->getLocale()] ) }}" data-service-name="{{ $category->name}}" id="service-details"><i class="far fa-clipboard"></i> Details</a>
 
-                <a href="#editService" data-toggle="modal" id="service-edit" title="Edit {{ $service->name }}" data-url="{{ route('admin.categories.edit', ['category'=>$service->uuid, 'locale'=>app()->getLocale()]) }}" data-service-name="{{ $service->name }}" data-id="{{ $service->uuid }}" class="dropdown-item details text-info"><i class="far fa-edit"></i> Edit</a>
+                <a href="#editService" data-toggle="modal" id="service-edit" title="Edit {{ $category->name }}" data-url="{{ route('admin.categories.edit', ['category'=>$category ->uuid, 'locale'=>app()->getLocale()]) }}" data-service-name="{{ $category->name }}" data-id="{{ $category->uuid }}" class="dropdown-item details text-info"><i class="far fa-edit"></i> Edit</a>
 
-                @if(empty($service->deleted_at)) 
-                  <a data-url="{{ route('admin.categories.deactivate', ['category'=>$service->uuid, 'locale'=>app()->getLocale()]) }}" class="dropdown-item details text-warning deactivate-entity" title="Deactivate {{ $service->name}}" style="cursor: pointer;"><i class="fas fa-ban"></i> Deactivate</a>
+                @if(empty($category->deleted_at)) 
+                  <a data-url="{{ route('admin.categories.deactivate', ['category'=>$category->uuid, 'locale'=>app()->getLocale()]) }}" class="dropdown-item details text-warning deactivate-entity" title="Deactivate {{ $category->name}}" style="cursor: pointer;"><i class="fas fa-ban"></i> Deactivate</a>
                 @else
-                  <a href="{{ route('admin.categories.reinstate', ['category'=>$service->uuid, 'locale'=>app()->getLocale()]) }}" class="dropdown-item details text-success" title="Reinstate {{ $service->name}}"><i class="fas fa-undo"></i> Reinstate</a>
+                  <a href="{{ route('admin.categories.reinstate', ['category'=>$category->uuid, 'locale'=>app()->getLocale()]) }}" class="dropdown-item details text-success" title="Reinstate {{ $category->name}}"><i class="fas fa-undo"></i> Reinstate</a>
                 @endif
 
-                <a href="#serviceReassign" data-toggle="modal" class="dropdown-item details text-secondary" id="service-reassign" data-url="{{ route('admin.categories.reassign', ['category'=>$service->uuid, 'locale'=>app()->getLocale()]) }}" data-service-name="{{ $service->name}}" title="Reassign {{ $service->name}} categories"><i class="fas fa-arrows-alt"></i> Reassign</a>
+                <a href="#serviceReassign" data-toggle="modal" class="dropdown-item details text-secondary" id="service-reassign" data-url="{{ route('admin.categories.reassign', ['category'=>$category->uuid, 'locale'=>app()->getLocale()]) }}" data-service-name="{{ $category->name}}" title="Reassign {{ $category->name}} categories"><i class="fas fa-arrows-alt"></i> Reassign</a>
 
-                <a data-url="{{ route('admin.categories.delete', ['category'=>$service->uuid, 'locale'=>app()->getLocale()]) }}" class="dropdown-item delete-entity text-danger" title="Delete {{ $service->name}}" style="cursor: pointer;"><i class="fas fa-trash"></i> Delete</a>
+                <a data-url="{{ route('admin.categories.delete', ['category'=>$category->uuid, 'locale'=>app()->getLocale()]) }}" class="dropdown-item delete-entity text-danger" title="Delete {{ $category->name}}" style="cursor: pointer;"><i class="fas fa-trash"></i> Delete</a>
 
               @else
 
-                <a href="#serviceReassign" data-toggle="modal" class="dropdown-item details text-primary" id="service-reassign" data-url="{{ route('admin.categories.reassign', ['category'=>$service->uuid, 'locale'=>app()->getLocale()]) }}" data-service-name="{{ $service->name}}" title="View {{ $service->name}} categories"><i class="fas fa-clipboard"></i> Details</a>
+                <a href="#serviceReassign" data-toggle="modal" class="dropdown-item details text-primary" id="service-reassign" data-url="{{ route('admin.categories.reassign', ['category'=>$category->uuid, 'locale'=>app()->getLocale()]) }}" data-service-name="{{ $category->name}}" title="View {{ $category->name}} categories"><i class="fas fa-clipboard"></i> Details</a>
               
               @endif
               </div>

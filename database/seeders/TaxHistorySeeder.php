@@ -22,11 +22,13 @@ class TaxHistorySeeder extends Seeder
                 'user_id'       =>  1,
                 'tax_id'        =>  1,
                 'percentage'    =>  5,
+                'created_at'    =>  '2021-01-01 6:28:38'
             ),
             array(
                 'user_id'       =>  1,
                 'tax_id'        =>  1,
                 'percentage'    =>  7.5,
+                'created_at'    =>  '2021-03-12 6:28:38'
             ),
         );
 

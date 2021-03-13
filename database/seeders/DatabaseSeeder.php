@@ -31,13 +31,16 @@ class DatabaseSeeder extends Seeder
             ServiceRequestStatusSeeder::class,
             CountrySeeder::class,
             PaymentModeSeeder::class,
-            // PaymentDisbursedSeeder::class,
+            PaymentDisbursedSeeder::class,
             ToolInventorySeeder::class,
             TaxSeeder::class,
             TaxHistorySeeder::class,
             QASeeder::class,
             DiscountSeeder::class,
             TechnicianSeeder::class,
+            PriceSeeder::class,
+            PriceHistorySeeder::class,
+            BankSeeder::class,
         ]);
     }
 }

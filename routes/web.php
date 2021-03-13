@@ -20,6 +20,8 @@ use App\Http\Controllers\Admin\User\ClientController as AdministratorClientContr
 use App\Http\Controllers\Technician\TechnicianProfileController;
 use App\Http\Controllers\Admin\EWalletController;
 use App\Http\Controllers\AdminLocationRequestController;
+use App\Http\Controllers\Admin\PriceController;
+
 
 
 /*
@@ -145,6 +147,10 @@ Route::prefix('admin')->group(function () {
         Route::get('/ewallet/clients',                      [EWalletController::class, 'clients'])->name('ewallet.clients'); 
         Route::get('/ewallet/client/history',               [EWalletController::class, 'clientHistory'])->name('ewallet.client_history'); 
         Route::get('/ewallet/transactions',                 [EWalletController::class, 'transactions'])->name('ewallet.transactions'); 
+
+
+        //Routes for Price Management
+        Route::resource('booking-fees',                     PriceController::class);
 
     });
 });

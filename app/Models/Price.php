@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Str;
 
-class Tax extends Model
+class Price extends Model
 {
     use HasFactory;
 
@@ -20,7 +20,7 @@ class Tax extends Model
     public $incrementing = false;
     
     protected $fillable = [
-        'uuid', 'user_id', 'name', 'percentage', 'applicable', 'description',
+        'uuid', 'user_id', 'name', 'description', 'amount'
     ];
 
     /**
@@ -40,20 +40,9 @@ class Tax extends Model
     protected static function booted()
     {
         // Create a uuid when a new Tax is to be created 
-        static::creating(function ($tax) {
-            $tax->uuid = (string) Str::uuid(); 
+        static::creating(function ($price) {
+            $price->uuid = (string) Str::uuid(); 
         });
-    }
-
-    /** 
-     * Scope a query to only include availaible tools
-     * 
-     * @param \Illuminate\Database\Eloquent\Builder $query
-     * @return \Illuminate\Database\Eloquent\Builder
-     */    
-    public function scopeTaxes($query){
-        return $query->select('*')
-        ->orderBy('name', 'ASC');
     }
 
     public function user()
@@ -66,14 +55,13 @@ class Tax extends Model
         return $this->hasMany(User::class, 'user_id')->withDefault();
     }
 
-    public function taxHistory()
+    public function priceshistory()
     {
-        return $this->belongsTo(TaxHistory::class, 'tax_id', 'id');
+        return $this->belongsTo(PriceHistory::class, 'price_id', 'id');
     }
 
-    public function taxHistories()
+    public function priceHistories()
     {
-        return $this->hasMany(TaxHistory::class, 'tax_id', 'id')->orderBy('created_at', 'DESC');
+        return $this->hasMany(PriceHistory::class, 'price_id', 'id')->orderBy('created_at', 'DESC');
     }
-
 }

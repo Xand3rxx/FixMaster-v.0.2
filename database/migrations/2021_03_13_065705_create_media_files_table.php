@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateServiceRequestPaymentsTable extends Migration
+class CreateMediaFilesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,18 +13,15 @@ class CreateServiceRequestPaymentsTable extends Migration
      */
     public function up()
     {
-        Schema::create('service_request_payments', function (Blueprint $table) {
+        Schema::create('media_files', function (Blueprint $table) {
             $table->engine = 'InnoDB';
             $table->charset = 'utf8mb4';
             $table->collation = 'utf8mb4_unicode_ci';
 
             $table->id();
-            $table->foreignId('user_id');
-            $table->foreignId('payment_id')->unique();
-            $table->foreignId('service_request_id');
-            $table->integer('amount')->unsigned();
-            $table->string('unique_id', 191)->unique()->comment('e.g. REF-36786429');
-            $table->enum('payment_type', ['initial-service-request', 'diagnosis', 'RFQ', 'others']);
+		    $table->foreignId('client_id');
+            $table->string('original_name')->unique();
+            $table->string('unique_name')->unique();
             $table->softDeletes();
             $table->timestamps();
         });
@@ -37,6 +34,6 @@ class CreateServiceRequestPaymentsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('service_request_payments');
+        Schema::dropIfExists('media_files');
     }
 }
