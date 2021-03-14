@@ -19,7 +19,7 @@ class UserSeeder extends Seeder
 
         $user1 = new User();
         $user1->email = 'dev@fix-master.com';
-        $user1->password = bcrypt('admin12345');
+        $user1->password = bcrypt('password');
         $user1->save();
         $user1->roles()->attach($developer);
         $user1->permissions()->attach($manageUsers);

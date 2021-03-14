@@ -70,6 +70,7 @@ class DiscountController extends Controller
         'services' => isset($request->services)?$request->services:'',
         'estate' => isset($request->estate_name) ? $request->estate_name: ''
        ];
+  
        
         $discount = Discount::create([
             'name' => $request->input('discount_name') ,
@@ -107,7 +108,7 @@ class DiscountController extends Controller
                 case 'service':
                     if (!empty($request->services)){
                         $update = $this->createServiceDiscount($request, $discount);
-                    }if(!empty($request->category)){
+                    }else{
                         $update = $this->createAllServiceDiscount($request, $discount);
                     }
                  
@@ -429,10 +430,10 @@ class DiscountController extends Controller
                     else
                     {
                         $dataArry = Account::select('accounts.user_id', 'first_name', 'last_name')
-                                ->join('clients', 'accounts.user_id', '=', 'clients.account_id')
-                                ->join('users', 'users.id', '=', 'accounts.user_id')
-                                ->orderBy('accounts.user_id', 'ASC')
-                            ->get();
+                        ->join('clients', 'accounts.user_id', '=', 'clients.account_id')
+                        ->join('users', 'users.id', '=', 'accounts.user_id')
+                        ->orderBy('accounts.user_id', 'ASC')
+                        ->get();
                     }
                     $name = '';
                     $optionValue = '';
@@ -648,7 +649,6 @@ class DiscountController extends Controller
 
 
  
-
     private function createEstateTypeUsersDiscount($request, $discounts, $type)
     {
        
@@ -712,10 +712,6 @@ class DiscountController extends Controller
         return true;
     }
 
-
-
-
-   
 
     private function createAllServiceDiscount($request, $discounts)
     {    

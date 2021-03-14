@@ -21,8 +21,7 @@ use App\Traits\Loggable;
 
 class DiscountEditController extends Controller
 {
-    use Utility;
-    use Loggable;
+    use Utility,Loggable;
     //
    
 
@@ -44,6 +43,7 @@ class DiscountEditController extends Controller
         return response()->view('admin.discount.edit', $data);
     }
 
+   
 
 
     public function categoryEdit(Request $request)
@@ -83,6 +83,7 @@ class DiscountEditController extends Controller
             parse_str($request->form, $fields);
             $services = json_decode($fields['edit_services'][0]);
             $category =  json_decode($fields['edit_category'][0]);
+        
             $service = []; 
             if (in_array("all", $category))
             {
@@ -97,11 +98,16 @@ class DiscountEditController extends Controller
             }
             $optionValue = '';
             $optionValue .= "<option value='all-services' class='select-all'>All services </option>";
+
             foreach ($service as $row)
             {
+                $selected = '';
+                if($services){
                 $selected = in_array($row->id, $services)? 'selected': '';
+                }
                 $optionValue .= "<option value='$row->id' $selected >$row->name</option>";
             }
+           
             $data = array(
                 'service' => $optionValue
             );
@@ -377,7 +383,7 @@ class DiscountEditController extends Controller
                     case 'service':
                         if (!empty($request->services)){
                             $update = $this->updateServiceDiscount($request, $discount);
-                        }if(!empty($request->category)){
+                        }else{
                             $update = $this->updateAllServiceDiscount($request, $discount);
                         }
                      
@@ -555,54 +561,28 @@ class DiscountEditController extends Controller
 
 
     private function updateServiceDiscount($request, $discounts)
-    {     
-        $allservices = [];
-        $old_services = [];
+    {   
        
-        $services = ServiceDiscount::select('*')->where('discount_id', $request->discount_id)->get();
-       //get previous service discount users
-
-        foreach ($services as $service){
-            $allservices[]=  $service->uuid;
-            if(!in_array($service->uuid, $request->services)){
-                $old_users [] = $service->uuid; // to delete services not inside updated request
-            }          
+        $services_uuid = Service::select('uuid')->whereIn('id', $request->services)->get();
+        $discount = ServiceDiscount::where(['discount_id'=>$request->discount_id])->delete();
+        if($discount){
+            foreach ($services_uuid as $service)
+            {                      
+            $services = ServiceDiscount::create([
+                'discount_id' => $request->discount_id,
+                'discount_name' => $request->input('discount_name') ,
+                'entity' => $request->input('entity') , 
+                'notify' => $request->input('notify') ,
+                'rate' => $request->input('rate') ,
+                'description' => $request->input('description') ,
+                'created_by' => Auth::user()->email,
+                'service_id'=> $service->uuid,
+                'status' => 'activate'
+                ]);
+            }
         }
-     
-     //get update request service uuid
-        $all_services = Service::select('uuid')->whereIn('id', $request->services)->get(); 
-     //loop new service request
-        foreach ($all_services as $service)
-        {                     
-        
-        if(in_array($service,  $allservices))   {
-            $discount = ServiceDiscount::where(['service_id'=>$service,'discount_id'=>$request->discount_id])->update([
-            'discount_name' => $request->input('discount_name') ,
-            'entity' => $request->input('entity') , 
-            'notify' => $request->input('notify') ,
-            'rate' => $request->input('rate') ,
-            'status' => 'activate',
-            'service_id'=> $service->uuid
-            ]);
-        } else{
-            $service = ServiceDiscount::create([
-            'discount_id' => $request->discount_id,
-            'discount_name' => $request->input('discount_name') ,
-            'entity' => $request->input('entity') , 
-            'notify' => $request->input('notify') ,
-            'rate' => $request->input('rate') ,
-            'description' => $request->input('description') ,
-            'created_by' => Auth::user()->email,
-            'service_id'=> $service->uuid,
-            'status' => 'activate'
-            ]);
-        }    
-
-    }
-    foreach ($old_services as $service)
-    { 
-        $discount = ServiceDiscount::where(['service_id'=> $service, 'discount_id'=>$request->discount_id])->delete();
-    } 
+      
+  
         return true;
     }
 
