@@ -156,7 +156,7 @@ class ClientSeeder extends Seeder
         $clientTable->user_id = $client4->id;
         $clientTable->account_id = $clientAccount4->id;
         $clientTable->estate_id = '3';
-        $clientTable->	profession_id = '14';
+        $clientTable->	profession_id = '22';
         $clientTable->save();
     }
 }

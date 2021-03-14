@@ -48,11 +48,13 @@
 
         <li class="nav-item {{ Route::currentRouteNamed('admin.activity-log.index') ? 'active' : '' }}"><a href="{{ route('admin.activity-log.index', app()->getLocale()) }}" class="nav-link"><i data-feather="activity"></i> <span>Activity Log</span></a></li>
 
-        <li class="nav-item with-sub {{ Route::currentRouteNamed('admin.categories.index', 'admin.services.index') ? 'active show' : '' }}">
+        <li class="nav-item with-sub {{ Route::currentRouteNamed('admin.categories.index', 'admin.services.index', 'admin.booking-fees.index') ? 'active show' : '' }}">
           <a href="" class="nav-link"><i data-feather="aperture"></i> <span>Category & Service</span></a>
           <ul>
+          <li class="{{ Route::currentRouteNamed('admin.booking-fees.index') ? 'active' : '' }}"><a href="{{ route('admin.booking-fees.index', app()->getLocale()) }}">Booking Fee</a></li>
             <li class="{{ Route::currentRouteNamed('admin.categories.index') ? 'active' : '' }}"><a href="{{ route('admin.categories.index', app()->getLocale()) }}">Category List</a></li>
             <li class="{{ Route::currentRouteNamed('admin.services.index') ? 'active' : '' }}"><a href="{{ route('admin.services.index', app()->getLocale()) }}">Services List</a></li>
+            <li class=""><a href="#">Service Request Status</a></li>
           </ul>
         </li>
 
@@ -80,7 +82,7 @@
           </ul>
         </li>
 
-        <li class="nav-item"><a href="" class="nav-link"><i data-feather="credit-card"></i> <span>Income/Commission</span></a></li>
+        <li class="nav-item"><a href="" class="nav-link"><i data-feather="bar-chart"></i> <span>Income/Commission</span></a></li>
 
         <li class="nav-item"><a href="" class="nav-link"><i data-feather="briefcase"></i> <span>Job Card</span></a></li>
 
@@ -111,20 +113,21 @@
           </ul>
         </li>
 
+        <li class="nav-item with-sub {{ Route::currentRouteNamed('admin.disbursed_payments', 'admin.received_payments') ? 'active show' : '' }}">
+          <a href="" class="nav-link"><i data-feather="credit-card"></i> <span>Payments</span></a>
+          <ul> 
+            <li class="{{ Route::currentRouteNamed('') ? 'active' : '' }}"><a href="#">Disbursed</a></li>
+            <li class="{{ Route::currentRouteNamed('') ? 'active' : '' }}"><a href="#">Received</a></li>
+            <li class="{{ Route::currentRouteNamed('') ? 'active' : '' }}"><a href="#">Verify</a></li>
+          </ul>
+        </li>
+
         <li class="nav-item with-sub {{ Route::currentRouteNamed('list_payment_gateway') ? 'active show' : '' }}">
             <a href="" class="nav-link"><i data-feather="credit-card"></i> <span>Payment Gateway</span></a>
             <ul>
               <li class="{{ Route::currentRouteNamed('list_payment_gateway') ? 'active' : '' }}"><a href="{{ route('admin.list_payment_gateway', app()->getLocale()) }}">List</a></li>
             </ul>
           </li>
-
-        <li class="nav-item with-sub ">
-          <a href="#" class="nav-link"><i data-feather="cpu"></i> <span>Price Management</span></a>
-          <ul>
-            <li class=""><a href="#">Add</a></li>
-            <li class=""><a href="#">List</a></li>
-          </ul>
-        </li>
 
         <li class="nav-item with-sub {{ Route::currentRouteNamed('admin.category', 'admin.job', 'admin.category_reviews') ? 'active show' : '' }}">
           <a href="" class="nav-link"><i data-feather="star"></i> <span>Rating</span></a>
@@ -178,7 +181,6 @@
         <li class="nav-item with-sub">
           <a href="" class="nav-link"><i data-feather="sliders"></i> <span>Utilities</span></a>
           <ul>
-            <li class=""><a href="#">Project Status</a></li>
             <li class=""><a href="#">Reset Password</a></li>
             <li class=""><a href="#">Verify Payment</a></li>
           </ul>

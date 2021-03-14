@@ -20,10 +20,6 @@ class SetLocale
         $locale = $request->segment(1);
         if (!array_key_exists($locale, config('app.available_locales'))) {
             return abort(404);
-            // $segments = $request->segments();
-            // $segments[0] = config('app.locale');
-            // dd(url(implode('/', $segments)));
-            // return redirect(url(implode('/', $segments)));
         }
         app()->setLocale($locale);
         return $next($request);
