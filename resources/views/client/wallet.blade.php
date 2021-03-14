@@ -103,7 +103,18 @@
         margin-top: -10px;
     }
 
+
+
+
+
+.avatar.avatar-ex-smm {
+    max-height: 75px;
+}
+
+
 </style>
+
+
 <div class="col-lg-8 col-12">
     <div class="border-bottom pb-4 row">
         {{-- <h5>Femi Joseph</h5>
@@ -114,7 +125,7 @@
                 <div class="media-body content ml-3">
                     <h4 class="title mb-0">Transactions</h4>
                 <p class="text-muted mb-0">3</p>
-                    {{-- <p class="text-muted mb-0"><a href="javascript:void(0)" class="text-primary">CircleCi</a> @London, UK</p>     --}}
+                    <!-- {{-- <p class="text-muted mb-0"><a href="javascript:void(0)" class="text-primary">CircleCi</a> @London, UK</p>     --}} -->
                 </div>
             </div>
 
@@ -126,7 +137,7 @@
                 <div class="media-body content ml-3">
                     <h4 class="title mb-0">Amount Spent</h4>
                     <p class="text-muted mb-0">₦30,000.00</p>
-                    {{-- <p class="text-muted mb-0"><a href="javascript:void(0)" class="text-primary">CircleCi</a> @London, UK</p>     --}}
+                    <!-- {{-- <p class="text-muted mb-0"><a href="javascript:void(0)" class="text-primary">CircleCi</a> @London, UK</p>     --}} -->
                 </div>
             </div>
         </div>
@@ -137,7 +148,7 @@
                 <div class="media-body content ml-3">
                     <h4 class="title mb-0">Amount Recieved</h4>
                     <p class="text-muted mb-0">₦84,560.00</p>
-                    {{-- <p class="text-muted mb-0"><a href="javascript:void(0)" class="text-primary">CircleCi</a> @London, UK</p>     --}}
+                    <!-- {{-- <p class="text-muted mb-0"><a href="javascript:void(0)" class="text-primary">CircleCi</a> @London, UK</p>     --}} -->
                 </div>
             </div>
         </div>
@@ -167,57 +178,162 @@
 
     <div class="tab-content" id="pills-tabContent">
         <div class="tab-pane fade show active" id="fund-account" role="tabpanel" aria-labelledby="fund-account-tab">
-            <div class="col-md-12 mt-4 pt-2">
-                <h5>Fund Account :</h5>
-                <form>
-                    <div class="row">
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label>Amount : </label>
-                                <input name="name" id="number" type="tel" class="form-control font-weight-bold" maxlength="9" required placeholder="Amount : ">
-                            </div>
-                        </div><!--end col-->
-        
-                        <div class="col-md-6">
-                            <div class="form-group">
+          <!-- payment options starts here -->
+        <div class="border-bottom pb-4 row">      
 
-                            <label>Payment Gateway : </label>
-                                {{-- <br> --}}
-                            {{-- <label>
-                                <input type="radio" name="profile_avatar" value="">
-                                <img src="{{ asset('assets/images/paystack.png') }}" alt="" class="img-fluid avatar avatar-small mx-2 mt-4 rounded-circl shadow">
-                            </label>
-        
-                            <label>
-                                <input type="radio" name="profile_avatar" value="">
-                                <img src="{{ asset('assets/images/flutterwave.jpg') }}" alt="" class="img-fluid avatar avatar-small mx-2 mt-4 rounded-circl shadow">
-                            </label> --}}
-
-                            <select class="vodiapicker form-control font-weight-bold">
-                                <option value="" data-thumbnail="" class="test">Select...</option>
-                                <option value="paystack" class="test" data-thumbnail="{{ asset('assets/images/paystack.png') }}">Paystack</option>
-                                <option value="flutterwave" class="test" data-thumbnail="{{ asset('assets/images/flutterwave.jpg') }}">Flutterwave</option>
-                            </select>
-        
-                            <div class="lang-select">
-                                <button class="btn-select" value=""></button>
-                                <div class="b">
-                                    <ul id="a"></ul>
-                                </div>
-                            </div>
-                            </div><!--end col-->
-                        </div><!--end col-->
+        @foreach($gateways as $val) 
+            <div class="col-md-6 mt-4">
+                <div class="media key-feature align-items-center p-3 rounded shadow mt-4">
+                <a href="#" data-toggle="modal" data-target="#modal-form{{$val->id}}" >
+                    <img src="{{ asset('assets/images') }}/{{$val->name}}.png" class="avatar avatar-ex-smm" alt="">
+                </a>
+                    <a href="javascript:void(0)" class="text-primary">
+                    <div class="media-body content ml-3">
+                    
+                        <h4 class="title mb-0">{{$val->name}}</h4>
+                        <p class="text-muted mb-0">₦30,000.00</p>
+                        <!-- <p class="text-muted mb-0"> @London, UK</p>  -->
                         
-                        </div>
                     </div>
-                
-                    {{-- <div class="row mb-4"> --}}
-                        <div class="col-md-12">
-                            <input type="submit" id="submit" name="send" class="submitBnt btn btn-primary" value="Make Payment">
-                        </div><!--end col-->
-                    {{-- </div><!--end row--> --}}
-                </form><!--end form-->
+                    </a>
+                </div>
+            </div>
+
+
+
+     <!-- 
+      <div class="modal fade" id="modal-form{{$val->id}}" tabindex="-1" role="dialog" aria-labelledby="modal-form" aria-hidden="true">
+        <div class="modal-dialog modal- modal-dialog-centered modal-sm" role="document">
+          <div class="modal-content">
+            <div class="modal-body p-0">
+              <div class="card bg-secondary border-0 mb-0">
+                <div class="card-header bg-transparent pb-5">
+                  <div class="text-muted text-center mt-2 mb-3"><small>Deposit via</small></div>
+                  <div class="btn-wrapper text-center">
+                    <a href="javascript:void;" class="btn btn-neutral btn-icon">
+                      <span class="btn-inner--icon"><img src="http://localhost/smartBlueMoney/asset/payment_gateways/flutterwave.png"></span>
+                    </a>
+                  </div>
+                </div>
+                <div class="card-body px-lg-5 py-lg-5">
+                  <form role="form" action="http://localhost/smartBlueMoney/user/fund" method="post">
+                  <input type="hidden" name="_token" value="zw4RXmcyfmrUnbvk3qgR6Tl79IpUvAy2L3G3FHOP">                    <div class="form-group mb-3">
+                      <div class="input-group input-group-merge input-group-alternative">
+                        <div class="input-group-prepend">
+                          <span class="input-group-text">NGN</span>
+                        </div>
+                        <input type="number" step="any" class="form-control" placeholder="" name="amount" required>
+                        <input type="hidden" name="gateway" value="108">  
+                      </div>
+                    </div>
+                    <div class="text-center">
+                      <button type="submit" class="btn btn-primary my-4">Preview</button>
+                    </div>
+                  </form>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
+      </div>  
+      -->
+
+
+      <div class="modal fade" id="modal-form{{$val->id}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel2" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content tx-14">
+          <!-- <div class="modal-header">
+            <h6 class="modal-title" id="exampleModalLabel2">Modal Title</h6>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div> -->
+          <div class="card-header bg-transparent pb-5">
+          <div class="text-muted text-center mt-2 mb-3"><small>Deposit via</small></div>
+                <div class="btn-wrapper text-center">
+                <!-- <a href="javascript:void;" class="btn btn-neutral btn-icon"> -->
+                    <span class="btn-inner--icon"><img class="avatar avatar-ex-smm" src="{{ asset('assets/images') }}/{{$val->name}}.png"></span>
+                <!-- </a> -->
+                </div>
+            </div>
+
+
+          <div class="modal-body">
+        <div>
+        <form role="form" action="{{ route('client.wallet.submit', app()->getLocale()) }}" method="post">
+            @csrf                  
+            <div class="form-group mb-3">
+                <div class="input-group input-group-merge input-group-alternative">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text">NGN</span>
+                    </div>
+                    <input type="number" step="any" class="form-control" placeholder="" name="amount" required>
+                    <input type="hidden" name="gateway" value="{{$val->id}}">  
+                    <input type="hidden" name="channel" value="{{$val->name}}">  
+                </div>
+            </div>
+            <div class="text-center">
+                <button type="submit" class="btn btn-primary my-4">Preview</button>
+            </div>
+            </form>
+        </div>
+      </div>
+
+          <!-- <div class="modal-footer">
+            <button type="button" class="btn btn-secondary tx-13" data-dismiss="modal">Close</button>
+            <button type="button" class="btn btn-primary tx-13">Save changes</button>
+          </div> -->
+        </div>
+      </div>
+    </div>
+
+
+      <!-- <div class="modal fade" id="modal-form{{$val->id}}" tabindex="-1" role="dialog" aria-labelledby="modal-form" aria-hidden="true">
+     
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Message Template</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div>
+        <form role="form" action="http://localhost/smartBlueMoney/user/fund" method="post">
+                  <input type="hidden" name="_token" value="zw4RXmcyfmrUnbvk3qgR6Tl79IpUvAy2L3G3FHOP">                    <div class="form-group mb-3">
+                      <div class="input-group input-group-merge input-group-alternative">
+                        <div class="input-group-prepend">
+                          <span class="input-group-text">NGN</span>
+                        </div>
+                        <input type="number" step="any" class="form-control" placeholder="" name="amount" required>
+                        <input type="hidden" name="gateway" value="108">  
+                      </div>
+                    </div>
+                    <div class="text-center">
+                      <button type="submit" class="btn btn-primary my-4">Preview</button>
+                    </div>
+                  </form>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div> -->
+
+
+
+        @endforeach
+
+
+</div> 
+</div> 
+
+<!-- payment options ends here -->
+
+
+
+
         <div class="tab-pane fade show" id="transactions" role="tabpanel" aria-labelledby="transactions-tab">
             <h5 class="mb-0">Transactions</h5>
             <div class="table-responsive mt-4 bg-white rounded shadow">
@@ -309,7 +425,7 @@
         
                     <tbody>
                         <tr>
-                            <td>{{ ++$i }}</td>
+                            <td>1</td>
                             <td>32e3lh2e23083h432b</td>
                             <td>92347h86234g38hh23 or UNAVAILABLE</td>
                             <td>Credit</td>
@@ -324,6 +440,7 @@
                 
             </div>
         </div>
+
     </div>
 
 
