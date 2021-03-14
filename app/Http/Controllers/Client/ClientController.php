@@ -153,7 +153,7 @@ class ClientController extends Controller
     public function walletSubmit(Request $request)
     { 
         // try {
-        $user = User::find(auth()->user()->id);
+        $client = Client::find(auth()->user()->id);
         
         $depo = new Payment();
         $depo['user_id'] = auth()->user()->id;
@@ -162,38 +162,38 @@ class ClientController extends Controller
         $depo['payment_for'] = 1;
         $depo['unique_id'] = $user->wallet_id; //wallet ID
         $CustomHelper = new CustomHelpers();
-        $depo['reference_id'] =  $CustomHelper->generateRandomNumber(); 
+        $depo['reference_id'] =  $CustomHelper->generateRandomNumber(); //system generated payment ID
         $depo['status'] = 'pending';        
         Session::put('Track', $depo['reference_id']); 
 
-        $gate = PaymentGateway::where('id', $request->gateway)->first();
-
         // if is already a made a transaction we already have his/her wallet id; then update
-        if (!WalletTransaction::where('unique_id', '=', $user->wallet_id)->exists()) {
-
-              
-                if ($depo->save()) {
-                    $track = Session::get('Track');           
-                    $data  = Payment::where('reference_id', $track)->orderBy('id', 'DESC')->first();            
-                    
-                    // $walTrans = new WalletTransaction;
-        
-                    $walTrans['user_id'] = auth()->user()->id;
-                    $walTrans['payment_id'] = $data->id;
-                    $walTrans['amount'] = $data->amount;
-                    $walTrans['payment_type'] = 1;
-                    $walTrans['unique_id'] = $data->unique_id;
-                    $walTrans['transaction_type'] = 1;  
-                    if (WalletTransaction::create($walTrans)) {
-                        $this->directToRightpage();
-                                     
-                    } 
-                    
-                }
-
-         }else{
+        // if (!Payment::where('unique_id', '=', $user->wallet_id)->exists()) {
+            
+        if ($depo->save()) {
             $this->directToRightpage();
-         }
+        }
+              
+                // if ($depo->save()) {
+                //     $track = Session::get('Track');           
+                //     $data  = Payment::where('reference_id', $track)->orderBy('id', 'DESC')->first();            
+                    
+                //     // $walTrans = new WalletTransaction;        
+                //     $walTrans['user_id'] = auth()->user()->id;
+                //     $walTrans['payment_id'] = $data->id;
+                //     $walTrans['amount'] = $data->amount;
+                //     $walTrans['payment_type'] = 1;
+                //     $walTrans['unique_id'] = $data->unique_id;
+                //     $walTrans['transaction_type'] = 1;  
+                //     if (WalletTransaction::create($walTrans)) {
+                //         $this->directToRightpage();
+                                     
+                //     } 
+                    
+                // }
+
+        //  }else{
+        //     $this->directToRightpage();
+        //  }
 
 
 
