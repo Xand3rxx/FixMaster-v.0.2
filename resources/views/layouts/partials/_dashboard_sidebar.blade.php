@@ -69,6 +69,10 @@
         </ul>
       </li>
 
+      <li class="nav-item {{ Route::currentRouteNamed('admin.invoices') ? 'active show' : '' }}">
+          <a href="{{ route('admin.invoices', app()->getLocale()) }}" class="nav-link"><i data-feather="file-text"></i> <span>Invoice Management</span></a>
+      </li>
+
       <li class="nav-item"><a href="" class="nav-link"><i data-feather="credit-card"></i> <span>Income/Commission</span></a></li>
 
       <li class="nav-item"><a href="" class="nav-link"><i data-feather="briefcase"></i> <span>Job Card</span></a></li>

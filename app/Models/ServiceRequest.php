@@ -11,14 +11,14 @@ class ServiceRequest extends Model
 {
     use HasFactory, SoftDeletes;
 
-    // column name of key
-    protected $primaryKey = 'uuid';
-
-    // type of key
-    protected $keyType = 'string';
-
-    // whether the key is automatically incremented or not
-    public $incrementing = false;
+//    // column name of key
+//    protected $primaryKey = 'id';
+//
+//    // type of key
+//    protected $keyType = 'string';
+//
+//    // whether the key is automatically incremented or not
+//    public $incrementing = false;
 
     /**
      * The attributes that are mass assignable.
@@ -26,7 +26,7 @@ class ServiceRequest extends Model
      * @var array
      */
     protected $fillable = [
-        'user_id', 'admin_id', 'cse_id', 'technician_id', 'service_id', 'category_id', 'job_reference', 'security_code', 'service_request_status_id', 'total_amount',
+        'uuid', 'user_id', 'admin_id', 'cse_id', 'technician_id', 'service_id', 'category_id', 'job_reference', 'security_code', 'service_request_status_id', 'total_amount',
     ];
 
     /**
@@ -45,10 +45,58 @@ class ServiceRequest extends Model
      */
     protected static function booted()
     {
-        // Create a uuid when a new Serivce Request is to be created 
+        // Create a uuid when a new Serivce Request is to be created
         static::creating(function ($serviceRequest) {
-            $serviceRequest->uuid = (string) Str::uuid(); 
+            $serviceRequest->uuid = (string) Str::uuid();
         });
+    }
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
+
+    public function users()
+    {
+        return $this->belongsToMany(User::class);
+    }
+
+    public function cse()
+    {
+        return $this->belongsTo(Cse::class);
+    }
+
+    public function cses()
+    {
+        return $this->belongsToMany(Cse::class);
+    }
+
+    public function invoice()
+    {
+        return $this->hasOne(Invoice::class);
+    }
+
+    public function invoices()
+    {
+        return $this->hasMany(Invoice::class);
+    }
+
+    public function service(){
+        return $this->hasOne(Service::class, 'id', 'service_id');
+    }
+
+    public function services(){
+            return $this->hasMany(Service::class, 'id', 'service_id');
+    }
+
+    public function rfq()
+    {
+        return $this->hasOne(Rfq::class, 'service_request_id');
+    }
+
+    public function rfqs()
+    {
+        return $this->hasMany(Rfq::class, 'service_request_id');
     }
 
 }

@@ -27,4 +27,14 @@ class Cse extends Model
             //    $cse->unique_id = 'CSE-'.strtoupper(substr(md5(time()), 0, 8));// Create a Unique CSE ID
         });
     }
+
+    public function serviceRequest()
+    {
+        return $this->hasOne(ServiceRequest::class);
+    }
+
+    public function serviceRequests()
+    {
+        return $this->hasMany(ServiceRequest::class);
+    }
 }

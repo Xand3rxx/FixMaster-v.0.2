@@ -5,6 +5,8 @@ use App\Http\Controllers\Client\ClientController;
 use App\Http\Controllers\Admin\User\AdministratorController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\EstateController;
+use App\Http\Controllers\InvoiceController;
+use App\Http\Controllers\SimulationController;
 use App\Http\Controllers\ServiceController;
 /*
 |--------------------------------------------------------------------------
@@ -37,6 +39,7 @@ Route::prefix('admin')->group(function () {
         });
         Route::view('/',                   'admin.index')->name('index'); //Take me to Admin Dashboard
 
+        //Routes for estate management
         Route::get('/estate/list',      [EstateController::class, 'index'])->name('list_estate');
         Route::get('/estate/add',      [EstateController::class, 'create'])->name('add_estate');
         Route::post('/estate/add',      [EstateController::class, 'store'])->name('store_estate');
@@ -48,6 +51,19 @@ Route::prefix('admin')->group(function () {
         Route::get('/estate/approve/{estate:uuid}',      [EstateController::class, 'approve'])->name('approve_estate');
         Route::get('/estate/decline/{estate:uuid}',      [EstateController::class, 'decline'])->name('decline_estate');
         Route::get('/estate/delete/{estate:uuid}',      [EstateController::class, 'delete'])->name('delete_estate');
+
+        //Routes for Invoice Management
+        Route::get('/invoices',      [InvoiceController::class, 'index'])->name('invoices');
+
+        //Routes for Simulation
+        Route::get('/diagnostic', [SimulationController::class, 'diagnosticSimulation'])->name('diagnostic');
+        Route::get('/end-service/{service_request:uuid}', [SimulationController::class, 'endService'])->name('end_service');
+        Route::get('/complete-service/{service_request:uuid}', [SimulationController::class, 'completeService'])->name('complete_service');
+        Route::get('/invoice/{invoice:id}', [SimulationController::class, 'invoice'])->name('invoice');
+
+        Route::get('/rfq',                                  [SimulationController::class, 'rfqSimulation'])->name('rfq');
+        Route::get('/rfq/details/{serviceRequest:id}',    [SimulationController::class, 'rfqDetailsSimulation'])->name('rfq_details');
+        Route::post('/rfq/ongoing/update',                  [SimulationController::class, 'simulateOngoingProcess'])->name('rfq_update');
 
 
         //Routes for Category Management

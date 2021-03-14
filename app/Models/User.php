@@ -119,4 +119,25 @@ class User extends Authenticatable
     {
         return $this->hasMany(Estate::class);
     }
+
+    public function invoice()
+    {
+        return $this->hasOne(Invoice::class);
+    }
+
+    public function invoices()
+    {
+        return $this->hasMany(Invoice::class);
+    }
+
+    public function serviceRequest()
+    {
+        return $this->hasOne(ServiceRequest::class);
+    }
+
+    public function serviceRequests()
+    {
+        return $this->hasMany(ServiceRequest::class);
+    }
+
 }
