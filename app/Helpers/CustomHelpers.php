@@ -27,10 +27,10 @@ class CustomHelpers
         $string = str_shuffle($pin);
         // dd($randomString);
     
-        // // call the same function if the barcode exists already
-        // if (checkIfStringExists($randomString)) {
-        //     return generateRandomNumber();
-        // }
+        // call the same function if the barcode exists already
+        if (checkIfStringExists($randomString)) {
+            return generateRandomNumber();
+        }
     
         // otherwise, it's valid and can be used
         return $string;

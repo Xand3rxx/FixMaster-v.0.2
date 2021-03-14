@@ -11,6 +11,7 @@ use App\Models\PaymentGateway;
 use App\Models\Payment;
 use App\Models\WalletTransaction;
 use App\Models\User;
+use App\Models\Client;
 use App\Helpers\CustomHelpers;
 use App\Traits\RegisterPaymentTransaction;
 use Session;
@@ -150,16 +151,21 @@ class ClientController extends Controller
 
     public function walletSubmit(Request $request)
     {
+        $client = Client::find(auth()->user()->id);
         // validate Request
         $valid = $this->validate($request, [
             // List of things needed from the request like 
             // Amount, Payment Channel, Payment for, Reference Id
+            'amount'           => 'required',
+            'payment_channel'  => 'required',
+            'payment_for'      => 'e-wallet',
+            'unique_id'        => $client->unique_id,
         ]);
         // fetch the Client Table Record
         $client = \App\Models\Client::where('user_id', $request->user()->id)->with('user')->first();
         // call the payment Trait and submit record on the 
-        $payment = $this->payment($valid['amount'], $valid['payment_channel'], $valid['payment_for'], $client['unique_id'], 'pending', $valid['reference_id']);
-            
+        $payment = $this->payment($valid['amount'], $valid['payment_channel'], $valid['payment_for'], $valid['unique_id'], 'pending', $CustomHelper->generateRandomNumber());
+        // dd($payment);
         // try {
         // $user = User::find(auth()->user()->id);
 
