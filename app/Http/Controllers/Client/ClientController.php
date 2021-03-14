@@ -12,12 +12,13 @@ use App\Models\Payment;
 use App\Models\WalletTransaction;
 use App\Models\User;
 use App\Helpers\CustomHelpers;
+use App\Traits\GenerateUniqueIdentity as Generator;
 use App\Traits\RegisterPaymentTransaction;
 use Session;
 
 class ClientController extends Controller
 {
-    use RegisterPaymentTransaction;
+    use RegisterPaymentTransaction, Generator;
 
 
     //call the profile page with credentials
@@ -156,9 +157,9 @@ class ClientController extends Controller
             // Amount, Payment Channel, Payment for, Reference Id
         ]);
         // fetch the Client Table Record
-        $client = \App\Models\Client::where('user_id', $request->user()->id)->with('user')->first();
+        $client = \App\Models\Client::where('user_id', $request->user()->id)->with('user')->firstOrFail();
         // call the payment Trait and submit record on the 
-        $payment = $this->payment($valid['amount'], $valid['payment_channel'], $valid['payment_for'], $client['unique_id'], 'pending', $valid['reference_id']);
+        $payment = $this->payment($valid['amount'], $valid['payment_channel'], $valid['payment_for'], $client['unique_id'], 'pending', $this->generateReference());
 
         // try {
         // $user = User::find(auth()->user()->id);
