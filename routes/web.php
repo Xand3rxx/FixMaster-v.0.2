@@ -21,8 +21,7 @@ use App\Http\Controllers\Technician\TechnicianProfileController;
 use App\Http\Controllers\Admin\EWalletController;
 use App\Http\Controllers\AdminLocationRequestController;
 use App\Http\Controllers\Admin\PriceController;
-
-
+use App\Http\Controllers\Admin\User\Administrator\SummaryController;
 
 /*
 |--------------------------------------------------------------------------
@@ -51,8 +50,8 @@ Route::prefix('admin')->group(function () {
         Route::view('/', 'admin.index')->name('index'); //Take me to Admin Dashboard
 
         Route::view('/ratings/category', 'admin.ratings.category')->name('category');
-        Route::view('/ratings/job', 	 'admin.ratings.job')->name('job');
-        Route::view('/ratings/category_reviews', 	 'admin.ratings.category_reviews')->name('category_reviews');
+        Route::view('/ratings/job',      'admin.ratings.job')->name('job');
+        Route::view('/ratings/category_reviews',      'admin.ratings.category_reviews')->name('category_reviews');
 
         Route::prefix('users')->name('users.')->group(function () {
             Route::resource('administrator', AdministratorController::class);
@@ -62,6 +61,7 @@ Route::prefix('admin')->group(function () {
             Route::resource('franchisee', FranchiseeController::class);
             Route::resource('technician-artisan', TechnicianArtisanController::class);
             Route::resource('quality-assurance', QualityAssuranceController::class);
+            Route::get('administrator/summary/{user:uuid}', [SummaryController::class, 'show'])->name('administrator.summary.show');
         });
 
         Route::get('/estate/list',      [EstateController::class, 'index'])->name('list_estate');
@@ -87,7 +87,7 @@ Route::prefix('admin')->group(function () {
 
         //Routes for Services Management
         Route::get('/services/deactivate/{service}',        [ServiceController::class, 'deactivate'])
-        ->name('services.deactivate');
+            ->name('services.deactivate');
         Route::get('/services/reinstate/{service}',         [ServiceController::class, 'reinstate'])->name('services.reinstate');
         Route::get('/services/delete/{service}',            [ServiceController::class, 'destroy'])->name('services.delete');
         Route::resource('services',                         ServiceController::class);
@@ -114,10 +114,10 @@ Route::prefix('admin')->group(function () {
         Route::resource('taxes',                            TaxController::class);
 
 
-         //Routes for Discount Management
-         Route::get('/discount/add',                     [App\Http\Controllers\DiscountController::class, 'create'])->name('add_discount');
-         Route::get('/discount/list',                       [App\Http\Controllers\DiscountController::class, 'index'])->name('discount_list');
-         Route::post('/discount/add',                    [App\Http\Controllers\DiscountController::class, 'store'])->name('store_discount');
+        //Routes for Discount Management
+        Route::get('/discount/add',                     [App\Http\Controllers\DiscountController::class, 'create'])->name('add_discount');
+        Route::get('/discount/list',                       [App\Http\Controllers\DiscountController::class, 'index'])->name('discount_list');
+        Route::post('/discount/add',                    [App\Http\Controllers\DiscountController::class, 'store'])->name('store_discount');
         Route::post('/LGA',                             [App\Http\Controllers\DiscountController::class, 'getLGA'])->name('getLGA');
         Route::post('/estates',                             [App\Http\Controllers\DiscountController::class, 'estates'])->name('all_estates');
         Route::post('/categories-list',                             [App\Http\Controllers\DiscountController::class, 'category'])->name('categories');
@@ -139,50 +139,50 @@ Route::prefix('admin')->group(function () {
         Route::post('/flutter/update',                      [GatewayController::class, 'flutterUpdate'])->name('flutter_update');
 
         // messaging routes
-         Route::view('/messaging/templates',           		'admin.messaging.template')->name('template');
-         Route::view('/messaging/outbox',      'admin.messaging.email.outbox')->name('inbox');
-         Route::view('/messaging/new',      'admin.messaging.email.new')->name('new_email');
+        Route::view('/messaging/templates',                   'admin.messaging.template')->name('template');
+        Route::view('/messaging/outbox',      'admin.messaging.email.outbox')->name('inbox');
+        Route::view('/messaging/new',      'admin.messaging.email.new')->name('new_email');
 
         //Routes for E-Wallet Admin Management
-        Route::get('/ewallet/clients',                      [EWalletController::class, 'clients'])->name('ewallet.clients'); 
-        Route::get('/ewallet/client/history',               [EWalletController::class, 'clientHistory'])->name('ewallet.client_history'); 
-        Route::get('/ewallet/transactions',                 [EWalletController::class, 'transactions'])->name('ewallet.transactions'); 
+        Route::get('/ewallet/clients',                      [EWalletController::class, 'clients'])->name('ewallet.clients');
+        Route::get('/ewallet/client/history',               [EWalletController::class, 'clientHistory'])->name('ewallet.client_history');
+        Route::get('/ewallet/transactions',                 [EWalletController::class, 'transactions'])->name('ewallet.transactions');
 
 
         //Routes for Price Management
         Route::resource('booking-fees',                     PriceController::class);
-
     });
 });
 
 // Route::resource('client', ClientController::class);
-    //All routes regarding clients should be in here
-    Route::prefix('/client')->group(function () {
-        Route::name('client.')->group(function () {
-            //All routes regarding clients should be in here
-            Route::get('/',           		[ClientController::class, 'index'])->name('index'); //Take me to Supplier Dashboard
 
-            // Route::get('password',          [ClientController::class, 'changePassword'])->name('client.password');
-            // Route::post('password',         [ClientController::class, 'submitPassword'])->name('change.password');
+//All routes regarding clients should be in here
+Route::prefix('/client')->group(function () {
+    Route::name('client.')->group(function () {
+        //All routes regarding clients should be in here
+        Route::get('/',                   [ClientController::class, 'index'])->name('index'); //Take me to Supplier Dashboard
 
-            // Route::get('/profile/view',             [ClientController::class, 'view_profile'])->name('client.view_profile');
-            // Route::get('/profile/edit',             [ClientController::class, 'edit_profile'])->name('client.edit_profile');
-            // Route::post('/profile/update',          [ClientController::class, 'update_profile'])->name('client.updateProfile');
-            // Route::post('/profile/updatePassword',  [ClientController::class, 'updatePassword'])->name('client.updatePassword');
-            // Route::post('/password/upadte',         [ClientController::class, 'update_password'])->name('client.update_password');
+        // Route::get('password',          [ClientController::class, 'changePassword'])->name('client.password');
+        // Route::post('password',         [ClientController::class, 'submitPassword'])->name('change.password');
 
-            // Route::get('/requests',                    [ClientRequestController::class, 'index'])->name('client.requests');
+        // Route::get('/profile/view',             [ClientController::class, 'view_profile'])->name('client.view_profile');
+        // Route::get('/profile/edit',             [ClientController::class, 'edit_profile'])->name('client.edit_profile');
+        // Route::post('/profile/update',          [ClientController::class, 'update_profile'])->name('client.updateProfile');
+        // Route::post('/profile/updatePassword',  [ClientController::class, 'updatePassword'])->name('client.updatePassword');
+        // Route::post('/password/upadte',         [ClientController::class, 'update_password'])->name('client.update_password');
 
-            Route::get('/wallet',           		[ClientController::class, 'wallet'])->name('wallet'); //Take me to Supplier Dashboard
+        // Route::get('/requests',                    [ClientRequestController::class, 'index'])->name('client.requests');
 
-        });
+        Route::get('/wallet',                   [ClientController::class, 'wallet'])->name('wallet'); //Take me to Supplier Dashboard
+
     });
+});
 
 
 Route::prefix('/cse')->group(function () {
     Route::name('cse.')->group(function () {
         //All routes regarding CSE's should be in here
-        Route::view('/',           		'cse.index')->name('index'); //Take me to CSE Dashboard
+        Route::view('/',                   'cse.index')->name('index'); //Take me to CSE Dashboard
 
     });
 });
@@ -190,7 +190,7 @@ Route::prefix('/cse')->group(function () {
 Route::prefix('/supplier')->group(function () {
     Route::name('supplier.')->group(function () {
         //All routes regarding suppliers should be in here
-        Route::view('/',           		'supplier.index')->name('index'); //Take me to Supplier Dashboard
+        Route::view('/',                   'supplier.index')->name('index'); //Take me to Supplier Dashboard
 
     });
 });
@@ -199,10 +199,10 @@ Route::prefix('/technician')->group(function () {
     Route::name('technician.')->group(function () {
         //All routes regarding technicians should be in here
         Route::get('/',                                 [TechnicianProfileController::class, 'index'])->name('index');    //Take me to Technician Dashboard            
-        Route::get('/location-request',                 [TechnicianProfileController::class, 'locationRequest'])->name('location_request'); 
+        Route::get('/location-request',                 [TechnicianProfileController::class, 'locationRequest'])->name('location_request');
         //Route::get('/payments',                         [TechnicianProfileController::class, 'payments'])->name('payments');                
-        Route::get('/requests',                         [TechnicianProfileController::class, 'serviceRequests'])->name('requests');                
-        Route::get('/requests/details/{serviceRequest:id}',                 [TechnicianProfileController::class, 'serviceRequestDetails'])->name('request_details');     
+        Route::get('/requests',                         [TechnicianProfileController::class, 'serviceRequests'])->name('requests');
+        Route::get('/requests/details/{serviceRequest:id}',                 [TechnicianProfileController::class, 'serviceRequestDetails'])->name('request_details');
 
         Route::get('/profile/',                         [TechnicianProfileController::class, 'viewProfile'])->name('view_profile');
         Route::get('/profile/edit',                     [TechnicianProfileController::class, 'editProfile'])->name('edit_profile');
@@ -221,10 +221,10 @@ Route::prefix('/qa')->group(function () {
         //All routes regarding quality_assurance should be in here
         Route::view('/', 'qa.index')->name('index'); //Take me to quality_assurance Dashboard
 
-        Route::get('/profile',    [App\Http\Controllers\QualityAssurance\QualityAssuranceProfileController::class,'view_profile'])->name('view_profile');
-        Route::get('/profile/edit_profile', [App\Http\Controllers\QualityAssurance\QualityAssuranceProfileController::class,'edit'])->name('edit_profile');
-        Route::patch('/profile/update_profile', [App\Http\Controllers\QualityAssurance\QualityAssuranceProfileController::class,'update'])->name('update_profile');
-        Route::patch('/update_password', [App\Http\Controllers\QualityAssurance\QualityAssuranceProfileController::class,'update_password'])->name('update_password');
+        Route::get('/profile',    [App\Http\Controllers\QualityAssurance\QualityAssuranceProfileController::class, 'view_profile'])->name('view_profile');
+        Route::get('/profile/edit_profile', [App\Http\Controllers\QualityAssurance\QualityAssuranceProfileController::class, 'edit'])->name('edit_profile');
+        Route::patch('/profile/update_profile', [App\Http\Controllers\QualityAssurance\QualityAssuranceProfileController::class, 'update'])->name('update_profile');
+        Route::patch('/update_password', [App\Http\Controllers\QualityAssurance\QualityAssuranceProfileController::class, 'update_password'])->name('update_password');
         Route::view('/requests', 'qa.requests')->name('requests');
         Route::get('/payments', [PaymentController::class, 'get_qa_disbursed_payments'])->name('payments');
         Route::view('/messages/inbox', 'qa.messages.inbox')->name('messages.inbox');

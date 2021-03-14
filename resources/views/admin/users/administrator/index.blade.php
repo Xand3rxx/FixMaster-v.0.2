@@ -62,7 +62,7 @@
                                         <div class="dropdown-file">
                                             <a href="" class="dropdown-link" data-toggle="dropdown"><i data-feather="more-vertical"></i></a>
                                             <div class="dropdown-menu dropdown-menu-right">
-                                                <a href="#" class="dropdown-item details text-primary"><i class="far fa-user"></i> Summary</a>
+                                                <a href="{{ route('admin.users.administrator.summary.show', [app()->getLocale(),$administrator['user']['uuid'] ]) }}" class="dropdown-item details text-primary"><i class="far fa-user"></i> Summary</a>
                                                 <a href="#" class="dropdown-item details text-info"><i class="far fa-edit"></i> Edit</a>
                                                 <a href="#" class="dropdown-item details"><i class="fas fa-address-card"></i> Activitiy Log</a>
                                                 <a href="#" class="dropdown-item details text-warning"><i class="fas fa-ban"></i> Deactivate</a>
