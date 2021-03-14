@@ -28,7 +28,7 @@ class DiscountController extends Controller
     //
     public function index()
     {
-        $discounts = Discount::all();
+        $discounts = Discount::orderBy('id', 'DESC')->get();
         return response()->view('admin.discount.list', compact('discounts'));
     }
 
@@ -300,7 +300,7 @@ class DiscountController extends Controller
     {
         if ($request->ajax())
         {
-            $wh = $d = [];
+            $wh = $d =  $est= [];
             $groupby = '';
             $replace_amount = 'middle_name';
             $replace_user = 'user_id';
@@ -403,8 +403,10 @@ class DiscountController extends Controller
 
             if (isset($fields['estate_name']) && $fields['estate_name'] != '')
             {
-                $wh[] = ['est.estate_name', '=', $fields['estate_name']];
+                $est[] = ['est.estate_name', '=', $fields['estate_name']];
             }
+
+       
 
             if (count($wh) == 0)
             {
@@ -423,9 +425,8 @@ class DiscountController extends Controller
                     if (count(array_filter($chk_fields)) > 0)
                     {
                         $dataArry = ServiceRequest::select('sr.user_id', $replace_amount, 'first_name', 'last_name')->from(ServiceRequest::raw("(select  $replace_user, count(user_id) as users from service_requests $groupby)
-                 sr Join accounts ac ON sr.user_id=ac.user_id"))->where($wh)->withTrashed()
-                            ->get();
-
+                        sr Join accounts ac ON sr.user_id=ac.user_id Join clients cs ON sr.user_id=cs.account_id "))->where($wh)->withTrashed()
+                                   ->get();
                     }
                     else
                     {
@@ -461,7 +462,7 @@ class DiscountController extends Controller
                     else
                     {
                         $dataArry = Estate::from('estates as est')->select('uuid', 'first_name', 'last_name')
-                            ->where($wh)->orderBy('est.id', 'ASC')
+                            ->where($est)->orderBy('est.id', 'ASC')
                             ->get();
                     }
 
@@ -649,6 +650,7 @@ class DiscountController extends Controller
 
 
  
+
     private function createEstateTypeUsersDiscount($request, $discounts, $type)
     {
        
@@ -712,6 +714,10 @@ class DiscountController extends Controller
         return true;
     }
 
+
+
+
+   
 
     private function createAllServiceDiscount($request, $discounts)
     {    
