@@ -468,7 +468,7 @@ class DiscountEditController extends Controller
     private function updateUsersDiscount($request, $discounts)
     {
         $discount = ClientDiscount::where(['discount_id'=>$request->discount_id])->delete();
-
+       
         foreach ($request->users as $user)
         {   
          
@@ -486,8 +486,7 @@ class DiscountEditController extends Controller
               ]);
             }    
       
-        }
-
+     
 
         return true;
     }
