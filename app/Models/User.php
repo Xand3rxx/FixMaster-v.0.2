@@ -101,6 +101,14 @@ class User extends Authenticatable
         return $this->hasOne(Account::class);
     }
 
+    /**
+     * Get the phone associated with the user.
+     */
+    public function phone()
+    {
+        return $this->hasOne(Phone::class);
+    }
+
      /**
      * Get the phone associated with the user.
      */

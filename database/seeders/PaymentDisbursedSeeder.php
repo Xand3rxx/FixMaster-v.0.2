@@ -33,7 +33,7 @@ class PaymentDisbursedSeeder extends Seeder
         [
             'user_id'               =>  1,
             'recipient_id'          =>  10,
-            'service_request_id'    =>  2,
+            'service_request_id'    =>  3,
             'payment_mode_id'       =>  3,
             'payment_reference'     =>  'ewiblpq1tslb71m',
             'amount'                =>  2500,
@@ -45,7 +45,7 @@ class PaymentDisbursedSeeder extends Seeder
         [
             'user_id'               =>  1,
             'recipient_id'          =>  13,
-            'service_request_id'    =>  3,
+            'service_request_id'    =>  2,
             'payment_mode_id'          =>  2,
             'payment_reference'     =>  'b6okvlkyjxkbgqf',
             'amount'                =>  2000,
@@ -56,7 +56,7 @@ class PaymentDisbursedSeeder extends Seeder
         PaymentDisbursed::create(
         [
             'user_id'               =>  1,
-            'recipient_id'          =>  2,
+            'recipient_id'          =>  3,
             'service_request_id'    =>  3,
             'payment_mode_id'       =>  2,
             'payment_reference'     =>  'o4zydovezhjv0d3',
@@ -69,7 +69,7 @@ class PaymentDisbursedSeeder extends Seeder
         [
             'user_id'               =>  1,
             'recipient_id'          =>  10,
-            'service_request_id'    =>  1,
+            'service_request_id'    =>  3,
             'payment_mode_id'       =>  2,
             'payment_reference'     =>  '0iye1ttve9cyod7',
             'amount'                =>  7500,

@@ -21,22 +21,41 @@ class CreateServiceRequestsTable extends Migration
 
             $table->id();
             $table->uuid('uuid')->unique();
-		    $table->foreignId('client_id');
-            $table->foreignId('service_id');
-            $table->string('unique_id')->unique();
-            $table->foreignId('state_id');
-            $table->foreignId('lga_id');
-            $table->foreignId('town_id');
-            $table->foreignId('price_id');
-            $table->foreignId('phone_id');
-            $table->foreignId('address_id');
-            $table->foreignId('client_discount_id')->nullable();
-            $table->string('client_security_code')->unique();
-            $table->text('description');
+		    $table->foreignId('user_id');
+		    $table->foreignId('admin_id')->default(null);
+		    $table->foreignId('cse_id')->default(null);
+            $table->foreignId('technician_id')->default(null);
+
+            $table->foreignId('service_id')
+            ->constrained()
+            ->onUpdate('CASCADE')
+            ->onDelete('NO ACTION');
+            
+            $table->bigInteger('service_request_status_id')->index()->default(1);
+		    $table->string('job_reference');
+		    $table->string('security_code');
             $table->bigInteger('total_amount')->unsigned();
-            $table->dateTime('preferred_time')->nullable();
             $table->softDeletes();
             $table->timestamps();
+
+            // $table->id();
+            // $table->uuid('uuid')->unique();
+		    // $table->foreignId('client_id');
+            // $table->foreignId('service_id');
+            // $table->string('unique_id')->unique();
+            // $table->foreignId('state_id');
+            // $table->foreignId('lga_id');
+            // $table->foreignId('town_id');
+            // $table->foreignId('price_id');
+            // $table->foreignId('phone_id');
+            // $table->foreignId('address_id');
+            // $table->foreignId('client_discount_id')->nullable();
+            // $table->string('client_security_code')->unique();
+            // $table->text('description');
+            // $table->bigInteger('total_amount')->unsigned();
+            // $table->dateTime('preferred_time')->nullable();
+            // $table->softDeletes();
+            // $table->timestamps();
         });
     }
 

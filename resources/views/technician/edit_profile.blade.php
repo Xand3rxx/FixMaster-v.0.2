@@ -130,7 +130,7 @@
                             <!-- Full Address -->
                             <div class="form-group col-md-6">
                               <label for="inputAddress2">Full Address</label>
-                              <textarea class="user_address form-control @error('full_address') is-invalid @enderror" rows="3" name="full_address" id="full_address" placeholder="e.g. 284B, Ajose Adeogun Street, Victoria Island, Lagos, Nigeria.">{{ old('full_address') }}</textarea>
+                              <input type="text" class="user_address form-control @error('full_address') is-invalid @enderror name="full_address" id="full_address" placeholder="e.g. 284B, Ajose Adeogun Street, Victoria Island, Lagos, Nigeria." value="{{ old('full_address') }}" >
                             @error('full_address')
                             <span class="invalid-feedback" role="alert">
                                 <strong>{{ $message }}</strong>
@@ -139,7 +139,7 @@
                              </div>
                             <div class="form-group col-md-6">
                                 <label for="inputAddress2">Work Address</label>
-                                <textarea class="user_address2 form-control @error('work_address') is-invalid @enderror" rows="3" name="work_address" id="work_address" placeholder="e.g. Block A2, Broad Street, Marina, Lagos, Nigeria.">{{ old('work_address') }}</textarea>
+                                <input type="text" class="user_address2 form-control @error('work_address') is-invalid @enderror" name="work_address" id="work_address" placeholder="e.g. Block A2, Broad Street, Marina, Lagos, Nigeria." value="{{ old('work_address') }}" >
                             @error('full_address')
                             <span class="invalid-feedback" role="alert">
                                 <strong>{{ $message }}</strong>
@@ -147,6 +147,7 @@
                             @enderror
 
                         </div>
+                      </div>
 
                         <button type="submit" class="btn btn-primary">Update Profile</button>
                     </form>
