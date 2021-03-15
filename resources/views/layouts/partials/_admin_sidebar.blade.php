@@ -100,18 +100,18 @@
           </ul>
         </li>
 
-        <li class="nav-item with-sub">
+        <li class="nav-item with-sub {{ Route::currentRouteNamed('admin.inbox', 'admin.outbox') ? 'active show' : '' }}">
           <a href="" class="nav-link"><i data-feather="message-circle"></i> <span>Messages</span></a>
           <ul>
-            <li class=""><a href="#">Inbox</a></li>
-            <li class=""><a href="#">Sent</a></li>
+            <li class="{{ Route::currentRouteNamed('admin.inbox') ? 'active' : '' }}"><a href="{{ route('admin.inbox', app()->getLocale()) }}">Inbox</a></li>
+            <li class="{{ Route::currentRouteNamed('admin.outbox') ? 'active' : '' }}"><a href="{{ route('admin.outbox', app()->getLocale()) }}">Sent</a></li>
           </ul>
         </li>
 
-        <li class="nav-item with-sub">
+        <li class="nav-item with-sub {{ Route::currentRouteNamed('admin.template') ? 'active show' : '' }}"">
           <a href="" class="nav-link"><i data-feather="bell"></i> <span>Notification Management</span></a>
           <ul>
-            <li class=""><a href="#">Email</a></li>
+            <li class="{{ Route::currentRouteNamed('admin.template') ? 'active' : '' }}"><a href="{{ route('admin.template', app()->getLocale()) }}">Email & SMS</a></li>
             <li class=""><a href="#">In-app</a></li>
             <li class=""><a href="#">SMS</a></li>
           </ul>
