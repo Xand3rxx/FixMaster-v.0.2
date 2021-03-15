@@ -421,6 +421,7 @@ class ClientController extends Controller
             // $track = Session::get('Track'); 
             // $data  = Payment::where('reference_id', $track)->orderBy('id', 'DESC')->first();
             $walTrans = new WalletTransaction;
+            $walTrans['status'] = 'success';
             $walTrans['user_id'] = auth()->user()->id;
             $walTrans['payment_id'] = $data->id;
             $walTrans['amount'] = $data->amount;
@@ -441,37 +442,6 @@ class ClientController extends Controller
 
 
     }
-
-
-
-
-    // public function userDataUpdate($data)
-    // {
-    //     if ($data->status == 0) {
-    //         $data['status'] = 'success';
-    //         $data['transaction_id'] = rawurlencode($reference);
-    //         $data->update();
-
-    //         // $walTrans = WalletTransaction::find($data->user_id);
-    //         // $walTrans['balance'] = $walTrans->balance + $data->amount;
-    //         // $user->update(); 
-
-    //         // $walTrans = new WalletTransaction();
-    //         // PaymentGateway::whereStatus(1)->orderBy('id', 'DESC')->get();
-    //         $walTrans = WalletTransaction::where('reference_id', $track)->orderBy('id', 'DESC')->first();
-    //         $walTrans['balance'] = auth()->user()->id;
-    //         $walTrans->save();
-
-    //         if (!WalletTransaction::where('unique_id', '=', $user->wallet_id)->exists()) {
-    //             $track = Session::get('Track'); 
-    //             $data  = Payment::where('reference_id', $track)->orderBy('id', 'DESC')->first();
-    //             $walTrans = new WalletTransaction;
-    //             $walTrans['user_id'] = auth()->user()->id;
-    //         }
-
-    //     }
-
-    // }
 
 
 }
