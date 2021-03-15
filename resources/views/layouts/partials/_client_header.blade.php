@@ -144,11 +144,10 @@
                                     @endif
                                 @endif --}}
                             </div><!--end col-->
-
                             <div class="col-lg-10 col-md-9">
                                 <div class="row align-items-end">
                                     <div class="col-md-7 text-md-left text-center mt-4 mt-sm-0">
-                                    <h3 class="title mb-0">Felix George</h3>
+                                    <h3 class="title mb-0">{{ !empty($profile->first_name || $profile->last_name) ? $profile->first_name.' '.$profile->last_name : 'UNAVAILABLE' }}</h3>
                                     <small class="text-muted h6 mr-2">Accountant Profession/Career</small>
                                         {{-- <ul class="list-inline mb-0 mt-3">
                                             <li class="list-inline-item mr-2"><a href="javascript:void(0)" class="text-muted" title="Instagram"><i data-feather="instagram" class="fea icon-sm mr-2"></i>Femi_joseph</a></li>

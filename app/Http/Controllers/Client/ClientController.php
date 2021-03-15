@@ -56,6 +56,7 @@ class ClientController extends Controller
     {
 
         $popularRequests = Service::select('id', 'name', 'url', 'image')->take(10)->get()->random(3);
+        // $myWallet    = WalletTransaction::where('user_id', auth()->user()->id)->orderBy('id', 'DESC')->get();
 
         return view('client.home', [
             // data
@@ -67,6 +68,7 @@ class ClientController extends Controller
                 'phone_number' => '0909078888'
             ],
             'popularRequests'   =>  $popularRequests,
+            // 'myWallet'          =>  $myWallet,
             // JoeBoy Fill this data
             // 1. 'userServiceRequests'
             // 2. 'popularRequests'
