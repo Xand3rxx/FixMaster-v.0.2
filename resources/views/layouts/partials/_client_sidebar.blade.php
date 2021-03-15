@@ -18,7 +18,7 @@
                                     
                                         <div class="media-body content">
                                             <h4><a href="javascript:void(0)" class="text-dark title">Balance</a></h4>
-                                        <p class="text-muted location-time"><span class="text-dark h6">₦{{$myWallet[0]['closing_balance']}}</span></p>
+                                        <p class="text-muted location-time"><span class="text-dark h6">₦{{ $myWallet[0]['closing_balance'] ?? number_format(0) }}</span></p>
                                             <a href="#" class="btn btn-sm btn-outline-primary mouse-down">Fund Account</a>
                                         </div>
                                     </div>

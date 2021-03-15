@@ -167,12 +167,12 @@ class ClientController extends Controller
             'payment_channel'  => 'required',
             'payment_for'      => 'required',
         ]);
+       
         // fetch the Client Table Record
         $client = \App\Models\Client::where('user_id', $request->user()->id)->with('user')->firstOrFail();
         // save the reference_id as track in session
 
-        $generatedVal = $this->generateReference();
-        
+        $generatedVal = $this->generateReference();        
         // call the payment Trait and submit record on the
         $payment = $this->payment($valid['amount'], $valid['payment_channel'], $valid['payment_for'], $client['unique_id'], 'pending', $generatedVal);
         Session::put('Track', $generatedVal);
@@ -208,56 +208,6 @@ class ClientController extends Controller
                     return view('client.payment.flutter', compact('flutter', 'title', 'gatewayData', 'pay', 'myWallet','client'));
                 }
         }
-
-
-
-        
-        // dd($payment);
-       
-            // try {
-        // $user = User::find(auth()->user()->id);
-        // $client = \App\Models\Client::where('user_id', $request->user()->id)->with('user')->firstOrFail();
-
-        // $depo = new Payment();
-        // $depo['user_id'] = auth()->user()->id;
-        // $depo['amount'] = $request->amount;
-        // $depo['payment_channel'] = $request->channel; 
-        // $depo['payment_for'] = 1;
-        // $depo['unique_id'] = $user->wallet_id; //wallet ID
-        // $CustomHelper = new CustomHelpers();
-        // $depo['reference_id'] =  $CustomHelper->generateRandomNumber(); 
-        // $depo['status'] = 'pending';        
-        // Session::put('Track', $depo['reference_id']); 
-
-        // $gate = PaymentGateway::where('id', $request->gateway)->first();
-
-        // // if is already a made a transaction we already have his/her wallet id; then update
-        // if (!WalletTransaction::where('unique_id', '=', $user->wallet_id)->exists()) {
-
-
-        //         if ($depo->save()) {
-        //             $track = Session::get('Track');           
-        //             $data  = Payment::where('reference_id', $track)->orderBy('id', 'DESC')->first();            
-
-        //             // $walTrans = new WalletTransaction;
-
-        //             $walTrans['user_id'] = auth()->user()->id;
-        //             $walTrans['payment_id'] = $data->id;
-        //             $walTrans['amount'] = $data->amount;
-        //             $walTrans['payment_type'] = 1;
-        //             $walTrans['unique_id'] = $data->unique_id;
-        //             $walTrans['transaction_type'] = 1;  
-        //             if (WalletTransaction::create($walTrans)) {
-        //                 $this->directToRightpage();
-
-        //             } 
-
-        //         }
-
-        //  }else{
-        //     $this->directToRightpage();
-        //  }
-
 
 
     }
@@ -375,7 +325,7 @@ class ClientController extends Controller
         }
 
         /** If the transaction stats are successful snd to DB */
-        if ($data->status == 0) {
+        if ($data->status == 'pending') {
             $data['status'] = 'success';
             $data['transaction_id'] = rawurlencode($reference);
             $data->update();
@@ -415,13 +365,17 @@ class ClientController extends Controller
     {
         $track  = Session::get('Track');
         $data = Payment::where('reference_id', $track)->orderBy('id', 'DESC')->first();
+        if ($data->status == 'pending') {
+            $data['status'] = 'success';
+            $data->update();
+        }
+        
         // $track = Session::get('Track');
         $client = \App\Models\Client::where('user_id', $request->user()->id)->with('user')->firstOrFail();
         if (!WalletTransaction::where('unique_id', '=', $client['unique_id'])->exists()) {
             // $track = Session::get('Track'); 
             // $data  = Payment::where('reference_id', $track)->orderBy('id', 'DESC')->first();
             $walTrans = new WalletTransaction;
-            $walTrans['status'] = 'success';
             $walTrans['user_id'] = auth()->user()->id;
             $walTrans['payment_id'] = $data->id;
             $walTrans['amount'] = $data->amount;
