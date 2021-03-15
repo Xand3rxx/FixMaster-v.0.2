@@ -56,6 +56,7 @@ class ClientController extends Controller
     {
 
         $popularRequests = Service::select('id', 'name', 'url', 'image')->take(10)->get()->random(3);
+        $myWallet    = WalletTransaction::where('user_id', auth()->user()->id)->orderBy('id', 'DESC')->get();
 
         return view('client.home', [
             // data
@@ -67,6 +68,7 @@ class ClientController extends Controller
                 'phone_number' => '0909078888'
             ],
             'popularRequests'   =>  $popularRequests,
+            'myWallet'          => $myWallet
             // JoeBoy Fill this data
             // 1. 'userServiceRequests'
             // 2. 'popularRequests'
@@ -183,8 +185,6 @@ class ClientController extends Controller
                 $track = Session::get('Track');
                 $pay =  Payment::where('reference_id', $track)->orderBy('id', 'DESC')->first();
 
-                // dd($track);
-                // dd($pay);
                 if (is_null($pay)) {
                     return redirect()->route('client.wallet', app()->getLocale())->with('alert', 'Invalid Deposit Request');
                 }
@@ -212,38 +212,36 @@ class ClientController extends Controller
 
     }
 
+    // public function directToRightpage()
+    // {
+    //     $user_id = auth()->user()->id;
+    //     $track = Session::get('Track');
+    //     $pay =  Payment::where('reference_id', $track)->orderBy('id', 'DESC')->first();
 
-    public function directToRightpage()
-    {
-        $user_id = auth()->user()->id;
-        $track = Session::get('Track');
-        $pay =  Payment::where('reference_id', $track)->orderBy('id', 'DESC')->first();
+    //     if (is_null($pay)) {
+    //         return redirect()->route('client.wallet', app()->getLocale())->with('alert', 'Invalid Deposit Request');
+    //     }
+    //     if ($pay->status != 'pending') {
+    //         return redirect()->route('client.wallet', app()->getLocale())->with('alert', 'Invalid Deposit Request');
+    //     }
+    //     $gatewayData = PaymentGateway::where('id', $data->payment_channel)->first();
 
-        if (is_null($pay)) {
-            return redirect()->route('client.wallet', app()->getLocale())->with('alert', 'Invalid Deposit Request');
-        }
-        if ($pay->status != 'pending') {
-            return redirect()->route('client.wallet', app()->getLocale())->with('alert', 'Invalid Deposit Request');
-        }
-        $gatewayData = PaymentGateway::where('id', $data->payment_channel)->first();
-
-        if ($pay->payment_channel == 1) {
-            $paystack['amount'] = $pay->amount;
-            $paystack['track'] = $track;
-            $title = $gatewayData->name;
-            return view('client.payment.paystack', compact('paystack', 'title', 'gatewayData', 'data'));
-        } elseif ($pay->payment_channel == 2) {
-            $flutter['amount'] = $pay->amount;
-            $flutter['track'] = $track;
-            $title = $gatewayData->name;
-            return view('client.payment.flutter', compact('flutter', 'title', 'gatewayData', 'data'));
-        }
-    }
+    //     if ($pay->payment_channel == 1) {
+    //         $paystack['amount'] = $pay->amount;
+    //         $paystack['track'] = $track;
+    //         $title = $gatewayData->name;
+    //         return view('client.payment.paystack', compact('paystack', 'title', 'gatewayData', 'data'));
+    //     } elseif ($pay->payment_channel == 2) {
+    //         $flutter['amount'] = $pay->amount;
+    //         $flutter['track'] = $track;
+    //         $title = $gatewayData->name;
+    //         return view('client.payment.flutter', compact('flutter', 'title', 'gatewayData', 'data'));
+    //     }
+    // }
 
     public function paystackIPN(Request $request)
     {
         $track  = Session::get('Track');
-
         $data = Payment::where('reference_id', $track)->orderBy('id', 'DESC')->first();
         $user = User::find($data->user_id);
 
