@@ -158,6 +158,7 @@ class ClientController extends Controller
 
     public function walletSubmit(Request $request)
     {
+
         $myWallet    = WalletTransaction::where('user_id', auth()->user()->id)->orderBy('id', 'DESC')->get();
         // validate Request
         $valid = $this->validate($request, [
