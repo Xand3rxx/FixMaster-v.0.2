@@ -36,4 +36,9 @@ class Account extends Model
     {
         return $this->hasMany(Phone::class, 'user_id', 'user_id');
     }
+
+    public function payment()
+    {
+        return $this->hasMany(PaymentDisbursed::class, 'user_id', 'user_id');
+    }
 }

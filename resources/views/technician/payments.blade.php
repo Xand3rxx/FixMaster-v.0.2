@@ -9,7 +9,7 @@
       <div>
         <nav aria-label="breadcrumb">
           <ol class="breadcrumb breadcrumb-style1 mg-b-10">
-          <li class="breadcrumb-item"><a href="{{ route('technician.index', app()->getLocale()) }}">Dashboard</a></li>
+          <li class="breadcrumb-item"><a href="{{ route('qa.index',app()->getLocale()) }}">Dashboard</a></li>
             <li class="breadcrumb-item active" aria-current="page">Payments</li>
           </ol>
         </nav>
@@ -25,7 +25,7 @@
               <h6 class="mg-b-5">Your Most Recent Requests</h6>
             <p class="tx-13 tx-color-03 mg-b-0">This table displays a list of <strong>Payments</strong> made by <span>FixMaster</span> as of <strong>{{ date('l jS F Y') }}</strong>.</p>
             </div>
-            
+
           </div><!-- card-header -->
           <div class="card-body pd-y-30">
             <div class="d-sm-flex">
@@ -35,10 +35,10 @@
                 </div>
                 <div class="media-body">
                   <h6 class="tx-sans tx-uppercase tx-10 tx-spacing-1 tx-color-03 tx-semibold tx-nowrap mg-b-5 mg-md-b-8">Total Payments</h6>
-                  <h4 class="tx-20 tx-sm-18 tx-md-20 tx-normal tx-rubik mg-b-0">1</h4>
+                  <h4 class="tx-20 tx-sm-18 tx-md-20 tx-normal tx-rubik mg-b-0">{{count($payments)}}</h4>
                 </div>
               </div>
-              
+
             </div>
           </div><!-- card-body -->
           <div class="table-responsive">
@@ -54,14 +54,14 @@
                         </select>
                     </div>
                 </div><!--end col-->
-    
+
                 <div class="col-md-4 specific-date d-none">
                     <div class="form-group position-relative">
                         <label>Specify Date <span class="text-danger">*</span></label>
-                        <input name="name" id="name" type="date" class="form-control pl-5">
+                        <input name="name" id="" type="date" class="form-control s_date pl-5">
                     </div>
                 </div>
-    
+
                 <div class="col-md-4 sort-by-year d-none">
                     <div class="form-group position-relative">
                         <label>Specify Year <span class="text-danger">*</span></label>
@@ -73,7 +73,7 @@
                         </select>
                     </div>
                 </div>
-    
+
                 <div class="col-md-4 sort-by-year d-none">
                     <div class="form-group position-relative">
                         <label>Specify Month <span class="text-danger">*</span></label>
@@ -94,14 +94,14 @@
                         </select>
                     </div>
                 </div>
-    
+
                 <div class="col-md-4 date-range d-none">
                     <div class="form-group position-relative">
                         <label>From <span class="text-danger">*</span></label>
                         <input name="name" id="name" type="date" class="form-control pl-5">
                     </div>
                 </div>
-    
+
                 <div class="col-md-4 date-range d-none">
                     <div class="form-group position-relative">
                         <label>To <span class="text-danger">*</span></label>
@@ -123,39 +123,21 @@
                 </tr>
               </thead>
               <tbody>
-                @foreach ($payments as $payment)
+               
+                @foreach ($payments as $result)
+
                   <tr>
                   <td class="tx-color-03 tx-center">{{ $loop->iteration }}</td>
-                  <td class="tx-medium">{{ $payment['job_reference'] }}</td>
-                    <td class="tx-medium">{{ $payment->payment_reference }}</td>
-                    <td class="tx-medium">{{ $payment->user->fullName->name }}</td>
-                    <td class="tx-medium">
-                      @if($payment->payment_mode == 1)
-                        ATM Transfer
-                      @elseif($payment->payment_mode == 2)
-                        Bank Transfer
-                      @elseif($payment->payment_mode == 3)
-                        Internet Banking
-                      @else
-                        USSD Transfer
-                      @endif
-                    </td>
+                  <td class="tx-medium">{{$result->service_request->job_reference}}</td>
+                    <td class="tx-medium">{{$result->payment_reference}}</td>
+                    <td class="tx-medium">Admin</td>
+                    <td class="tx-medium">₦{{ number_format($result->amount)}}</td>
+                    <td class="tx-medium">{{$result->mode->name}}</td>
+                    <td class="tx-medium">{{$result->comment}}</td>
+                    <td class="text-medium tx-center">{{ Carbon\Carbon::parse($result->created_at, 'UTC')->isoFormat('MMMM Do YYYY, h:mm:ssa') }}</td>
 
-                    <td class="tx-medium">₦{{ number_format($payment->amount) }}</td>
-                    <td class="text-medium">{{ $payment->comment }}</td>
-                    <td class="text-medium tx-center">{{ Carbon\Carbon::parse($payment->payment_date, 'UTC')->isoFormat('MMMM Do YYYY') }}</td>
                   </tr>
-                @endforeach }}
-                  <tr>
-                  <td class="tx-color-03 tx-center">{{ ++$i }}</td>
-                  <td class="tx-medium">REF-234234723</td>
-                    <td class="tx-medium">32e3lh2e23083h432b</td>
-                    <td class="tx-medium">David Akinsola</td>
-                    <td class="tx-medium">₦{{ number_format(10000) }}</td>
-                    <td class="tx-medium">Bank Transfer</td>
-                    <td class="text-medium">This payment was made because of your successful task completion on job REF-234234723</td>
-                    <td class="text-medium tx-center">{{ Carbon\Carbon::parse('2020-12-28 16:58:54', 'UTC')->isoFormat('MMMM Do YYYY') }}</td>
-                  </tr>
+                @endforeach
               </tbody>
             </table>
           </div><!-- table-responsive -->
@@ -172,7 +154,7 @@
 <script>
     $(document).ready(function() {
 
-        $('#request-sorting').on('change', function (){        
+        $('#request-sorting').on('change', function (){
                 let option = $("#request-sorting").find("option:selected").val();
 
                 if(option === 'None'){
@@ -195,7 +177,22 @@
                 }
         });
     });
-   
+
+    //  $(document).on('keyup', '#s_date', function(){
+
+    //  alert('date clicked');
+
+    //  });
+
+//     $('.s_date input').change(function(){
+//   var dt = new Date( $(this).val());
+//   var year = dt.getFullYear();
+//   var month =  (dt.getMonth() < 10 ? '0' : '') + (dt.getMonth()+1);
+//   var day = (dt.getDate() < 10 ? '0' : '') + dt.getDate();
+
+//   alert(dt);
+
+//     });
 </script>
 @endsection
 

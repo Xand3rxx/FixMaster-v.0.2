@@ -91,7 +91,7 @@
                             <!-- Email -->
                             <div class="form-group col-md-4">
                               <label for="inputEmail4">Email</label>
-                              <input type="email" class="form-control @error('email') is-invalid @enderror" id="email" name="email" value="{{$result->account->email}}" required>
+                              <input type="email" class="form-control @error('email') is-invalid @enderror" id="email" name="email" value="{{$result->email}}" required>
                               @error('email')
                               <span class="invalid-feedback" role="alert">
                                   <strong>{{ $message }}</strong>
@@ -130,12 +130,21 @@
                             <!-- Full Address -->
                             <div class="form-group col-md-6">
                               <label for="inputAddress2">Full Address</label>
-                              <textarea rows="3" class="form-control" id="inputAddress2" name="full_address" required></textarea>
-                            </div>
+                              <textarea class="user_address form-control @error('full_address') is-invalid @enderror" rows="3" name="full_address" id="full_address" placeholder="e.g. 284B, Ajose Adeogun Street, Victoria Island, Lagos, Nigeria.">{{ old('full_address') }}</textarea>
+                            @error('full_address')
+                            <span class="invalid-feedback" role="alert">
+                                <strong>{{ $message }}</strong>
+                            </span>
+                            @enderror
+                             </div>
                             <div class="form-group col-md-6">
                                 <label for="inputAddress2">Work Address</label>
-                                <textarea rows="3" class="form-control" id="inputAddress2" name="work_address" required></textarea>
-                            </div>
+                                <textarea class="user_address2 form-control @error('work_address') is-invalid @enderror" rows="3" name="work_address" id="work_address" placeholder="e.g. Block A2, Broad Street, Marina, Lagos, Nigeria.">{{ old('work_address') }}</textarea>
+                            @error('full_address')
+                            <span class="invalid-feedback" role="alert">
+                                <strong>{{ $message }}</strong>
+                            </span>
+                            @enderror
 
                         </div>
 
@@ -148,7 +157,10 @@
                   <h6>CHANGE PASSWORD</h6>
                   <p class="mg-b-0 text-danger">In order to change your password, you need to provide the current password.</p>
                   <div class="card-body pd-20 pd-lg-25">
-                  <form action="{{route('technician.update_password', app()->getLocale())}}" method="post">
+                  
+                  <form action="{{route('technician.update_password', app()->getLocale())}}" method="post" role="form" enctype="multipart/form-data">
+                      {{ csrf_field() }}
+                      @method('PATCH')
                       <div class="form-row">
                         <div class="form-group col-md-4">
                           <label for="current_password">Current Password</label>
@@ -193,6 +205,40 @@
 
 
 @section('scripts')
+
+@push('scripts')
+<script src="{{ asset('assets/dashboard/assets/js/bootstrap-multiselect.js') }}"></script>
+<script src="{{ asset('assets/js/password-generator.js') }}"></script>
+<script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDeDLVAiaU13p2O0d3jfcPjscsbVsCQUzc&v=3.exp&libraries=places"></script>
+
+<script>
+    $('.selectpicker').selectpicker();
+
+    $(document).ready(function() {
+        "use strict";
+        let autocomplete;
+        initialize();
+
+        
+
+        function initialize() {
+            // Create the autocomplete object, restricting the search to geographical location types.
+            autocomplete = new google.maps.places.Autocomplete((document.querySelector('.user_address')), {
+                types: ['geocode']
+            });
+            autocomplete = new google.maps.places.Autocomplete((document.querySelector('.user_address2')), {
+                types: ['geocode']
+            });
+            // Chain request to html element on the page
+            google.maps.event.addDomListener(document.querySelector('.user_address'), 'focus');
+            google.maps.event.addDomListener(document.querySelector('.user_address2'), 'focus');
+        }
+    });
+</script>
+
+@endpush
+
+
 <script>
   (function($){
     "use scrict";

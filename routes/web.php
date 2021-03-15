@@ -190,8 +190,8 @@ Route::prefix('/technician')->group(function () {
         Route::get('/profile/',                         [TechnicianProfileController::class, 'viewProfile'])->name('view_profile');
         Route::get('/profile/edit',                     [TechnicianProfileController::class, 'editProfile'])->name('edit_profile');
         Route::patch('/update_profile',                     [TechnicianProfileController::class, 'updateProfile'])->name('update_profile');
-        Route::PATCH('/update_password',                     [TechnicianProfileController::class, 'updatePassword'])->name('update_password');
-        Route::get('/payments', [PaymentController::class, 'get_technician_disbursed_payments'])->name('payments');
+        Route::patch('/update_password',                     [TechnicianProfileController::class, 'updatePassword'])->name('update_password');
+        Route::get('/payments', [TechnicianProfileController::class, 'get_technician_disbursed_payments'])->name('payments');
         Route::view('/messages/inbox', 'technician.messages.inbox')->name('messages.inbox');
         Route::view('/messages/sent', 'technician.messages.outbox')->name('messages.outbox');
     });

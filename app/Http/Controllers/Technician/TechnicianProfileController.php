@@ -16,7 +16,7 @@ use App\Models\ServiceRequest;
 use App\Rules\MatchOldPassword;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
-
+use Redirect;
 class TechnicianProfileController extends Controller
 {
     use Loggable;
@@ -120,9 +120,9 @@ class TechnicianProfileController extends Controller
                 'gender' => 'required|max:255',
                 'email' => 'required|email',
                 'phone_number' => 'required',
-                'profile_avater' => 'mimes:jpeg,jpg,png,gif'
-                // 'full_address' => 'required',
-                // 'work_address' => '',
+                'profile_avater' => 'mimes:jpeg,jpg,png,gif',
+                'full_address' => 'required',
+                'work_address' => '',
     
               ];
     
@@ -158,6 +158,7 @@ class TechnicianProfileController extends Controller
             'gender'=>$request->gender,
             'avatar'=>$filename
         ]);
+        
     
         $user->update([
             'email'=>$request->email,
@@ -196,7 +197,11 @@ class TechnicianProfileController extends Controller
            $user->update(['password' => $changed_password]);
            
            $this->log($type, 'informational', $actionUrl, $user->email.' Password changed successfully');
-           return redirect()->back()->with('success', 'Password changed successfully!');
+                  
+           
+           return back()->with('success', 'Password changed successfully!');
+           
+           
             }
             $this->log($type, 'error', $actionUrl,  $user->email. 'Password updating failed, current password do not match our record');
             return redirect()->back()->with('error', 'Your current password do not match our record');
@@ -209,9 +214,9 @@ class TechnicianProfileController extends Controller
 
        public function get_technician_disbursed_payments(Request $request){
 
-        // $user = Auth::user();
-        // $payments = $user->payments();
+        
         $payments = PaymentDisbursed::where('recipient_id',Auth::id())->get();
+        
         return view('technician.payments', compact('payments'));
     }
     
