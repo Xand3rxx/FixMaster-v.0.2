@@ -9,6 +9,8 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Route;
 use App\Providers\RouteServiceProvider;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
+use Illuminate\Support\Facades\Auth;
+use App\Traits\Utility;
 
 class LoginController extends Controller
 {
@@ -23,7 +25,8 @@ class LoginController extends Controller
     |
     */
 
-    use AuthenticatesUsers, RedirectAuthenticatedUsers, Loggable;
+    use AuthenticatesUsers, RedirectAuthenticatedUsers, Loggable, Utility;
+
 
     /**
      * Where to redirect users after login.
@@ -42,15 +45,20 @@ class LoginController extends Controller
         $this->middleware('guest')->except('logout');
     }
 
+    
+
     /**
      * The user has been authenticated.
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  mixed  $user
      * @return mixed
+     * 
      */
+    
     protected function authenticated(Request $request, $user)
-    {
-        $this->log('Login', 'Informational', Route::currentRouteAction(), $user->email . ' logged in.');
+    { 
+      $this->updateVerifiedUsers(Auth::user());
+      $this->log('Login', 'Informational', Route::currentRouteAction(), $user->email . ' logged in.');
     }
 }

@@ -13,7 +13,7 @@ class Cse extends Model
      *
      * @var array
      */
-    protected $fillable = ['user_id', 'account_id',  'referral_id', 'bank_id', 'franchisee_id'];
+    protected $fillable = ['user_id', 'account_id',  'referral_id', 'bank_id','firsttime', 'franchisee_id'];
 
     /**
      * The "booted" method of the model.
@@ -23,7 +23,7 @@ class Cse extends Model
     protected static function booted()
     {
         static::creating(function ($cse) {
-            $cse->unique_id = static::generate('cses', 'CSE-'); // Create a Unique cse id
+            $cse->unique_id = static::generate('cses', 'CSE-', ''); // Create a Unique cse id
         });
     }
 

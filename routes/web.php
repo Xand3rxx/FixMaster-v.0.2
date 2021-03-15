@@ -131,6 +131,14 @@ Route::prefix('admin')->group(function () {
         Route::get('/discount/deactivate/{discount:id}',                    [App\Http\Controllers\DiscountController::class, 'deactivate'])->name('deactivate_discount');
         Route::get('/discount/activate/{discount:id}',                    [App\Http\Controllers\DiscountController::class, 'reinstate'])->name('activate_discount');
 
+        Route::get('/referral/add',                     [App\Http\Controllers\ReferralController::class, 'create'])->name('add_referral');
+        Route::post('/referral/store',                    [App\Http\Controllers\ReferralController::class, 'store'])->name('referral_store');
+        Route::get('/referral/list',                       [App\Http\Controllers\ReferralController::class, 'index'])->name('referral_list');
+        Route::get('/referral/delete/{referral:id}',                    [App\Http\Controllers\ReferralController::class, 'delete'])->name('delete_referral');
+        Route::get('/referral/deactivate/{referral:id}',                    [App\Http\Controllers\ReferralController::class, 'deactivate'])->name('deactivate_referral');
+        Route::get('/referral/activate/{referral:id}',                    [App\Http\Controllers\ReferralController::class, 'reinstate'])->name('activate_referral');
+
+
         //Admin payment Routes
         Route::get('/payment-gateway/list',                 [GatewayController::class, 'index'])->name('list_payment_gateway');
         Route::post('/paystack/update',                     [GatewayController::class, 'paystackUpdate'])->name('paystack_update');
@@ -194,14 +202,19 @@ Route::prefix('/technician')->group(function () {
         //All routes regarding technicians should be in here
         Route::get('/',                                 [TechnicianProfileController::class, 'index'])->name('index');    //Take me to Technician Dashboard            
         Route::get('/location-request',                 [TechnicianProfileController::class, 'locationRequest'])->name('location_request'); 
-        Route::get('/payments',                         [TechnicianProfileController::class, 'payments'])->name('payments');                
+        //Route::get('/payments',                         [TechnicianProfileController::class, 'payments'])->name('payments');                
         Route::get('/requests',                         [TechnicianProfileController::class, 'serviceRequests'])->name('requests');                
-        Route::get('/requests/details',                 [TechnicianProfileController::class, 'serviceRequestDetails'])->name('request_details');     
+        Route::get('/requests/details/{serviceRequest:id}',                 [TechnicianProfileController::class, 'serviceRequestDetails'])->name('request_details');     
 
         Route::get('/profile/',                         [TechnicianProfileController::class, 'viewProfile'])->name('view_profile');
         Route::get('/profile/edit',                     [TechnicianProfileController::class, 'editProfile'])->name('edit_profile');
         Route::view('/messages/inbox',                  'technician.messages.inbox')->name('messages.inbox');
         Route::view('/messages/sent',                   'technician.messages.outbox')->name('messages.outbox');
+        Route::patch('/update_profile',                     [TechnicianProfileController::class, 'updateProfile'])->name('update_profile');
+        Route::PATCH('/update_password',                     [TechnicianProfileController::class, 'updatePassword'])->name('update_password');
+        Route::get('/payments', [PaymentController::class, 'get_technician_disbursed_payments'])->name('payments');
+        Route::view('/messages/inbox', 'technician.messages.inbox')->name('messages.inbox');
+        Route::view('/messages/sent', 'technician.messages.outbox')->name('messages.outbox');
     });
 });
 

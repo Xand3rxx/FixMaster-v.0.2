@@ -271,10 +271,10 @@ class DiscountController extends Controller
         }
 
      
-        $deactivateDiscount = Discount::where('uuid', $discount)->update(['status' => 'activate', ]);
+        $activateDiscount = Discount::where('uuid', $discount)->update(['status' => 'activate', ]);
   
 
-        if ($deactivateDiscount)
+        if ($activateDiscount)
         {
             $type = 'Request';
             $severity = 'Informational';
@@ -283,7 +283,7 @@ class DiscountController extends Controller
             $this->log($type, $severity, $actionUrl, $message);
             return redirect()->route('admin.discount_list', app()
                 ->getLocale())
-                ->with('success', 'Discount has been deactivated');
+                ->with('success', 'Discount has been activated');
         }
         else
         {
