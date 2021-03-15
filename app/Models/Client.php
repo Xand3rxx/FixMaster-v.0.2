@@ -12,4 +12,12 @@ class Client extends Model
      * @var array
      */
     protected $guarded = ['created_at', 'updated_at'];
+
+    /**
+     * Get the user that owns the Account.
+     */
+    public function user()
+    {
+        return $this->belongsTo(User::class)->with(['account', 'phones']);
+    }
 }

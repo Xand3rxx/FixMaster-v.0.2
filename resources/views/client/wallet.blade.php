@@ -21,6 +21,88 @@
         outline: 2px solid #E97D1F;
         outline-style: dashed;
     }
+
+    .vodiapicker{
+        display: none; 
+    }
+
+    #a{
+        padding-left: 0px;
+    }
+
+    #a img, .btn-select img{
+        width: 45px;
+    }
+
+    #a li{
+        list-style: none;
+        padding-top: 5px;
+        padding-bottom: 5px;
+    }
+
+    #a li:hover{
+    background-color: #F4F3F3;
+    }
+
+    #a li img{
+        margin-left: 15px;
+    }
+
+    #a li span, .btn-select li span{
+        margin-left: 30px;
+    }
+
+    /* item list */
+
+    .b{
+        display: none;
+        width: 100%;
+        /* max-width: 350px; */
+        max-width: 335px;
+        box-shadow: 0 6px 12px rgba(0,0,0,.175);
+        border: 1px solid rgba(0,0,0,.15);
+        border-radius: 5px;
+        position: absolute;
+        z-index: 1000;
+    }
+
+    .open{
+        display: show !important;
+    }
+
+    .btn-select{
+        margin-top: 10px;
+        width: 100%;
+        max-width: 350px;
+        height: 42px;
+        border-radius: 5px;
+        background-color: #fff;
+        border: 1px solid #ccc;
+    }
+    .btn-select li{
+        list-style: none;
+        float: left;
+        padding-bottom: 0px;
+    }
+
+    .btn-select:hover li{
+        margin-left: 0px;
+    }
+
+    .btn-select:hover{
+        background-color: #F4F3F3;
+        border: 1px solid transparent;
+        box-shadow: inset 0 0px 0px 1px #ccc;
+    }
+
+    .btn-select:focus{
+        outline:none;
+    }
+
+    .lang-select{
+        margin-top: -10px;
+    }
+
 </style>
 <div class="col-lg-8 col-12">
     <div class="border-bottom pb-4 row">
@@ -31,7 +113,7 @@
                 <img src="{{ asset('assets/images/job/Circleci.svg') }}" class="avatar avatar-ex-sm" alt="">
                 <div class="media-body content ml-3">
                     <h4 class="title mb-0">Transactions</h4>
-                <p class="text-muted mb-0">{{ $walletTransactions->count() }}</p>
+                <p class="text-muted mb-0">3</p>
                     {{-- <p class="text-muted mb-0"><a href="javascript:void(0)" class="text-primary">CircleCi</a> @London, UK</p>     --}}
                 </div>
             </div>
@@ -87,20 +169,21 @@
         <div class="tab-pane fade show active" id="fund-account" role="tabpanel" aria-labelledby="fund-account-tab">
             <div class="col-md-12 mt-4 pt-2">
                 <h5>Fund Account :</h5>
-        
                 <form>
                     <div class="row">
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label>Amount : </label>
-                                <input name="name" id="number" type="tel" class="form-control font-weight-bold" required placeholder="Amount : ">
+                                <input name="name" id="number" type="tel" class="form-control font-weight-bold" maxlength="9" required placeholder="Amount : ">
                             </div>
                         </div><!--end col-->
         
                         <div class="col-md-6">
+                            <div class="form-group">
+
                             <label>Payment Gateway : </label>
-                                <br>
-                            <label>
+                                {{-- <br> --}}
+                            {{-- <label>
                                 <input type="radio" name="profile_avatar" value="">
                                 <img src="{{ asset('assets/images/paystack.png') }}" alt="" class="img-fluid avatar avatar-small mx-2 mt-4 rounded-circl shadow">
                             </label>
@@ -108,57 +191,33 @@
                             <label>
                                 <input type="radio" name="profile_avatar" value="">
                                 <img src="{{ asset('assets/images/flutterwave.jpg') }}" alt="" class="img-fluid avatar avatar-small mx-2 mt-4 rounded-circl shadow">
-                            </label>
+                            </label> --}}
+
+                            <select class="vodiapicker form-control font-weight-bold">
+                                <option value="" data-thumbnail="" class="test">Select...</option>
+                                <option value="paystack" class="test" data-thumbnail="{{ asset('assets/images/paystack.png') }}">Paystack</option>
+                                <option value="flutterwave" class="test" data-thumbnail="{{ asset('assets/images/flutterwave.jpg') }}">Flutterwave</option>
+                            </select>
         
+                            <div class="lang-select">
+                                <button class="btn-select" value=""></button>
+                                <div class="b">
+                                    <ul id="a"></ul>
+                                </div>
+                            </div>
+                            </div><!--end col-->
                         </div><!--end col-->
-                        <div class="col-md-12 form-group">
-                            <div class="col-md-6 custom-control custom-checkbox form-group position-relative">
-                                <input type="radio" id="customRadio33" name="customRadio" class="custom-control-input">
-                                <label class="custom-control-label" for="customRadio33">Use my saved card</label>
-                            </div>
                         
-                            <div class="col-md-6 custom-control custom-checkbox form-group position-relative">
-                                <input type="radio" id="customRadio34" name="customRadio" class="custom-control-input">
-                                <label class="custom-control-label" for="customRadio34">No, I have another card</label>
-                            </div>
                         </div>
                     </div>
                 
-                    <div class="row d-none add-card mt-b col-md-6">
-                        <div class="col-md-12">
-                            <div class="form-group">
-                                <label>Name of card holder : </label>
-                                <input name="name" id="name" type="text" class="form-control font-weight-bold" required placeholder="Name">
-                            </div>
-                        </div><!--end col-->
-                        <div class="col-md-12">
-                            <div class="form-group">
-                                <label>Card Number :</label>
-                                <input type="tel" min="0" autocomplete="off" id="cardnumber" maxlength="16" class="form-control font-weight-bold" required placeholder="0000 0000 0000 0000">
-                            </div>                                                                               
-                        </div><!--end col-->
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label>Expires End :</label>
-                                <input type="tel" min="0" autocomplete="off" id="exdate" class="form-control font-weight-bold" required placeholder="MM/YY" maxlength="2">
-                            </div>
-                        </div><!--end col-->
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label>CVV :</label>
-                                <input type="tel" min="0" autocomplete="off" id="cvv" class="form-control font-weight-bold" required placeholder="CVV" maxlength="3">
-                            </div>
-                        </div><!--end col-->
-                    </div><!--end row-->
                     {{-- <div class="row mb-4"> --}}
                         <div class="col-md-12">
                             <input type="submit" id="submit" name="send" class="submitBnt btn btn-primary" value="Make Payment">
                         </div><!--end col-->
                     {{-- </div><!--end row--> --}}
                 </form><!--end form-->
-            </div><!--end col-->
         </div>
-
         <div class="tab-pane fade show" id="transactions" role="tabpanel" aria-labelledby="transactions-tab">
             <h5 class="mb-0">Transactions</h5>
             <div class="table-responsive mt-4 bg-white rounded shadow">
@@ -236,43 +295,29 @@
                     <thead>
                         <tr>
                             <th class="py-3">#</th>
-                            <th class="py-3">Job Reference</th>
+                            <th class="py-3">Reference No</th>
+                            <th class="py-3">Transaction ID</th>
                             <th class="py-3">Payment Type</th>
-                            <th class="py-3">Timestamp</th>
                             <th class="py-3">Amount</th>
+                            <th class="py-3">Status</th>
+                            <th class="py-3">Transacation Date</th>
+                            <th class="py-3">Action</th>
+
                             {{-- <th class="py-3">Balance</th> --}}
                         </tr>
                     </thead>
         
                     <tbody>
-                        @foreach ($walletTransactions as $walletTransaction)
                         <tr>
                             <td>{{ ++$i }}</td>
-                            <td>{{ $walletTransaction->serviceRequest->job_reference }}</td>
-                            <td> 
-                                @if($walletTransaction->payment_type == "Payment")
-                                    Service Request Payment
-                                @elseif($walletTransaction->payment_type == 'Refund')
-                                    Service Request Refund
-                                @else
-                                    E-Wallet Funding
-                                @endif
-                            </td>
-                            <td>{{ Carbon\Carbon::parse($walletTransaction->created_at, 'UTC')->isoFormat('MMMM Do YYYY, h:mm:ssa') }}</td>
-                            <td class="font-weight-bold">₦{{ number_format($walletTransaction->amount) }}</td>
-                            {{-- <td class="font-weight-bold">
-                                @if($walletTransaction->payment_type == "Payment")
-                                    ₦{{ number_format($walletTransaction->wallet->balance - $walletTransaction->amount) }}
-                                @elseif($walletTransaction->payment_type == 'Refund')
-                                    ₦{{ number_format($walletTransaction->wallet->balance + $walletTransaction->amount) }}
-                                @else
-                                    ₦{{ number_format($walletTransaction->wallet->balance + $walletTransaction->amount) }}
-                                @endif
-                            </td> --}}
+                            <td>32e3lh2e23083h432b</td>
+                            <td>92347h86234g38hh23 or UNAVAILABLE</td>
+                            <td>Credit</td>
+                            <td class="font-weight-bold">₦{{ number_format(10000) }}</td>
+                            <td class="text-center text-warning">Pending</td>
+                            <td>{{ Carbon\Carbon::parse('', 'UTC')->isoFormat('MMMM Do YYYY, h:mm:ssa') }}</td>
+                            <td><a href="#transactionDetails" data-toggle="modal" class="btn btn-primary btn-sm ">Details</a></td>
                         </tr>
-                        @endforeach
-                      
-                       
                     </tbody>
                 </table>
         
@@ -282,6 +327,67 @@
     </div>
 
 
+    <div class="modal fade" id="transactionDetails" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel2" aria-hidden="true" data-keyboard="false" data-backdrop="static">
+        <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+          <div class="modal-content tx-14">
+            <div class="modal-header">
+              <h6 class="modal-title" id="exampleModalLabel2">E-Wallet Transaction Details</h6>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body pd-x-25 pd-sm-x-30 pd-t-40 pd-sm-t-20 pd-b-15 pd-sm-b-20">
+                <div class="table-responsive mt-4">
+                    <table class="table table-striped table-sm mg-b-0">
+                    <tbody>
+                        <tr>
+                            <td class="tx-medium" width="25%">Unique ID</td>
+                            <td class="tx-color-03" width="75%">WAL-23782382</td>
+                        </tr>
+                        <tr>
+                            <td class="tx-medium" width="25%">Reference No.</td>
+                            <td class="tx-color-03" width="75%">32e3lh2e23083h432b</td>
+                        </tr>
+                        <tr>
+                            <td class="tx-medium" width="25%">Transaction ID.</td>
+                            <td class="tx-color-03" width="75%">Transaction ID returned on success should be displayed here only if payment gateway was used or UNAVAILABLE</td>
+                        </tr>
+                        <tr>
+                            <td class="tx-medium" width="25%">Transaction Type</td>
+                            <td class="tx-color-03" width="75%">Credit</td>
+                        </tr>
+                        <tr>
+                            <td class="tx-medium" width="25%">Payment Type</td>
+                            <td class="tx-color-03" width="75%"3">Funding</td>
+                        </tr>
+                        <tr>
+                            <td class="tx-medium" width="25%">Payment Channel</td>
+                            <td class="tx-color-03" width="75%"3">Paystack or Flutterwave or Offline or Wallet</td>
+                        </tr>
+                        <tr>
+                            <td class="tx-medium" width="25%">Payment For</td>
+                            <td class="tx-color-03" width="75%"3">Wallet</td>
+                        </tr>
+                        <tr>
+                            <td class="tx-medium" width="25%">Amount</td>
+                            <td class="tx-color-03" width="75%">₦{{ number_format(10000) }}</td>
+                        </tr>
+                        <tr>
+                            <td class="tx-medium" width="25%">Status</td>
+                            <td class="text-warning" width="75%">Pending</td>
+                        </tr>
+                        <tr>
+                            <td class="tx-medium" width="25%">Refund Reason</td>
+                            <td class="tx-color-03" width="75%">This section should only be visible in a case of refund, the reason should be displayed here or UNAVAILABLE</td>
+                        </tr>
+                    </tbody>
+                    </table>
+                </div>
+              </div><!-- modal-body -->
+            <div class="modal-footer"></div>
+          </div>
+        </div>
+    </div>
     
 
     
@@ -312,6 +418,59 @@
                     $('.specific-date, .sort-by-year').addClass('d-none');
                 }
         });
+
+        //test for getting url value from attr
+    // var img1 = $('.test').attr("data-thumbnail");
+    // console.log(img1);
+
+    //test for iterating over child elements
+    var langArray = [];
+    $('.vodiapicker option').each(function(){
+        var img = $(this).attr("data-thumbnail");
+        var text = this.innerText;
+        var value = $(this).val();
+        var item = '<li><img src="'+ img +'" alt="" value="'+value+'"/><span>'+ text +'</span></li>';
+        langArray.push(item);
+    })
+
+    $('#a').html(langArray);
+
+    //Set the button value to the first el of the array
+    $('.btn-select').html(langArray[0]);
+    $('.btn-select').attr('value', 'en');
+
+    //change button stuff on click
+    $('#a li').click(function(){
+        var img = $(this).find('img').attr("src");
+        var value = $(this).find('img').attr('value');
+        var text = this.innerText;
+        var item = '<li><img src="'+ img +'" alt="" /><span>'+ text +'</span></li>';
+        $('.btn-select').html(item);
+        $('.btn-select').attr('value', value);
+        $(".b").toggle();
+        //console.log(value);
+    });
+
+    $(".btn-select").click(function(){
+            $(".b").toggle();
+    });
+
+    //check local storage for the lang
+    var sessionLang = localStorage.getItem('lang');
+    if (sessionLang){
+        //find an item with value of sessionLang
+        var langIndex = langArray.indexOf(sessionLang);
+        $('.btn-select').html(langArray[langIndex]);
+        $('.btn-select').attr('value', sessionLang);
+        } else {
+        var langIndex = langArray.indexOf('ch');
+        console.log(langIndex);
+        $('.btn-select').html(langArray[langIndex]);
+        //$('.btn-select').attr('value', 'en');
+    }
+
+
+
     });
 </script>
 

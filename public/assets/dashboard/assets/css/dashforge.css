@@ -2469,6 +2469,11 @@ textarea.form-control {
   margin-top: 0.25rem;
   font-size: 80%;
   color: #dc3545; }
+  .invalid-feedback-err {
+    width: 100%;
+    margin-top: 0.25rem;
+    font-size: 80%;
+    color: #dc3545; }
 
 .invalid-tooltip {
   position: absolute;
@@ -41066,3 +41071,95 @@ a.bg-twitter:hover, a.bg-twitter:focus, button.bg-twitter:hover, button.bg-twitt
       transform: rotate(360deg);
     }
   }
+
+ .add-page +.bootstrap-select:not([class*=col-]):not([class*=form-control]):not(.input-group-btn) {
+ width:100%;
+}
+
+.pull-right-1{
+  float:right
+}
+
+.flex-this{
+  display: flex;
+  align-items: baseline;
+justify-content: space-between
+}
+
+.flex-this label{
+  display: inline-block
+}
+
+.contain {
+  display: block;
+  position: relative;
+  padding-left: 35px;
+  margin-bottom: 12px;
+  cursor: pointer;
+  font-size: 13px;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+
+.contain input {
+  position: absolute;
+  opacity: 0;
+  cursor: pointer;
+}
+
+
+.contain .checkmark {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 25px;
+  width: 25px;
+  background-color: #eee;
+  border-radius: 50%;
+  border:1px solid  #E97D1F;
+}
+
+
+.contain:hover input ~ .contain .checkmark {
+  background-color: #ccc;
+}
+
+
+.contain input:checked ~ .checkmark {
+    background-color: #E97D1F;
+}
+
+.contain  .checkmark:after {
+  content: "";
+  position: absolute;
+  display: none;
+}
+
+.contain input:checked ~ .checkmark:after {
+  display: block;
+}
+
+.contain .checkmark:after {
+ 	top: 9px;
+	left: 9px;
+	width: 8px;
+	height: 8px;
+	border-radius: 50%;
+	background: white;
+}
+
+.capitalize{
+text-transform: capitalize
+}
+
+.swal2-styled.swal2-confirm a.confirm-link {
+  color: #fff  !important;
+  font-size: 1.0625em;
+
+}
+.show-estate, .show-service{
+display:none;
+}

@@ -24,10 +24,10 @@ class CreateTechniciansTable extends Migration
             $table->foreignId('user_id')->index();
             $table->foreignId('account_id')->index();
 
-            $table->foreignId('state_id')->index();
-            $table->foreignId('lga_id')->index();
-            $table->foreignId('town_id')->index();
-            $table->foreignId('bank_id')->index();
+            // $table->foreignId('state_id')->index();
+            // $table->foreignId('lga_id')->index();
+            // $table->foreignId('town_id')->index();
+            $table->foreignId('bank_id')->index()->nulable();;
 
             $table->foreignId('franchisee_id')->nullable();
 

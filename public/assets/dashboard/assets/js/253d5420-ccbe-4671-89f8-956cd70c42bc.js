@@ -11,7 +11,7 @@
       $.ajax({
           url: route,
           beforeSend: function() {
-            $("#spinner-icon").html('<div class="d-flex justify-content-center mt-4 mb-4"><span class="loadingspinner"></span></div>');
+            $("#modal-body").html('<div class="d-flex justify-content-center mt-4 mb-4"><span class="loadingspinner"></span></div>');
           },
           // return the result
           success: function(result) {
@@ -40,7 +40,7 @@
       $.ajax({
           url: route,
           beforeSend: function() {
-            $("#spinner-icon-2").html('<div class="d-flex justify-content-center mt-4 mb-4"><span class="loadingspinner"></span></div>');
+            $("#modal-reassign-body").html('<div class="d-flex justify-content-center mt-4 mb-4"><span class="loadingspinner"></span></div>');
           },
           // return the result
           success: function(result) {
@@ -79,7 +79,7 @@
         method: 'GET',
         data: {"id": id, "serviceName": serviceName },
         beforeSend : function(){
-            $("#spinner-icon-3").html('<div class="d-flex justify-content-center mt-4 mb-4"><span class="loadingspinner"></span></div>'); 
+            $("#modal-edit-body").html('<div class="d-flex justify-content-center mt-4 mb-4"><span class="loadingspinner"></span></div>'); 
         },
         success: function (result){
             $('#modal-edit-body').modal("show");
@@ -121,7 +121,7 @@
         method: "POST",
         data: {'serviceId':serviceId, 'serviceName':serviceName, 'categoryId':categoryId, 'categoryName':categoryName},
         beforeSend : function(){
-            $("#spinner-icon-4").html('<div class="d-flex justify-content-center mt-4 mb-4"><span class="loadingspinner"></span></div>'); 
+            $("#sort_table").html('<div class="d-flex justify-content-center mt-4 mb-4"><span class="loadingspinner"></span></div>'); 
         },
         success: function (data){
             if(data){
@@ -164,6 +164,8 @@
     });
 
 //   });
+
+    
 
   function jQuerySort(){
     $('.basicExample').DataTable({

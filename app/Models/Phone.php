@@ -10,8 +10,16 @@ class Phone extends Model
     use HasFactory;
 
     /**
+     * The attributes that are mass assignable.
+     *
+     * @var array
+     */
+    
+    /**
      * Get the user that owns the phone.
      */
+    protected $fillable = ['user_id', 'account_id', 'country_id', 'number'];
+
     public function user()
     {
         return $this->belongsTo(User::class);

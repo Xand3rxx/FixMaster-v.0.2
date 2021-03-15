@@ -24,7 +24,8 @@ class CreateServiceRequestCancellationsTable extends Migration
                 ->constrained()
                 ->onUpdate('CASCADE')
                 ->onDelete('NO ACTION');
-                $table->foreignId('category_id')
+
+            $table->foreignId('service_request_id')
                 ->constrained()
                 ->onUpdate('CASCADE')
                 ->onDelete('NO ACTION');

@@ -23,8 +23,15 @@ class Cse extends Model
     protected static function booted()
     {
         static::creating(function ($cse) {
-            $cse->unique_id = static::cse('cses', 'CSE-'); // Create a Unique cse id
-            //    $cse->unique_id = 'CSE-'.strtoupper(substr(md5(time()), 0, 8));// Create a Unique CSE ID
+            $cse->unique_id = static::generate('cses', 'CSE-'); // Create a Unique cse id
         });
+    }
+
+    /**
+     * Get the user that owns the Account.
+     */
+    public function user()
+    {
+        return $this->belongsTo(User::class)->with(['account', 'phones', 'roles']);
     }
 }
