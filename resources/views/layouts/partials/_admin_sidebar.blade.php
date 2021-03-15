@@ -141,8 +141,8 @@
         <li class="nav-item with-sub">
           <a href="" class="nav-link"><i data-feather="external-link"></i> <span>Referral</span></a>
           <ul>
-            <li class=""><a href="#">Add</a></li>
-            <li class=""><a href="#">List</a></li>
+            <li class="{{ Route::currentRouteNamed('admin.add_referral') ? 'active' : '' }}"><a href="{{ route('admin.add_referral',  app()->getLocale()) }}">Add</a></li>
+            <li class="{{ Route::currentRouteNamed('admin.referral_list') ? 'active' : '' }}"><a href="{{ route('admin.referral_list',  app()->getLocale()) }}">List</a></li>
           </ul>
         </li>
 

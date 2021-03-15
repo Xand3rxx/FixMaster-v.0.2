@@ -133,6 +133,14 @@ Route::prefix('admin')->group(function () {
         Route::get('/discount/deactivate/{discount:id}',                    [App\Http\Controllers\DiscountController::class, 'deactivate'])->name('deactivate_discount');
         Route::get('/discount/activate/{discount:id}',                    [App\Http\Controllers\DiscountController::class, 'reinstate'])->name('activate_discount');
 
+        Route::get('/referral/add',                     [App\Http\Controllers\ReferralController::class, 'create'])->name('add_referral');
+        Route::post('/referral/store',                    [App\Http\Controllers\ReferralController::class, 'store'])->name('referral_store');
+        Route::get('/referral/list',                       [App\Http\Controllers\ReferralController::class, 'index'])->name('referral_list');
+        Route::get('/referral/delete/{referral:id}',                    [App\Http\Controllers\ReferralController::class, 'delete'])->name('delete_referral');
+        Route::get('/referral/deactivate/{referral:id}',                    [App\Http\Controllers\ReferralController::class, 'deactivate'])->name('deactivate_referral');
+        Route::get('/referral/activate/{referral:id}',                    [App\Http\Controllers\ReferralController::class, 'reinstate'])->name('activate_referral');
+
+
         //Admin payment Routes
         Route::get('/payment-gateway/list',                 [GatewayController::class, 'index'])->name('list_payment_gateway');
         Route::post('/paystack/update',                     [GatewayController::class, 'paystackUpdate'])->name('paystack_update');

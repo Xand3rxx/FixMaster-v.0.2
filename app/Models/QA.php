@@ -30,7 +30,7 @@ class QA extends Model
     protected static function booted()
     {
         static::creating(function ($qa) {
-            $qa->unique_id = static::generate('quality_assurances', 'QA-'); // Create a Unique Quality Assurance id
+            $qa->unique_id = static::generate('quality_assurances', 'QA-', ''); // Create a Unique Quality Assurance id
         });
     }
 

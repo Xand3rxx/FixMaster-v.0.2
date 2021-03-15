@@ -4,9 +4,11 @@ namespace App\Http\Controllers\Admin\User;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use App\Traits\Utility;
 
 class CustomerServiceExecutiveController extends Controller
 {
+    use Utility;
     /**
      * Display a listing of the resource.
      *
@@ -51,7 +53,7 @@ class CustomerServiceExecutiveController extends Controller
     {
         // Validate Request
         $valid = $this->validateCreateCustomerServiceExecutive($request);
-
+  
     }
 
     /**

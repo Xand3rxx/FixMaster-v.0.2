@@ -182,13 +182,23 @@
                                 </div>
                                 <!--end col-->
 
-                                <div class="col-md-12">
+                                <div class="col-md-6">
                                     <div class="form-group position-relative">
                                         <label>Address <span class="text-danger">*</span></label>
                                         <i data-feather="map-pin" class="fea icon-sm icons"></i>
                                         <textarea name="message" id="message" rows="4" class="form-control pl-5" placeholder="Your residential address :"></textarea>
                                     </div>
                                 </div>
+
+                                   <div class="col-md-6">
+                                <div class="form-group position-relative">
+                                    <label>Referral Code </label>
+                                    <i data-feather="key" class="fea icon-sm icons"></i>
+                                    <input type="text" class="form-control pl-5 " placeholder="Referral Code" name="referral_code" id="referral_code">
+                                   
+                                </div>
+                            </div> 
+
 
                                 <div class="col-md-6">
                                     <div class="form-group position-relative">

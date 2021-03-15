@@ -24,7 +24,7 @@ class CreateEstateDiscountHistories extends Migration
             $table->string('name', 250);
             $table->string('estate_name', 250);
             $table->string('created_by', 250);
-            $table->integer('rate');
+            $table->float('rate');
             $table->enum('notify', [0, 1])->default(0);
             $table->enum('status', ['activate', 'deactivate'])->default('activate');
             $table->dateTime('duration_start');
