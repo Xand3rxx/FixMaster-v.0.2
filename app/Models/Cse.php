@@ -34,4 +34,14 @@ class Cse extends Model
     {
         return $this->belongsTo(User::class)->with(['account', 'phones', 'roles']);
     }
+    
+    public function serviceRequest()
+    {
+        return $this->hasOne(ServiceRequest::class);
+    }
+
+    public function serviceRequests()
+    {
+        return $this->hasMany(ServiceRequest::class);
+    }
 }
