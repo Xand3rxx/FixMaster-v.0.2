@@ -138,7 +138,8 @@ Route::prefix('admin')->group(function () {
 
         // messaging routes
          Route::view('/messaging/templates',           		'admin.messaging.template')->name('template');
-         Route::view('/messaging/outbox',      'admin.messaging.email.outbox')->name('inbox');
+         Route::view('/messaging/outbox',      'admin.messaging.email.outbox')->name('outbox');
+         Route::view('/messaging/inbox',      'admin.messaging.email.inbox')->name('inbox');
          Route::view('/messaging/new',      'admin.messaging.email.new')->name('new_email');
 
         //Routes for E-Wallet Admin Management
