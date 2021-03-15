@@ -19,9 +19,9 @@
       </div>
 
       <div class="row row-xs">
-        <div class="col-12 justify-content-center text-center align-items-center">
+        {{-- <div class="col-12 justify-content-center text-center align-items-center">
           <a href="#addTax" class="btn btn-primary float-right" data-toggle="modal"><i class="fas fa-plus"></i> Add New</a>
-        </div>
+        </div> --}}
 
         <div class="col-lg-12 col-xl-12 mg-t-10">
             <div class="card mg-b-10">

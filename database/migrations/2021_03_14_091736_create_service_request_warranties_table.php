@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateWarrantiesTable extends Migration
+class CreateServiceRequestWarrantiesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,19 +13,18 @@ class CreateWarrantiesTable extends Migration
      */
     public function up()
     {
-        Schema::create('warranties', function (Blueprint $table) {
+        Schema::create('service_request_warranties', function (Blueprint $table) {
             $table->engine = 'InnoDB';
             $table->charset = 'utf8mb4';
             $table->collation = 'utf8mb4_unicode_ci';
-            
+
             $table->id();
-            $table->string('name')->unique();
-            $table->unsignedInteger('amount');
+            $table->foreignId('warranty_id');
+            $table->foreignId('service_request_id')->unique();
+            $table->dateTime('start_date');
             $table->dateTime('expiration_date')->nullable();
             $table->enum('warranty_type', ['free', 'extended']);
-            $table->text('description')->nullable();
-            $table->softDeletes();
-            $table->timestamps();
+            $table->text('reason')->nullable();
         });
     }
 
@@ -36,6 +35,6 @@ class CreateWarrantiesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('warranties');
+        Schema::dropIfExists('service_request_warranties');
     }
 }

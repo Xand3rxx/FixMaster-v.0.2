@@ -217,8 +217,8 @@ Route::prefix('/technician')->group(function () {
         Route::view('/messages/inbox',                  'technician.messages.inbox')->name('messages.inbox');
         Route::view('/messages/sent',                   'technician.messages.outbox')->name('messages.outbox');
         Route::patch('/update_profile',                     [TechnicianProfileController::class, 'updateProfile'])->name('update_profile');
-        Route::PATCH('/update_password',                     [TechnicianProfileController::class, 'updatePassword'])->name('update_password');
-        Route::get('/payments', [PaymentController::class, 'get_technician_disbursed_payments'])->name('payments');
+        Route::patch('/update_password',                     [TechnicianProfileController::class, 'updatePassword'])->name('update_password');
+        Route::get('/payments', [TechnicianProfileController::class, 'get_technician_disbursed_payments'])->name('payments');
         Route::view('/messages/inbox', 'technician.messages.inbox')->name('messages.inbox');
         Route::view('/messages/sent', 'technician.messages.outbox')->name('messages.outbox');
     });

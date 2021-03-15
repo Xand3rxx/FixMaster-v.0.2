@@ -27,7 +27,7 @@ class DatabaseSeeder extends Seeder
             ServiceSeeder::class,
             StateSeeder::class,
             LgaSeeder::class,
-            ServiceRequestSeeder::class,
+            // ServiceRequestSeeder::class,
             ServiceRequestStatusSeeder::class,
             CountrySeeder::class,
             PaymentModeSeeder::class,

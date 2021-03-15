@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateServiceRequestMediaFilesTable extends Migration
+class CreateServiceRequestMediasTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,24 +13,26 @@ class CreateServiceRequestMediaFilesTable extends Migration
      */
     public function up()
     {
-        Schema::create('service_request_media_files', function (Blueprint $table) {
+        Schema::create('service_request_medias', function (Blueprint $table) {
             $table->engine = 'InnoDB';
             $table->charset = 'utf8mb4';
             $table->collation = 'utf8mb4_unicode_ci';
 
-            $table->foreignId('media_file_id')
-                ->constrained()
-                ->onUpdate('cascade')
-                ->onDelete('cascade');
+            $table->foreignId('media_id');
+                // ->index()
+                // ->constrained()
+                // ->onUpdate('cascade')
+                // ->onDelete('cascade');
 
             $table->foreignId('service_request_id')
                 ->constrained()
                 ->onUpdate('cascade')
                 ->onDelete('cascade');
 
-            $table->primary(['media_file_id','service_request_id']);
+            $table->primary(['media_id', 'service_request_id']);
 
             $table->timestamps();
+
         });
     }
 
@@ -41,6 +43,6 @@ class CreateServiceRequestMediaFilesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('service_request_media_files');
+        Schema::dropIfExists('service_request_medias');
     }
 }
