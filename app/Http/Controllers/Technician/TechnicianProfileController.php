@@ -192,7 +192,6 @@ class TechnicianProfileController extends Controller
             'current_password' => 'required',
             'new_password' => 'required',
             'new_confirm_password' => 'required|same:new_password',
-            // 'user' => User::where('id', $request->user()->id)->firstOrFail(),
         ]);
         $user = $request->user();
         if (!$user) {
