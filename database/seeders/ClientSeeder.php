@@ -126,6 +126,7 @@ class ClientSeeder extends Seeder
         // Client Table
         $clientTable = new \App\Models\Client();
         $clientTable->user_id = $client->id;
+        $clientTable->unique_id = 'WAL-23782382';
         $clientTable->account_id = $clientAccount->id;
         $clientTable->estate_id = '1';
         $clientTable->	profession_id = '18';
@@ -133,6 +134,7 @@ class ClientSeeder extends Seeder
 
         $clientTable = new \App\Models\Client();
         $clientTable->user_id = $client1->id;
+        $clientTable->unique_id = 'WAL-21780953';
         $clientTable->account_id = $clientAccount1->id;
         $clientTable->estate_id = '1';
         $clientTable->	profession_id = '12';
@@ -140,6 +142,7 @@ class ClientSeeder extends Seeder
 
         $clientTable = new \App\Models\Client();
         $clientTable->user_id = $client2->id;
+        $clientTable->unique_id = 'WAL-50B6D80A';
         $clientTable->account_id = $clientAccount2->id;
         $clientTable->estate_id = '2';
         $clientTable->	profession_id = '3';
@@ -147,6 +150,7 @@ class ClientSeeder extends Seeder
 
         $clientTable = new \App\Models\Client();
         $clientTable->user_id = $client3->id;
+        $clientTable->unique_id = 'WAL-BFE41F23';
         $clientTable->account_id = $clientAccount3->id;
         $clientTable->estate_id = '3';
         $clientTable->	profession_id = '14';
@@ -154,6 +158,7 @@ class ClientSeeder extends Seeder
 
         $clientTable = new \App\Models\Client();
         $clientTable->user_id = $client4->id;
+        $clientTable->unique_id = 'WAL-DB9DBC86';
         $clientTable->account_id = $clientAccount4->id;
         $clientTable->estate_id = '3';
         $clientTable->	profession_id = '22';
