@@ -13,6 +13,8 @@
                     <ol class="breadcrumb breadcrumb-style1 mg-b-10">
                         <li class="breadcrumb-item"><a
                                 href="{{ route('admin.index', app()->getLocale()) }}">Dashboard</a></li>
+                        <li class="breadcrumb-item"><a href="{{ route('admin.discount_list', app()->getLocale()) }}">Discount List</a></li>
+
                         <li class="breadcrumb-item active" aria-current="page">Edit Discount/ Edit Promotion</li>
                     </ol>
                 </nav>

@@ -58,11 +58,11 @@
           </ul>
         </li>
 
-        <li class="nav-item with-sub {{ Route::currentRouteNamed('admin.add_discount', 'admin.discount_list') ? 'active show' : '' }}">
+        <li class="nav-item with-sub {{ Route::currentRouteNamed('admin.add_discount', 'admin.discount_list', 'admin.edit_discount') ? 'active show' : '' }}">
           <a href="" class="nav-link"><i data-feather="percent"></i> <span>Discount/Promotion</span></a>
           <ul>
           <li class="{{ Route::currentRouteNamed('admin.add_discount') ? 'active' : '' }}"><a href="{{ route('admin.add_discount',  app()->getLocale()) }}">Add</a></li>
-            <li class="{{ Route::currentRouteNamed('admin.discount_list') ? 'active' : '' }}"><a href="{{ route('admin.discount_list',  app()->getLocale()) }}">List</a></li>
+            <li class="{{ Route::currentRouteNamed('admin.discount_list', 'admin.edit_discount') ? 'active' : '' }}"><a href="{{ route('admin.discount_list',  app()->getLocale()) }}">List</a></li>
           </ul>
         </li>
 
@@ -108,14 +108,16 @@
           </ul>
         </li>
 
-        <li class="nav-item with-sub {{ Route::currentRouteNamed('admin.template') ? 'active show' : '' }}"">
+        <li class="nav-item {{ Route::currentRouteNamed('admin.template') ? 'active' : '' }}"><a href="{{ route('admin.template', app()->getLocale()) }}" class="nav-link"><i data-feather="bell"></i> <span>Notification Management</span></a></li>
+
+        {{-- <li class="nav-item with-sub {{ Route::currentRouteNamed('admin.template') ? 'active show' : '' }}">
           <a href="" class="nav-link"><i data-feather="bell"></i> <span>Notification Management</span></a>
           <ul>
             <li class="{{ Route::currentRouteNamed('admin.template') ? 'active' : '' }}"><a href="{{ route('admin.template', app()->getLocale()) }}">Email & SMS</a></li>
             <li class=""><a href="#">In-app</a></li>
             <li class=""><a href="#">SMS</a></li>
           </ul>
-        </li>
+        </li> --}}
 
         <li class="nav-item with-sub {{ Route::currentRouteNamed('admin.disbursed_payments', 'admin.received_payments') ? 'active show' : '' }}">
           <a href="" class="nav-link"><i data-feather="credit-card"></i> <span>Payments</span></a>
@@ -142,7 +144,7 @@
           </ul>
         </li>
 
-        <li class="nav-item with-sub">
+        <li class="nav-item with-sub {{ Route::currentRouteNamed('admin.add_referral', 'admin.referral_list') ? 'active show' : '' }}"">
           <a href="" class="nav-link"><i data-feather="external-link"></i> <span>Referral</span></a>
           <ul>
             <li class="{{ Route::currentRouteNamed('admin.add_referral') ? 'active' : '' }}"><a href="{{ route('admin.add_referral',  app()->getLocale()) }}">Add</a></li>
@@ -182,13 +184,13 @@
           </ul>
         </li>
 
-        <li class="nav-item with-sub">
+        {{-- <li class="nav-item with-sub">
           <a href="" class="nav-link"><i data-feather="sliders"></i> <span>Utilities</span></a>
           <ul>
             <li class=""><a href="#">Reset Password</a></li>
             <li class=""><a href="#">Verify Payment</a></li>
           </ul>
-        </li>
+        </li> --}}
 
         <li class="nav-item"><a href="#" class="nav-link"><i data-feather="thumbs-up"></i> <span>Warranty Management</span></a></li>
 
