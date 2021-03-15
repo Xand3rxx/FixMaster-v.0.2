@@ -327,23 +327,23 @@
 
 <!-- START QUALITY ASSURANCE SIDEBAR MENU -->
 @if(Auth::user()->type->role->name === 'Quality Assurance Manager')
-  
+
   <aside class="aside aside-fixed" id="sidebarMenu">
     <div class="aside-header">
         <a href="{{ route('qa.index',app()->getLocale())}}" class="aside-logo">
-        
+
       </a>
       <a href="" class="aside-menu-link">
         <i data-feather="menu"></i>
         <i data-feather="x"></i>
       </a>
       <a href="" id="mailSidebar" class="burger-menu d-md-none"><i data-feather="arrow-left"></i></a>
-  
+
     </div>
     <div class="aside-body">
       <div class="aside-loggedin">
         <div class="d-flex align-items-center justify-content-start">
-          <a href="" class="avatar"><img src="{{!empty(Auth::user()->account->avatar) ? asset('assets/qa_images/'.Auth::user()->account->avatar) : asset('assets/images/no-image-available.png')}}" class="rounded-circle" alt="Male Avatar"></a>
+          <a href="" class="avatar"><img src="{{!empty(Auth::user()->account->avatar) ? asset('assets/qa_avatars/'.Auth::user()->account->avatar) : asset('assets/images/no-image-available.png')}}" class="rounded-circle" alt="Male Avatar"></a>
           <div class="aside-alert-link">
           <a href="#" class="new" data-toggle="tooltip" title="You have 0 unread messages"><i data-feather="message-square"></i></a>
             <a onclick="event.preventDefault();
@@ -365,7 +365,7 @@
           <ul class="nav nav-aside mg-b-0">
             {{-- <li class="nav-item"><a href="" class="nav-link"><i data-feather="edit"></i> <span>Edit Profile</span></a></li> --}}
             <li class="nav-item {{ Route::currentRouteNamed('qa.view_profile') ? 'active' : '' }}"><a href="{{ route('qa.view_profile', app()->getLocale()) }}" class="nav-link"><i data-feather="user"></i> <span>View Profile</span></a></li>
-  
+
             <li class="nav-item {{ Route::currentRouteNamed('qa.edit_profile') ? 'active' : '' }}"><a href="{{ route('qa.edit_profile',app()->getLocale()) }}" class="nav-link"><i data-feather="settings"></i> <span>Account Settings</span></a></li>
           </ul>
         </div>
@@ -373,10 +373,10 @@
       <ul class="nav nav-aside">
         <li class="nav-label">Components</li>
         <li class="nav-item {{ Route::currentRouteNamed('qa.index') ? 'active' : '' }}"><a href="{{ route('qa.index', app()->getLocale()) }}" class="nav-link"><i data-feather="airplay"></i> <span>Home</span></a></li>
-  
-  
+
+
         <li class="nav-label mg-t-25">Adminstration</li>
-  
+
         <li class="nav-item with-sub {{ Route::currentRouteNamed('inbox_messages', 'outbox_messages') ? 'active show' : '' }}">
           <a href="" class="nav-link"><i data-feather="message-circle"></i> <span>Messages</span></a>
           <ul>
@@ -385,10 +385,10 @@
             {{-- <li><a href="#cseMessageComposer" data-toggle="modal">Compose</a></li> --}}
           </ul>
         </li>
-          
+
         <li class="nav-item {{ Route::currentRouteNamed('qa.requests', 'qa.request_details') ? 'active show' : '' }}"><a href="{{ route('qa.requests', app()->getLocale()) }}" class="nav-link"><i data-feather="git-pull-request"></i> <span>Requests</span></a></li>
         <li class="nav-item {{ Route::currentRouteNamed('qa.payments') ? 'active show' : '' }}"><a href="{{ route('qa.payments', app()->getLocale()) }}" class="nav-link"><i data-feather="credit-card"></i> <span>Payments</span></a></li>
-  
+
       </ul>
     </div>
   </aside>
