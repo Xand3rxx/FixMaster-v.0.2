@@ -136,7 +136,7 @@
                 <img src="{{ asset('assets/images/job/Circleci.svg') }}" class="avatar avatar-ex-sm" alt="">
                 <div class="media-body content ml-3">
                     <h4 class="title mb-0">Amount Spent</h4>
-                    <p class="text-muted mb-0">₦30,000.00</p>
+                    <!-- <p class="text-muted mb-0">₦30,000.00</p> -->
                     <!-- {{-- <p class="text-muted mb-0"><a href="javascript:void(0)" class="text-primary">CircleCi</a> @London, UK</p>     --}} -->
                 </div>
             </div>
@@ -189,10 +189,11 @@
                 </a>
                     <a href="javascript:void(0)" class="text-primary">
                     <div class="media-body content ml-3">
-                    
+                    <a href="#" data-toggle="modal" data-target="#modal-form{{$val->id}}" >
                         <h4 class="title mb-0">{{$val->name}}</h4>
-                        <p class="text-muted mb-0">₦30,000.00</p>
+                        <!-- <p class="text-muted mb-0">₦30,000.00</p> -->
                         <!-- <p class="text-muted mb-0"> @London, UK</p>  -->
+                        </a>
                         
                     </div>
                     </a>
@@ -268,8 +269,9 @@
                         <span class="input-group-text">NGN</span>
                     </div>
                     <input type="number" step="any" class="form-control" placeholder="" name="amount" required>
-                    <input type="hidden" name="gateway" value="{{$val->id}}">  
-                    <input type="hidden" name="channel" value="{{$val->name}}">  
+                    <input type="hidden" name="gateway" value="{{$val->id}}">   
+                    <input type="hidden" name="payment_channel" value="{{$val->keyword}}">  
+                    <input type="hidden" name="payment_for" value="e-wallet">  
                 </div>
             </div>
             <div class="text-center">
@@ -413,27 +415,40 @@
                             <th class="py-3">#</th>
                             <th class="py-3">Reference No</th>
                             <th class="py-3">Transaction ID</th>
-                            <th class="py-3">Payment Type</th>
+                            <th class="py-3">Payment For</th>
                             <th class="py-3">Amount</th>
                             <th class="py-3">Status</th>
                             <th class="py-3">Transacation Date</th>
-                            <th class="py-3">Action</th>
+                            <!-- <th class="py-3">Action</th> -->
 
                             {{-- <th class="py-3">Balance</th> --}}
                         </tr>
                     </thead>
         
                     <tbody>
+                    @foreach($mytransactions as $k=>$val)
                         <tr>
-                            <td>1</td>
-                            <td>32e3lh2e23083h432b</td>
-                            <td>92347h86234g38hh23 or UNAVAILABLE</td>
-                            <td>Credit</td>
-                            <td class="font-weight-bold">₦{{ number_format(10000) }}</td>
-                            <td class="text-center text-warning">Pending</td>
-                            <td>{{ Carbon\Carbon::parse('', 'UTC')->isoFormat('MMMM Do YYYY, h:mm:ssa') }}</td>
-                            <td><a href="#transactionDetails" data-toggle="modal" class="btn btn-primary btn-sm ">Details</a></td>
+                            <td>{{++$k}}.</td>
+                            <td>{{$val->reference_id}}</td>  
+                            <td>{{$val->transaction_id}}</td>
+                            <td class="font-weight-bold">{{$val->payment_for}}</td>
+                            <td>{{$val->amount}}</td>
+                            
+                            @if($val->status=='success')
+                            <td class="text-center text-success">Success</td>
+                            @elseif($val->status=='pending')
+                            <td class="text-center text-danger">Pending</td>                 
+                            @elseif($val->status=='failed')
+                            <td class="text-center text-warning">Failed</td>
+                            @elseif($val->status=='timeout')
+                            <td class="text-center text-info">Timeout</td>
+                            @endif
+
+                            <td>{{date("Y/m/d h:i:A", strtotime($val->created_at))}}</td>
+                            <!-- <td>{{ Carbon\Carbon::parse('', 'UTC')->isoFormat('MMMM Do YYYY, h:mm:ssa') }}</td> -->
+                            <!-- <td><a href="#transactionDetails" data-toggle="modal" class="btn btn-primary btn-sm ">Details</a></td> -->
                         </tr>
+                        @endforeach
                     </tbody>
                 </table>
         

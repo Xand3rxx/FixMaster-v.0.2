@@ -149,32 +149,79 @@ class ClientController extends Controller
     {
         $data['title']        = 'Fund your wallet';
         $data['gateways']     = PaymentGateway::whereStatus(1)->orderBy('id', 'DESC')->get();
-        return view('client.wallet', $data);
+        $data['mytransactions']    = Payment::where('user_id', auth()->user()->id)->orderBy('id', 'DESC')->get();
+        $myWallet    = WalletTransaction::where('user_id', auth()->user()->id)->orderBy('id', 'DESC')->get();
+        // dd($data['myWallet']);
+        return view('client.wallet', compact('myWallet')+$data);
     }
 
 
     public function walletSubmit(Request $request)
     {
+        $myWallet    = WalletTransaction::where('user_id', auth()->user()->id)->orderBy('id', 'DESC')->get();
         // validate Request
         $valid = $this->validate($request, [
             // List of things needed from the request like 
             // Amount, Payment Channel, Payment for, Reference Id
             'amount'           => 'required',
             'payment_channel'  => 'required',
-            'payment_for'      => 'e-wallet',
+            'payment_for'      => 'required',
         ]);
         // fetch the Client Table Record
         $client = \App\Models\Client::where('user_id', $request->user()->id)->with('user')->firstOrFail();
-        // call the payment Trait and submit record on the 
-        $payment = $this->payment($valid['amount'], $valid['payment_channel'], $valid['payment_for'], $client['unique_id'], 'pending', $this->generateReference());
+        // save the reference_id as track in session
 
-        // try {
+        $generatedVal = $this->generateReference();
+        
+        // call the payment Trait and submit record on the
+        $payment = $this->payment($valid['amount'], $valid['payment_channel'], $valid['payment_for'], $client['unique_id'], 'pending', $generatedVal);
+        Session::put('Track', $generatedVal);
+        // $client->user()->email();
+        if ($payment) {            
+                //   new starts here 
+                $user_id = auth()->user()->id;
+                $track = Session::get('Track');
+                $pay =  Payment::where('reference_id', $track)->orderBy('id', 'DESC')->first();
+
+                // dd($track);
+                // dd($pay);
+                if (is_null($pay)) {
+                    return redirect()->route('client.wallet', app()->getLocale())->with('alert', 'Invalid Deposit Request');
+                }
+                if ($pay->status != 'pending') {
+                    return redirect()->route('client.wallet', app()->getLocale())->with('alert', 'Invalid Deposit Request');
+                }
+                $gatewayData = PaymentGateway::where('keyword', $pay->payment_channel)->first();
+
+                // dd($gatewayData); 
+                if ($pay->payment_channel == 'paystack') { 
+                    $paystack['amount'] = $pay->amount;
+                    $paystack['track'] = $track;
+                    $title = $gatewayData->name;
+                    $client = User::find(auth()->user()->id);
+                    return view('client.payment.paystack', compact('paystack', 'title', 'gatewayData', 'pay', 'myWallet','client'));
+                } elseif ($pay->payment_channel == 'flutterwave') {
+                    $flutter['amount'] = $pay->amount;
+                    $flutter['track'] = $track;
+                    $title = $gatewayData->name;
+                    $client = User::find(auth()->user()->id);
+                    return view('client.payment.flutter', compact('flutter', 'title', 'gatewayData', 'pay', 'myWallet','client'));
+                }
+        }
+
+
+
+        
+        // dd($payment);
+       
+            // try {
         // $user = User::find(auth()->user()->id);
+        // $client = \App\Models\Client::where('user_id', $request->user()->id)->with('user')->firstOrFail();
 
         // $depo = new Payment();
         // $depo['user_id'] = auth()->user()->id;
         // $depo['amount'] = $request->amount;
-        // $depo['payment_channel'] = 1; 
+        // $depo['payment_channel'] = $request->channel; 
         // $depo['payment_for'] = 1;
         // $depo['unique_id'] = $user->wallet_id; //wallet ID
         // $CustomHelper = new CustomHelpers();
@@ -329,15 +376,102 @@ class ClientController extends Controller
 
         /** If the transaction stats are successful snd to DB */
         if ($data->status == 0) {
-            $data['status'] = 1;
+            $data['status'] = 'success';
             $data['transaction_id'] = rawurlencode($reference);
             $data->update();
-            $walTrans = WalletTransaction::find($data->user_id);
-            $walTrans['balance'] = $walTrans->balance + $data->amount;
-            $user->update();
+            $track = Session::get('Track');
+            $data  = Payment::where('reference_id', $track)->orderBy('id', 'DESC')->first();
+
+            $client = \App\Models\Client::where('user_id', auth()->user()->id)->with('user')->firstOrFail();
+
+            if (!WalletTransaction::where('unique_id', '=', $client['unique_id'])->exists()) {
+                // $track = Session::get('Track'); 
+                // $data  = Payment::where('reference_id', $track)->orderBy('id', 'DESC')->first();
+                $walTrans = new WalletTransaction;
+                $walTrans['user_id'] = auth()->user()->id;
+                $walTrans['payment_id'] = $data->id;
+                $walTrans['amount'] = $data->amount;
+                $walTrans['payment_type'] = 'funding';
+                $walTrans['unique_id'] = $data->unique_id;
+                $walTrans['transaction_type'] = 'debit';
+                $walTrans['opening_balance'] = '0';
+                $walTrans['closing_balance'] = $data->amount;
+                $walTrans->save();
+            }else{
+                $walTrans = WalletTransaction::where('user_id', auth()->user()->id)->orderBy('id', 'DESC')->first();
+                $walTrans['opening_balance'] = $walTrans->closing_balance;
+                $walTrans['closing_balance'] = $walTrans->opening_balance + $data->amount;
+                $walTrans->update(); 
+            }
+
         }
 
-        /** Finally return the callback view for the end user */
-        return redirect()->route('user.fund')->with('success', 'Fund successfully added!');
+        /** Finally return the callback view for the end user */ 
+        return redirect()->route('client.wallet', app()->getLocale())->with('success', 'Fund successfully added!');
+    } 
+
+
+    public function flutterIPN(Request $request)
+    {
+        $track  = Session::get('Track');
+        $data = Payment::where('reference_id', $track)->orderBy('id', 'DESC')->first();
+        // $track = Session::get('Track');
+        $client = \App\Models\Client::where('user_id', $request->user()->id)->with('user')->firstOrFail();
+        if (!WalletTransaction::where('unique_id', '=', $client['unique_id'])->exists()) {
+            // $track = Session::get('Track'); 
+            // $data  = Payment::where('reference_id', $track)->orderBy('id', 'DESC')->first();
+            $walTrans = new WalletTransaction;
+            $walTrans['user_id'] = auth()->user()->id;
+            $walTrans['payment_id'] = $data->id;
+            $walTrans['amount'] = $data->amount;
+            $walTrans['payment_type'] = 'funding';
+            $walTrans['unique_id'] = $data->unique_id;
+            $walTrans['transaction_type'] = 'debit';
+            $walTrans['opening_balance'] = '0';
+            $walTrans['closing_balance'] = $data->amount;
+            $walTrans->save();
+        }else{
+            $walTrans = WalletTransaction::where('user_id', auth()->user()->id)->orderBy('id', 'DESC')->first();
+            $walTrans['opening_balance'] = $walTrans->closing_balance;
+            $walTrans['closing_balance'] = $walTrans->opening_balance + $data->amount;
+            $walTrans->update(); 
+        }
+        // dd()
+        return redirect()->route('client.wallet', app()->getLocale())->with('success', 'Fund successfully added!');
+
+
     }
+
+
+
+
+    // public function userDataUpdate($data)
+    // {
+    //     if ($data->status == 0) {
+    //         $data['status'] = 'success';
+    //         $data['transaction_id'] = rawurlencode($reference);
+    //         $data->update();
+
+    //         // $walTrans = WalletTransaction::find($data->user_id);
+    //         // $walTrans['balance'] = $walTrans->balance + $data->amount;
+    //         // $user->update(); 
+
+    //         // $walTrans = new WalletTransaction();
+    //         // PaymentGateway::whereStatus(1)->orderBy('id', 'DESC')->get();
+    //         $walTrans = WalletTransaction::where('reference_id', $track)->orderBy('id', 'DESC')->first();
+    //         $walTrans['balance'] = auth()->user()->id;
+    //         $walTrans->save();
+
+    //         if (!WalletTransaction::where('unique_id', '=', $user->wallet_id)->exists()) {
+    //             $track = Session::get('Track'); 
+    //             $data  = Payment::where('reference_id', $track)->orderBy('id', 'DESC')->first();
+    //             $walTrans = new WalletTransaction;
+    //             $walTrans['user_id'] = auth()->user()->id;
+    //         }
+
+    //     }
+
+    // }
+
+
 }
