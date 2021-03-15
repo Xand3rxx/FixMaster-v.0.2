@@ -39,9 +39,9 @@
                                 <div class="pos-relative d-inline-block mg-b-20">
                                   <a href="#">
                                   {{-- {{asset('assets/qa_images/'.$result->account->avatar)}} --}}
-                                    <div class="avatar avatar-xxl">  
+                                    <div class="avatar avatar-xxl">
                                       <div class="user-img">
-                                        <img class="rounded-circle wh-150p img-fluid image profile_image_preview" src="{{!empty($result->account->avatar) ? asset('assets/qa_images/'.$result->account->avatar) : asset('assets/images/no-image-available.png')}}" alt="user-image">
+                                        <img class="rounded-circle wh-150p img-fluid image profile_image_preview" src="{{!empty($result->account->avatar) ? asset('assets/qa_avatars/'.$result->account->avatar) : asset('assets/images/no-image-available.png')}}" alt="user-image">
                                       </div>
                                     </div>
                                   </a>
@@ -60,7 +60,7 @@
                         </div>
                         <div class="form-group col-md-3">
                           <label for="inputEmail4">Middle Name</label>
-                          <input type="text" class="form-control" id="middle_name" name="middle_name" value="{{$result->account->middle_name}}" required>
+                          <input type="text" class="form-control @error('middle_name') is-invalid @enderror" id="middle_name" name="middle_name" value="{{$result->account->middle_name}}" required>
                           @error('middle_name')
                           <span class="invalid-feedback" role="alert">
                               <strong>{{ $message }}</strong>
@@ -87,6 +87,11 @@
                               <option value="female">Female</option>
                               <option value="others">Others</option>
                            </select>
+                           @error('gender')
+                           <span class="invalid-feedback" role="alert">
+                               <strong>{{ $message }}</strong>
+                           </span>
+                         @enderror
                           </div>
                             <!-- Email -->
                             <div class="form-group col-md-4">
@@ -116,7 +121,6 @@
                                 <div class="custom-file">
                                   <input type="file" accept="image/*" class="custom-file-input @error('image') is-invalid @enderror" name="profile_avater" id="profile_image">
                                   <label class="custom-file-label" id="imagelabel" for="profile_image">Upload Profile Avatar</label>
-
                                   @error('image')
                                   <span class="invalid-feedback" role="alert">
                                       <strong>{{ $message }}</strong>
@@ -130,11 +134,21 @@
                             <!-- Full Address -->
                             <div class="form-group col-md-6">
                               <label for="inputAddress2">Full Address</label>
-                              <textarea rows="3" class="form-control" id="inputAddress2" name="full_address" required></textarea>
+                              <textarea rows="3" class="user_address form-control @error('full_address') is-invalid @enderror" placeholder="e.g. 284B, Ajose Adeogun Street, Victoria Island, Lagos, Nigeria." id="inputAddress2" name="full_address" required></textarea>
+                              @error('full_address')
+                            <span class="invalid-feedback" role="alert">
+                                <strong>{{ $message }}</strong>
+                            </span>
+                            @enderror
                             </div>
                             <div class="form-group col-md-6">
                                 <label for="inputAddress2">Work Address</label>
-                                <textarea rows="3" class="form-control" id="inputAddress2" name="work_address" required></textarea>
+                                <textarea rows="3" class="user_address2 form-control @error('work_address') is-invalid @enderror" placeholder="e.g. Block A2, Broad Street, Marina, Lagos, Nigeria"  id="" name="work_address" required></textarea>
+                                @error('work_address')
+                            <span class="invalid-feedback" role="alert">
+                                <strong>{{ $message }}</strong>
+                            </span>
+                            @enderror
                             </div>
 
                         </div>
@@ -192,10 +206,37 @@
     </div>
 </div>
 @endsection
+@push('scripts')
+<script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDeDLVAiaU13p2O0d3jfcPjscsbVsCQUzc&v=3.exp&libraries=places"></script>
 
 
-@section('scripts')
 <script>
+
+$(document).ready(function() {
+        "use strict";
+        let autocomplete;
+        initialize();
+
+        
+
+        function initialize() {
+            // Create the autocomplete object, restricting the search to geographical location types.
+            autocomplete = new google.maps.places.Autocomplete((document.querySelector('.user_address')), {
+                types: ['geocode']
+            });
+            autocomplete = new google.maps.places.Autocomplete((document.querySelector('.user_address2')), {
+                types: ['geocode']
+            });
+            // Chain request to html element on the page
+            google.maps.event.addDomListener(document.querySelector('.user_address'), 'focus');
+            google.maps.event.addDomListener(document.querySelector('.user_address2'), 'focus');
+        }
+    });
+    
+</script>
+
+<script>
+
   (function($){
     "use scrict";
     $(document).ready(function(){
@@ -243,9 +284,13 @@
           return false;
       }
 
-    })
+
+      
+
+    });
 
  })(jQuery);
 
+
 </script>
-@endsection
+@endpush
