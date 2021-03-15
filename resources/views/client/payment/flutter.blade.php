@@ -114,7 +114,7 @@
             <div class="media key-feature align-items-center p-3 rounded shadow mt-4">
                 <img src="{{ asset('assets/images/job/Circleci.svg') }}" class="avatar avatar-ex-sm" alt="">
                 <div class="media-body content ml-3">
-                    <h4 class="title mb-0">flutter</h4>
+                    <h4 class="title mb-0">paystack</h4>
                 <p class="text-muted mb-0">3</p>
                     {{-- <p class="text-muted mb-0"><a href="javascript:void(0)" class="text-primary">CircleCi</a> @London, UK</p>     --}}
                 </div>
@@ -152,8 +152,59 @@
                 <div class="media">                                        
                     <div class="media-body content">
                     <p class="text-muted location-time"><span class="text-dark h6">You are about to pay the sum of</span></p>
-                        <h4><a href="javascript:void(0)" class="text-dark title">₦ {{$data->amount}} </a></h4>                    
-                        <a href="#" class="btn btn-lg btn-outline-primary mouse-down">Click to complete the transaction</a>
+                        <h4><a href="javascript:void(0)" class="text-dark title">₦ {{$pay->amount}} </a></h4> 
+                  
+                        <p class="text-muted location-time"><span class="text-dark h6">Via Flutter</span></p>                  
+                        
+                        
+                        <!-- <form class="mb-5" method="post" action="{{ route('client.ipn.paystack', app()->getLocale()) }}">
+                          @csrf     
+                          <button type="submit" class="btn btn-lg btn-outline-primary mouse-down btn-block">
+                            Click to complete the transaction
+                          </button>    
+                         </form> -->
+
+
+                         <form>              
+                  <button type="button" class="btn btn-primary" style="cursor:pointer;" value="Click to complete the transaction" id="submit">Click to complete the transaction</button>
+                </form>
+                <script type="text/javascript" src="http://flw-pms-dev.eu-west-1.elasticbeanstalk.com/flwv3-pug/getpaidx/api/flwpbf-inline.js"></script>
+                <script>
+                document.addEventListener("DOMContentLoaded", function(event) {
+                document.getElementById("submit").addEventListener("click", function(e) {
+                    // var PBFKey = "FLWPUBK_TEST-0c1e95aa9cc0953c40ce3f504bde6736-X";
+                    getpaidSetup({
+                    PBFPubKey: 'FLWPUBK_TEST-0c1e95aa9cc0953c40ce3f504bde6736-X',
+                    customer_email: "{{$client->email}}",
+                    customer_firstname: "{{$client->name}}",
+                    customer_lastname: "",
+                    custom_description: "E-WALLET funding",
+                    custom_title: "FIXMASTER",
+                    amount: {{ $flutter['amount'] }},
+                    customer_phone: "{{$client->mobile}}",
+                    country: "",
+                    currency: "NGN",
+                    txref: "{{ $flutter['track'] }}",
+                    // integrity_hash: "6800d2dcbb7a91f5f9556e1b5820096d3d74ed4560343fc89b03a42701da4f30",
+                    onclose: function() {},
+                    callback: function(response) {
+                        var flw_ref = response.tx.flwRef; // collect flwRef returned and pass to a server page to complete status check.
+                        console.log("This is the response returned after a charge", response);
+                        if (
+                        response.tx.chargeResponseCode == "00" ||
+                        response.tx.chargeResponseCode == "0"
+                        ) {
+                        window.location.href="{{route('client.ipn.flutter', app()->getLocale())}}";
+                        } else {
+                        window.location.href="{{route('client.wallet', app()->getLocale())}}";
+           
+                        }
+                    }
+                    });
+                });
+                });
+                </script>
+
                     </div>
                 </div>
         </div>

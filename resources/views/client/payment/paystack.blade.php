@@ -152,17 +152,17 @@
                 <div class="media">                                        
                     <div class="media-body content">
                     <p class="text-muted location-time"><span class="text-dark h6">You are about to pay the sum of</span></p>
-                        <h4><a href="javascript:void(0)" class="text-dark title">₦ {{$data->amount}} </a></h4> 
+                        <h4><a href="javascript:void(0)" class="text-dark title">₦ {{$pay->amount}} </a></h4> 
                         
-                        @if($data->payment_channel==1)
+                        <!-- @if($pay->payment_channel=='paystack') -->
                         <p class="text-muted location-time"><span class="text-dark h6">Via Paystack</span></p>
-                        @elseif($data->status==2)
+                        <!-- @elseif($pay->payment_channel=='flutterwave')
                         <p class="text-muted location-time"><span class="text-dark h6">Via Flutter</span></p>                 
-                        @elseif($data->status==3)
+                        @elseif($pay->payment_channel=='offline')
                         <p class="text-muted location-time"><span class="text-dark h6">Via Offline</span></p>
-                        @elseif($data->status==4)
+                        @elseif($pay->payment_channel=='wallet')
                         <p class="text-muted location-time"><span class="text-dark h6">Via Wallet</span></p>
-                        @endif
+                        @endif -->
                         
                         <form class="mb-5" method="post" action="{{ route('client.ipn.paystack', app()->getLocale()) }}">
                           @csrf     

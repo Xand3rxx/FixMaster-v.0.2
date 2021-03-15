@@ -15,9 +15,10 @@
                                             <li class="month font-weight-bold">{{ date('M') }}</li>
                                             <li class="month font-weight-bold">{{ date('Y') }}</li>
                                         </ul> --}}
+                                    
                                         <div class="media-body content">
                                             <h4><a href="javascript:void(0)" class="text-dark title">Balance</a></h4>
-                                        <p class="text-muted location-time"><span class="text-dark h6">₦{{ number_format(5000) }}</span></p>
+                                        <p class="text-muted location-time"><span class="text-dark h6">₦{{$myWallet[0]['closing_balance']}}</span></p>
                                             <a href="#" class="btn btn-sm btn-outline-primary mouse-down">Fund Account</a>
                                         </div>
                                     </div>

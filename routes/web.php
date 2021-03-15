@@ -198,7 +198,7 @@ Route::prefix('/client')->group(function () {
 
         // Route::get('/requests',                    [ClientRequestController::class, 'index'])->name('client.requests');
 
-        Route::get('/wallet',                   [ClientController::class, 'wallet'])->name('wallet'); //Take me to Supplier Dashboard
+        // Route::get('/wallet',                   [ClientController::class, 'wallet'])->name('wallet'); //Take me to Supplier Dashboard
             // Route::get('/requests',                 [ClientRequestController::class, 'index'])->name('client.requests');
             
 
