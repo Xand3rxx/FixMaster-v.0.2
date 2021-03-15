@@ -23,7 +23,7 @@ class CreateServiceDiscountsTable extends Migration
             $table->uuid('service_id');
             $table->string('discount_name', 250);
             $table->string('entity', 250);
-            $table->integer('rate');
+            $table->float('rate');
             $table->enum('notify', [0, 1])->default(0);
             $table->enum('status', ['activate', 'deactivate'])->default('activate');
             $table->timestamps();

@@ -84,6 +84,10 @@
 
         <li class="nav-item"><a href="" class="nav-link"><i data-feather="bar-chart"></i> <span>Income/Commission</span></a></li>
 
+        <li class="nav-item {{ Route::currentRouteNamed('admin.invoices') ? 'active show' : '' }}">
+            <a href="{{ route('admin.invoices', app()->getLocale()) }}" class="nav-link"><i data-feather="file-text"></i> <span>Invoice Management</span></a>
+        </li>
+
         <li class="nav-item"><a href="" class="nav-link"><i data-feather="briefcase"></i> <span>Job Card</span></a></li>
 
         <li class="nav-item {{ Route::currentRouteNamed('admin.location_request') ? 'active' : '' }}"><a href="{{ route('admin.location_request', app()->getLocale()) }}" class="nav-link"><i data-feather="map-pin"></i> <span>Location Request</span></a></li>
@@ -96,18 +100,18 @@
           </ul>
         </li>
 
-        <li class="nav-item with-sub">
+        <li class="nav-item with-sub {{ Route::currentRouteNamed('admin.inbox', 'admin.outbox') ? 'active show' : '' }}">
           <a href="" class="nav-link"><i data-feather="message-circle"></i> <span>Messages</span></a>
           <ul>
-            <li class=""><a href="#">Inbox</a></li>
-            <li class=""><a href="#">Sent</a></li>
+            <li class="{{ Route::currentRouteNamed('admin.inbox') ? 'active' : '' }}"><a href="{{ route('admin.inbox', app()->getLocale()) }}">Inbox</a></li>
+            <li class="{{ Route::currentRouteNamed('admin.outbox') ? 'active' : '' }}"><a href="{{ route('admin.outbox', app()->getLocale()) }}">Sent</a></li>
           </ul>
         </li>
 
-        <li class="nav-item with-sub">
+        <li class="nav-item with-sub {{ Route::currentRouteNamed('admin.template') ? 'active show' : '' }}"">
           <a href="" class="nav-link"><i data-feather="bell"></i> <span>Notification Management</span></a>
           <ul>
-            <li class=""><a href="#">Email</a></li>
+            <li class="{{ Route::currentRouteNamed('admin.template') ? 'active' : '' }}"><a href="{{ route('admin.template', app()->getLocale()) }}">Email & SMS</a></li>
             <li class=""><a href="#">In-app</a></li>
             <li class=""><a href="#">SMS</a></li>
           </ul>
@@ -141,8 +145,8 @@
         <li class="nav-item with-sub">
           <a href="" class="nav-link"><i data-feather="external-link"></i> <span>Referral</span></a>
           <ul>
-            <li class=""><a href="#">Add</a></li>
-            <li class=""><a href="#">List</a></li>
+            <li class="{{ Route::currentRouteNamed('admin.add_referral') ? 'active' : '' }}"><a href="{{ route('admin.add_referral',  app()->getLocale()) }}">Add</a></li>
+            <li class="{{ Route::currentRouteNamed('admin.referral_list') ? 'active' : '' }}"><a href="{{ route('admin.referral_list',  app()->getLocale()) }}">List</a></li>
           </ul>
         </li>
 

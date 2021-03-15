@@ -21,6 +21,8 @@ use App\Http\Controllers\Technician\TechnicianProfileController;
 use App\Http\Controllers\Admin\EWalletController;
 use App\Http\Controllers\AdminLocationRequestController;
 use App\Http\Controllers\Admin\PriceController;
+use App\Http\Controllers\InvoiceController;
+use App\Http\Controllers\SimulationController;
 use App\Http\Controllers\Admin\User\Administrator\SummaryController;
 
 /*
@@ -64,6 +66,7 @@ Route::prefix('admin')->group(function () {
             Route::get('administrator/summary/{user:uuid}', [SummaryController::class, 'show'])->name('administrator.summary.show');
         });
 
+        //Routes for estate management
         Route::get('/estate/list',      [EstateController::class, 'index'])->name('list_estate');
         Route::get('/estate/add',      [EstateController::class, 'create'])->name('add_estate');
         Route::post('/estate/add',      [EstateController::class, 'store'])->name('store_estate');
@@ -75,6 +78,19 @@ Route::prefix('admin')->group(function () {
         Route::get('/estate/approve/{estate:uuid}',      [EstateController::class, 'approve'])->name('approve_estate');
         Route::get('/estate/decline/{estate:uuid}',      [EstateController::class, 'decline'])->name('decline_estate');
         Route::get('/estate/delete/{estate:uuid}',      [EstateController::class, 'delete'])->name('delete_estate');
+
+        //Routes for Invoice Management
+        Route::get('/invoices',      [InvoiceController::class, 'index'])->name('invoices');
+
+        //Routes for Simulation
+        Route::get('/diagnostic', [SimulationController::class, 'diagnosticSimulation'])->name('diagnostic');
+        Route::get('/end-service/{service_request:uuid}', [SimulationController::class, 'endService'])->name('end_service');
+        Route::get('/complete-service/{service_request:uuid}', [SimulationController::class, 'completeService'])->name('complete_service');
+        Route::get('/invoice/{invoice:id}', [SimulationController::class, 'invoice'])->name('invoice');
+
+        Route::get('/rfq',                                  [SimulationController::class, 'rfqSimulation'])->name('rfq');
+        Route::get('/rfq/details/{serviceRequest:id}',    [SimulationController::class, 'rfqDetailsSimulation'])->name('rfq_details');
+        Route::post('/rfq/ongoing/update',                  [SimulationController::class, 'simulateOngoingProcess'])->name('rfq_update');
 
 
         //Routes for Category Management
@@ -133,15 +149,24 @@ Route::prefix('admin')->group(function () {
         Route::get('/discount/deactivate/{discount:id}',                    [App\Http\Controllers\DiscountController::class, 'deactivate'])->name('deactivate_discount');
         Route::get('/discount/activate/{discount:id}',                    [App\Http\Controllers\DiscountController::class, 'reinstate'])->name('activate_discount');
 
+        Route::get('/referral/add',                     [App\Http\Controllers\ReferralController::class, 'create'])->name('add_referral');
+        Route::post('/referral/store',                    [App\Http\Controllers\ReferralController::class, 'store'])->name('referral_store');
+        Route::get('/referral/list',                       [App\Http\Controllers\ReferralController::class, 'index'])->name('referral_list');
+        Route::get('/referral/delete/{referral:id}',                    [App\Http\Controllers\ReferralController::class, 'delete'])->name('delete_referral');
+        Route::get('/referral/deactivate/{referral:id}',                    [App\Http\Controllers\ReferralController::class, 'deactivate'])->name('deactivate_referral');
+        Route::get('/referral/activate/{referral:id}',                    [App\Http\Controllers\ReferralController::class, 'reinstate'])->name('activate_referral');
+
+
         //Admin payment Routes
         Route::get('/payment-gateway/list',                 [GatewayController::class, 'index'])->name('list_payment_gateway');
         Route::post('/paystack/update',                     [GatewayController::class, 'paystackUpdate'])->name('paystack_update');
         Route::post('/flutter/update',                      [GatewayController::class, 'flutterUpdate'])->name('flutter_update');
 
         // messaging routes
-        Route::view('/messaging/templates',                   'admin.messaging.template')->name('template');
-        Route::view('/messaging/outbox',      'admin.messaging.email.outbox')->name('inbox');
-        Route::view('/messaging/new',      'admin.messaging.email.new')->name('new_email');
+        Route::view('/messaging/templates',           		'admin.messaging.template')->name('template');
+         Route::view('/messaging/outbox',      'admin.messaging.email.outbox')->name('outbox');
+         Route::view('/messaging/inbox',      'admin.messaging.email.inbox')->name('inbox');
+         Route::view('/messaging/new',      'admin.messaging.email.new')->name('new_email');
 
         //Routes for E-Wallet Admin Management
         Route::get('/ewallet/clients',                      [EWalletController::class, 'clients'])->name('ewallet.clients');
@@ -219,10 +244,8 @@ Route::prefix('/technician')->group(function () {
         Route::view('/messages/inbox',                  'technician.messages.inbox')->name('messages.inbox');
         Route::view('/messages/sent',                   'technician.messages.outbox')->name('messages.outbox');
         Route::patch('/update_profile',                     [TechnicianProfileController::class, 'updateProfile'])->name('update_profile');
-        Route::PATCH('/update_password',                     [TechnicianProfileController::class, 'updatePassword'])->name('update_password');
-        Route::get('/payments', [PaymentController::class, 'get_technician_disbursed_payments'])->name('payments');
-        Route::view('/messages/inbox', 'technician.messages.inbox')->name('messages.inbox');
-        Route::view('/messages/sent', 'technician.messages.outbox')->name('messages.outbox');
+        Route::patch('/update_password',                     [TechnicianProfileController::class, 'updatePassword'])->name('update_password');
+        Route::get('/payments', [TechnicianProfileController::class, 'get_technician_disbursed_payments'])->name('payments');
     });
 });
 

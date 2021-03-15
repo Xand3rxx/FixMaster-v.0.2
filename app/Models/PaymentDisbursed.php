@@ -32,10 +32,20 @@ class PaymentDisbursed extends Model
 
 
     public function service_request(){
-        return $this->hasOne(ServiceRequest::class,'id');
+        return $this->hasOne(ServiceRequest::class, 'id', 'service_request_id');
     }
 
     public function mode(){
-        return $this->hasOne(PaymentMode::class, 'id');
+        return $this->hasOne(PaymentMode::class, 'id', 'payment_mode_id');
+    }
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
+
+    public function account()
+    {
+        return $this->belongsTo(Account::class);
     }
 }

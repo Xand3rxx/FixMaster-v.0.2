@@ -22,7 +22,7 @@
                 <a href="{{ route('admin.discount_list',app()->getLocale()) }}" class="btn btn-primary"><i
                         class="fas fa-arrow-left"></i> Discount List</a>
                 <a href="{{ route('admin.add_discount',app()->getLocale()) }}" class="btn btn-warning"><i
-                        class="fas fa-plus"></i> Create New Discount</a>
+                        class="fas fa-plus"></i> Edit Discount</a>
 
             </div>
         </div>
@@ -271,7 +271,7 @@
                         <div class="form-group col-md-6">
                             <label for="rate">Rate</label>
                             <div class="input-group">
-                                <input type="number" min='1' id="rate" class="form-control" name="rate"
+                                <input type="number" min="0.1" step="any" id="rate" class="form-control" name="rate"
                                     aria-label="Dollar amount" value="{{ $status->rate }}">
                                 <div class="input-group-append">
                                     <span id="percentage" class="input-group-text">0.00</span>
@@ -336,7 +336,7 @@
                                 </div>
                             </span>
 
-                            <button type="submit" class="btn btn-primary pull-right-1">Create</button>
+                            <button type="submit" class="btn btn-primary pull-right-1">Edit</button>
                         </div>
 
                     </div>
@@ -647,6 +647,7 @@ $(document).ready(function() {
         $('.show-estate').hide();
         $('.show-service').show();
         $('.parameter').hide();
+        $('.add-page').show();
 
         $.ajax({
             url: "{{ route('admin.categories_edit',app()->getLocale()) }}",
@@ -702,7 +703,7 @@ $(document).ready(function() {
             },
         })
     }
-    console.log(categories, '12');
+  
 
     if (entity === 'service') {
 

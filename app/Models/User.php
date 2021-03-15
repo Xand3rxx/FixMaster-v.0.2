@@ -116,8 +116,16 @@ class User extends Authenticatable
     {
         return $this->hasMany(ActivityLog::class, 'user_id', 'id');
     }
+    
+    /**
+     * Get the phone associated with the user.
+     */
+    public function phone()
+    {
+        return $this->hasOne(Phone::class);
+    }
 
-     /**
+    /**
      * Get the phone associated with the user.
      */
     public function phones()
@@ -143,7 +151,27 @@ class User extends Authenticatable
         return $this->hasMany(Estate::class);
     }
 
-    public function payments(){
-        return $this->hasMany(PaymentDisbursed::class,'recipient_id');
+    public function payments()
+    {
+        return $this->hasMany(PaymentDisbursed::class, 'recipient_id');
+    }
+    public function invoice()
+    {
+        return $this->hasOne(Invoice::class);
+    }
+
+    public function invoices()
+    {
+        return $this->hasMany(Invoice::class);
+    }
+
+    public function serviceRequest()
+    {
+        return $this->hasOne(ServiceRequest::class);
+    }
+
+    public function serviceRequests()
+    {
+        return $this->hasMany(ServiceRequest::class);
     }
 }

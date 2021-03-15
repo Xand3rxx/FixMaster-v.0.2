@@ -18,9 +18,9 @@ trait GenerateUniqueIdentity
      * 
      * @return string
      */
-    public static function generate(string $tableName, string $abbr)
+    public static function generate(string $table, string $abbr, $colunm)
     {
-        return static::uniqueIdentity($tableName, $abbr);
+        return static::uniqueIdentity($table, $abbr, $colunm);
     }
 
     /**
@@ -30,7 +30,7 @@ trait GenerateUniqueIdentity
      *
      * @return string
      */
-    protected static function uniqueIdentity(string $tableName, string $abbr, $unique = false)
+    protected static function uniqueIdentity(string $table, string $abbr, $colunm='',  $unique = false)
     {
         // Store tested results in array to not test them again
         $tested = [];
@@ -44,9 +44,14 @@ trait GenerateUniqueIdentity
             if (in_array($random, $tested)) {
                 continue;
             }
-
+              
+            if($colunm){
+                $exist = \Illuminate\Support\Facades\DB::table($table)->where($colunm, $random)->exists();
+            }else{
+                $exist = \Illuminate\Support\Facades\DB::table($table)->where('unique_id', $random)->exists();
+            }
             // Check if it is unique in the database
-            $exist = \Illuminate\Support\Facades\DB::table($tableName)->where('unique_id', $random)->exists();
+           
 
             // Store the random characters in the tested array
             // To keep track which ones are already tested

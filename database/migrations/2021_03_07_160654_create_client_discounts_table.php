@@ -24,7 +24,7 @@ class CreateClientDiscountsTable extends Migration
             $table->integer('user_id')->nullable();
             $table->string('discount_name', 250);
             $table->string('entity', 250);
-            $table->integer('rate');
+            $table->float('rate');
             $table->enum('notify', [0, 1])->default(0);
             $table->enum('status', ['activate', 'deactivate'])->default('activate');
             $table->timestamps();

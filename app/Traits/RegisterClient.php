@@ -3,6 +3,7 @@
 namespace App\Traits;
 
 use App\Models\User;
+use App\Models\Referral;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -20,6 +21,7 @@ trait RegisterClient
         DB::transaction(function () use ($valid, &$registred) {
             // store in users Table
             $user = $this->createUser($valid);
+          
 
             // find client role using slug of client-user
             $role = \App\Models\Role::where('slug', 'client-user')->first();
@@ -49,6 +51,15 @@ trait RegisterClient
                 'profession_id' => $valid['profession_id'] ?? "0",
             ]);
 
+              // Store in referrals table
+             $code = $valid['ref'];
+             if($code){
+                Referral::where('referral_code', $code )->increment('referral_count' , 1);
+                Referral::create(['user_id'=> $user->id, 'referral'=> $code, 'referral_count'=> 0]);  
+             }
+        
+          
+
             // update registered to be true
             $registred = true;
             $this->guard()->login($user);
@@ -68,6 +79,8 @@ trait RegisterClient
         return User::create([
             'email' => $data['email'],
             'password' => Hash::make($data['password']),
+          
+           
         ]);
     }
 
@@ -80,4 +93,6 @@ trait RegisterClient
     {
         return Auth::guard();
     }
+
+    
 }

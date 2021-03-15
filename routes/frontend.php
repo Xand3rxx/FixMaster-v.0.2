@@ -40,6 +40,7 @@ Route::view('/faq',                         'frontend.faq')->name('frontend.faq'
 Route::view('/register',                    'auth.register')->name('frontend.register');
 
 
+
 Route::view('/service-details',             'frontend.service_details')->name('frontend.services_details');
 Route::get('/services',                     [App\Http\Controllers\PageController::class, 'services'])->name('frontend.services');
 Route::get('/services/details/{url}',       [App\Http\Controllers\PageController::class, 'serviceDetails'])->name('frontend.services_details');

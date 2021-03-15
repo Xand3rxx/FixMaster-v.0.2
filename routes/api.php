@@ -64,18 +64,24 @@ Route::post('message/send', function(Request $request) {
 
 });
 
-Route::get('messaging/outbox', function() {
+Route::get('messaging/outbox', function(Request $request) { 
    $messageController = new MessageController();
-    return $messageController->mailList();
+    return $messageController->getOutBox($request);
  
  });
 
-Route::get('inbox', function() {
+ Route::get('messaging/inbox', function(Request $request) {
    $messageController = new MessageController();
-   $user = Auth::user();
-    return $messageController->mailList($user);
+    return $messageController->getInbox($request);
  
  });
+
+ Route::get('messaging/getMessage', function(Request $request) {
+   $messageController = new MessageController();
+    return $messageController->getMessage($request);
+ 
+ });
+
 
 Route::get('messaging/roles', function() {
    $messageController = new MessageController();

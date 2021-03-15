@@ -28,6 +28,7 @@ class CreateCsesTable extends Migration
             $table->foreignId('bank_id')->index();
             
             $table->foreignId('franchisee_id')->nullable();
+            $table->integer('firsttime')->default(0);
 
             $table->timestamps();
             
