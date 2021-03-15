@@ -143,7 +143,7 @@
         "use strict";
         $(document).ready(function() {
             $('#designation').change(function() {
-                if ($(this).val() == 'SUPER_ADMIN_ROLE') {
+                if ($(this).val() == '1') {
                     $('.permission').addClass('d-none');
                 } else {
                     $('.permission').removeClass('d-none');

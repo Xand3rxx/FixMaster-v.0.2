@@ -15,7 +15,7 @@ class FranchiseeController extends Controller
     public function index()
     {
         return view('admin.users.franchisee.index')->with([
-            'users' => \App\Models\Client::with('user')->get(),
+            'users' => \App\Models\Franchisee::with('user')->get(),
         ]);
     }
 

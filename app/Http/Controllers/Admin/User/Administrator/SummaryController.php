@@ -15,7 +15,7 @@ class SummaryController extends Controller
      */
     public function show($language, \App\Models\User $user)
     {
-        // dd($user, 'hee');
-        return view('admin.users.administrator.summary.show', ['user' => $user]);
+        dd($user->load('logs'), 'hee');
+        return view('admin.users.administrator.summary.show', ['user' => $user->load('administrator', 'phones', 'account', 'roles')]);
     }
 }
