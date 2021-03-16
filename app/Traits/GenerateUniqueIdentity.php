@@ -44,11 +44,10 @@ trait GenerateUniqueIdentity
                 continue;
             }
               
-            if($colunm){
-                $exist = \Illuminate\Support\Facades\DB::table($table)->where($colunm, $random)->exists();
-            }else{
-                $exist = \Illuminate\Support\Facades\DB::table($table)->where('unique_id', $random)->exists();
-            }
+              $unique_id = 'unique_id';
+              $unique_colunm = $colunm ? $colunm : $unique_id;
+                $exist = \Illuminate\Support\Facades\DB::table($table)->where($unique_colunm, $random)->exists();
+            
             // Check if it is unique in the database
            
 
