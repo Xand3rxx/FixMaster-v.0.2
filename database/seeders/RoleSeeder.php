@@ -53,7 +53,7 @@ class RoleSeeder extends Seeder
         $manager = new Role();
         $manager->name = 'Quality Assurance Manager';
         $manager->slug = 'quality_assurance-user';
-        $manager->url = 'qa';
+        $manager->url = 'quality-assurance';
         $manager->save();
     }
 }

@@ -43,8 +43,8 @@ class QASeeder extends Seeder
             'avatar'        => 'default-male-avatar.png'
         ]);
 
-        // QA Account
-        $qaAccount = \App\Models\Phone::create([
+        // QA Phone
+        $qaPhone = \App\Models\Phone::create([
             'user_id' =>  $qa->id,
             'account_id'  => $qaAccount->id,
             'country_id'  => 2,
@@ -52,11 +52,18 @@ class QASeeder extends Seeder
 
         ]);
 
+        // QA Address
+        $qaPhone = \App\Models\Address::create([
+            'user_id' =>  $qa->id,
+            'account_id'  => $qaAccount->id,
+            'country_id'  => 2,
+            'name'   => ""
+        ]);
+
         // QA Table
         $qaTable = new \App\Models\QA();
         $qaTable->user_id = $qa->id;
         $qaTable->account_id = $qaAccount->id;
-        //$qaTable->unique_id = '19807654';
         $qaTable->save();
     }
 }

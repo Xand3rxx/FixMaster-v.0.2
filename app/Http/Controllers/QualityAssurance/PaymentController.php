@@ -14,6 +14,6 @@ class PaymentController extends Controller
         // $user = Auth::user();
         // $payments = $user->payments();
         $payments = PaymentDisbursed::where('recipient_id',Auth::id())->get();
-        return view('qa.payments', compact('payments'));
+        return view('quality-assurance.payments', compact('payments'));
     }
 }

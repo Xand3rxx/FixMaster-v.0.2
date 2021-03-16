@@ -203,7 +203,7 @@
         @endforeach
           </ul>
           <div class="card-footer text-center tx-13">
-          <a href="{{ route('qa.payments',app()->getLocale()) }}" class="link-03">View All Transactions <i class="icon ion-md-arrow-down mg-l-5"></i></a>
+          <a href="{{ route('quality-assurance.payments',app()->getLocale()) }}" class="link-03">View All Transactions <i class="icon ion-md-arrow-down mg-l-5"></i></a>
           </div><!-- card-footer -->
           @else
           <div class="card-footer text-center tx-13">

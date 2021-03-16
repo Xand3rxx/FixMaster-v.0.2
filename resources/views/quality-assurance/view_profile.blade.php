@@ -18,7 +18,7 @@
               <div class="d-flex align-items-center justify-content-between mg-b-25">
                 <h5 class="mg-b-0">Personal Details</h5>
                 <div class="d-flex">
-                  <a href="{{ route('qa.edit_profile',app()->getLocale()) }}" class="btn btn-sm btn-white d-flex align-items-center mg-r-5"><i data-feather="edit-2"></i><span class="d-none d-sm-inline mg-l-5"> Edit</span></a>
+                  <a href="{{ route('quality-assurance.edit_profile',app()->getLocale()) }}" class="btn btn-sm btn-white d-flex align-items-center mg-r-5"><i data-feather="edit-2"></i><span class="d-none d-sm-inline mg-l-5"> Edit</span></a>
 
                 </div>
               </div>

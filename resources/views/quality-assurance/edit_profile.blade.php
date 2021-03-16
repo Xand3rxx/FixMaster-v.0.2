@@ -8,7 +8,7 @@
         <div>
           <nav aria-label="breadcrumb">
             <ol class="breadcrumb breadcrumb-style1 mg-b-10">
-            <li class="breadcrumb-item"><a href="{{ route('qa.index', app()->getLocale()) }}">Dashboard</a></li>
+            <li class="breadcrumb-item"><a href="{{ route('quality-assurance.index', app()->getLocale()) }}">Dashboard</a></li>
               <li class="breadcrumb-item active" aria-current="page">Edit Profile</li>
             </ol>
           </nav>
@@ -31,7 +31,7 @@
                 <div class="tab-pane fade show active" id="description3" role="tabpanel" aria-labelledby="description-tab3">
                   <h6>UPDATE PROFILE</h6>
                   <div class="card-body pd-20 pd-lg-25">
-                    <form action="{{route('qa.update_profile', app()->getLocale())}}" method="post" role="form" enctype="multipart/form-data">
+                    <form action="{{route('quality-assurance.update_profile', app()->getLocale())}}" method="post" role="form" enctype="multipart/form-data">
                       {{ csrf_field() }}
                       @method('PATCH')
                       <div class="d-sm-flex float-left">
@@ -41,7 +41,7 @@
                                   {{-- {{asset('assets/qa_images/'.$result->account->avatar)}} --}}
                                     <div class="avatar avatar-xxl">
                                       <div class="user-img">
-                                        <img class="rounded-circle wh-150p img-fluid image profile_image_preview" src="{{!empty($result->account->avatar) ? asset('assets/qa_avatars/'.$result->account->avatar) : asset('assets/images/no-image-available.png')}}" alt="user-image">
+                                        <img class="rounded-circle wh-150p img-fluid image profile_image_preview" src="{{!empty($result->account->avatar) ? asset('assets/user-avatars/'.$result->account->avatar) : asset('assets/images/no-image-available.png')}}" alt="user-image">
                                       </div>
                                     </div>
                                   </a>
@@ -114,7 +114,6 @@
                             @enderror
                           </div>
 
-
                               <!-- Profile Avatar -->
                               <div class="form-group col-md-4">
                                 <label>Profile Avatar</label>
@@ -127,9 +126,7 @@
                                   </span>
                                   @enderror
                                 </div>
-
                               </div>
-
 
                             <!-- Full Address -->
                             <div class="form-group col-md-6">
@@ -162,7 +159,7 @@
                   <h6>CHANGE PASSWORD</h6>
                   <p class="mg-b-0 text-danger">In order to change your password, you need to provide the current password.</p>
                   <div class="card-body pd-20 pd-lg-25">
-                    <form action="{{route('qa.update_password', app()->getLocale())}}" method="post">
+                    <form action="{{route('quality-assurance.update_password', app()->getLocale())}}" method="post">
                       {{ csrf_field() }}
                       @method('PATCH')
                       <div class="form-row">

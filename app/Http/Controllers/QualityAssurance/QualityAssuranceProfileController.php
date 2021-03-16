@@ -21,12 +21,12 @@ class QualityAssuranceProfileController extends Controller
 
     public function view_profile(Request $request){
         $user = User::where('id', Auth::id())->first();
-        return view('qa.view_profile', compact('user'));
+        return view('quality-assurance.view_profile', compact('user'));
     }
 
     public function edit(Request $request){
          $result = User::findOrFail(Auth::id());
-        return view('qa.edit_profile', compact('result'));
+        return view('quality-assurance.edit_profile', compact('result'));
     }
 
     public function update(Request $request){
@@ -48,8 +48,8 @@ class QualityAssuranceProfileController extends Controller
             'gender' => 'required|max:255',
             'email' => 'required|email',
             'phone_number' => 'required',
-            'profile_avater' => 'mimes:jpeg,jpg,png,gif'
-            // 'full_address' => 'required',
+            'profile_avater' => 'mimes:jpeg,jpg,png,gif',
+            'full_address' => 'required'
             // 'work_address' => '',
 
           ];
@@ -58,25 +58,23 @@ class QualityAssuranceProfileController extends Controller
              'first_name.required' => 'First Name field can not be empty',
              'middle_name.required' => 'Middle Name field can not be empty',
              'last_name.required' => 'Last Name field can not be empty',
-            //  'profile_avater.required' => '',
              'gender.required' => 'Please select gender',
              'email.required' => 'Email field can not be empty',
              'phone_number.required' => 'Please select phone number',
-             'profile_avater.mimes'    => 'Unsupported Image Format',
-
+             'profile_avater.mimes'    => 'Unsupported Image Format'
           ];
 
           $validator = Validator::make($request->all(), $rules, $messages);
-if($validator->fails()){
-    return redirect()->back()->with('errors', $validator->errors());
-}else{
+        if($validator->fails()){
+            return redirect()->back()->with('errors', $validator->errors());
+        }else{
 
-    if($request->hasFile('profile_avater')){
-        $filename = $request->profile_avater->getClientOriginalName();
-        $request->profile_avater->move('assets/qa_images', $filename);
-    }else{
-        $filename = $user->account->avatar;
-    }
+        if($request->hasFile('profile_avater')){
+            $filename = $request->profile_avater->getClientOriginalName();
+            $request->profile_avater->move('assets/user-avatars', $filename);
+        }else{
+            $filename = $user->account->avatar;
+        }
 
     $user->account->update([
         'user_id'=>$user->id,
@@ -121,7 +119,7 @@ if($validator->fails()){
         if(Hash::check($request->current_password, $user->password)){
            $changed_password = Hash::make($new_password);
            $user->update(['password' => $changed_password]);
-           
+
            $this->log($type, 'informational', $actionUrl, $user->email.' Password changed successfully');
            return redirect()->back()->with('success', 'Password changed successfully!');
             }

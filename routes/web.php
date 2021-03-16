@@ -179,18 +179,18 @@ Route::prefix('/technician')->group(function () {
     });
 });
 
-Route::prefix('/qa')->group(function () {
-    Route::name('qa.')->group(function () {
+Route::prefix('/quality-assurance')->group(function () {
+    Route::name('quality-assurance.')->group(function () {
         //All routes regarding quality_assurance should be in here
-        Route::view('/', 'qa.index')->name('index'); //Take me to quality_assurance Dashboard
+        Route::view('/', 'quality-assurance.index')->name('index'); //Take me to quality_assurance Dashboard
 
         Route::get('/profile',    [App\Http\Controllers\QualityAssurance\QualityAssuranceProfileController::class,'view_profile'])->name('view_profile');
         Route::get('/profile/edit_profile', [App\Http\Controllers\QualityAssurance\QualityAssuranceProfileController::class,'edit'])->name('edit_profile');
         Route::patch('/profile/update_profile', [App\Http\Controllers\QualityAssurance\QualityAssuranceProfileController::class,'update'])->name('update_profile');
         Route::patch('/update_password', [App\Http\Controllers\QualityAssurance\QualityAssuranceProfileController::class,'update_password'])->name('update_password');
-        Route::view('/requests', 'qa.requests')->name('requests');
+        Route::view('/requests', 'quality-assurance.requests')->name('requests');
         Route::get('/payments', [PaymentController::class, 'get_qa_disbursed_payments'])->name('payments');
-        Route::view('/messages/inbox', 'qa.messages.inbox')->name('messages.inbox');
-        Route::view('/messages/sent', 'qa.messages.sent')->name('messages.sent');
+        Route::view('/messages/inbox', 'quality-assurance.messages.inbox')->name('messages.inbox');
+        Route::view('/messages/sent', 'quality-assurance.messages.sent')->name('messages.sent');
     });
 });
