@@ -37,6 +37,25 @@ class CreateServiceRequestsTable extends Migration
             $table->bigInteger('total_amount')->unsigned();
             $table->softDeletes();
             $table->timestamps();
+
+            // $table->id();
+            // $table->uuid('uuid')->unique();
+		    // $table->foreignId('client_id');
+            // $table->foreignId('service_id');
+            // $table->string('unique_id')->unique();
+            // $table->foreignId('state_id');
+            // $table->foreignId('lga_id');
+            // $table->foreignId('town_id');
+            // $table->foreignId('price_id');
+            // $table->foreignId('phone_id');
+            // $table->foreignId('address_id');
+            // $table->foreignId('client_discount_id')->nullable();
+            // $table->string('client_security_code')->unique();
+            // $table->text('description');
+            // $table->bigInteger('total_amount')->unsigned();
+            // $table->dateTime('preferred_time')->nullable();
+            // $table->softDeletes();
+            // $table->timestamps();
         });
     }
 

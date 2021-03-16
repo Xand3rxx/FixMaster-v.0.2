@@ -1,6 +1,7 @@
 <form method="POST" action="{{ route('admin.taxes.update', ['tax'=>$tax->uuid, 'locale'=>app()->getLocale()]) }}">
         @csrf @method('PUT')
     <h5 class="mg-b-2"><strong>Editing "{{ $tax->name }}" Tax</strong></h5>
+    <hr>
     <div class="form-row mt-4">
       <div class="form-group col-md-12">
         <div class="form-row mt-4">

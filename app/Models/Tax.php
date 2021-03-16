@@ -51,18 +51,6 @@ class Tax extends Model
      * @param \Illuminate\Database\Eloquent\Builder $query
      * @return \Illuminate\Database\Eloquent\Builder
      */    
-    public function scopeAllTools($query){
-        return $query->select('*')
-        // ->where('available', '>', '0')
-        ->orderBy('name', 'ASC');
-    }
-
-    /** 
-     * Scope a query to only include availaible tools
-     * 
-     * @param \Illuminate\Database\Eloquent\Builder $query
-     * @return \Illuminate\Database\Eloquent\Builder
-     */    
     public function scopeTaxes($query){
         return $query->select('*')
         ->orderBy('name', 'ASC');

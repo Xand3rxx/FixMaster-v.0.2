@@ -83,9 +83,9 @@
                             <select name="gender" id="gender" class="form-control @error('gender') is-invalid @enderror" required>
                               <option value="{{$result->account->gender}}">{{$result->account->gender}}</option>
                               <option value="">Choose....</option>
-                              <option value="Male"}>Male</option>
-                              <option value="Female">Female</option>
-                              <option value="Others">Others</option>
+                              <option value="male"}>Male</option>
+                              <option value="female">Female</option>
+                              <option value="others">Others</option>
                            </select>
                            @error('gender')
                            <span class="invalid-feedback" role="alert">
@@ -96,7 +96,7 @@
                             <!-- Email -->
                             <div class="form-group col-md-4">
                               <label for="inputEmail4">Email</label>
-                              <input type="email" class="form-control @error('email') is-invalid @enderror" id="email" name="email" value="{{$result->email}}" required readonly>
+                              <input type="email" class="form-control @error('email') is-invalid @enderror" id="email" value="{{$result->email}}" disabled>
                               @error('email')
                               <span class="invalid-feedback" role="alert">
                                   <strong>{{ $message }}</strong>
@@ -131,7 +131,7 @@
                             <!-- Full Address -->
                             <div class="form-group col-md-6">
                               <label for="inputAddress2">Full Address</label>
-                              <textarea rows="3" class="user_address form-control @error('full_address') is-invalid @enderror" id="inputAddress2" name="full_address" required></textarea>
+                              <textarea rows="3" class="user_address form-control @error('full_address') is-invalid @enderror" placeholder="e.g. 284B, Ajose Adeogun Street, Victoria Island, Lagos, Nigeria." id="inputAddress2" name="full_address" required></textarea>
                               @error('full_address')
                             <span class="invalid-feedback" role="alert">
                                 <strong>{{ $message }}</strong>
@@ -140,7 +140,7 @@
                             </div>
                             <div class="form-group col-md-6">
                                 <label for="inputAddress2">Work Address</label>
-                                <textarea rows="3" class="user_address form-control @error('work_address') is-invalid @enderror" id="" name="work_address" required></textarea>
+                                <textarea rows="3" class="user_address2 form-control @error('work_address') is-invalid @enderror" placeholder="e.g. Block A2, Broad Street, Marina, Lagos, Nigeria"  id="" name="work_address" required></textarea>
                                 @error('work_address')
                             <span class="invalid-feedback" role="alert">
                                 <strong>{{ $message }}</strong>
@@ -203,14 +203,40 @@
     </div>
 </div>
 @endsection
-@section('scripts')
+@push('scripts')
 <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDeDLVAiaU13p2O0d3jfcPjscsbVsCQUzc&v=3.exp&libraries=places"></script>
+
+
 <script>
+
+$(document).ready(function() {
+        "use strict";
+        let autocomplete;
+        initialize();
+
+        
+
+        function initialize() {
+            // Create the autocomplete object, restricting the search to geographical location types.
+            autocomplete = new google.maps.places.Autocomplete((document.querySelector('.user_address')), {
+                types: ['geocode']
+            });
+            autocomplete = new google.maps.places.Autocomplete((document.querySelector('.user_address2')), {
+                types: ['geocode']
+            });
+            // Chain request to html element on the page
+            google.maps.event.addDomListener(document.querySelector('.user_address'), 'focus');
+            google.maps.event.addDomListener(document.querySelector('.user_address2'), 'focus');
+        }
+    });
+    
+</script>
+
+<script>
+
   (function($){
     "use scrict";
     $(document).ready(function(){
-        let autocomplete;
-        initialize();
 
       $(document).on('change','#profile_image', function(){
         readURL(this);
@@ -256,18 +282,12 @@
       }
 
 
-      function initialize() {
-            // Create the autocomplete object, restricting the search to geographical location types.
-            autocomplete = new google.maps.places.Autocomplete((document.querySelector('.user_address')), {
-                types: ['geocode']
-            });
-            // Chain request to html element on the page
-            google.maps.event.addDomListener(document.querySelector('.user_address'), 'focus');
-        }
+      
 
     });
 
  })(jQuery);
 
+
 </script>
-@endsection
+@endpush

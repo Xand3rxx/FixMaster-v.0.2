@@ -55,7 +55,7 @@
                             </label>
                             <label class="selectgroup-item">
                               <input type="radio" name="status" value="0" class="selectgroup-input" {{$paystack->status == 0 ? 'checked' : ''}}>
-                              <span class="selectgroup-button">Deactive</span>
+                              <span class="selectgroup-button">Inactive</span>
                             </label>
                           </div>
                         </div>
@@ -123,7 +123,7 @@
                               </label>
                               <label class="selectgroup-item">
                                 <input type="radio" name="status" value="0" class="selectgroup-input" {{$flutter->status == 0 ? 'checked' : ''}}>
-                                <span class="selectgroup-button">Deactive</span>
+                                <span class="selectgroup-button">Inactive</span>
                               </label>
                             </div>
                         </div>

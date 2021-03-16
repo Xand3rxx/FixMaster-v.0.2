@@ -1,5 +1,5 @@
 @extends('layouts.dashboard')
-@section('title', 'Create New Estate')
+@section('title', 'New Message')
 @section('content')
     <link rel="stylesheet" href="{{ asset('assets/dashboard/assets/jlistbox/css/jquery.transfer.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/dashboard/assets/jlistbox/icon_font/css/icon_font.css') }}">
@@ -34,13 +34,12 @@
 
             @csrf
             <fieldset class="form-group border p-4">
-                <legend class="w-auto px-2">Recepients</legend>
+                <legend class="w-auto px-2">Recipients</legend>
                 <div class="row row-xs">
                     <div class="col-md-12">
                         <div class="form-row">
                             <div class="form-group col-md-12">
                                 <div class="recipients"></div>
-
                             </div>
                             
                          </div>
@@ -85,7 +84,9 @@
 <script>
     var url = window.location.origin
     var selected_recipients = {};
+    var user_role = '<?php  echo Auth::user()->type->role_id ?>';
         $(document).ready(function (){
+            
             $("#message-box").summernote({
                 height: 150
             });
@@ -127,9 +128,14 @@
                         selected_recipients = items;
                     }
                 };
-                $(".recipients").html("")
-                var newrecipients = $(".recipients").transfer(settings);
-                newrecipients.getSelectedItems();
+                if(user_role==1){
+                    $(".recipients").html("")
+                    var newrecipients = $(".recipients").transfer(settings);
+                    newrecipients.getSelectedItems();
+                }else{
+                    $(".recipients").html("Administrator (admin@fixmaster.com)")
+                }
+                
                 
 
                 
@@ -147,9 +153,23 @@
          });
 
          
-         $('#btnSendMessage').click(function(){
+      
+            
+        });
+    </script>
+@endpush
+<script src="{{ asset('assets/dashboard/lib/jquery/jquery.min.js') }}"></script>
+<script>
+  $(document).ready(function (){
+
+    var user_role = '<?php  echo Auth::user()->type->role_id ?>';
+   $('#btnSendMessage').click(function(){
             var subject = $('#subject').val();
             var recipients = selected_recipients;
+           
+            if(user_role!=1){
+                recipients = [{name: "Super Admin", value: "1"}]
+                }
             var content = $('#message-box').val();
             var sender = '<?php echo Auth::user()->id; ?>';
             var jqxhr = $.post(url+"/api/messaging/save_email",
@@ -160,7 +180,7 @@
                sender:sender
             },
             function(data, status){
-                console.log(data)
+                //TODO change display message to sweet alert
                 displayMessage(data.message, 'success');
             })
             .fail(function(data, status) {
@@ -171,7 +191,5 @@
           
 
          });
-            
         });
-    </script>
-@endpush
+</script>

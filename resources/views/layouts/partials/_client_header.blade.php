@@ -75,17 +75,17 @@
             <ul class="navigation-menu nav-light">
                 <li ><a href="#">FixMaster Home</a></li>
 
-                <li><a class="{{ Route::currentRouteNamed('frontend.about') ? 'selected' : '' }}" href="{{ route('frontend.about', app()->getLocale()) }}">About us</a></li>
+                <li><a class="" href="{{ route('frontend.about', app()->getLocale()) }}">About us</a></li>
                 
-                <li class="has-submenu {{ Route::currentRouteNamed('frontend.how_it_works', 'frontend.faq') ? 'selected' : '' }}">
+                <li class="has-submenu">
                     <a href="javascript:void(0)">How it works</a><span class="menu-arrow"></span>
                     <ul class="submenu">
-                        <li><a class="{{ Route::currentRouteNamed('frontend.how_it_works') ? 'selected' : '' }}" href="{{ route('frontend.how_it_works', app()->getLocale()) }}">How It Works</a></li>
-                        <li><a class="{{ Route::currentRouteNamed('frontend.faq') ? 'selected' : '' }}" href="">FAQ</a></li>
+                        <li><a class="" href="{{ route('frontend.how_it_works', app()->getLocale()) }}">How It Works</a></li>
+                        <li><a class="" href="">FAQ</a></li>
                     </ul>
                 </li>
                 
-                <li><a class="{{ Route::currentRouteNamed('') ? 'selected' : '' }}" href="#">Contact</a></li>
+                <li><a class="" href="#">Contact</a></li>
 
                 <li class="has-submenu {{ Route::currentRouteNamed('') ? 'active' : '' }}">
                     <a href="javascript:void(0)" class="l-dark l-light">Profile</a><span class="menu-arrow"></span>
@@ -94,7 +94,7 @@
 
                         <li class="{{ Route::currentRouteNamed('') ? 'active' : '' }}"><a href="#">Book a Service</a></li>
 
-                        <li class="{{ Route::currentRouteNamed('') ? 'active' : '' }}"><a href="#">E-Wallet</a></li>
+                        <li class="{{ Route::currentRouteNamed('client.wallet') ? 'active' : '' }}"><a href="{{ route('client.wallet', app()->getLocale()) }}">E-Wallet</a></li>
 
                         <li class="{{ Route::currentRouteNamed('') ? 'active' : '' }}"><a href="#">Requests</a></li>
 
@@ -144,11 +144,10 @@
                                     @endif
                                 @endif --}}
                             </div><!--end col-->
-
                             <div class="col-lg-10 col-md-9">
                                 <div class="row align-items-end">
                                     <div class="col-md-7 text-md-left text-center mt-4 mt-sm-0">
-                                    <h3 class="title mb-0">Felix George</h3>
+                                    <h3 class="title mb-0">{{ !empty($profile->first_name || $profile->last_name) ? $profile->first_name.' '.$profile->last_name : 'UNAVAILABLE' }}</h3>
                                     <small class="text-muted h6 mr-2">Accountant Profession/Career</small>
                                         {{-- <ul class="list-inline mb-0 mt-3">
                                             <li class="list-inline-item mr-2"><a href="javascript:void(0)" class="text-muted" title="Instagram"><i data-feather="instagram" class="fea icon-sm mr-2"></i>Femi_joseph</a></li>
@@ -157,7 +156,7 @@
                                     </div><!--end col-->
                                     <div class="col-md-5 text-md-right text-center">
                                         <ul class="list-unstyled social-icon social mb-0 mt-4">
-                                            <li class="list-inline-item"><a href="#" class="rounded" data-toggle="tooltip" data-placement="bottom" title="E-Wallet"><i data-feather="credit-card" class="fea icon-sm fea-social"></i></a></li>
+                                            <li class="list-inline-item"><a href="{{ route('client.wallet', app()->getLocale()) }}" class="rounded" data-toggle="tooltip" data-placement="bottom" title="E-Wallet"><i data-feather="credit-card" class="fea icon-sm fea-social"></i></a></li>
                                             <li class="list-inline-item">
                                                 <a href="#" class="rounded" data-toggle="tooltip" title="You have 0 unread messages" data-placement="bottom">
                                                     <i data-feather="message-circle" class="fea icon-sm fea-social" ></i>

@@ -19,9 +19,13 @@ class CreateQualityAssurancesTable extends Migration
             $table->collation = 'utf8mb4_unicode_ci';
 
             $table->id();
+            $table->string('unique_id')->unique();
             $table->foreignId('user_id')->index();
             $table->foreignId('account_id')->index();
-            $table->foreignId('franchisee_id')->nullable();
+            // $table->foreignId('state_id')->index();
+            // $table->foreignId('lga_id')->index();
+            // $table->foreignId('town_id')->index();
+            $table->foreignId('bank_id')->index()->nulable();
             $table->timestamps();
         });
     }

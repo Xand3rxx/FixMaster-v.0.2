@@ -16,16 +16,24 @@ class DiscountSeeder extends Seeder
     public function run()
     {
         
+        $parameterArray = [
+            'field' => '' , 
+            'users' =>  '',
+            'category' =>'' ,
+            'services' => '',
+            'estate' =>  ''
+           ];
+
         $discount = new Discount();
         $discount->uuid = Str::uuid('uuid');
-        $discount->name = 'Registration User Discount';
-        $discount->entity = 'user';
+        $discount->name = 'Client Registration Discount';
+        $discount->entity = 'client';
         $discount->notify = '1';
-        $discount->rate = 10;
-        $discount->duration_start =  date('d-m-y');
-        $discount->duration_end =  date('d-m-y');
-        $discount->description =  'This is a discount which entitles all users to 5% off their complete registration.';
-        $discount->parameter = NULL;
+        $discount->rate = 5;
+        $discount->duration_start =  '2021-04-01 00:00:00';
+        $discount->duration_end =  '2022-04-01 00:00:00';
+        $discount->description =  'This is a discount which entitles all clients to 5% off their first job booking upon email verification.';
+        $discount->parameter = json_encode($parameterArray);
         $discount->created_by= 'dev@fix-master.com';
         $discount->status= 'activate';
         $discount->save();

@@ -10,15 +10,6 @@ class PaymentDisbursed extends Model
 {
     use HasFactory;
 
-    // column name of key
-    //protected $primaryKey = 'uuid';
-
-    // type of key
-    protected $keyType = 'string';
-
-    // whether the key is automatically incremented or not
-    public $incrementing = false;
-
     //Table name
     protected $table = 'payments_disbursed';
     /**
@@ -27,7 +18,7 @@ class PaymentDisbursed extends Model
      * @var array
      */
     protected $fillable = [
-        'uuid', 'user_id', 'recipient_id', 'service_request_id', 'payment_mode_id', 'payment_reference', 'amount', 'payment_date', 'comment',
+        'user_id', 'recipient_id', 'service_request_id', 'payment_mode_id', 'payment_reference', 'amount', 'payment_date', 'comment',
     ];
 
     /**
@@ -39,24 +30,22 @@ class PaymentDisbursed extends Model
         'id'
     ];
 
-    /**
-     * The "booted" method of the model.
-     *
-     * @return void
-     */
-    protected static function booted()
-    {
-        // Create a uuid when a new Payment Disbursed is to be created
-        static::creating(function ($serviceRequest) {
-            $serviceRequest->uuid = (string) Str::uuid();
-        });
-    }
 
     public function service_request(){
-        return $this->hasOne(ServiceRequest::class,'id');
+        return $this->hasOne(ServiceRequest::class, 'id', 'service_request_id');
     }
 
     public function mode(){
-        return $this->hasOne(PaymentMode::class, 'id');
+        return $this->hasOne(PaymentMode::class, 'id', 'payment_mode_id');
+    }
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
+
+    public function account()
+    {
+        return $this->belongsTo(Account::class);
     }
 }

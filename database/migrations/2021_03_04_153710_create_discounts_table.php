@@ -23,7 +23,7 @@ class CreateDiscountsTable extends Migration
             $table->string('name', 250)->unique();
             $table->string('entity', 250);
             $table->string('created_by', 250);
-            $table->integer('rate');
+            $table->float('rate');
             $table->enum('notify', [0, 1])->default(0);
             $table->dateTime('duration_start');
             $table->dateTime('duration_end');

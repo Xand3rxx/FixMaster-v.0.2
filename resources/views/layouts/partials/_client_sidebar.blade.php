@@ -15,9 +15,10 @@
                                             <li class="month font-weight-bold">{{ date('M') }}</li>
                                             <li class="month font-weight-bold">{{ date('Y') }}</li>
                                         </ul> --}}
+                                    
                                         <div class="media-body content">
                                             <h4><a href="javascript:void(0)" class="text-dark title">Balance</a></h4>
-                                        <p class="text-muted location-time"><span class="text-dark h6">₦{{ number_format(5000) }}</span></p>
+                                        <p class="text-muted location-time"><span class="text-dark h6">₦{{ $myWallet[0]['closing_balance'] ?? number_format(0) }}</span></p>
                                             <a href="#" class="btn btn-sm btn-outline-primary mouse-down">Fund Account</a>
                                         </div>
                                     </div>
@@ -37,7 +38,7 @@
                     <div class="widget">
                         <div class="row">
                             <div class="col-6 mt-4 pt-2">
-                            <a href="#" class="accounts rounded d-block shadow text-center py-3 {{ Route::currentRouteNamed('') ? 'active' : '' }}">
+                            <a href="{{ route('client.index', app()->getLocale()) }}" class="accounts rounded d-block shadow text-center py-3 {{ Route::currentRouteNamed('client.index') ? 'active' : '' }}">
                                     <span class="pro-icons h3 text-muted"><i class="uil uil-user"></i></span>
                                     <h6 class="title text-dark h6 my-0">Dashboard</h6>
                                 </a>
@@ -57,7 +58,7 @@
                             </div><!--end col-->
 
                             <div class="col-6 mt-4 pt-2">
-                            <a href="#" class="accounts rounded d-block shadow text-center py-3 {{ Route::currentRouteNamed('') ? 'active' : '' }}">
+                            <a href="{{ route('client.wallet', app()->getLocale()) }}" class="accounts rounded d-block shadow text-center py-3 {{ Route::currentRouteNamed('client.wallet') ? 'active' : '' }}">
                                     <span class="pro-icons h3 text-muted"><i class="uil uil-file"></i></span>
                                     <h6 class="title text-dark h6 my-0">E-Wallet</h6>
                                 </a>

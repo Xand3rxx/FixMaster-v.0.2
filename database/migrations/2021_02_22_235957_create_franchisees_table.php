@@ -20,7 +20,7 @@ class CreateFranchiseesTable extends Migration
 
             $table->id();
             $table->string('unique_id')->unique();
-            $table->string('cac_number')->unique();
+            $table->string('cac_number', 14)->unique();
 
             $table->foreignId('user_id')->index();
             $table->foreignId('account_id')->index();
@@ -30,6 +30,8 @@ class CreateFranchiseesTable extends Migration
             $table->date('established_on');
 
             $table->timestamps();
+            $table->softDeletes();
+
         });
     }
 
