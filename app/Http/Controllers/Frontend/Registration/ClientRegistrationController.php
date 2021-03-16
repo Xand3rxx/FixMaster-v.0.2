@@ -18,7 +18,10 @@ class ClientRegistrationController extends Controller
     {
         return view('frontend.registration.client.index', [
             'states' => \App\Models\State::all(),
-            'activeEstates' => \App\Models\Estate::all(),
+            'activeEstates' => \App\Models\Estate::select('id', 'estate_name')
+                ->orderBy('estates.estate_name', 'ASC')
+                ->where('estates.is_active', 'reinstated')
+                ->get(),
         ]);
     }
 

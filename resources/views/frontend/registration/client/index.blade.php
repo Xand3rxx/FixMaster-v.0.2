@@ -153,7 +153,7 @@
 
                             <div class="col-md-3">
                                 <div class="form-group position-relative">
-                                    <label>Estate </label>
+                                    <label>Estates </label>
                                     <i data-feather="navigation" class="fea icon-sm icons"></i>
                                     <select class="form-control pl-5" name="estate_id" id="estate_id">
                                         <option selected disabled value="0">Select...</option>
@@ -259,7 +259,7 @@
 </section>
 
 @push('scripts')
-<script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDeDLVAiaU13p2O0d3jfcPjscsbVsCQUzc&v=3.exp&libraries=places"></script> 
+<script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDeDLVAiaU13p2O0d3jfcPjscsbVsCQUzc&v=3.exp&libraries=places"></script>
 
 <script>
     $(document).ready(function() {
@@ -299,14 +299,14 @@
         "use strict";
         var autocomplete;
         initialize();
-        
+
         $( document ).ready(function() {
             $('.current_location').on('click',function(){
                 var id=$(this).attr('data-id');
                 current_location(id);
-            }); 
+            });
         });
-        
+
         function initialize() {
             // Create the autocomplete object, restricting the search
             // to geographical location types.
