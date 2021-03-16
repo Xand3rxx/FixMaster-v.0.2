@@ -30,7 +30,7 @@ class QASeeder extends Seeder
         $qa2->save();
 
         // AQ Roles and Permissions
-        $qaRole = \App\Models\Role::where('slug', 'quality_assurance-user')->first();
+        $qaRole = \App\Models\Role::where('slug', 'quality-assurance-user')->first();
         $qa->roles()->attach($qaRole);
 
         $qa_permission = \App\Models\Permission::where('slug', 'view-qa')->first();

@@ -40,7 +40,8 @@ class DatabaseSeeder extends Seeder
             TechnicianSeeder::class,
             PriceSeeder::class,
             PriceHistorySeeder::class,
-            BankSeeder::class,
+            InsertSQLSeeder::class,
+            FranchiseeSeeder::class,
         ]);
     }
 }

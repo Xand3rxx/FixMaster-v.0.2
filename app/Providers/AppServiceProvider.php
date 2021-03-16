@@ -36,6 +36,13 @@ class AppServiceProvider extends ServiceProvider
             ]);
         });
 
-        
+        view()->composer('layouts.dashboard', function($view){
+
+            $view->with([
+                'profile'   =>  Auth::user()->account,
+            ]);
+        });
+
+
     }
 }

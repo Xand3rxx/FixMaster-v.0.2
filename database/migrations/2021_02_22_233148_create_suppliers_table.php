@@ -25,8 +25,9 @@ class CreateSuppliersTable extends Migration
             $table->foreignId('account_id')->index();
 
             $table->string('business_name')->unique();
-            $table->integer('years_of_business');
-            $table->string('education_level');
+            $table->inteunsignedTinyIntegerger('years_of_business');
+            $table->enum('education_level', ['none', 'primary-school', 'secondary-school', 'technical-school', 'college-of-education', 'polytechnic', 'university']);
+
             $table->string('registered_identification_number')->unique();
             $table->longText('business_description');
 

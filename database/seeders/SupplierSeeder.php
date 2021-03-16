@@ -3,9 +3,8 @@
 namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
-use DB;
 
-class BankSeeder extends Seeder
+class SupplierSeeder extends Seeder
 {
     /**
      * Run the database seeds.
@@ -14,8 +13,6 @@ class BankSeeder extends Seeder
      */
     public function run()
     {
-        $sql = file_get_contents(database_path() . '/insert_sql/banks.sql');
-    
-        DB::statement($sql);
+        //
     }
 }
