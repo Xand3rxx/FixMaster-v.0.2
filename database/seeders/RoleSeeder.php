@@ -27,7 +27,7 @@ class RoleSeeder extends Seeder
         $developer->save();
 
         $developer = new Role();
-        $developer->name = 'CSE Coordinator';
+        $developer->name = 'Franchisee(CSE Coordinator)';
         $developer->slug = 'franchisee-user';
         $developer->url = 'franchisee';
         $developer->save();
