@@ -2,19 +2,17 @@
 
 namespace App\Http\Controllers\Auth;
 
+use App\Traits\Utility;
 use App\Traits\Loggable;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\URL;
+use Illuminate\Http\JsonResponse;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Route;
-use App\Providers\RouteServiceProvider;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
-use Illuminate\Support\Facades\Auth;
-use App\Traits\Utility;
 
 class LoginController extends Controller
 {
-    /*
+  /*
     |--------------------------------------------------------------------------
     | Login Controller
     |--------------------------------------------------------------------------
@@ -25,40 +23,65 @@ class LoginController extends Controller
     |
     */
 
-    use AuthenticatesUsers, RedirectAuthenticatedUsers, Loggable, Utility;
+  use AuthenticatesUsers, RedirectAuthenticatedUsers, Loggable, Utility;
 
 
-    /**
-     * Where to redirect users after login.
-     *
-     * @var string
-     */
-    // protected $redirectTo = RouteServiceProvider::HOME;
+  /**
+   * Where to redirect users after login.
+   *
+   * @var string
+   */
+  // protected $redirectTo = RouteServiceProvider::HOME;
 
-    /**
-     * Create a new controller instance.
-     *
-     * @return void
-     */
-    public function __construct()
-    {
-        $this->middleware('guest')->except('logout');
+  /**
+   * Create a new controller instance.
+   *
+   * @return void
+   */
+  public function __construct()
+  {
+    $this->middleware('guest')->except('logout');
+  }
+
+
+
+  /**
+   * The user has been authenticated.
+   *
+   * @param  \Illuminate\Http\Request  $request
+   * @param  mixed  $user
+   * @return mixed
+   * 
+   */
+
+  protected function authenticated(Request $request, $user)
+  {
+    $this->updateVerifiedUsers($user);
+    $this->log('Login', 'Informational', Route::currentRouteAction(), $user->email . ' logged in.');
+  }
+
+  /**
+   * Log the user out of the application.
+   *
+   * @param  \Illuminate\Http\Request  $request
+   * @return \Illuminate\Http\RedirectResponse|\Illuminate\Http\JsonResponse
+   */
+  public function logout(Request $request)
+  {
+    $this->log('logout', 'Informational', Route::currentRouteAction(), $request->user()->email . ' logged out.');
+    
+    $this->guard()->logout();
+
+    $request->session()->invalidate();
+
+    $request->session()->regenerateToken();
+
+    if ($response = $this->loggedOut($request)) {
+      return $response;
     }
 
-    
-
-    /**
-     * The user has been authenticated.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  mixed  $user
-     * @return mixed
-     * 
-     */
-    
-    protected function authenticated(Request $request, $user)
-    { 
-      $this->updateVerifiedUsers(Auth::user());
-      $this->log('Login', 'Informational', Route::currentRouteAction(), $user->email . ' logged in.');
-    }
+    return $request->wantsJson()
+      ? new JsonResponse([], 204)
+      : redirect('/');
+  }
 }

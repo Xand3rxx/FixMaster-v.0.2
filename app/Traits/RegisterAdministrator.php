@@ -8,6 +8,8 @@ use Illuminate\Support\Facades\Hash;
 
 trait RegisterAdministrator
 {
+    protected $registred;
+
     /**
      * Handle registration of an Administartor request for the application.
      *
@@ -60,5 +62,43 @@ trait RegisterAdministrator
             'email' => $data['email'],
             'password' => Hash::make($data['password']),
         ]);
+    }
+
+    /**
+     * Handle updating of an Administartor
+     *
+     * @param  array $valid
+     * 
+     * @throws Illuminate\Database\Eloquent\ModelNotFoundException
+     * @return \App\Models\User 
+     */
+    public function updateAdministrator(array $valid)
+    {
+        return $this->attemptUpdatingAdministrator($valid);
+    }
+
+    /**
+     * Handle updating of an Administartor
+     *
+     * @param  array $valid
+     * 
+     * @throws Illuminate\Database\Eloquent\ModelNotFoundException
+     * @return \App\Models\User 
+     */
+    protected function attemptUpdatingAdministrator(array $valid)
+    {
+        $user =  \App\Models\User::where('uuid', $valid['uuid'])->with('account', 'administrator', 'permissions', 'phones')->firstOrFail();
+        DB::transaction(function () use ($valid, &$user) {
+            // update Account Record
+            $user->account->update([
+                'first_name' => $valid['first_name'],
+                'middle_name' => $valid['middle_name'],
+                'last_name' => $valid['last_name'],
+            ]);
+            // comeback to update phone record
+            // dd($user->phones()->saveMany(['number' => $valid['phone_number']]));
+            // $user->phones[0]['number']->save(['number' => $valid['phone_number']]);
+        });
+        return $user;
     }
 }

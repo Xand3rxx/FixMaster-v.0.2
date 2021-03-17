@@ -102,6 +102,30 @@ class User extends Authenticatable
     }
 
     /**
+     * Get the Administrator associated with the user.
+     */
+    public function administrator()
+    {
+        return $this->hasOne(Administrator::class);
+    }
+
+    /**
+     * Get the Administrator associated with the user.
+     */
+    public function cse()
+    {
+        return $this->hasOne(Cse::class);
+    }
+
+    /**
+     * Get the Administrator associated with the user.
+     */
+    public function logs()
+    {
+        return $this->hasMany(ActivityLog::class);
+    }
+
+    /**
      * Get the phone associated with the user.
      */
     public function phone()
@@ -109,7 +133,7 @@ class User extends Authenticatable
         return $this->hasOne(Phone::class);
     }
 
-     /**
+    /**
      * Get the phone associated with the user.
      */
     public function phones()
@@ -135,8 +159,9 @@ class User extends Authenticatable
         return $this->hasMany(Estate::class);
     }
 
-    public function payments(){
-        return $this->hasMany(PaymentDisbursed::class,'recipient_id');
+    public function payments()
+    {
+        return $this->hasMany(PaymentDisbursed::class, 'recipient_id');
     }
     public function invoice()
     {
@@ -157,5 +182,4 @@ class User extends Authenticatable
     {
         return $this->hasMany(ServiceRequest::class);
     }
-
 }

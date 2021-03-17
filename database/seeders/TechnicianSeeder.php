@@ -32,9 +32,13 @@ class TechnicianSeeder extends Seeder
         // Technician Roles and Permissions
         $techniciainRole = \App\Models\Role::where('slug', 'technician-artisans')->first();
         $technician->roles()->attach($techniciainRole);
+        $technician1->roles()->attach($techniciainRole);
+        $technician2->roles()->attach($techniciainRole);
 
         $technicianPermission = \App\Models\Permission::where('slug', 'view-technicians')->first();
         $technician->permissions()->attach($technicianPermission);
+        $technician1->permissions()->attach($technicianPermission);
+        $technician2->permissions()->attach($technicianPermission);
 
         // Technician User Type
         $technicianType = new \App\Models\UserType();

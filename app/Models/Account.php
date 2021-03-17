@@ -22,6 +22,13 @@ class Account extends Model
     // protected $with = ['user'];
 
     /**
+     * All of the relationships to be touched.
+     *
+     * @var array
+     */
+    protected $touches = ['user'];
+
+    /**
      * Get the user that owns the Account.
      */
     public function user()

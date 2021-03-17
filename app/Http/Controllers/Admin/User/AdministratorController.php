@@ -80,24 +80,54 @@ class AdministratorController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  int  $id
+     * @param  string  $uuid
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit($language, $uuid)
     {
-        //
+        return view('admin.users.administrator.edit', [
+            'roles' => \App\Models\Role::where('url', 'admin')->get(),
+            'permissions' => [
+                'administrators'        => 'Administrators',
+                'clients'               => 'Clients',
+                'location_request'      => 'Location Request',
+                'cses'                  => "CSE's",
+                'payments'              => 'Payments',
+                'ratings'               => 'Rating',
+                'requests'              => 'Requests',
+                'rfqs'                  => "RFQ's",
+                'service_categories'    => "Service & Category",
+                'technicians'           => "Technicians",
+                'tools'                 => "Tools",
+                'utilities'             => "Utilities",
+            ],
+            'user' => \App\Models\User::where('uuid', $uuid)->with('account', 'administrator', 'permissions', 'phones')->firstOrFail()
+        ]);
     }
 
     /**
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param  string  $uuid
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request)
     {
-        //
+        // validate request
+        $valid = $this->validate($request, [
+            'uuid'                      =>   'required|uuid',
+            'first_name'                =>   'required|string',
+            'middle_name'               =>   'sometimes',
+            'last_name'                 =>   'required|string',
+            'email'                     =>   'required|email',
+            'phone_number'              =>   'required|numeric',
+            'role_id'                   =>   'required|numeric',
+        ]);
+        $user = $this->updateAdministrator($valid);
+        return collect($user)->isNotEmpty()
+            ? redirect()->route('admin.users.administrator.index', app()->getLocale())->with('success', "The Administrator Profile Updated Successfully!!")
+            : back()->with('error', "An error occurred while Updating Administrator Profile");
     }
 
     /**
