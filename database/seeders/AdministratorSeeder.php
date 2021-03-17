@@ -33,9 +33,13 @@ class AdministratorSeeder extends Seeder
         // Administrator Roles and Permissions
         $adminRole = \App\Models\Role::where('slug', 'admin-user')->first();
         $admin->roles()->attach($adminRole);
+        $admin1->roles()->attach($adminRole);
+        $admin2->roles()->attach($adminRole);
 
         $adminPermission = \App\Models\Permission::where('slug', 'view-administrators')->first();
         $admin->permissions()->attach($adminPermission);
+        $admin1->permissions()->attach($adminPermission);
+        $admin2->permissions()->attach($adminPermission);
 
         // Administrator User Type
         $adminType = new \App\Models\UserType();
