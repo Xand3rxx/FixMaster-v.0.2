@@ -29,7 +29,7 @@ class Supplier extends Model
     protected static function booted()
     {
         static::creating(function ($supplier) {
-            $supplier->unique_id = static::generate('suppliers', 'SUP-', ''); // Create a Unique Supplier id
+            $supplier->unique_id = static::generate('suppliers', 'SUP-'); // Create a Unique Supplier id
         });
     }
 

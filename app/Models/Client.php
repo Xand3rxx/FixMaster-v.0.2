@@ -25,7 +25,7 @@ class Client extends Model
     protected static function booted()
     {
         static::creating(function ($client) {
-            $client->unique_id = static::generate('clients', 'WAL-', ''); // Create a Unique Client id
+            $client->unique_id = static::generate('clients', 'WAL-'); // Create a Unique Client id
         });
     }
 
