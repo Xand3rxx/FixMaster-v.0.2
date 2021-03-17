@@ -24,6 +24,7 @@ use App\Http\Controllers\Admin\PriceController;
 use App\Http\Controllers\InvoiceController;
 use App\Http\Controllers\SimulationController;
 use App\Http\Controllers\Admin\User\Administrator\SummaryController;
+use App\Http\Controllers\Admin\StatusController;
 
 /*
 |--------------------------------------------------------------------------
@@ -176,6 +177,12 @@ Route::prefix('admin')->group(function () {
 
         //Routes for Price Management
         Route::resource('booking-fees',                     PriceController::class);
+
+        //Routes for Status Management
+        Route::resource('statuses',                         StatusController::class);
+
+        
+
     });
 });
 

@@ -29,7 +29,7 @@
                         <li><a href="{{ route('frontend.about', app()->getLocale()) }}" class="text-foot"><i class="mdi mdi-chevron-right mr-1"></i> FAQ</a></li>
                         <li><a href="{{ route('frontend.careers', app()->getLocale()) }}" class="text-foot"><i class="mdi mdi-chevron-right mr-1"></i> Join Us</a></li>
                         <li><a href="{{ route('frontend.faq', app()->getLocale(), ) }}" class="text-foot js-scroll-trigger"><i class="mdi mdi-chevron-right mr-1"></i> How It Works</a></li>
-                        <li><a href="{{ route('frontend.services', app()->getLocale()) }}" class="text-foot js-scroll-trigger"><i class="mdi mdi-chevron-right mr-1"></i> Services</a></li>
+                        {{-- <li><a href="{{ route('services.index', app()->getLocale()) }}" class="text-foot js-scroll-trigger"><i class="mdi mdi-chevron-right mr-1"></i> Services</a></li> --}}
                         <li><a href="{{ route('frontend.why_home_fix', app()->getLocale()) }}" class="text-foot js-scroll-trigger"><i class="mdi mdi-chevron-right mr-1"></i>  Why FixMaster?</a></li>
 
                     </ul>
