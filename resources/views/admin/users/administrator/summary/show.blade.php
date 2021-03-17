@@ -74,23 +74,23 @@
 
                                             <tr>
                                                 <td class="tx-medium">Requests Supervised</td>
-                                                <td class="tx-color-03">0</td>
+                                                <td class="tx-color-03">{{$requests_supervised}}</td>
                                             </tr>
                                             <tr>
                                                 <td class="tx-medium">Payments Disbursed</td>
-                                                <td class="tx-color-03">0</td>
+                                                <td class="tx-color-03">{{$payments_disbursed}}</td>
                                             </tr>
                                             <tr>
                                                 <td class="tx-medium">Messages Sent</td>
-                                                <td class="tx-color-03">0</td>
+                                                <td class="tx-color-03">{{$messages_sent}}</td>
                                             </tr>
                                             <tr>
                                                 <td class="tx-medium">Login Count</td>
-                                                <td class="tx-color-03">0</td>
+                                                <td class="tx-color-03">{{$logs['logs_count'] }}</td>
                                             </tr>
                                             <tr>
                                                 <td class="tx-medium">Last Seen</td>
-                                                <td class="tx-color-03">0</td>
+                                                <td class="tx-color-03">{{!empty($last_seen['created_at']) ? Carbon\Carbon::parse($last_seen['created_at'], 'UTC')->diffForHumans()  : 'NEVER'}}</td>
                                             </tr>
 
                                         </tbody>

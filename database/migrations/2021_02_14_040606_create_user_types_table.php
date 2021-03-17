@@ -29,7 +29,7 @@ class CreateUserTypesTable extends Migration
                 ->onUpdate('cascade')
                 ->onDelete('cascade');
 
-            $table->string('url', 15);
+            $table->string('url', 100);
             $table->timestamps();
         });
     }

@@ -112,11 +112,19 @@ class User extends Authenticatable
     /**
      * Get the Administrator associated with the user.
      */
+    public function cse()
+    {
+        return $this->hasOne(Cse::class);
+    }
+
+    /**
+     * Get the Administrator associated with the user.
+     */
     public function logs()
     {
-        return $this->hasMany(ActivityLog::class, 'user_id', 'id');
+        return $this->hasMany(ActivityLog::class);
     }
-    
+
     /**
      * Get the phone associated with the user.
      */

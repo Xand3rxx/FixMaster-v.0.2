@@ -4,23 +4,18 @@ namespace App\Http\Controllers\Technician;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\URL;
 use App\Traits\Loggable;
 use Illuminate\Support\Facades\Route;
 use Auth;
-use Session;
 use App\Models\PaymentDisbursed;
 use App\Models\User;
-use App\Models\Technician;
 use App\Models\ServiceRequest;
-use App\Rules\MatchOldPassword;
-use Illuminate\Support\Facades\Hash;
+use App\Traits\PasswordUpdator;
 use Illuminate\Support\Facades\Validator;
-use Redirect;
 
 class TechnicianProfileController extends Controller
 {
-    use Loggable;
+    use Loggable, PasswordUpdator;
     /**
      * This method will redirect users back to the login page if not properly authenticated
      * @return void
@@ -186,58 +181,26 @@ class TechnicianProfileController extends Controller
 
 
 
-
+    /**
+     * Update password of the current request user
+     * 
+     * PLEASE INCLUDE IN FORM REQUEST THE NAME:
+     * 
+     * 1: current_password
+     * 
+     * 2: new_password
+     * 
+     * 3: new_confirm_password 
+     * 
+     * 
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\RedirectResponse
+     * 
+     * @throws \Illuminate\Validation\ValidationException
+     */
     public function updatePassword(Request $request)
     {
-        // validate request, it would throw error back to page if validation fails
-        $valid = $this->validate($request, [
-            'current_password' => 'required',
-            'new_password' => 'required',
-            'new_confirm_password' => 'required|same:new_password',
-        ]);
-        $user = $request->user();
-        if (!$user) {
-            return redirect()->back()->with('error', 'Invalid Request User! ');
-        }
-        if (!Hash::check($valid['current_password'], $user->password)) {
-            return back()->withErrors(['current_password' => ['The provided password does not match our records.']]);
-        }
-
-        $this->setUserPassword($user, $valid['new_password']);
-
-        $user->setRememberToken(\Illuminate\Support\Str::random(60));
-
-        $user->save();
-
-        $this->log("Profile", 'informational', Route::currentRouteAction(), $user->email . ' Password successfully updated');
-
-        $this->guard()->login($user);
-
-        return back()->with('success', 'Password changed successfully!');
-
-
-        // return redirect()->route('login', app()->getLocale())->with('success', __('Password changed successfully, Kindly Re-login'));
-
-        // $current_password = $request->input('current_password');
-        // $new_password = $request->input('new_password');
-        // $new_confirm_password = $request->input('new_confirm_password');
-
-        // if ($new_password === $new_confirm_password) {
-
-        //     if (Hash::check($request->current_password, $user->password)) {
-        //         $changed_password = Hash::make($new_password);
-        //         $user->update(['password' => $changed_password]);
-
-        //         $this->log($type, 'informational', $actionUrl, $user->email . ' Password changed successfully');
-
-
-        //         return back()->with('success', 'Password changed successfully!');
-        //     }
-        //     $this->log($type, 'error', $actionUrl,  $user->email . 'Password updating failed, current password do not match our record');
-        //     return redirect()->back()->with('error', 'Your current password do not match our record');
-        // }
-        // $this->log($type, 'error', $actionUrl,  $user->email . ' Password updating failed, new password and confirm password do not match');
-        // return redirect()->back()->with('error', 'Your new password and confirm password do not match');
+        return $this->passwordUpdator($request);
     }
 
     public function get_technician_disbursed_payments(Request $request)
@@ -247,27 +210,5 @@ class TechnicianProfileController extends Controller
         $payments = PaymentDisbursed::where('recipient_id', Auth::id())->get();
 
         return view('technician.payments', compact('payments'));
-    }
-
-    /**
-     * Set the user's password.
-     *
-     * @param  \Illuminate\Http\Request  $user
-     * @param  string  $password
-     * @return void
-     */
-    protected function setUserPassword($user, $password)
-    {
-        $user->password = Hash::make($password);
-    }
-
-     /**
-     * Get the guard to be used during registration.
-     *
-     * @return \Illuminate\Contracts\Auth\StatefulGuard
-     */
-    protected function guard()
-    {
-        return Auth::guard();
     }
 }
