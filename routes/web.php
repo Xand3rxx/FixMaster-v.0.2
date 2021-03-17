@@ -239,7 +239,7 @@ Route::prefix('/technician')->group(function () {
         Route::get('/requests',                         [TechnicianProfileController::class, 'serviceRequests'])->name('requests');
         Route::get('/requests/details/{serviceRequest:id}',                 [TechnicianProfileController::class, 'serviceRequestDetails'])->name('request_details');
 
-        Route::get('/profile/',                         [TechnicianProfileController::class, 'viewProfile'])->name('view_profile');
+        Route::get('/profile',                         [TechnicianProfileController::class, 'viewProfile'])->name('view_profile');
         Route::get('/profile/edit',                     [TechnicianProfileController::class, 'editProfile'])->name('edit_profile');
         Route::patch('/update_profile',                     [TechnicianProfileController::class, 'updateProfile'])->name('update_profile');
         Route::patch('/update_password',                     [TechnicianProfileController::class, 'updatePassword'])->name('update_password');

@@ -7,7 +7,8 @@ use App\Traits\Loggable;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\URL;
 use Illuminate\Support\Facades\Route;
-use Auth;
+use Redirect;
+use Illuminate\Support\Facades\Auth;
 use Session;
 use App\Models\User;
 use App\Models\QA;
@@ -18,6 +19,15 @@ use Illuminate\Support\Facades\Validator;
 class QualityAssuranceProfileController extends Controller
 {
     use Loggable;
+
+    /**
+     * This method will redirect users back to the login page if not properly authenticated
+     * @return void
+     */
+    public function __construct()
+    {
+        $this->middleware('auth:web');
+    }
 
     public function view_profile(Request $request){
         $user = User::where('id', Auth::id())->first();
@@ -46,7 +56,6 @@ class QualityAssuranceProfileController extends Controller
             'middle_name' => 'required|max:255',
             'last_name' => 'required|max:255',
             'gender' => 'required|max:255',
-            'email' => 'required|email',
             'phone_number' => 'required',
             'profile_avater' => 'mimes:jpeg,jpg,png,gif',
             'full_address' => 'required'
@@ -59,14 +68,13 @@ class QualityAssuranceProfileController extends Controller
              'middle_name.required' => 'Middle Name field can not be empty',
              'last_name.required' => 'Last Name field can not be empty',
              'gender.required' => 'Please select gender',
-             'email.required' => 'Email field can not be empty',
              'phone_number.required' => 'Please select phone number',
              'profile_avater.mimes'    => 'Unsupported Image Format'
           ];
 
           $validator = Validator::make($request->all(), $rules, $messages);
         if($validator->fails()){
-            return redirect()->back()->with('errors', $validator->errors());
+            return redirect()->back()->withErrors($validator->errors());
         }else{
 
         if($request->hasFile('profile_avater')){
@@ -85,13 +93,14 @@ class QualityAssuranceProfileController extends Controller
         'avatar'=>$filename
     ]);
 
-    $user->update([
-        'email'=>$request->email,
-    ]);
-
     $user->phone->update([
         'user_id'=>$user->id,
         'number'=>$request->phone_number,
+    ]);
+
+    $user->address->update([
+        'user_id'=>$user->id,
+        'name'=>$request->full_address,
     ]);
 
     $this->log($type, $severity, $actionUrl, $message);
@@ -130,5 +139,5 @@ class QualityAssuranceProfileController extends Controller
           $this->log($type, 'error', $actionUrl,  $user->email.' Password updating failed, new password and confirm password do not match');
          return redirect()->back()->with('error', 'Your new password and confirm password do not match');
 
-       }
+    }
 }

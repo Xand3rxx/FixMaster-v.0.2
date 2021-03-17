@@ -38,10 +38,17 @@
                             <div class="mg-sm-r-30">
                                 <div class="pos-relative d-inline-block mg-b-20">
                                   <a href="#">
-                                  {{-- {{asset('assets/qa_images/'.$result->account->avatar)}} --}}
+                                  @php
+                                  if($result->account->gender == "male")
+                                   $photo = "default-male-avatar.png";
+                                  elseif($result->account->gender == "female")
+                                  $photo = "default-female-avatar.png";
+                                  else
+                                  $photo = "no-image-available.png";
+                                  @endphp
                                     <div class="avatar avatar-xxl">
                                       <div class="user-img">
-                                        <img class="rounded-circle wh-150p img-fluid image profile_image_preview" src="{{!empty($result->account->avatar) ? asset('assets/user-avatars/'.$result->account->avatar) : asset('assets/images/no-image-available.png')}}" alt="user-image">
+                                        <img class="rounded-circle wh-150p img-fluid image profile_image_preview" src="{{!empty($result->account->avatar) ? asset('assets/user-avatars/'.$result->account->avatar) : asset('assets/user-avatars/'.$photo)}}" alt="user-image">
                                       </div>
                                     </div>
                                   </a>
@@ -51,7 +58,7 @@
                         <div class="form-row">
                           <div class="form-group col-md-3">
                             <label for="inputEmail4">First Name</label>
-                            <input type="text" class="form-control @error('first_name') is-invalid @enderror" name="first_name" id="first_name" value="{{$result->account->first_name}}" required>
+                            <input type="text" class="form-control @error('first_name') is-invalid @enderror" name="first_name" id="first_name" value="{{$result->account->first_name}}">
                             @error('first_name')
                             <span class="invalid-feedback" role="alert">
                                 <strong>{{ $message }}</strong>
@@ -60,7 +67,7 @@
                         </div>
                         <div class="form-group col-md-3">
                           <label for="inputEmail4">Middle Name</label>
-                          <input type="text" class="form-control @error('middle_name') is-invalid @enderror" id="middle_name" name="middle_name" value="{{$result->account->middle_name}}" required>
+                          <input type="text" class="form-control @error('middle_name') is-invalid @enderror" id="middle_name" name="middle_name" value="{{$result->account->middle_name}}">
                           @error('middle_name')
                           <span class="invalid-feedback" role="alert">
                               <strong>{{ $message }}</strong>
@@ -70,7 +77,7 @@
                             <!-- Last Name -->
                             <div class="form-group col-md-3">
                               <label for="inputEmail4">Last Name</label>
-                              <input type="text" class="form-control @error('last_name') is-invalid @enderror" id="last_name" name="last_name" value="{{$result->account->last_name}}" required>
+                              <input type="text" class="form-control @error('last_name') is-invalid @enderror" id="last_name" name="last_name" value="{{$result->account->last_name}}">
                               @error('last_name')
                               <span class="invalid-feedback" role="alert">
                                   <strong>{{ $message }}</strong>
@@ -106,7 +113,7 @@
                           <!-- Phone Number -->
                           <div class="form-group col-md-4">
                             <label for="inputEmail4">Phone Number</label>
-                            <input type="tel" class="form-control @error('phone_number') is-invalid @enderror" id="phone_number" name="phone_number" maxlength="11" value="{{ old('phone_number')?? $result->phone->number }}" required>
+                            <input type="tel" class="form-control @error('phone_number') is-invalid @enderror" id="phone_number" name="phone_number" maxlength="11" value="{{ old('phone_number')?? $result->phone->number }}">
                             @error('phone_number')
                               <span class="invalid-feedback" role="alert">
                                   <strong>{{ $message }}</strong>
@@ -131,7 +138,7 @@
                             <!-- Full Address -->
                             <div class="form-group col-md-6">
                               <label for="inputAddress2">Full Address</label>
-                              <textarea rows="3" class="user_address form-control @error('full_address') is-invalid @enderror" placeholder="e.g. 284B, Ajose Adeogun Street, Victoria Island, Lagos, Nigeria." id="inputAddress2" name="full_address" required></textarea>
+                              <textarea rows="3" class="user_address form-control @error('full_address') is-invalid @enderror" id="" name="full_address" value="{{ old('full_address')?? $result->address->name }}"></textarea>
                               @error('full_address')
                             <span class="invalid-feedback" role="alert">
                                 <strong>{{ $message }}</strong>
@@ -140,7 +147,7 @@
                             </div>
                             <div class="form-group col-md-6">
                                 <label for="inputAddress2">Work Address</label>
-                                <textarea rows="3" class="user_address2 form-control @error('work_address') is-invalid @enderror" placeholder="e.g. Block A2, Broad Street, Marina, Lagos, Nigeria"  id="" name="work_address" required></textarea>
+                                <textarea rows="3" class="user_address2 form-control @error('work_address') is-invalid @enderror" placeholder="e.g. Block A2, Broad Street, Marina, Lagos, Nigeria"  id="" name="work_address"></textarea>
                                 @error('work_address')
                             <span class="invalid-feedback" role="alert">
                                 <strong>{{ $message }}</strong>
@@ -174,7 +181,7 @@
                           </div>
                         <div class="form-group col-md-4">
                           <label for="new_password">New Password</label>
-                          <input type="password" class="form-control @error('new_password') is-invalid @enderror" id="new_password" name="new_password" required>
+                          <input type="password" class="form-control @error('new_password') is-invalid @enderror" id="new_password" name="new_password">
                           @error('new_password')
                             <span class="invalid-feedback" role="alert">
                                 <strong>{{ $message }}</strong>
@@ -183,7 +190,7 @@
                         </div>
                         <div class="form-group col-md-4">
                           <label for="new_confirm_password">Confirm Password</label>
-                          <input type="password" class="form-control @error('confirm_password') is-invalid @enderror" id="new_confirm_password" name="new_confirm_password" required>
+                          <input type="password" class="form-control @error('confirm_password') is-invalid @enderror" id="new_confirm_password" name="new_confirm_password">
                           @error('new_confirm_password')
                             <span class="invalid-feedback" role="alert">
                                 <strong>{{ $message }}</strong>
@@ -214,7 +221,7 @@ $(document).ready(function() {
         let autocomplete;
         initialize();
 
-        
+
 
         function initialize() {
             // Create the autocomplete object, restricting the search to geographical location types.
@@ -229,7 +236,7 @@ $(document).ready(function() {
             google.maps.event.addDomListener(document.querySelector('.user_address2'), 'focus');
         }
     });
-    
+
 </script>
 
 <script>
@@ -282,7 +289,7 @@ $(document).ready(function() {
       }
 
 
-      
+
 
     });
 
