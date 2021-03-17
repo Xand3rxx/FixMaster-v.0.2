@@ -3,8 +3,6 @@
 namespace App\Traits;
 
 use App\Models\ActivityLog;
-use Illuminate\Http\Request;
-
 trait Loggable
 {
     /**

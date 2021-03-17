@@ -9,5 +9,23 @@ class Address extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['user_id', 'account_id', 'country_id', 'name'];
+    /**
+     * Get the user that owns the address.
+     */
+    protected $fillable = [
+        'user_id', 'account_id', 'country_id', 'address', 'address_longitude', 'address_latitude'
+    ];
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
+
+    /**
+     * Get the user that owns the address.
+     */
+    public function account()
+    {
+        return $this->belongsTo(Account::class);
+    }
 }

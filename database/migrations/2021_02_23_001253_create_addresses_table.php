@@ -23,9 +23,9 @@ class CreateAddressesTable extends Migration
             $table->foreignId('user_id')->index();
             $table->foreignId('account_id')->index();
             $table->foreignId('country_id')->index();
-
-            $table->longText('name');
-
+            $table->longText('address');
+            $table->double('address_longitude');
+            $table->double('address_latitude');
             $table->timestamps();
         });
     }

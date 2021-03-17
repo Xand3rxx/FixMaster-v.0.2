@@ -18,13 +18,12 @@ class CreateServiceRequestMediasTable extends Migration
             $table->charset = 'utf8mb4';
             $table->collation = 'utf8mb4_unicode_ci';
 
-            $table->foreignId('media_id');
-                // ->index()
-                // ->constrained()
-                // ->onUpdate('cascade')
-                // ->onDelete('cascade');
+            $table->unsignedBigInteger('media_id')
+                ->constrained()
+                ->onUpdate('cascade')
+                ->onDelete('cascade');
 
-            $table->foreignId('service_request_id')
+            $table->unsignedBigInteger('service_request_id')
                 ->constrained()
                 ->onUpdate('cascade')
                 ->onDelete('cascade');

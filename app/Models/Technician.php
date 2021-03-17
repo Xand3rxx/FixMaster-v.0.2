@@ -25,7 +25,7 @@ class Technician extends Model
     protected static function booted()
     {
         static::creating(function ($technician) {
-            $technician->unique_id = static::generate('technicians', 'TECH-', ''); // Create a Unique Technician/Artisan id
+            $technician->unique_id = static::generate('technicians', 'TECH-'); // Create a Unique Technician/Artisan id
         });
     }
 

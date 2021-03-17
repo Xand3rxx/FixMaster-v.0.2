@@ -13,7 +13,7 @@ trait ActiveEstates
         //Get all the active estates from the db
         $activeEstates = Estate::select('id', 'estate_name')
             ->orderBy('estates.estate_name', 'ASC')
-            ->where('estates.is_active', '1')
+            ->where('estates.is_active', 'reinstated')
             ->get();
         return $activeEstates;
     }

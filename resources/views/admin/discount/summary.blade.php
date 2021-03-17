@@ -17,7 +17,7 @@
 
       <div class="d-md-block">
       <a href="{{ route('admin.discount_list',app()->getLocale()) }}" class="btn btn-primary"><i class="fas fa-arrow-left"></i> Back</a>
-        <a href="#" class="btn btn-warning"><i class="fas fa-edit"></i> Edit</a>
+      <a href="{{ route('admin.edit_discount', [ 'discount'=>$discount->uuid, 'locale'=>app()->getLocale() ]) }}" class="btn btn-warning"><i class="fas fa-edit"></i> Edit</a>
         @if($discount->status == 'activate') 
         <a href="#"  id="deactivate" data-toggle="modal" data-url="{{ route('admin.deactivate_discount', [ 'discount'=>$discount->uuid, 'locale'=>app()->getLocale() ]) }}"   class="btn btn-warning" title="Deactivate "><i class="fas fa-ban"></i> Deactivate</a>
         @else 

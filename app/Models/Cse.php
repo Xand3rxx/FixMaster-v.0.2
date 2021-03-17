@@ -23,7 +23,7 @@ class Cse extends Model
     protected static function booted()
     {
         static::creating(function ($cse) {
-            $cse->unique_id = static::generate('cses', 'CSE-', ''); // Create a Unique cse id
+            $cse->unique_id = static::generate('cses', 'CSE-'); // Create a Unique cse id
         });
     }
 

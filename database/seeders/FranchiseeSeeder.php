@@ -32,9 +32,13 @@ class FranchiseeSeeder extends Seeder
         // Franchisee Roles and Permissions
         $franchiseeRole = \App\Models\Role::where('slug', 'franchisee-user')->first();
         $franchisee->roles()->attach($franchiseeRole);
+        $franchisee1->roles()->attach($franchiseeRole);
+        $franchisee2->roles()->attach($franchiseeRole);
 
         $franchiseePermission = \App\Models\Permission::where('slug', 'view-franchisee')->first();
         $franchisee->permissions()->attach($franchiseePermission);
+        $franchisee1->permissions()->attach($franchiseePermission);
+        $franchisee2->permissions()->attach($franchiseePermission);
 
         // Franchisee User Type
         $franchiseeType = new \App\Models\UserType();

@@ -17,8 +17,8 @@ Route::get('/', function () {
 });
 
 Route::get('another', function () {
-    return dd(request()->url(), request()->path());
-});
+    return dd(request()->url(), request()->path(), request()->user(), auth()->user());
+})->middleware('auth');
 
 
 //Clear configurations:

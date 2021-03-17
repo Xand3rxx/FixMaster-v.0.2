@@ -32,7 +32,7 @@ class Franchisee extends Model
     protected static function booted()
     {
         static::creating(function ($franchisee) {
-            $franchisee->unique_id = static::generate('franchisees', 'FR-', ''); // Create a Unique Franchisee id
+            $franchisee->unique_id = static::generate('franchisees', 'FR-'); // Create a Unique Franchisee id
         });
     }
 
