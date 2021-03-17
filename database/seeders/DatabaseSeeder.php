@@ -27,8 +27,6 @@ class DatabaseSeeder extends Seeder
             ServiceSeeder::class,
             StateSeeder::class,
             LgaSeeder::class,
-            ServiceRequestSeeder::class,
-            ServiceRequestStatusSeeder::class,
             CountrySeeder::class,
             PaymentModeSeeder::class,
             PaymentDisbursedSeeder::class,
@@ -42,6 +40,11 @@ class DatabaseSeeder extends Seeder
             PriceHistorySeeder::class,
             InsertSQLSeeder::class,
             FranchiseeSeeder::class,
+            SupplierSeeder::class,
+            StatusSeeder::class,
+            AdministratorSeeder::class,
+            ServiceRequestSeeder::class,
+
         ]);
     }
 }

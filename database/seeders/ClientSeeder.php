@@ -16,27 +16,27 @@ class ClientSeeder extends Seeder
         // Client User
         $client = new \App\Models\User;
         $client->email = 'client@fix-master.com';
-        $client->password = bcrypt('admin12345');
+        $client->password = bcrypt('client12345');
         $client->save();
 
         $client1 = new \App\Models\User;
         $client1->email = 'wisdom.amana@gmail.com';
-        $client1->password = bcrypt('admin12345');
+        $client1->password = bcrypt('client12345');
         $client1->save();
 
         $client2 = new \App\Models\User;
         $client2->email = 'debo.williams@gmail.com';
-        $client2->password = bcrypt('admin12345');
+        $client2->password = bcrypt('client12345');
         $client2->save();
 
         $client3 = new \App\Models\User;
         $client3->email = 'jennifer.isaac@outlook.co.uk';
-        $client3->password = bcrypt('admin12345');
+        $client3->password = bcrypt('client12345');
         $client3->save();
 
         $client4 = new \App\Models\User;
         $client4->email = 'favour.chidera@yahoo.com';
-        $client4->password = bcrypt('admin12345');
+        $client4->password = bcrypt('client12345');
         $client4->save();
 
         // Client Roles and Permissions
@@ -90,7 +90,7 @@ class ClientSeeder extends Seeder
         $clientAccount1 = \App\Models\Account::create([
             'user_id'       =>  $client1->id,
             'first_name'    => "Wisdom",
-            'middle_name'   => "",
+            'middle_name'   => "Basil",
             'last_name'     => "Amana",
             'gender'        => 'male',
             'avatar'        => 'default-male-avatar.png'
@@ -99,7 +99,7 @@ class ClientSeeder extends Seeder
         $clientAccount2 = \App\Models\Account::create([
             'user_id'       =>  $client2->id,
             'first_name'    => "Adebola",
-            'middle_name'   => "",
+            'middle_name'   => "Julius",
             'last_name'     => "Williams",
             'gender'        => 'male',
             'avatar'        => 'default-male-avatar.png'
@@ -108,7 +108,7 @@ class ClientSeeder extends Seeder
         $clientAccount3 = \App\Models\Account::create([
             'user_id'       =>  $client3->id,
             'first_name'    => "Jennifer",
-            'middle_name'   => "",
+            'middle_name'   => "Ifeyinwa",
             'last_name'     => "Isaac",
             'gender'        => 'male',
             'avatar'        => 'default-female-avatar.png'
@@ -163,5 +163,86 @@ class ClientSeeder extends Seeder
         $clientTable->estate_id = '3';
         $clientTable->	profession_id = '22';
         $clientTable->save();
+
+        $clientPhone = \App\Models\Phone::create([
+            'user_id' =>  $client->id,
+            'account_id'  => $clientAccount->id,
+            'country_id'  => 156, //Nigeria
+            'number'   => "07069836642"
+        ]);
+
+        $clientPhone = \App\Models\Phone::create([
+            'user_id' =>  $client1->id,
+            'account_id'  => $clientAccount1->id,
+            'country_id'  => 156, //Nigeria
+            'number'   => "08069386642"
+        ]);
+
+        $clientPhone = \App\Models\Phone::create([
+            'user_id' =>  $client2->id,
+            'account_id'  => $clientAccount2->id,
+            'country_id'  => 156, //Nigeria
+            'number'   => "08069386641"
+        ]);
+
+        $clientPhone = \App\Models\Phone::create([
+            'user_id' =>  $client3->id,
+            'account_id'  => $clientAccount2->id,
+            'country_id'  => 156, //Nigeria
+            'number'   => "07036722889"
+        ]);
+
+        $clientPhone = \App\Models\Phone::create([
+            'user_id' =>  $client4->id,
+            'account_id'  => $clientAccount2->id,
+            'country_id'  => 156, //Nigeria
+            'number'   => "09082354902"
+        ]);
+
+        $clientAddress = \App\Models\Address::create([
+            'user_id'           =>  $client->id,
+            'account_id'        =>  $clientAccount->id,
+            'country_id'        =>  156, //Nigeria
+            'address'           =>  "14 Idowu Martins St, Victoria Island, Lagos",
+            'address_longitude' =>  "3.420010",
+            'address_latitude'  =>  "6.432820",
+        ]);
+
+        $clientAddress = \App\Models\Address::create([
+            'user_id'           =>  $client1->id,
+            'account_id'        =>  $clientAccount1->id,
+            'country_id'        =>  156, //Nigeria
+            'address'           =>  "1-9 Reeve Rd, Ikoyi, Lagos",
+            'address_longitude' =>  "3.441440",
+            'address_latitude'  =>  "6.453120",
+        ]);
+
+        $clientAddress = \App\Models\Address::create([
+            'user_id'           =>  $client2->id,
+            'account_id'        =>  $clientAccount2->id,
+            'country_id'        =>  156, //Nigeria
+            'address'           =>  "Bisola Durosinmi Etti Drive, The Rock Dr, Lekki Phase 1, Lagos",
+            'address_longitude' =>  "3.464150",
+            'address_latitude'  =>  "6.437240",
+        ]);
+
+        $clientAddress = \App\Models\Address::create([
+            'user_id'           =>  $client3->id,
+            'account_id'        =>  $clientAccount3->id,
+            'country_id'        =>  156, //Nigeria
+            'address'           =>  "8 Oba Akinjobi Way, Ikeja GRA, Ikeja",
+            'address_longitude' =>  "3.346660",
+            'address_latitude'  =>  "6.586420",
+        ]);
+
+        $clientAddress = \App\Models\Address::create([
+            'user_id'           =>  $client4->id,
+            'account_id'        =>  $clientAccount4->id,
+            'country_id'        =>  156, //Nigeria
+            'address'           =>  "8 Oremeji St, Oke Odo, Lagos",
+            'address_longitude' =>  "3.346660",
+            'address_latitude'  =>  "6.586420",
+        ]);
     }
 }
+

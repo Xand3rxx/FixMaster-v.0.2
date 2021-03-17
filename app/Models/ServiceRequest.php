@@ -25,8 +25,12 @@ class ServiceRequest extends Model
      *
      * @var array
      */
+    // protected $fillable = [
+    //     'uuid', 'user_id', 'admin_id', 'cse_id', 'technician_id', 'service_id', 'category_id', 'job_reference', 'security_code', 'service_request_status_id', 'total_amount',
+    // ];
+
     protected $fillable = [
-        'uuid', 'user_id', 'admin_id', 'cse_id', 'technician_id', 'service_id', 'category_id', 'job_reference', 'security_code', 'service_request_status_id', 'total_amount',
+        'client_id', 'service_id', 'unique_id', 'state_id', 'lga_id', 'town_id', 'price_id', 'phone_id', 'address_id', 'client_discount_id', 'client_security_code', 'status_id', 'description', 'total_amount', 'preferred_time'
     ];
 
     /**
@@ -47,8 +51,17 @@ class ServiceRequest extends Model
     {
         // Create a uuid when a new Serivce Request is to be created
         static::creating(function ($serviceRequest) {
+            // Create a Unique Service Request uuid id
             $serviceRequest->uuid = (string) Str::uuid();
+
+            // Create a Unique Service Request reference id
+            $serviceRequest->unique_id = static::generate('service_requests', 'REF-', ''); 
+
+            // Create a Unique Service Request Client Security Code id
+            $serviceRequest->client_security_code = static::generate('service_requests', 'SEC-', ''); 
+
         });
+
     }
 
     public function user()
