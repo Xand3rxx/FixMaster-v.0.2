@@ -24,7 +24,7 @@ class PageController extends Controller
         ->where('id', '!=', 1)
         ->orderBy('name', 'ASC')
         ->with(['services'    =>  function($query){
-            return $query->select('name', 'url', 'image', 'category_id');
+            return $query->select('name', 'uuid', 'image', 'category_id');
         }])
         ->has('services')->get();
 
@@ -33,6 +33,15 @@ class PageController extends Controller
         return view('frontend.services.index')->with([
             'categories'    =>  $categories,
             'services'    =>  $services
+        ]);
+    }
+
+    public function serviceDetails($language, $uuid){
+
+        $service = Service::findOrFail($uuid);
+        
+        return view('client.service_details')->with([
+            'service'   =>  $service
         ]);
     }
 }

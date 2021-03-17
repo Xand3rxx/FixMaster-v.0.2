@@ -63,8 +63,8 @@ Route::post('/lga-list',                    [App\Http\Controllers\EssentialsCont
 Route::prefix('/services')->group(function () {
     Route::name('services.')->group(function () {
         Route::get('/',                     [PageController::class, 'services'])->name('list');
-        Route::view('/details',             'frontend.services.show')->name('details');
-        Route::get('/details/{service}',    [PageController::class, 'serviceDetails'])->name('detail');
+        // Route::view('/details',             'frontend.services.show')->name('details');
+        Route::get('/details/{service}',    [PageController::class, 'serviceDetails'])->name('details');
         Route::post('/search',              [PageController::class, 'searchCategories'])->name('search');
     });
 });

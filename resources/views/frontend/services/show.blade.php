@@ -24,12 +24,12 @@
                         <img src="{{ asset('assets/images/no-image-available.png') }}" alt="Image not available" class="card-img-top rounded-top">
                         @else
                             @if(file_exists(public_path().'/assets/category-images/'.$service->image))
-                                <img src="{{ asset('assets/category-images/'.$service->image) }}" alt="{{ $service->name }}" class="card-img-top rounded-top">
+                                <img src="{{ asset('assets/service-images/'.$service->image) }}" alt="{{ $service->name }}" class="card-img-top rounded-top">
                             @else
                             <img src="{{ asset('assets/images/no-image-available.png') }}" alt="Image not available" class="card-img-top rounded-top">
                             @endif
                         @endif
-
+                        
                     <div class="overlay rounded-top bg-dark"></div>
                     </div>
                     
@@ -39,7 +39,7 @@
                     </div>
                 </div>
                 <div class="mt-4 pt-2">
-                    <a href="{{ route('client.service_quote', $service->url) }}" class="btn btn-primary">Request Service</a>
+                    <a href="#" class="btn btn-primary">Request Service</a>
                 </div>
             </div><!--end col-->
 

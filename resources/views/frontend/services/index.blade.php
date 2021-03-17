@@ -57,11 +57,11 @@
         <div class="row align-items-center">
             <div class="col-lg-9 col-md-7">
                 <div class="title-heading">
-                <h4 class="mb-0 serv__1">{{ $service->name }}</h4>
+                <h4 class="mb-0 serv__1 mt-4 mb-2">{{ $service->name }}</h4>
                 </div>
             </div><!--end col-->
         </div><!--end row-->
-        <div class="row">
+        <div class="row mt-4">
             @foreach($service->services as $item)
                 <div class="col-lg-4 mt-4 pt-2">
                     <div class="card blog rounded border-0 shadow">
@@ -71,7 +71,7 @@
                             <div class="overlay rounded-top bg-dark"></div>
                         </div>
                         <div class="card-body content">
-                        <h5 class="serv__2">{{ $item->name }} <a href="" title="View {{ $item->name }} service details"> <i data-feather="info" class="text-primary"></i></a></h5>
+                        <h5 class="serv__2">{{ $item->name }} <a href="{{ route('services.details', ['service'=>$item->uuid, 'locale'=>app()->getLocale()]) }}" title="View {{ $item->name }} service details"> <i data-feather="info" class="text-primary"></i></a></h5>
                             <div class="post-meta d-flex justify-content-between mt-2">
                                 {{-- <p class="serv__3 text-muted">Lorem ipsum dolor sit amet consectetur adipisicing elit. Alias commodi.</p> --}}
                             </div>
