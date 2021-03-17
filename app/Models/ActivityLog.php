@@ -42,4 +42,20 @@ class ActivityLog extends Model
             $log->request_url = request()->fullUrl(); // The full url the request is from
         });
     }
+
+    /**
+     * Get the Type associated with the user.
+     */
+    public function type()
+    {
+        return $this->hasOne(UserType::class, 'user_id', 'user_id');
+    }
+
+    /**
+     * Get the Account associated with the user.
+     */
+    public function account()
+    {
+        return $this->hasOne(Account::class, 'user_id', 'user_id');
+    }
 }

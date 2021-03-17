@@ -29,5 +29,16 @@ class UserSeeder extends Seeder
         $userType->role_id = $developer->id;
         $userType->url = $developer->url;
         $userType->save();
+
+        // Super Admin Account
+        $superAdminAccount = \App\Models\Account::create([
+            'user_id'       =>  1,
+            'first_name'    => "Ninth Binary",
+            'middle_name'   => "",
+            'last_name'     => "Developer",
+            'gender'        => 'male',
+            'avatar'        => 'default-male-avatar.png'
+        ]);
+
     }
 }

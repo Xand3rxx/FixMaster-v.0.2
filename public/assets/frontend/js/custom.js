@@ -1,5 +1,33 @@
 $(document).ready(function(){
 
+    $(document).on('click', '.estate-summary', function(){
+        $('.summary').removeClass('d-none');
+        $('.discount, .client').addClass('d-none');
+        // scrollDown();
+        // $('html, body').animate({
+        //     scrollTop: $(".down").offset().top
+        // }, 1500);
+    });
+
+    $(document).on('click', '.estate-discount', function(){
+        $('.discount').removeClass('d-none');
+        $('.summary, .client').addClass('d-none');
+        // scrollDown();
+        // $('html, body').animate({
+        //     scrollTop: $(".down").offset().top
+        // }, 1500);
+    });
+
+    $(document).on('click', '.estate-client', function(){
+        $('.client').removeClass('d-none');
+        $('.discount, .summary').addClass('d-none');
+        // scrollDown();
+        // $('html, body').animate({
+        //     scrollTop: $(".down").offset().top
+        // }, 1500);
+    });
+
+
     $(document).on('click', '.register-cse', function(){
         $('.cse-registration').removeClass('d-none');
         $('.technician-registration, .supplier-registration, .estate-registration').addClass('d-none');

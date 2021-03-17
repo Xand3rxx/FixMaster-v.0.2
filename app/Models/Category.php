@@ -21,7 +21,7 @@ class Category extends Model
     public $incrementing = false;
 
     public $fillable = [
-        'user_id', 'name',
+        'uuid', 'user_id', 'name',
     ];
 
     /**
@@ -47,9 +47,9 @@ class Category extends Model
      */
     protected static function booted()
     {
-        // Create a uuid when a new Serivce is to be created 
-        static::creating(function ($user) {
-            $user->uuid = (string) Str::uuid(); 
+        // Create a uuid when a new Category is to be created 
+        static::creating(function ($category) {
+            $category->uuid = (string) Str::uuid(); 
         });
     }
 

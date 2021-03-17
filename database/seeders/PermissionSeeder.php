@@ -26,6 +26,16 @@ class PermissionSeeder extends Seeder
         $createTasks->save();
 
         $createTasks = new Permission();
+        $createTasks->name = 'Create New Franchisee ';
+        $createTasks->slug = 'create-franchisee';
+        $createTasks->save();
+
+        $createTasks = new Permission();
+        $createTasks->name = 'View Franchisee';
+        $createTasks->slug = 'view-franchisee';
+        $createTasks->save();
+
+        $createTasks = new Permission();
         $createTasks->name = 'Create New CSE';
         $createTasks->slug = 'create-cse';
         $createTasks->save();
@@ -36,6 +46,16 @@ class PermissionSeeder extends Seeder
         $createTasks->save();
 
         $createTasks = new Permission();
+        $createTasks->name = 'Create New Quality Assurance';
+        $createTasks->slug = 'create-qa';
+        $createTasks->save();
+
+        $createTasks = new Permission();
+        $createTasks->name = 'View Quality Assurance';
+        $createTasks->slug = 'view-qa';
+        $createTasks->save();
+
+        $createTasks = new Permission();
         $createTasks->name = 'Create New Technician';
         $createTasks->slug = 'create-technician';
         $createTasks->save();
@@ -43,6 +63,16 @@ class PermissionSeeder extends Seeder
         $createTasks = new Permission();
         $createTasks->name = 'View Technicians';
         $createTasks->slug = 'view-technicians';
+        $createTasks->save();
+
+        $createTasks = new Permission();
+        $createTasks->name = 'Create New Supplier';
+        $createTasks->slug = 'create-supplier';
+        $createTasks->save();
+
+        $createTasks = new Permission();
+        $createTasks->name = 'View Suppliers';
+        $createTasks->slug = 'view-suppliers';
         $createTasks->save();
 
         $createTasks = new Permission();

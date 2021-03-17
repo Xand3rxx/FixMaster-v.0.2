@@ -58,14 +58,18 @@
                                             @if($estate['approved_by'] == null)
                                                 <td class="text-medium text-danger">Pending</td>
                                             @else
-                                            @if($estate['is_active'] === '1')
-                                                <td class="text-medium text-success">Active</td>
-                                            @else
-                                                <td class="text-medium text-danger">Inactive</td>
-                                            @endif
+                                                <td class="text-medium text-@if($estate['is_active'] == 'approved' || $estate['is_active'] == 'reinstated')success @elseif($estate['is_active'] == 'declined' || $estate['is_active'] == 'deactivated')danger @endif">
+                                                    {{ Str::ucfirst($estate['is_active']) }}
+                                                </td>
                                             @endif
                                             <td class="text-medium">{{ $estate['created_by'] }}</td>
-                                            <td class="text-medium">{{ $estate['approved_by'] }}</td>
+                                            @if($estate['approved_by'] == null)
+                                            <td class="text-medium text-danger">Pending</td>
+                                            @else
+                                            @foreach($approvedBy as $item)
+                                            <td class="text-medium">{{ $item->email }}</td>
+                                            @endforeach
+                                            @endif
                                             <td class=" text-center">
                                                 <div class="dropdown-file">
                                                     <a href="" class="dropdown-link" data-toggle="dropdown"><i data-feather="more-vertical"></i></a>
@@ -73,11 +77,16 @@
                                                         <a href="{{ route('admin.estate_summary', [ 'estate'=>$estate['uuid'], 'locale'=>app()->getLocale() ]) }}" class="dropdown-item details text-primary"><i class="far fa-user"></i> Summary</a>
                                                         <a href="{{ route('admin.edit_estate', [ 'estate'=>$estate['uuid'], 'locale'=>app()->getLocale() ]) }}" class="dropdown-item details text-info"><i class="far fa-edit"></i> Edit</a>
                                                         <a href="" class="dropdown-item details text-secondary"><i class="fa fa-percent"></i> Discount </a>
-                                                        @if($estate['approved_by'] == null)
+
+
+                                                        @if($estate['approved_by'] == null || $estate['is_active'] == 'declined' || $estate['is_active'] == 'pending')
+                                                        @if($estate['approved_by'] != null || $estate['is_active'] == 'declined' || $estate['is_active'] == 'pending')
                                                             <a href="{{ route('admin.approve_estate', ['estate'=>$estate->uuid, 'locale'=>app()->getLocale()]) }}" class="dropdown-item details text-success"><i class="fas fa-ban"></i> Approve</a>
                                                             <a href="{{ route('admin.decline_estate', ['estate'=>$estate->uuid, 'locale'=>app()->getLocale()]) }}" class="dropdown-item details text-warning"><i class="fas fa-ban"></i> Decline</a>
-                                                        @else
-                                                        @if($estate['is_active'] == '1')
+                                                        @endif
+
+                                                        @elseif($estate['is_active'] == 'approved' || $estate['is_active'] == 'reinstated' || $estate['is_active'] == 'deactived')
+                                                        @if($estate['is_active'] == 'reinstated' )
                                                             <a href="{{ route('admin.deactivate_estate', ['estate'=>$estate->uuid, 'locale'=>app()->getLocale()]) }}" class="dropdown-item details text-warning"><i class="fas fa-ban"></i> Deactivate</a>
                                                         @else
                                                             <a href="{{ route('admin.reinstate_estate', ['estate'=>$estate->uuid, 'locale'=>app()->getLocale()]) }}" class="dropdown-item details text-success"><i class="fas fa-undo"></i> Reinstate</a>

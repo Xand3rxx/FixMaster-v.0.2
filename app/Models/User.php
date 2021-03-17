@@ -5,14 +5,11 @@ namespace App\Models;
 use Illuminate\Support\Str;
 use App\Traits\RolesAndPermissions;
 use Illuminate\Notifications\Notifiable;
-use function Illuminate\Events\queueable;
-use Illuminate\Contracts\Auth\MustVerifyEmail;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 
 class User extends Authenticatable
 {
-    use HasFactory, Notifiable, RolesAndPermissions;
+    use Notifiable, RolesAndPermissions;
 
     /**
      * The attributes that are mass assignable.
@@ -56,27 +53,100 @@ class User extends Authenticatable
         });
     }
 
-     /**
-     * Get the user that belongs to this role
+    /**
+     * Get the Type associated with the user.
      */
     public function type()
     {
         return $this->hasOne(UserType::class);
     }
 
+    /**
+     * Get the Category associated with the user who created it.
+     */
+    public function category()
+    {
+        return $this->hasOne(Category::class);
+    }
+
+    /**
+     * Get the Categories associated with the user who created it.
+     */
+    public function categories()
+    {
+        return $this->hasMany(Category::class);
+    }
+
+    /**
+     * Get the Sercice associated with the user who created it.
+     */
     public function service()
     {
         return $this->hasOne(Service::class);
     }
 
+    /**
+     * Get the Services associated with the user who created it.
+     */
     public function services()
     {
         return $this->hasMany(Service::class);
     }
 
-    public function category()
+    /**
+     * Get the Account associated with the user.
+     */
+    public function account()
     {
-        return $this->hasOne(Category::class);
+        return $this->hasOne(Account::class);
+    }
+
+    /**
+     * Get the Administrator associated with the user.
+     */
+    public function administrator()
+    {
+        return $this->hasOne(Administrator::class);
+    }
+
+    /**
+     * Get the Administrator associated with the user.
+     */
+    public function cse()
+    {
+        return $this->hasOne(Cse::class);
+    }
+
+    /**
+     * Get the Administrator associated with the user.
+     */
+    public function logs()
+    {
+        return $this->hasMany(ActivityLog::class);
+    }
+
+    /**
+     * Get the phone associated with the user.
+     */
+    public function phone()
+    {
+        return $this->hasOne(Phone::class);
+    }
+
+    /**
+     * Get the phone associated with the user.
+     */
+    public function phones()
+    {
+        return $this->hasMany(Phone::class);
+    }
+
+    /**
+     * Get the phone associated with the user.
+     */
+    public function addresses()
+    {
+        return $this->hasMany(Address::class);
     }
 
     public function estate()
@@ -87,5 +157,29 @@ class User extends Authenticatable
     public function estates()
     {
         return $this->hasMany(Estate::class);
+    }
+
+    public function payments()
+    {
+        return $this->hasMany(PaymentDisbursed::class, 'recipient_id');
+    }
+    public function invoice()
+    {
+        return $this->hasOne(Invoice::class);
+    }
+
+    public function invoices()
+    {
+        return $this->hasMany(Invoice::class);
+    }
+
+    public function serviceRequest()
+    {
+        return $this->hasOne(ServiceRequest::class);
+    }
+
+    public function serviceRequests()
+    {
+        return $this->hasMany(ServiceRequest::class);
     }
 }

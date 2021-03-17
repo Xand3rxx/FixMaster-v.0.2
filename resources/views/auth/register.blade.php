@@ -152,13 +152,13 @@
 
                                 <div class="col-md-3">
                                 <div class="form-group position-relative">
-                                    <label>Estate </label>
+                                    <label>Estates </label>
                                     <i data-feather="navigation" class="fea icon-sm icons"></i>
                                     <select class="form-control pl-5" name="estate_name" id="estate_name">
                                         <option selected value="">Select...</option>
-                                        @foreach($activeEstates as $estate)
-                                            <option value="{{ $estate->id }}">{{ $estate->estate_name }}</option>
-                                        @endforeach
+{{--                                        @foreach($activeEstates as $estate)--}}
+{{--                                            <option value="{{ $estate->id }}">{{ $estate->estate_name }}</option>--}}
+{{--                                        @endforeach--}}
                                     </select>
                                 </div>
                             </div>

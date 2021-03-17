@@ -21,19 +21,26 @@ class EstateController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(User $user)
     {
+        $approvedBy = '';
         $estates = Estate::select('id', 'uuid', 'estate_name', 'first_name', 'last_name', 'email', 'phone_number', 'state_id', 'lga_id', 'is_active', 'created_by', 'approved_by', 'slug', 'created_at')
             ->orderBy('estates.estate_name', 'ASC')
             ->latest('estates.created_at')
             ->get();
 
-        return view('admin.estate.list', compact('estates'));
+        $getAdminId = Estate::select('approved_by')->pluck('approved_by');
+        $approvedBy = User::find($getAdminId);
+
+        $userRole = Auth::user()->type->role->url;
+        // dd($userRole);
+
+        return view('admin.estate.list', compact('estates', 'approvedBy'));
     }
 
     public function showEstates()
     {
-        $estates = Estate::select('id', 'uuid', 'estate_name', 'first_name', 'last_name', 'email', 'phone_number', 'state_id', 'lga_id', 'is_active', 'slug', 'created_at')
+        $estates = Estate::select('id', 'uuid', 'estate_name', 'first_name', 'last_name', 'email', 'phone_number', 'state_id', 'lga_id', 'is_active'. 'created_by', 'approved_by', 'slug', 'created_at')
             ->orderBy('estates.estate_name', 'ASC')
             ->latest('estates.created_at')
             ->get();
@@ -60,16 +67,28 @@ class EstateController extends Controller
      */
     public function store(Request $request)
     {
+        //Get users url
+        $userRole = '';
+
+        if(Auth::user()){
+            $userRole = Auth::user()->type->role->url;
+        }
+
         //Validate users input
         $this->validateRequest();
         $is_active = '';
+        $created_by = '';
+        $approved_by = null;
 
-        //Get users url
-        $userRole = Auth::user()->type->role->url;
+
         if($userRole === 'admin') {
-            $is_active = '1';
+            $is_active = 'reinstated';
+            $created_by = Auth::user()->email;
+            $approved_by = Auth::user()->id;
         }else{
-            $is_active = '0';
+            $is_active = 'pending';
+            $created_by = $request->input('first_name').' '.$request->input('last_name');
+            $approved_by = null;
         }
 
         //Create new estate record
@@ -77,6 +96,8 @@ class EstateController extends Controller
             'uuid' => Str::uuid('uuid'),
             'state_id' => $request->input('state_id'),
             'lga_id' => $request->input('lga_id'),
+            'created_by' => $created_by,
+            'approved_by' => $approved_by,
             'first_name' => $request->input('first_name'),
             'middle_name' => $request->input('middle_name'),
             'last_name' => $request->input('last_name'),
@@ -214,7 +235,7 @@ class EstateController extends Controller
     public function reinstate($language, Estate $estate)
     {
         $reinstateEstate = $estate->update([
-           'is_active'  => '1'
+           'is_active'  => 'reinstated'
         ]);
 
         if($reinstateEstate) {
@@ -238,7 +259,7 @@ class EstateController extends Controller
     public function deactivate($language, Estate $estate)
     {
         $deactivateEstate = $estate->update([
-            'is_active'  => '0'
+            'is_active'  => 'deactivated'
         ]);
 
         if($deactivateEstate) {
@@ -262,7 +283,7 @@ class EstateController extends Controller
     public function approve($language, Estate $estate, User $user) {
         $approveEstate = $estate->update([
             'approved_by'   =>      Auth::user()->id,
-            'is_active'     =>      '1'
+            'is_active'     =>      'reinstated'
         ]);
 
         $approvedBy = User::where('id', $estate->approved_by)->get();
@@ -273,7 +294,7 @@ class EstateController extends Controller
             $actionUrl = Route::currentRouteAction();
             $message = Auth::user()->email.' approved '.$estate->estate_name;
             $this->log($type, $severity, $actionUrl, $message);
-            return redirect()->route('admin.list_estate', ['locale' => app()->getLocale(), $approvedBy])->with('success', 'Estate has been approved')->with($approvedBy);
+            return redirect()->route('admin.list_estate', app()->getLocale())->with('success', 'Estate has been approved');
         }
         else {
             $type = 'Errors';
@@ -288,7 +309,8 @@ class EstateController extends Controller
 
     public function decline($language, Estate $estate) {
         $declineEstate = $estate->update([
-            'approved_by'   =>      Auth::user()->id
+            'approved_by'   =>      Auth::user()->id,
+            'is_active'     =>      'declined'
         ]);
 
         if($declineEstate) {

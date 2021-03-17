@@ -3,6 +3,8 @@
 /public/storage
 /storage/*.key
 /vendor
+/config
+.idea
 .env
 .env.backup
 .phpunit.result.cache
@@ -12,3 +14,10 @@ Homestead.yaml
 npm-debug.log
 yarn-error.log
 _ide_helper.php
+Dockerfile
+docker-compose.yml
+.idea
+.history/
+.idea/*
+.env.production
+htaccess.prod

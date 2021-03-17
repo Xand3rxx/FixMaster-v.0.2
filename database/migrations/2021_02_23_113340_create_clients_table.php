@@ -19,11 +19,15 @@ class CreateClientsTable extends Migration
             $table->collation = 'utf8mb4_unicode_ci';
 
             $table->id();
-
             $table->foreignId('user_id')->index();
+            $table->string('unique_id')->comment('e.g. WAL-23782382');
+
             $table->foreignId('account_id')->index();
             $table->foreignId('estate_id')->index();
             $table->foreignId('profession_id')->index();
+            $table->bigInteger('referral_id')->nullable()->index();
+            $table->integer('firsttime')->default(0);
+
 
             $table->timestamps();
         });
