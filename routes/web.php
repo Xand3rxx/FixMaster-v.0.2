@@ -176,15 +176,14 @@ Route::prefix('/client')->group(function () {
         // Route::get('/wallet',                   [ClientController::class, 'wallet'])->name('wallet'); //Take me to Supplier Dashboard
             // Route::get('/requests',                 [ClientRequestController::class, 'index'])->name('client.requests');
             
-
-            Route::get('wallet',                [ClientController::class, 'wallet'])->name('wallet');
-            Route::any('fund',                 [ClientController::class, 'walletSubmit'])->name('wallet.submit');
-
+            // E-wallet Routes for clients
+            Route::get('wallet',        [ClientController::class, 'wallet'])->name('wallet');
+            Route::any('fund',          [ClientController::class, 'walletSubmit'])->name('wallet.submit');
             Route::post('/ipnpaystack', [ClientController::class, 'paystackIPN'])->name('ipn.paystack');
-            Route::get('/apiRequest', [ClientController::class, 'apiRequest'])->name('ipn.paystackApiRequest');
-
-            Route::get('/ipnflutter', [ClientController::class, 'flutterIPN'])->name('ipn.flutter');
-
+            Route::get('/apiRequest',   [ClientController::class, 'apiRequest'])->name('ipn.paystackApiRequest');
+            Route::get('/ipnflutter',   [ClientController::class, 'flutterIPN'])->name('ipn.flutter');
+            //Profile and password update
+            Route::get('/settings',     [ClientController::class, 'profile'])->name('profile');
     });
 });
 

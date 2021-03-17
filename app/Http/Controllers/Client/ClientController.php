@@ -12,6 +12,7 @@ use App\Models\Payment;
 use App\Models\WalletTransaction;
 use App\Models\User;
 use App\Models\Client;
+use App\Models\State;
 use App\Helpers\CustomHelpers;
 use App\Traits\GenerateUniqueIdentity as Generator;
 use App\Traits\RegisterPaymentTransaction;
@@ -142,10 +143,17 @@ class ClientController extends Controller
         //
     }
 
-    // public function wallet()
-    // {
-    //     return view('client.wallet')->with('i');
-    // }
+    public function profile(Request $request){
+        // $data['title'] = 'Profile';
+        // return view('client.profile', $data);
+        // $data['client'] = Client::where('user_id',auth()->user()->id)->first();
+        $data['client'] = Client::where('user_id', $request->user()->id)->with('user')->firstOrFail();
+        // $data['user'] = User::where('id', auth()->user()->id);
+        $data['user'] =  User::where('id', auth()->user()->id)->first();
+        $data['states'] = State::select('id', 'name')->orderBy('name', 'ASC')->get();
+        // dd($user );
+        return view('client.settings', $data);
+    }
 
     public function wallet()
     {

@@ -156,14 +156,7 @@
                         
                         <!-- @if($pay->payment_channel=='paystack') -->
                         <p class="text-muted location-time"><span class="text-dark h6">Via Paystack</span></p>
-                        <!-- @elseif($pay->payment_channel=='flutterwave')
-                        <p class="text-muted location-time"><span class="text-dark h6">Via Flutter</span></p>                 
-                        @elseif($pay->payment_channel=='offline')
-                        <p class="text-muted location-time"><span class="text-dark h6">Via Offline</span></p>
-                        @elseif($pay->payment_channel=='wallet')
-                        <p class="text-muted location-time"><span class="text-dark h6">Via Wallet</span></p>
-                        @endif -->
-                        
+                                              
                         <form class="mb-5" method="post" action="{{ route('client.ipn.paystack', app()->getLocale()) }}">
                           @csrf     
                           <button type="submit" class="btn btn-lg btn-outline-primary mouse-down btn-block">
