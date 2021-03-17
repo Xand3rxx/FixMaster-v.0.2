@@ -32,9 +32,13 @@ class SupplierSeeder extends Seeder
         // supplier Roles and Permissions
         $supplierRole = \App\Models\Role::where('slug', 'supplier-user')->first();
         $supplier->roles()->attach($supplierRole);
+        $supplier1->roles()->attach($supplierRole);
+        $supplier2->roles()->attach($supplierRole);
 
         $supplierPermission = \App\Models\Permission::where('slug', 'view-suppliers')->first();
         $supplier->permissions()->attach($supplierPermission);
+        $supplier1->permissions()->attach($supplierPermission);
+        $supplier2->permissions()->attach($supplierPermission);
 
         // supplier User Type
         $supplierType = new \App\Models\UserType();

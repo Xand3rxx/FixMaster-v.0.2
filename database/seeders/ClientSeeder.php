@@ -16,35 +16,43 @@ class ClientSeeder extends Seeder
         // Client User
         $client = new \App\Models\User;
         $client->email = 'client@fix-master.com';
-        $client->password = bcrypt('client12345');
+        $client->password = bcrypt('admin12345');
         $client->save();
 
         $client1 = new \App\Models\User;
         $client1->email = 'wisdom.amana@gmail.com';
-        $client1->password = bcrypt('client12345');
+        $client1->password = bcrypt('admin12345');
         $client1->save();
 
         $client2 = new \App\Models\User;
         $client2->email = 'debo.williams@gmail.com';
-        $client2->password = bcrypt('client12345');
+        $client2->password = bcrypt('admin12345');
         $client2->save();
 
         $client3 = new \App\Models\User;
         $client3->email = 'jennifer.isaac@outlook.co.uk';
-        $client3->password = bcrypt('client12345');
+        $client3->password = bcrypt('admin12345');
         $client3->save();
 
         $client4 = new \App\Models\User;
         $client4->email = 'favour.chidera@yahoo.com';
-        $client4->password = bcrypt('client12345');
+        $client4->password = bcrypt('admin12345');
         $client4->save();
 
         // Client Roles and Permissions
         $clientRole = \App\Models\Role::where('slug', 'client-user')->first();
         $client->roles()->attach($clientRole);
+        $client1->roles()->attach($clientRole);
+        $client2->roles()->attach($clientRole);
+        $client3->roles()->attach($clientRole);
+        $client4->roles()->attach($clientRole);
 
         $client_permission = \App\Models\Permission::where('slug', 'view-clients')->first();
         $client->permissions()->attach($client_permission);
+        $client1->permissions()->attach($client_permission);
+        $client2->permissions()->attach($client_permission);
+        $client3->permissions()->attach($client_permission);
+        $client4->permissions()->attach($client_permission);
 
         // Client User Type
         $clientType = new \App\Models\UserType();
@@ -84,7 +92,7 @@ class ClientSeeder extends Seeder
             'middle_name'   => "Israel",
             'last_name'     => "Adesanya",
             'gender'        => 'male',
-            'avatar'        => 'default-male-avatar.png'
+            'avatar'        => '0c9ac4cada39ba68e97fc6c0a0807458d1385048.jpg'
         ]);
 
         $clientAccount1 = \App\Models\Account::create([
