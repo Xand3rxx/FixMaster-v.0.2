@@ -79,7 +79,7 @@ trait PasswordUpdator
     }
 
     /**
-     * Validate the Password Update Request
+     * Verify Request User
      *
      * @param  \Illuminate\Http\Request  $request
      * @return \App\Models\User $user
