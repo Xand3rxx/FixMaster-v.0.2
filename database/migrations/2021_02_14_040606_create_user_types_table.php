@@ -20,6 +20,7 @@ class CreateUserTypesTable extends Migration
             $table->collation = 'utf8mb4_unicode_ci';
 
             $table->foreignId('user_id')
+                ->unique()
                 ->constrained()
                 ->onUpdate('cascade')
                 ->onDelete('cascade');
