@@ -1,4 +1,4 @@
-<!-- Sidebar options are displayed based on the Authenticated User Role -->
+
 
 <!-- START ADMIN SIDEBAR MENU -->
 @if((Auth::user()->type->role->name === 'Super Admin') || (Auth::user()->type->role->name === 'Administrator'))
