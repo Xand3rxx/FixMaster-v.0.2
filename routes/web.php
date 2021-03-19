@@ -52,9 +52,9 @@ Route::prefix('admin')->group(function () {
     Route::name('admin.')->group(function () {
         Route::view('/', 'admin.index')->name('index'); //Take me to Admin Dashboard
 
-        Route::view('/ratings/category', 'admin.ratings.category')->name('category');
-        Route::view('/ratings/job',      'admin.ratings.job')->name('job');
-        Route::view('/ratings/category_reviews',      'admin.ratings.category_reviews')->name('category_reviews');
+        Route::view('/ratings/cse-diagnosis', 'admin.ratings.cse_diagnosis_rating')->name('category');
+        Route::view('/ratings/services',      'admin.ratings.service_rating')->name('job');
+        Route::view('/ratings/service-reviews',      'admin.ratings.service_reviews')->name('category_reviews');
 
         Route::prefix('users')->name('users.')->group(function () {
             Route::resource('administrator', AdministratorController::class);

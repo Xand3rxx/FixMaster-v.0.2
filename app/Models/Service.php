@@ -107,6 +107,14 @@ class Service extends Model
         return $this->hasMany(ServiceRequest::class, 'service_id', 'id');
     }
 
+    public function clientDiscount()
+    {
+        return $this->belongsTo(ClientDiscount::class, 'client_id');
+    }
 
+    public function clientDiscounts()
+    {
+        return $this->hasMany(ClientDiscount::class, 'client_id');
+    }
 
 }

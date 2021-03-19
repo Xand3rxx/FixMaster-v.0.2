@@ -3,9 +3,11 @@
 @section('content')
 @include('layouts.partials._messages')
 <style>
-    .blog .author { opacity: 1 !important;}
-    .blog .overlay { opacity: 0.6 !important;}
+    .blog .author { opacity: 1 !important; }
+    .blog .overlay { opacity: 0.6 !important; }
+    .avatar.avatar-ex-smm { max-height: 75px; }
 </style>
+
 <div class="col-lg-8 col-12">
     <div class="card custom-form border-0">
         <div class="card-body mt-4">
@@ -24,7 +26,7 @@
 
             <form class="rounded p-4" method="POST" action="" enctype="multipart/form-data">
                 @csrf
-                <small class="text-danger">A booking deposit is required to validate this order and enable us assign a CSE to your Job.</small>
+                <small class="text-danger">A Booking Fee deposit is required to validate this order and enable our AI assign a Customer Service Executice(CSE) to your Job.</small>
 
                 <input type="hidden" class="d-none" value="{{ $service->service_id }}" name="service_id">
 
@@ -111,14 +113,14 @@
                         </div>
                     
                         <div class="custom-control custom-checkbox form-group position-relative">
-                            <input type="radio" id="customRadio4" name="address" class="custom-control-input user_address" value="no">
+                            <input type="radio" id="customRadio4" name="address" class="custom-control-input" value="no">
                             <label class="custom-control-label" for="customRadio4">No, I have another Address</label>
                         </div>
 
                         <div class="form-group position-relative d-none display-address">
                             <label>Address</label>
                             <i data-feather="map-pin" class="fea icon-sm icons"></i>
-                            <textarea name="alternate_address" id="alternate_address" rows="4" class="form-control pl-5 @error('alternate_address') is-invalid @enderror" placeholder="Address of where the service is required">{{ old('alternate_address') }}</textarea>
+                            <textarea name="alternate_address" id="alternate_address" rows="4" class="form-control pl-5 user_address @error('alternate_address') is-invalid @enderror" placeholder="Address of where the service is required">{{ old('alternate_address') }}</textarea>
                             @error('alternate_address')
                                 <span class="invalid-feedback" role="alert">
                                     <strong>{{ $message }}</strong>
@@ -126,39 +128,86 @@
                             @enderror
                         </div>
                     </div><!--end col--> 
-                                                       
                     
-                        <div class="col-md-12 form-group">
-                            <label>Payment Mode:<span class="text-danger">*</span></label>
-                        </div>
-                            
-                        <div class="col-md-4 form-group">
-                            <div class="custom-control custom-checkbox form-group position-relative">
-                                <input type="radio" id="customRadio5" name="payment_method" class="custom-control-input" value="Wallet">
-                                <label class="custom-control-label" for="customRadio5">E-Wallet</label>
-                            </div>
-                        </div>
+                    @if($discounts->count() > 0)
+                    <div class="col-md-12 form-group">
+                        <h5><span class="font-weight-bold">Available Service Request</span></h5>
+                        <small class="text-danger">The selected discount will be applied on final invoice.</small>
+                    </div>
 
-                        <div class="col-md-4 form-group">
-                            <div class="custom-control custom-checkbox form-group position-relative">
-                                <input type="radio" onclick="payWithPaystack()" id="paystack_option" name="payment_method" class="custom-control-input" value="Online">
-                                <label class="custom-control-label" for="paystack_option">Pay Online</label>
+                        @foreach($discounts as $discount)
+                            <div class="col-md-4 form-group">
+                                <div class="custom-control custom-radio form-group position-relative">
+                                <input type="radio" id="discount-{{ $discount->id }}" name="client_discount_id" class="custom-control-input" value="{{ $discount->id }}" @if(empty($discount->discount->name)) disabled @endif>
+                                <label class="custom-control-label" for="discount-{{ $discount->id }}">{{ $discount->discount->name ?? 'UNAVAILABLE' }}(<small class="text-danger">{{ $discount->discount->rate ?? '0.00' }}%</small>)</label>
+                                </div>
                             </div>
-                        </div>
+                        @endforeach
+                    @endif
+                    
+                    <div class="col-md-12 form-group">
+                        <h5><span class="font-weight-bold">Payment Options</span></h5>
+                    </div>
                         
-                        <div class="col-md-4 form-group">
-                            <div class="custom-control custom-checkbox form-group position-relative">
-                                <input type="radio" id="pay_offline" name="payment_method" class="custom-control-input" data-toggle="modal" href="#payOffline" value="Offline">
-                                <label class="custom-control-label" for="pay_offline">Pay Offline</label>
+                    <div class="col-md-4 form-group">
+                        <div class="custom-control custom-radio form-group position-relative">
+                            <input type="radio" id="customRadio5" name="payment_method" class="custom-control-input" value="Wallet">
+                            <label class="custom-control-label" for="customRadio5">E-Wallet</label>
+                        </div>
+                    </div>
+
+                    <div class="col-md-4 form-group">
+                        <div class="custom-control custom-radio form-group position-relative">
+                            <input type="radio" id="payment_gateway_option" name="payment_method" class="custom-control-input" onclick="displayPaymentGateways()" value="Online">
+                            <label class="custom-control-label" for="payment_gateway_option">Pay Online</label>
+                        </div>
+                    </div>
+                    
+                    <div class="col-md-4 form-group">
+                        <div class="custom-control custom-radio form-group position-relative">
+                            <input type="radio" id="pay_offline" name="payment_method" class="custom-control-input" data-toggle="modal" href="#payOffline" value="Offline">
+                            <label class="custom-control-label" for="pay_offline">Pay Offline</label>
+                        </div>
+                    </div>
+
+                    <div class="row d-none payment-options">
+                        <div class="col-md-6">
+                            <div class="media key-feature align-items-center p-3 rounded shadow mt-4">
+                                <a href="#" data-toggle="modal" data-target="#modal-form">
+                                    <img src="{{ asset('assets/images/flutter.png')}}" class="avatar avatar-ex-smm" alt="">
+                                </a>
+                                <a href="javascript:void(0)" class="text-primary">
+                                    <div class="media-body content ml-2">
+                                        <a href="#" data-toggle="modal" data-target="#modal-form" >
+                                            <h4 class="title mb-0">Flutter</h4>
+                                        </a>
+                                    </div>
+                                </a>
                             </div>
                         </div>
+                            <div class="col-md-6">
+                                <div class="media key-feature align-items-center p-3 rounded shadow mt-4">
+                                    <a href="#" data-toggle="modal" data-target="#modal-form">
+                                        <img src="{{ asset('assets/images/paystack.png')}}" class="avatar avatar-ex-smm" alt="">
+                                    </a>
+                                    <a href="javascript:void(0)" class="text-primary">
+                                        <div class="media-body content ml-2">
+                                            <a href="#" data-toggle="modal" data-target="#modal-form" >
+                                                <h4 class="title mb-0">Paystack</h4>
+                                            </a>
+                                        </div>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                         {{-- </div>
                     </div><!--end col--> --}}
                 </div><!--end row-->
 
                 
 
-                <div class="row">
+                <div class="row ml-4 mb-4">
                     <div class="col-sm-12">
                     <button type="submit" class="submitBnt btn btn-primary">Submit</button>
                     </div><!--end col-->
@@ -210,11 +259,23 @@
     </div><!-- modal-dialog -->
 </div><!-- modal -->
 
-@push('script')
+@push('scripts')
     <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDeDLVAiaU13p2O0d3jfcPjscsbVsCQUzc&v=3.exp&libraries=places"></script>
 
     <script>
         $(document).ready(function (){
+            let autocomplete;
+            initialize();
+
+            function initialize() {
+                // Create the autocomplete object, restricting the search to geographical location types.
+                autocomplete = new google.maps.places.Autocomplete((document.querySelector('.user_address')), {
+                    types: ['geocode']
+                });
+               
+                // Chain request to html element on the page
+                google.maps.event.addDomListener(document.querySelector('.user_address'), 'focus');
+            }
 
             $(document).on('click', '.nav-item', function(){
                 $(this).find('.booking-fee').prop('checked', true);
@@ -222,6 +283,7 @@
 
             $('#pay_offline').on('change', function (){  
                 $('#pay_offline').attr('checked', 'checked');
+                $('.payment-options').addClass('d-none');
             });
 
             $('.close').click(function (){
@@ -229,6 +291,10 @@
             });
             
         });
+
+        function displayPaymentGateways(){
+            $('.payment-options').removeClass('d-none');
+        }
     </script>
 @endpush
 

@@ -94,45 +94,6 @@
             </div>
           </div>
           
-          <h5 class="ml-4" >Total Requests: 100</h5><br>
-
-          <div class="row row-xs col-lg-12">
-            <div class="col-sm-6 col-lg-3">
-              <div class="card card-body">
-                <h6 class="tx-uppercase tx-11 tx-spacing-1 tx-color-02 tx-semibold mg-b-8">Pending Requests</h6>
-                <div class="d-flex d-lg-block d-xl-flex align-items-end">
-                <h5 class="tx-normal tx-rubik mg-b-0 mg-r-5 lh-1"><a href="#"> 40</a></h5>
-                </div>
-                
-              </div>
-            </div>
-            <div class="col-sm-6 col-lg-3">
-              <div class="card card-body">
-                <h6 class="tx-uppercase tx-11 tx-spacing-1 tx-color-02 tx-semibold mg-b-8">Completed Requests</h6>
-                <div class="d-flex d-lg-block d-xl-flex align-items-end">
-                  <h5 class="tx-normal tx-rubik mg-b-0 mg-r-5 lh-1"><a href="#">30</a></h5>
-                </div>
-              </div>
-            </div>
-            <div class="col-sm-6 col-lg-3">
-              <div class="card card-body">
-                <h6 class="tx-uppercase tx-11 tx-spacing-1 tx-color-02 tx-semibold mg-b-8">Ongoing Requests</h6>
-                <div class="d-flex d-lg-block d-xl-flex align-items-end">
-                  <h5 class="tx-normal tx-rubik mg-b-0 mg-r-5 lh-1"><a href="#">10</a></h5>
-                </div>
-              </div>
-            </div>
-            <div class="col-sm-6 col-lg-3">
-              <div class="card card-body">
-                <h6 class="tx-uppercase tx-11 tx-spacing-1 tx-color-02 tx-semibold mg-b-8">Cancelled Requests</h6>
-                <div class="d-flex d-lg-block d-xl-flex align-items-end">
-                  <h5 class="tx-normal tx-rubik mg-b-0 mg-r-5 lh-1"><a href="#">20</a></h5>
-                </div>
-              </div>
-            </div>
-          </div>
-
-
           <div class="card-header bd-b-0 pd-t-20 pd-lg-t-25 pd-l-20 pd-lg-l-25 d-flex flex-column flex-sm-row align-items-sm-start justify-content-sm-between">
             <div>
               <h6 class="mg-b-5">Service Request Metrics</h6>
@@ -156,33 +117,33 @@
                 <div class="row">
                   <div class="col-sm-6 col-lg-12">
                     <div class="d-flex align-items-center justify-content-between mg-b-5">
-                      <h6 class="tx-uppercase tx-10 tx-spacing-1 tx-color-02 tx-semibold mg-b-0">Total Administrators</h6>
+                      <h6 class="tx-uppercase tx-10 tx-spacing-1 tx-color-02 tx-semibold mg-b-0">Total Requests</h6>
                       {{-- <span class="tx-10 tx-color-04">65</span> --}}
                     </div>
                     <div class="d-flex align-items-end justify-content-between mg-b-5">
-                      <h5 class="tx-normal tx-rubik lh-2 mg-b-0">12</h5>
+                      <h5 class="tx-normal tx-rubik lh-2 mg-b-0">25</h5>
                       {{-- <h6 class="tx-normal tx-rubik tx-color-03 lh-2 mg-b-0">20,000</h6> --}}
                     </div>
                     <div class="progress ht-4 mg-b-0 op-5">
-                      <div class="progress-bar bg-teal wd-12p" role="progressbar" aria-valuenow="12" aria-valuemin="0" aria-valuemax="25"></div>
+                      <div class="progress-bar bg-teal wd-65p" role="progressbar" aria-valuenow="65" aria-valuemin="0" aria-valuemax="100"></div>
                     </div>
                   </div>
                   <div class="col-sm-6 col-lg-12 mg-t-30 mg-sm-t-0 mg-lg-t-30">
                     <div class="d-flex align-items-center justify-content-between mg-b-5">
-                      <h6 class="tx-uppercase tx-10 tx-spacing-1 tx-color-02 tx-semibold mg-b-0">Total CSE's</h6>
+                      <h6 class="tx-uppercase tx-10 tx-spacing-1 tx-color-02 tx-semibold mg-b-0">Completed Requests</h6>
                       {{-- <span class="tx-10 tx-color-04">45% goal reached</span> --}}
                     </div>
                     <div class="d-flex justify-content-between mg-b-5">
-                      <h5 class="tx-normal tx-rubik mg-b-0">5</h5>
+                      <h5 class="tx-normal tx-rubik mg-b-0">20</h5>
                       {{-- <h5 class="tx-normal tx-rubik tx-color-03 mg-b-0"><small>250,000</small></h5> --}}
                     </div>
                     <div class="progress ht-4 mg-b-0 op-5">
-                      <div class="progress-bar bg-orange wd-5p" role="progressbar" aria-valuenow="5" aria-valuemin="0" aria-valuemax="25"></div>
+                      <div class="progress-bar bg-orange wd-45p" role="progressbar" aria-valuenow="45" aria-valuemin="0" aria-valuemax="100"></div>
                     </div>
                   </div>
                   <div class="col-sm-6 col-lg-12 mg-t-30">
                     <div class="d-flex align-items-center justify-content-between mg-b-5">
-                      <h6 class="tx-uppercase tx-10 tx-spacing-1 tx-color-02 tx-semibold mg-b-0">Total Technicians</h6>
+                      <h6 class="tx-uppercase tx-10 tx-spacing-1 tx-color-02 tx-semibold mg-b-0">Cancelled Requests</h6>
                       {{-- <span class="tx-10 tx-color-04">20% goal reached</span> --}}
                     </div>
                     <div class="d-flex justify-content-between mg-b-5">
@@ -190,20 +151,20 @@
                       {{-- <h5 class="tx-normal tx-rubik tx-color-03 mg-b-0"><small>85,000</small></h5> --}}
                     </div>
                     <div class="progress ht-4 mg-b-0 op-5">
-                      <div class="progress-bar bg-pink wd-5p" role="progressbar" aria-valuenow="5" aria-valuemin="0" aria-valuemax="25"></div>
+                      <div class="progress-bar bg-pink wd-20p" role="progressbar" aria-valuenow="20" aria-valuemin="0" aria-valuemax="100"></div>
                     </div>
                   </div>
                   <div class="col-sm-6 col-lg-12 mg-t-30">
                     <div class="d-flex align-items-center justify-content-between mg-b-5">
-                      <h6 class="tx-uppercase tx-10 tx-spacing-1 tx-color-02 tx-semibold mg-b-0">Clients</h6>
+                      <h6 class="tx-uppercase tx-10 tx-spacing-1 tx-color-02 tx-semibold mg-b-0">Payments Received</h6>
                       {{-- <span class="tx-10 tx-color-04">85% goal reached</span> --}}
                     </div>
                     <div class="d-flex justify-content-between mg-b-5">
-                      <h5 class="tx-normal tx-rubik mg-b-0">12</h5>
+                      <h5 class="tx-normal tx-rubik mg-b-0">8</h5>
                       {{-- <h5 class="tx-normal tx-rubik tx-color-03 mg-b-0"><small>30.50%</small></h5> --}}
                     </div>
                     <div class="progress ht-4 mg-b-0 op-5">
-                      <div class="progress-bar bg-primary wd-12p" role="progressbar" aria-valuenow="12" aria-valuemin="0" aria-valuemax="25"></div>
+                      <div class="progress-bar bg-primary wd-85p" role="progressbar" aria-valuenow="85" aria-valuemin="0" aria-valuemax="100"></div>
                     </div>
                   </div>
                 </div><!-- row -->
@@ -281,7 +242,7 @@
             </li>
           </ul>
           <div class="card-footer text-center tx-13">
-          <a href="{{ route('technician.payments') }}" class="link-03">View All Transactions <i class="icon ion-md-arrow-down mg-l-5"></i></a>
+          <a href="{{ route('technician.payments', app()->getLocale()) }}" class="link-03">View All Transactions <i class="icon ion-md-arrow-down mg-l-5"></i></a>
           </div><!-- card-footer -->
         </div><!-- card -->
       </div>
