@@ -19,6 +19,8 @@ class Price extends Model
     // whether the key is automatically incremented or not
     public $incrementing = false;
     
+    protected $table = 'prices';
+
     protected $fillable = [
         'uuid', 'user_id', 'name', 'description', 'amount'
     ];

@@ -4,12 +4,13 @@ namespace App\Http\Controllers;
 
 use App\Models\State;
 use Illuminate\Http\Request;
+use App\Traits\Services;
 
-use App\Models\Category;
-use App\Models\Service;
 
 class PageController extends Controller
 {
+    use Services;
+
     public function index()
     {
         $states = State::all();
@@ -18,30 +19,19 @@ class PageController extends Controller
 
     public function services(){
 
-        $categories = Category::ActiveCategories()->get();
-
-        $services = Category::ActiveCategories()
-        ->where('id', '!=', 1)
-        ->orderBy('name', 'ASC')
-        ->with(['services'    =>  function($query){
-            return $query->select('name', 'uuid', 'image', 'category_id');
-        }])
-        ->has('services')->get();
-
-        // return $services;
-
-        return view('frontend.services.index')->with([
-            'categories'    =>  $categories,
-            'services'    =>  $services
-        ]);
+        //Return all active categories with at least one Service
+        return view('frontend.services.index', $this->categoryAndServices());
     }
 
     public function serviceDetails($language, $uuid){
 
-        $service = Service::findOrFail($uuid);
-        
-        return view('client.service_details')->with([
-            'service'   =>  $service
-        ]);
+        //Return Service details
+        return view('frontend.services.show', ['service' => $this->service($uuid)]);
+    }
+
+    public function search($language, Request $request){
+
+        //Return all active categories with at least one Service of matched keyword or Category ID
+        return view('frontend.services._search', $this->searchKeywords($request));
     }
 }

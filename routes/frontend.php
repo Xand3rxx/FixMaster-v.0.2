@@ -65,6 +65,6 @@ Route::prefix('/services')->group(function () {
         Route::get('/',                     [PageController::class, 'services'])->name('list');
         // Route::view('/details',             'frontend.services.show')->name('details');
         Route::get('/details/{service}',    [PageController::class, 'serviceDetails'])->name('details');
-        Route::post('/search',              [PageController::class, 'searchCategories'])->name('search');
+        Route::post('/search',              [PageController::class, 'search'])->name('search');
     });
 });

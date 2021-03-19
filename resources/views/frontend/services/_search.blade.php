@@ -23,15 +23,15 @@
             <div class="col-lg-4 mt-4 pt-2">
                 <div class="card blog rounded border-0 shadow">
                     <div class="position-relative">
-                        <img class="ult1 card-img-top rounded-top" src="{{ asset('assets/category-images/'.$service->image) }}" alt="{{ $service->name }}">
+                        <img class="ult1 card-img-top rounded-top" src="{{ asset('assets/service-images/'.$service->image) }}" alt="{{ $service->name }}">
 
                         <div class="overlay rounded-top bg-dark"></div>
                     </div>
                     <div class="card-body content">
-                    <h5 class="serv__2">{{ $service->name }} <a href="{{ route('page.services_details', $service->url) }}" title="View {{ $service->name }} service details"> <i data-feather="info" class="text-primary"></i></a></h5>
+                    <h5 class="serv__2">{{ $service->name }} <a href="{{ route('services.details', ['service'=>$service->uuid, 'locale'=>app()->getLocale()]) }}" title="View {{ $service->name }} service details"> <i data-feather="info" class="text-primary"></i></a></h5>
                         <div class="post-meta d-flex justify-content-between mt-2">
                         </div>
-                        <a href="{{ route('client.service_quote', $service->url) }}" class="btn btn-outline-fix btn-block">Request Service</a>
+                        <a href="#" class="btn btn-outline-fix btn-block">Request Service</a>
                     </div>
                 </div>
             </div>
@@ -64,15 +64,15 @@
             <div class="col-lg-4 mt-4 pt-2">
                 <div class="card blog rounded border-0 shadow">
                     <div class="position-relative">
-                        <img class="ult1 card-img-top rounded-top" src="{{ asset('assets/category-images/'.$service->image) }}" alt="{{ $service->name }}">
+                        <img class="ult1 card-img-top rounded-top" src="{{ asset('assets/service-images/'.$service->image) }}" alt="{{ $service->name }}">
 
                         <div class="overlay rounded-top bg-dark"></div>
                     </div>
                     <div class="card-body content">
-                    <h5 class="serv__2">{{ $service->name }} <a href="{{ route('page.services_details', $service->url) }}" title="View {{ $service->name }} service details"> <i data-feather="info" class="text-primary"></i></a></h5>
+                    <h5 class="serv__2">{{ $service->name }} <a href="{{ route('services.details', ['service'=>$service->uuid, 'locale'=>app()->getLocale()]) }}" title="View {{ $service->name }} service details"> <i data-feather="info" class="text-primary"></i></a></h5>
                         <div class="post-meta d-flex justify-content-between mt-2">
                         </div>
-                        <a href="{{ route('client.service_quote', $service->url) }}" class="btn btn-outline-fix btn-block">Request Service</a>
+                        <a href="#" class="btn btn-outline-fix btn-block">Request Service</a>
                     </div>
                 </div>
             </div>

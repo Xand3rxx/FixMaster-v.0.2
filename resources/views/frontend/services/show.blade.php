@@ -1,5 +1,5 @@
 @extends('layouts.app')
-@section('title', 'Service Details')
+@section('title', $service->name.' Service Details')
 @section('contents')
 <link rel="stylesheet" href="https://netdna.bootstrapcdn.com/font-awesome/3.2.1/css/font-awesome.css">
 <link href="{{ asset('assets/frontend/css/service-details.css') }}" rel="stylesheet" type="text/css"/>
@@ -9,7 +9,7 @@
         <div class="row justify-content-center">
             <div class="col-12 text-center">
                 <div class="title-heading ml-lg-4 mb-4">
-                    <h4 class="title mb-4">Service Details</h4>
+                    <h4 class="title mb-4">{{ $service->name }} Service</h4>
                     <p class="text-muted para-desc mb-0 mx-auto">Start working with <span class="texty font-weight-bold">FixMaster</span> that can provide everything you need to make your life easier and better.</p>
                 </div>
             </div>
@@ -23,7 +23,7 @@
                         @if(empty($service->image))
                         <img src="{{ asset('assets/images/no-image-available.png') }}" alt="Image not available" class="card-img-top rounded-top">
                         @else
-                            @if(file_exists(public_path().'/assets/category-images/'.$service->image))
+                            @if(file_exists(public_path().'/assets/service-images/'.$service->image))
                                 <img src="{{ asset('assets/service-images/'.$service->image) }}" alt="{{ $service->name }}" class="card-img-top rounded-top">
                             @else
                             <img src="{{ asset('assets/images/no-image-available.png') }}" alt="Image not available" class="card-img-top rounded-top">
@@ -34,8 +34,8 @@
                     </div>
                     
                     <div class="author">
-                    <h4 class="text-light user d-block"><i class="mdi mdi-account"></i> {{ $service->name }}</h4>
-                        <small class="text-light date"><i class="mdi mdi-bookmark"></i> {{ $service->requests()->count() }} Requests</small>
+                    <h4 class="text-light user d-block"><i class="mdi mdi-home"></i> {{ $service->name }}</h4>
+                        <small class="text-light date"><i class="mdi mdi-bookmark"></i> {{ $service->serviceRequests()->count() }} Requests</small>
                     </div>
                 </div>
                 <div class="mt-4 pt-2">
