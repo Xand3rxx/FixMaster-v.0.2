@@ -16,8 +16,10 @@ class InsertSQLSeeder extends Seeder
     {
         $banks = file_get_contents(database_path() . '/insert_sql/banks.sql');
         $paymentGateways = file_get_contents(database_path() . '/insert_sql/payment_gateways.sql');
+        $professions = file_get_contents(database_path() . '/insert_sql/professions.sql');
     
         DB::statement($banks);
         DB::statement($paymentGateways);
+        DB::statement($professions);
     }
 }

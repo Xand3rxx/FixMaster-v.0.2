@@ -11,7 +11,7 @@ class ClientDiscount extends Model
 
     
     protected $fillable = [
-         'discount_id', 'user_id', 'uuid','discount_name', 'rate', 'notify', 'status','entity'
+         'discount_id', 'client_id', 'estate_id', 'service_id', 'availability'
     ];
 }
 

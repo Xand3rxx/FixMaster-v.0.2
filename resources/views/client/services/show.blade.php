@@ -6,7 +6,7 @@
 <link rel="stylesheet" href="https://netdna.bootstrapcdn.com/font-awesome/3.2.1/css/font-awesome.css">
 <link href="{{ asset('assets/frontend/css/service-details.css') }}" rel="stylesheet" type="text/css"/>
 
-
+{{-- {{ dd($service->serviceRequests()->count()) }} --}}
 <div class="col-lg-8 col-12" style="margin-top: 3rem;">
 
     <div class="row mt-4">
@@ -16,8 +16,8 @@
                     @if(empty($service->image))
                         <img src="{{ asset('assets/images/no-image-available.png') }}" alt="Image not available" class="card-img-top rounded-top">
                     @else
-                        @if(file_exists(public_path().'/assets/category-images/'.$service->image))
-                            <img src="{{ asset('assets/category-images/'.$service->image) }}" alt="{{ $service->name }}" class="card-img-top rounded-top">
+                        @if(file_exists(public_path().'/assets/service-images/'.$service->image))
+                            <img src="{{ asset('assets/service-images/'.$service->image) }}" alt="{{ $service->name }}" class="card-img-top rounded-top">
                         @else
                         <img src="{{ asset('assets/images/no-image-available.png') }}" alt="Image not available" class="card-img-top rounded-top">
                         @endif
@@ -27,11 +27,11 @@
                 
                 <div class="author">
                 <h4 class="text-light user d-block"><i class="mdi mdi-account"></i> {{ $service->name }}</h4>
-                    <small class="text-light date"><i class="mdi mdi-bookmark"></i> {{ $service->requests()->count() }} Requests</small>
+                    <small class="text-light date"><i class="mdi mdi-bookmark"></i> {{ $service->serviceRequests()->count() }} Requests</small>
                 </div>
             </div>
             <div class="mt-4 pt-2">
-                <a href="{{ route('client.service_quote', $service->url) }}" class="btn btn-primary">Request Service</a>
+                <a href="{{ route('client.services.quote', ['service'=>$service->uuid, 'locale'=>app()->getLocale()]) }}" class="btn btn-primary">Request Service</a>
             </div>
         </div><!--end col-->
 
