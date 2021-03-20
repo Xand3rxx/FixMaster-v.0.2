@@ -142,5 +142,33 @@ class FranchiseeSeeder extends Seeder
             'country_id'  => 156, //Nigeria
             'number'   => "07014728999"
         ]);
+
+        $franchiseeAddress = \App\Models\Address::create([
+            'user_id'           =>  $franchisee->id,
+            'account_id'        =>  $franchiseeAccount->id,
+            'country_id'        =>  156, //Nigeria
+            'address'           =>  "6 Ikoyi Club 1938 Rd, Ikoyi, Lagos",
+            'address_longitude' =>  "3.428400",
+            'address_latitude'  =>  "6.452420",
+        ]);
+
+        $franchiseeAddress = \App\Models\Address::create([
+            'user_id'           =>  $franchisee1->id,
+            'account_id'        =>  $franchiseeAccount1->id,
+            'country_id'        =>  156, //Nigeria
+            'address'           =>  "Ipaja Rd, Alagba, Lagos",
+            'address_longitude' =>  "3.303510",
+            'address_latitude'  =>  "6.623930",
+        ]);
+
+        $franchiseeAddress = \App\Models\Address::create([
+            'user_id'           =>  $franchisee2->id,
+            'account_id'        =>  $franchiseeAccount2->id,
+            'country_id'        =>  156, //Nigeria
+            'address'           =>  "Akerele St, Surulere, Lagos",
+            'address_longitude' =>  "3.358380",
+            'address_latitude'  =>  "6.503340",
+        ]);
+
     }
 }

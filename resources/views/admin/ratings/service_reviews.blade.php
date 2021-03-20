@@ -9,10 +9,11 @@
           <nav aria-label="breadcrumb">
             <ol class="breadcrumb breadcrumb-style1 mg-b-10">
             <li class="breadcrumb-item"><a href="{{ route('admin.index', app()->getLocale()) }}">Dashboard</a></li>
-              <li class="breadcrumb-item active" aria-current="page">Service Category Review</li>
+              <li class="breadcrumb-item" aria-current="page">Rating</li>
+              <li class="breadcrumb-item active" aria-current="page">Service Review</li>
             </ol>
           </nav>
-          <h4 class="mg-b-0 tx-spacing--1">Service Category Review</h4>
+          <h4 class="mg-b-0 tx-spacing--1">Service Review</h4>
         </div>
       </div>
 
@@ -22,8 +23,8 @@
             <div class="card mg-b-10">
               <div class="card-header pd-t-20 d-sm-flex align-items-start justify-content-between bd-b-0 pd-b-0">
                 <div>
-                  <h6 class="mg-b-5">Service Category Reviews as of {{ date('M, d Y') }}</h6>
-                  <p class="tx-13 tx-color-03 mg-b-0">This table displays a list of all FixMaster Service Category Reviews made by Clients.</p>
+                  <h6 class="mg-b-5">Service Reviews as of {{ date('M, d Y') }}</h6>
+                  <p class="tx-13 tx-color-03 mg-b-0">This table displays a list of all FixMaster Service Reviews made by Clients.</p>
                 </div>
                 
               </div><!-- card-header -->
@@ -34,9 +35,9 @@
                   <thead class="thead-primary">
                     <tr>
                       <th class="text-center">#</th>
-                      <th>Category Name</th>
+                      <th>Service</th>
                       <th class="text-center">Client</th>
-                      <th class="text-center">Job Ref.</th>
+                      <th>Job Ref.</th>
                       <th class="text-center">Review</th>
                       <th>Status</th>
                       <th>Date Created</th>
@@ -46,17 +47,17 @@
                   <tbody>
                     <tr>
                       <td class="tx-color-03 tx-center">1</td>
-                      <td class="tx-medium">Mobile Phone</td>
-                      <td class="tx-medium">Femi Joseph</td>
+                      <td>Mobile Phone</td>
+                      <td>Femi Joseph</td>
                       <td class="tx-medium">REF-234094623496</td>
-                      <td class="tx-medium">The service is top class. I recommend them if you want to beef up your home, office or company security with top class surveillance systems, electric gates etc. They are the solution to your security problems.</td>
+                      <td>The service is top class. I recommend them if you want to beef up your home, office or company security with top class surveillance systems, electric gates etc. They are the solution to your security problems.</td>
                       <td class="text-medium text-success">Active</td>
                       <td class="text-medium">May 15th 2020</td>
                       <td class=" text-center">
                         <div class="dropdown-file">
                           <a href="" class="dropdown-link" data-toggle="dropdown"><i data-feather="more-vertical"></i></a>
                           <div class="dropdown-menu dropdown-menu-right">
-                            <a href="#" class="dropdown-item details text-success"><i class="fas fa-check"></i> Mark as Active</a>
+                            <a href="#" class="dropdown-item details text-danger"><i class="fas fa-times"></i> Mark as Inactive</a>
                             <a href="" class="dropdown-item details text-danger"><i class="fas fa-trash"></i> Delete</a>
                           </div>
                         </div>
@@ -65,11 +66,11 @@
 
                     <tr>
                       <td class="tx-color-03 tx-center">2</td>
-                      <td class="tx-medium">Doors</td>
-                      <td class="tx-medium">Derrick Nnamdi</td>
+                      <td>Doors</td>
+                      <td>Derrick Nnamdi</td>
                       <td class="tx-medium">REF-094009623412</td>
-                      <td class="tx-medium">Hi, I am Derrick Nnamdi from Aba. My employers used FixMaster for the company's outdoor advertising project based on my recommendation and they more than delivered. They handled the metal fabrication, hoisting and went on to offer a discount on the banner itself. Now that is what i call service delivery. I wouldn”t hesitate to recommend FixMaster.</td>
-                      <td class="text-medium text-success">Active</td>
+                      <td>Hi, I am Derrick Nnamdi from Aba. My employers used FixMaster for the company's outdoor advertising project based on my recommendation and they more than delivered. They handled the metal fabrication, hoisting and went on to offer a discount on the banner itself. Now that is what i call service delivery. I wouldn”t hesitate to recommend FixMaster.</td>
+                      <td class="text-medium text-danger">Inactive</td>
                       <td class="text-medium">May 15th 2020</td>
                       <td class=" text-center">
                         <div class="dropdown-file">

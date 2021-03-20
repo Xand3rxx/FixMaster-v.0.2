@@ -88,6 +88,8 @@ class ClientSeeder extends Seeder
         // Client Account
         $clientAccount = \App\Models\Account::create([
             'user_id'       =>  $client->id,
+            'state_id'         =>  24,
+            'lga_id'           =>  505,
             'first_name'    => "Kelvin",
             'middle_name'   => "Israel",
             'last_name'     => "Adesanya",
@@ -250,6 +252,46 @@ class ClientSeeder extends Seeder
             'address'           =>  "8 Oremeji St, Oke Odo, Lagos",
             'address_longitude' =>  "3.346660",
             'address_latitude'  =>  "6.586420",
+        ]);
+
+        $clientDiscount = \App\Models\ClientDiscount::create([
+            'discount_id'      =>  1, 
+            'client_id'        =>  $client->id, 
+            'estate_id'        =>  NULL,
+            'service_id'       =>  NULL, 
+            'availability'     =>  'unused', 
+        ]);
+
+        $clientDiscount = \App\Models\ClientDiscount::create([
+            'discount_id'      =>  1, 
+            'client_id'        =>  $client1->id, 
+            'estate_id'        =>  NULL,
+            'service_id'       =>  NULL, 
+            'availability'     =>  'unused', 
+        ]);
+
+        $clientDiscount = \App\Models\ClientDiscount::create([
+            'discount_id'      =>  1, 
+            'client_id'        =>  $client2->id, 
+            'estate_id'        =>  NULL,
+            'service_id'       =>  NULL, 
+            'availability'     =>  'unused', 
+        ]);
+
+        $clientDiscount = \App\Models\ClientDiscount::create([
+            'discount_id'      =>  1, 
+            'client_id'        =>  $client3->id, 
+            'estate_id'        =>  NULL,
+            'service_id'       =>  NULL, 
+            'availability'     =>  'unused', 
+        ]);
+
+        $clientDiscount = \App\Models\ClientDiscount::create([
+            'discount_id'       =>  1, 
+            'client_id'         =>  $client4->id, 
+            'estate_id'         =>  NULL,
+            'service_id'        =>  NULL, 
+            'availability'      =>  'unused', 
         ]);
     }
 }
