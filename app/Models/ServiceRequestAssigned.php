@@ -19,7 +19,7 @@ class ServiceRequestAssigned extends Model
     protected $fillable = ['user_id', 'service_request_id'];
 
     public function service_request(){
-        return $this->belongsTo(ServiceRequest::class);
+        return $this->belongsTo(ServiceRequest::class)->with('users', 'client');
     }
 
     // public function account()

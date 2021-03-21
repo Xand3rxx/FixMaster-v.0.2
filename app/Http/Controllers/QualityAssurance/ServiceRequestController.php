@@ -44,8 +44,12 @@ class ServiceRequestController extends Controller
 
     public function get_requests(Request $request)
     {
-        $results = ServiceRequestAssigned::where('user_id', Auth::id())
-                   ->orderBy('created_at', 'DESC')->get();
+        // $results = ServiceRequestAssigned::where('user_id', Auth::id())
+        //            ->orderBy('created_at', 'DESC')->get();
+        // return view('quality-assurance.requests', compact('results'));
+
+        return $results = ServiceRequestAssigned::where('user_id', Auth::id())->with('service_request')->get();
+
         return view('quality-assurance.requests', compact('results'));
     }
 
