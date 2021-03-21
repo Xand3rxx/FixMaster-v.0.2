@@ -168,23 +168,20 @@ Route::prefix('/client')->group(function () {
 
         // Route::get('/profile/view',             [ClientController::class, 'view_profile'])->name('client.view_profile');
         // Route::get('/profile/edit',             [ClientController::class, 'edit_profile'])->name('client.edit_profile');
-        // Route::post('/profile/update',          [ClientController::class, 'update_profile'])->name('client.updateProfile');
+        Route::post('/profile/update',          [ClientController::class, 'update_profile'])->name('updateProfile');
         // Route::post('/profile/updatePassword',  [ClientController::class, 'updatePassword'])->name('client.updatePassword');
         // Route::post('/password/upadte',         [ClientController::class, 'update_password'])->name('client.update_password');
 
         // Route::get('/requests',                    [ClientRequestController::class, 'index'])->name('client.requests');
-
-        // Route::get('/wallet',                   [ClientController::class, 'wallet'])->name('wallet'); //Take me to Supplier Dashboard
-            // Route::get('/requests',                 [ClientRequestController::class, 'index'])->name('client.requests');
-            
-            // E-wallet Routes for clients
-            Route::get('wallet',        [ClientController::class, 'wallet'])->name('wallet');
-            Route::any('fund',          [ClientController::class, 'walletSubmit'])->name('wallet.submit');
-            Route::post('/ipnpaystack', [ClientController::class, 'paystackIPN'])->name('ipn.paystack');
-            Route::get('/apiRequest',   [ClientController::class, 'apiRequest'])->name('ipn.paystackApiRequest');
-            Route::get('/ipnflutter',   [ClientController::class, 'flutterIPN'])->name('ipn.flutter');
-            //Profile and password update
-            Route::get('/settings',     [ClientController::class, 'profile'])->name('profile');
+ 
+        // E-wallet Routes for clients 
+        Route::get('wallet',        [ClientController::class, 'wallet'])->name('wallet');
+        Route::any('fund',          [ClientController::class, 'walletSubmit'])->name('wallet.submit');
+        Route::post('/ipnpaystack', [ClientController::class, 'paystackIPN'])->name('ipn.paystack');
+        Route::get('/apiRequest',   [ClientController::class, 'apiRequest'])->name('ipn.paystackApiRequest');
+        Route::get('/ipnflutter',   [ClientController::class, 'flutterIPN'])->name('ipn.flutter');
+        //Profile and password update
+        Route::get('/settings',     [ClientController::class, 'settings'])->name('settings');
     });
 });
 

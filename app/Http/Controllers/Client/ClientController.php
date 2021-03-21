@@ -4,15 +4,17 @@ namespace App\Http\Controllers\Client;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-
+use Image;
 use App\Models\Category;
 use App\Models\Service;
 use App\Models\PaymentGateway;
 use App\Models\Payment;
 use App\Models\WalletTransaction;
 use App\Models\User;
-use App\Models\Client;
+use App\Models\Client; 
 use App\Models\State;
+use App\Models\Account;
+use App\Models\Phone;
 use App\Helpers\CustomHelpers;
 use App\Traits\GenerateUniqueIdentity as Generator;
 use App\Traits\RegisterPaymentTransaction;
@@ -24,29 +26,6 @@ use Session;
 class ClientController extends Controller
 {
     use RegisterPaymentTransaction, Generator;
-
-
-    //call the profile page with credentials
-    public function edit_profile(Request $request)
-    {
-    }
-
-    public function update_profile(Request $request)
-    {
-    }
-
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function updatePassword(Request $request)
-    {
-    }
-
-    public function view_profile(Request $request)
-    {
-    }
 
     /**
      * Display a listing of the resource.
@@ -143,16 +122,132 @@ class ClientController extends Controller
         //
     }
 
-    public function profile(Request $request){
-        // $data['title'] = 'Profile';
+
+    // public function settings(){
+    //     $data['title'] = "Profile";
+    //     return view('user.profile', $data);
+    // }
+
+    public function settings(Request $request){
         // return view('client.profile', $data);
         // $data['client'] = Client::where('user_id',auth()->user()->id)->first();
         $data['client'] = Client::where('user_id', $request->user()->id)->with('user')->firstOrFail();
-        // $data['user'] = User::where('id', auth()->user()->id);
-        $data['user'] =  User::where('id', auth()->user()->id)->first();
+       
+        // $data['user'] =  User::where('id', auth()->user()->id)->first();
         $data['states'] = State::select('id', 'name')->orderBy('name', 'ASC')->get();
-        // dd($user );
+        // dd($data['client'] );       
+        // echo "<pre>";
+        // print_r($data['client']->user->phones[0]->number);
+        // echo "<pre>";
         return view('client.settings', $data);
+    }
+
+
+    public function update_profile(Request $request)
+    {
+        $img = $request->file('profile_avater');
+        $allowedExts = array('jpg', 'png', 'jpeg');
+
+        $validatedData = $request->validate([            
+            'first_name'  => 'required|max:255',
+            'middle_name' => 'required|max:255',
+            'last_name'   => 'required|max:255',
+            'gender'   => 'required',
+            'phone_number'   => 'required|max:255',
+            'email'       => 'required|email|max:255', 
+        'profile_avater' => [
+            function ($attribute, $value, $fail) use ($request, $img, $allowedExts) {
+                if ($request->hasFile('profile_avater')) {
+                    $ext = $img->getClientOriginalExtension();
+                    if (!in_array($ext, $allowedExts)) {
+                        return $fail("Only png, jpg, jpeg image is allowed");
+                    }
+                }
+            },
+        ],
+            'state_id'   => 'required|max:255',
+            'lga_id'   => 'required|max:255',
+            'full_address'   => 'required|max:255',           
+          ]);
+
+         //user table
+        $user_data = User::find(auth()->user()->id);
+        $user_data['email'] = $request->email; 
+        $user_data->update(); 
+        // dd($validatedData);        
+
+        // if there is user_id update phones
+        $phones = Phone::where('user_id', auth()->user()->id)->orderBy('id','DESC')->first();         
+        $phones->number = $request->phone_number;
+        $phones->update();
+
+            //  $client_data = Account::find(auth()->user()->id); 
+             $client_data = Account::where('user_id', auth()->user()->id)->orderBy('id','DESC')->first();
+            // if ($client_data->user_id) {                
+                //account table                         
+                $client_data->first_name = $request->first_name;
+                $client_data->middle_name = $request->middle_name;
+                $client_data->last_name = $request->last_name;     
+                $client_data->gender = $request->gender;      
+                
+                if($request->hasFile('profile_avater')){
+                    $image = $request->file('profile_avater');
+                    $imageName = sha1(time()) .'.'.$image->getClientOriginalExtension();
+                    $imagePath = public_path('assets/client-avatars').'/'.$imageName;        
+                    //Delete old image
+                    if(\File::exists(public_path('assets/client-avatars/'.$request->input('old_avatar')))){
+                        $done = \File::delete(public_path('assets/client-avatars/'.$request->input('old_avatar')));
+                        if($done){
+                            // echo 'File has been deleted';
+                        }
+                    }        
+                    //Move new image to `client-avatars` folder
+                    Image::make($image->getRealPath())->resize(220, 220)->save($imagePath);
+                }else{
+                    // $imageName = $request->input('old_avatar');
+                    $client_data->avatar = $request->input('old_avatar');
+                    
+                }
+                    
+                $client_data->state_id = $request->state_id;                      
+                $client_data->lga_id = $request->lga_id;                      
+                // $client_data->town = $request->town;                       
+                $client_data->full_address = $request->full_address;
+                $client_data->save();
+                // dd($client_data);
+            // } 
+
+
+        // if($user_data){
+
+        //     //Record crurrenlty logged in user activity
+        //     $this->addRecord = new RecordActivityLogController();
+        //     $id = Auth::id();
+        //     $type = 'Profile';
+        //     $severity = 'Informational';
+        //     $actionUrl = Route::currentRouteAction();
+        //     $controllerActionPath = URL::full();
+        //     $message = Auth::user()->fullName->name.' updated profile';
+        //     $this->addRecord->createMessage($id, $type, $severity, $actionUrl, $controllerActionPath, $message);
+
+        //     return back()->with('success', 'Profile was successfully updated.');
+
+        // }else{
+        //     //Record Unauthorized user activity
+        //     $this->addRecord = new RecordActivityLogController();
+        //     $id = Auth::id();
+        //     $type = 'Errors';
+        //     $severity = 'Error';
+        //     $actionUrl = Route::currentRouteAction();
+        //     $controllerActionPath = URL::full();
+        //     $message = 'An error occurred while '.Auth::user()->fullName->name.' was trying to update profile.';
+
+        //     return back()->with('error', 'An error occurred while trying to update Profile.');
+        // }
+        
+        
+        Session::flash('success', 'Profile updated successfully!');
+        return redirect()->back();
     }
 
     public function wallet()

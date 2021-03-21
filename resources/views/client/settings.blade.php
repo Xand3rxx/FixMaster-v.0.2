@@ -1,139 +1,147 @@
 @extends('layouts.client')
-@section('title', 'Settings')
+@section('title', 'Profile Setting')
 @section('content')
 @include('layouts.partials._messages')
 
       <div class="col-lg-8 col-12">
           <div class="card border-0 rounded shadow">
               <div class="card-body mt-">
-                  <h5 class="text-md-left text-center">Personal Detail :</h5>
-
+                  <h5 class="text-md-left text-center">{{$client->user->account->avatar}} Personal Detail :</h5>
+  
                   <div class="mt-3 text-md-left text-center d-sm-flex">
-                      <img src="http://localhost:8000/assets/images/default-female-avatar.png" alt="Default female profile avatar" class="avatar float-md-left avatar-medium rounded-circle shadow mr-md-4" />
+                
+                  @if(!empty($client->user->account->avatar))
+                    <img src="{{ asset('assets/images/'.$client->user->account->avatar) }}" class="profile_image_preview avatar float-md-left avatar-medium rounded-circle shadow mr-md-4" alt="{{ $client->user->account->first_name }}" />
+                  @else
+                  
+                  @if($client->user->account->gender == 'male')
+                    <img src="{{ asset('assets/images/default-male-avatar.png') }}" class="profile_image_preview avatar float-md-left avatar-medium rounded-circle shadow mr-md-4" alt="{{ $client->user->account->first_name }}" />
+                  @endif
+                
+                  @if($client->user->account->gender == 'female')
+                    <img src="{{ asset('assets/images/default-female-avatar.png') }}" class="profile_image_preview avatar float-md-left avatar-medium rounded-circle shadow mr-md-4" alt="{{ $client->user->account->first_name }}" />
+                  @endif
 
-                      <div class="mt-md-4 mt-3 mt-sm-0">
-                          <button type="button" class="btn btn-primary btn-sm mt-2 change-picture">Change Picture</button>
-
-                          <form method="POST" action="" enctype="multipart/form-data">
-                              <input type="hidden" name="_token" value="QPTh2nPY9a4ypodU53bsXMtvmbEJPgvtUbnc96We" /> <input type="hidden" name="_method" value="PUT" /> <input type="hidden" id="old_avatar" name="old_avatar" value="" />
-                              <input type="file" accept="image/*" class="d-none" name="avatar" id="avatar" />
-                              <button type="submit" class="btn btn-outline-primary btn-sm d-none mt-2" id="submit-avatar">Save Picture</button>
-                          </form>
-                      </div>
+                  @endif
                   </div>
 
-                  <form method="POST" action=" ">
-                      <input type="hidden" name="_token" value="QPTh2nPY9a4ypodU53bsXMtvmbEJPgvtUbnc96We" /> <input type="hidden" name="_method" value="PUT" />
+                  <form method="POST" action="{{ route('client.updateProfile', app()->getLocale()) }}" enctype="multipart/form-data">
+                   {{ csrf_field() }}
                       <div class="row mt-4">
+                      <!-- first name -->
                           <div class="col-md-4">
                               <div class="form-group position-relative">
                                   <label>First Name</label>
                                   <i data-feather="user" class="fea icon-sm icons"></i>
-                                  <input name="first_name" id="first_name" type="text" class="form-control pl-5" value="" placeholder="First Name :" />
+                                  <input name="first_name" id="first_name" type="text" class="form-control pl-5" value="{{$client->user->account->first_name}}" placeholder="First Name :" />
                               </div>
                           </div>
                           <!--end col-->
-
+                        <!-- middle name -->
                           <div class="col-md-4">
                               <div class="form-group position-relative">
                                   <label>Middle Name</label>
                                   <i data-feather="user" class="fea icon-sm icons"></i>
-                                  <input name="middle_name" id="middle_name" type="text" class="form-control pl-5" value="" placeholder="Middle Name :" />
+                                  <input name="middle_name" id="middle_name" type="text" class="form-control pl-5" value="{{$client->user->account->middle_name}}" placeholder="Middle Name :" />
                               </div>
                           </div>
                           <!--end col-->
+                          <!-- Last Name -->
                           <div class="col-md-4">
                               <div class="form-group position-relative">
                                   <label>Last Name</label>
                                   <i data-feather="user" class="fea icon-sm icons"></i>
-                                  <input name="last_name" id="last_name" type="text" class="form-control pl-5" value="" placeholder="Last Name :" />
+                                  <input name="last_name" id="last_name" type="text" class="form-control pl-5" value="{{$client->user->account->last_name}}" placeholder="Last Name :" />
                               </div>
                           </div>
                           <!--end col-->
+                          <!-- Email -->
                           <div class="col-md-4">
                               <div class="form-group position-relative">
                                   <label>Your Email</label>
                                   <i data-feather="mail" class="fea icon-sm icons"></i>
-                                  <input name="email" id="email" type="email" class="form-control pl-5" value="client@fix-master.com" placeholder="Your E-Mail :" />
+                                  <input name="email" id="email" type="email" class="form-control pl-5" value="{{$client->user->email}}" placeholder="Your E-Mail :" />
                               </div>
                           </div>
                           <!--end col-->
+                          <!-- Phone No -->
                           <div class="col-md-4">
                               <div class="form-group position-relative">
                                   <label>Phone No. :</label>
                                   <i data-feather="phone" class="fea icon-sm icons"></i>
-                                  <input name="phone_number" id="phone_number" type="tel" maxlength="11" class="form-control pl-5" value="" placeholder="Phone :" />
+                                  <input name="phone_number" id="phone_number" type="tel" maxlength="11" class="form-control pl-5" value="{{$client->user->phones[0]->number}}" placeholder="Phone :" />
                               </div>
                           </div>
                           <!--end col-->
-
+                          <!-- Profile Avatar -->
+                          <div class="form-group col-md-4">
+                              <label>Profile Avatar</label>
+                              <div class="custom-file">
+                                <input type="file" accept="image/*" class="custom-file-input @error('image') is-invalid @enderror" name="profile_avater" id="profile_image" value="{{$client->user->account->avatar}}">
+                                <label class="custom-file-label" id="imagelabel" for="profile_image">Upload Profile Avatar</label>
+                               
+                              </div>
+                            </div>
+                        <!--end col-->
+                        <!-- gender -->
+                        <div class="col-md-4">
+                            <label>Gender</label>
+                            <select name="gender" id="gender" class="form-control @error('gender') is-invalid @enderror" required>
+                            <option value="">Choose....</option>
+                            <option value="Male" {{ $client->user->account->gender == 'male' ? 'selected' : ''}}>Male</option>
+                            <option value="Female" {{ $client->user->account->gender == 'female' ? 'selected' : ''}}>Female</option>                                                         
+                            </select> 
+                        </div>
+                          <!-- State -->
                           <div class="col-md-4">
                               <div class="form-group position-relative">
                                   <label>State <span class="text-danger">*</span></label>
                                   <i data-feather="map-pin" class="fea icon-sm icons"></i>
-                                  <select class="form-control pl-5" name="state_id" id="state_id">
-                                      <option selected value="">Select...</option>
-                                      <option value="1">Abia</option>
-                                      <option value="37">Abuja Federal Capital Territory</option>
-                                      <option value="2">Adamawa</option>
-                                      <option value="3">Akwa Ibom</option>
-                                      <option value="4">Anambra</option>
-                                      <option value="5">Bauchi</option>
-                                      <option value="6">Bayelsa</option>
-                                      <option value="7">Benue</option>
-                                      <option value="8">Borno</option>
-                                      <option value="9">Cross River</option>
-                                      <option value="10">Delta</option>
-                                      <option value="11">Ebonyi</option>
-                                      <option value="12">Edo</option>
-                                      <option value="13">Ekiti</option>
-                                      <option value="14">Enugu</option>
-                                      <option value="15">Gombe</option>
-                                      <option value="16">Imo</option>
-                                      <option value="17">Jigawa</option>
-                                      <option value="18">Kaduna</option>
-                                      <option value="19">Kano</option>
-                                      <option value="20">Katsina</option>
-                                      <option value="21">Kebbi</option>
-                                      <option value="22">Kogi</option>
-                                      <option value="23">Kwara</option>
-                                      <option value="24">Lagos</option>
-                                      <option value="25">Nassarawa</option>
-                                      <option value="26">Niger</option>
-                                      <option value="27">Ogun</option>
-                                      <option value="28">Ondo</option>
-                                      <option value="29">Osun</option>
-                                      <option value="30">Oyo</option>
-                                      <option value="31">Plateau</option>
-                                      <option value="32">Rivers</option>
-                                      <option value="33">Sokoto</option>
-                                      <option value="34">Taraba</option>
-                                      <option value="35">Yobe</option>
-                                      <option value="36">Zamfara</option>
+                                  <select class="form-control pl-5  @error('state_id') is-invalid @enderror" name="state_id" id="state_id">
+                                    <option selected value="">Select...</option>
+                                    @foreach($states as $state)
+                                      <option value="{{$state->id}}" {{old('state_id') == $state->id ? 'selected' : ''}} @if($client->state_id == $state->id) selected @endif>{{ $state->name }}</option>
+                                    @endforeach
                                   </select>
+                                  @error('state_id')
+                                    <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $message }}</strong>
+                                    </span>
+                                 @enderror
                               </div>
                           </div>
-
+                          <!--End row-->
+                          <!-- Town/City -->
                           <div class="col-md-4">
-                              <div class="form-group position-relative">
-                                  <label>Town/City <span class="text-danger">*</span></label>
-                                  <i data-feather="navigation" class="fea icon-sm icons"></i>
-                                  <input type="text" class="form-control pl-5" placeholder="e.g. Ajah, Ikoyi" name="town" id="town" value="" />
-                              </div>
-                          </div>
-
+                             <div class="form-group position-relative">
+                                <label>L.G.A <span class="text-danger">*</span></label>
+                                <i data-feather="map" class="fea icon-sm icons"></i>
+                                <select class="form-control pl-5 @error('lga_id') is-invalid @enderror" name="lga_id" id="lga_id">
+                                    <option selected value="">Select...</option>
+                                </select>
+                                @error('lga_id')
+                                <span class="invalid-feedback" role="alert">
+                                    <strong>{{ $message }}</strong>
+                                </span>
+                                @enderror
+                            </div>
+                        </div>
+                          <!--End row-->
+                          <!-- Residential Address -->
                           <div class="col-lg-12">
                               <div class="form-group position-relative">
                                   <label>Residential Address</label>
                                   <i data-feather="map-pin" class="fea icon-sm icons"></i>
-                                  <textarea name="full_address" id="full_address" rows="4" class="form-control pl-5" placeholder="Residential address :"></textarea>
+                                  <input type="text" class="form-control pl-5 user_address @error('full_address') is-invalid @enderror" placeholder="e.g. 284B, Ajose Adeogun Street, Victoria Island, Lagos, Nigeria." name="full_address" id="full_address" value="{{ old('full_address') }}" required>
+                                  <!-- <textarea name="full_address" id="full_address" class="form-control pl-5 user_address" placeholder="Residential address :"></textarea> -->
                               </div>
                           </div>
                       </div>
+                     
                       <!--end row-->
                       <div class="row">
                           <div class="col-sm-12">
-                              <input type="submit" id="submit" class="btn btn-primary btn-sm" value="Update Profile" />
+                              <input type="submit" id="submit" class="btn btn-primary btn-sm user_address" value="Update Profile" />
                           </div>
                           <!--end col-->
                       </div>
@@ -146,8 +154,8 @@
                           <h5>Change password :</h5>
                           <small class="text-danger">In order to change your password, you need to provide the current password.</small>
 
-                          <form method="POST" action=" ">
-                              <input type="hidden" name="_token" value="QPTh2nPY9a4ypodU53bsXMtvmbEJPgvtUbnc96We" /> <input type="hidden" name="_method" value="PUT" />
+                          <form method="post" action=" " >
+                              {{ csrf_field() }}
                               <div class="row mt-4">
                                   <div class="col-lg-4">
                                       <div class="form-group position-relative">
@@ -196,41 +204,90 @@
       @push('scripts')
  
   <script>
-    $(document).ready(function (){
-        $('#state_id').on('change',function () {
+//function to pick profile pix starts
+(function($){
+    "use scrict";
+    $(document).ready(function(){
+    
+      $(document).on('change','#profile_image', function(){
+        readURL(this);
+      })
+
+      reader.readAsDataURL(input.files[0]);
+
+      function readURL(input){
+        if(input.files && input.files[0]){
+          var reader = new FileReader();
+          var res = isImage(input.files[0].name);
+
+          if(res==false){
+            var msg = 'Image should be png/PNG, jpg/JPG & jpeg/JPG';
+            Snackbar.show({text: msg, pos: 'bottom-right',backgroundColor:'#d32f2f', actionTextColor:'#fff' });
+            return false;
+          }
+
+          reader.onload = function(e){
+            $('.profile_image_preview').attr('src', e.target.result);
+            $("imagelabel").text((input.files[0].name));
+          }
+
+          reader.readAsDataURL(input.files[0]);
+        }
+      }
+
+      function getExtension(filename) {
+          var parts = filename.split('.');
+          return parts[parts.length - 1];
+      }  
+
+      function isImage(filename) {
+          var ext = getExtension(filename);
+          switch (ext.toLowerCase()) {
+          case 'jpg':
+          case 'jpeg':
+          case 'png':
+          case 'gif':
+              return true;
+          }
+          return false;
+      }
+
+    })
+
+ })(jQuery);
+//function to pick profile pix ends
+</script>
+
+<script>
+$(document).ready(function() {
+        //Get list of L.G.A's in a particular state.
+        $('#state_id').on('change', function() {
             let stateId = $('#state_id').find('option:selected').val();
             let stateName = $('#state_id').find('option:selected').text();
-            
-            // console.log(stateId, stateName); return;
-            $.ajaxSetup({
-                headers: {
-                    'X-CSRF_TOKEN':$('meta[name="csrf-token"]').attr('content')
-                }
-            });
 
+            // $.ajaxSetup({
+            //         headers: {
+            //             'X-CSRF_TOKEN':$('meta[name="csrf-token"]').attr('content')
+            //         }
+            //     });
             $.ajax({
-                url: "http://localhost:8000/en/lga-list",
+                url: "{{ route('lga_list', app()->getLocale()) }}",
                 method: "POST",
                 dataType: "JSON",
-                data: {state_id:stateId},
-                success: function(data){
-                    if(data){
-
+                data: {
+                    "_token": "{{ csrf_token() }}",
+                    "state_id": stateId
+                },
+                success: function(data) {
+                    if (data) {
                         $('#lga_id').html(data.lgaList);
-                    }else{
-                        var message = 'Error occured while trying to get L.G.A`s in '+ categoryName +' category to '+ serviceName + ' service';
+                    } else {
+                        var message = 'Error occured while trying to get L.G.A`s in ' + stateName + ' state';
                         var type = 'error';
                         displayMessage(message, type);
-
                     }
                 },
-            })  
-        });
-
-        $(document).on('click', '.change-picture', function (){
-            // alert();
-            $('#avatar').trigger('click');
-            $('#submit-avatar').removeClass('d-none');
+            })
         });
     });
 </script>
