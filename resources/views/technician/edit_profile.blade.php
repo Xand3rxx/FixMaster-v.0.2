@@ -91,7 +91,7 @@
                             <!-- Email -->
                             <div class="form-group col-md-4">
                               <label for="inputEmail4">Email</label>
-                              <input type="email" class="form-control @error('email') is-invalid @enderror" id="email" value="{{$result->email}}" disabled>
+                              <input type="email" class="form-control @error('email') is-invalid @enderror" id="email" name="email" value="{{$result->email}}" readonly>
                               @error('email')
                               <span class="invalid-feedback" role="alert">
                                   <strong>{{ $message }}</strong>
@@ -130,7 +130,7 @@
                             <!-- Full Address -->
                             <div class="form-group col-md-6">
                               <label for="inputAddress2">Full Address</label>
-                              <textarea rows="3" class="user_address form-control @error('full_address') is-invalid @enderror" placeholder="e.g. 284B, Ajose Adeogun Street, Victoria Island, Lagos, Nigeria." id="inputAddress2" name="full_address" required></textarea>
+                              <textarea rows="3" class="user_address form-control @error('full_address') is-invalid @enderror" placeholder="e.g. 284B, Ajose Adeogun Street, Victoria Island, Lagos, Nigeria." id="inputAddress2" name="full_address" required>{{$result->address}}</textarea>
                               @error('full_address')
                             <span class="invalid-feedback" role="alert">
                                 <strong>{{ $message }}</strong>
@@ -139,7 +139,7 @@
                             </div>
                             <div class="form-group col-md-6">
                                 <label for="inputAddress2">Work Address</label>
-                                <textarea rows="3" class="user_address2 form-control @error('work_address') is-invalid @enderror" placeholder="e.g. Block A2, Broad Street, Marina, Lagos, Nigeria"  id="" name="work_address" required></textarea>
+                                <textarea rows="3" class="user_address2 form-control @error('work_address') is-invalid @enderror" placeholder="e.g. Block A2, Broad Street, Marina, Lagos, Nigeria"  id="" name="work_address"></textarea>
                                 @error('work_address')
                             <span class="invalid-feedback" role="alert">
                                 <strong>{{ $message }}</strong>
@@ -173,7 +173,7 @@
                           </div>
                         <div class="form-group col-md-4">
                           <label for="new_password">New Password</label>
-                          <input type="password" class="form-control @error('new_password') is-invalid @enderror" id="new_password" name="new_password" required>
+                          <input type="password" class="form-control @error('new_password') is-invalid @enderror" id="new_password" name="new_password" onkeyup='check();' required>
                           @error('new_password')
                             <span class="invalid-feedback" role="alert">
                                 <strong>{{ $message }}</strong>
@@ -182,7 +182,8 @@
                         </div>
                         <div class="form-group col-md-4">
                           <label for="new_confirm_password">Confirm Password</label>
-                          <input type="password" class="form-control @error('confirm_password') is-invalid @enderror" id="new_confirm_password" name="new_confirm_password" required>
+                          <input type="password" class="form-control @error('confirm_password') is-invalid @enderror" id="new_confirm_password" onkeyup='check();' name="new_confirm_password" required>
+                          <span id='message'></span>
                           @error('new_confirm_password')
                             <span class="invalid-feedback" role="alert">
                                 <strong>{{ $message }}</strong>
@@ -290,6 +291,17 @@
     })
 
  })(jQuery);
+
+ var check = function() {
+  if (document.getElementById('new_password').value ==
+    document.getElementById('new_confirm_password').value) {
+    document.getElementById('message').style.color = 'green';
+    document.getElementById('message').innerHTML = 'Password Match Correctly';
+  } else {
+    document.getElementById('message').style.color = 'red';
+    document.getElementById('message').innerHTML = 'Password does not Match';
+  }
+}
 
 </script>
 @endsection

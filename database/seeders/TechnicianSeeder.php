@@ -127,5 +127,7 @@ class TechnicianSeeder extends Seeder
             'country_id'  => 156, //Nigeria
             'number'   => "07004728329"
         ]);
+
+        
     }
 }

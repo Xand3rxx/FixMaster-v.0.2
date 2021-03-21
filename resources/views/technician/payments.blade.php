@@ -128,12 +128,12 @@
 
                   <tr>
                   <td class="tx-color-03 tx-center">{{ $loop->iteration }}</td>
-                  <td class="tx-medium">{{$result->service_request->job_reference}}</td>
-                    <td class="tx-medium">{{$result->payment_reference}}</td>
+                  <td class="tx-medium">{{$result->service_request->unique_id ?? ''}}</td>
+                    <td class="tx-medium">{{$result->payment_reference ?? ''}}</td>
                     <td class="tx-medium">Admin</td>
                     <td class="tx-medium">₦{{ number_format($result->amount)}}</td>
-                    <td class="tx-medium">{{$result->mode->name}}</td>
-                    <td class="tx-medium">{{$result->comment}}</td>
+                    <td class="tx-medium">{{$result->mode->name ?? ''}}</td>
+                    <td class="tx-medium">{{$result->comment ?? ''}}</td>
                     <td class="text-medium tx-center">{{ Carbon\Carbon::parse($result->created_at, 'UTC')->isoFormat('MMMM Do YYYY, h:mm:ssa') }}</td>
 
                   </tr>

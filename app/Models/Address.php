@@ -28,4 +28,9 @@ class Address extends Model
     {
         return $this->belongsTo(Account::class);
     }
+
+    public function users()
+    {
+        return $this->hasMany(User::class, 'user_id')->withDefault();
+    }
 }

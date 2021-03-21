@@ -27,4 +27,6 @@ class ServiceRequestStatus extends Model
             $serviceRequest->uuid = (string) Str::uuid(); 
         });
     }
+
+    
 }

@@ -24,6 +24,7 @@ use App\Http\Controllers\Admin\PriceController;
 use App\Http\Controllers\InvoiceController;
 use App\Http\Controllers\SimulationController;
 use App\Http\Controllers\Admin\User\Administrator\SummaryController;
+use App\Http\Controllers\ReportController;
 
 /*
 |--------------------------------------------------------------------------
@@ -109,6 +110,7 @@ Route::prefix('admin')->group(function () {
         Route::resource('services',                         ServiceController::class);
 
 
+
         //  location request
         Route::get('/location-request',                     [AdminLocationRequestController::class, 'index'])->name('location_request');
         Route::post('/get-names',                           [AdminLocationRequestController::class, 'getNames'])->name('get_names');
@@ -119,6 +121,13 @@ Route::prefix('admin')->group(function () {
         Route::post('/activity-log/sorting',                [ActivityLogController::class, 'sortActivityLog'])->name('activity-log.sorting_users');
         Route::get('/activity-log/details/{activity_log}',  [ActivityLogController::class, 'activityLogDetails'])->name('activity-log.details');
         Route::resource('activity-log',                     ActivityLogController::class);
+
+        //Routes for report management
+        Route::get('/reports/sorting',      [ReportController::class, 'cseReports'])->name('cse_reports');
+        Route::get('/reports/sort_cse_report',      [ReportController::class, 'sortCSEReports'])->name('sort_cse_reports');
+        Route::get('/reports/cse_report_details/{activity_log}',      [ReportController::class, 'cseReportDetails'])->name('report_details');
+
+
 
         //Routes for Tools & Tools Request Management
         Route::get('/tools/delete/{tool}',                  [ToolInventoryController::class, 'destroy'])->name('tools.delete');
@@ -237,7 +246,7 @@ Route::prefix('/technician')->group(function () {
         Route::get('/location-request',                 [TechnicianProfileController::class, 'locationRequest'])->name('location_request');
         //Route::get('/payments',                         [TechnicianProfileController::class, 'payments'])->name('payments');                
         Route::get('/requests',                         [TechnicianProfileController::class, 'serviceRequests'])->name('requests');
-        Route::get('/requests/details/{serviceRequest:id}',                 [TechnicianProfileController::class, 'serviceRequestDetails'])->name('request_details');
+        Route::get('/requests/details/{serviceRequests:service_request_id}',                 [TechnicianProfileController::class, 'serviceRequestDetails'])->name('request_details');
 
         Route::get('/profile/',                         [TechnicianProfileController::class, 'viewProfile'])->name('view_profile');
         Route::get('/profile/edit',                     [TechnicianProfileController::class, 'editProfile'])->name('edit_profile');

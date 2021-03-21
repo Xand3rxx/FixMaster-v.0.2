@@ -48,4 +48,9 @@ class Account extends Model
     {
         return $this->hasMany(PaymentDisbursed::class, 'user_id', 'user_id');
     }
+
+    public function service_request()
+    {
+        return $this->hasMany(ServiceRequest::class, 'user_id', 'client_id');
+    }
 }
