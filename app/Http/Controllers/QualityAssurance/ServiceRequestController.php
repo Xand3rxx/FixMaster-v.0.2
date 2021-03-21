@@ -16,9 +16,17 @@ class ServiceRequestController extends Controller
      */
     public function index(Request $request)
     {
-        $results = ServiceRequestAssigned::where('user_id', Auth::id())
-                   ->orderBy('created_at', 'DESC')->get();
-        return view('quality-assurance.requests', compact('results'));
+        $allRequests = ServiceRequestAssigned::where('user_id', Auth::id())->get();
+
+        foreach($allRequests as $serviceRequest){
+            $canceled = $serviceRequest->service_request->status_id;
+        }
+
+        // if($res == 3){
+        //     $canceled = $res;
+        // }
+
+        return view('quality-assurance.index', compact('allRequests','canceled'));
     }
 
     // public function chat_data(){
@@ -33,6 +41,14 @@ class ServiceRequestController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+
+    public function get_requests(Request $request)
+    {
+        $results = ServiceRequestAssigned::where('user_id', Auth::id())
+                   ->orderBy('created_at', 'DESC')->get();
+        return view('quality-assurance.requests', compact('results'));
+    }
+
     public function create()
     {
         //

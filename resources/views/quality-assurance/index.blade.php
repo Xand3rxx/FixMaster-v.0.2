@@ -123,11 +123,10 @@
                       {{-- <span class="tx-10 tx-color-04">65</span> --}}
                     </div>
                     <div class="d-flex align-items-end justify-content-between mg-b-5">
-                      <h5 class="tx-normal tx-rubik lh-2 mg-b-0">25</h5>
-                      {{-- <h6 class="tx-normal tx-rubik tx-color-03 lh-2 mg-b-0">20,000</h6> --}}
+                      <h5 class="tx-normal tx-rubik lh-2 mg-b-0">{{$allRequests->count()}}</h5>
                     </div>
                     <div class="progress ht-4 mg-b-0 op-5">
-                      <div class="progress-bar bg-teal wd-25p" role="progressbar" aria-valuemin="0" aria-valuemax="100"></div>
+                      <div class="progress-bar bg-teal wd-{{$allRequests->count()}}p" role="progressbar" aria-valuemin="0" aria-valuemax="100"></div>
                     </div>
                   </div>
                   <div class="col-sm-6 col-lg-12 mg-t-30 mg-sm-t-0 mg-lg-t-30">
@@ -135,23 +134,23 @@
                       <h6 class="tx-uppercase tx-10 tx-spacing-1 tx-color-02 tx-semibold mg-b-0">Completed Requests</h6>
                     </div>
                     <div class="d-flex justify-content-between mg-b-5">
-                      <h5 class="tx-normal tx-rubik mg-b-0">20</h5>
+                      <h5 class="tx-normal tx-rubik mg-b-0"></h5>
                     </div>
                     <div class="progress ht-4 mg-b-0 op-5">
-                      <div class="progress-bar bg-orange wd-20p" role="progressbar" aria-valuemin="0" aria-valuemax="100"></div>
+                      <div class="progress-bar bg-orange wd-p" role="progressbar" aria-valuemin="0" aria-valuemax="100"></div>
                     </div>
                   </div>
                   <div class="col-sm-6 col-lg-12 mg-t-30">
                     <div class="d-flex align-items-center justify-content-between mg-b-5">
                       <h6 class="tx-uppercase tx-10 tx-spacing-1 tx-color-02 tx-semibold mg-b-0">Canceled Requests</h6>
-                      {{-- <span class="tx-10 tx-color-04">20% goal reached</span> --}}
+
                     </div>
                     <div class="d-flex justify-content-between mg-b-5">
-                      <h5 class="tx-normal tx-rubik mg-b-0">5</h5>
-                      {{-- <h5 class="tx-normal tx-rubik tx-color-03 mg-b-0"><small>85,000</small></h5> --}}
+                      <h5 class="tx-normal tx-rubik mg-b-0">{{$canceled->count()}}</h5>
+
                     </div>
                     <div class="progress ht-4 mg-b-0 op-5">
-                      <div class="progress-bar bg-pink wd-5p" role="progressbar" aria-valuenow="20" aria-valuemin="0" aria-valuemax="100"></div>
+                      <div class="progress-bar bg-pink wd-{{$canceled->count()}}" role="progressbar" aria-valuenow="20" aria-valuemin="0" aria-valuemax="100"></div>
                     </div>
                   </div>
                   <div class="col-sm-6 col-lg-12 mg-t-30">
