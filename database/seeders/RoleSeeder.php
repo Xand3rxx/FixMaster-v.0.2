@@ -27,6 +27,12 @@ class RoleSeeder extends Seeder
         $developer->save();
 
         $developer = new Role();
+        $developer->name = 'Franchisee(CSE Coordinator)';
+        $developer->slug = 'franchisee-user';
+        $developer->url = 'franchisee';
+        $developer->save();
+
+        $developer = new Role();
         $developer->name = 'Customer Service Executive';
         $developer->slug = 'cse-user';
         $developer->url = 'cse';
@@ -52,8 +58,8 @@ class RoleSeeder extends Seeder
 
         $manager = new Role();
         $manager->name = 'Quality Assurance Manager';
-        $manager->slug = 'quality_assurance-user';
-        $manager->url = 'qa';
+        $manager->slug = 'quality-assurance-user';
+        $manager->url = 'quality-assurance';
         $manager->save();
     }
 }

@@ -4,9 +4,11 @@ namespace App\Http\Controllers\Admin\User;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use App\Traits\Utility;
 
 class CustomerServiceExecutiveController extends Controller
 {
+    use Utility;
     /**
      * Display a listing of the resource.
      *
@@ -51,18 +53,25 @@ class CustomerServiceExecutiveController extends Controller
     {
         // Validate Request
         $valid = $this->validateCreateCustomerServiceExecutive($request);
-
+  
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
+     * @param  string  $uuid
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show($language, $uuid)
     {
-        //
+        $user = \App\Models\User::where('uuid', $uuid)->with('account', 'cse', 'permissions', 'phones')->firstOrFail();
+        return view('admin.users.cse.show',[
+            'user' => $user,
+            'last_seen' => $user->load(['logs' => function ($query) {
+                $query->where('type', 'logout')->orderBy('created_at', 'asc');}]),
+            'logs' => $user->loadCount(['logs' => function ($query) {
+                $query->where('type', 'login');}])
+        ]);
     }
 
     /**

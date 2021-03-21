@@ -35,9 +35,13 @@ class CSESeeder extends Seeder
         // CSE Roles and Permissions
         $cseRole = \App\Models\Role::where('slug', 'cse-user')->first();
         $cse->roles()->attach($cseRole);
+        $cse1->roles()->attach($cseRole);
+        $cse2->roles()->attach($cseRole);
 
         $cse_permission = \App\Models\Permission::where('slug', 'view-cse')->first();
         $cse->permissions()->attach($cse_permission);
+        $cse1->permissions()->attach($cse_permission);
+        $cse2->permissions()->attach($cse_permission);
 
         // CSE User Type
         $cseType = new UserType();

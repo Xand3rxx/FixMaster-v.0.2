@@ -125,7 +125,6 @@
                             </div>
                             @endforeach
                         </div>
-
                     </div>
 
                     <div class="col-md-12 mt-4">
@@ -137,13 +136,16 @@
         </div>
     </div>
 
+
+    @endsection
+
     @section('scripts')
     <script src="{{ asset('assets/js/password-generator.js') }}"></script>
     <script>
         "use strict";
         $(document).ready(function() {
             $('#designation').change(function() {
-                if ($(this).val() == 'SUPER_ADMIN_ROLE') {
+                if ($(this).val() == '1') {
                     $('.permission').addClass('d-none');
                 } else {
                     $('.permission').removeClass('d-none');
@@ -158,5 +160,4 @@
             });
         });
     </script>
-    @endsection
     @endsection

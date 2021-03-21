@@ -9,29 +9,37 @@ trait GenerateUniqueIdentity
     protected $exist;
     protected $tested;
     protected $tableName;
+    protected $columnName;
     protected $abbr;
     protected $unique;
 
 
     /**
-     * Generate a Uniqe CSE ID 
+     * Generate a Uniqe ID 
+     * @param string $tableName
+     * @param string $abbr
+     * @param string|NULL $columnName
      * 
      * @return string
      */
-    public static function generate(string $tableName, string $abbr)
+    public static function generate(string $tableName, string $abbr, string $columnName = null)
     {
-        return static::uniqueIdentity($tableName, $abbr);
+        return static::uniqueIdentity($tableName, $abbr, $columnName);
     }
 
     /**
-     * Generate Unique ID in related to given table
+     * Generate Unique ID in related to given table and column name
      * 
      * @param string $tableName
-     *
+     * @param string $abbr
+     * @param string|NULL $columnName
+     * 
      * @return string
      */
-    protected static function uniqueIdentity(string $tableName, string $abbr, $unique = false)
+    protected static function uniqueIdentity(string $tableName, string $abbr, string $columnName = null)
     {
+        // instantiate $unique to null
+        $unique = false;
         // Store tested results in array to not test them again
         $tested = [];
 
@@ -44,9 +52,8 @@ trait GenerateUniqueIdentity
             if (in_array($random, $tested)) {
                 continue;
             }
-
             // Check if it is unique in the database
-            $exist = \Illuminate\Support\Facades\DB::table($tableName)->where('unique_id', $random)->exists();
+            $exist = \Illuminate\Support\Facades\DB::table($tableName)->where($columnName ?? 'unique_id', $random)->exists();
 
             // Store the random characters in the tested array
             // To keep track which ones are already tested
@@ -81,7 +88,7 @@ trait GenerateUniqueIdentity
     /**
      * Create reference number of
      * 
-     * @param string $tableName|NULL
+     * @param string|NULL $tableName|NULL
      * @param int $stringLength|13
      *
      * @return string

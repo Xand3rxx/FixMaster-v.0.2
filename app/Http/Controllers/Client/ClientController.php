@@ -18,14 +18,15 @@ use App\Models\Phone;
 use App\Helpers\CustomHelpers;
 use App\Traits\GenerateUniqueIdentity as Generator;
 use App\Traits\RegisterPaymentTransaction;
-
+use App\Traits\Services;
+use Auth;
 
 
 use Session;
 
 class ClientController extends Controller
 {
-    use RegisterPaymentTransaction, Generator;
+    use RegisterPaymentTransaction, Generator, Services;
 
     /**
      * Display a listing of the resource.
@@ -36,19 +37,21 @@ class ClientController extends Controller
     {
 
         $popularRequests = Service::select('id', 'name', 'url', 'image')->take(10)->get()->random(3);
-        $myWallet    = WalletTransaction::where('user_id', auth()->user()->id)->orderBy('id', 'DESC')->get();
+        // $myWallet    = WalletTransaction::where('user_id', auth()->user()->id)->orderBy('id', 'DESC')->get();
+
+        $user = Auth::user();
 
         return view('client.home', [
             // data
-            'totalRequests' => rand(1, 1),
-            'completedRequests' => rand(1, 1),
-            'cancelledRequests' => rand(1, 1),
+            'totalRequests' => $user->clientRequests()->count(),
+            'completedRequests' => $user->clientRequests()->where('status_id', 4)->count(),
+            'cancelledRequests' => $user->clientRequests()->where('status_id', 3)->count(),
             'user' => auth()->user()->account,
             'client' => [
                 'phone_number' => '0909078888'
             ],
             'popularRequests'   =>  $popularRequests,
-            'myWallet'          => $myWallet
+            // 'myWallet'          =>  $myWallet,
             // JoeBoy Fill this data
             // 1. 'userServiceRequests'
             // 2. 'popularRequests'
@@ -263,6 +266,7 @@ class ClientController extends Controller
 
     public function walletSubmit(Request $request)
     {
+
         $myWallet    = WalletTransaction::where('user_id', auth()->user()->id)->orderBy('id', 'DESC')->get();
         // validate Request
         $valid = $this->validate($request, [
@@ -498,5 +502,61 @@ class ClientController extends Controller
 
     }
 
+    /**
+     * Return a list of all active FixMaster services.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function services(){
+        //Return all active categories with at least one Service
+        return view('client.services.index', $this->categoryAndServices());
+    }
+
+    /**
+     * Display a service request quote page.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function serviceQuote($language, $uuid){
+
+        //Return Service details
+        return view('client.services.quote', [
+            'service'       =>  $this->service($uuid),
+            'bookingFees'   =>  $this->bookingFees(),
+            'discounts'     =>  $this->clientDiscounts(),
+        ]);
+    }
+
+    /**
+     * Display a more details about a FixMaster service.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function serviceDetails($language, $uuid){
+
+        //Return Service details
+        return view('client.services.show', ['service' => $this->service($uuid)]);
+    }
+    /**
+     * Search and return a list of FixMaster services.
+     * This is an ajax call to sort all FixMaster services 
+     * present on change of Category select dropdown
+     * 
+     * @return \Illuminate\Http\Response
+     */
+    public function search($language, Request $request){
+
+        //Return all active categories with at least one Service of matched keyword or Category ID
+        return view('client.services._search', $this->searchKeywords($request));
+    }
+
+    /**
+     * Request for a Custom Service frpm FixMaster.
+     * Save custom request
+     * @return \Illuminate\Http\Response
+     */
+    public function customService(){
+        
+    }
 
 }

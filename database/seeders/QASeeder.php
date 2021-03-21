@@ -30,11 +30,15 @@ class QASeeder extends Seeder
         $qa2->save();
 
         // AQ Roles and Permissions
-        $qaRole = \App\Models\Role::where('slug', 'quality_assurance-user')->first();
+        $qaRole = \App\Models\Role::where('slug', 'quality-assurance-user')->first();
         $qa->roles()->attach($qaRole);
+        $qa1->roles()->attach($qaRole);
+        $qa2->roles()->attach($qaRole);
 
         $qa_permission = \App\Models\Permission::where('slug', 'view-qa')->first();
         $qa->permissions()->attach($qa_permission);
+        $qa1->permissions()->attach($qa_permission);
+        $qa2->permissions()->attach($qa_permission);
 
         // QA User Type
         $qaType = new \App\Models\UserType();

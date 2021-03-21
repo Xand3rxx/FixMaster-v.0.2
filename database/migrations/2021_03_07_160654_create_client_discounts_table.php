@@ -19,16 +19,12 @@ class CreateClientDiscountsTable extends Migration
             $table->collation = 'utf8mb4_unicode_ci';
 
             $table->id();
-            $table->uuid('discount_id');
-            $table->uuid('uuid')->nullable();
-            $table->integer('user_id')->nullable();
-            $table->string('discount_name', 250);
-            $table->string('entity', 250);
-            $table->integer('rate');
-            $table->enum('notify', [0, 1])->default(0);
-            $table->enum('status', ['activate', 'deactivate'])->default('activate');
+            $table->foreignId('discount_id');
+            $table->foreignId('client_id');
+            $table->foreignId('estate_id')->nullable();
+            $table->foreignId('service_id')->nullable();
+            $table->enum('availability', ['used', 'unused'])->default('unused');
             $table->timestamps();
-            $table->softDeletes();
         });
     }
 

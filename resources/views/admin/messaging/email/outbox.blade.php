@@ -26,12 +26,10 @@
             <span class="tx-color-03">Sort:</span> <a href="" class="dropdown-link link-02">Date</a>
           </div><!-- dropdown -->
         </div>
-
       </div><!-- mail-group-body -->
   </div><!-- mail-group -->
 
   <div class="mail-content">
-
     <div class="mail-content-header">
         <div class="media">
         <div class="avatar avatar-sm"><img src="https://via.placeholder.com/600" class="rounded-circle" alt=""></div>
@@ -47,7 +45,6 @@
         <h5 class="mg-b-30"></h5>
         </div>
         <div class="pd-20 pd-lg-25 pd-xl-30" id="mail-content-body">
-
         </div>
     </div><!-- mail-content-body -->
 </div><!-- mail-wrapper -->

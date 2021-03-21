@@ -17,13 +17,15 @@ class CreateWarrantiesTable extends Migration
             $table->engine = 'InnoDB';
             $table->charset = 'utf8mb4';
             $table->collation = 'utf8mb4_unicode_ci';
-
+            
             $table->id();
-            $table->foreignId('service_request_id')->unique();
-            $table->dateTime('start_date');
+            $table->string('name')->unique();
+            $table->unsignedInteger('amount');
             $table->dateTime('expiration_date')->nullable();
             $table->enum('warranty_type', ['free', 'extended']);
-            $table->text('reason')->nullable();
+            $table->text('description')->nullable();
+            $table->softDeletes();
+            $table->timestamps();
         });
     }
 

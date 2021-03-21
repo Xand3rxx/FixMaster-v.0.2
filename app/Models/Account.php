@@ -22,6 +22,13 @@ class Account extends Model
     // protected $with = ['user'];
 
     /**
+     * All of the relationships to be touched.
+     *
+     * @var array
+     */
+    protected $touches = ['user'];
+
+    /**
      * Get the user that owns the Account.
      */
     public function user()
@@ -35,5 +42,25 @@ class Account extends Model
     public function phone()
     {
         return $this->hasMany(Phone::class, 'user_id', 'user_id');
+    }
+
+    public function payment()
+    {
+        return $this->hasMany(PaymentDisbursed::class, 'user_id', 'user_id');
+    }
+
+    public function state()
+    {
+        return $this->belongsTo(State::class, 'id');
+    }
+
+    public function lga()
+    {
+        return $this->belongsTo(Lga::class, 'id');
+    }
+
+    public function profession()
+    {
+        return $this->belongsTo(Profession::class, 'id');
     }
 }

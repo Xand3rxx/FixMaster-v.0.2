@@ -5,20 +5,33 @@ namespace App\Http\Controllers\Frontend\Registration;
 use App\Http\Controllers\Controller;
 use App\Traits\RegisterClient;
 use Illuminate\Http\Request;
+use App\Traits\Utility;
+
 
 class ClientRegistrationController extends Controller
 {
-    use RegisterClient;
+    use RegisterClient,Utility;
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\View\View
      */
-    public function index()
+    public function index(Request $request)
     {
+        if($request->ref){
+            $link = $request->ref;
+            $authenticateReferral = $this->authenticateRefferralLink($link);
+            if(!$authenticateReferral){
+             return abort(404);
+            }
+        }
+      
         return view('frontend.registration.client.index', [
             'states' => \App\Models\State::all(),
-            'activeEstates' => \App\Models\Estate::all(),
+            'activeEstates' => \App\Models\Estate::select('id', 'estate_name')
+                ->orderBy('estates.estate_name', 'ASC')
+                ->where('estates.is_active', 'reinstated')
+                ->get(),
         ]);
     }
 
@@ -52,7 +65,10 @@ class ClientRegistrationController extends Controller
     {
         // dd($request->all());
         // Validate Client Registration
-        $valid = $this->validateCreateClient($request);
+        $oldvalid = $this->validateCreateClient($request); 
+      ;
+       $valid = array_merge($oldvalid, ["ref" =>  $request->ref]);
+       
         // Register a Client User
         $registered = $this->register($valid);
         // If registered, redirect to client url
@@ -131,6 +147,7 @@ class ClientRegistrationController extends Controller
             'full_address'              =>   'required',
             'terms_and_conditions'      =>   'required|accepted',
             'estate_id'                 =>   'nullable|numeric'
+         
         ]);
     }
 }

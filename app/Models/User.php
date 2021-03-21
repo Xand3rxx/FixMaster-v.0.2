@@ -101,7 +101,39 @@ class User extends Authenticatable
         return $this->hasOne(Account::class);
     }
 
-     /**
+    /**
+     * Get the Administrator associated with the user.
+     */
+    public function administrator()
+    {
+        return $this->hasOne(Administrator::class);
+    }
+
+    /**
+     * Get the Administrator associated with the user.
+     */
+    public function cse()
+    {
+        return $this->hasOne(Cse::class);
+    }
+
+    /**
+     * Get the Administrator associated with the user.
+     */
+    public function logs()
+    {
+        return $this->hasMany(ActivityLog::class);
+    }
+
+    /**
+     * Get the phone associated with the user.
+     */
+    public function phone()
+    {
+        return $this->hasOne(Phone::class);
+    }
+
+    /**
      * Get the phone associated with the user.
      */
     public function phones()
@@ -127,7 +159,37 @@ class User extends Authenticatable
         return $this->hasMany(Estate::class);
     }
 
-    public function payments(){
-        return $this->hasMany(PaymentDisbursed::class,'recipient_id');
+    public function payments()
+    {
+        return $this->hasMany(PaymentDisbursed::class, 'recipient_id');
+    }
+    public function invoice()
+    {
+        return $this->hasOne(Invoice::class);
+    }
+
+    public function invoices()
+    {
+        return $this->hasMany(Invoice::class);
+    }
+
+    public function serviceRequest()
+    {
+        return $this->hasOne(ServiceRequest::class);
+    }
+
+    public function serviceRequests()
+    {
+        return $this->hasMany(ServiceRequest::class);
+    }
+
+    public function clientRequest()
+    {
+        return $this->hasOne(ServiceRequest::class, 'client_id');
+    }
+
+    public function clientRequests()
+    {
+        return $this->hasMany(ServiceRequest::class, 'client_id');
     }
 }

@@ -28,7 +28,7 @@ class DiscountController extends Controller
     //
     public function index()
     {
-        $discounts = Discount::all();
+        $discounts = Discount::orderBy('id', 'DESC')->get();
         return response()->view('admin.discount.list', compact('discounts'));
     }
 
@@ -70,6 +70,7 @@ class DiscountController extends Controller
         'services' => isset($request->services)?$request->services:'',
         'estate' => isset($request->estate_name) ? $request->estate_name: ''
        ];
+  
        
         $discount = Discount::create([
             'name' => $request->input('discount_name') ,
@@ -107,7 +108,7 @@ class DiscountController extends Controller
                 case 'service':
                     if (!empty($request->services)){
                         $update = $this->createServiceDiscount($request, $discount);
-                    }if(!empty($request->category)){
+                    }else{
                         $update = $this->createAllServiceDiscount($request, $discount);
                     }
                  
@@ -162,10 +163,10 @@ class DiscountController extends Controller
     private function validateFieldRequest($request)
     {
             return request()->validate([
-            'specified_request_count_morethan' => 'numeric',
-            'specified_request_count_equalto' => 'numeric',
-            'specified_request_amount_from'  => 'numeric',
-            'specified_request_amount_to'   => 'numeric',
+                'specified_request_count_morethan' => 'nullable|numeric',
+                'specified_request_count_equalto' => 'nullable|numeric',
+                'specified_request_amount_from'  => 'nullable|numeric',
+                'specified_request_amount_to'   => 'nullable|numeric',
            ]);
         
     }
@@ -270,10 +271,10 @@ class DiscountController extends Controller
         }
 
      
-        $deactivateDiscount = Discount::where('uuid', $discount)->update(['status' => 'activate', ]);
+        $activateDiscount = Discount::where('uuid', $discount)->update(['status' => 'activate', ]);
   
 
-        if ($deactivateDiscount)
+        if ($activateDiscount)
         {
             $type = 'Request';
             $severity = 'Informational';
@@ -282,7 +283,7 @@ class DiscountController extends Controller
             $this->log($type, $severity, $actionUrl, $message);
             return redirect()->route('admin.discount_list', app()
                 ->getLocale())
-                ->with('success', 'Discount has been deactivated');
+                ->with('success', 'Discount has been activated');
         }
         else
         {
@@ -299,7 +300,7 @@ class DiscountController extends Controller
     {
         if ($request->ajax())
         {
-            $wh = $d = [];
+            $wh = $d =  $est= [];
             $groupby = '';
             $replace_amount = 'middle_name';
             $replace_user = 'user_id';
@@ -402,8 +403,10 @@ class DiscountController extends Controller
 
             if (isset($fields['estate_name']) && $fields['estate_name'] != '')
             {
-                $wh[] = ['est.estate_name', '=', $fields['estate_name']];
+                $est[] = ['est.estate_name', '=', $fields['estate_name']];
             }
+
+       
 
             if (count($wh) == 0)
             {
@@ -422,14 +425,16 @@ class DiscountController extends Controller
                     if (count(array_filter($chk_fields)) > 0)
                     {
                         $dataArry = ServiceRequest::select('sr.user_id', $replace_amount, 'first_name', 'last_name')->from(ServiceRequest::raw("(select  $replace_user, count(user_id) as users from service_requests $groupby)
-                 sr Join accounts ac ON sr.user_id=ac.user_id"))->where($wh)->withTrashed()
-                            ->get();
-
+                        sr Join accounts ac ON sr.user_id=ac.user_id Join clients cs ON sr.user_id=cs.account_id "))->where($wh)->withTrashed()
+                                   ->get();
                     }
                     else
                     {
-                        $dataArry = Account::select('user_id', 'first_name', 'last_name')->orderBy('accounts.user_id', 'ASC')
-                            ->get();
+                        $dataArry = Account::select('accounts.user_id', 'first_name', 'last_name')
+                        ->join('clients', 'accounts.user_id', '=', 'clients.account_id')
+                        ->join('users', 'users.id', '=', 'accounts.user_id')
+                        ->orderBy('accounts.user_id', 'ASC')
+                        ->get();
                     }
                     $name = '';
                     $optionValue = '';
@@ -457,7 +462,7 @@ class DiscountController extends Controller
                     else
                     {
                         $dataArry = Estate::from('estates as est')->select('uuid', 'first_name', 'last_name')
-                            ->where($wh)->orderBy('est.id', 'ASC')
+                            ->where($est)->orderBy('est.id', 'ASC')
                             ->get();
                     }
 

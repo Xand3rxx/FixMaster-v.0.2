@@ -28,10 +28,10 @@
         <div class="aside-loggedin-user">
           <a href="#loggedinMenu" class="d-flex align-items-center justify-content-between mg-b-2" data-toggle="collapse">
           {{-- <h6 class="tx-semibold mg-b-0"> {{ $profile->first_name.' '.$profile->last_name ?? 'Charles Famoriyo' }}</h6> --}}
-          <h6 class="tx-semibold mg-b-0"> Charles Famoriyo</h6>
+          <h6 class="tx-semibold mg-b-0"> {{ !empty($profile->first_name || $profile->last_name) ? $profile->first_name.' '.$profile->last_name : 'UNAVAILABLE' }}</h6>
             <i data-feather="chevron-down"></i>
           </a>
-          <p class="tx-color-03 tx-12 mg-b-0">Adminstrator</p>
+          <p class="tx-color-03 tx-12 mg-b-0">{{ Auth::user()->type->role->name ?? 'Administrator' }}</p>
         </div>
         <div class="collapse" id="loggedinMenu">
           <ul class="nav nav-aside mg-b-0">
@@ -58,11 +58,11 @@
           </ul>
         </li>
 
-        <li class="nav-item with-sub {{ Route::currentRouteNamed('admin.add_discount', 'admin.discount_list') ? 'active show' : '' }}">
+        <li class="nav-item with-sub {{ Route::currentRouteNamed('admin.add_discount', 'admin.discount_list', 'admin.edit_discount') ? 'active show' : '' }}">
           <a href="" class="nav-link"><i data-feather="percent"></i> <span>Discount/Promotion</span></a>
           <ul>
           <li class="{{ Route::currentRouteNamed('admin.add_discount') ? 'active' : '' }}"><a href="{{ route('admin.add_discount',  app()->getLocale()) }}">Add</a></li>
-            <li class="{{ Route::currentRouteNamed('admin.discount_list') ? 'active' : '' }}"><a href="{{ route('admin.discount_list',  app()->getLocale()) }}">List</a></li>
+            <li class="{{ Route::currentRouteNamed('admin.discount_list', 'admin.edit_discount') ? 'active' : '' }}"><a href="{{ route('admin.discount_list',  app()->getLocale()) }}">List</a></li>
           </ul>
         </li>
 
@@ -84,6 +84,10 @@
 
         <li class="nav-item"><a href="" class="nav-link"><i data-feather="bar-chart"></i> <span>Income/Commission</span></a></li>
 
+        <li class="nav-item {{ Route::currentRouteNamed('admin.invoices') ? 'active show' : '' }}">
+            <a href="{{ route('admin.invoices', app()->getLocale()) }}" class="nav-link"><i data-feather="file-text"></i> <span>Invoice Management</span></a>
+        </li>
+
         <li class="nav-item"><a href="" class="nav-link"><i data-feather="briefcase"></i> <span>Job Card</span></a></li>
 
         <li class="nav-item {{ Route::currentRouteNamed('admin.location_request') ? 'active' : '' }}"><a href="{{ route('admin.location_request', app()->getLocale()) }}" class="nav-link"><i data-feather="map-pin"></i> <span>Location Request</span></a></li>
@@ -96,22 +100,24 @@
           </ul>
         </li>
 
-        <li class="nav-item with-sub">
+        <li class="nav-item with-sub {{ Route::currentRouteNamed('admin.inbox', 'admin.outbox') ? 'active show' : '' }}">
           <a href="" class="nav-link"><i data-feather="message-circle"></i> <span>Messages</span></a>
           <ul>
-            <li class=""><a href="#">Inbox</a></li>
-            <li class=""><a href="#">Sent</a></li>
+            <li class="{{ Route::currentRouteNamed('admin.inbox') ? 'active' : '' }}"><a href="{{ route('admin.inbox', app()->getLocale()) }}">Inbox</a></li>
+            <li class="{{ Route::currentRouteNamed('admin.outbox') ? 'active' : '' }}"><a href="{{ route('admin.outbox', app()->getLocale()) }}">Sent</a></li>
           </ul>
         </li>
 
-        <li class="nav-item with-sub">
+        <li class="nav-item {{ Route::currentRouteNamed('admin.template') ? 'active' : '' }}"><a href="{{ route('admin.template', app()->getLocale()) }}" class="nav-link"><i data-feather="bell"></i> <span>Notification Management</span></a></li>
+
+        {{-- <li class="nav-item with-sub {{ Route::currentRouteNamed('admin.template') ? 'active show' : '' }}">
           <a href="" class="nav-link"><i data-feather="bell"></i> <span>Notification Management</span></a>
           <ul>
-            <li class=""><a href="#">Email</a></li>
+            <li class="{{ Route::currentRouteNamed('admin.template') ? 'active' : '' }}"><a href="{{ route('admin.template', app()->getLocale()) }}">Email & SMS</a></li>
             <li class=""><a href="#">In-app</a></li>
             <li class=""><a href="#">SMS</a></li>
           </ul>
-        </li>
+        </li> --}}
 
         <li class="nav-item with-sub {{ Route::currentRouteNamed('admin.disbursed_payments', 'admin.received_payments') ? 'active show' : '' }}">
           <a href="" class="nav-link"><i data-feather="credit-card"></i> <span>Payments</span></a>
@@ -132,17 +138,17 @@
         <li class="nav-item with-sub {{ Route::currentRouteNamed('admin.category', 'admin.job', 'admin.category_reviews') ? 'active show' : '' }}">
           <a href="" class="nav-link"><i data-feather="star"></i> <span>Rating</span></a>
           <ul>
-            <li class="{{ Route::currentRouteNamed('admin.category') ? 'active' : '' }}"><a href="{{ route('admin.category',  app()->getLocale()) }}">Category Rating</a></li>
-            <li class="{{ Route::currentRouteNamed('admin.job') ? 'active' : '' }}"><a href="{{ route('admin.job',  app()->getLocale()) }}">Job Rating</a></li>
-            <li class="{{ Route::currentRouteNamed('admin.category_reviews') ? 'active' : '' }}"><a href="{{ route('admin.category_reviews',  app()->getLocale()) }}">Category Reviews</a></li>
+            <li class="{{ Route::currentRouteNamed('admin.category') ? 'active' : '' }}"><a href="{{ route('admin.category',  app()->getLocale()) }}">CSE Diagnosis Rating</a></li>
+            <li class="{{ Route::currentRouteNamed('admin.job') ? 'active' : '' }}"><a href="{{ route('admin.job',  app()->getLocale()) }}">Service Rating</a></li>
+            <li class="{{ Route::currentRouteNamed('admin.category_reviews') ? 'active' : '' }}"><a href="{{ route('admin.category_reviews',  app()->getLocale()) }}">Service Reviews</a></li>
           </ul>
         </li>
 
-        <li class="nav-item with-sub">
+        <li class="nav-item with-sub {{ Route::currentRouteNamed('admin.add_referral', 'admin.referral_list') ? 'active show' : '' }}"">
           <a href="" class="nav-link"><i data-feather="external-link"></i> <span>Referral</span></a>
           <ul>
-            <li class=""><a href="#">Add</a></li>
-            <li class=""><a href="#">List</a></li>
+            <li class="{{ Route::currentRouteNamed('admin.add_referral') ? 'active' : '' }}"><a href="{{ route('admin.add_referral',  app()->getLocale()) }}">Add</a></li>
+            <li class="{{ Route::currentRouteNamed('admin.referral_list') ? 'active' : '' }}"><a href="{{ route('admin.referral_list',  app()->getLocale()) }}">List</a></li>
           </ul>
         </li>
 
@@ -178,13 +184,13 @@
           </ul>
         </li>
 
-        <li class="nav-item with-sub">
+        {{-- <li class="nav-item with-sub">
           <a href="" class="nav-link"><i data-feather="sliders"></i> <span>Utilities</span></a>
           <ul>
             <li class=""><a href="#">Reset Password</a></li>
             <li class=""><a href="#">Verify Payment</a></li>
           </ul>
-        </li>
+        </li> --}}
 
         <li class="nav-item"><a href="#" class="nav-link"><i data-feather="thumbs-up"></i> <span>Warranty Management</span></a></li>
 

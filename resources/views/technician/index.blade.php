@@ -94,45 +94,6 @@
             </div>
           </div>
           
-          <h5 class="ml-4" >Total Requests: 100</h5><br>
-
-          <div class="row row-xs col-lg-12">
-            <div class="col-sm-6 col-lg-3">
-              <div class="card card-body">
-                <h6 class="tx-uppercase tx-11 tx-spacing-1 tx-color-02 tx-semibold mg-b-8">Pending Requests</h6>
-                <div class="d-flex d-lg-block d-xl-flex align-items-end">
-                <h5 class="tx-normal tx-rubik mg-b-0 mg-r-5 lh-1"><a href="#"> 40</a></h5>
-                </div>
-                
-              </div>
-            </div>
-            <div class="col-sm-6 col-lg-3">
-              <div class="card card-body">
-                <h6 class="tx-uppercase tx-11 tx-spacing-1 tx-color-02 tx-semibold mg-b-8">Completed Requests</h6>
-                <div class="d-flex d-lg-block d-xl-flex align-items-end">
-                  <h5 class="tx-normal tx-rubik mg-b-0 mg-r-5 lh-1"><a href="#">30</a></h5>
-                </div>
-              </div>
-            </div>
-            <div class="col-sm-6 col-lg-3">
-              <div class="card card-body">
-                <h6 class="tx-uppercase tx-11 tx-spacing-1 tx-color-02 tx-semibold mg-b-8">Ongoing Requests</h6>
-                <div class="d-flex d-lg-block d-xl-flex align-items-end">
-                  <h5 class="tx-normal tx-rubik mg-b-0 mg-r-5 lh-1"><a href="#">10</a></h5>
-                </div>
-              </div>
-            </div>
-            <div class="col-sm-6 col-lg-3">
-              <div class="card card-body">
-                <h6 class="tx-uppercase tx-11 tx-spacing-1 tx-color-02 tx-semibold mg-b-8">Cancelled Requests</h6>
-                <div class="d-flex d-lg-block d-xl-flex align-items-end">
-                  <h5 class="tx-normal tx-rubik mg-b-0 mg-r-5 lh-1"><a href="#">20</a></h5>
-                </div>
-              </div>
-            </div>
-          </div>
-
-
           <div class="card-header bd-b-0 pd-t-20 pd-lg-t-25 pd-l-20 pd-lg-l-25 d-flex flex-column flex-sm-row align-items-sm-start justify-content-sm-between">
             <div>
               <h6 class="mg-b-5">Service Request Metrics</h6>
@@ -156,33 +117,33 @@
                 <div class="row">
                   <div class="col-sm-6 col-lg-12">
                     <div class="d-flex align-items-center justify-content-between mg-b-5">
-                      <h6 class="tx-uppercase tx-10 tx-spacing-1 tx-color-02 tx-semibold mg-b-0">Total Administrators</h6>
+                      <h6 class="tx-uppercase tx-10 tx-spacing-1 tx-color-02 tx-semibold mg-b-0">Total Requests</h6>
                       {{-- <span class="tx-10 tx-color-04">65</span> --}}
                     </div>
                     <div class="d-flex align-items-end justify-content-between mg-b-5">
-                      <h5 class="tx-normal tx-rubik lh-2 mg-b-0">12</h5>
+                      <h5 class="tx-normal tx-rubik lh-2 mg-b-0">25</h5>
                       {{-- <h6 class="tx-normal tx-rubik tx-color-03 lh-2 mg-b-0">20,000</h6> --}}
                     </div>
                     <div class="progress ht-4 mg-b-0 op-5">
-                      <div class="progress-bar bg-teal wd-12p" role="progressbar" aria-valuenow="12" aria-valuemin="0" aria-valuemax="25"></div>
+                      <div class="progress-bar bg-teal wd-65p" role="progressbar" aria-valuenow="65" aria-valuemin="0" aria-valuemax="100"></div>
                     </div>
                   </div>
                   <div class="col-sm-6 col-lg-12 mg-t-30 mg-sm-t-0 mg-lg-t-30">
                     <div class="d-flex align-items-center justify-content-between mg-b-5">
-                      <h6 class="tx-uppercase tx-10 tx-spacing-1 tx-color-02 tx-semibold mg-b-0">Total CSE's</h6>
+                      <h6 class="tx-uppercase tx-10 tx-spacing-1 tx-color-02 tx-semibold mg-b-0">Completed Requests</h6>
                       {{-- <span class="tx-10 tx-color-04">45% goal reached</span> --}}
                     </div>
                     <div class="d-flex justify-content-between mg-b-5">
-                      <h5 class="tx-normal tx-rubik mg-b-0">5</h5>
+                      <h5 class="tx-normal tx-rubik mg-b-0">20</h5>
                       {{-- <h5 class="tx-normal tx-rubik tx-color-03 mg-b-0"><small>250,000</small></h5> --}}
                     </div>
                     <div class="progress ht-4 mg-b-0 op-5">
-                      <div class="progress-bar bg-orange wd-5p" role="progressbar" aria-valuenow="5" aria-valuemin="0" aria-valuemax="25"></div>
+                      <div class="progress-bar bg-orange wd-45p" role="progressbar" aria-valuenow="45" aria-valuemin="0" aria-valuemax="100"></div>
                     </div>
                   </div>
                   <div class="col-sm-6 col-lg-12 mg-t-30">
                     <div class="d-flex align-items-center justify-content-between mg-b-5">
-                      <h6 class="tx-uppercase tx-10 tx-spacing-1 tx-color-02 tx-semibold mg-b-0">Total Technicians</h6>
+                      <h6 class="tx-uppercase tx-10 tx-spacing-1 tx-color-02 tx-semibold mg-b-0">Cancelled Requests</h6>
                       {{-- <span class="tx-10 tx-color-04">20% goal reached</span> --}}
                     </div>
                     <div class="d-flex justify-content-between mg-b-5">
@@ -190,20 +151,20 @@
                       {{-- <h5 class="tx-normal tx-rubik tx-color-03 mg-b-0"><small>85,000</small></h5> --}}
                     </div>
                     <div class="progress ht-4 mg-b-0 op-5">
-                      <div class="progress-bar bg-pink wd-5p" role="progressbar" aria-valuenow="5" aria-valuemin="0" aria-valuemax="25"></div>
+                      <div class="progress-bar bg-pink wd-20p" role="progressbar" aria-valuenow="20" aria-valuemin="0" aria-valuemax="100"></div>
                     </div>
                   </div>
                   <div class="col-sm-6 col-lg-12 mg-t-30">
                     <div class="d-flex align-items-center justify-content-between mg-b-5">
-                      <h6 class="tx-uppercase tx-10 tx-spacing-1 tx-color-02 tx-semibold mg-b-0">Clients</h6>
+                      <h6 class="tx-uppercase tx-10 tx-spacing-1 tx-color-02 tx-semibold mg-b-0">Payments Received</h6>
                       {{-- <span class="tx-10 tx-color-04">85% goal reached</span> --}}
                     </div>
                     <div class="d-flex justify-content-between mg-b-5">
-                      <h5 class="tx-normal tx-rubik mg-b-0">12</h5>
+                      <h5 class="tx-normal tx-rubik mg-b-0">8</h5>
                       {{-- <h5 class="tx-normal tx-rubik tx-color-03 mg-b-0"><small>30.50%</small></h5> --}}
                     </div>
                     <div class="progress ht-4 mg-b-0 op-5">
-                      <div class="progress-bar bg-primary wd-12p" role="progressbar" aria-valuenow="12" aria-valuemin="0" aria-valuemax="25"></div>
+                      <div class="progress-bar bg-primary wd-85p" role="progressbar" aria-valuenow="85" aria-valuemin="0" aria-valuemax="100"></div>
                     </div>
                   </div>
                 </div><!-- row -->
@@ -214,160 +175,7 @@
         </div><!-- card -->
       </div>
 
-      <div class="col-lg-12 col-xl-12 mg-t-10">
-        <style>
-          canvas {
-            -moz-user-select: none;
-            -webkit-user-select: none;
-            -ms-user-select: none;
-          }
-        </style>
-        <div class="card">
-          <div style="width:100%;">
-            <canvas id="canvas"></canvas>
-          </div>
-      </div>
-      </div>
-      
-      <div class="col-md-6 col-xl-4 mg-t-10 order-md-1 order-xl-0">
-        <div class="card ht-lg-100p">
-          <div class="card-header d-flex align-items-center justify-content-between">
-            <h6 class="mg-b-0">Highest Requests by L.G.A</h6>
-            <div class="tx-13 d-flex align-items-center">
-              {{-- <span class="mg-r-5">Country:</span> <a href="" class="d-flex align-items-center link-03 lh-0">USA <i class="icon ion-ios-arrow-down mg-l-5"></i></a> --}}
-            </div>
-          </div><!-- card-header -->
-          <div class="card-body pd-0">
-            
-            <div class="table-responsive">
-              <table class="table table-borderless table-dashboard table-dashboard-one">
-                <thead>
-                  <tr>
-                    <th class="wd-40">L.G.A</th>
-                    <th class="wd-25 text-right">Requests</th>
-                    <th class="wd-35 text-right">Total</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr>
-                    <td class="tx-medium">Alimosho</td>
-                    <td class="text-right">73</td>
-                    <td class="text-right">₦150,200.80</td>
-                  </tr>
-                  <tr>
-                    <td class="tx-medium">Kosofe</td>
-                    <td class="text-right">64</td>
-                    <td class="text-right">₦138,910.20</td>
-                  </tr>
-                  <tr>
-                    <td class="tx-medium">Ibeju-Lekki</td>
-                    <td class="text-right">58</td>
-                    <td class="text-right">₦132,050.00</td>
-                  </tr>
-                  <tr>
-                    <td class="tx-medium">Mushin</td>
-                    <td class="text-right">31</td>
-                    <td class="text-right">₦127,762.10</td>
-                  </tr>
-                  <tr>
-                    <td class="tx-medium">Ojo</td>
-                    <td class="text-right">17</td>
-                    <td class="text-right">₦117,087.50</td>
-                  </tr>
-                </tbody>
-              </table>
-            </div><!-- table-responsive -->
-          </div><!-- card-body -->
-        </div><!-- card -->
-      </div><!-- col -->
-
-      
-      <div class="col-lg-12 col-xl-8 mg-t-10">
-        <div class="card mg-b-10">
-          <div class="card-header pd-t-20 d-sm-flex align-items-start justify-content-between bd-b-0 pd-b-0">
-            <div>
-              {{-- <h6 class="mg-b-5">Your earnings since inception</h6> --}}
-              <p class="tx-13 tx-color-03 mg-b-0">Your Payments gross total since inception</p>
-            </div>
-            <div class="d-flex mg-t-20 mg-sm-t-0">
-              {{-- <div class="btn-group flex-fill">
-                <button class="btn btn-white btn-xs active">Range</button>
-                <button class="btn btn-white btn-xs">Period</button>
-              </div> --}}
-            </div>
-          </div><!-- card-header -->
-          <div class="card-body pd-y-30">
-            <div class="d-sm-flex">
-              <div class="media">
-                <div class="wd-40 wd-md-50 ht-40 ht-md-50 bg-teal tx-white mg-r-10 mg-md-r-10 d-flex align-items-center justify-content-center rounded op-6">
-                  <i data-feather="bar-chart-2"></i>
-                </div>
-                <div class="media-body">
-                  <h6 class="tx-sans tx-uppercase tx-10 tx-spacing-1 tx-color-03 tx-semibold tx-nowrap mg-b-5 mg-md-b-8"> Recieved</h6>
-                  <h4 class="tx-20 tx-sm-18 tx-md-24 tx-normal tx-rubik mg-b-0">₦1,200,000</h4>
-                </div>
-              </div>
-              <div class="media mg-t-20 mg-sm-t-0 mg-sm-l-15 mg-md-l-40">
-                <div class="wd-40 wd-md-50 ht-40 ht-md-50 bg-pink tx-white mg-r-10 mg-md-r-10 d-flex align-items-center justify-content-center rounded op-5">
-                  <i data-feather="bar-chart-2"></i>
-                </div>
-                <div class="media-body">
-                  <h6 class="tx-sans tx-uppercase tx-10 tx-spacing-1 tx-color-03 tx-semibold mg-b-5 mg-md-b-8"> Cancelled</h6>
-                  <h4 class="tx-20 tx-sm-18 tx-md-24 tx-normal tx-rubik mg-b-0">₦50,000</h4>
-                </div>
-              </div>
-              <div class="media mg-t-20 mg-sm-t-0 mg-sm-l-15 mg-md-l-40">
-                <div class="wd-40 wd-md-50 ht-40 ht-md-50 bg-pink tx-white mg-r-10 mg-md-r-10 d-flex align-items-center justify-content-center rounded op-5">
-                  <i data-feather="bar-chart-2"></i>
-                </div>
-                <div class="media-body">
-                  <h6 class="tx-sans tx-uppercase tx-10 tx-spacing-1 tx-color-03 tx-semibold mg-b-5 mg-md-b-8"> Disbursed</h6>
-                  <h4 class="tx-20 tx-sm-18 tx-md-24 tx-normal tx-rubik mg-b-0">₦150,000</h4>
-                </div>
-              </div>
-              
-            </div>
-            <div class="d-sm-flex">
-              <div class="media mt-3">
-                <div class="wd-40 wd-md-50 ht-40 ht-md-50 bg-primary tx-white mg-r-10 mg-md-r-10 d-flex align-items-center justify-content-center rounded op-4">
-                  <i data-feather="bar-chart-2"></i>
-                </div>
-                <div class="media-body">
-                  <h6 class="tx-sans tx-uppercase tx-10 tx-spacing-1 tx-color-03 tx-semibold mg-b-5 mg-md-b-8">Profit/Loss</h6>
-                  <h4 class="tx-20 tx-sm-18 tx-md-24 tx-normal tx-rubik mg-b-0 @if(1200000 > 150000) text-success @else text-danger @endif ">₦1,050,000</h4>
-                </div>
-              </div>
-            </div>
-          </div><!-- card-body -->
-          <div class="table-responsive">
-            <h4 class="ml-4 mt-4 mb-4 mg-b-5">Highest Returning Jobs</h4>
-
-            <table class="table table-dashboard mg-b-0">
-              <thead>
-                <tr>
-                  <th class="text-center">#</th>
-                  <th class="text-right">Job Ref</th>
-                  <th class="text-right">Client</th>
-                  <th class="text-right">Amount</th>
-                  <th>Date</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td class="text-center">1</td>
-                  <td class="text-right">JOB-23637269</td>
-                  <td class="text-right">Femi George</td>
-                  <td class="tx-medium text-right">₦47,000</td>
-                  <td class="tx-color-03 tx-normal">{{ Carbon\Carbon::parse(Carbon\Carbon::now(), 'UTC')->isoFormat('MMMM Do YYYY') }}</td>
-                </tr> 
-              </tbody>
-            </table>
-          </div><!-- table-responsive -->
-        </div><!-- card -->
-
-      </div><!-- col -->
-
-      <div class="col-md-6 col-xl-6 mg-t-10">
+      <div class="col-md-12 col-xl-12 mg-t-10">
         <div class="card ht-100p">
           <div class="card-header d-flex align-items-center justify-content-between">
             <h6 class="mg-b-0">Recent Payments</h6>
@@ -377,201 +185,67 @@
             </div> --}}
           </div>
           <ul class="list-group list-group-flush tx-13">
-              <li class="list-group-item d-flex pd-sm-x-20">
-                <div class="avatar d-none d-sm-block"><span class="avatar-initial rounded-circle bg-teal"><i class="icon ion-md-checkmark"></i></span></div>
-                <div class="pd-sm-l-10">
-                  <p class="tx-medium mg-b-0">Payment from Charles Famoriyo for JOB-23637269 job</p>
-                  <small class="tx-12 tx-color-03 mg-b-0">Apr 3, 2020, 12:56pm</small>
-                </div>
-                <div class="mg-l-auto text-right">
-                  <p class="tx-medium mg-b-0"> ₦10,000</p>
-                  <small class="tx-12 tx-success mg-b-0">Completed</small>
-                </div>
-              </li>
-          </ul>
-          <div class="card-footer text-center tx-13">
-          <a href="#" class="link-03">View Received Payments <i class="icon ion-md-arrow-down mg-l-5"></i></a>
-          </div><!-- card-footer -->
-        </div><!-- card -->
-      </div>
-
-      <div class="col-md-6 col-xl-6 mg-t-10">
-        <div class="card ht-100p">
-          <div class="card-header d-flex align-items-center justify-content-between">
-            <h6 class="mg-b-0">CSE's</h6>
-            {{-- <div class="d-flex align-items-center tx-18">
-              <a href="" class="link-03 lh-0"><i class="icon ion-md-refresh"></i></a>
-              <a href="" class="link-03 lh-0 mg-l-10"><i class="icon ion-md-more"></i></a>
-            </div> --}}
-          </div>
-          <ul class="list-group list-group-flush tx-13">
-            <li class="list-group-item d-flex pd-x-20">
-              <div class="avatar">
-                <img src="{{ asset('assets/images/default-male-avatar.png') }}" class="rounded-circle" alt="Default male avatar" />
+            <li class="list-group-item d-flex pd-sm-x-20">
+              <div class="avatar d-none d-sm-block"><span class="avatar-initial rounded-circle bg-teal"><i class="icon ion-md-checkmark"></i></span></div>
+              <div class="pd-sm-l-10">
+                <p class="tx-medium mg-b-0">Payment from FixMaster for REF-234094623496 job</p>
+                <small class="tx-12 tx-color-03 mg-b-0">Apr 3, 2020, 12:56pm</small>
               </div>
-              <div class="pd-l-10">
-                <p class="tx-medium mg-b-0">Gabriel Badmus</p>
-                <small class="tx-12 tx-color-03 mg-b-0">Completed Jobs: 3</small>
+              <div class="mg-l-auto text-right">
+                <p class="tx-medium mg-b-0"> ₦7,000</p>
+                <small class="tx-12 tx-success mg-b-0">Completed</small>
               </div>
-              <div class="mg-l-auto d-flex align-self-center">
-                <nav class="nav nav-icon-only">
-                  {{-- <a href="" class="nav-link d-none d-sm-block" title="Revoke login access"><i data-feather="slash"></i></a> --}}
-                  <a href="#" class="nav-link d-none d-sm-block" title="View Profile"><i data-feather="user"></i></a>
-                </nav>
+            </li>
+            <li class="list-group-item d-flex pd-sm-x-20">
+              <div class="avatar d-none d-sm-block"><span class="avatar-initial rounded-circle bg-teal"><i class="icon ion-md-checkmark"></i></span></div>
+              <div class="pd-sm-l-10">
+                <p class="tx-medium mg-b-0">Payment from FixMaster for REF-094009623412 job</p>
+                <small class="tx-12 tx-color-03 mg-b-0">Mar 21, 2020, 3:30pm</small>
+              </div>
+              <div class="mg-l-auto text-right">
+                <p class="tx-medium mg-b-0"> ₦4,800</p>
+                <small class="tx-12 tx-success mg-b-0">Completed</small>
+              </div>
+            </li>
+            <li class="list-group-item d-flex pd-sm-x-20">
+              <div class="avatar d-none d-sm-block"><span class="avatar-initial rounded-circle bg-teal"><i class="icon ion-md-checkmark"></i></span></div>
+              <div class="pd-sm-l-10">
+                <p class="tx-medium mg-b-0">Payment from FixMaster for REF-237290223123</p>
+                <small class="tx-12 tx-color-03 mg-b-0">Feb 25, 2020, 8:17am</small>
+              </div>
+              <div class="mg-l-auto text-right">
+                <p class="tx-medium mg-b-0"> ₦2,500</p>
+                <small class="tx-12 tx-success mg-b-0">Completed</small>
+              </div>
+            </li>
+            <li class="list-group-item d-flex pd-sm-x-20">
+              <div class="avatar d-none d-sm-block"><span class="avatar-initial rounded-circle bg-teal"><i class="icon ion-md-checkmark"></i></span></div>
+              <div class="pd-sm-l-10">
+                <p class="tx-medium mg-b-0">Payment from FixMaster for REF-234094623496 job</p>
+                <small class="tx-12 tx-color-03 mg-b-0">Jan 18, 2020, 7:30pm</small>
+              </div>
+              <div class="mg-l-auto text-right">
+                <p class="tx-medium mg-b-0"> ₦1,950</p>
+                <small class="tx-12 tx-success mg-b-0">Completed</small>
+              </div>
+            </li>
+            <li class="list-group-item d-flex pd-sm-x-20">
+              <div class="avatar d-none d-sm-block"><span class="avatar-initial rounded-circle bg-teal"><i class="icon ion-md-checkmark"></i></span></div>
+              <div class="pd-sm-l-10">
+                <p class="tx-medium mg-b-0">Payment from FixMaster for REF-544199238409 job</p>
+                <small class="tx-12 tx-color-03 mg-b-0">Jan 8, 2020, 6:18am</small>
+              </div>
+              <div class="mg-l-auto text-right">
+                <p class="tx-medium mg-b-0"> ₦6,000</p>
+                <small class="tx-12 tx-success mg-b-0">Completed</small>
               </div>
             </li>
           </ul>
           <div class="card-footer text-center tx-13">
-            <a href="#" class="link-03">View More <i class="icon ion-md-arrow-down mg-l-5"></i></a>
+          <a href="{{ route('technician.payments', app()->getLocale()) }}" class="link-03">View All Transactions <i class="icon ion-md-arrow-down mg-l-5"></i></a>
           </div><!-- card-footer -->
         </div><!-- card -->
       </div>
-      
-      <div class="col-lg-6 mg-t-10">
-        <div class="card">
-          <div class="card-header d-flex align-items-start justify-content-between">
-            <h6 class="lh-5 mg-b-0">Total Visits</h6>
-            {{-- <a href="" class="tx-13 link-03">Mar 01 - Mar 20, 2019 <i class="icon ion-ios-arrow-down"></i></a> --}}
-          </div><!-- card-header -->
-          <div class="card-body pd-y-15 pd-x-10">
-            <div class="table-responsive">
-              <table class="table table-borderless table-sm tx-13 tx-nowrap mg-b-0">
-                <thead>
-                  <tr class="tx-10 tx-spacing-1 tx-color-03 tx-uppercase">
-                    <th class="wd-5p">Link</th>
-                    <th>Page Title</th>
-                    <th class="text-right">Percentage (%)</th>
-                    <th class="text-right">Value</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr>
-                    <td class="align-middle text-center"><a href=""><i data-feather="external-link" class="wd-12 ht-12 stroke-wd-3"></i></a></td>
-                    <td class="align-middle tx-medium">Home</td>
-                    <td class="align-middle text-right">
-                      <div class="wd-150 d-inline-block">
-                        <div class="progress ht-4 mg-b-0">
-                          <div class="progress-bar bg-teal wd-65p" role="progressbar" aria-valuenow="65" aria-valuemin="0" aria-valuemax="100"></div>
-                        </div>
-                      </div>
-                    </td>
-                    <td class="align-middle text-right"><span class="tx-medium">65.35%</span></td>
-                  </tr>
-                  <tr>
-                    <td class="align-middle text-center"><a href=""><i data-feather="external-link" class="wd-12 ht-12 stroke-wd-3"></i></a></td>
-                    <td class="align-middle tx-medium">Services</td>
-                    <td class="align-middle text-right">
-                      <div class="wd-150 d-inline-block">
-                        <div class="progress ht-4 mg-b-0">
-                          <div class="progress-bar bg-primary wd-85p" role="progressbar" aria-valuenow="85" aria-valuemin="0" aria-valuemax="100"></div>
-                        </div>
-                      </div>
-                    </td>
-                    <td class="text-right"><span class="tx-medium">84.97%</span></td>
-                  </tr>
-                  <tr>
-                    <td class="align-middle text-center"><a href=""><i data-feather="external-link" class="wd-12 ht-12 stroke-wd-3"></i></a></td>
-                    <td class="align-middle tx-medium">Service Details</td>
-                    <td class="align-middle text-right">
-                      <div class="wd-150 d-inline-block">
-                        <div class="progress ht-4 mg-b-0">
-                          <div class="progress-bar bg-warning wd-45p" role="progressbar" aria-valuenow="45" aria-valuemin="0" aria-valuemax="100"></div>
-                        </div>
-                      </div>
-                    </td>
-                    <td class="text-right"><span class="tx-medium">38.66%</span></td>
-                  </tr>
-                  <tr>
-                    <td class="align-middle text-center"><a href=""><i data-feather="external-link" class="wd-12 ht-12 stroke-wd-3"></i></a></td>
-                    <td class="align-middle tx-medium">Contact Us</td>
-                    <td class="align-middle text-right">
-                      <div class="wd-150 d-inline-block">
-                        <div class="progress ht-4 mg-b-0">
-                          <div class="progress-bar bg-pink wd-15p" role="progressbar" aria-valuenow="15" aria-valuemin="0" aria-valuemax="100"></div>
-                        </div>
-                      </div>
-                    </td>
-                    <td class="text-right"><span class="tx-medium">16.11%</span></td>
-                  </tr>
-                  <tr>
-                    <td class="align-middle text-center"><a href=""><i data-feather="external-link" class="wd-12 ht-12 stroke-wd-3"></i></a></td>
-                    <td class="align-middle tx-medium">How It Works</td>
-                    <td class="align-middle text-right">
-                      <div class="wd-150 d-inline-block">
-                        <div class="progress ht-4 mg-b-0">
-                          <div class="progress-bar bg-teal wd-60p" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100"></div>
-                        </div>
-                      </div>
-                    </td>
-                    <td class="text-right"><span class="tx-medium">59.34%</span></td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-          </div><!-- card-body -->
-        </div><!-- card -->
-      </div><!-- col -->
-      
-      <div class="col-lg-6 mg-t-10">
-        <div class="card">
-          <div class="card-header d-sm-flex align-items-start justify-content-between">
-            <h6 class="lh-5 mg-b-0">Browser Used By Users</h6>
-            {{-- <a href="" class="tx-13 link-03">Mar 01 - Mar 20, 2019 <i class="icon ion-ios-arrow-down"></i></a> --}}
-          </div><!-- card-header -->
-          <div class="card-body pd-y-15 pd-x-10">
-            <div class="table-responsive">
-              <table class="table table-borderless table-sm tx-13 tx-nowrap mg-b-0">
-                <thead>
-                  <tr class="tx-10 tx-spacing-1 tx-color-03 tx-uppercase">
-                    <th class="wd-5p">&nbsp;</th>
-                    <th>Browser</th>
-                    <th class="text-right">Sessions</th>
-                    <th class="text-right">Bounce Rate</th>
-                    <th class="text-right">Conversion Rate</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr>
-                    <td><i class="fab fa-chrome tx-primary op-6"></i></td>
-                    <td class="tx-medium">Google Chrome</td>
-                    <td class="text-right">13,410</td>
-                    <td class="text-right">40.95%</td>
-                    <td class="text-right">19.45%</td>
-                  </tr>
-                  <tr>
-                    <td><i class="fab fa-firefox tx-orange"></i></td>
-                    <td class="tx-medium">Mozilla Firefox</td>
-                    <td class="text-right">1,710</td>
-                    <td class="text-right">47.58%</td>
-                    <td class="text-right">19.99%</td>
-                  </tr>
-                  <tr>
-                    <td><i class="fab fa-safari tx-primary"></i></td>
-                    <td class="tx-medium">Apple Safari</td>
-                    <td class="text-right">1,340</td>
-                    <td class="text-right">56.50%</td>
-                    <td class="text-right">11.00%</td>
-                  </tr>
-                  <tr>
-                    <td><i class="fab fa-edge tx-primary"></i></td>
-                    <td class="tx-medium">Microsoft Edge</td>
-                    <td class="text-right">713</td>
-                    <td class="text-right">59.62%</td>
-                    <td class="text-right">4.69%</td>
-                  </tr>
-                  <tr>
-                    <td><i class="fab fa-opera tx-danger"></i></td>
-                    <td class="tx-medium">Opera</td>
-                    <td class="text-right">380</td>
-                    <td class="text-right">52.50%</td>
-                    <td class="text-right">8.75%</td>
-                  </tr>
-                </tbody>
-              </table>
-            </div><!-- table-responsive -->
-          </div><!-- card-body -->
-        </div><!-- card -->
-      </div><!-- col -->
 
     </div><!-- row -->
   </div><!-- container -->
