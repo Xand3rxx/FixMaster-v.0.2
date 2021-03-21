@@ -100,7 +100,9 @@ class QASeeder extends Seeder
             'user_id' =>  $qa->id,
             'account_id'  => $qaAccount->id,
             'country_id'  => 156,
-            'name'   => ""
+            'address'   => "",
+            'address_longitude'=> '3.908',
+            'address_latitude'=> '4.098'
         ]);
 
         // QA Address
@@ -108,7 +110,9 @@ class QASeeder extends Seeder
             'user_id' =>  $qa1->id,
             'account_id'  => $qaAccount1->id,
             'country_id'  => 156,
-            'name'   => ""
+            'address'   => "",
+            'address_longitude'=> '6.980',
+            'address_latitude'=> '2.098'
         ]);
 
         // QA Address
@@ -116,7 +120,9 @@ class QASeeder extends Seeder
             'user_id' =>  $qa2->id,
             'account_id'  => $qaAccount2->id,
             'country_id'  => 156,
-            'name'   => ""
+            'address'   => "",
+            'address_longitude'=> '4.459',
+            'address_latitude'=> '9.968'
         ]);
 
         // QA Table

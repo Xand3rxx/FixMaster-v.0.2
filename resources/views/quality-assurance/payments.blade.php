@@ -44,12 +44,14 @@
           <div class="table-responsive">
             <div class="row mt-1 mb-1 ml-1 mr-1">
                 <div class="col-md-4">
+                    <input value="{{ route("quality-assurance.disbursed_payments_sorting", app()->getLocale()) }}" type="hidden" id="route">
                     <div class="form-group">
                         <label>Sort</label>
-                        <select class="custom-select" id="request-sorting">
+                        <select class="custom-select" id="sort_by_range">
                             <option value="None">Select...</option>
                             <option value="Date">Date</option>
                             <option value="Month">Month</option>
+                            <option value="Year">Year</option>
                             <option value="Date Range">Date Range</option>
                         </select>
                     </div>
@@ -58,88 +60,62 @@
                 <div class="col-md-4 specific-date d-none">
                     <div class="form-group position-relative">
                         <label>Specify Date <span class="text-danger">*</span></label>
-                        <input name="name" id="" type="date" class="form-control s_date pl-5">
+                        <input name="name" id="specific_date" type="date" class="form-control s_date pl-5">
                     </div>
                 </div>
 
                 <div class="col-md-4 sort-by-year d-none">
                     <div class="form-group position-relative">
                         <label>Specify Year <span class="text-danger">*</span></label>
-                        <select class="form-control custom-select" id="Sortbylist-Shop">
+                        <select class="form-control custom-select" id="sort_by_year">
                             <option>Select...</option>
-                            <option>2018</option>
-                            <option>2019</option>
-                            <option>2020</option>
+                            <option value="2018">2018</option>
+                            <option value="2019">2019</option>
+                            <option value="2020">2020</option>
+                            <option value="2021">2021</option>
                         </select>
                     </div>
                 </div>
 
-                <div class="col-md-4 sort-by-year d-none">
+                <div class="col-md-4 sort-by-year d-none" id="sort-by-month">
                     <div class="form-group position-relative">
                         <label>Specify Month <span class="text-danger">*</span></label>
-                        <select class="form-control custom-select" id="Sortbylist-Shop">
-                            <option>Select...</option>
-                            <option>January</option>
-                            <option>February</option>
-                            <option>March</option>
-                            <option>April</option>
-                            <option>May</option>
-                            <option>June</option>
-                            <option>July</option>
-                            <option>August</option>
-                            <option>September</option>
-                            <option>October</option>
-                            <option>November</option>
-                            <option>December</option>
+                        <select class="form-control custom-select" id="sort_by_month">
+                            <option value="">Select...</option>
+                            <option value="January">January</option>
+                            <option value="February">February</option>
+                            <option value="March">March</option>
+                            <option value="April">April</option>
+                            <option value="May">May</option>
+                            <option value="June">June</option>
+                            <option value="July">July</option>
+                            <option value="August">August</option>
+                            <option value="September">September</option>
+                            <option value="October">October</option>
+                            <option value="November">November</option>
+                            <option value="December">December</option>
                         </select>
                     </div>
-                </div>
+                  </div>
 
                 <div class="col-md-4 date-range d-none">
                     <div class="form-group position-relative">
                         <label>From <span class="text-danger">*</span></label>
-                        <input name="name" id="name" type="date" class="form-control pl-5">
+                        <input id="date_from" type="date" class="form-control pl-5">
                     </div>
                 </div>
 
                 <div class="col-md-4 date-range d-none">
                     <div class="form-group position-relative">
                         <label>To <span class="text-danger">*</span></label>
-                        <input name="name" id="name" type="date" class="form-control pl-5">
+                        <input id="date_to" type="date" class="form-control pl-5">
                     </div>
                 </div>
               </div>
-            <table class="table table-hover mg-b-0" id="basicExample">
-              <thead class="thead-primary">
-                <tr>
-                  <th class="text-center">#</th>
-                  <th>Job Reference</th>
-                  <th>Reference No</th>
-                  <th>Paid By</th>
-                  <th>Amount</th>
-                  <th>Payment Mode</th>
-                  <th>Comment</th>
-                  <th class="text-center">Payment Date</th>
-                </tr>
-              </thead>
-              <tbody>
-                @php $sn = 1; @endphp
-                @foreach ($payments as $result)
 
-                  <tr>
-                  <td class="tx-color-03 tx-center">{{ $sn++ }}</td>
-                  <td class="tx-medium">{{$result->service_request->job_reference}}</td>
-                    <td class="tx-medium">{{$result->payment_reference}}</td>
-                    <td class="tx-medium">Admin</td>
-                    <td class="tx-medium">₦{{ number_format($result->amount)}}</td>
-                    <td class="tx-medium">{{$result->mode->name}}</td>
-                    <td class="tx-medium">{{$result->comment}}</td>
-                    <td class="text-medium tx-center">{{ Carbon\Carbon::parse($result->created_at, 'UTC')->isoFormat('MMMM Do YYYY, h:mm:ssa') }}</td>
-
-                  </tr>
-                @endforeach
-              </tbody>
-            </table>
+              <div id="sort_table">
+              @include('quality-assurance._disbursed_table')
+              </div>
           </div><!-- table-responsive -->
         </div><!-- card -->
 
@@ -149,51 +125,36 @@
 
   </div><!-- container -->
 </div>
-
+@endsection
 @section('scripts')
-<script>
-    $(document).ready(function() {
+<script src="{{ asset('assets/dashboard/assets/js/qa-payments-sortings.js') }}"></script>
+ <script>
+    //$(document).ready(function() {
 
-        $('#request-sorting').on('change', function (){
-                let option = $("#request-sorting").find("option:selected").val();
+//         $('#request-sorting').on('change', function (){
+//                 let option = $("#request-sorting").find("option:selected").val();
 
-                if(option === 'None'){
-                    $('.specific-date, .sort-by-year, .date-range').addClass('d-none');
-                }
+//                 if(option === 'None'){
+//                     $('.specific-date, .sort-by-year, .date-range').addClass('d-none');
+//                 }
 
-                if(option === 'Date'){
-                    $('.specific-date').removeClass('d-none');
-                    $('.sort-by-year, .date-range').addClass('d-none');
-                }
+//                 if(option === 'Date'){
+//                     $('.specific-date').removeClass('d-none');
+//                     $('.sort-by-year, .date-range').addClass('d-none');
+//                 }
 
-                if(option === 'Month'){
-                    $('.sort-by-year').removeClass('d-none');
-                    $('.specific-date, .date-range').addClass('d-none');
-                }
+//                 if(option === 'Month'){
+//                     $('.sort-by-year').removeClass('d-none');
+//                     $('.specific-date, .date-range').addClass('d-none');
+//                 }
 
-                if(option === 'Date Range'){
-                    $('.date-range').removeClass('d-none');
-                    $('.specific-date, .sort-by-year').addClass('d-none');
-                }
-        });
-    });
-
-    //  $(document).on('keyup', '#s_date', function(){
-
-    //  alert('date clicked');
-
-    //  });
-
-//     $('.s_date input').change(function(){
-//   var dt = new Date( $(this).val());
-//   var year = dt.getFullYear();
-//   var month =  (dt.getMonth() < 10 ? '0' : '') + (dt.getMonth()+1);
-//   var day = (dt.getDate() < 10 ? '0' : '') + dt.getDate();
-
-//   alert(dt);
-
+//                 if(option === 'Date Range'){
+//                     $('.date-range').removeClass('d-none');
+//                     $('.specific-date, .sort-by-year').addClass('d-none');
+//                 }
+//         });
 //     });
+
 </script>
 @endsection
 
-@endsection

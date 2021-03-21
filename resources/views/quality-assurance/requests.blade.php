@@ -9,7 +9,7 @@
       <div>
         <nav aria-label="breadcrumb">
           <ol class="breadcrumb breadcrumb-style1 mg-b-10">
-          <li class="breadcrumb-item"><a href="{{ route('qa.index', app()->getLocale()) }}">Dashboard</a></li>
+          <li class="breadcrumb-item"><a href="{{ route('quality-assurance.index', app()->getLocale()) }}">Dashboard</a></li>
             <li class="breadcrumb-item active" aria-current="page">New Requests</li>
           </ol>
         </nav>
@@ -59,42 +59,40 @@
                 </tr>
               </thead>
               <tbody>
-                {{-- @foreach ($technicianServiceRequests as $serviceRequest) --}}
+                @php $sn = 1; @endphp
+                @foreach ($results as $serviceRequest)
                 <tr>
-                  <td class="tx-color-03 tx-center"></td>
-                  <td class="tx-medium"></td>
-                  <td class="tx-medium"></td>
-                  <td class="tx-medium"></td>
-                  <td class="tx-medium"></td>
+                  <td class="tx-color-03 tx-center">{{$sn++}}</td>
+                  <td class="tx-medium">{{$serviceRequest->service_request->unique_id}}</td>
+                  <td class="tx-medium">{{$serviceRequest->service_request->client}}</td>
+                  <td class="tx-medium">{{'Admin'}}</td>
+                  <td class="tx-medium">{{'CSE'}}</td>
+                  <td class="text-medium text-center">{{'Technician'}}</td>
                   <td class="text-medium text-center">
-                    {{-- @if(!empty($serviceRequest->serviceRequestDetail->discount_service_fee))
-                        ₦{{ number_format($serviceRequest->serviceRequestDetail->discount_service_fee) }}
-                        <br><span style="font-size: 10px;" class="text-success">Discount</span>
-                    @else
-                        ₦{{ number_format($serviceRequest->serviceRequestDetail->initial_service_fee) }}
-                    @endif --}}
+                        ₦{{ number_format($serviceRequest->service_request->total_amount) }}
                   </td>
-                  {{-- @if($serviceRequest->service_request_status_id == 1)
-                    <td class="text-medium text-warning">{{ $serviceRequest->serviceRequestStatus->name }}</td>
-                  @elseif($serviceRequest->service_request_status_id == 2)
-                    <td class="text-medium text-danger">{{ $serviceRequest->serviceRequestStatus->name }}</td>
-                  @elseif($serviceRequest->service_request_status_id == 3)
-                    <td class="text-medium text-success">{{ $serviceRequest->serviceRequestStatus->name }}</td>
-                  @else --}}
-                    {{-- <td class="text-medium text-info">Ongoing</td> --}}
-                  {{-- @endif --}}
 
-                  {{-- <td class="text-medium"></td> --}}
-                  {{-- <td class=" text-center">
+                  @if($serviceRequest->service_request->status_id == 1)
+                    <td class="text-medium text-warning">{{ $serviceRequest->service_request->status->name }}</td>
+                  @elseif($serviceRequest->service_request->service_request_status_id == 2)
+                    <td class="text-medium text-danger">{{ $serviceRequest->service_request->status->name }}</td>
+                  @elseif($serviceRequest->service_request->service_request_status_id == 3)
+                    <td class="text-medium text-success">{{ $serviceRequest->service_request->status->name }}</td>
+                  @elseif($serviceRequest->service_request->service_request_status_id == 4)
+                    <td class="text-medium text-info">{{ $serviceRequest->service_request->status->name }}</td>
+                  @endif
+
+                  <td class="text-medium">{{$serviceRequest->service_request->created_at}}</td>
+                  <td class=" text-center">
                     <div class="dropdown-file">
                       <a href="" class="dropdown-link" data-toggle="dropdown"><i data-feather="more-vertical"></i></a>
                       <div class="dropdown-menu dropdown-menu-right">
                       <a href="{{ url('quality.request_details') }}" class="dropdown-item details"><i class="far fa-clipboard"></i> Details</a>
                       </div>
                     </div>
-                  </td> --}}
+                  </td>
                 </tr>
-                {{-- @endforeach --}}
+                @endforeach
 
               </tbody>
             </table>

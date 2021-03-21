@@ -181,7 +181,7 @@ Route::prefix('admin')->group(function () {
         //Routes for Status Management
         Route::resource('statuses',                         StatusController::class);
 
-        
+
 
     });
 });
@@ -272,9 +272,11 @@ Route::prefix('/quality-assurance')->group(function () {
         Route::get('/profile/edit_profile', [App\Http\Controllers\QualityAssurance\QualityAssuranceProfileController::class,'edit'])->name('edit_profile');
         Route::patch('/profile/update_profile', [App\Http\Controllers\QualityAssurance\QualityAssuranceProfileController::class,'update'])->name('update_profile');
         Route::patch('/update_password', [App\Http\Controllers\QualityAssurance\QualityAssuranceProfileController::class,'update_password'])->name('update_password');
-        Route::view('/requests', 'quality-assurance.requests')->name('requests');
-        Route::get('/payments', [PaymentController::class, 'get_qa_disbursed_payments'])->name('payments');
+        Route::get('/requests', [App\Http\Controllers\QualityAssurance\ServiceRequestController::class, 'index'])->name('requests');
+        Route::get('/payments', [App\Http\Controllers\QualityAssurance\PaymentController::class, 'get_qa_disbursed_payments'])->name('payments');
         Route::view('/messages/inbox', 'quality-assurance.messages.inbox')->name('messages.inbox');
         Route::view('/messages/sent', 'quality-assurance.messages.sent')->name('messages.sent');
+        Route::post('/disbursed_payments_sorting', [App\Http\Controllers\QualityAssurance\PaymentController::class, 'sortDisbursedPayments'])->name('disbursed_payments_sorting');
+        Route::get('/get_chart_data', [App\Http\Controllers\QualityAssurance\ServiceRequestController::class, 'chat_data']);
     });
 });

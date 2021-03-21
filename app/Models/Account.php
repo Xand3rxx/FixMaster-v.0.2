@@ -63,4 +63,9 @@ class Account extends Model
     {
         return $this->belongsTo(Profession::class, 'id');
     }
+
+    public function client()
+    {
+        return $this->hasOne(client::class);
+    }
 }

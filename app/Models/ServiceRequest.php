@@ -55,10 +55,10 @@ class ServiceRequest extends Model
             $serviceRequest->uuid = (string) Str::uuid();
 
             // Create a Unique Service Request reference id
-            $serviceRequest->unique_id = static::generate('service_requests', 'REF-', ''); 
+            $serviceRequest->unique_id = static::generate('service_requests', 'REF-', '');
 
             // Create a Unique Service Request Client Security Code id
-            $serviceRequest->client_security_code = static::generate('service_requests', 'SEC-', ''); 
+            $serviceRequest->client_security_code = static::generate('service_requests', 'SEC-', '');
 
         });
 
@@ -67,6 +67,16 @@ class ServiceRequest extends Model
     public function user()
     {
         return $this->belongsTo(User::class);
+    }
+
+    public function client()
+    {
+        return $this->belongsTo(Client::class);
+    }
+
+    public function account()
+    {
+        return $this->belongsTo(Account::class);
     }
 
     public function users()
@@ -114,5 +124,9 @@ class ServiceRequest extends Model
 
     public function payment_disbursed(){
         return $this->belongsTo(PaymentDisbursed::class);
+    }
+
+    public function status(){
+        return $this->hasOne(Status::class, 'id');
     }
 }
