@@ -67,11 +67,7 @@ class TechnicianProfileController extends Controller
         
         //$serviceRequests = DB::table('ServiceRequestAssigned')->join('ServiceRequest', 'ServiceRequestAssigned.service_request_id', '=', 'ServiceRequest.service_id' ))
 
-        /*DB::table('USER')
-        ->join('FOLLOWERS', 'USER.id', '=', 'FOLLOWERS.user_id')
-        ->join('SHARES', 'FOLLOWERS.follower_id', '=', 'SHARES.user_id')
-        ->where('USER.id', 3)
-        ->get();*/
+       
 
         $serviceRequests = DB::table('service_request_assigned')->join('service_requests', 'service_request_assigned.service_request_id', '=', 'service_requests.service_id' )
   ->join('accounts', 'service_requests.client_id', '=', 'accounts.user_id')
@@ -150,7 +146,7 @@ class TechnicianProfileController extends Controller
             'phone_number' => 'required',
             'profile_avater' => 'mimes:jpeg,jpg,png,gif',
             'full_address' => 'required',
-            'work_address' => '',
+            
 
         ];
 
@@ -197,7 +193,7 @@ class TechnicianProfileController extends Controller
                 'number' => $request->phone_number,
             ]);
 
-           /*$user->address->update([
+          /* $user->address->update([
                 'user_id' => $user->id,
                 'address' => $request->full_address,
                

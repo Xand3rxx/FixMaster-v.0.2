@@ -137,15 +137,7 @@
                             </span>
                             @enderror
                             </div>
-                            <div class="form-group col-md-6">
-                                <label for="inputAddress2">Work Address</label>
-                                <textarea rows="3" class="user_address2 form-control @error('work_address') is-invalid @enderror" placeholder="e.g. Block A2, Broad Street, Marina, Lagos, Nigeria"  id="" name="work_address"></textarea>
-                                @error('work_address')
-                            <span class="invalid-feedback" role="alert">
-                                <strong>{{ $message }}</strong>
-                            </span>
-                            @enderror
-                            </div>
+                            
                       </div>
 
                         <button type="submit" class="btn btn-primary">Update Profile</button>
@@ -227,12 +219,10 @@
             autocomplete = new google.maps.places.Autocomplete((document.querySelector('.user_address')), {
                 types: ['geocode']
             });
-            autocomplete = new google.maps.places.Autocomplete((document.querySelector('.user_address2')), {
-                types: ['geocode']
-            });
+            
             // Chain request to html element on the page
             google.maps.event.addDomListener(document.querySelector('.user_address'), 'focus');
-            google.maps.event.addDomListener(document.querySelector('.user_address2'), 'focus');
+           
         }
     });
 </script>
