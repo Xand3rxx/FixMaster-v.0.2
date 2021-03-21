@@ -6,10 +6,11 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Str;
+use App\Traits\GenerateUniqueIdentity as Generator;
 
 class ServiceRequest extends Model
 {
-    use HasFactory, SoftDeletes;
+    use HasFactory, SoftDeletes, Generator;
 
     // column name of key
     //protected $primaryKey = 'uuid';
@@ -55,10 +56,10 @@ class ServiceRequest extends Model
             $serviceRequest->uuid = (string) Str::uuid();
 
             // Create a Unique Service Request reference id
-            $serviceRequest->unique_id = static::generate('service_requests', 'REF-', '');
+            $serviceRequest->unique_id = static::generate('service_requests', 'REF-');
 
             // Create a Unique Service Request Client Security Code id
-            $serviceRequest->client_security_code = static::generate('service_requests', 'SEC-', '');
+            $serviceRequest->client_security_code = static::generate('service_requests', 'SEC-');
 
         });
 
@@ -66,7 +67,7 @@ class ServiceRequest extends Model
 
     public function user()
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(User::class)->with('account', 'roles');
     }
 
     public function client()
@@ -81,7 +82,7 @@ class ServiceRequest extends Model
 
     public function users()
     {
-        return $this->belongsToMany(User::class);
+        return $this->belongsToMany(User::class, 'service_request_assigned')->with('account', 'roles');
     }
 
     public function cse()
@@ -129,4 +130,20 @@ class ServiceRequest extends Model
     public function status(){
         return $this->hasOne(Status::class, 'id');
     }
+
+    public function technician()
+    {
+        return $this->belongsTo(Technician::class);
+    }
+
+    public function technicians()
+    {
+        return $this->belongsToMany(Technician::class);
+    }
+
+    public function clientAccount()
+    {
+        return $this->belongsToMany(Account::class, 'user_id', 'client_id');
+    }
+
 }
