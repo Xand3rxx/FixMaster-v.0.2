@@ -13,7 +13,7 @@ class ServiceRequest extends Model
     use HasFactory, SoftDeletes, Generator;
 
     // column name of key
-    protected $primaryKey = 'uuid';
+    // protected $primaryKey = 'uuid';
 
     // type of key
     protected $keyType = 'string';
@@ -63,7 +63,7 @@ class ServiceRequest extends Model
 
     public function client()
     {
-        return $this->hasOne(Client::class);
+        return $this->belongsTo(Client::class);
     }
 
     public function account()
