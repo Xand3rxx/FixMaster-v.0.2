@@ -32,7 +32,7 @@ class CreateServicesTable extends Migration
                 ->onDelete('NO ACTION');
 
             $table->string('name')->unique();
-            $table->uuid('url')->unique();
+            $table->unsignedInteger('service_charge');
             $table->text('description');
             $table->boolean('status')->default(1);
             $table->string('image')->unique();

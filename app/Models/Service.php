@@ -21,7 +21,7 @@ class Service extends Model
     public $incrementing = false;
 
     protected $fillable = [
-        'user_id', 'category_id', 'name', 'url', 'description', 'status', 'image'
+        'user_id', 'category_id', 'name', 'service_charge', 'description', 'status', 'image'
     ];
 
     /**
@@ -43,7 +43,6 @@ class Service extends Model
         // Create a uuid when a new serivce uuid and url is to be created
         static::creating(function ($service) {
             $service->uuid = (string) Str::uuid();
-            $service->url = (string) Str::uuid();
         });
     }
 

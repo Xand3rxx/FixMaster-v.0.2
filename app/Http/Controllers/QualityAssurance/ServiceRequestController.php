@@ -17,7 +17,8 @@ class ServiceRequestController extends Controller
     public function index(Request $request)
     {
 
-        $results = ServiceRequestAssigned::where('user_id', Auth::id())->with('service_request')->get();
+         return dd($results = ServiceRequestAssigned::where('user_id', Auth::id())->with('user', 'service_request')->get());
+
 
         return view('quality-assurance.requests', compact('results'));
     }

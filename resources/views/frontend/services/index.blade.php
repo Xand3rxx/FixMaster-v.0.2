@@ -63,21 +63,27 @@
                 </div>
             </div><!--end col-->
         </div><!--end row-->
+
         <div class="row mt-4">
             @foreach($service->services as $item)
                 <div class="col-lg-4 mt-4 pt-2">
                     <div class="card blog rounded border-0 shadow">
                         <div class="position-relative">
-                            <img class="ult1 card-img-top rounded-top" src="{{ asset('assets/service-images/'.$item->image) }}" alt="{{ $item->name }}">
-
+                            @if(empty($item->image))
+                                <img src="{{ asset('assets/images/no-image-available.png') }}" class="ult1 card-img-top rounded-top" alt="No image found">
+                            @elseif(!file_exists(public_path('assets/service-images/'.$item->image)))
+                                <img src="{{ asset('assets/images/no-image-available.png') }}" class="ult1 card-img-top rounded-top" alt="No image found">
+                            @else
+                                <img class="ult1 card-img-top rounded-top" src="{{ asset('assets/service-images/'.$item->image) }}" alt="{{ $item->name }}">
+                            @endif
                             <div class="overlay rounded-top bg-dark"></div>
                         </div>
                         <div class="card-body content">
-                        <h5 class="serv__2">{{ $item->name }} <a href="{{ route('services.details', ['service'=>$item->uuid, 'locale'=>app()->getLocale()]) }}" title="View {{ $item->name }} service details"> <i data-feather="info" class="text-primary"></i></a></h5>
+                        <h5 class="serv__2">{{ !empty($item->name) ? $item->name : 'UNAVAILABLE' }} <a href="{{ route('services.details', ['service'=>$item->uuid, 'locale'=>app()->getLocale()]) }}" title="View {{ !empty($item->name) ? $item->name : 'UNAVAILABLE' }} service details"> <i data-feather="info" class="text-primary"></i></a></h5>
                             <div class="post-meta d-flex justify-content-between mt-2">
                                 {{-- <p class="serv__3 text-muted">Lorem ipsum dolor sit amet consectetur adipisicing elit. Alias commodi.</p> --}}
                             </div>
-                            <a href="" class="btn btn-outline-fix btn-block">Request Service</a>
+                            <a href="{{ route('client.services.quote', ['service'=>$item->uuid, 'locale'=>app()->getLocale()]) }}" class="btn btn-outline-fix btn-block">Request Service</a>
                             {{-- <p class="text-center mb-0 mt-1"><a class="btn btn-primary btn-sm" href="{{ route('page.services_details') }}">Details</a></p> --}}
                             
 
