@@ -68,4 +68,9 @@ class Account extends Model
     {
         return $this->hasOne(client::class);
     }
+    
+    public function service_request()
+    {
+        return $this->hasMany(ServiceRequest::class, 'user_id', 'client_id');
+    }
 }

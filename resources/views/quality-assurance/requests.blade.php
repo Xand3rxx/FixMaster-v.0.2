@@ -1,5 +1,5 @@
 @extends('layouts.dashboard')
-@section('title', 'All QA Service Requests')
+@section('title', 'All Quality Assurance Service Requests')
 @include('layouts.partials._messages')
 @section('content')
 
@@ -10,10 +10,10 @@
         <nav aria-label="breadcrumb">
           <ol class="breadcrumb breadcrumb-style1 mg-b-10">
           <li class="breadcrumb-item"><a href="{{ route('quality-assurance.index', app()->getLocale()) }}">Dashboard</a></li>
-            <li class="breadcrumb-item active" aria-current="page">New Requests</li>
+            <li class="breadcrumb-item active" aria-current="page">Service Requests</li>
           </ol>
         </nav>
-        <h4 class="mg-b-0 tx-spacing--1">New Requests</h4>
+        <h4 class="mg-b-0 tx-spacing--1">Service Requests</h4>
       </div>
     </div>
 
@@ -59,10 +59,14 @@
                 </tr>
               </thead>
               <tbody>
-                @php $sn = 1; @endphp
+                {{-- @php $sn = 1; @endphp
                 @foreach ($results as $serviceRequest)
+<<<<<<< HEAD
                 <tr>
                     {{-- {{dd($serviceRequest->service_request->users)}}  $data->account->first_name--}}
+=======
+                 <tr>
+>>>>>>> 08d316a3d76eb1c8eec1ebeb0b0ca1fb0bfc9613
                   <td class="tx-color-03 tx-center">{{$sn++}}</td>
                   <td class="tx-medium">{{$serviceRequest->service_request->unique_id}}</td>
                   <td class="tx-medium">{{$serviceRequest->service_request->client->account->first_name}} {{$serviceRequest->service_request->client->account->last_name}}</td>
@@ -116,8 +120,30 @@
                       </div>
                     </div>
                   </td>
-                </tr>
+                </tr> 
+                
                 @endforeach
+                --}}
+
+                <tr>
+                  <td class="tx-color-03 tx-center">1</td>
+                  <td class="tx-medium">REF-234234723</td>
+                  <td class="tx-medium">Kelvin Adesanya</td>
+                  <td class="tx-medium">David Akinsola</td>
+                  <td class="tx-medium">Benedict Mayowa</td>
+                  <td class="tx-medium">Taofeek Adedokun</td>
+                  <td class="text-medium text-center">₦{{ number_format(10000) }}</td>
+                  <td class="text-medium text-info">Ongoing</td>
+                  <td class="text-medium">{{ Carbon\Carbon::parse('2020-12-28 16:58:54', 'UTC')->isoFormat('MMMM Do YYYY') }}</td>
+                  <td class=" text-center">
+                    <div class="dropdown-file">
+                      <a href="" class="dropdown-link" data-toggle="dropdown"><i data-feather="more-vertical"></i></a>
+                      <div class="dropdown-menu dropdown-menu-right">
+                      <a href="{{ route('quality-assurance.request_details', app()->getLocale()) }}" class="dropdown-item details"><i class="far fa-clipboard"></i> Details</a>
+                      </div>
+                    </div>
+                  </td>
+                </tr>
 
               </tbody>
             </table>

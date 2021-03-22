@@ -53,7 +53,7 @@ class AdminLocationRequestController extends Controller
     public function index()
     {
         $locationRequest = Location::get();
-        $serviceRequests = ServiceRequest::where('service_request_status_id', 4)->get();
+        $serviceRequests = ServiceRequest::where('id', 4)->get();
         // $createdBy    = Name::get();
 
 

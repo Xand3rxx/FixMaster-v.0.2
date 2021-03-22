@@ -136,7 +136,7 @@
                               </div>
 
                             <!-- Full Address -->
-                            <div class="form-group col-md-6">
+                            <div class="form-group col-md-12">
                               <label for="inputAddress2">Full Address</label>
                               <textarea rows="3" class="user_address form-control @error('full_address') is-invalid @enderror" id="" name="full_address" value="{{ old('full_address')?? $result->address->name }}"></textarea>
                               @error('full_address')
@@ -145,16 +145,6 @@
                             </span>
                             @enderror
                             </div>
-                            <div class="form-group col-md-6">
-                                <label for="inputAddress2">Work Address</label>
-                                <textarea rows="3" class="user_address2 form-control @error('work_address') is-invalid @enderror" placeholder="e.g. Block A2, Broad Street, Marina, Lagos, Nigeria"  id="" name="work_address"></textarea>
-                                @error('work_address')
-                            <span class="invalid-feedback" role="alert">
-                                <strong>{{ $message }}</strong>
-                            </span>
-                            @enderror
-                            </div>
-
                         </div>
 
                         <button type="submit" class="btn btn-primary">Update Profile</button>

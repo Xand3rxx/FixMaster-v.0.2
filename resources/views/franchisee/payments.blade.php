@@ -1,5 +1,5 @@
 @extends('layouts.dashboard')
-@section('title', 'Quality Assurance Payments')
+@section('title', 'Franchisee Payments')
 @include('layouts.partials._messages')
 @section('content')
 
@@ -35,7 +35,7 @@
                 </div>
                 <div class="media-body">
                   <h6 class="tx-sans tx-uppercase tx-10 tx-spacing-1 tx-color-03 tx-semibold tx-nowrap mg-b-5 mg-md-b-8">Total Payments</h6>
-                  <h4 class="tx-20 tx-sm-18 tx-md-20 tx-normal tx-rubik mg-b-0">{{$payments->count()}}</h4>
+                  <h4 class="tx-20 tx-sm-18 tx-md-20 tx-normal tx-rubik mg-b-0">1</h4>
                 </div>
               </div>
 
@@ -113,9 +113,33 @@
                 </div>
               </div>
 
-              <div id="sort_table">
-              @include('quality-assurance._disbursed_table')
-              </div>
+              <table class="table table-hover mg-b-0" id="basicExample">
+                <thead class="thead-primary">
+                  <tr>
+                    <th class="text-center">#</th>
+                    <th>Job Reference</th>
+                    <th>Reference No</th>
+                    <th>Paid By</th>
+                    <th>Amount</th>
+                    <th>Payment Mode</th>
+                    <th>Comment</th>
+                    <th class="text-center">Payment Date</th>
+                  </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                    <td class="tx-color-03 tx-center">1</td>
+                    <td class="tx-medium">REF-234234723</td>
+                      <td class="tx-medium">32e3lh2e23083h432b</td>
+                      <td class="tx-medium">David Akinsola</td>
+                      <td class="tx-medium">₦{{ number_format(10000) }}</td>
+                      <td class="tx-medium">Bank Transfer</td>
+                      <td class="text-medium">This payment was made because of your successful task completion on job REF-234234723</td>
+                      <td class="text-medium tx-center">{{ Carbon\Carbon::parse('2020-12-28 16:58:54', 'UTC')->isoFormat('MMMM Do YYYY') }}</td>
+                    </tr>
+                </tbody>
+              </table>
+            </div><!-- table-responsive -->
           </div><!-- table-responsive -->
         </div><!-- card -->
 

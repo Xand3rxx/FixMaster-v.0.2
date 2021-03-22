@@ -10,6 +10,8 @@ use Auth;
 use App\Models\PaymentDisbursed;
 use App\Models\User;
 use App\Models\ServiceRequest;
+use App\Models\ServiceRequestAssigned;
+use Illuminate\Support\Facades\DB;
 use App\Traits\PasswordUpdator;
 use Illuminate\Support\Facades\Validator;
 
@@ -55,14 +57,25 @@ class TechnicianProfileController extends Controller
     /**
      * Return Service Requests Page 
      */
-    public function serviceRequests($language, ServiceRequest $serviceRequest)
+    public function serviceRequests($language, ServiceRequestAssigned $serviceRequest)
     {
 
         $user_id = auth()->user()->id; // gets the current user id
 
-        $serviceRequest = ServiceRequest::where('technician_id', $user_id)->orderBy('id', 'DESC')->paginate(15);
+        //$serviceRequests = ServiceRequestAssigned::where('user_id', $user_id)->orderBy('created_at', 'DESC')->paginate(15);
+        //$serviceRequests = ServiceRequestAssigned::where('user_id', Auth::id())->get();
+        
+        //$serviceRequests = DB::table('ServiceRequestAssigned')->join('ServiceRequest', 'ServiceRequestAssigned.service_request_id', '=', 'ServiceRequest.service_id' ))
 
-        return view('technician.requests', compact('serviceRequest'));
+       
+
+        $serviceRequests = DB::table('service_request_assigned')->join('service_requests', 'service_request_assigned.service_request_id', '=', 'service_requests.service_id' )
+  ->join('accounts', 'service_requests.client_id', '=', 'accounts.user_id')
+  ->where('service_request_assigned.user_id', $user_id)
+  ->get();
+  
+
+        return view('technician.requests', compact('serviceRequests'));
 
         //return view('technician.requests')->with('i');
     }
@@ -70,14 +83,21 @@ class TechnicianProfileController extends Controller
     /**
      * Return Service Requests Details Page 
      */
-    public function serviceRequestDetails($language, ServiceRequest $serviceRequest)
+    public function serviceRequestDetails($language, $service_request_id)
     {
 
         $user_id = auth()->user()->id; // gets the current user id
 
-        $serviceRequest = ServiceRequest::where('technician_id', $user_id)->orderBy('id', 'DESC')->paginate(15);
+       // $serviceRequests = ServiceRequestAssigned::where('user_id', $user_id)->orderBy('created_at', 'DESC')->paginate(15);
 
-        return view('technician.request_details', compact('serviceRequest'));
+        $serviceRequests = DB::table('service_request_assigned')->join('service_requests', 'service_request_assigned.service_request_id', '=', 'service_requests.service_id' )
+  ->join('accounts', 'service_requests.client_id', '=', 'accounts.user_id')
+  ->join('addresses', 'service_requests.client_id', '=', 'addresses.user_id')
+  //->join('services', 'service_request_assigned.service_request_id', '=', 'services.user_id')
+  ->where('service_requests.uuid', $service_request_id)->first();
+      
+  //dd($service_request_id);
+        return view('technician.request_details', compact('serviceRequests'));
     }
 
     /**
@@ -106,6 +126,7 @@ class TechnicianProfileController extends Controller
     public function updateProfile(Request $request)
     {
         $user = User::where('id', Auth::id())->first();
+        
         if ($user->account->gender == "male") {
             $res = "his";
         } else {
@@ -125,7 +146,7 @@ class TechnicianProfileController extends Controller
             'phone_number' => 'required',
             'profile_avater' => 'mimes:jpeg,jpg,png,gif',
             'full_address' => 'required',
-            'work_address' => '',
+            
 
         ];
 
@@ -143,7 +164,7 @@ class TechnicianProfileController extends Controller
 
         $validator = Validator::make($request->all(), $rules, $messages);
         if ($validator->fails()) {
-            return redirect()->back()->with('errors', $validator->errors());
+            return redirect()->back()->withInput()->withErrors($validator);
         } else {
 
             if ($request->hasFile('profile_avater')) {
@@ -171,6 +192,12 @@ class TechnicianProfileController extends Controller
                 'user_id' => $user->id,
                 'number' => $request->phone_number,
             ]);
+
+          /* $user->address->update([
+                'user_id' => $user->id,
+                'address' => $request->full_address,
+               
+            ]);*/
 
             $this->log($type, $severity, $actionUrl, $message);
 
