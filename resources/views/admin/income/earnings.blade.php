@@ -1,5 +1,5 @@
 @extends('layouts.dashboard')
-@section('title', 'Invoices')
+@section('title', 'Earnings')
 @section('content')
     @include('layouts.partials._messages')
 
@@ -10,15 +10,13 @@
                     <nav aria-label="breadcrumb">
                         <ol class="breadcrumb breadcrumb-style1 mg-b-10">
                             <li class="breadcrumb-item"><a href="{{ route('admin.index', app()->getLocale()) }}">Dashboard</a></li>
-                            <li class="breadcrumb-item active" aria-current="page">Invoices</li>
+                            <li class="breadcrumb-item active" aria-current="page">Earnings</li>
                         </ol>
                     </nav>
-                    <h4 class="mg-b-0 tx-spacing--1">Invoices</h4>
+                    <h4 class="mg-b-0 tx-spacing--1">Earnings</h4>
                 </div>
                 <div class="d-md-block">
-                    <a href="" class="btn btn-primary"><i class="fas fa-plus"></i> Create New Invoice</a>
-                    <a href="{{ route('admin.diagnostic', app()->getLocale()) }}" class="btn btn-primary"><i class="fas fa-plus"></i> Diagnostic Invoice</a>
-                    <a href="{{ route('admin.rfq', app()->getLocale()) }}" class="btn btn-primary"><i class="fas fa-plus"></i> RFQ Issuance</a>
+{{--                    <a href="{{ route('admin.add_earnings', app()->getLocale()) }}" class="btn btn-primary"><i class="fas fa-plus"></i> Add New</a>--}}
                 </div>
             </div>
 
@@ -27,8 +25,8 @@
                     <div class="card mg-b-10">
                         <div class="card-header pd-t-20 d-sm-flex align-items-start justify-content-between bd-b-0 pd-b-0">
                             <div>
-                                <h6 class="mg-b-5">Invoices as of {{ date('M, d Y') }}</h6>
-                                <p class="tx-13 tx-color-03 mg-b-0">This table displays a list of all FixMaster Invoices.</p>
+                                <h6 class="mg-b-5">Earnings as of {{ date('M, d Y') }}</h6>
+                                <p class="tx-13 tx-color-03 mg-b-0">This table displays a list of all FixMaster Earnings.</p>
                             </div>
 
                         </div><!-- card-header -->
@@ -39,36 +37,28 @@
                                 <thead class="thead-primary">
                                 <tr>
                                     <th class="text-center">#</th>
-                                    <th>Invoice Number</th>
-                                    <th>Customer</th>
-                                    <th>Date</th>
-                                    <th>Total</th>
-                                    <th>Amount Due</th>
-                                    <th>Status</th>
-                                    <th>Action</th>
+                                    <th>Roles</th>
+                                    <th>Amount</th>
+                                    <th class="text-center">Action</th>
                                 </tr>
                                 </thead>
                                 <tbody>
+                                @foreach($earnings as $earning)
                                     <tr>
-                                        <td class="tx-color-03 tx-center">1</td>
-                                        <td class="tx-medium">INV-2021-05</td>
-                                        <td class="tx-medium">Francis Maja</td>
-                                        <td class="tx-medium">12 Feb 2021</td>
-                                        <td class="text-medium">#6000.00</td>
-                                        <td class="text-medium">#6000.00</td>
-                                        <td class="text-medium text-danger">Unpaid</td>
+                                        <td class="tx-color-03 tx-center">{{ $loop->iteration }}</td>
+                                        <td class="tx-medium">{{ $earning['role_name'] }}</td>
+                                        <td class="tx-medium">{{ $earning['earnings'] }}</td>
                                         <td class=" text-center">
                                             <div class="dropdown-file">
                                                 <a href="" class="dropdown-link" data-toggle="dropdown"><i data-feather="more-vertical"></i></a>
                                                 <div class="dropdown-menu dropdown-menu-right">
-                                                    <a href="" class="dropdown-item details text-primary"><i class="far fa-user"></i> Summary</a>
-                                                    <a href="" class="dropdown-item details text-info"><i class="far fa-edit"></i> Edit</a>
-                                                    <a href="" class="dropdown-item details text-secondary"><i class="fa fa-percent"></i> Discount </a>
-                                                    <a href="" class="dropdown-item details text-danger"><i class="fas fa-trash"></i> Delete</a>
+                                                    <a href="{{ route('admin.edit_earnings', ['locale' => app()->getLocale(), 'earning' => $earning['uuid']]) }}" class="dropdown-item details text-info"><i class="far fa-edit"></i> Edit</a>
+                                                    <a href="{{ route('admin.delete_earnings', ['locale' => app()->getLocale(), 'earning' => $earning['uuid']]) }}" class="dropdown-item details text-danger"><i class="fas fa-trash"></i> Delete</a>
                                                 </div>
                                             </div>
                                         </td>
                                     </tr>
+                                @endforeach
                                 </tbody>
                             </table>
                         </div><!-- table-responsive -->

@@ -30,7 +30,7 @@ class SimulationController extends Controller
 
     public function endService($language, ServiceRequest $serviceRequest)
     {
-        $user_id = $serviceRequest->user_id;
+        $user_id = $serviceRequest->client_id;
         $service_request_id = $serviceRequest->id;
         $invoice_type = 'Diagnostic Invoice';
         $hours_spent = '1';
@@ -47,7 +47,7 @@ class SimulationController extends Controller
 
     public function completeService($language, ServiceRequest $serviceRequest)
     {
-        $user_id = $serviceRequest->user_id;
+        $user_id = $serviceRequest->client_id;
         $service_request_id = $serviceRequest->id;
         $rfq_id = $serviceRequest->rfq->id;
         $invoice_type = 'Completion Invoice';

@@ -125,7 +125,7 @@ class EstateController extends Controller
             }
             return back()->with('success', 'Estate has been added successfully');
         } else {
-            $type = 'Erroros';
+            $type = 'Errors';
             $severity = 'Error';
             $actionUrl = Route::currentRouteAction();
             $message = 'An Error Occured while '. Auth::user()->email. ' was trying to create '.$request->input('estate_name');
@@ -211,14 +211,16 @@ class EstateController extends Controller
      * @param  \App\Models\Estate  $estate
      * @return \Illuminate\Http\Response
      */
-    public function delete($language, Estate $estate)
+    public function delete($language, $estate)
     {
-        $deleteEstate = $estate->delete();
-        if ($deleteEstate){
+        $estateExists = Estate::where('uuid', $estate)->first();
+
+        $softDeleteEstate = $estateExists->delete();
+        if ($softDeleteEstate){
             $type = 'Request';
             $severity = 'Informational';
             $actionUrl = Route::currentRouteAction();
-            $message = Auth::user()->email.' deleted '.$estate->estate_name;
+            $message = Auth::user()->email.' deleted '.$estateExists->estate_name;
             $this->log($type, $severity, $actionUrl, $message);
             return redirect()->route('admin.list_estate', app()->getLocale())->with('success', 'Estate has been deleted');
         }
