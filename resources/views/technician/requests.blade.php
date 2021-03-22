@@ -1,5 +1,5 @@
 @extends('layouts.dashboard')
-@section('title', 'New Requests')
+@section('title', 'Technician Service Requests')
 @include('layouts.partials._messages')
 @section('content')
 
@@ -10,10 +10,10 @@
         <nav aria-label="breadcrumb">
           <ol class="breadcrumb breadcrumb-style1 mg-b-10">
           <li class="breadcrumb-item"><a href="{{ route('technician.index', app()->getLocale()) }}">Dashboard</a></li>
-            <li class="breadcrumb-item active" aria-current="page">New Requests</li>
+            <li class="breadcrumb-item active" aria-current="page">Service Requests</li>
           </ol>
         </nav>
-        <h4 class="mg-b-0 tx-spacing--1">New Requests</h4>
+        <h4 class="mg-b-0 tx-spacing--1">Service Requests</h4>
       </div>
     </div>
 
@@ -35,7 +35,7 @@
                 </div>
                 <div class="media-body">
                   <h6 class="tx-sans tx-uppercase tx-10 tx-spacing-1 tx-color-03 tx-semibold tx-nowrap mg-b-5 mg-md-b-8">Total Requests</h6>
-                <h4 class="tx-20 tx-sm-18 tx-md-20 tx-normal tx-rubik mg-b-0">{{count($serviceRequest)}}</h4>
+                <h4 class="tx-20 tx-sm-18 tx-md-20 tx-normal tx-rubik mg-b-0">{{count($serviceRequests)}}</h4>
                 </div>
               </div>
               
@@ -49,7 +49,9 @@
                   <th class="text-center">#</th>
                   <th>Job Ref.</th>
                   <th>Client</th>
+                  <th>Supervised By</th>
                   <th>CSE</th>
+                  <th>Quality Assurance</th>
                   <th class="text-center">Amount</th>
                   <th>Status</th>
                   <th class="text-center">Date</th>
@@ -57,30 +59,35 @@
                 </tr>
               </thead>
               <tbody>
-              @foreach ($serviceRequest as $serviceRequest)
+              @foreach ($serviceRequests as $serviceRequest)
                 <tr>
                   <td class="tx-color-03 tx-center">{{ $loop->iteration }}</td>
-                  <td class="tx-medium">{{ $serviceRequest['job_reference'] }}</td>
-                  <td class="tx-medium">Kelvin Adesanya</td>
-                  <td class="tx-medium">David Akinsola</td>
-                  <td class="text-medium text-center">₦{{ number_format($serviceRequest['total_amount'] )}}</td>
-                  @if($serviceRequest->service_request_status_id === 4)
-                    <td class="text-medium text-danger">Ongoing</td>
-                  @elseif($serviceRequest->service_request_status_id === 3)
-                    <td class="text-medium text-success">Completed</td>
-                  @elseif($serviceRequest->service_request_status_id === 5)
-                   <td class="text-medium text-danger">Enroute to Client's Location</td>
-                  @elseif($serviceRequest->service_request_status_id === 6)
-                    <td class="text-medium text-pending">Performing Diagnosis</td>
-                  @endif
+                  <td class="tx-medium">{{ $serviceRequest->unique_id}}</td>
+                  <td class="tx-medium">{{ $serviceRequest->first_name. ' '. $serviceRequest->middle_name. ' '. $serviceRequest->last_name ?? '' }}</td>
+                  <td class="tx-medium">{{ $serviceRequest->first_name. ' '. $serviceRequest->middle_name. ' '. $serviceRequest->last_name ?? '' }}</td>
+                  <td class="tx-medium">{{ $serviceRequest->first_name. ' '. $serviceRequest->middle_name. ' '. $serviceRequest->last_name ?? '' }}</td>
+                  <td class="tx-medium">{{ $serviceRequest->first_name. ' '. $serviceRequest->middle_name. ' '. $serviceRequest->last_name ?? '' }}</td>
                   
-                  <td class="text-medium">{{ Carbon\Carbon::parse($serviceRequest->created_at, 'UTC')->isoFormat('MMMM Do YYYY, h:mm:ssa') }} ({{ $serviceRequest->created_at->diffForHumans() }})</td>
+                  <td class="text-medium text-center">₦{{ number_format($serviceRequest->total_amount )}}</td>
+                  
+                  @if($serviceRequest->status_id === 1)
+                    <td class="text-medium text-warning">Pending</td>
+                  @elseif($serviceRequest->status_id === 2)
+                    <td class="text-medium text-danger">Ongoing</td>
+                  @elseif($serviceRequest->status_id === 3)
+                    <td class="text-medium text-success">Cancelled</td>
+                  @else 
+                  <td class="text-medium text-info">Completed</td> 
+                  @endif 
+                  <td class="text-medium">{{ Carbon\Carbon::parse($serviceRequest->created_at, 'UTC')->isoFormat('MMMM Do YYYY, h:mm:ssa') }}</td>
                   <td class=" text-center">
                     <div class="dropdown-file">
                       <a href="" class="dropdown-link" data-toggle="dropdown"><i data-feather="more-vertical"></i></a>
                       <div class="dropdown-menu dropdown-menu-right">
-                      <a href="{{ route('technician.request_details',['serviceRequest'=>$serviceRequest['id'], app()->getLocale()]) }}" class="dropdown-item details"><i class="far fa-clipboard"></i> Details</a>
+                      <a href="{{ route('technician.request_details', ['serviceRequests'=>$serviceRequest->uuid, 'locale'=>app()->getLocale()]) }}" class="dropdown-item details"><i class="far fa-clipboard"></i> Details</a>
+                      
                       </div>
+                      
                     </div>
                   </td>
                 </tr>

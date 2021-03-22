@@ -130,10 +130,6 @@
                             </td>
                           </tr>
                           <tr>
-                            <td class="tx-medium">Payment Status</td>
-                            <td class="tx-color-03">Paid</td>
-                          </tr>
-                          <tr>
                             <td class="tx-medium">State</td>
                             <td class="tx-color-03">Lagos</td>
                           </tr>

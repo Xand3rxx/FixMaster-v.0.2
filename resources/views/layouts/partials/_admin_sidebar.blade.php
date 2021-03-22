@@ -152,7 +152,18 @@
           </ul>
         </li>
 
-        <li class="nav-item"><a href="" class="nav-link"><i data-feather="pie-chart"></i> <span>Reports</span></a></li>
+        <li class="nav-item with-sub">
+          <a href="" class="nav-link"><i data-feather="git-pull-request"></i> <span>Reports</span></a>
+          <ul>
+            
+            <li class=""><a href="{{route('admin.cse_reports', app()->getLocale())}}">CSE</a></li>
+            <li class=""><a href="#">Supplier</a></li>
+            <li class=""><a href="#">Job MGT</a></li>
+            <li class=""><a href="#">Technician</a></li>
+            <li class=""><a href="#">Customer</a></li>
+            <li class=""><a href="#">Marketing</a></li>
+          </ul>
+        </li>
 
         <li class="nav-item with-sub">
           <a href="" class="nav-link"><i data-feather="git-pull-request"></i> <span>Requests</span></a>
