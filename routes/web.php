@@ -280,3 +280,17 @@ Route::prefix('/quality-assurance')->group(function () {
         Route::get('/get_chart_data', [App\Http\Controllers\QualityAssurance\ServiceRequestController::class, 'chat_data']);
     });
 });
+
+
+Route::prefix('/franchisee')->group(function () {
+    Route::name('franchisee.')->group(function () {
+        Route::view('/',                'franchisee.index')->name('index'); //Take me to frnahisee Dashboard
+        Route::view('/messages/inbox',      'franchisee.messages.inbox')->name('messages.inbox');
+        Route::view('/messages/sent',       'franchisee.messages.sent')->name('messages.sent');
+        Route::view('/payments',            'franchisee.payments')->name('payments');
+        Route::view('/requests',            'franchisee.requests')->name('requests');
+        Route::view('/requests/details',    'franchisee.request_details')->name('request_details');
+        Route::view('/profile',             'franchisee.view_profile')->name('view_profile');
+        Route::view('/profile/edit',        'franchisee.edit_profile')->name('edit_profile');
+    });
+});

@@ -13,22 +13,13 @@ class ServiceRequest extends Model
     use HasFactory, SoftDeletes, Generator;
 
     // column name of key
-    //protected $primaryKey = 'uuid';
+    protected $primaryKey = 'uuid';
 
     // type of key
     protected $keyType = 'string';
 
     // whether the key is automatically incremented or not
     public $incrementing = false;
-
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var array
-     */
-    // protected $fillable = [
-    //     'uuid', 'user_id', 'admin_id', 'cse_id', 'technician_id', 'service_id', 'category_id', 'job_reference', 'security_code', 'service_request_status_id', 'total_amount',
-    // ];
 
     protected $fillable = [
         'client_id', 'service_id', 'unique_id', 'state_id', 'lga_id', 'town_id', 'price_id', 'phone_id', 'address_id', 'client_discount_id', 'client_security_code', 'status_id', 'description', 'total_amount', 'preferred_time'
@@ -72,7 +63,7 @@ class ServiceRequest extends Model
 
     public function client()
     {
-        return $this->belongsTo(Client::class);
+        return $this->hasOne(Client::class);
     }
 
     public function account()
@@ -83,16 +74,6 @@ class ServiceRequest extends Model
     public function users()
     {
         return $this->belongsToMany(User::class, 'service_request_assigned')->with('account', 'roles');
-    }
-
-    public function cse()
-    {
-        return $this->belongsTo(Cse::class);
-    }
-
-    public function cses()
-    {
-        return $this->belongsToMany(Cse::class);
     }
 
     public function invoice()
@@ -129,16 +110,6 @@ class ServiceRequest extends Model
 
     public function status(){
         return $this->hasOne(Status::class, 'id');
-    }
-
-    public function technician()
-    {
-        return $this->belongsTo(Technician::class);
-    }
-
-    public function technicians()
-    {
-        return $this->belongsToMany(Technician::class);
     }
 
     public function clientAccount()

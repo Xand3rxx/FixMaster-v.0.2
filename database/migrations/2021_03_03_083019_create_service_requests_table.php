@@ -19,25 +19,6 @@ class CreateServiceRequestsTable extends Migration
             $table->charset = 'utf8mb4';
             $table->collation = 'utf8mb4_unicode_ci';
 
-            // $table->id();
-            // $table->uuid('uuid')->unique();
-		    // $table->foreignId('user_id');
-		    // $table->foreignId('admin_id')->default(null);
-		    // $table->foreignId('cse_id')->default(null);
-            // $table->foreignId('technician_id')->default(null);
-
-            // $table->foreignId('service_id')
-            // ->constrained()
-            // ->onUpdate('CASCADE')
-            // ->onDelete('NO ACTION');
-            
-            // $table->bigInteger('service_request_status_id')->index()->default(1);
-		    // $table->string('job_reference');
-		    // $table->string('security_code');
-            // $table->bigInteger('total_amount')->unsigned();
-            // $table->softDeletes();
-            // $table->timestamps();
-
             $table->id();
             $table->uuid('uuid')->unique();
 		    $table->foreignId('client_id');

@@ -32,7 +32,7 @@
         </a>
         <p class="tx-color-03 tx-12 mg-b-0">{{ Auth::user()->type->role->name ?? 'Technicians & Artisans' }}</p>
       </div>
-      <div class="collapse {{ Route::currentRouteNamed('technician.view_profile', 'technician.edit_profile') ? 'show' : '' }}"" id="loggedinMenu">
+      <div class="collapse {{ Route::currentRouteNamed('technician.view_profile', 'technician.edit_profile') ? 'show' : '' }}" id="loggedinMenu">
         <ul class="nav nav-aside mg-b-0">
           <li class="nav-item {{ Route::currentRouteNamed('technician.view_profile') ? 'active' : '' }}"><a href="{{ route('technician.view_profile', app()->getLocale()) }}" class="nav-link"><i data-feather="user"></i> <span>View Profile</span></a></li>
 
