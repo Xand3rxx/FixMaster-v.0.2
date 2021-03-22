@@ -143,7 +143,7 @@ class ServiceRequest extends Model
 
     public function clientAccount()
     {
-        return $this->belongsToMany(Account::class, 'user_id', 'client_id');
+        return $this->hasOne(Account::class, 'user_id', 'client_id');
     }
 
 }

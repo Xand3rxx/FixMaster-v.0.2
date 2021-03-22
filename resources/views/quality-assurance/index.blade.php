@@ -134,10 +134,10 @@
                       <h6 class="tx-uppercase tx-10 tx-spacing-1 tx-color-02 tx-semibold mg-b-0">Completed Requests</h6>
                     </div>
                     <div class="d-flex justify-content-between mg-b-5">
-                      <h5 class="tx-normal tx-rubik mg-b-0"></h5>
+                      <h5 class="tx-normal tx-rubik mg-b-0">10</h5>
                     </div>
                     <div class="progress ht-4 mg-b-0 op-5">
-                      <div class="progress-bar bg-orange wd-p" role="progressbar" aria-valuemin="0" aria-valuemax="100"></div>
+                      <div class="progress-bar bg-orange wd-10p" role="progressbar" aria-valuemin="0" aria-valuemax="100"></div>
                     </div>
                   </div>
                   <div class="col-sm-6 col-lg-12 mg-t-30">
@@ -146,11 +146,11 @@
 
                     </div>
                     <div class="d-flex justify-content-between mg-b-5">
-                      <h5 class="tx-normal tx-rubik mg-b-0">{{$canceled->count()}}</h5>
+                      <h5 class="tx-normal tx-rubik mg-b-0">20</h5>
 
                     </div>
                     <div class="progress ht-4 mg-b-0 op-5">
-                      <div class="progress-bar bg-pink wd-{{$canceled->count()}}" role="progressbar" aria-valuenow="20" aria-valuemin="0" aria-valuemax="100"></div>
+                      <div class="progress-bar bg-pink wd-30" role="progressbar" aria-valuenow="20" aria-valuemin="0" aria-valuemax="100"></div>
                     </div>
                   </div>
                   <div class="col-sm-6 col-lg-12 mg-t-30">
