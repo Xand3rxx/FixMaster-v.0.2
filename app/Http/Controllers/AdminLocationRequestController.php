@@ -53,37 +53,6 @@ class AdminLocationRequestController extends Controller
 
     public function index()
     {
-        
-        // $data['serviceRequests'] = DB::table('service_requests')
-        // ->where('service_requests.status_id',  2)
-        //     ->select('service_requests.*', 'service_request_assigned.user_id',  'service_request_assigned.service_request_id')
-        //     ->join('service_request_assigned', 'service_requests.id', '=', 'service_request_assigned.service_request_id')
-        //     // ->join('accounts', 'service_request_assigned.user_id', '=', 'accounts.user_id')
-        //     // ->orderBy('service_requests.created_at', 'DESC')  
-        //     ->get();
-
-        // $data['serviceRequests'] = DB::table('service_request_assigned')
-        
-        // // ->join('service_requests', 'service_request_assigned.service_request_id', '=', 'service_requests.service_id')
-        // ->join('service_requests', function ($join) {
-        //     $join->on('service_request_assigned.service_request_id', '=', 'service_requests.service_id');
-        // })
-
-        // // ->join('accounts', 'accounts.user_id', '=', 'service_request_assigned.user_id')
-        // // ->orderBy('service_requests.created_at', 'DESC')
-        // // ->select('service_requests.unique_id', 'service_requests.description', 'service_requests.status_id', 'service_request_assigned.*',  'accounts.first_name')
-        // ->where('service_requests.status_id', 2)
-
-        // ->get();
-
-            // $data['serviceRequests'] =  DB::table('service_requests')
-            //     ->join('service_request_assigned', function ($join) {
-            //         $join->on('users.id', '=', 'contacts.user_id');
-            //     })
-            //     ->get();
-
-        // $data['locationRequest'] = Location::get();
-
         $data['serviceRequests'] = ServiceRequest::where('status_id', 2)
                                     // ->with('serviceRequestAssigned')
                                     ->get(); 
