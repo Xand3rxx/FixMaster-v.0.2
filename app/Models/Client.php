@@ -10,6 +10,7 @@ class Client extends Model
     use Generator;
 
     /**
+     * 
      * The attributes that aren't mass assignable.
      *
      * @var array
@@ -36,4 +37,6 @@ class Client extends Model
     {
         return $this->belongsTo(User::class)->with(['account', 'phones']);
     }
+
+    
 }

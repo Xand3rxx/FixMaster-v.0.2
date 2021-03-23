@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Frontend\Registration\ClientRegistrationController;
+use App\Http\Controllers\PageController;
 
 /*
 |--------------------------------------------------------------------------
@@ -41,10 +42,6 @@ Route::view('/register',                    'auth.register')->name('frontend.reg
 
 
 
-Route::view('/service-details',             'frontend.service_details')->name('frontend.services_details');
-Route::get('/services',                     [App\Http\Controllers\PageController::class, 'services'])->name('frontend.services');
-Route::get('/services/details/{url}',       [App\Http\Controllers\PageController::class, 'serviceDetails'])->name('frontend.services_details');
-Route::post('/services/search',              [App\Http\Controllers\PageController::class, 'searchCategories'])->name('frontend.services_search');
 Route::get('/contact-us',                   [App\Http\Controllers\PageController::class, 'contactUs'])->name('frontend.contact');
 Route::post('/contact-us',                  [App\Http\Controllers\PageController::class, 'sendContactMail'])->name('frontend.send_contact_mail');
 
@@ -60,3 +57,14 @@ Route::post('/lga-list',                    [App\Http\Controllers\EssentialsCont
 
 // Route::get('/tools-request/details/{id}',           [App\Http\Controllers\ToolsRequestController::class, 'toolRequestDetails'])->name('tool_request_details');
 // Route::get('/rfq/details/{id}',                     [App\Http\Controllers\RFQController::class, 'rfqDetails'])->name('rfq_details');
+
+
+//All frontend routes for Services
+Route::prefix('/services')->group(function () {
+    Route::name('services.')->group(function () {
+        Route::get('/',                     [PageController::class, 'services'])->name('list');
+        // Route::view('/details',             'frontend.services.show')->name('details');
+        Route::get('/details/{service}',    [PageController::class, 'serviceDetails'])->name('details');
+        Route::post('/search',              [PageController::class, 'search'])->name('search');
+    });
+});

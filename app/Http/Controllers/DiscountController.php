@@ -15,7 +15,7 @@ use App\Models\Service;
 use App\Models\Category;
 use App\Models\Account;
 use App\Models\Estate;
-use App\Models\EstateDiscountHistory;
+use App\Models\DiscountHistory;
 use App\Traits\Utility;
 use App\Traits\Loggable;
 use Carbon\Carbon;
@@ -23,8 +23,7 @@ use Carbon\Carbon;
 
 class DiscountController extends Controller
 {
-    use Utility;
-    use Loggable;
+    use Utility, Loggable;
     //
     public function index()
     {
@@ -32,9 +31,10 @@ class DiscountController extends Controller
         return response()->view('admin.discount.list', compact('discounts'));
     }
 
+
+  
     public function create()
     {
-    
         $data['entities'] = $this->entityArray();
         $data['states'] = State::select('id', 'name')->orderBy('name', 'ASC')
             ->get();
@@ -49,7 +49,7 @@ class DiscountController extends Controller
         $this->validateRequest($request);
         $this->validateFieldRequest($request);
       
-    
+
         $fields = [
         'specified_request_count_morethan' => $request->specified_request_count_morethan,
         'specified_request_count_equalto' => $request->specified_request_count_equalto, 
@@ -59,6 +59,7 @@ class DiscountController extends Controller
         'specified_request_end_date' => $request->specified_request_end_date,
         'specified_request_lga' => $request->specified_request_lga
          ];
+       
      
         $entity = $request->input('entity');
         $users = $this->filterEntity($request);
@@ -70,8 +71,8 @@ class DiscountController extends Controller
         'services' => isset($request->services)?$request->services:'',
         'estate' => isset($request->estate_name) ? $request->estate_name: ''
        ];
-  
-       
+ 
+     
         $discount = Discount::create([
             'name' => $request->input('discount_name') ,
              'entity' => $request->input('entity') , 
@@ -95,15 +96,7 @@ class DiscountController extends Controller
                     $update = $this->createUsersDiscount($request, $discount);
                 break;
                 case 'estate':
-                    if (empty($request->estate_name))
-                    {
-                        $update = $this->createEstateUsersDiscount($request, $discount);
-                    }
-                    else
-                    {
-                        $update = $this->createEstateTypeUsersDiscount($request, $discount, $request->estate_name);
-                    }
-                    $this->createEstateHistory($request, $discount);
+                        $update = $this->createEstateTypeUsersDiscount($request, $discount);  
                 break;
                 case 'service':
                     if (!empty($request->services)){
@@ -182,20 +175,13 @@ class DiscountController extends Controller
             ->view('admin.discount.summary', $data);
     }
 
-
+ 
 
     public function delete($language, $discount)
     {
 
         $discountExists = Discount::where('uuid', $discount)->first();
-        $disountEntity = Discount::select('entity')->where('uuid', $discount)->first();
-       
-        if( $disountEntity->entity == 'service'){
-            ServiceDiscount::where('discount_id', $discount)->delete();
-        }
-        if( $disountEntity->entity != 'service'){
-            ClientDiscount::where('discount_id', $discount)->delete();
-        }
+     
         //Casted to SoftDelete
         $softDeleteUser = $discountExists->delete();
         if ($softDeleteUser)
@@ -225,14 +211,7 @@ class DiscountController extends Controller
     {
 
         $discountExists = Discount::where('uuid', $discount)->first();
-        $disountEntity = Discount::select('entity')->where('uuid', $discount)->first();
-       
-        if( $disountEntity->entity == 'service'){
-            ServiceDiscount::where('discount_id', $discount)->update(['status' => 'deactivate']);
-        }
-        if( $disountEntity->entity != 'service'){
-            ClientDiscount::where('discount_id', $discount)->update(['status' => 'deactivate' ]);
-        }
+     
         $deactivateDiscount = Discount::where('uuid', $discount)->update(['status' => 'deactivate', ]);
 
         if ($deactivateDiscount)
@@ -261,15 +240,6 @@ class DiscountController extends Controller
     {
         $status = '';
         $discountExists = Discount::where('uuid', $discount)->first();
-        $disountEntity = Discount::select('entity')->where('uuid', $discount)->first();
-       
-        if( $disountEntity->entity == 'service'){
-            ServiceDiscount::where('discount_id', $discount)->update(['status' => 'activate']);
-        }
-        if( $disountEntity->entity != 'service'){
-            ClientDiscount::where('discount_id', $discount)->update(['status' => 'activate' ]);
-        }
-
      
         $activateDiscount = Discount::where('uuid', $discount)->update(['status' => 'activate', ]);
   
@@ -300,133 +270,150 @@ class DiscountController extends Controller
     {
         if ($request->ajax())
         {
-            $wh = $d =  $est= [];
+            $wh = $whx = $d =  $est= [];
             $groupby = '';
-            $replace_amount = 'middle_name';
-            $replace_user = 'user_id';
+            $replace_amount = 'ac.middle_name';
+            $replace_user = 'client_id';
             parse_str($request->data, $fields);
             $entity = $fields['entity'];
-            $replace_value = 'user_id';
+            $replace_value = 'client_id';
+            $WHERE=$SQL= $SQLx='';
+       
 
-            $chk_fields = ['specified_request_count_morethan' => $fields['specified_request_count_morethan'], 'specified_request_count_equalto' => $fields['specified_request_count_equalto'], 'specified_request_amount_from' => $fields['specified_request_amount_from'], 'specified_request_amount_to' => $fields['specified_request_amount_to'], 'specified_request_start_date' => $fields['specified_request_start_date'], 'specified_request_end_date' => $fields['specified_request_end_date'], ];
+            $chk_fields = ['specified_request_count_morethan' =>
+             $fields['specified_request_count_morethan'], 
+             'specified_request_count_equalto' => $fields['specified_request_count_equalto'],
+              'specified_request_amount_from' => $fields['specified_request_amount_from'],
+               'specified_request_amount_to' => $fields['specified_request_amount_to'],
+                'specified_request_start_date' => $fields['specified_request_start_date'],
+                 'specified_request_end_date' => $fields['specified_request_end_date'], 
+                 'specified_request_lga' => isset($fields['specified_request_lga']) ? $fields['specified_request_lga']: '',
+                 'specified_request_state' => isset($fields['specified_request_state'])? $fields['specified_request_state']: '',
+
+                ];
 
             if ($fields['specified_request_count_morethan'] != '')
             {
-                $wh[] = ['sr.users', '>=', $fields['specified_request_count_morethan']];
-                $groupby = 'group by user_id';
-                if ($entity == 'estate')
-                {
-                    $groupby = 'group by uuid';
-                    $replace_value = " '*'";
-                }
+                $whx[] ="sr.users >='".$fields['specified_request_count_morethan']."'";
+                $groupby = 'group by client_id';
 
             }
 
             if ($fields['specified_request_count_equalto'] != '')
             {
-                $wh[] = ['sr.users', '=', $fields['specified_request_count_equalto']];
-                $groupby = 'group by user_id';
-                if ($entity == 'estate')
-                {
-                    $groupby = 'group by uuid';
-                    $replace_value = " '*'";
-                }
-
+                $whx[] ="sr.users >='".$fields['specified_request_count_equalto']."'";
+                $groupby = 'group by client_id';
             }
 
             if ($fields['specified_request_amount_from'] != '')
             {
-                $wh[] = ['sr.total_amount', '>=', $fields['specified_request_amount_from']];
+                $wh[] ="total_amount >='".$fields['specified_request_amount_from']."'";
                 $replace_amount = "total_amount";
-                $replace_user = 'total_amount, user_id';
-                $groupby = 'group by total_amount, user_id';
-                if ($entity == 'estate')
-                {
-                    $replace_value = "total_amount";
-                    $groupby = 'group by total_amount, uuid';
-                }
+                $replace_user = 'total_amount, client_id';
+                $groupby = 'group by total_amount';
+               
             }
 
             if ($fields['specified_request_amount_to'] != '')
             {
-                $wh[] = ['sr.total_amount', '<=', $fields['specified_request_amount_to']];
+               
+                $wh[] ="total_amount <='".$fields['specified_request_amount_to']."'";
                 $replace_amount = "total_amount";
-                $replace_user = 'total_amount, user_id';
-                $groupby = 'group by total_amount, user_id';
-                if ($entity == 'estate')
-                {
-                    $replace_value = "total_amount";
-                    $groupby = 'group by total_amount, uuid';
-                }
+                $replace_user = 'total_amount, client_id';
+                $groupby = 'group by total_amount';
+              
 
             }
 
             if ($fields['specified_request_start_date'] != '')
             {
-                $start_date = date('Y-m-d h:i:s', strtotime($fields['specified_request_start_date']));
-                $wh[] = ['sr.created_at', '>=', "$start_date"];
-                $replace_amount = "created_at";
-                $replace_user = 'created_at,user_id';
-                $groupby = 'group by user_id,created_at';
-                if ($entity == 'estate')
-                {
-                    $replace_value = "created_at";
-                    $groupby = 'group by uuid,created_at';
-                }
+                $start_date = date('Y-m-d', strtotime($fields['specified_request_start_date']));
+                $wh[] ="preferred_time <='".$start_date."'";
+                $replace_amount = "preferred_time";
+                $replace_user = 'preferred_time, client_id';
+                $groupby = 'group by client_id';
+              
             }
 
             if ($fields['specified_request_end_date'] != '')
             {
-                $start_date = date('Y-m-d h:i:s', strtotime($fields['specified_request_end_date']));
-                $wh[] = ['sr.created_at', '<=', "$end_date"];
-                $replace_amount = "created_at";
-                $replace_user = 'created_at,user_id';
-                $groupby = 'group by user_id,created_at';
-                if ($entity == 'estate')
-                {
-                    $replace_value = "created_at";
-                    $groupby = 'group by uuid,created_at';
-                }
+                $end_date = date('Y-m-d', strtotime($fields['specified_request_end_date']));
+                $wh[] = ['sr.preferred_time', '<=',  "\"$end_date\""];
+                $wh[] ="preferred_time <='".$end_date."'";
+                $replace_amount = "preferred_time";
+                $replace_user = 'preferred_time, client_id';
+                $groupby = 'group by client_id';
+              
             }
 
-            if (isset($fields['lga']) && $fields['lga'] != '')
+            if (isset($fields['specified_request_state']) && $fields['specified_request_state'] != '')
             {
-                $wh[] = ['lga_id', '=', $fields['lga']];
-                $groupby = 'group by user_id';
-                if ($entity == 'estate')
-                {
-                    $wh[] = ['est.lga_id', '=', $fields['lga']];
-                    $replace_value = "created_at";
-                    $groupby = 'group by uuid,created_at';
-                }
+           
+                $wh[] = "state_id = '".$fields['specified_request_state']."'";
+                $groupby = 'group by client_id';
+              
+            }
+
+
+            if (isset($fields['specified_request_lga']) && $fields['specified_request_lga'] != '')
+            {
+            
+                $wh[] = "lga_id = '".$fields['specified_request_lga']."'";
+                $groupby = 'group by client_id';
+              
             }
 
             if (isset($fields['estate_name']) && $fields['estate_name'] != '')
             {
-                $est[] = ['est.estate_name', '=', $fields['estate_name']];
+                $est[] = ['estate_name', '=', $fields['estate_name']];
             }
 
-       
 
-            if (count($wh) == 0)
+
+            if (count($wh) == 0 && count($whx) == 0 )
             {
                 $groupby = 'group by user_id';
-                if ($entity == 'estate')
-                {
-                    $groupby = 'uuid';
-                    $replace_value = "'*'";
-                }
+               
 
             }
+            if (count($wh) > 0) {
+                $WHERE = implode(' and ', $wh);
+                $SQL .= " WHERE ( $WHERE )";
+            }
+            else
+            {
+                $SQL .= " WHERE (1)";
+            }
 
+            if (count($whx) > 0) {
+                $WHERE = implode(' and ', $whx);
+                $SQLx .= " WHERE ( $WHERE )";
+            }
+            else
+            {
+                $SQLx .= " WHERE (1)";
+            }
+          
+            $name = $optionValue = '';
             switch ($entity)
             {
                 case 'client':
                     if (count(array_filter($chk_fields)) > 0)
                     {
-                        $dataArry = ServiceRequest::select('sr.user_id', $replace_amount, 'first_name', 'last_name')->from(ServiceRequest::raw("(select  $replace_user, count(user_id) as users from service_requests $groupby)
-                        sr Join accounts ac ON sr.user_id=ac.user_id Join clients cs ON sr.user_id=cs.account_id "))->where($wh)->withTrashed()
-                                   ->get();
+                        $dataArry = ServiceRequest::select('sr.client_id', $replace_amount, 'first_name', 'last_name')
+                        ->from(ServiceRequest::raw("(select  $replace_user, count(client_id) as users from service_requests $SQL $groupby)
+                        sr Join accounts ac ON sr.client_id=ac.user_id Join clients cs ON sr.client_id=cs.account_id  $SQLx"))
+                        ->withTrashed()
+                        ->get();
+
+                    
+                        $optionValue .= "<option value='[all]' class='select-all'>All Users </option>";
+                        $optionValue .= " <option value='' data-divider='true'></option>";
+                        foreach ($dataArry as $row)
+                        {
+                            $name = $row->first_name . ' ' . $row->last_name;
+                            $optionValue .= "<option value='$row->client_id' {{ old('lga') == $row->client_id ? 'selected' : ''}}>$name</option>";
+                        }
                     }
                     else
                     {
@@ -435,16 +422,16 @@ class DiscountController extends Controller
                         ->join('users', 'users.id', '=', 'accounts.user_id')
                         ->orderBy('accounts.user_id', 'ASC')
                         ->get();
+
+                        $optionValue .= "<option value='[all]' class='select-all'>All Users </option>";
+                        $optionValue .= " <option value='' data-divider='true'></option>";
+                        foreach ($dataArry as $row)
+                        {
+                            $name = $row->first_name . ' ' . $row->last_name;
+                            $optionValue .= "<option value='$row->user_id' {{ old('lga') == $row->user_id ? 'selected' : ''}}>$name</option>";
+                        }
                     }
-                    $name = '';
-                    $optionValue = '';
-                    $optionValue .= "<option value='[all]' class='select-all'>All Users </option>";
-                    $optionValue .= " <option value='' data-divider='true'></option>";
-                    foreach ($dataArry as $row)
-                    {
-                        $name = $row->first_name . ' ' . $row->last_name;
-                        $optionValue .= "<option value='$row->user_id' {{ old('lga') == $row->user_id ? 'selected' : ''}}>$name</option>";
-                    }
+                
 
                     $data = array(
                         'options' => $optionValue
@@ -454,36 +441,95 @@ class DiscountController extends Controller
                 case 'estate':
                     if (count(array_filter($chk_fields)) > 0)
                     {
-                        $dataArry = ServiceRequest::select('sr.uuid', 'first_name', 'last_name')->from(ServiceRequest::raw("(select uuid,  $replace_value,  COUNT(uuid) as users from service_requests $groupby)
-                         sr Join estates est ON sr.uuid=est.uuid"))->where($wh)->withTrashed()
+                     
+                            $dataArry = ServiceRequest::select('sr.client_id', $replace_amount, 'ac.first_name', 'ac.last_name')
+                            ->from(ServiceRequest::raw("(select  $replace_user, count(client_id) as users from service_requests $SQL $groupby)
+                            sr Join accounts ac ON sr.client_id=ac.user_id Join clients cs ON sr.client_id=cs.account_id 
+                            Join estates est ON est.id=cs.estate_id $SQLx"))
+                            ->withTrashed()
                             ->get();
 
+                            $optionValue .= "<option value='[all]' class='select-all'>All Users </option>";
+                            $optionValue .= " <option value='' data-divider='true'></option>";
+                            foreach ($dataArry as $row)
+                            {
+                                $name = $row->first_name . ' ' . $row->last_name;
+                                $optionValue .= "<option value='$row->user_id' {{ old('user') == $row->user_id ? 'selected' : ''}}>$name</option>";
+                            }
+        
                     }
                     else
                     {
-                        $dataArry = Estate::from('estates as est')->select('uuid', 'first_name', 'last_name')
-                            ->where($est)->orderBy('est.id', 'ASC')
-                            ->get();
+                        $dataArry = Account::select('accounts.user_id', 'accounts.first_name', 'accounts.last_name')
+                        ->join('clients', 'accounts.user_id', '=', 'clients.account_id')
+                        ->join('users', 'users.id', '=', 'accounts.user_id')
+                        ->join('estates', 'estates.id', '=', 'clients.estate_id')
+                        ->where($est)
+                        ->orderBy('accounts.user_id', 'ASC')
+                        ->get();
+
+                        $optionValue .= "<option value='[all]' class='select-all'>All Users </option>";
+                        $optionValue .= " <option value='' data-divider='true'></option>";
+                        foreach ($dataArry as $row)
+                        {
+                            $name = $row->first_name . ' ' . $row->last_name;
+                            $optionValue .= "<option value='$row->user_id' {{ old('user') == $row->user_id ? 'selected' : ''}}>$name</option>";
+                        }
+    
                     }
 
-
-                    $name = '';
-                    $optionValue = '';
-                    $optionValue .= "<option value='[all]' class='select-all'>All Users </option>";
-                    $optionValue .= " <option value='' data-divider='true'></option>";
-                    foreach ($dataArry as $row)
-                    {
-                        $name = $row->first_name . ' ' . $row->last_name;
-                        $optionValue .= "<option value='$row->uuid' {{ old('user') == $row->uuid ? 'selected' : ''}}>$name</option>";
-                    }
-
+                  
+                 
                     $data = array(
                         'options' => $optionValue
                     );
 
                 break;
-              
-             
+                case 'service':
+               
+                    if (count(array_filter($chk_fields)) > 0)
+                    {
+                        $dataArry = ServiceRequest::select('sr.client_id', $replace_amount, 'first_name', 'last_name')
+                        ->from(ServiceRequest::raw("(select  $replace_user, count(client_id) as users from service_requests $SQL $groupby)
+                        sr Join accounts ac ON sr.client_id=ac.user_id Join clients cs ON sr.client_id=cs.account_id  $SQLx"))
+                        ->withTrashed()
+                        ->get();
+
+                        $optionValue .= "<option value='[all]' class='select-all'>All Users </option>";
+                        $optionValue .= " <option value='' data-divider='true'></option>";
+                        foreach ($dataArry as $row)
+                        {
+                            $name = $row->first_name . ' ' . $row->last_name;
+                            $optionValue .= "<option value='$row->client_id' {{ old('lga') == $row->client_id ? 'selected' : ''}}>$name</option>";
+                        }
+    
+                      
+                    }
+                    
+                    else
+                    {
+                    
+                        $dataArry = Account::select('accounts.user_id', 'first_name', 'last_name')
+                        ->join('clients', 'accounts.user_id', '=', 'clients.account_id')
+                        ->join('users', 'users.id', '=', 'accounts.user_id')
+                        ->orderBy('accounts.user_id', 'ASC')
+                        ->get();
+
+                        $optionValue .= "<option value='[all]' class='select-all'>All Users </option>";
+                        $optionValue .= " <option value='' data-divider='true'></option>";
+                        foreach ($dataArry as $row)
+                        {
+                            $name = $row->first_name . ' ' . $row->last_name;
+                            $optionValue .= "<option value='$row->user_id' {{ old('lga') == $row->user_id ? 'selected' : ''}}>$name</option>";
+                        }
+    
+                      
+                    }
+                 
+                    $data = array(
+                        'options' => $optionValue
+                    );
+                   break;
                 default:
                 $data =[];
                 break;
@@ -603,144 +649,160 @@ class DiscountController extends Controller
  
 
     private function createUsersDiscount($request, $discounts)
-    {
-        $allusers = [];     
+    {   
+        $accounts = Account::select('first_name', 'last_name', 'user_id')->whereIn('user_id', $request->users)->get();
+      
        foreach ($request->users as $user)
         {           
-         $discount = ClientDiscount::create([
-            'discount_id' => $discounts->uuid,
-            'discount_name' => $request->input('discount_name') ,
-            'entity' => $request->input('entity') , 
-            'notify' => $request->input('notify') ,
-            'rate' => $request->input('rate') ,
-            'description' => $request->input('description') ,
-            'created_by' => Auth::user()->email,
-            'user_id'=> $user,
-            'status' => 'activate'
-    
+        ClientDiscount::create([
+            'discount_id' => $discounts->id,
+            'client_id' => $user,
                 ]);
         }
 
-        return true;
-    }
-
-
-    private function createEstateUsersDiscount($request, $discounts)
-    {
-        $allusers = [];    
-     
-       foreach ($request->users as $user)
+        foreach ($accounts as $user)
         {           
-         $discount = ClientDiscount::create([
-            'discount_id' => $discounts->uuid,
-            'discount_name' => $request->input('discount_name') ,
-            'entity' => $request->input('entity') , 
-            'notify' => $request->input('notify') ,
-            'rate' => $request->input('rate') ,
-            'description' => $request->input('description') ,
-            'created_by' => Auth::user()->email,
-            'uuid'=> $user,
-            'status' => 'activate'
-    
+        DiscountHistory::create([
+            'discount_id' => $discounts->id,
+            'client_name' => $user->first_name.' '.$user->last_name,
+            'client_id' => $user->user_id,
+           
                 ]);
         }
-
-        return true;
+  
+      
+        return true;  
     }
 
 
- 
 
-    private function createEstateTypeUsersDiscount($request, $discounts, $type)
+
+
+    private function createEstateTypeUsersDiscount($request, $discounts)
     {
-       
-        $users = Estate::select('id')->where('estate_name', $type)->whereIn('id', $request->users)
-        ->get();
+    
+        $estates = Estate::select('id')->where('estate_name', $request->estate_name)
+        ->first();
+        $accounts = Account::select('first_name', 'last_name', 'user_id')->whereIn('user_id', $request->users)->get();
 
-        foreach ($users as $user)
+
+        foreach ($request->users as $user)
         {           
-         $discount = ClientDiscount::create([
-            'discount_id' => $discounts->uuid,
-            'discount_name' => $request->input('discount_name') ,
-            'entity' => $request->input('entity') , 
-            'notify' => $request->input('notify') ,
-            'rate' => $request->input('rate') ,
-            'description' => $request->input('description') ,
-            'created_by' => Auth::user()->email,
-            'user_id'=> $user->id,
-            'status' => 'activate'
-    
+         ClientDiscount::create([
+            'discount_id' => $discounts->id,
+            'client_id' => $user,
+            'estate_id' =>  $estates->id,
+                ]);
+        
+        }
+        foreach ($accounts as $user)
+        {           
+          DiscountHistory::create([
+            'discount_id' => $discounts->id,
+            'estate_id' =>  $estates->id,
+            'client_name' => $user->first_name.' '.$user->last_name,
+            'client_id' => $user->user_id,
+            'estate_name'=> $request->estate_name
+           
                 ]);
         }
+         
         return true;
     }
 
-    private function createEstateHistory($request, $discounts)
-    {
-        $discount = EstateDiscountHistory::create([
-        'discount_id' => $discounts->uuid,
-        'name' => $request->input('discount_name'),
-        'estate_name' => $request->input('estate_name')? $request->input('estate_name'): 'all users'  ,
-        'notify' => $request->input('notify') ,
-        'rate' => $request->input('rate') ,
-        'duration_start' => $request->input('start_date') ,
-        'duration_end' => $request->input('end_date') , 
-        'created_by' => Auth::user()->email, 
-        'status' => 'activate'
-         ]);
-
-    }
+  
 
     private function createServiceDiscount($request, $discounts)
     {     
-     
-        $all_services = Service::select('uuid')->whereIn('id', $request->services)
-        ->orderBy('name', 'ASC')
+        
+        $services = Service::select('services.name as servicename', 'categories.name as catname','services.id as serviceid')
+        ->join('categories', 'categories.id', '=', 'services.category_id')
+        ->whereIn('services.id', $request->services)
         ->get();
-        foreach ($all_services  as $service)
-        {
-            $service = ServiceDiscount::create([
-                'discount_id' => $discounts->uuid,
-                'discount_name' => $request->input('discount_name') ,
-                'entity' => $request->input('entity') , 
-                'notify' => $request->input('notify') ,
-                'rate' => $request->input('rate') ,
-                'description' => $request->input('description') ,
-                'created_by' => Auth::user()->email,
-                'service_id'=> $service->uuid,
-                'status' => 'activate'
-                    ]);
+
+      
+        foreach ($services as $service)
+        {           
+         ClientDiscount::create([
+            'discount_id' => $discounts->id,
+            'service_id' =>  $service->serviceid,
+                ]);
+        
         }
+        foreach ($services as $service)
+        {           
+          $history = DiscountHistory::create([
+            'discount_id' => $discounts->id,
+            'service_id' =>  $service->serviceid,
+            'service_name' => $service->servicename,
+            'service_category'=> $service->catname,
+           
+                ]);
+        }
+
+        if (!empty($request->users)){
+            $accounts = Account::select('first_name', 'last_name', 'user_id')->whereIn('user_id', $request->users)
+            ->get();
+        
+            foreach ($request->users as $user)
+            {           
+           ClientDiscount::create([
+                'discount_id' => $discounts->id,
+                'client_id' => $user,
+                    ]);
+            }
+
+    
+            foreach ($accounts as $key => $user)
+            {   
+             
+            DiscountHistory::create([
+                'discount_id' => $discounts->id,
+                'client_id' => $user->user_id,
+                'client_name' => $user->first_name.' '.$user->last_name,
+                'service_name' =>  $history->service_name,
+                'service_id' => $history->service_id,
+                'service_category'=>  $history->catname,
+               
+                    ]);
+             }
+      
+        }
+
         return true;
     }
 
 
 
 
-   
 
     private function createAllServiceDiscount($request, $discounts)
     {    
-        
-        $all_services = Service::select('uuid')->whereIn('category_id', $request->category)
-        ->orderBy('name', 'ASC')
-        ->get();   
-        foreach ($all_services as $service)
-        {
-                 
-         $service = ServiceDiscount::create([
-        'discount_id' => $discounts->uuid,
-        'discount_name' => $request->input('discount_name') ,
-        'entity' => $request->input('entity') , 
-        'notify' => $request->input('notify') ,
-        'rate' => $request->input('rate') ,
-        'description' => $request->input('description') ,
-        'created_by' => Auth::user()->email,
-        'service_id'=> $service->uuid,
-        'status' => 'activate'
-            ]);
+      
+        $all_services= Service::select('services.name as servicename', 'categories.name as catname','services.id as serviceid')
+        ->join('categories', 'categories.id', '=', 'services.category_id')
+        ->whereIn('services.category_id', $request->category)
+        ->get();
 
+        foreach ($all_services as $service)
+        {           
+         ClientDiscount::create([
+            'discount_id' => $discounts->id,
+            'service_id' =>  $service->serviceid,
+                ]);
+        
         }
+        foreach ($all_services as $service)
+        {           
+          DiscountHistory::create([
+            'discount_id' => $discounts->id,
+            'service_id' =>  $service->serviceid,
+            'service_name' => $service->servicename,
+            'service_category'=> $service->catname,
+                ]);
+        }
+
+       
         return true;
     }
 

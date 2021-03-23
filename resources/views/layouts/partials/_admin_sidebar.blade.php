@@ -62,7 +62,8 @@
           <a href="" class="nav-link"><i data-feather="percent"></i> <span>Discount/Promotion</span></a>
           <ul>
           <li class="{{ Route::currentRouteNamed('admin.add_discount') ? 'active' : '' }}"><a href="{{ route('admin.add_discount',  app()->getLocale()) }}">Add</a></li>
-            <li class="{{ Route::currentRouteNamed('admin.discount_list', 'admin.edit_discount') ? 'active' : '' }}"><a href="{{ route('admin.discount_list',  app()->getLocale()) }}">List</a></li>
+            <li class="{{ Route::currentRouteNamed('admin.discount_list') ? 'active' : '' }}"><a href="{{ route('admin.discount_list',  app()->getLocale()) }}">List</a></li>
+            <li class="{{ Route::currentRouteNamed('admin.discount_history') ? 'active' : '' }}"><a href="{{ route('admin.discount_history',  app()->getLocale()) }}">History</a></li>
           </ul>
         </li>
 

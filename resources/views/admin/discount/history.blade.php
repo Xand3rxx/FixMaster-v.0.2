@@ -10,7 +10,7 @@
                     <ol class="breadcrumb breadcrumb-style1 mg-b-10">
                         <li class="breadcrumb-item"><a
                                 href="{{ route('admin.index', app()->getLocale()) }}">Dashboard</a></li>
-                        <li class="breadcrumb-item active" aria-current="page">Discount/Promotion List</li>
+                        <li class="breadcrumb-item active" aria-current="page">Discount History List</li>
                     </ol>
                 </nav>
             </div>
@@ -26,9 +26,9 @@
                 <div class="card mg-b-10">
                     <div class="card-header pd-t-20 d-sm-flex align-items-start justify-content-between bd-b-0 pd-b-0">
                         <div>
-                            <h6 class="mg-b-5">Discount List as of {{ date('M, d Y') }}</h6>
+                            <h6 class="mg-b-5">Discount History List as of {{ date('M, d Y') }}</h6>
                             <p class="tx-13 tx-color-03 mg-b-0">This table displays a list of all FixMaster
-                                Discounts/Promotion.</p>
+                                Discounts History.</p>
                         </div>
 
                     </div><!-- card-header -->
@@ -39,16 +39,16 @@
                             <thead class="thead-primary">
                                 <tr>
                                     <th class="text-center">#</th>
-                                    <th>Name</th>
+                                    <th>Client Name</th>
+                                    <th>Discount Name</th>
                                     <th>Entity</th>
-                                    <th>Created By</th>
                                     <th class="text-center">Rate</th>
                                     <th class="text-center">Duration</th>
-                                    <th class="text-center">Description</th>
-                                    <th>Notification Status</th>
-                                    <th>Status</th>
+                                    <th class="text-center">Service Category</th>
+                                    <th>Services Name</th>
+                                    <th>Available</th>
                                     <th>Date Created</th>
-                                    <th class="text-center">Action</th>
+                             
                                 </tr>
                             </thead>
                             <tbody>
@@ -56,58 +56,24 @@
                                 @foreach($discounts as $discount)
                                 <tr>
                                     <td class="tx-color-03 tx-center">{{ $loop->iteration }}</td>
-                                    <td class="tx-medium">{{ucfirst($discount->name) }}</td>
-                                    <td class="tx-medium">{{ $discount->created_by}}</td>
-                                    <td class="tx-medium text-center">{{ucfirst('super admin')}}</td>
+                                    <td class="tx-medium">{{  $discount->client_name != '' ?ucfirst($discount->client_name): 'Nil' }}</td>
+                                    <td class="tx-medium">{{ ucfirst($discount->name)}}</td>
+                                    <td class="tx-medium text-center">{{ucfirst($discount->entity)}}</td>
                                     <td class="tx-medium text-center">{{$discount->rate.'%'}}</td>
                                <td class="tx-medium text-center">{{CustomHelpers::displayTime($discount->duration_start, $discount->duration_end) }}</td>
-                                    <td class="tx-medium">{{$discount->description}}</td>
-                                    <td class="tx-medium text-center">{{$discount->notify == 1 ? ' Sent': 'Not Sent'}}
+                                    <td class="tx-medium">{{$discount->service_category != ''? $discount->service_category: 'Nil'}}</td>
+                                    <td class="tx-medium text-center">{{$discount->service_name != ''? $discount->service_name: 'Nil'}}
                                     </td>
-                                    @if($discount->status == 'activate')
-                                    <td class="text-medium text-success">Active</td>
+                                    @if($discount->availability  == 'used')
+                                    <td class="text-medium text-success">Used</td>
                                     @else
-                                    <td class="text-medium text-danger">Deactivated</td>
+                                    <td class="text-medium text-danger">Unused</td>
                                     @endif
 
                                     <td class="text-medium">
                                         {{ Carbon\Carbon::parse($discount->created_at, 'UTC')->isoFormat('MMMM Do YYYY, h:mm:ssa') }}
-                                    </td>
-                                    <td class=" text-center">
-
-                                        <div class="dropdown-file">
-                                            <a href="" class="dropdown-link" data-toggle="dropdown"><i
-                                                    data-feather="more-vertical"></i></a>
-                                            <div class="dropdown-menu dropdown-menu-right">
-                                                <a href="{{ route('admin.summary', [ 'discount'=>$discount->uuid, 'locale'=>app()->getLocale() ]) }}"
-                                                    class="dropdown-item details text-primary" title="View  details"
-                                                    data-url="" data-category-name="" id="category-details"><i
-                                                        class="far fa-clipboard"></i> Summary</a>
-                                                <a href="{{ route('admin.edit_discount', [ 'discount'=>$discount->uuid, 'locale'=>app()->getLocale() ]) }}"
-                                                    class="dropdown-item details text-info"><i class="far fa-edit"></i>
-                                                    Edit</a>
-                                                @if($discount->status == 'activate')
-                                                <a href="#" id="deactivate"
-                                                    data-url="{{ route('admin.deactivate_discount', [ 'discount'=>$discount->uuid, 'locale'=>app()->getLocale() ]) }}"
-                                                    class="dropdown-item details text-warning deactivate"
-                                                    title="Deactivate "><i class="fas fa-ban"></i> Deactivate</a>
-                                                @else
-
-                                                <a href="#" id="activate"
-                                                    data-url="{{ route('admin.activate_discount', [ 'discount'=>$discount->uuid, 'locale'=>app()->getLocale() ]) }}"
-                                                    class="dropdown-item details text-success" title="Reinstate"><i
-                                                        class="fas fa-undo"></i> Reinstate</a>
-                                                @endif
-
-                                                <a href="#" id="delete" 
-                                                    data-url="{{ route('admin.delete_discount', [ 'discount'=>$discount->uuid, 'locale'=>app()->getLocale() ]) }}"
-                                                    class="dropdown-item details text-danger" title="Delete Discount"><i
-                                                        class="fas fa-trash"></i> Delete</a>
-
-                                            </div>
-                                        </div>
-                                    </td>
-                                </tr>
+                                    </td> 
+                            
                                 @endforeach
                             </tbody>
                         </table>

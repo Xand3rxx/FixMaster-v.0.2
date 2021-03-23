@@ -26,6 +26,7 @@ use App\Http\Controllers\Admin\PriceController;
 use App\Http\Controllers\InvoiceController;
 use App\Http\Controllers\SimulationController;
 use App\Http\Controllers\Admin\User\Administrator\SummaryController;
+use App\Http\Controllers\Admin\StatusController;
 
 /*
 |--------------------------------------------------------------------------
@@ -161,6 +162,8 @@ Route::prefix('admin')->group(function () {
         Route::get('/discount/delete/{discount:id}',                    [App\Http\Controllers\DiscountController::class, 'delete'])->name('delete_discount');
         Route::get('/discount/deactivate/{discount:id}',                    [App\Http\Controllers\DiscountController::class, 'deactivate'])->name('deactivate_discount');
         Route::get('/discount/activate/{discount:id}',                    [App\Http\Controllers\DiscountController::class, 'reinstate'])->name('activate_discount');
+        Route::get('/discount/history',                       [App\Http\Controllers\DiscountHistoryController::class, 'index'])->name('discount_history');
+
 
         Route::get('/referral/add',                     [App\Http\Controllers\ReferralController::class, 'create'])->name('add_referral');
         Route::post('/referral/store',                    [App\Http\Controllers\ReferralController::class, 'store'])->name('referral_store');
@@ -189,6 +192,12 @@ Route::prefix('admin')->group(function () {
 
         //Routes for Price Management
         Route::resource('booking-fees',                     PriceController::class);
+
+        //Routes for Status Management
+        Route::resource('statuses',                         StatusController::class);
+
+        
+
     });
 });
 
@@ -222,6 +231,13 @@ Route::prefix('/client')->group(function () {
             Route::get('/apiRequest', [ClientController::class, 'apiRequest'])->name('ipn.paystackApiRequest');
 
             Route::get('/ipnflutter', [ClientController::class, 'flutterIPN'])->name('ipn.flutter');
+
+            Route::get('/services',                     [ClientController::class, 'services'])->name('services.list');
+            Route::get('services/quote/{service}',      [ClientController::class, 'serviceQuote'])->name('services.quote');
+            Route::get('services/details/{service}',    [ClientController::class, 'serviceDetails'])->name('services.details');
+            Route::post('services/search',              [ClientController::class, 'search'])->name('services.search');
+            Route::get('services/custom/',              [ClientController::class, 'customService'])->name('services.custom');
+
 
     });
 });

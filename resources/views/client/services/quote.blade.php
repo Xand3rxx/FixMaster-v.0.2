@@ -2,64 +2,46 @@
 @section('title', 'Service Quote')
 @section('content')
 @include('layouts.partials._messages')
-<script src="https://js.paystack.co/v1/inline.js"></script>
-
+<style>
+    .blog .author { opacity: 1 !important;}
+    .blog .overlay { opacity: 0.6 !important;}
+</style>
 <div class="col-lg-8 col-12">
     <div class="card custom-form border-0">
-        <div class="card-body">
-            <h5>{{ $serviceQuote->name }} Service Request</h5>
-            <div class="example gc3 mb-4">
-               
+        <div class="card-body mt-4">
+            {{-- <h5><span class="font-weight-bold">{{ $service->name }}</span> Service Request</h5> --}}
+            <div class="card blog">
+            <div class="position-relative" style="height: 100px !important">
+                <img alt="{{ $service->name }}" src="{{ asset('assets/service-images/'.$service->image) }}" style="width:100% !important; height: 100% !important" class="card-img-top rounded-top" />
+                <div class="overlay rounded-top bg-dark"></div>
             </div>
 
-            <form class="rounded shadow p-4" method="POST" action="{{ route('client.book_services') }}" enctype="multipart/form-data">
+            <div class="author">
+                <h4 class="text-light user d-block"><i class="mdi mdi-bookmark"></i> {{ $service->name }}</h4>
+                <small class="text-light date"><i class="mdi mdi-bookmark"></i> {{ $service->serviceRequests()->count() }} Requests</small>
+            </div>
+            </div>
+
+            <form class="rounded p-4" method="POST" action="" enctype="multipart/form-data">
                 @csrf
                 <small class="text-danger">A booking deposit is required to validate this order and enable us assign a CSE to your Job.</small>
 
-                <input type="hidden" class="d-none" value="{{ $serviceQuote->service_id }}" name="service_id">
-                <input type="hidden" class="d-none" value="{{ $serviceQuote->id }}" name="category_id">
+                <input type="hidden" class="d-none" value="{{ $service->service_id }}" name="service_id">
 
                 <div class="row" id="pills-tab" role="tablist">
                     <ul class="nav nav-pills bg-white nav-justified flex-column mb-0" id="pills-tab" role="tablist">
-                        <li class="nav-item bg-light rounded-md">
-                            <a class="nav-link rounded-md @if(old('service_fee') == $serviceQuote->standard_fee) active @endif"  id="dashboard" data-toggle="pill" href="#dash-board" role="tab" aria-controls="dash-board" aria-selected="false">
-                                <div class="p-3 text-left">
-                                <h5 class="title">Standard: ₦{{ number_format($serviceQuote->standard_fee) }}</h5>
-                                    <p class="text-muted tab-para mb-0">Your job will be evaluated by a CSE and technician within a maximum period of 8 hours.</p>
-                                    <input type="radio" name="service_fee" value="{{ $serviceQuote->standard_fee }}" class="custom-control-input service-fee" @if(old('service_fee') == $serviceQuote->standard_fee) checked @endif>
+                        @foreach($bookingFees as $bookingFee)
+                            <li class="nav-item bg-light rounded-md mt-4">
+                                <a class="nav-link rounded-md @if(old('price_id') == $bookingFee->id) active @endif"  id="dashboard-{{$bookingFee->id}}" data-toggle="pill" href="#dash-board-{{$bookingFee->id}}" role="tab" aria-controls="dash-board-{{$bookingFee->id}}" aria-selected="false">
+                                    <div class="p-3 text-left">
+                                    <h5 class="title">{{ $bookingFee->name }}: ₦{{ number_format($bookingFee->amount) }}</h5>
+                                        <p class="text-muted tab-para mb-0">{{ $bookingFee->description }}</p>
+                                        <input type="radio" name="price_id" value="{{ $bookingFee->id }}" class="custom-control-input booking-fee" @if(old('price_id') == $bookingFee->id) checked @endif>
 
-                                    <input type="radio" name="service_fee_name" value="Standard" class="custom-control-input service-fee-name" @if(old('service_fee') == $serviceQuote->standard_fee) checked @endif>
-
-                                </div>
-                            </a><!--end nav link-->
-                        </li><!--end nav item-->
-                        
-                        <li class="nav-item bg-light rounded-md mt-4">
-                            <a class="nav-link rounded-md urgent @if(old('service_fee') == $serviceQuote->urgent_fee) active @endif" id="timeline" data-toggle="pill" href="#time-line" role="tab" aria-controls="time-line" aria-selected="false">
-                                <div class="p-3 text-left">
-                                <h5 class="title">Urgent - ₦{{ number_format($serviceQuote->urgent_fee) }}</h5>
-                                    <p class="text-muted tab-para mb-0">Your job will be evaluated by a CSE and technician within a maximum period of 2 hours</p>
-                                    <input type="radio" name="service_fee" value="{{ $serviceQuote->urgent_fee }}" class="custom-control-input service-fee" @if(old('service_fee') == $serviceQuote->urgent_fee) checked @endif>
-
-                                    <input type="radio" name="service_fee_name" value="Urgent" class="custom-control-input service-fee-name" @if(old('service_fee') == $serviceQuote->urgent_fee) checked @endif>
-                                </div>
-                            </a><!--end nav link-->
-                        </li><!--end nav item-->
-                        
-                        <li class="nav-item bg-light rounded-md mt-4">
-                            <a class="nav-link rounded-md @if(old('service_fee') == $serviceQuote->ooh_fee) active @endif" id="paymentmanagement" data-toggle="pill" href="#payment-management" role="tab" aria-controls="payment-management" aria-selected="false">
-                                <div class="p-3 text-left">
-                                <h5 class="title">Out of Hours - ₦{{ number_format($serviceQuote->ooh_fee) }}</h5>
-                                    <p class="text-muted tab-para mb-0">Our normal working Hours is 7AM to 7PM. A CSE and technician will evaluate your job within a maximum period of 2 hours</p>
-                                    <input type="radio" name="service_fee" value="{{ $serviceQuote->ooh_fee }}" class="custom-control-input service-fee" @if(old('service_fee') == $serviceQuote->ooh_fee) checked @endif>
-
-                                    <input type="radio" name="service_fee_name" value="Out of Hours" class="custom-control-input service-fee-name" @if(old('service_fee') == $serviceQuote->ooh_fee) checked @endif>
-
-                                </div>
-                            </a><!--end nav link-->
-                        </li><!--end nav item-->
-                        
-                    
+                                    </div>
+                                </a><!--end nav link-->
+                            </li><!--end nav item-->
+                        @endforeach
                     </ul><!--end nav pills-->
                 </div>
 
@@ -129,7 +111,7 @@
                         </div>
                     
                         <div class="custom-control custom-checkbox form-group position-relative">
-                            <input type="radio" id="customRadio4" name="address" class="custom-control-input" value="no">
+                            <input type="radio" id="customRadio4" name="address" class="custom-control-input user_address" value="no">
                             <label class="custom-control-label" for="customRadio4">No, I have another Address</label>
                         </div>
 
@@ -176,16 +158,6 @@
 
                 
 
-                {{-- REQUIREMENTS FOR PAYMENT GATWAYS  --}}
-                <input type="hidden" class="d-none" value="{{ old('email') ?? $email }}" id="email" name="email">
-                <input type="hidden" class="d-none" value="{{ old('client_discount') ?? $clientDiscount }}" id="client_discount" name="client_discount">
-                <input type="hidden" class="d-none" value="{{ old('client_phone_number') ?? $clientPhoneNumber }}" id="client_phone_number" name="client_phone_number">
-
-                {{-- Values are to be provided by the payment gateway using jQuery or Vanilla JS --}}
-                <input type="hidden" class="d-none" value="{{ old('payment_response_message') }}" id="payment_response_message" name="payment_response_message">
-                <input type="hidden" class="d-none" value="{{ old('payment_reference') }}" id="payment_reference" name="payment_reference">
-
-                
                 <div class="row">
                     <div class="col-sm-12">
                     <button type="submit" class="submitBnt btn btn-primary">Submit</button>
@@ -210,12 +182,12 @@
                 <p class="text-muted">You can make offline payment using the following options</p>
                 <h5 class="text-primary">Pay To The Bank</h5>
                 <p>
-                    Pay to into the account details below:<br> Account name: <strong>FCMB</strong><br> Account Number: <strong>1234567890</strong><br> <span class="text-danger">Note: </span> On the teller, please write as depositor's name and add your job reference at the end of the name. E.g.: <span class="text-muted">"{{ Auth::user()->fullName->name }} (REF-2E3487AAF23) payment."</span>
+                    Pay to into the account details below:<br> Account name: <strong>FCMB</strong><br> Account Number: <strong>1234567890</strong><br> <span class="text-danger">Note: </span> On the teller, please write as depositor's name and add your job reference at the end of the name. E.g.: <span class="text-muted">"{{ Auth::user()->account->first_name.' '.Auth::user()->account->last_name }} (REF-2E3487AAF23) payment."</span>
                 </p>
 
                 <h5 class="text-primary">Internet Banking</h5>
                 <p>
-                    Make an online transfer to the account details below:<br> Account name: <strong>FCMB</strong><br> Account Number: <strong>1234567890</strong><br> <span class="text-danger">Note: </span> Use the following as transfer note. E.g.: <span class="text-muted">"{{ Auth::user()->fullName->name }} (REF-2E3487AAF23) payment."</span>
+                    Make an online transfer to the account details below:<br> Account name: <strong>FCMB</strong><br> Account Number: <strong>1234567890</strong><br> <span class="text-danger">Note: </span> Use the following as transfer note. E.g.: <span class="text-muted">"{{ Auth::user()->account->first_name.' '.Auth::user()->account->last_name }} (REF-2E3487AAF23) payment."</span>
                 </p>
 
                 <div class="col-md-12 col-12 mt-4 mb-4 pt-2">
@@ -238,134 +210,26 @@
     </div><!-- modal-dialog -->
 </div><!-- modal -->
 
-@php
-$paystackInfo = json_decode($paystack->information, true);
-@endphp
+@push('script')
+    <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDeDLVAiaU13p2O0d3jfcPjscsbVsCQUzc&v=3.exp&libraries=places"></script>
 
-@push('scripts')
-<script>
-    $(document).ready(function (){
+    <script>
+        $(document).ready(function (){
 
-        $(document).on('click', '.nav-item', function(){
-            // console.log($(this).closest('a').find('.service-fee').val());
-            // console.log($(this).find('.service-fee').val());
+            $(document).on('click', '.nav-item', function(){
+                $(this).find('.booking-fee').prop('checked', true);
+            });
 
-            $(this).find('.service-fee').prop('checked', true);
-            $(this).find('.service-fee-name').prop('checked', true);
+            $('#pay_offline').on('change', function (){  
+                $('#pay_offline').attr('checked', 'checked');
+            });
 
+            $('.close').click(function (){
+                $(".modal-backdrop").remove();
+            });
+            
         });
-
-        $('#pay_offline').on('change', function (){  
-            $('#pay_offline').attr('checked', 'checked');
-        });
-
-        $('.close').click(function (){
-            $(".modal-backdrop").remove();
-        });
-
-        //PAYMENR GATEWAY
-        $('#paystack_option').on('change', function (){  
-
-            // var clientEmail = $('#email').val();
-            // var clientDiscount = $('#client_discount').val();
-            // var serviceFee = $('.service-fee').val();
-            // var amount;
-
-            // //ADD VALUE FROM PAYSTACK
-            // var paymentResponseMessage = $('#payment_response_message');
-            // var paymentReference = $('#payment_reference');
-
-            // if(clientDiscount == 0){
-            //     //If client still has a discount of 5%
-            //     var discountServiceFee = 0.95 * serviceFee;
-            //     amount = discountServiceFee;
-            // }else{
-            //     amount = serviceFee;
-            // }
-
-            // //IF client has no discount seviceFee and amount should be the same value
-            //  console.log(clientEmail, clientDiscount, serviceFee, amount);
-
-            // //DENK your CODE continues from here. Cheers
-        });
-
-        // payment_response_message
-// payment_reference
-
-
-    });
-</script>
-
-<script>
-    function payWithPaystack(){
-
-        var clientEmail = $('#email').val();
-        var clientDiscount = $('#client_discount').val();
-        var clientPhoneNumber = $('#client_phone_number').val();
-        var amount;
-        var serviceFee = $("input[name='service_fee']:checked").val();
-
-        if($.trim(serviceFee).length < 1){
-
-            $('#paystack_option').prop('checked', false);
-
-            var message = 'Please select a Service Fee Type.';
-            var type = 'error';
-            displayMessage(message, type);
-
-            return false;
-        }
-
-        //ADD VALUE FROM PAYSTACK
-        var paymentResponseMessage = $('#payment_response_message');
-        var paymentReference = $('#payment_reference');
-
-        if(clientDiscount == 0){
-            //If client still has a discount of 5%
-            var discountServiceFee = 0.95 * serviceFee;
-            amount = discountServiceFee;
-        }else{
-            amount = serviceFee;
-        }
-
-        var handler = PaystackPop.setup({
-            key:"{{ $paystackInfo['public_key'] }}",
-            // key: 'pk_test_41ada297a2a2953f9d42e125713644baccd0658c',
-            email: clientEmail,
-            amount: amount * 100,
-            currency: "NGN",
-            ref: ''+Math.floor((Math.random() * 1000000000) + 1), // generates a pseudo-unique reference. Please replace with a reference you generated. Or remove the line entirely so our API will generate one for you
-            metadata: {
-            custom_fields: [
-                {
-                    display_name: "Mobile Number",
-                    variable_name: "mobile_number",
-                    value: clientPhoneNumber,
-                }
-            ]
-            },
-            callback: function(response){
-                // sendResponseToController(response);
-                // alert('success. transaction ref is ' + response.reference);
-                $('#payment_reference').val(response.reference);
-                $('#payment_response_message').val('success');
-
-                // console.log($('#payment_reference').val());
-                $('.submitBnt').trigger('click');
-
-            },
-            onClose: function(){
-                // alert('window closed');
-
-                var message = 'Closing payment gateway window.';
-                var type = 'success';
-                displayMessage(message, type);
-            }
-        });
-        handler.openIframe();
-    }
-
-  </script>
-
+    </script>
 @endpush
+
 @endsection
