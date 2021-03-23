@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\EarningHistory;
 use Route;
 use Auth;
 use App\Models\Earning;
@@ -43,11 +44,17 @@ class EarningController extends Controller
         }
 
         $updateEarnings = $earning->update([
-            'earnings' => $request->input('earnings')
+            'earnings' => $request->input('earnings')/100
         ]);
 
         if($updateEarnings)
         {
+            $earningHistory = new EarningHistory();
+            $earningHistory->uuid = $earning->uuid;
+            $earningHistory->role_name = $request->input('role_name');
+            $earningHistory->earnings = $request->input('earnings');
+            $earningHistory->save();
+
             $type = 'Request';
             $severity = 'Informational';
             $actionUrl = Route::currentRouteAction();

@@ -53,8 +53,8 @@
                                 @foreach($serviceRequests as $request)
                                     <tr>
                                         <td class="tx-color-03 tx-center">{{ $loop->iteration }}</td>
-                                        <td class="tx-medium">{{ $request['job_reference'] }}</td>
-                                        <td class="tx-medium">{{ $request['user_id'] }}</td>
+                                        <td class="tx-medium">{{ $request['unique_id'] }}</td>
+                                        <td class="tx-medium">{{ $request['client']->account->first_name }} {{ $request['client']->account->last_name }}</td>
                                         <td class="tx-medium">{{ $request['cse_id'] }}</td>
                                         <td class="text-medium">{{ $request['cse_id'] }}</td>
                                         <td class="text-medium">{{ $request['total_amount'] }}</td>

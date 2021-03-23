@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\IncomeHistory;
 use Route;
 use Auth;
 use App\Models\Income;
@@ -35,14 +36,37 @@ class IncomeController extends Controller
 
     public function updateIncome($language, Request $request, Income $income)
     {
+        $amount = '';
+        $percentage = '';
+
+        if ($request->input('type') === 'amount')
+        {
+            $amount = $request->input('amount');
+            $percentage = null;
+        }
+        elseif ($request->input('type') === 'percentage')
+        {
+            $amount = null;
+            $percentage = $request->input('percentage')/100;
+        }
+
+
         $updateIncome = $income->update([
             'income_type' => $request->input('type'),
-            'amount' => $request->input('amount'),
-            'percentage' => $request->input('percentage')
+            'amount' => $amount,
+            'percentage' => $percentage
         ]);
 
         if ($updateIncome)
         {
+            $incomeHistory = new IncomeHistory();
+            $incomeHistory->uuid = $income->uuid;
+            $incomeHistory->income_name = $request->input('income_name');
+            $incomeHistory->income_type = $request->input('type');
+            $incomeHistory->amount = $amount;
+            $incomeHistory->percentage = $percentage;
+            $incomeHistory->save();
+
             $type = 'Request';
             $severity = 'Informational';
             $actionUrl = Route::currentRouteAction();

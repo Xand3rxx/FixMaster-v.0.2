@@ -19,7 +19,7 @@ class EarningsSeeder extends Seeder
 
         $earnings = new Earning();
         $earnings->uuid = Str::uuid('uuid');
-        $earnings->role_name = 'Manager';
+        $earnings->role_name = 'QA';
         $earnings->earnings = 0.00;
         $earnings->save();
 
@@ -33,9 +33,5 @@ class EarningsSeeder extends Seeder
         $earnings->role_name = 'CSE';
         $earnings->save();
 
-        $earnings = new Earning();
-        $earnings->uuid = Str::uuid('uuid');
-        $earnings->role_name = 'Technician';
-        $earnings->save();
     }
 }

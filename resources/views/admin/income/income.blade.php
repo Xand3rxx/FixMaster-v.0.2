@@ -56,7 +56,7 @@
                                     @if($income['percentage'] == null)
                                         <td class="tx-medium"> - </td>
                                     @else
-                                        <td class="tx-medium"> {{ $income['percentage'] }} </td>
+                                        <td class="tx-medium"> {{ $income['percentage']*100 }} </td>
                                     @endif
                                     <td class=" text-center">
                                         <div class="dropdown-file">

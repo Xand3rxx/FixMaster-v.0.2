@@ -25,22 +25,17 @@ class IncomeSeeder extends Seeder
 
         $income = new Income();
         $income->uuid = Str::uuid('uuid');
-        $income->income_name = 'Initial Labour Cost';
-        $income->save();
-
-        $income = new Income();
-        $income->uuid = Str::uuid('uuid');
-        $income->income_name = 'Proceeding Labour Cost';
-        $income->save();
-
-        $income = new Income();
-        $income->uuid = Str::uuid('uuid');
         $income->income_name = 'FixMaster Markup';
         $income->save();
 
         $income = new Income();
         $income->uuid = Str::uuid('uuid');
         $income->income_name = 'Logistics Cost';
+        $income->save();
+
+        $income = new Income();
+        $income->uuid = Str::uuid('uuid');
+        $income->income_name = 'Retention Fee';
         $income->save();
     }
 }
