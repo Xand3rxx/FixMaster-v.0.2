@@ -106,26 +106,29 @@ class TechnicianSeeder extends Seeder
         $technicianTable->bank_id = 23;
         $technicianTable->save();
 
-        // Technician Phone record Account
-        $technicianPhone = \App\Models\Phone::create([
-            'user_id' =>  $technician->id,
-            'account_id'  => $technicianAccount->id,
-            'country_id'  => 156, //Nigeria
-            'number'   => "08132667823"
-        ]);
+        // // Technician Phone record Account
+        // $technicianPhone = \App\Models\Phone::create([
+        //     'user_id' =>  $technician->id,
+        //     'account_id'  => $technicianAccount->id,
+        //     'country_id'  => 156, //Nigeria
+        //     'number'   => "08132667823"
+        // ]);
 
-        $technicianPhone = \App\Models\Phone::create([
-            'user_id' =>  $technician1->id,
-            'account_id'  => $technicianAccount1->id,
-            'country_id'  => 156, //Nigeria
-            'number'   => "08124363864"
-        ]);
+        // $technicianPhone = \App\Models\Phone::create([
+        //     'user_id' =>  $technician1->id,
+        //     'account_id'  => $technicianAccount1->id,
+        //     'country_id'  => 156, //Nigeria
+        //     'number'   => "08124363864"
+        // ]);
 
-        $technicianPhone = \App\Models\Phone::create([
-            'user_id' =>  $technician2->id,
-            'account_id'  => $technicianAccount2->id,
-            'country_id'  => 156, //Nigeria
-            'number'   => "07004728329"
-        ]);
+        // $technicianPhone = \App\Models\Phone::create([
+        //     'user_id' =>  $technician2->id,
+        //     'account_id'  => $technicianAccount2->id,
+        //     'country_id'  => 156, //Nigeria
+        //     'number'   => "07004728329"
+        // ]);
+
+        // Sample Implementation for storing Contact Details of a user
+        \App\Models\Contact::attemptToStore($technician2->id, $technicianAccount2->id, 156, '09082354902', "8 Oremeji St, Oke Odo, Lagos", "3.346660", "6.586420",);
     }
 }

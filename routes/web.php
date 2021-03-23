@@ -182,7 +182,7 @@ Route::prefix('admin')->group(function () {
 // Route::resource('client', ClientController::class);
 
 //All routes regarding clients should be in here
-Route::prefix('/client')->group(function () {
+Route::prefix('/client')->middleware('verified')->group(function () {
     Route::name('client.')->group(function () {
         //All routes regarding clients should be in here
         Route::get('/',                   [ClientController::class, 'index'])->name('index'); //Take me to Supplier Dashboard
@@ -264,3 +264,4 @@ Route::prefix('/qa')->group(function () {
         Route::view('/messages/sent', 'qa.messages.sent')->name('messages.sent');
     });
 });
+

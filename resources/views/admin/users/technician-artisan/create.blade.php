@@ -95,7 +95,7 @@
                             <label for="password">Password</label>
                             <input type="password" class="form-control @error('password') is-invalid @enderror" id="password" name="password" placeholder="Password" autocomplete="off">
                             <small id="passwordHelpBlock" class="form-text text-muted">
-                                Password must be 8 characters at least.
+                                Password must be 6 characters at least.
                                 <a href="{{ route('admin.users.technician-artisan.create', app()->getLocale()) }}" class="random-password"> Generate random password </a>
                             </small>
 

@@ -5,9 +5,10 @@ namespace App\Models;
 use Illuminate\Support\Str;
 use App\Traits\RolesAndPermissions;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 
-class User extends Authenticatable
+class User extends Authenticatable implements MustVerifyEmail
 {
     use Notifiable, RolesAndPermissions;
 
@@ -99,6 +100,14 @@ class User extends Authenticatable
     public function account()
     {
         return $this->hasOne(Account::class);
+    }
+
+    /**
+     * Get the Account associated with the user.
+     */
+    public function contact()
+    {
+        return $this->hasOne(Contact::class);
     }
 
     /**

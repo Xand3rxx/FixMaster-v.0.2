@@ -105,26 +105,29 @@ class QASeeder extends Seeder
         $qaTable->bank_id = 5;
         $qaTable->save();
 
-        // QA Phone Record 
-        $qaPhone = \App\Models\Phone::create([
-            'user_id' =>  $qa->id,
-            'account_id'  => $qaAccount->id,
-            'country_id'  => 156, //Nigeria
-            'number'   => "09033319908"
-        ]);
+        // // QA Phone Record 
+        // $qaPhone = \App\Models\Phone::create([
+        //     'user_id' =>  $qa->id,
+        //     'account_id'  => $qaAccount->id,
+        //     'country_id'  => 156, //Nigeria
+        //     'number'   => "09033319908"
+        // ]);
 
-        $qaPhone = \App\Models\Phone::create([
-            'user_id' =>  $qa1->id,
-            'account_id'  => $qaAccount1->id,
-            'country_id'  => 156, //Nigeria
-            'number'   => "08030919912"
-        ]);
+        // $qaPhone = \App\Models\Phone::create([
+        //     'user_id' =>  $qa1->id,
+        //     'account_id'  => $qaAccount1->id,
+        //     'country_id'  => 156, //Nigeria
+        //     'number'   => "08030919912"
+        // ]);
 
-        $qaPhone = \App\Models\Phone::create([
-            'user_id' =>  $qa2->id,
-            'account_id'  => $qaAccount2->id,
-            'country_id'  => 156, //Nigeria
-            'number'   => "08235610015"
-        ]);
+        // $qaPhone = \App\Models\Phone::create([
+        //     'user_id' =>  $qa2->id,
+        //     'account_id'  => $qaAccount2->id,
+        //     'country_id'  => 156, //Nigeria
+        //     'number'   => "08235610015"
+        // ]);
+
+        // Sample Implementation for storing Contact Details of a user
+        \App\Models\Contact::attemptToStore($qa2->id, $qaAccount2->id, 156, '08235610015', "8 Oremeji St, Oke Odo, Lagos", "3.346660", "6.586420",);
     }
 }

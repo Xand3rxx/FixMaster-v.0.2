@@ -91,58 +91,60 @@ class SupplierSeeder extends Seeder
 
         // Supplier details Table
         $supplierTable = new \App\Models\Supplier();
-        $supplierTable->unique_id = 'SUP-F1A4E0D2'; 
+        $supplierTable->unique_id = 'SUP-F1A4E0D2';
         $supplierTable->user_id = $supplier->id;
         $supplierTable->account_id = $supplierAccount->id;
         $supplierTable->business_name = 'Search & Be Found';
         $supplierTable->years_of_business = '14';
         $supplierTable->education_level = 'university';
-        $supplierTable->registered_identification_number = 'RN92BAD2A8'; 
-        $supplierTable->business_description = 'Every company in the digital age wants one thing: to be found when their customer or prospect searches for them. They\'ve stated the benefit of using their agency in the title of their business. Work with Search & Be Found and ... be found by more customers.'; 
+        $supplierTable->registered_identification_number = 'RN92BAD2A8';
+        $supplierTable->business_description = 'Every company in the digital age wants one thing: to be found when their customer or prospect searches for them. They\'ve stated the benefit of using their agency in the title of their business. Work with Search & Be Found and ... be found by more customers.';
         $supplierTable->save();
 
         $supplierTable = new \App\Models\Supplier();
-        $supplierTable->unique_id = 'SUP-1CBDD295'; 
+        $supplierTable->unique_id = 'SUP-1CBDD295';
         $supplierTable->user_id = $supplier1->id;
         $supplierTable->account_id = $supplierAccount1->id;
         $supplierTable->business_name = 'IMPACT';
         $supplierTable->years_of_business = '10';
         $supplierTable->education_level = 'polytechnic';
         $supplierTable->registered_identification_number = 'BNA9B41982';
-        $supplierTable->business_description = 'IMPACT is an award-winning agency helping marketers and salespeople achieve their goals "and look like a rockstar in the process." Their business name reflects that mission and clearly states they exist to make you look good at work.'; 
+        $supplierTable->business_description = 'IMPACT is an award-winning agency helping marketers and salespeople achieve their goals "and look like a rockstar in the process." Their business name reflects that mission and clearly states they exist to make you look good at work.';
         $supplierTable->save();
 
         $supplierTable = new \App\Models\Supplier();
-        $supplierTable->unique_id = 'SUP-84E2F131'; 
+        $supplierTable->unique_id = 'SUP-84E2F131';
         $supplierTable->user_id = $supplier2->id;
         $supplierTable->account_id = $supplierAccount2->id;
         $supplierTable->business_name = 'Delivius';
         $supplierTable->years_of_business = '5';
         $supplierTable->education_level = 'polytechnic';
-        $supplierTable->registered_identification_number = 'BNE2E4B0E4'; 
-        $supplierTable->business_description = 'Take a risk and keep testing, because what works today won\'t work tomorrow, but what worked yesterday may work again'; 
+        $supplierTable->registered_identification_number = 'BNE2E4B0E4';
+        $supplierTable->business_description = 'Take a risk and keep testing, because what works today won\'t work tomorrow, but what worked yesterday may work again';
         $supplierTable->save();
 
-        // supplier Phone record Account
-        $supplierPhone = \App\Models\Phone::create([
-            'user_id' =>  $supplier->id,
-            'account_id'  => $supplierAccount->id,
-            'country_id'  => 156, //Nigeria
-            'number'   => "08168900129"
-        ]);
+        // // supplier Phone record Account
+        // $supplierPhone = \App\Models\Phone::create([
+        //     'user_id' =>  $supplier->id,
+        //     'account_id'  => $supplierAccount->id,
+        //     'country_id'  => 156, //Nigeria
+        //     'number'   => "08168900129"
+        // ]);
 
-        $supplierPhone = \App\Models\Phone::create([
-            'user_id' =>  $supplier1->id,
-            'account_id'  => $supplierAccount1->id,
-            'country_id'  => 156, //Nigeria
-            'number'   => "08134362177"
-        ]);
+        // $supplierPhone = \App\Models\Phone::create([
+        //     'user_id' =>  $supplier1->id,
+        //     'account_id'  => $supplierAccount1->id,
+        //     'country_id'  => 156, //Nigeria
+        //     'number'   => "08134362177"
+        // ]);
 
-        $supplierPhone = \App\Models\Phone::create([
-            'user_id' =>  $supplier2->id,
-            'account_id'  => $supplierAccount2->id,
-            'country_id'  => 156, //Nigeria
-            'number'   => "08016706323"
-        ]);
+        // $supplierPhone = \App\Models\Phone::create([
+        //     'user_id' =>  $supplier2->id,
+        //     'account_id'  => $supplierAccount2->id,
+        //     'country_id'  => 156, //Nigeria
+        //     'number'   => "08016706323"
+        // ]);
+        // Sample Implementation for storing Contact Details of a user
+        \App\Models\Contact::attemptToStore($supplier2->id, $supplierAccount2->id, 156, '09072354902', "8 Oremeji St, Oke Odo, Lagos", "3.346660", "6.586420",);
     }
 }

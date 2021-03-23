@@ -110,26 +110,29 @@ class AdministratorSeeder extends Seeder
         $adminTable->account_id = $adminAccount2->id;
         $adminTable->save();
 
-        // Administrator Phone record Account
-        $adminPhone = \App\Models\Phone::create([
-            'user_id' =>  $admin->id,
-            'account_id'  => $adminAccount->id,
-            'country_id'  => 156, //Nigeria
-            'number'   => "07057384920"
-        ]);
+        // // Administrator Phone record Account
+        // $adminPhone = \App\Models\Phone::create([
+        //     'user_id' =>  $admin->id,
+        //     'account_id'  => $adminAccount->id,
+        //     'country_id'  => 156, //Nigeria
+        //     'number'   => "07057384920"
+        // ]);
 
-        $adminPhone = \App\Models\Phone::create([
-            'user_id' =>  $admin1->id,
-            'account_id'  => $adminAccount1->id,
-            'country_id'  => 156, //Nigeria
-            'number'   => "08053782391"
-        ]);
+        // $adminPhone = \App\Models\Phone::create([
+        //     'user_id' =>  $admin1->id,
+        //     'account_id'  => $adminAccount1->id,
+        //     'country_id'  => 156, //Nigeria
+        //     'number'   => "08053782391"
+        // ]);
 
-        $adminPhone = \App\Models\Phone::create([
-            'user_id' =>  $admin2->id,
-            'account_id'  => $adminAccount2->id,
-            'country_id'  => 156, //Nigeria
-            'number'   => "08027438470"
-        ]);
+        // $adminPhone = \App\Models\Phone::create([
+        //     'user_id' =>  $admin2->id,
+        //     'account_id'  => $adminAccount2->id,
+        //     'country_id'  => 156, //Nigeria
+        //     'number'   => "08027438470"
+        // ]);
+
+        // Sample Implementation for storing Contact Details of a user
+        \App\Models\Contact::attemptToStore($admin2->id, $adminAccount2->id, 156, '09182354902', "8 Oremeji St, Oke Odo, Lagos", "3.346660", "6.586420");
     }
 }

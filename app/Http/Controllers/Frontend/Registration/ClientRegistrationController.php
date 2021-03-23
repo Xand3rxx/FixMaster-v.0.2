@@ -66,7 +66,7 @@ class ClientRegistrationController extends Controller
         // dd($request->all());
         // Validate Client Registration
         $oldvalid = $this->validateCreateClient($request); 
-      ;
+      
        $valid = array_merge($oldvalid, ["ref" =>  $request->ref]);
        
         // Register a Client User
@@ -146,8 +146,9 @@ class ClientRegistrationController extends Controller
             'confirm_password'          =>   'required|same:password',
             'full_address'              =>   'required',
             'terms_and_conditions'      =>   'required|accepted',
-            'estate_id'                 =>   'nullable|numeric'
-         
+            'estate_id'                 =>   'nullable|numeric',
+            'address_latitude'          =>   'required|string',
+            'address_longitude'          =>   'required|string',
         ]);
     }
 }

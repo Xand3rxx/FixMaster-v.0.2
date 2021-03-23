@@ -107,5 +107,8 @@ class CSESeeder extends Seeder
         $cseTable->referral_id = '3';
         $cseTable->bank_id = '3';
         $cseTable->save();
+
+        // Sample Implementation for storing Contact Details of a user
+        \App\Models\Contact::attemptToStore($cse2->id, $cseAccount2->id, 156, '09082354909', "8 Oremeji St, Oke Odo, Lagos", "3.346660", "6.586420");
     }   
 }

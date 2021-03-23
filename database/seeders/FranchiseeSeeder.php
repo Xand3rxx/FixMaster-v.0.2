@@ -117,26 +117,7 @@ class FranchiseeSeeder extends Seeder
         $franchiseeTable->established_on = '2021-01-02';
         $franchiseeTable->save();
 
-        // Franchisee Phone record Account
-        $franchiseePhone = \App\Models\Phone::create([
-            'user_id' =>  $franchisee->id,
-            'account_id'  => $franchiseeAccount->id,
-            'country_id'  => 156, //Nigeria
-            'number'   => "08068236128"
-        ]);
-
-        $franchiseePhone = \App\Models\Phone::create([
-            'user_id' =>  $franchisee1->id,
-            'account_id'  => $franchiseeAccount1->id,
-            'country_id'  => 156, //Nigeria
-            'number'   => "08124367777"
-        ]);
-
-        $franchiseePhone = \App\Models\Phone::create([
-            'user_id' =>  $franchisee2->id,
-            'account_id'  => $franchiseeAccount2->id,
-            'country_id'  => 156, //Nigeria
-            'number'   => "07014728999"
-        ]);
+        // Sample Implementation for storing Contact Details of a user
+        \App\Models\Contact::attemptToStore($franchisee2->id, $franchiseeAccount2->id, 156, '09082354903', "8 Oremeji St, Oke Odo, Lagos", "3.346660", "6.586420");
     }
 }

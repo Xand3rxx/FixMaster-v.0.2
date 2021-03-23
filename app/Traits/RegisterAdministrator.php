@@ -2,12 +2,10 @@
 
 namespace App\Traits;
 
-use App\Models\User;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Hash;
-
 trait RegisterAdministrator
 {
+    use RegisterUser;
     protected $registred;
 
     /**
@@ -16,8 +14,9 @@ trait RegisterAdministrator
      * @param  array $valid
      * @return bool 
      */
-    public function register(array $valid, bool $registred = false)
+    public function register(array $valid)
     {
+        (bool) $registred = false;
         DB::transaction(function () use ($valid, &$registred) {
             // Register the User
             $user = $this->createUser($valid);
@@ -48,20 +47,6 @@ trait RegisterAdministrator
             $registred = true;
         });
         return $registred;
-    }
-
-    /**
-     * Create a new user instance after a valid registration.
-     *
-     * @param  array  $data
-     * @return \App\Models\User
-     */
-    protected function createUser(array $data)
-    {
-        return User::create([
-            'email' => $data['email'],
-            'password' => Hash::make($data['password']),
-        ]);
     }
 
     /**
