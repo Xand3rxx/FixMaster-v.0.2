@@ -96,6 +96,20 @@
                             @enderror
                         </div>
 
+                        <div class="form-group col-md-12 show-service" id="add-users">
+                            <label class='add-page service'>Add Users</label>
+                            <select class="selectpicker show-tick select-user" id="service-users" name="users[]"
+                                title="select..." multiple="multiple" data-selected-text-format="count>3"
+                                data-live-search="true">
+                                <option value="">Select...</option>
+                            </select>
+                            @error('users')
+                            <span class="invalid-feedback-err">
+                                <strong>{{ $message }}</strong>
+                            </span>
+                            @enderror
+                        </div>
+
 
 
                         <div class="form-group col-md-6 show-service">
@@ -220,7 +234,7 @@
                                     <label for="entity">States</label>
                                     @php $name = isset($request_state->name)? $request_state->name : ''; @endphp
                                     @php $id = isset($request_state->id)? $request_state->id : ''; @endphp
-                                    <select id="state_id" name="state" class="custom-select cs-select">
+                                    <select id="state_id" name="specified_request_state" class="custom-select cs-select">
                                         <option value="{{$id }}"> {{$name}} </option>
                                         @foreach($states as $state)
                                         <option value="{{ $state->id }}"
@@ -521,6 +535,7 @@ $(document).ready(function() {
                 success: function(data) {
                     if (data) {
                         $("#users").html(data.options).selectpicker('refresh');
+                        $("#service-users").html(data.options).selectpicker('refresh');
                     } else {
                         var message =
                             'Error occured while trying to get Enity Parameter List`s in ';
@@ -695,6 +710,9 @@ $(document).ready(function() {
                 if (data && entity == 'estate') {
                     $("#estate-user").html(data.options).selectpicker('refresh');
                 }
+                if (data && entity == 'service') {
+                        $("#service-users").html(data.options).selectpicker('refresh');
+                    }
 
                 if (!data) {
                     var message =
@@ -797,6 +815,7 @@ $(document).ready(function() {
                 success: function(data) {
                     if (data) {
                         $('#category_id').html(data.category).selectpicker('refresh');
+                        $("#service-users").html(data.options).selectpicker('refresh');
 
                     } else {
                         var message =
@@ -827,6 +846,10 @@ $(document).ready(function() {
                     }
                     if (data && entity == 'estate') {
                         $("#estate-user").html(data.options).selectpicker('refresh');
+                        $("#service-users").html(data.options).selectpicker('refresh');
+                    }
+                    if (data && entity == 'service') {
+                        $("#service-users").html(data.options).selectpicker('refresh');
                     }
                     if (!data) {
                         var message =

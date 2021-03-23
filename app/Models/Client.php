@@ -10,6 +10,7 @@ class Client extends Model
     use Generator;
 
     /**
+     * 
      * The attributes that aren't mass assignable.
      *
      * @var array
