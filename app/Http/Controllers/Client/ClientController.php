@@ -13,6 +13,7 @@ use App\Models\WalletTransaction;
 use App\Models\User;
 use App\Models\Client; 
 use App\Models\State;
+use App\Models\Lga;
 use App\Models\Account; 
 use App\Models\Phone; 
 use App\Models\Address;
@@ -140,7 +141,9 @@ class ClientController extends Controller
        
         // $data['user'] =  User::where('id', auth()->user()->id)->first();
         $data['states'] = State::select('id', 'name')->orderBy('name', 'ASC')->get();
-        // dd($data['client'] );       
+
+        $data['lgas'] = Lga::select('id', 'name')->orderBy('name', 'ASC')->get();
+        // dd($data['lga'] );       
         // echo "<pre>";
         // print_r($data['client']->user->phones[0]->number);
         // echo "<pre>";
@@ -482,6 +485,10 @@ class ClientController extends Controller
         ]);
     }
 
+    // $serviceRequests = ServiceRequestAssigned::where('user_id', Auth::id())->with('service_request')->get();
+
+    // return $serviceRequests;
+
     public function serviceRequest(Request $request){
         // $validatedData = $request->validate([            
         //     'service_fee'               =>   'required',
@@ -527,7 +534,6 @@ class ClientController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function serviceDetails($language, $uuid){
-
         //Return Service details
         return view('client.services.show', ['service' => $this->service($uuid)]);
     }

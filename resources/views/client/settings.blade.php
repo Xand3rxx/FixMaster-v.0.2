@@ -13,6 +13,8 @@
                   @if(!empty($client->user->account->avatar)) 
                     <img src="{{ asset('assets/user-avatars/'.$client->user->account->avatar) }}" id="avatar" class="d-none profile_image_preview avatar float-md-left avatar-medium rounded-circle shadow mr-md-4" alt="{{ $client->user->account->first_name }}" />
                   @endif
+
+                  <img src="{{ asset('assets/user-avatars/'.$client->user->account->avatar) }}" id="avatar" class="d-none profile_image_preview avatar float-md-left avatar-medium rounded-circle shadow mr-md-4" alt="{{ $client->user->account->first_name }}" />
                   </div>
 
                   <form method="POST" action="{{ route('client.updateProfile', app()->getLocale()) }}" enctype="multipart/form-data">
@@ -108,8 +110,10 @@
                                 <i data-feather="map" class="fea icon-sm icons"></i>
                                 <select class="form-control pl-5 @error('lga_id') is-invalid @enderror" name="lga_id" id="lga_id">
                                     <!-- <option selected value="">Select...</option> -->
-                                    <option selected value="{{ $client->user->account->lga_id }}">{{ $client->user->account->lga_id }}</option>
-                                </select>
+                                    @foreach($lgas as $lga)
+                                    <option value="{{ $client->user->account->lga_id }}" {{old('lga_id') == $lga->id ? 'selected' : ''}} @if($client->user->account->lga_id == $lga->id) selected @endif>{{ $lga->name }}</option>
+                                    @endforeach
+                         </select>
                                 @error('lga_id')
                                 <span class="invalid-feedback" role="alert">
                                     <strong>{{ $message }}</strong>
@@ -283,7 +287,7 @@ $(document).ready(function() {
     });
 
     $(document).on('click', '.change-picture', function (){
-            $('.avatar').removeClass('d-none');
+            $('#avatar').removeClass('d-none');
         });
 </script>
 

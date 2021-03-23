@@ -13,7 +13,7 @@
         <div class="card-body mt-4">
             {{-- <h5><span class="font-weight-bold">{{ $service->name }}</span> Service Request</h5> --}}
             <div class="card blog">
-            <div class="position-relative" style="height: 100px !important">
+            <!-- <div class="position-relative" style="height: 100px !important">
                 @if(empty($service->image))
                         <img src="{{ asset('assets/images/no-image-available.png') }}" alt="Image not available" class="card-img-top rounded-top" height="100px !important">
                 @else
@@ -24,7 +24,7 @@
                     @endif
                 @endif
                 <div class="overlay rounded-top bg-dark"></div>
-            </div>
+            </div> -->
 
             <div class="author">
                 <h4 class="text-light user d-block"><i class="mdi mdi-bookmark"></i> {{ !empty($service->name) ? $service->name : 'UNAVAILABLE' }}</h4>

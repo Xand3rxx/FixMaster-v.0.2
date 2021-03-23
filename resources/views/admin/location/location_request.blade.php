@@ -177,8 +177,8 @@ $(function(){
 
 
        // to change the menu item list on change of category in dropdown select
-       function getWorkersAssignedToThisService(jobRef){
-        console.log(jobRef);
+       function getWorkersAssignedToThisService(val){
+        console.log(val);
 
         // $.ajaxSetup({
         //     headers: {
@@ -187,7 +187,7 @@ $(function(){
         // });
 
             // $.ajax({
-            //     url: "{{ route('getUsersAssigned', app()->getLocale()) }}"+"/"+val,
+            //     url: "{{ route('getServiceDetails', app()->getLocale()) }}"+"/"+val,
             //     responseData: { },
             //     success: function( responseData ) {
             //         // var itemname = "";
@@ -200,21 +200,22 @@ $(function(){
             // });
 
             $.ajax({
-                url: "{{ route('getUsersAssigned', app()->getLocale()) }}",
+                url: "{{ route('getServiceDetails', app()->getLocale()) }}",
                 method: "POST",
-                dataType: "JSON",
+                dataType: "JSON", 
                 data: {
                     "_token": "{{ csrf_token() }}",
-                    "job_Ref": jobRef
+                    "job_Ref": val
                 },
                 success: function(data) {
+                  // itemname = '';
+                  // for (var i = 0; i < data.length; i++) {
+                  //       itemname += '<option value="'+data[i]["id"]+'">'+data[i]["menu_name"]+ '</option>'
+                  //   }
 
-                  for (var i = 0; i < data.length; i++) {
-                        itemname += '<option value="'+data[i]["id"]+'">'+data[i]["menu_name"]+ '</option>'
-                    }
                   // document.getElementById("itemlist").innerHTML = itemname;
 
-                  console.log(itemname)
+                  console.log(data)
 
                     // if (data) {
                     //     $('#lga_id').html(data.lgaList);

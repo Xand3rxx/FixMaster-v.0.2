@@ -156,7 +156,7 @@
           <a href="" class="nav-link"><i data-feather="git-pull-request"></i> <span>Reports</span></a>
           <ul>
             
-            <li class=""><a href="{{route('admin.cse_reports', app()->getLocale())}}">CSE</a></li>
+            <li class=""><a href="#">CSE</a></li>
             <li class=""><a href="#">Supplier</a></li>
             <li class=""><a href="#">Job MGT</a></li>
             <li class=""><a href="#">Technician</a></li>
