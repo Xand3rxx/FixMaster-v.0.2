@@ -14,13 +14,21 @@
             {{-- <h5><span class="font-weight-bold">{{ $service->name }}</span> Service Request</h5> --}}
             <div class="card blog">
             <div class="position-relative" style="height: 100px !important">
-                <img alt="{{ $service->name }}" src="{{ asset('assets/service-images/'.$service->image) }}" style="width:100% !important; height: 100% !important" class="card-img-top rounded-top" />
+                @if(empty($service->image))
+                        <img src="{{ asset('assets/images/no-image-available.png') }}" alt="Image not available" class="card-img-top rounded-top" height="100px !important">
+                @else
+                    @if(file_exists(public_path().'/assets/service-images/'.$service->image))
+                        <img src="{{ asset('assets/service-images/'.$service->image) }}" alt="{{ !empty($service->name) ? $service->name : 'UNAVAILABLE'  }}" class="card-img-top rounded-top">
+                    @else
+                        <img src="{{ asset('assets/images/no-image-available.png') }}" alt="Image not available" class="card-img-top rounded-top" height="100px !important">
+                    @endif
+                @endif
                 <div class="overlay rounded-top bg-dark"></div>
             </div>
 
             <div class="author">
-                <h4 class="text-light user d-block"><i class="mdi mdi-bookmark"></i> {{ $service->name }}</h4>
-                <small class="text-light date"><i class="mdi mdi-bookmark"></i> {{ $service->serviceRequests()->count() }} Requests</small>
+                <h4 class="text-light user d-block"><i class="mdi mdi-bookmark"></i> {{ !empty($service->name) ? $service->name : 'UNAVAILABLE' }}</h4>
+                <small class="text-light date"><i class="mdi mdi-bookmark"></i> {{ $service->serviceRequests()->count() ?? '0' }} Requests</small>
             </div>
             </div>
 
@@ -36,8 +44,8 @@
                             <li class="nav-item bg-light rounded-md mt-4">
                                 <a class="nav-link rounded-md @if(old('price_id') == $bookingFee->id) active @endif"  id="dashboard-{{$bookingFee->id}}" data-toggle="pill" href="#dash-board-{{$bookingFee->id}}" role="tab" aria-controls="dash-board-{{$bookingFee->id}}" aria-selected="false">
                                     <div class="p-3 text-left">
-                                    <h5 class="title">{{ $bookingFee->name }}: ₦{{ number_format($bookingFee->amount) }}</h5>
-                                        <p class="text-muted tab-para mb-0">{{ $bookingFee->description }}</p>
+                                    <h5 class="title">{{ !empty($bookingFee->name) ? $bookingFee->name : 'UNAVAILABLE' }}: ₦{{ number_format(!empty($bookingFee->amount) ? $bookingFee->amount : '0') }}</h5>
+                                        <p class="text-muted tab-para mb-0">{{ !empty($bookingFee->description) ? $bookingFee->description : 'No description found' }}</p>
                                         <input type="radio" name="price_id" value="{{ $bookingFee->id }}" class="custom-control-input booking-fee" @if(old('price_id') == $bookingFee->id) checked @endif>
 
                                         <input type="hidden" name="booking_fee" value="{{$bookingFee->amount}}">

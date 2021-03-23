@@ -69,6 +69,14 @@ class QASeeder extends Seeder
             'avatar'        => 'default-female-avatar.png',
         ]);
 
+        // // QA Phone
+        // $qaPhone = \App\Models\Phone::create([
+        //     'user_id' =>  $qa->id,
+        //     'account_id'  => $qaAccount->id,
+        //     'country_id'  => 2,
+        //     'number'   => "09033319908"
+        // ]);
+
         $qaAccount1 = \App\Models\Account::create([
             'user_id'       =>  $qa1->id,
             'first_name'    => "Desmond",
@@ -85,6 +93,36 @@ class QASeeder extends Seeder
             'last_name'     => "Johnson",
             'gender'        => 'male',
             'avatar'        => 'default-male-avatar.png',
+        ]);
+
+        // QA Address
+        $qaAddress = \App\Models\Address::create([
+            'user_id' =>  $qa->id,
+            'account_id'  => $qaAccount->id,
+            'country_id'  => 156,
+            'address'   => "",
+            'address_longitude'=> '3.908',
+            'address_latitude'=> '4.098'
+        ]);
+
+        // QA Address
+        $qaAddress1 = \App\Models\Address::create([
+            'user_id' =>  $qa1->id,
+            'account_id'  => $qaAccount1->id,
+            'country_id'  => 156,
+            'address'   => "",
+            'address_longitude'=> '6.980',
+            'address_latitude'=> '2.098'
+        ]);
+
+        // QA Address
+        $qaAddress2 = \App\Models\Address::create([
+            'user_id' =>  $qa2->id,
+            'account_id'  => $qaAccount2->id,
+            'country_id'  => 156,
+            'address'   => "",
+            'address_longitude'=> '4.459',
+            'address_latitude'=> '9.968'
         ]);
 
         // QA Table
@@ -109,7 +147,7 @@ class QASeeder extends Seeder
         $qaTable->bank_id = 5;
         $qaTable->save();
 
-        // QA Phone Record 
+        // QA Phone Record
         $qaPhone = \App\Models\Phone::create([
             'user_id' =>  $qa->id,
             'account_id'  => $qaAccount->id,

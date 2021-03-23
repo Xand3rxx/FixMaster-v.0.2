@@ -25,6 +25,7 @@ use App\Http\Controllers\InvoiceController;
 use App\Http\Controllers\SimulationController;
 use App\Http\Controllers\Admin\User\Administrator\SummaryController;
 use App\Http\Controllers\Admin\StatusController;
+use App\Http\Controllers\ReportController;
 
 /*
 |--------------------------------------------------------------------------
@@ -110,6 +111,7 @@ Route::prefix('admin')->group(function () {
         Route::resource('services',                         ServiceController::class);
 
 
+
         //  location request
         Route::get('/location-request',                     [AdminLocationRequestController::class, 'index'])->name('location_request');
         // Route::post('/get-names',                           [AdminLocationRequestController::class, 'getNames'])->name('get_names');
@@ -120,6 +122,13 @@ Route::prefix('admin')->group(function () {
         Route::post('/activity-log/sorting',                [ActivityLogController::class, 'sortActivityLog'])->name('activity-log.sorting_users');
         Route::get('/activity-log/details/{activity_log}',  [ActivityLogController::class, 'activityLogDetails'])->name('activity-log.details');
         Route::resource('activity-log',                     ActivityLogController::class);
+
+        //Routes for report management
+        Route::get('/reports/sorting',      [ReportController::class, 'cseReports'])->name('cse_reports');
+        Route::get('/reports/sort_cse_report',      [ReportController::class, 'sortCSEReports'])->name('sort_cse_reports');
+        Route::get('/reports/cse_report_details/{activity_log}',      [ReportController::class, 'cseReportDetails'])->name('report_details');
+
+
 
         //Routes for Tools & Tools Request Management
         Route::get('/tools/delete/{tool}',                  [ToolInventoryController::class, 'destroy'])->name('tools.delete');
@@ -181,7 +190,7 @@ Route::prefix('admin')->group(function () {
         //Routes for Status Management
         Route::resource('statuses',                         StatusController::class);
 
-        
+
 
     });
 });
@@ -266,13 +275,13 @@ Route::prefix('/supplier')->group(function () {
 Route::prefix('/technician')->group(function () {
     Route::name('technician.')->group(function () {
         //All routes regarding technicians should be in here
-        Route::get('/',                                 [TechnicianProfileController::class, 'index'])->name('index');    //Take me to Technician Dashboard            
+        Route::get('/',                                 [TechnicianProfileController::class, 'index'])->name('index');    //Take me to Technician Dashboard
         Route::get('/location-request',                 [TechnicianProfileController::class, 'locationRequest'])->name('location_request');
-        //Route::get('/payments',                         [TechnicianProfileController::class, 'payments'])->name('payments');                
+        //Route::get('/payments',                         [TechnicianProfileController::class, 'payments'])->name('payments');
         Route::get('/requests',                         [TechnicianProfileController::class, 'serviceRequests'])->name('requests');
-        Route::get('/requests/details/{serviceRequest:id}',                 [TechnicianProfileController::class, 'serviceRequestDetails'])->name('request_details');
+        Route::get('/requests/details/{serviceRequests:service_request_id}',                 [TechnicianProfileController::class, 'serviceRequestDetails'])->name('request_details');
 
-        Route::get('/profile/',                         [TechnicianProfileController::class, 'viewProfile'])->name('view_profile');
+        Route::get('/profile',                         [TechnicianProfileController::class, 'viewProfile'])->name('view_profile');
         Route::get('/profile/edit',                     [TechnicianProfileController::class, 'editProfile'])->name('edit_profile');
         Route::patch('/update_profile',                     [TechnicianProfileController::class, 'updateProfile'])->name('update_profile');
         Route::patch('/update_password',                     [TechnicianProfileController::class, 'updatePassword'])->name('update_password');
@@ -282,18 +291,36 @@ Route::prefix('/technician')->group(function () {
     });
 });
 
-Route::prefix('/qa')->group(function () {
-    Route::name('qa.')->group(function () {
+Route::prefix('/quality-assurance')->group(function () {
+    Route::name('quality-assurance.')->group(function () {
         //All routes regarding quality_assurance should be in here
-        Route::view('/', 'qa.index')->name('index'); //Take me to quality_assurance Dashboard
+        Route::view('/', 'quality-assurance.index')->name('index'); //Take me to quality_assurance Dashboard
 
-        Route::get('/profile',    [App\Http\Controllers\QualityAssurance\QualityAssuranceProfileController::class, 'view_profile'])->name('view_profile');
-        Route::get('/profile/edit_profile', [App\Http\Controllers\QualityAssurance\QualityAssuranceProfileController::class, 'edit'])->name('edit_profile');
-        Route::patch('/profile/update_profile', [App\Http\Controllers\QualityAssurance\QualityAssuranceProfileController::class, 'update'])->name('update_profile');
-        Route::patch('/update_password', [App\Http\Controllers\QualityAssurance\QualityAssuranceProfileController::class, 'update_password'])->name('update_password');
-        Route::view('/requests', 'qa.requests')->name('requests');
-        Route::get('/payments', [PaymentController::class, 'get_qa_disbursed_payments'])->name('payments');
-        Route::view('/messages/inbox', 'qa.messages.inbox')->name('messages.inbox');
-        Route::view('/messages/sent', 'qa.messages.sent')->name('messages.sent');
+        Route::get('/profile',    [App\Http\Controllers\QualityAssurance\QualityAssuranceProfileController::class,'view_profile'])->name('view_profile');
+        Route::get('/profile/edit_profile', [App\Http\Controllers\QualityAssurance\QualityAssuranceProfileController::class,'edit'])->name('edit_profile');
+        Route::patch('/profile/update_profile', [App\Http\Controllers\QualityAssurance\QualityAssuranceProfileController::class,'update'])->name('update_profile');
+        Route::patch('/update_password', [App\Http\Controllers\QualityAssurance\QualityAssuranceProfileController::class,'update_password'])->name('update_password');
+        Route::get('/requests', [App\Http\Controllers\QualityAssurance\ServiceRequestController::class, 'index'])->name('requests');
+        Route::get('/payments', [App\Http\Controllers\QualityAssurance\PaymentController::class, 'get_qa_disbursed_payments'])->name('payments');
+        Route::view('/messages/inbox', 'quality-assurance.messages.inbox')->name('messages.inbox');
+        Route::view('/messages/sent', 'quality-assurance.messages.sent')->name('messages.sent');
+        Route::post('/disbursed_payments_sorting', [App\Http\Controllers\QualityAssurance\PaymentController::class, 'sortDisbursedPayments'])->name('disbursed_payments_sorting');
+        Route::get('/get_chart_data', [App\Http\Controllers\QualityAssurance\ServiceRequestController::class, 'chat_data']);
+        Route::view('/requests/details',    'quality-assurance.request_details')->name('request_details');
+
+    });
+});
+
+
+Route::prefix('/franchisee')->group(function () {
+    Route::name('franchisee.')->group(function () {
+        Route::view('/',                'franchisee.index')->name('index'); //Take me to frnahisee Dashboard
+        Route::view('/messages/inbox',      'franchisee.messages.inbox')->name('messages.inbox');
+        Route::view('/messages/sent',       'franchisee.messages.sent')->name('messages.sent');
+        Route::view('/payments',            'franchisee.payments')->name('payments');
+        Route::view('/requests',            'franchisee.requests')->name('requests');
+        Route::view('/requests/details',    'franchisee.request_details')->name('request_details');
+        Route::view('/profile',             'franchisee.view_profile')->name('view_profile');
+        Route::view('/profile/edit',        'franchisee.edit_profile')->name('edit_profile');
     });
 });

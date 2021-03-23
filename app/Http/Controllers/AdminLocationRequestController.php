@@ -56,6 +56,9 @@ class AdminLocationRequestController extends Controller
         $data['serviceRequests'] = ServiceRequest::where('status_id', 2)
                                     // ->with('serviceRequestAssigned')
                                     ->get(); 
+        $locationRequest = Location::get();
+        // $serviceRequests = ServiceRequest::where('id', 4)->get();
+        // $createdBy    = Name::get();
 
         // $createdBy    = Name::get(); ->with('users')
 

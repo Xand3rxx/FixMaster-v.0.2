@@ -18,7 +18,7 @@
               <div class="d-flex align-items-center justify-content-between mg-b-25">
                 <h5 class="mg-b-0">Personal Details</h5>
                 <div class="d-flex">
-                  <a href="{{ route('qa.edit_profile',app()->getLocale()) }}" class="btn btn-sm btn-white d-flex align-items-center mg-r-5"><i data-feather="edit-2"></i><span class="d-none d-sm-inline mg-l-5"> Edit</span></a>
+                  <a href="{{ route('quality-assurance.edit_profile',app()->getLocale()) }}" class="btn btn-sm btn-white d-flex align-items-center mg-r-5"><i data-feather="edit-2"></i><span class="d-none d-sm-inline mg-l-5"> Edit</span></a>
 
                 </div>
               </div>
@@ -41,51 +41,34 @@
               <h5 class="mg-t-40 mg-b-20">Contact Details</h5>
 
               <div class="row row-sm">
-                <div class="col-6 col-sm-4">
+                <div class="col-6 col-sm-6">
                   <label class="tx-10 tx-medium tx-spacing-1 tx-color-03 tx-uppercase tx-sans mg-b-10">Email Address</label>
                   <p class="tx-primary mg-b-0">{{$user->email}}</p>
                 </div>
-                <div class="col-6 col-sm-4">
+                <div class="col-6 col-sm-6">
                   <label class="tx-10 tx-medium tx-spacing-1 tx-color-03 tx-uppercase tx-sans mg-b-10">Mobile Phone</label>
                   <p class="tx-primary tx-rubik mg-b-0">{{$user->phone->number}}</p>
                 </div>
-                <div class="col-6 col-sm-4 mg-t-20 mg-sm-t-0">
-                  <label class="tx-10 tx-medium tx-spacing-1 tx-color-03 tx-uppercase tx-sans mg-b-10">Work Phone</label>
-                  {{-- <p class="tx-primary tx-rubik mg-b-0">{{$otherPhoneNumber?$otherPhoneNumber:'+234097865410'}}</p> --}}
-                  <p class="tx-primary tx-rubik mg-b-0">{{$user->phone->number}}</p>
-                </div>
-                <div class="col-sm-4 mg-t-20 mg-sm-t-30">
-                  <label class="tx-10 tx-medium tx-spacing-1 tx-color-03 tx-uppercase tx-sans mg-b-10">Company</label>
-                  <p class="mg-b-0">Ludwig Enterprise</p>
-                </div>
-                <div class="col-sm-4 mg-t-20 mg-sm-t-30">
-                  <label class="tx-10 tx-medium tx-spacing-1 tx-color-03 tx-uppercase tx-sans mg-b-10">Job Position</label>
-                  <p class="mg-b-0">{{$user->phone->number}}</p>
-                </div>
+                
                 <div class="col-sm-6 mg-t-20 mg-sm-t-30">
                   <label class="tx-10 tx-medium tx-spacing-1 tx-color-03 tx-uppercase tx-sans mg-b-10">Home Address</label>
-                  <p class="mg-b-0">{{'89, mike street, Ijegun'}}</p>
+                  <p class="mg-b-0">{{$user->address->name ?? 'UNAVAILABLE'}}</p>
                 </div>
                 <div class="col-sm-6 mg-t-20 mg-sm-t-30">
-                  <label class="tx-10 tx-medium tx-spacing-1 tx-color-03 tx-uppercase tx-sans mg-b-10">Work Address</label>
-                  <p class="mg-b-0">8284 Ajose Adeogun Street, Victoria Island, Lagos, Nigeria</p>
-                </div>
-                <div class="col-sm-6 mg-t-20 mg-sm-t-30">
-                    <label class="tx-10 tx-medium tx-spacing-1 tx-color-03 tx-uppercase tx-sans mg-b-10">Rating</label>
-                    <p class="mg-b-0">
-                        <div class="pd-t-10 pd-b-15 d-flex align-items-baseline">
-                            <h1 class="tx-normal tx-rubik mg-b-0 mg-r-5">4.2</h1>
-                            <div class="tx-18">
-                              <i class="icon ion-md-star lh-0 tx-orange"></i>
-                              <i class="icon ion-md-star lh-0 tx-orange"></i>
-                              <i class="icon ion-md-star lh-0 tx-orange"></i>
-                              <i class="icon ion-md-star lh-0 tx-orange"></i>
-                              <i class="icon ion-md-star lh-0 tx-gray-300"></i>
-                            </div>
+                  <label class="tx-10 tx-medium tx-spacing-1 tx-color-03 tx-uppercase tx-sans mg-b-10">Rating</label>
+                  <p class="mg-b-0">
+                    <div class="pd-t-10 pd-b-15 d-flex align-items-baseline">
+                      <h1 class="tx-normal tx-rubik mg-b-0 mg-r-5">4.2</h1>
+                      <div class="tx-18">
+                        <i class="icon ion-md-star lh-0 tx-orange"></i>
+                        <i class="icon ion-md-star lh-0 tx-orange"></i>
+                        <i class="icon ion-md-star lh-0 tx-orange"></i>
+                        <i class="icon ion-md-star lh-0 tx-orange"></i>
+                        <i class="icon ion-md-star lh-0 tx-gray-300"></i>
                       </div>
-                    </p>
                 </div>
-
+                  </p>
+                </div>
               </div><!-- row -->
             </div>
           </div><!-- tab-content -->

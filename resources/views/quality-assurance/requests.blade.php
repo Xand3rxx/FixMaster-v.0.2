@@ -1,5 +1,5 @@
 @extends('layouts.dashboard')
-@section('title', 'All QA Service Requests')
+@section('title', 'All Quality Assurance Service Requests')
 @include('layouts.partials._messages')
 @section('content')
 
@@ -9,11 +9,11 @@
       <div>
         <nav aria-label="breadcrumb">
           <ol class="breadcrumb breadcrumb-style1 mg-b-10">
-          <li class="breadcrumb-item"><a href="{{ route('qa.index', app()->getLocale()) }}">Dashboard</a></li>
-            <li class="breadcrumb-item active" aria-current="page">New Requests</li>
+          <li class="breadcrumb-item"><a href="{{ route('quality-assurance.index', app()->getLocale()) }}">Dashboard</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Service Requests</li>
           </ol>
         </nav>
-        <h4 class="mg-b-0 tx-spacing--1">New Requests</h4>
+        <h4 class="mg-b-0 tx-spacing--1">Service Requests</h4>
       </div>
     </div>
 
@@ -59,42 +59,62 @@
                 </tr>
               </thead>
               <tbody>
-                {{-- @foreach ($technicianServiceRequests as $serviceRequest) --}}
-                <tr>
-                  <td class="tx-color-03 tx-center"></td>
-                  <td class="tx-medium"></td>
-                  <td class="tx-medium"></td>
-                  <td class="tx-medium"></td>
-                  <td class="tx-medium"></td>
+                {{-- @php $sn = 1; @endphp
+                @foreach ($results as $serviceRequest)
+                 <tr>
+                  <td class="tx-color-03 tx-center">{{$sn++}}</td>
+                  <td class="tx-medium">{{$serviceRequest->service_request->unique_id}}</td>
+                  <td class="tx-medium">{{$serviceRequest->service_request->client}}</td>
+                  <td class="tx-medium">{{'Admin'}}</td>
+                  <td class="tx-medium">{{'CSE'}}</td>
+                  <td class="text-medium text-center">{{'Technician'}}</td>
                   <td class="text-medium text-center">
-                    {{-- @if(!empty($serviceRequest->serviceRequestDetail->discount_service_fee))
-                        ₦{{ number_format($serviceRequest->serviceRequestDetail->discount_service_fee) }}
-                        <br><span style="font-size: 10px;" class="text-success">Discount</span>
-                    @else
-                        ₦{{ number_format($serviceRequest->serviceRequestDetail->initial_service_fee) }}
-                    @endif --}}
+                        ₦{{ number_format($serviceRequest->service_request->total_amount) }}
                   </td>
-                  {{-- @if($serviceRequest->service_request_status_id == 1)
-                    <td class="text-medium text-warning">{{ $serviceRequest->serviceRequestStatus->name }}</td>
-                  @elseif($serviceRequest->service_request_status_id == 2)
-                    <td class="text-medium text-danger">{{ $serviceRequest->serviceRequestStatus->name }}</td>
-                  @elseif($serviceRequest->service_request_status_id == 3)
-                    <td class="text-medium text-success">{{ $serviceRequest->serviceRequestStatus->name }}</td>
-                  @else --}}
-                    {{-- <td class="text-medium text-info">Ongoing</td> --}}
-                  {{-- @endif --}}
 
-                  {{-- <td class="text-medium"></td> --}}
-                  {{-- <td class=" text-center">
+                  @if($serviceRequest->service_request->status_id == 1)
+                    <td class="text-medium text-warning">{{ $serviceRequest->service_request->status->name }}</td>
+                  @elseif($serviceRequest->service_request->service_request_status_id == 2)
+                    <td class="text-medium text-danger">{{ $serviceRequest->service_request->status->name }}</td>
+                  @elseif($serviceRequest->service_request->service_request_status_id == 3)
+                    <td class="text-medium text-success">{{ $serviceRequest->service_request->status->name }}</td>
+                  @elseif($serviceRequest->service_request->service_request_status_id == 4)
+                    <td class="text-medium text-info">{{ $serviceRequest->service_request->status->name }}</td>
+                  @endif
+
+                  <td class="text-medium">{{$serviceRequest->service_request->created_at}}</td>
+                  <td class=" text-center">
                     <div class="dropdown-file">
                       <a href="" class="dropdown-link" data-toggle="dropdown"><i data-feather="more-vertical"></i></a>
                       <div class="dropdown-menu dropdown-menu-right">
                       <a href="{{ url('quality.request_details') }}" class="dropdown-item details"><i class="far fa-clipboard"></i> Details</a>
                       </div>
                     </div>
-                  </td> --}}
+                  </td>
+                </tr> 
+                
+                @endforeach
+                --}}
+
+                <tr>
+                  <td class="tx-color-03 tx-center">1</td>
+                  <td class="tx-medium">REF-234234723</td>
+                  <td class="tx-medium">Kelvin Adesanya</td>
+                  <td class="tx-medium">David Akinsola</td>
+                  <td class="tx-medium">Benedict Mayowa</td>
+                  <td class="tx-medium">Taofeek Adedokun</td>
+                  <td class="text-medium text-center">₦{{ number_format(10000) }}</td>
+                  <td class="text-medium text-info">Ongoing</td>
+                  <td class="text-medium">{{ Carbon\Carbon::parse('2020-12-28 16:58:54', 'UTC')->isoFormat('MMMM Do YYYY') }}</td>
+                  <td class=" text-center">
+                    <div class="dropdown-file">
+                      <a href="" class="dropdown-link" data-toggle="dropdown"><i data-feather="more-vertical"></i></a>
+                      <div class="dropdown-menu dropdown-menu-right">
+                      <a href="{{ route('quality-assurance.request_details', app()->getLocale()) }}" class="dropdown-item details"><i class="far fa-clipboard"></i> Details</a>
+                      </div>
+                    </div>
+                  </td>
                 </tr>
-                {{-- @endforeach --}}
 
               </tbody>
             </table>

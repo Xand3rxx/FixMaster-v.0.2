@@ -38,9 +38,14 @@ class ClientController extends Controller
      */
     public function index()
     {
+        //Get total available serviecs
+        $totalServices = Service::count();
 
-        $popularRequests = Service::select('id', 'name', 'url', 'image')->take(10)->get()->random(3);
-        // $myWallet    = WalletTransaction::where('user_id', auth()->user()->id)->orderBy('id', 'DESC')->get();
+        if($totalServices < 3){
+            $popularRequests = Service::select('id', 'uuid', 'name', 'image')->take(10)->get()->random(1);
+        }else{
+            $popularRequests = Service::select('id', 'uuid', 'name', 'image')->take(10)->get()->random(3);
+        }
 
         $user = Auth::user();
 
@@ -53,7 +58,7 @@ class ClientController extends Controller
             'client' => [
                 'phone_number' => '0909078888'
             ],
-            'popularRequests'   =>  $popularRequests,
+            'popularRequests'   =>  $popularRequests ,
             // 'myWallet'          =>  $myWallet,
             // JoeBoy Fill this data
             // 1. 'userServiceRequests'

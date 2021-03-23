@@ -188,9 +188,9 @@
                 <div class="overlay rounded-top bg-dark"></div>
                 </div>
                 <div class="card-body content">
-                <h5><a href="javascript:void(0)" class="card-title title text-dark">{{ $popularRequest->name }}</a> <a href="#" title="View {{ $popularRequest->name }} service details"> <i data-feather="info" class="text-primary"></i></a></h5>
+                <h5><a href="javascript:void(0)" class="card-title title text-dark">{{ !empty($popularRequest->name) ? $popularRequest->name : 'UNAVAILABLE' }}</a> <a href="#" title="View {{ $popularRequest->name }} service details"> <i data-feather="info" class="text-primary"></i></a></h5>
                     <div class="post-meta d-flex justify-content-between mt-3">
-                        <a href="#" class="text-muted readmore">Request Service <i class="mdi mdi-chevron-right"></i></a>
+                        <a href="{{ route('client.services.quote', ['service'=>$popularRequest->uuid, 'locale'=>app()->getLocale()]) }}" class="text-muted readmore">Request Service <i class="mdi mdi-chevron-right"></i></a>
                     </div>
                 </div>
                 <div class="author">

@@ -127,25 +127,23 @@
                       {{-- <h6 class="tx-normal tx-rubik tx-color-03 lh-2 mg-b-0">20,000</h6> --}}
                     </div>
                     <div class="progress ht-4 mg-b-0 op-5">
-                      <div class="progress-bar bg-teal wd-65p" role="progressbar" aria-valuenow="65" aria-valuemin="0" aria-valuemax="100"></div>
+                      <div class="progress-bar bg-teal wd-25p" role="progressbar" aria-valuemin="0" aria-valuemax="100"></div>
                     </div>
                   </div>
                   <div class="col-sm-6 col-lg-12 mg-t-30 mg-sm-t-0 mg-lg-t-30">
                     <div class="d-flex align-items-center justify-content-between mg-b-5">
                       <h6 class="tx-uppercase tx-10 tx-spacing-1 tx-color-02 tx-semibold mg-b-0">Completed Requests</h6>
-                      {{-- <span class="tx-10 tx-color-04">45% goal reached</span> --}}
                     </div>
                     <div class="d-flex justify-content-between mg-b-5">
                       <h5 class="tx-normal tx-rubik mg-b-0">20</h5>
-                      {{-- <h5 class="tx-normal tx-rubik tx-color-03 mg-b-0"><small>250,000</small></h5> --}}
                     </div>
                     <div class="progress ht-4 mg-b-0 op-5">
-                      <div class="progress-bar bg-orange wd-45p" role="progressbar" aria-valuenow="45" aria-valuemin="0" aria-valuemax="100"></div>
+                      <div class="progress-bar bg-orange wd-20p" role="progressbar" aria-valuemin="0" aria-valuemax="100"></div>
                     </div>
                   </div>
                   <div class="col-sm-6 col-lg-12 mg-t-30">
                     <div class="d-flex align-items-center justify-content-between mg-b-5">
-                      <h6 class="tx-uppercase tx-10 tx-spacing-1 tx-color-02 tx-semibold mg-b-0">Pending Requests</h6>
+                      <h6 class="tx-uppercase tx-10 tx-spacing-1 tx-color-02 tx-semibold mg-b-0">Canceled Requests</h6>
                       {{-- <span class="tx-10 tx-color-04">20% goal reached</span> --}}
                     </div>
                     <div class="d-flex justify-content-between mg-b-5">
@@ -153,7 +151,7 @@
                       {{-- <h5 class="tx-normal tx-rubik tx-color-03 mg-b-0"><small>85,000</small></h5> --}}
                     </div>
                     <div class="progress ht-4 mg-b-0 op-5">
-                      <div class="progress-bar bg-pink wd-20p" role="progressbar" aria-valuenow="20" aria-valuemin="0" aria-valuemax="100"></div>
+                      <div class="progress-bar bg-pink wd-5p" role="progressbar" aria-valuenow="20" aria-valuemin="0" aria-valuemax="100"></div>
                     </div>
                   </div>
                   <div class="col-sm-6 col-lg-12 mg-t-30">
@@ -203,7 +201,7 @@
         @endforeach
           </ul>
           <div class="card-footer text-center tx-13">
-          <a href="{{ route('qa.payments',app()->getLocale()) }}" class="link-03">View All Transactions <i class="icon ion-md-arrow-down mg-l-5"></i></a>
+          <a href="{{ route('quality-assurance.payments',app()->getLocale()) }}" class="link-03">View All Transactions <i class="icon ion-md-arrow-down mg-l-5"></i></a>
           </div><!-- card-footer -->
           @else
           <div class="card-footer text-center tx-13">
