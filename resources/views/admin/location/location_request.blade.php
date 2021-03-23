@@ -11,6 +11,7 @@
   }
 </style>
 
+  <input type="hidden" id="path_web" value="{{ route('admin.index', app()->getLocale()) }}">
 <div class="content-body">
   <div class="container pd-x-0">
     <div class="d-sm-flex align-items-center justify-content-between mg-b-20 mg-lg-b-25 mg-xl-b-30">
@@ -62,7 +63,7 @@
               @foreach($serviceRequests as $k=>$data)
                 <tr>
                   <td class="tx-color-03 tx-center">{{++$k}}</td> 
-                  <td class="tx-medium">{{$data->job_reference}}</td>
+                  <td class="tx-medium">{{$data->unique_id}}</td>
                   <td class="tx-medium">David Akinsola</td>
                   <td class="text-medium">{{date("Y/m/d h:i:A",strtotime($data->created_at))}}</td>
                   <td class="tx-medium">Godfrey Diwa</td>
@@ -98,12 +99,11 @@
             <div class="form-row">
                 <div class="col-md-12">
                     <label for="password">Job Reference</label>
-                    <select class="custom-select select2 form-control">
+                    <select class="custom-select select2 form-control" required onchange="getWorkersAssignedToThisService(this.value)">
                         <option label="Select..."></option>
-                        <option value="REF-234094623496">REF-234094623496</option>
-                        <option value="REF-094009623412">REF-094009623412</option>
-                        <option value="REF-237290223123">REF-237290223123</option>
-                        <option value="REF-234094623496">REF-234094623496</option>
+                        @foreach($serviceRequests as $data)
+                        <option value="{{$data->id}}">{{$data->unique_id}}</option>
+                        @endforeach
                     </select>
                 </div>
             </div>
@@ -174,6 +174,62 @@ $(function(){
         });
     });
    
+
+
+       // to change the menu item list on change of category in dropdown select
+       function getWorkersAssignedToThisService(jobRef){
+        console.log(jobRef);
+
+        // $.ajaxSetup({
+        //     headers: {
+        //         'X-CSRF_TOKEN':$('meta[name="csrf-token"]').attr('content')
+        //     }
+        // });
+
+            // $.ajax({
+            //     url: "{{ route('getUsersAssigned', app()->getLocale()) }}"+"/"+val,
+            //     responseData: { },
+            //     success: function( responseData ) {
+            //         // var itemname = "";
+            //         console.log(responseData);
+            //         // for (var i = 0; i < responseData.length; i++) {
+            //         //     itemname += '<option value="'+responseData[i]["id"]+'">'+responseData[i]["menu_name"]+ '</option>'
+            //         // }
+            //         // document.getElementById("itemlist").innerHTML = itemname;
+            //     }
+            // });
+
+            $.ajax({
+                url: "{{ route('getUsersAssigned', app()->getLocale()) }}",
+                method: "POST",
+                dataType: "JSON",
+                data: {
+                    "_token": "{{ csrf_token() }}",
+                    "job_Ref": jobRef
+                },
+                success: function(data) {
+
+                  for (var i = 0; i < data.length; i++) {
+                        itemname += '<option value="'+data[i]["id"]+'">'+data[i]["menu_name"]+ '</option>'
+                    }
+                  // document.getElementById("itemlist").innerHTML = itemname;
+
+                  console.log(itemname)
+
+                    // if (data) {
+                    //     $('#lga_id').html(data.lgaList);
+                    // } else {
+                    //     var message = 'Error occured while trying to get L.G.A`s in ' + stateName + ' state';
+                    //     var type = 'error';
+                    //     displayMessage(message, type);
+                    // }
+                },
+            })
+
+
+
+        }
+
 </script>
 @endsection
 

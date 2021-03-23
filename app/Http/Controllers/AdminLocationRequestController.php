@@ -10,6 +10,7 @@ use App\Models\User;
 // use App\Http\Controllers\RecordActivityLogController; 
 use App\Models\Location; 
 use App\Models\ServiceRequest;
+use DB;
 // use App\Models\Name;
 
 
@@ -52,24 +53,63 @@ class AdminLocationRequestController extends Controller
 
     public function index()
     {
-        $locationRequest = Location::get();
-        $serviceRequests = ServiceRequest::where('service_request_status_id', 4)->get();
-        // $createdBy    = Name::get();
+        
+        // $data['serviceRequests'] = DB::table('service_requests')
+        // ->where('service_requests.status_id',  2)
+        //     ->select('service_requests.*', 'service_request_assigned.user_id',  'service_request_assigned.service_request_id')
+        //     ->join('service_request_assigned', 'service_requests.id', '=', 'service_request_assigned.service_request_id')
+        //     // ->join('accounts', 'service_request_assigned.user_id', '=', 'accounts.user_id')
+        //     // ->orderBy('service_requests.created_at', 'DESC')  
+        //     ->get();
+
+        // $data['serviceRequests'] = DB::table('service_request_assigned')
+        
+        // // ->join('service_requests', 'service_request_assigned.service_request_id', '=', 'service_requests.service_id')
+        // ->join('service_requests', function ($join) {
+        //     $join->on('service_request_assigned.service_request_id', '=', 'service_requests.service_id');
+        // })
+
+        // // ->join('accounts', 'accounts.user_id', '=', 'service_request_assigned.user_id')
+        // // ->orderBy('service_requests.created_at', 'DESC')
+        // // ->select('service_requests.unique_id', 'service_requests.description', 'service_requests.status_id', 'service_request_assigned.*',  'accounts.first_name')
+        // ->where('service_requests.status_id', 2)
+
+        // ->get();
+
+            // $data['serviceRequests'] =  DB::table('service_requests')
+            //     ->join('service_request_assigned', function ($join) {
+            //         $join->on('users.id', '=', 'contacts.user_id');
+            //     })
+            //     ->get();
+
+        // $data['locationRequest'] = Location::get();
+
+        $data['serviceRequests'] = ServiceRequest::where('status_id', 2)
+                                    // ->with('serviceRequestAssigned')
+                                    ->get(); 
+
+        // $createdBy    = Name::get(); ->with('users')
 
 
-        $data = [
-            'locationRequest'   =>  $locationRequest, 
-            'serviceRequests'   =>  $serviceRequests,
-            // 'createdBy'         =>  $createdBy
-        ];
+        // $data = [
+        //     'locationRequest'   =>  $locationRequest, 
+        //     'serviceRequests'   =>  $serviceRequests,
+        //     // 'createdBy'         =>  $createdBy
+        // ];
 
-        // echo '<pre>';
-        // echo json_encode($serviceRequests);
+        // echo '<pre>';  $data['client']->user->phones[0]->number
+        // dd($data['serviceRequests']);
         // echo '<pre>';
 
         return view('admin.location.location_request', $data)->with('i');
 
     }
+
+        // this method is used to fetch a single menu item
+        public function getUsersAssigned($id) {
+            $data = Account::where("user_id", 2)->get();
+            return $data;
+        }
 
     // public function getRecipientNames(Request $request){
     //     // $locationRequest = Location::get();
@@ -101,22 +141,16 @@ class AdminLocationRequestController extends Controller
 
     // }
 
-
-
-
-
-    // public function requestLocation(Request $request){
-    //     $location = new Location;
-    //     $location->requester_id = Auth::id();
-    //     $location->recipient_id = $request->subject; 
-    //     $location->location = $request->message;
-    //     $location->job_reference = $request->message;
-    //     $location->service_id = $request->message;
-    //     // $location->status = is '1' by default
-
-    //     $saveLocation = $location->save(); 
-
-    // }
+    public function requestLocation(Request $request){
+        $location = new Location;
+        $location->requester_id = Auth::id();
+        $location->recipient_id = $request->subject; 
+        $location->location = $request->message;
+        $location->job_reference = $request->message;
+        $location->service_id = $request->message;
+        // $location->status = is '1' by default
+        $saveLocation = $location->save();
+    }
 
     
 }

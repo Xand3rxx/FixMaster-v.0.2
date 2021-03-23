@@ -13,20 +13,23 @@ use App\Models\WalletTransaction;
 use App\Models\User;
 use App\Models\Client; 
 use App\Models\State;
-use App\Models\Account;
-use App\Models\Phone;
+use App\Models\Account; 
+use App\Models\Phone; 
+use App\Models\Address;
+use App\Models\Servicerequest;
 use App\Helpers\CustomHelpers;
 use App\Traits\GenerateUniqueIdentity as Generator;
 use App\Traits\RegisterPaymentTransaction;
 use App\Traits\Services;
+use App\Traits\PasswordUpdator;
 use Auth;
 
 
-use Session;
+use Session; 
 
 class ClientController extends Controller
 {
-    use RegisterPaymentTransaction, Generator, Services;
+    use RegisterPaymentTransaction, Generator, Services, PasswordUpdator;
 
     /**
      * Display a listing of the resource.
@@ -125,12 +128,6 @@ class ClientController extends Controller
         //
     }
 
-
-    // public function settings(){
-    //     $data['title'] = "Profile";
-    //     return view('user.profile', $data);
-    // }
-
     public function settings(Request $request){
         // return view('client.profile', $data);
         // $data['client'] = Client::where('user_id',auth()->user()->id)->first();
@@ -179,10 +176,15 @@ class ClientController extends Controller
         $user_data->update(); 
         // dd($validatedData);        
 
-        // if there is user_id update phones
+        // update phones
         $phones = Phone::where('user_id', auth()->user()->id)->orderBy('id','DESC')->first();         
         $phones->number = $request->phone_number;
         $phones->update();
+        // update address
+        $addresses = Address::where('user_id', auth()->user()->id)->orderBy('id','DESC')->first();         
+        $addresses->address = $request->full_address;
+        $addresses->update();
+        
 
             //  $client_data = Account::find(auth()->user()->id); 
              $client_data = Account::where('user_id', auth()->user()->id)->orderBy('id','DESC')->first();
@@ -196,59 +198,30 @@ class ClientController extends Controller
                 if($request->hasFile('profile_avater')){
                     $image = $request->file('profile_avater');
                     $imageName = sha1(time()) .'.'.$image->getClientOriginalExtension();
-                    $imagePath = public_path('assets/client-avatars').'/'.$imageName;        
+                    $imagePath = public_path('assets/user-avatars').'/'.$imageName;        
                     //Delete old image
-                    if(\File::exists(public_path('assets/client-avatars/'.$request->input('old_avatar')))){
-                        $done = \File::delete(public_path('assets/client-avatars/'.$request->input('old_avatar')));
+                    if(\File::exists(public_path('assets/user-avatars/'.$request->input('old_avatar')))){
+                        $done = \File::delete(public_path('assets/user-avatars/'.$request->input('old_avatar')));
                         if($done){
                             // echo 'File has been deleted';
                         }
                     }        
                     //Move new image to `client-avatars` folder
                     Image::make($image->getRealPath())->resize(220, 220)->save($imagePath);
+                    $client_data->avatar = $imageName; 
                 }else{
-                    // $imageName = $request->input('old_avatar');
-                    $client_data->avatar = $request->input('old_avatar');
-                    
+                    // $imageName = $request->input('old_avatar'); profile_avater
+                    $client_data->avatar = $request->input('old_avatar');                    
                 }
                     
                 $client_data->state_id = $request->state_id;                      
-                $client_data->lga_id = $request->lga_id;                      
-                // $client_data->town = $request->town;                       
-                $client_data->full_address = $request->full_address;
+                $client_data->lga_id = $request->lga_id;  
                 $client_data->save();
                 // dd($client_data);
             // } 
 
 
         // if($user_data){
-
-        //     //Record crurrenlty logged in user activity
-        //     $this->addRecord = new RecordActivityLogController();
-        //     $id = Auth::id();
-        //     $type = 'Profile';
-        //     $severity = 'Informational';
-        //     $actionUrl = Route::currentRouteAction();
-        //     $controllerActionPath = URL::full();
-        //     $message = Auth::user()->fullName->name.' updated profile';
-        //     $this->addRecord->createMessage($id, $type, $severity, $actionUrl, $controllerActionPath, $message);
-
-        //     return back()->with('success', 'Profile was successfully updated.');
-
-        // }else{
-        //     //Record Unauthorized user activity
-        //     $this->addRecord = new RecordActivityLogController();
-        //     $id = Auth::id();
-        //     $type = 'Errors';
-        //     $severity = 'Error';
-        //     $actionUrl = Route::currentRouteAction();
-        //     $controllerActionPath = URL::full();
-        //     $message = 'An error occurred while '.Auth::user()->fullName->name.' was trying to update profile.';
-
-        //     return back()->with('error', 'An error occurred while trying to update Profile.');
-        // }
-        
-        
         Session::flash('success', 'Profile updated successfully!');
         return redirect()->back();
     }
@@ -285,7 +258,7 @@ class ClientController extends Controller
         // call the payment Trait and submit record on the
         $payment = $this->payment($valid['amount'], $valid['payment_channel'], $valid['payment_for'], $client['unique_id'], 'pending', $generatedVal);
         Session::put('Track', $generatedVal);
-        // $client->user()->email();
+        // $client->user()->email(); 
         if ($payment) {            
                 //   new starts here 
                 $user_id = auth()->user()->id;
@@ -318,33 +291,6 @@ class ClientController extends Controller
 
 
     }
-
-    // public function directToRightpage()
-    // {
-    //     $user_id = auth()->user()->id;
-    //     $track = Session::get('Track');
-    //     $pay =  Payment::where('reference_id', $track)->orderBy('id', 'DESC')->first();
-
-    //     if (is_null($pay)) {
-    //         return redirect()->route('client.wallet', app()->getLocale())->with('alert', 'Invalid Deposit Request');
-    //     }
-    //     if ($pay->status != 'pending') {
-    //         return redirect()->route('client.wallet', app()->getLocale())->with('alert', 'Invalid Deposit Request');
-    //     }
-    //     $gatewayData = PaymentGateway::where('id', $data->payment_channel)->first();
-
-    //     if ($pay->payment_channel == 1) {
-    //         $paystack['amount'] = $pay->amount;
-    //         $paystack['track'] = $track;
-    //         $title = $gatewayData->name;
-    //         return view('client.payment.paystack', compact('paystack', 'title', 'gatewayData', 'data'));
-    //     } elseif ($pay->payment_channel == 2) {
-    //         $flutter['amount'] = $pay->amount;
-    //         $flutter['track'] = $track;
-    //         $title = $gatewayData->name;
-    //         return view('client.payment.flutter', compact('flutter', 'title', 'gatewayData', 'data'));
-    //     }
-    // }
 
     public function paystackIPN(Request $request)
     {
@@ -440,8 +386,6 @@ class ClientController extends Controller
             $client = \App\Models\Client::where('user_id', auth()->user()->id)->with('user')->firstOrFail();
 
             if (!WalletTransaction::where('unique_id', '=', $client['unique_id'])->exists()) {
-                // $track = Session::get('Track'); 
-                // $data  = Payment::where('reference_id', $track)->orderBy('id', 'DESC')->first();
                 $walTrans = new WalletTransaction;
                 $walTrans['user_id'] = auth()->user()->id;
                 $walTrans['payment_id'] = $data->id;
@@ -478,8 +422,6 @@ class ClientController extends Controller
         // $track = Session::get('Track');
         $client = \App\Models\Client::where('user_id', $request->user()->id)->with('user')->firstOrFail();
         if (!WalletTransaction::where('unique_id', '=', $client['unique_id'])->exists()) {
-            // $track = Session::get('Track'); 
-            // $data  = Payment::where('reference_id', $track)->orderBy('id', 'DESC')->first();
             $walTrans = new WalletTransaction;
             $walTrans['user_id'] = auth()->user()->id;
             $walTrans['payment_id'] = $data->id;
@@ -498,9 +440,17 @@ class ClientController extends Controller
         }
         // dd()
         return redirect()->route('client.wallet', app()->getLocale())->with('success', 'Fund successfully added!');
-
-
     }
+
+    /**
+     * Return a list of all active FixMaster services.
+     *
+     * @return \Illuminate\Http\Response
+    */
+   public function updatePassword(Request $request)
+   {
+       return $this->passwordUpdator($request);
+   }
 
     /**
      * Return a list of all active FixMaster services.
@@ -525,6 +475,45 @@ class ClientController extends Controller
             'bookingFees'   =>  $this->bookingFees(),
             'discounts'     =>  $this->clientDiscounts(),
         ]);
+    }
+
+    public function serviceRequest(Request $request){
+        // $validatedData = $request->validate([            
+        //     'service_fee'               =>   'required',
+        //     'description'               =>   'required',
+        //     'timestamp'                 =>   'required',
+        //     'phone_number'              =>   'required',
+        //     'address'                   =>   'required',
+        //     'payment_method'            =>   'required',          
+        //   ]);
+        
+        //   $all = $request->all();
+        //     dd($all);
+
+
+            //Determine if User has a discount of 5% auth()->user()->client->discounted == 1
+            // if($request->client_discount_id == 1){
+                // $discountServiceFee = null;
+                $amount = $request->booking_fee;    
+            // }else {
+                // $discountServiceFee = 0.95 * $serviceFee;
+                // $amount = $discountServiceFee;
+            // }
+
+          $service_request                        = new Servicerequest;  
+          $service_request->cliend_id             = auth()->user()->id;
+          $service_request->service_id            = $request->service_id;
+          $service_request->unique_id             = 'REF-'.$this->generateReference();
+          $service_request->price_id              = $request->price_id;
+          $service_request->phone_id              = $request->phone_number;
+          $service_request->address_id            = $request->address;
+          $service_request->client_discount_id    = $request->client_discount_id;
+          $service_request->client_security_code  = 'SEC-'.strtoupper(substr(md5(time()), 0, 8));
+          $service_request->status_id             = '1';
+          $service_request->description           = $request->description;
+          $service_request->total_amount          = $amount;
+          $service_request->preferred_time        = $request->timestamp;
+          dd($service_request); 
     }
 
     /**

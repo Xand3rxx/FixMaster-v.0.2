@@ -6,22 +6,12 @@
       <div class="col-lg-8 col-12">
           <div class="card border-0 rounded shadow">
               <div class="card-body mt-">
-                  <h5 class="text-md-left text-center">{{$client->user->account->avatar}} Personal Detail :</h5>
+                  <h5 class="text-md-left text-center">Personal Detail :</h5>
   
                   <div class="mt-3 text-md-left text-center d-sm-flex">
                 
-                  @if(!empty($client->user->account->avatar))
-                    <img src="{{ asset('assets/images/'.$client->user->account->avatar) }}" class="profile_image_preview avatar float-md-left avatar-medium rounded-circle shadow mr-md-4" alt="{{ $client->user->account->first_name }}" />
-                  @else
-                  
-                  @if($client->user->account->gender == 'male')
-                    <img src="{{ asset('assets/images/default-male-avatar.png') }}" class="profile_image_preview avatar float-md-left avatar-medium rounded-circle shadow mr-md-4" alt="{{ $client->user->account->first_name }}" />
-                  @endif
-                
-                  @if($client->user->account->gender == 'female')
-                    <img src="{{ asset('assets/images/default-female-avatar.png') }}" class="profile_image_preview avatar float-md-left avatar-medium rounded-circle shadow mr-md-4" alt="{{ $client->user->account->first_name }}" />
-                  @endif
-
+                  @if(!empty($client->user->account->avatar)) 
+                    <img src="{{ asset('assets/user-avatars/'.$client->user->account->avatar) }}" id="avatar" class="d-none profile_image_preview avatar float-md-left avatar-medium rounded-circle shadow mr-md-4" alt="{{ $client->user->account->first_name }}" />
                   @endif
                   </div>
 
@@ -76,7 +66,7 @@
                           <!-- Profile Avatar -->
                           <div class="form-group col-md-4">
                               <label>Profile Avatar</label>
-                              <div class="custom-file">
+                              <div class="custom-file change-picture">
                                 <input type="file" accept="image/*" class="custom-file-input @error('image') is-invalid @enderror" name="profile_avater" id="profile_image" value="{{$client->user->account->avatar}}">
                                 <label class="custom-file-label" id="imagelabel" for="profile_image">Upload Profile Avatar</label>
                                
@@ -100,7 +90,7 @@
                                   <select class="form-control pl-5  @error('state_id') is-invalid @enderror" name="state_id" id="state_id">
                                     <option selected value="">Select...</option>
                                     @foreach($states as $state)
-                                      <option value="{{$state->id}}" {{old('state_id') == $state->id ? 'selected' : ''}} @if($client->state_id == $state->id) selected @endif>{{ $state->name }}</option>
+                                      <option value="{{$state->id}}" {{old('state_id') == $state->id ? 'selected' : ''}} @if($client->user->account->state_id == $state->id) selected @endif>{{ $state->name }}</option>
                                     @endforeach
                                   </select>
                                   @error('state_id')
@@ -117,7 +107,8 @@
                                 <label>L.G.A <span class="text-danger">*</span></label>
                                 <i data-feather="map" class="fea icon-sm icons"></i>
                                 <select class="form-control pl-5 @error('lga_id') is-invalid @enderror" name="lga_id" id="lga_id">
-                                    <option selected value="">Select...</option>
+                                    <!-- <option selected value="">Select...</option> -->
+                                    <option selected value="{{ $client->user->account->lga_id }}">{{ $client->user->account->lga_id }}</option>
                                 </select>
                                 @error('lga_id')
                                 <span class="invalid-feedback" role="alert">
@@ -154,7 +145,7 @@
                           <h5>Change password :</h5>
                           <small class="text-danger">In order to change your password, you need to provide the current password.</small>
 
-                          <form method="post" action=" " >
+                          <form method="post" action="{{route('client.updatePassword', app()->getLocale()) }}" >
                               {{ csrf_field() }}
                               <div class="row mt-4">
                                   <div class="col-lg-4">
@@ -290,6 +281,10 @@ $(document).ready(function() {
             })
         });
     });
+
+    $(document).on('click', '.change-picture', function (){
+            $('.avatar').removeClass('d-none');
+        });
 </script>
 
 @endpush

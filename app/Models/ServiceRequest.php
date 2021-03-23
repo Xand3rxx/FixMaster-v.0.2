@@ -102,6 +102,10 @@ class ServiceRequest extends Model
             return $this->hasMany(Service::class, 'id', 'service_id');
     }
 
+    public function serviceRequestAssigned(){
+        return $this->hasMany(ServiceRequestAssigned::class, 'service_request_id', 'id');
+    }
+
     public function rfq()
     {
         return $this->hasOne(Rfq::class, 'service_request_id');

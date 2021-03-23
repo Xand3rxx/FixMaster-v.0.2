@@ -24,11 +24,11 @@
             </div>
             </div>
 
-            <form class="rounded p-4" method="POST" action="" enctype="multipart/form-data">
+            <form class="rounded p-4" method="POST" action="{{ route('client.services.serviceRequest', app()->getLocale()) }}" enctype="multipart/form-data">
                 @csrf
                 <small class="text-danger">A Booking Fee deposit is required to validate this order and enable our AI assign a Customer Service Executice(CSE) to your Job.</small>
 
-                <input type="hidden" class="d-none" value="{{ $service->service_id }}" name="service_id">
+                <input type="hidden" class="d-none" value="{{ $service->id }}" name="service_id">
 
                 <div class="row" id="pills-tab" role="tablist">
                     <ul class="nav nav-pills bg-white nav-justified flex-column mb-0" id="pills-tab" role="tablist">
@@ -40,6 +40,7 @@
                                         <p class="text-muted tab-para mb-0">{{ $bookingFee->description }}</p>
                                         <input type="radio" name="price_id" value="{{ $bookingFee->id }}" class="custom-control-input booking-fee" @if(old('price_id') == $bookingFee->id) checked @endif>
 
+                                        <input type="hidden" name="booking_fee" value="{{$bookingFee->amount}}">
                                     </div>
                                 </a><!--end nav link-->
                             </li><!--end nav item-->
@@ -146,29 +147,41 @@
                     @endif
                     
                     <div class="col-md-12 form-group">
-                        <h5><span class="font-weight-bold">Payment Options</span></h5>
+                        <h5><span class="font-weight-bold"><b>Pay Via</b></span></h5>
                     </div>
-                        
-                    <div class="col-md-4 form-group">
+                    
+                    <div class="col-md-6 form-group">
+                        <div class="custom-control custom-radio form-group position-relative">
+                            <input type="radio" id="Paystack" name="payment_method" class="custom-control-input" value="paystack" data-action="{{ route('client.paystack.submit', app()->getLocale()) }}">
+                            <label class="custom-control-label" for="Paystack">Paystack</label>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6 form-group">
+                        <div class="custom-control custom-radio form-group position-relative">
+                            <input type="radio" id="Flutter" name="payment_method" class="custom-control-input" value="flutterwave" data-action="{{ route('client.paystack.submit', app()->getLocale()) }}">
+                            <label class="custom-control-label" for="Flutter">Flutter</label>
+                        </div>
+                    </div>
+
+                    <div class="col-md-12 form-group">
+                        <h5><span class="font-weight-bold"> <b>Other payment methods</b> </span></h5>
+                    </div>
+
+                    <div class="col-md-12 form-group">
                         <div class="custom-control custom-radio form-group position-relative">
                             <input type="radio" id="customRadio5" name="payment_method" class="custom-control-input" value="Wallet">
                             <label class="custom-control-label" for="customRadio5">E-Wallet</label>
                         </div>
-                    </div>
+                    </div>   
 
-                    <div class="col-md-4 form-group">
-                        <div class="custom-control custom-radio form-group position-relative">
-                            <input type="radio" id="payment_gateway_option" name="payment_method" class="custom-control-input" onclick="displayPaymentGateways()" value="Online">
-                            <label class="custom-control-label" for="payment_gateway_option">Pay Online</label>
-                        </div>
-                    </div>
-                    
-                    <div class="col-md-4 form-group">
+                    <div class="col-md-12 form-group">
                         <div class="custom-control custom-radio form-group position-relative">
                             <input type="radio" id="pay_offline" name="payment_method" class="custom-control-input" data-toggle="modal" href="#payOffline" value="Offline">
                             <label class="custom-control-label" for="pay_offline">Pay Offline</label>
                         </div>
                     </div>
+
 
                     <div class="row d-none payment-options">
                         <div class="col-md-6">
@@ -295,6 +308,14 @@
         function displayPaymentGateways(){
             $('.payment-options').removeClass('d-none');
         }
+
+         // always check the first payment gateway
+        //  $(".input-check").first().attr('checked', true);
+        // // change form action, show form for checked 'gateway'
+        // let tabid = $(".input-check:checked").data('tabid');
+        // $('#payment').attr('action', $(".input-check:checked").data('action'));
+        // // showDetails(tabid);
+
     </script>
 @endpush
 

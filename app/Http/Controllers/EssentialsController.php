@@ -3,7 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\State;
-use Illuminate\Http\Request;
+use DB;
+use Illuminate\Http\Request; 
 
 class EssentialsController extends Controller
 {
@@ -31,5 +32,16 @@ class EssentialsController extends Controller
 
         return response()->json($data);
 
+    }
+
+    public function getUsersAssigned() {
+        // $data = ServiceRequestAssigned::where("user_id", 2)
+        $data = DB::table('service_request_assigned')
+        // ->join()
+        // ->join('accounts', 'service_request_assigned.user_id', '=', 'accounts.user_id')
+        // ->where("user_id", 2)
+        // ->select('accounts.*', 'service_request_assigned.user_id')
+        ->get();
+        return $data;
     }
 }

@@ -154,7 +154,6 @@
                     <p class="text-muted location-time"><span class="text-dark h6">You are about to pay the sum of</span></p>
                         <h4><a href="javascript:void(0)" class="text-dark title">₦ {{$pay->amount}} </a></h4> 
                         
-                        <!-- @if($pay->payment_channel=='paystack') -->
                         <p class="text-muted location-time"><span class="text-dark h6">Via Paystack</span></p>
                                               
                         <form class="mb-5" method="post" action="{{ route('client.ipn.paystack', app()->getLocale()) }}">
