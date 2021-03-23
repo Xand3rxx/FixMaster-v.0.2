@@ -63,7 +63,7 @@
                 @foreach ($results as $serviceRequest)
                  <tr>
                   <td class="tx-color-03 tx-center">{{$sn++}}</td>
-                  <td class="tx-medium">{{$serviceRequest->service_requests}}</td>
+                  <td class="tx-medium">{{$serviceRequest->service_request}}</td>
                   {{-- <td class="tx-medium">{{$serviceRequest->clientAccount}} {{$serviceRequest->clientAccount}}</td> --}}
                   {{-- <td class="tx-medium">
                     @foreach($serviceRequest->service_request->users as $data)

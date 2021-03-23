@@ -108,7 +108,7 @@
                 </a>
             </div>
             <div class="buy-button">
-                <a href="{{ route('frontend.index', app()->getLocale()) }}" target="_blank">
+                <a href="{{ route('services.list', app()->getLocale()) }}" target="_blank">
                     <div class="btn btn-primary login-btn-primary">Book a Service</div>
                     <div class="btn btn-light login-btn-light buy-btn-two">Book a Service</div>
                 </a>

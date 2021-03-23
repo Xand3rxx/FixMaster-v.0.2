@@ -21,6 +21,8 @@ class ServiceRequestController extends Controller
         foreach($allRequests as $serviceRequest){
             $canceled = $serviceRequest->service_request->status_id;
         }
+         //return $results = ServiceRequestAssigned::where('user_id', Auth::id())->with( 'service_request')->get();
+
 
         // if($res == 3){
         //     $canceled = $res;

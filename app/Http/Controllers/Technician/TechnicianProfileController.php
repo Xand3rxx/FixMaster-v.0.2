@@ -60,6 +60,7 @@ class TechnicianProfileController extends Controller
     public function serviceRequests($language, ServiceRequestAssigned $serviceRequest)
     {
 
+        
         $user_id = auth()->user()->id; // gets the current user id
 
         //$serviceRequests = ServiceRequestAssigned::where('user_id', $user_id)->orderBy('created_at', 'DESC')->paginate(15);
@@ -67,12 +68,15 @@ class TechnicianProfileController extends Controller
         
         //$serviceRequests = DB::table('ServiceRequestAssigned')->join('ServiceRequest', 'ServiceRequestAssigned.service_request_id', '=', 'ServiceRequest.service_id' ))
 
-       
+        $serviceRequests = ServiceRequestAssigned::where('user_id', Auth::id())->with('service_request')->get();
 
-        $serviceRequests = DB::table('service_request_assigned')->join('service_requests', 'service_request_assigned.service_request_id', '=', 'service_requests.service_id' )
-  ->join('accounts', 'service_requests.client_id', '=', 'accounts.user_id')
-  ->where('service_request_assigned.user_id', $user_id)
-  ->get();
+        return $serviceRequests;
+
+
+//         $serviceRequests = DB::table('service_request_assigned')->join('service_requests', 'service_request_assigned.service_request_id', '=', 'service_requests.service_id' )
+//   ->join('accounts', 'service_requests.client_id', '=', 'accounts.user_id')
+//   ->where('service_request_assigned.user_id', $user_id)
+//   ->get();
   
 
         return view('technician.requests', compact('serviceRequests'));
