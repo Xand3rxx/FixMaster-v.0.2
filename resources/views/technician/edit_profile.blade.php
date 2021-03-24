@@ -137,7 +137,7 @@
                             <!-- Full Address -->
                             <div class="form-group col-md-12">
                               <label for="inputAddress2">Full Address</label>
-                              <textarea rows="3" class="user_address form-control @error('full_address') is-invalid @enderror" placeholder="e.g. 284B, Ajose Adeogun Street, Victoria Island, Lagos, Nigeria." id="inputAddress2" name="full_address" required>{{$result->address}}</textarea>
+                              <textarea rows="3" class="user_address form-control @error('full_address') is-invalid @enderror" placeholder="e.g. 284B, Ajose Adeogun Street, Victoria Island, Lagos, Nigeria." id="inputAddress2" name="full_address" required></textarea>
                               @error('full_address')
                             <span class="invalid-feedback" role="alert">
                                 <strong>{{ $message }}</strong>
@@ -214,14 +214,11 @@
 
 <script>
     $('.selectpicker').selectpicker();
-
     $(document).ready(function() {
         "use strict";
         let autocomplete;
         initialize();
-
         
-
         function initialize() {
             // Create the autocomplete object, restricting the search to geographical location types.
             autocomplete = new google.maps.places.Autocomplete((document.querySelector('.user_address')), {
@@ -242,38 +239,30 @@
   (function($){
     "use scrict";
     $(document).ready(function(){
-
       $(document).on('change','#profile_image', function(){
         readURL(this);
       })
-
       reader.readAsDataURL(input.files[0]);
-
       function readURL(input){
         if(input.files && input.files[0]){
           var reader = new FileReader();
           var res = isImage(input.files[0].name);
-
           if(res==false){
             var msg = 'Image should be png/PNG, jpg/JPG & jpeg/JPG';
             Snackbar.show({text: msg, pos: 'bottom-right',backgroundColor:'#d32f2f', actionTextColor:'#fff' });
             return false;
           }
-
           reader.onload = function(e){
             $('.profile_image_preview').attr('src', e.target.result);
             $("imagelabel").text((input.files[0].name));
           }
-
           reader.readAsDataURL(input.files[0]);
         }
       }
-
       function getExtension(filename) {
           var parts = filename.split('.');
           return parts[parts.length - 1];
       }
-
       function isImage(filename) {
           var ext = getExtension(filename);
           switch (ext.toLowerCase()) {
@@ -285,11 +274,8 @@
           }
           return false;
       }
-
     })
-
  })(jQuery);
-
  var check = function() {
   if (document.getElementById('new_password').value ==
     document.getElementById('new_confirm_password').value) {
@@ -300,6 +286,5 @@
     document.getElementById('message').innerHTML = 'Password does not Match';
   }
 }
-
 </script>
 @endsection

@@ -7,11 +7,11 @@ use Illuminate\Http\Request;
 use App\Traits\Loggable;
 use Illuminate\Support\Facades\Route;
 use Auth;
+use Session;
 use App\Models\PaymentDisbursed;
 use App\Models\User;
 use App\Models\ServiceRequest;
 use App\Models\ServiceRequestAssigned;
-use Illuminate\Support\Facades\DB;
 use App\Traits\PasswordUpdator;
 use Illuminate\Support\Facades\Validator;
 
@@ -60,45 +60,42 @@ class TechnicianProfileController extends Controller
     public function serviceRequests($language, ServiceRequestAssigned $serviceRequest)
     {
 
-        $user_id = auth()->user()->id; // gets the current user id
-
-        //$serviceRequests = ServiceRequestAssigned::where('user_id', $user_id)->orderBy('created_at', 'DESC')->paginate(15);
-        //$serviceRequests = ServiceRequestAssigned::where('user_id', Auth::id())->get();
-        
-        //$serviceRequests = DB::table('ServiceRequestAssigned')->join('ServiceRequest', 'ServiceRequestAssigned.service_request_id', '=', 'ServiceRequest.service_id' ))
-
        
 
-        $serviceRequests = DB::table('service_request_assigned')->join('service_requests', 'service_request_assigned.service_request_id', '=', 'service_requests.service_id' )
-  ->join('accounts', 'service_requests.client_id', '=', 'accounts.user_id')
-  ->where('service_request_assigned.user_id', $user_id)
-  ->get();
-  
+    $serviceRequests = ServiceRequestAssigned::where('user_id', Auth::id())->with('service_request')->get();
+
+        //return $serviceRequests;
 
         return view('technician.requests', compact('serviceRequests'));
-
-        //return view('technician.requests')->with('i');
     }
 
-    /**
-     * Return Service Requests Details Page 
-     */
-    public function serviceRequestDetails($language, $service_request_id)
+   
+
+    public function serviceRequestDetails($language, $details)
     {
+       
+        $serviceRequests = ServiceRequest::where('uuid', $details)->first();
 
-        $user_id = auth()->user()->id; // gets the current user id
+        
 
-       // $serviceRequests = ServiceRequestAssigned::where('user_id', $user_id)->orderBy('created_at', 'DESC')->paginate(15);
-
-        $serviceRequests = DB::table('service_request_assigned')->join('service_requests', 'service_request_assigned.service_request_id', '=', 'service_requests.service_id' )
-  ->join('accounts', 'service_requests.client_id', '=', 'accounts.user_id')
-  ->join('addresses', 'service_requests.client_id', '=', 'addresses.user_id')
-  //->join('services', 'service_request_assigned.service_request_id', '=', 'services.user_id')
-  ->where('service_requests.service_id', $service_request_id)->first();
-      
-  //dd($service_request_id);
         return view('technician.request_details', compact('serviceRequests'));
+
+
+        
+        
     }
+
+
+
+
+
+
+
+
+
+
+
+
 
     /**
      * Return View Profile Page 
@@ -169,7 +166,7 @@ class TechnicianProfileController extends Controller
 
             if ($request->hasFile('profile_avater')) {
                 $filename = $request->profile_avater->getClientOriginalName();
-                $request->profile_avater->move('assets/qa_images', $filename);
+                $request->profile_avater->move('assets/user-avatars', $filename);
             } else {
                 $filename = $user->account->avatar;
             }
@@ -230,12 +227,104 @@ class TechnicianProfileController extends Controller
         return $this->passwordUpdator($request);
     }
 
-    public function get_technician_disbursed_payments(Request $request)
+   /* public function get_technician_disbursed_payments(Request $request)
     {
-
-
         $payments = PaymentDisbursed::where('recipient_id', Auth::id())->get();
-
         return view('technician.payments', compact('payments'));
+    }*/
+
+    public function get_technician_disbursed_payments(Request $request){
+
+        // $user = Auth::user();
+        // $payments = $user->payments();
+        $payments = PaymentDisbursed::where('recipient_id',Auth::id())
+        ->orderBy('created_at', 'DESC')->get();
+        return view('technician.payments', compact('payments'));
+    }
+
+    public function sortDisbursedPayments(Request $request){
+        if($request->ajax()){
+
+            // return $request;
+            //Get current activity sorting level
+            $level =  $request->get('sort_level');
+            //Get the activity sorting type
+            $type =  $request->get('type');
+            //Get activity log for a specific date
+            $specificDate =  $request->get('date');
+            //Get activity log for a specific year
+            $specificYear =  $request->get('year');
+            //Get activity log for a specific month
+            $specificMonth =  date('m', strtotime($request->get('month')));
+            //Get activity log for a specific month name
+             $specificMonthName =  $request->get('month');
+            //Get activity log for a date range
+            $dateFrom =  $request->get('date_from');
+            $dateTo =  $request->get('date_to');
+
+            if($level === 'Level One'){
+
+                $payments = PaymentDisbursed::where('type', $type)
+                ->orderBy('created_at', 'DESC')->get();
+
+                $message = 'Showing Disbursed Payment of "'.$type.'"';
+
+                return view('technician._disbursed_table', compact('payments','message'));
+            }
+
+            if($level === 'Level Two'){
+
+                if(!empty($specificDate)){
+                    $payments = PaymentDisbursed::whereDate('created_at', $specificDate)
+                    ->where('recipient_id', Auth::id())
+                    ->orderBy('created_at', 'DESC')->get();
+
+                    $message = 'Showing Disbursed Payments for '.\Carbon\Carbon::parse($specificDate, 'UTC')->isoFormat('LL');
+                }
+
+                return view('technician._disbursed_table', compact('payments','message'));
+
+            }
+
+            if($level === 'Level Three'){
+
+                if(!empty($specificYear)){
+                    $payments = PaymentDisbursed::whereYear('created_at', $specificYear)
+                    ->where('recipient_id', Auth::id())
+                    ->orderBy('created_at', 'DESC')->get();
+
+                    $message = 'Showing Disbursed Payments for year '.$specificYear;
+                }
+
+                return view('technician._disbursed_table', compact('payments','message'));
+            }
+
+            if($level === 'Level Four'){
+
+                if(!empty($specificYear) && !empty($specificMonth)){
+                    $payments = PaymentDisbursed::whereYear('created_at', $specificYear)
+                    ->whereMonth('created_at', $specificMonth)
+                    ->where('recipient_id', Auth::id())
+                    ->orderBy('created_at', 'DESC')->get();
+
+                    $message = 'Showing Disbursed Payments for "'.$specificMonthName.'" in year '.$specificYear;
+                }
+
+                return view('technician._disbursed_table', compact('payments','message'));
+            }
+
+            if($level === 'Level Five'){
+
+                if(!empty($dateFrom) && !empty($dateTo)){
+                    $payments = PaymentDisbursed::whereBetween('created_at', [$dateFrom, $dateTo])
+                    ->where('recipient_id', Auth::id())
+                    ->orderBy('created_at', 'DESC')->get();
+
+                    $message = 'Showing Disbursed Payments from "'.\Carbon\Carbon::parse($dateFrom, 'UTC')->isoFormat('LL').'" to "'.\Carbon\Carbon::parse($dateTo, 'UTC')->isoFormat('LL').'"';
+                }
+
+                 return view('technician._disbursed_table', compact('payments','message'));
+            }
+        }
     }
 }

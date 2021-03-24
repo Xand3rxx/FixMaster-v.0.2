@@ -85,7 +85,7 @@ class ServiceRequest extends Model
 
     public function users()
     {
-        return $this->belongsToMany(User::class);
+        return $this->belongsToMany(User::class, 'service_request_assigned')->with('account', 'roles');
     }
     public function cse()
     {
@@ -145,5 +145,13 @@ class ServiceRequest extends Model
     {
         
             return $this->hasOne(Price::class, 'user_id', 'client_id')->withDefault();
+    }
+
+    public function address(){
+        return $this->belongsTo(Address::class);
+    }
+    public function phone()
+    {
+        return $this->belongsTo(Phone::class);
     }
 }
