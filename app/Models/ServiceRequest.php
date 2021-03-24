@@ -154,4 +154,9 @@ class ServiceRequest extends Model
     public function state(){
         return $this->belongsTo(State::class);
     }
+
+    public function phone()
+    {
+        return $this->belongsTo(Phone::class);
+    }
 }

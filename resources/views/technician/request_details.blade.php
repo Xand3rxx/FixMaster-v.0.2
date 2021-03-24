@@ -16,15 +16,15 @@
             </ol>
           </nav>
          
-          <h4 class="mg-b-0 tx-spacing--1"></h4><hr>
+          <h4 class="mg-b-0 tx-spacing--1">Job: {{$serviceRequests->unique_id}}</h4><hr>
           <div class="media align-items-center">
             <span class="tx-color-03 d-none d-sm-block">
               {{-- <i data-feather="credit-card" class="wd-60 ht-60"></i> --}}
               <img src="{{ asset('assets/images/default-male-avatar.png') }}" class="avatar rounded-circle" alt="Male Avatar">
             </span>
             <div class="media-body mg-sm-l-20">
-              <h4 class="tx-18 tx-sm-20 mg-b-2"></h4>
-              <p class="tx-13 tx-color-03 mg-b-0"></p>
+              <h4 class="tx-18 tx-sm-20 mg-b-2">{{$serviceRequests->clientAccount->first_name}} {{$serviceRequests->clientAccount->middle_name}} {{$serviceRequests->clientAccount->last_name}}</h4>
+              <p class="tx-13 tx-color-03 mg-b-0">{{$serviceRequests->phone->number}}</p>
             </div>
           </div><!-- media -->
         </div>
@@ -272,10 +272,7 @@
                             <td class="tx-color-03">{{$serviceRequests->service->description ?? ''}}</td>
                           </tr>
 
-                          {{-- If theres a cancellation, make this row visible --}}
-                          {{-- @if(!empty($requestDetail->serviceRequestCancellationReason->reason)) --}}
                           
-                          {{-- @endif --}}
                           @if($serviceRequests->status_id == 3)
                           <tr>
                             <td class="tx-medium">Reason for Cancellation </td>
