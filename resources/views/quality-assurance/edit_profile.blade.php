@@ -90,7 +90,7 @@
                             <select name="gender" id="gender" class="form-control @error('gender') is-invalid @enderror" required>
                               <option value="{{$result->account->gender}}">{{$result->account->gender}}</option>
                               <option value="">Choose....</option>
-                              <option value="male"}>Male</option>
+                              <option value="male">Male</option>
                               <option value="female">Female</option>
                               <option value="others">Others</option>
                            </select>
@@ -145,6 +145,25 @@
                             </span>
                             @enderror
                             </div>
+
+                            <div class="divider-text mt-4">Bank Account Details</div>
+                            <div class="form-group col-md-6">
+                              <label>Bank</label>
+                              <select name="bank_id" id="bank_id" class="form-control @error('bank_id') is-invalid @enderror" required>
+                                <option value="">Choose....</option>
+                                <option value="male">Male</option>
+                                <option value="female">Female</option>
+                                <option value="others">Others</option>
+                            </select>
+                            @error('bank_id')
+                            <span class="invalid-feedback" role="alert">
+                                <strong>{{ $message }}</strong>
+                            </span>
+                            </div>
+
+                            <div class="form-group col-md-6">
+                            </div>
+
                         </div>
 
                         <button type="submit" class="btn btn-primary">Update Profile</button>
@@ -163,7 +182,6 @@
                         <div class="form-group col-md-4">
                           <label for="current_password">Current Password</label>
                           <input type="password" class="form-control @error('current_password') is-invalid @enderror" id="current_password" name="current_password">
-                          <small style="color:red">Password must be minimum of 6 characters</small>
                           @error('current_password')
                             <span class="invalid-feedback" role="alert">
                                 <strong>{{ $message }}</strong>
@@ -173,6 +191,7 @@
                         <div class="form-group col-md-4">
                           <label for="new_password">New Password</label>
                           <input type="password" class="form-control @error('new_password') is-invalid @enderror" id="new_password" name="new_password">
+                          <small style="color:red">Password must be 6 characters at least.</small>
                           @error('new_password')
                             <span class="invalid-feedback" role="alert">
                                 <strong>{{ $message }}</strong>

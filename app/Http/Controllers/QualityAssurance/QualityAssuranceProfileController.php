@@ -36,7 +36,14 @@ class QualityAssuranceProfileController extends Controller
     }
 
     public function edit(Request $request){
-         $result = User::findOrFail(Auth::id());
+
+        $result = User::findOrFail(Auth::id());
+
+        $banks = \App\Models\Bank::get(['id', 'name']);
+        
+
+        return $banks;
+
         return view('quality-assurance.edit_profile', compact('result'));
     }
 

@@ -61,12 +61,14 @@ class QASeeder extends Seeder
 
         // QA Account
         $qaAccount = \App\Models\Account::create([
-            'user_id'       =>  $qa->id,
-            'first_name'    => "Yvonne",
-            'middle_name'   => "Obuchi",
-            'last_name'     => "Okoye",
-            'gender'        => 'female',
-            'avatar'        => 'default-female-avatar.png',
+            'user_id'           =>  $qa->id,
+            'first_name'        =>  "Yvonne",
+            'middle_name'       =>  "Obuchi",
+            'last_name'         =>  "Okoye",
+            'gender'            =>  'female',
+            'bank_id'           =>  3,
+            'account_number'    =>  '3082632813',
+            'avatar'            =>  'default-female-avatar.png',
         ]);
 
         // // QA Phone
@@ -78,21 +80,25 @@ class QASeeder extends Seeder
         // ]);
 
         $qaAccount1 = \App\Models\Account::create([
-            'user_id'       =>  $qa1->id,
-            'first_name'    => "Desmond",
-            'middle_name'   => "",
-            'last_name'     => "John",
-            'gender'        => 'male',
-            'avatar'        => 'default-male-avatar.png',
+            'user_id'           =>  $qa1->id,
+            'first_name'        => "Desmond",
+            'middle_name'       => "",
+            'last_name'         => "John",
+            'gender'            => 'male',
+            'bank_id'           =>  5,
+            'account_number'    =>  '1236322078',
+            'avatar'            => 'default-male-avatar.png',
         ]);
 
         $qaAccount2 = \App\Models\Account::create([
-            'user_id'       =>  $qa2->id,
-            'first_name'    => "Bidemi",
-            'middle_name'   => "Damian",
-            'last_name'     => "Johnson",
-            'gender'        => 'male',
-            'avatar'        => 'default-male-avatar.png',
+            'user_id'           =>  $qa2->id,
+            'first_name'        => "Bidemi",
+            'middle_name'       => "Damian",
+            'last_name'         => "Johnson",
+            'gender'            => 'male',
+            'bank_id'           =>  23,
+            'account_number'    =>  '7112572853',
+            'avatar'            => 'default-male-avatar.png',
         ]);
 
         // QA Address
@@ -130,21 +136,18 @@ class QASeeder extends Seeder
         $qaTable->user_id = $qa->id;
         $qaTable->account_id = $qaAccount->id;
         // $qaTable->unique_id = 'QA-19807654';
-        $qaTable->bank_id = 3;
         $qaTable->save();
 
         $qaTable = new \App\Models\QA();
         $qaTable->user_id = $qa1->id;
         $qaTable->account_id = $qaAccount1->id;
         // $qaTable->unique_id = 'QA-19807654';
-        $qaTable->bank_id = 7;
         $qaTable->save();
 
         $qaTable = new \App\Models\QA();
         $qaTable->user_id = $qa2->id;
         $qaTable->account_id = $qaAccount2->id;
         // $qaTable->unique_id = 'QA-19807654';
-        $qaTable->bank_id = 5;
         $qaTable->save();
 
         // QA Phone Record
