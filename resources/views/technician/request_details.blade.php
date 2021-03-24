@@ -182,7 +182,7 @@
                           </tr>
                           <tr>
                             <td class="tx-medium">Service Required</td>
-                            <td class="tx-color-03">{{$serviceRequests->service->name}}</td>
+                            <td class="tx-color-03">{{$serviceRequests->service->name ?? ''}}</td>
                           </tr>
                           <tr>
                             <td class="tx-medium">Scheduled Date & Time</td>
