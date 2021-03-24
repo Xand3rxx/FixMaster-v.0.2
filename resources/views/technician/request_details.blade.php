@@ -249,7 +249,7 @@
                           </tr>
                           <tr>
                             <td class="tx-medium">Request Address</td>
-                            <td class="tx-color-03">{{ $serviceRequests->address ?? '' }}</td>
+                            <td class="tx-color-03">{{$serviceRequests->address->address}}</td>
                           </tr>
                           <tr>
                             <td class="tx-medium">Request Description</td>
