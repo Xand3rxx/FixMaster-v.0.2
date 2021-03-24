@@ -61,12 +61,22 @@ class ServiceRequest extends Model
         return $this->belongsTo(User::class)->with('account', 'roles');
     }
 
+    public function account()
+    {
+        return $this->belongsTo(Account::class);
+    }
+    
     public function client()
     {
-        return $this->belongsTo(Client::class);
+        return $this->belongsTo(User::class);
     }
 
-    public function account()
+    public function clients()
+    {
+        return $this->belongsToMany(User::class);
+    }
+
+    public function cse()
     {
         return $this->belongsTo(Account::class);
     }

@@ -123,7 +123,6 @@
                                                             <thead class="bg-light">
                                                             <tr>
                                                                 <th scope="col" class="text-left">Service Type</th>
-                                                                <th scope="col" class="text-left">Hours Spent</th>
                                                                 <th scope="col" class="text-left">Amount</th>
                                                                 <th scope="col">Total</th>
                                                             </tr>
@@ -131,9 +130,8 @@
                                                             <tbody>
                                                                 <tr>
                                                                     <td class="text-left">Diagnostics Completion</td>
-                                                                    <td class="text-left">2 hr</td>
-                                                                    <td class="text-left">₦ {{ number_format(1000) }}</td>
-                                                                    <td class="text-left">₦ {{ number_format(1000 * 2) }}</td>
+                                                                    <td class="text-left">₦ {{ number_format(10000) }}</td>
+                                                                    <td class="text-left">₦ {{ number_format(10000) }}</td>
                                                                 </tr>
                                                             </tbody>
                                                         </table>
@@ -141,12 +139,10 @@
                                                     <div class="row">
                                                         <div class="col-lg-4 col-md-5 ml-auto">
                                                             <ul class="list-unstyled h5 font-weight-normal mt-4 mb-0">
-                                                                <li class="text-muted d-flex justify-content-between">Subtotal :<span>₦ {{ number_format(2000) }}</span></li>
-                                                                   <li class="text-muted d-flex justify-content-between">Labour Cost :<span> ₦ {{ number_format(3500) }}</span></li>
-                                                                   <li class="text-muted d-flex justify-content-between">FixMaster Royalty :<span> ₦ {{ number_format(5000) }}</span></li>
+                                                                <li class="text-muted d-flex justify-content-between">Subtotal :<span>₦ {{ number_format(10000) }}</span></li>
+                                                                   <li class="text-muted d-flex justify-content-between">FixMaster Royalty :<span> ₦ {{ number_format( 0.1 * 10000) }}</span></li>
                                                                    <li class="text-muted d-flex justify-content-between">Taxes :<span> ₦ {{ number_format(253) }}</span></li>
-{{--                                                                    <li class="text-muted d-flex justify-content-between">Warranty Cost :<span> ₦ {{ number_format(1500) }}</span></li>--}}
-                                                                   <li class="d-flex justify-content-between">Total :<span>₦ {{ number_format(2000 + 3500 + 5000 + 253) }}</span></li>
+                                                                   <li class="d-flex justify-content-between">Total :<span>₦ {{ number_format(10000 + 0.1 * 10000 + 253) }}</span></li>
                                                             </ul>
                                                         </div><!--end col-->
                                                     </div>
@@ -236,45 +232,6 @@
                                                             <table class="table mb-0 table-center invoice-tb">
                                                                 <thead class="bg-light">
                                                                 <tr>
-                                                                    <th scope="col" class="text-left">Service Type</th>
-                                                                    <th scope="col" class="text-left">Hours Spent</th>
-                                                                    <th scope="col" class="text-left">Amount</th>
-                                                                    <th scope="col">Total</th>
-                                                                </tr>
-                                                                </thead>
-                                                                <tbody>
-                                                                    <tr>
-                                                                        <td class="text-left">Diagnostics Completion</td>
-                                                                        <td class="text-left">2 hr</td>
-                                                                        <td class="text-left">₦ {{ number_format(1000) }}</td>
-                                                                        <td class="text-left">₦ {{ number_format(1000 * 2) }}</td>
-                                                                    </tr>
-                                                                </tbody>
-                                                            </table>
-                                                        </div>
-                                                        <div class="table-responsive bg-white shadow rounded mt-3">
-                                                            <table class="table mb-0 table-center invoice-tb">
-                                                                <thead class="bg-light">
-                                                                <tr>
-                                                                    <th scope="col" class="text-left">Supplier Name</th>
-                                                                    <th scope="col" class="text-left">Delivery Fee</th>
-                                                                    <th scope="col" class="text-left">Delivery Time</th>
-                                                                </tr>
-                                                                </thead>
-                                                                <tbody>
-                                                                    <tr>
-                                                                        <td class="text-left">{{ $invoice->rfqs->rfqSupplier->name }}</td>
-                                                                        <td class="text-left">₦ {{ number_format($invoice->rfqs->rfqSupplier->devlivery_fee) }}</td>
-                                                                        <td class="text-left">{{ Carbon\Carbon::parse($invoice->rfqs->rfqSupplier->delivery_time, 'UTC')->isoFormat('MMMM Do YYYY') }}</td>
-                                                                    </tr>
-                                                                </tbody>
-                                                            </table>
-                                                        </div>
-
-                                                        <div class="table-responsive bg-white shadow rounded mt-3">
-                                                            <table class="table mb-0 table-center invoice-tb">
-                                                                <thead class="bg-light">
-                                                                <tr>
                                                                     <th scope="col" class="text-left">#</th>
                                                                     <th scope="col" class="text-left">Component Name</th>
                                                                     <th scope="col" class="text-left">Model Number</th>
@@ -297,15 +254,41 @@
                                                                 </tbody>
                                                             </table>
                                                         </div>
+
+                                                        <div class="table-responsive bg-white shadow rounded mt-3">
+                                                            <table class="table mb-0 table-center invoice-tb">
+                                                                <thead class="bg-light">
+                                                                <tr>
+                                                                    <th scope="col" class="text-left" colspan="2">Labour Cost</th>
+                                                                </tr>
+                                                                </thead>
+                                                                <tbody>
+                                                                    <tr>
+                                                                        <td class="text-left">Hours worked</td>
+                                                                        <td class="text-left">2 hr</td>
+                                                                    </tr>
+                                                                    <tr>
+                                                                        <td class="text-left">Labor</td>
+                                                                        <td class="text-left">
+                                                                            ₦ {{ number_format(4000 + (0.1*4000) ) }}
+                                                                        </td>
+                                                                    </tr>
+                                                                </tbody>
+                                                            </table>
+                                                        </div>
+
+
                                                         <div class="row">
                                                             <div class="col-lg-4 col-md-5 ml-auto">
                                                                 <ul class="list-unstyled h5 font-weight-normal mt-4 mb-0">
-                                                                    <li class="test-muted d-flex justify-content-between">Subtotal :<span>₦ {{ number_format($invoice->total_amount) }}</span></li>
-                                                                   <li class="text-muted d-flex justify-content-between">Labour Cost :<span> ₦ {{ number_format(3500) }}</span></li>
-                                                                   <li class="text-muted d-flex justify-content-between">FixMaster Royalty :<span> ₦ {{ number_format(5000) }}</span></li>
+                                                                    <li class="test-muted d-flex justify-content-between">Subtotal :<span>₦ {{ number_format($invoice->rfqs->total_amount + 4400) }}</span></li>
+                                                                   <li class="text-muted d-flex justify-content-between">FixMaster Royalty :<span> ₦ {{ number_format(0.1 * ($invoice->rfqs->total_amount + 4400)) }}</span></li>
                                                                    <li class="text-muted d-flex justify-content-between">Taxes :<span> ₦ {{ number_format(253) }}</span></li>
-                                                                   <li class="text-muted d-flex justify-content-between">Warranty Cost :<span> ₦ {{ number_format(1500) }}</span></li>
-                                                                   <li class="d-flex justify-content-between">Total :<span>₦ {{ number_format($invoice->total_amount + 3500 + 5000 + 253 + 1500) }}</span></li>
+                                                                    <li class="text-muted d-flex justify-content-between">Warranty Cost :<span> ₦ {{ number_format(0.1 * ($invoice->rfqs->total_amount + 4400)) }}</span></li>
+                                                                    <li class="text-muted d-flex justify-content-between">Logistics :<span> ₦ {{ number_format(3000) }}</span></li>
+                                                                    <li class="d-flex justify-content-between text-info">Booking :<span> - ₦ {{ number_format(3000) }}</span></li>
+                                                                    <li class="d-flex justify-content-between text-info">Discount :<span> - ₦ {{ number_format(0.05 * ($invoice->rfqs->total_amount + 4400 + (0.1 * ($invoice->rfqs->total_amount + 4400)) + 253 + (0.1 * ($invoice->rfqs->total_amount + 4400)) + 3000 + 3000) ) }}</span></li>
+                                                                   <li class="d-flex justify-content-between">Total :<span>₦ {{ number_format( $invoice->rfqs->total_amount + 4400 + 0.1 * ($invoice->rfqs->total_amount + 4400) + 253 + 0.1 * ($invoice->rfqs->total_amount + 4400) + 3000 - 3000 - 0.05 * ($invoice->rfqs->total_amount + 4400 + (0.1 * ($invoice->rfqs->total_amount + 4400)) + 253 + (0.1 * ($invoice->rfqs->total_amount + 4400)) + 3000 + 3000) ) }}</span></li>
                                                                 </ul>
                                                             </div><!--end col-->
                                                         </div>
