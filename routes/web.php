@@ -121,15 +121,17 @@ Route::prefix('admin')->group(function () {
             ->name('services.deactivate');
         Route::get('/services/reinstate/{service}',         [ServiceController::class, 'reinstate'])->name('services.reinstate');
         Route::get('/services/delete/{service}',            [ServiceController::class, 'destroy'])->name('services.delete');
-        Route::resource('services',                         ServiceController::class);
+        Route::resource('services',                         ServiceController::class); 
 
 
 
         //  location request
         Route::get('/location-request',                     [AdminLocationRequestController::class, 'index'])->name('location_request');
-        Route::post('/get-names',                           [AdminLocationRequestController::class, 'getNames'])->name('get_names');
-        Route::post('/request-location',                    [AdminLocationRequestController::class, 'requestLocation'])->name('request_location');
-
+        // Route::post('/get-names',                           [AdminLocationRequestController::class, 'getNames'])->name('get_names');
+        // Route::post('/request-location',                    [AdminLocationRequestController::class, 'requestLocation'])->name('request_location');
+        
+        // Route::post("/getUsersAssigned",                    [AdminLocationRequestController::class, 'getUsersAssigned'])->name("getUsersAssigned");
+        // Route::post("/getServiceDetails",                    [AdminLocationRequestController::class, 'getServiceDetails'])->name("getServiceDetails");
 
         //Routes for Activity Log Management
         Route::post('/activity-log/sorting',                [ActivityLogController::class, 'sortActivityLog'])->name('activity-log.sorting_users');
@@ -223,31 +225,50 @@ Route::prefix('/client')->group(function () {
 
         // Route::get('/profile/view',             [ClientController::class, 'view_profile'])->name('client.view_profile');
         // Route::get('/profile/edit',             [ClientController::class, 'edit_profile'])->name('client.edit_profile');
-        // Route::post('/profile/update',          [ClientController::class, 'update_profile'])->name('client.updateProfile');
-        // Route::post('/profile/updatePassword',  [ClientController::class, 'updatePassword'])->name('client.updatePassword');
-        // Route::post('/password/upadte',         [ClientController::class, 'update_password'])->name('client.update_password');
-
+        Route::post('/profile/update',              [ClientController::class, 'update_profile'])->name('updateProfile');
+        Route::post('/updatePassword',      [ClientController::class, 'updatePassword'])->name('updatePassword');
+       
         // Route::get('/requests',                    [ClientRequestController::class, 'index'])->name('client.requests');
+ 
+        // E-wallet Routes for clients 
+        //Profile and password update
+        Route::get('/settings',                 [ClientController::class, 'settings'])->name('settings');
 
-        // Route::get('/wallet',                   [ClientController::class, 'wallet'])->name('wallet'); //Take me to Supplier Dashboard
-            // Route::get('/requests',                 [ClientRequestController::class, 'index'])->name('client.requests');
-
-
+        // Route::get('/wallet',                [ClientController::class, 'wallet'])->name('wallet'); //Take me to Supplier Dashboard
+            // Route::get('/requests',          [ClientRequestController::class, 'index'])->name('client.requests');
             Route::get('wallet',                [ClientController::class, 'wallet'])->name('wallet');
-            Route::any('fund',                 [ClientController::class, 'walletSubmit'])->name('wallet.submit');
+            Route::any('fund',                  [ClientController::class, 'walletSubmit'])->name('wallet.submit');
 
-            Route::post('/ipnpaystack', [ClientController::class, 'paystackIPN'])->name('ipn.paystack');
-            Route::get('/apiRequest', [ClientController::class, 'apiRequest'])->name('ipn.paystackApiRequest');
+            Route::post('/ipnpaystack',         [ClientController::class, 'paystackIPN'])->name('ipn.paystack');
+            Route::get('/apiRequest',           [ClientController::class, 'apiRequest'])->name('ipn.paystackApiRequest');
 
-            Route::get('/ipnflutter', [ClientController::class, 'flutterIPN'])->name('ipn.flutter');
+            Route::get('/ipnflutter',           [ClientController::class, 'flutterIPN'])->name('ipn.flutter');
 
+            // Service request SECTION
             Route::get('/services',                     [ClientController::class, 'services'])->name('services.list');
             Route::get('services/quote/{service}',      [ClientController::class, 'serviceQuote'])->name('services.quote');
             Route::get('services/details/{service}',    [ClientController::class, 'serviceDetails'])->name('services.details');
             Route::post('services/search',              [ClientController::class, 'search'])->name('services.search');
             Route::get('services/custom/',              [ClientController::class, 'customService'])->name('services.custom');
 
+            Route::post('servicesRequest',              [ClientController::class, 'serviceRequest'])->name('services.serviceRequest');
 
+            //Flutterwave Routes
+            Route::post('/request/flutterwave/submit',              [ClientController::class, 'storeFlutterServiceRequest'])->name('flutterwave.submit');
+            Route::get('/request/flutterwave/{orderId}/apiRequest', [ClientController::class, 'apiRequestFlutterServiceRequest'])->name('flutterwave.apiRequest');
+            Route::post('/request/flutterwave/notify',              [ClientController::class, 'notifyFlutterServiceRequest'])->name('flutterwave.notify');
+            Route::get('/request/flutterwave/notify',               [ClientController::class, 'successFlutterServiceRequest'])->name('flutterwave.success');
+
+            //Paystack Routes
+            Route::post('/request/paystack/submit',                 [ClientController::class, 'storePaystackServiceRequest'])->name('paystack.submit');
+            Route::get('/request/paystack/{orderId}/apiRequest',    [ClientController::class, 'apiRequestPaystackServiceRequest'])->name('paystack.apiRequest');
+            Route::get('/request/paystack/notify',                  [ClientController::class, 'notifyPaystackServiceRequest'])->name('paystack.notify');
+
+
+            // Route::post('servicesRequest',              [ClientController::class, 'serviceRequest'])->name('paystack.submit');
+            // Route::post('servicesRequest',              [ClientController::class, 'serviceRequest'])->name('flutter.submit');
+
+            
     });
 });
 

@@ -191,7 +191,7 @@
                                     @enderror
                                 </div>
                             </div>
-                            <input type="hidden" name="ref" value="{{$ref}}">
+                           
 
                             <div class="col-md-12">
                                 <div class="form-group position-relative">
