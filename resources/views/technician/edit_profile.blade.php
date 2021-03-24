@@ -173,10 +173,12 @@
                           <label for="new_password">New Password</label>
                           <input type="password" class="form-control @error('new_password') is-invalid @enderror" id="new_password" name="new_password" onkeyup='check();' required>
                           @error('new_password')
+                          
                             <span class="invalid-feedback" role="alert">
                                 <strong>{{ $message }}</strong>
                             </span>
                           @enderror
+                          <small style="color:red">Password must be minimum of 6 characters</small>
                         </div>
                         <div class="form-group col-md-4">
                           <label for="new_confirm_password">Confirm Password</label>

@@ -198,7 +198,7 @@ class TechnicianProfileController extends Controller
                 'address' => $request->full_address,
                
             ]);*/
-
+            
             $this->log($type, $severity, $actionUrl, $message);
 
             return redirect()->back()->with('success', 'Your profile has been updated successfully');
