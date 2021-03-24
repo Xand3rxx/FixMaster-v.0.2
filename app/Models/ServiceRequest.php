@@ -81,7 +81,7 @@ class ServiceRequest extends Model
 
     public function users()
     {
-        return $this->belongsToMany(User::class);
+        return $this->belongsToMany(User::class, 'service_request_assigned')->with('account', 'roles');
     }
     public function cse()
     {

@@ -62,13 +62,13 @@
                   <td class="tx-color-03 tx-center">{{ $loop->iteration ?? ''}}</td>
                   <td class="tx-medium">{{ $serviceRequest->service_request->unique_id ?? ''}}</td>
                   <td class="tx-medium">{{ $serviceRequest->account->first_name. ' '.$serviceRequest->account->last_name ?? '' }}</td>
-                  <td class="tx-medium">{{-- @foreach($serviceRequest->service_request->users as $data)
+                  <td class="tx-medium"> @foreach($serviceRequest->service_request->users as $data)
                     @foreach($data->roles as $res)
                     @if($res->url == "admin")
-                       {{$data->account->first_name}} {{$data->account->last_name}}
+                       {{$data->account->first_name}} {{$data->account->last_name ?? ''}}
                     @endif
                     @endforeach
-                    @endforeach --}}{{'CSE'}}</td>
+                    @endforeach</td>
                   <td class="text-medium text-center">₦{{ number_format($serviceRequest->service_request->total_amount) ?? ''}}</td>
                   @if($serviceRequest->service_request->status_id === 1)
                     <td class="text-medium text-warning">{{ $serviceRequest->service_request->status->name ?? ''}}</td>
