@@ -236,7 +236,6 @@ class ClientController extends Controller
 
     public function wallet()
     {
-        $data['title']        = 'Fund your wallet';
         $data['gateways']     = PaymentGateway::whereStatus(1)->orderBy('id', 'DESC')->get();
         $data['mytransactions']    = Payment::where('user_id', auth()->user()->id)->orderBy('id', 'DESC')->get();
         $myWallet    = WalletTransaction::where('user_id', auth()->user()->id)->orderBy('id', 'DESC')->get();
@@ -476,13 +475,20 @@ class ClientController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function serviceQuote($language, $uuid){
+        $data['gateways']     = PaymentGateway::whereStatus(1)->orderBy('id', 'DESC')->get();
+        $data['service']      = $this->service($uuid);
+        $data['bookingFees']  = $this->bookingFees();
+        $data['discounts']    = $this->clientDiscounts();
 
+        $data['balance']      = WalletTransaction::where('user_id', auth()->user()->id)->orderBy('id', 'DESC')->first();
+        // [
+        //     'service'       =>  $this->service($uuid),
+        //     'bookingFees'   =>  $this->bookingFees(),
+        //     'discounts'     =>  $this->clientDiscounts(),
+        // ]
+        // dd($data['balance']->closing_balance );
         //Return Service details
-        return view('client.services.quote', [
-            'service'       =>  $this->service($uuid),
-            'bookingFees'   =>  $this->bookingFees(),
-            'discounts'     =>  $this->clientDiscounts(),
-        ]);
+        return view('client.services.quote', $data);
     }
 
     // $serviceRequests = ServiceRequestAssigned::where('user_id', Auth::id())->with('service_request')->get();
@@ -499,34 +505,45 @@ class ClientController extends Controller
         //     'payment_method'            =>   'required',          
         //   ]);
         
-        //   $all = $request->all();
-        //     dd($all);
+            $all = $request->all();
+            dd($all);
+            
 
+            //if payment method is wallet
+            if($request->payment_method == 'Wallet'){
+                if($request->balance<$request->booking_fee){
 
-            //Determine if User has a discount of 5% auth()->user()->client->discounted == 1
-            // if($request->client_discount_id == 1){
-                // $discountServiceFee = null;
-                $amount = $request->booking_fee;    
-            // }else {
-                // $discountServiceFee = 0.95 * $serviceFee;
-                // $amount = $discountServiceFee;
-            // }
+                    $service_request                        = new Servicerequest;  
+                    $service_request->cliend_id             = auth()->user()->id;
+                    $service_request->service_id            = $request->service_id;
+                    $service_request->unique_id             = 'REF-'.$this->generateReference();
+                    $service_request->price_id              = $request->price_id;
+                    $service_request->phone_id              = $request->phone_number;
+                    $service_request->address_id            = $request->address;
+                    $service_request->client_discount_id    = $request->client_discount_id;
+                    $service_request->client_security_code  = 'SEC-'.strtoupper(substr(md5(time()), 0, 8));
+                    $service_request->status_id             = '1';
+                    $service_request->description           = $request->description;
+                    $service_request->total_amount          = $request->booking_fee;
+                    $service_request->preferred_time        = $request->timestamp;
+                    $service_request->closing_balance       = $request->balance;
+                    dd($service_request);
+                }else{
+                        Session::flash('alert', 'sorry!, service amount is less than wallet balance');
+                    }                  
+                }
+                if ($request->payment_method == 'Offline') {
+                    // $this->requestForService(); 
+                    echo 'denk';
+                } else{
+                    echo 'tony';
+                    // $discountServiceFee = 0.95 * $serviceFee;
+                    // $amount = $discountServiceFee;
+                    // $this->requestForService();
+                }
 
-          $service_request                        = new Servicerequest;  
-          $service_request->cliend_id             = auth()->user()->id;
-          $service_request->service_id            = $request->service_id;
-          $service_request->unique_id             = 'REF-'.$this->generateReference();
-          $service_request->price_id              = $request->price_id;
-          $service_request->phone_id              = $request->phone_number;
-          $service_request->address_id            = $request->address;
-          $service_request->client_discount_id    = $request->client_discount_id;
-          $service_request->client_security_code  = 'SEC-'.strtoupper(substr(md5(time()), 0, 8));
-          $service_request->status_id             = '1';
-          $service_request->description           = $request->description;
-          $service_request->total_amount          = $amount;
-          $service_request->preferred_time        = $request->timestamp;
-          dd($service_request); 
     }
+
 
     /**
      * Display a more details about a FixMaster service.

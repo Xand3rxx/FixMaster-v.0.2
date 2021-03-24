@@ -8,6 +8,47 @@
     .avatar.avatar-ex-smm { max-height: 75px; }
 </style>
 
+<style>
+.cc-selector input{
+    margin:0;padding:0;
+    -webkit-appearance:none;
+       -moz-appearance:none;
+            appearance:none;
+}
+.paystack{background-image:url({{ asset('assets/images') }}/paystack.png);}
+.flutter{background-image:url({{ asset('assets/images') }}/flutter.png);}
+
+.cc-selector input:active +.drinkcard-cc{opacity: .5;}
+.cc-selector input:checked +.drinkcard-cc{
+    -webkit-filter: none;
+       -moz-filter: none;
+            filter: none;
+}
+.drinkcard-cc{
+    cursor:pointer;
+    background-size:contain;
+    background-repeat:no-repeat;
+    display:inline-block;
+    width:100px;height:10em;
+    -webkit-transition: all 100ms ease-in;
+       -moz-transition: all 100ms ease-in;
+            transition: all 100ms ease-in;
+    -webkit-filter: brightness(1.8) grayscale(1) opacity(.7);
+       -moz-filter: brightness(1.8) grayscale(1) opacity(.7);
+            filter: brightness(1.8) grayscale(1) opacity(.7);
+}
+.drinkcard-cc:hover{
+    -webkit-filter: brightness(1.2) grayscale(.5) opacity(.9);
+       -moz-filter: brightness(1.2) grayscale(.5) opacity(.9);
+            filter: brightness(1.2) grayscale(.5) opacity(.9);
+}
+
+/* Extras */
+a:visited{color:#888}
+a{color:#999;text-decoration:none;}
+p{margin-bottom:.3em;}
+</style>
+
 <div class="col-lg-8 col-12">
     <div class="card custom-form border-0">
         <div class="card-body mt-4">
@@ -155,43 +196,31 @@
                     @endif
                     
                     <div class="col-md-12 form-group">
-                        <h5><span class="font-weight-bold"><b>Pay Via</b></span></h5>
+                        <h5><span class="font-weight-bold">Payment Options</span></h5>
                     </div>
-                    
-                    <div class="col-md-6 form-group">
-                        <div class="custom-control custom-radio form-group position-relative">
-                            <input type="radio" id="Paystack" name="payment_method" class="custom-control-input" value="paystack" data-action="{{ route('client.paystack.submit', app()->getLocale()) }}">
-                            <label class="custom-control-label" for="Paystack">Paystack</label>
-                        </div>
-                    </div>
-
-                    <div class="col-md-6 form-group">
-                        <div class="custom-control custom-radio form-group position-relative">
-                            <input type="radio" id="Flutter" name="payment_method" class="custom-control-input" value="flutterwave" data-action="{{ route('client.paystack.submit', app()->getLocale()) }}">
-                            <label class="custom-control-label" for="Flutter">Flutter</label>
-                        </div>
-                    </div>
-
-                    <div class="col-md-12 form-group">
-                        <h5><span class="font-weight-bold"> <b>Other payment methods</b> </span></h5>
-                    </div>
-
-                    <div class="col-md-12 form-group">
+                        
+                    <div class="col-md-4 form-group">
                         <div class="custom-control custom-radio form-group position-relative">
                             <input type="radio" id="customRadio5" name="payment_method" class="custom-control-input" value="Wallet">
                             <label class="custom-control-label" for="customRadio5">E-Wallet</label>
                         </div>
-                    </div>   
+                    </div>
 
-                    <div class="col-md-12 form-group">
+                    <div class="col-md-4 form-group">
+                        <div class="custom-control custom-radio form-group position-relative">
+                            <input type="radio" id="payment_gateway_option" name="payment_method" class="custom-control-input" onclick="displayPaymentGateways()" value="Online">
+                            <label class="custom-control-label" for="payment_gateway_option">Pay Online</label>
+                        </div>
+                    </div>
+                    
+                    <div class="col-md-4 form-group">
                         <div class="custom-control custom-radio form-group position-relative">
                             <input type="radio" id="pay_offline" name="payment_method" class="custom-control-input" data-toggle="modal" href="#payOffline" value="Offline">
                             <label class="custom-control-label" for="pay_offline">Pay Offline</label>
                         </div>
                     </div>
-
-
-                    <div class="row d-none payment-options">
+                    <input type="hidden" value="{{$balance->closing_balance}}" name="balance">
+                    <!-- <div class="row d-none payment-options">
                         <div class="col-md-6">
                             <div class="media key-feature align-items-center p-3 rounded shadow mt-4">
                                 <a href="#" data-toggle="modal" data-target="#modal-form">
@@ -220,7 +249,37 @@
                                     </a>
                                 </div>
                             </div>
-                        </div>
+                        </div> -->
+
+
+         @foreach($gateways as $val) 
+            <div class="col-md-6 cc-selector d-none payment-options">
+                      <!-- <input id="{{$val->name}}" type="radio" name="credit-card" value="{{$val->name}}" />
+                      <label class="drinkcard-cc {{$val->name}}" for="{{$val->name}}"></label> -->
+                <div class="media key-feature align-items-center p-3 rounded shadow mt-4">
+                <a href="#" data-toggle="modal" data-target="#modal-form{{$val->id}}" >
+                    <img src="{{ asset('assets/images') }}/{{$val->name}}.png" class="avatar avatar-ex-smm" alt="">
+                </a>
+                <a href="javascript:void(0)" class="text-primary">
+                <div class="media-body content ml-3">
+                <a href="#" data-toggle="modal" data-target="#modal-form{{$val->id}}" >
+                    <h4 class="title mb-0">{{$val->name}}</h4>
+                    </a>
+                </div>
+                </a>
+                </div>
+            </div>
+        @endforeach
+
+
+    <!-- <div class="col-md-6 cc-selector d-none payment-options">
+        @foreach($gateways as $val) 
+          <input id="{{$val->name}}" type="radio" name="credit-card" value="{{$val->name}}" />
+          <label class="drinkcard-cc {{$val->name}}" for="{{$val->name}}"></label>
+        @endforeach
+    </div> -->
+
+
                     </div>
                         {{-- </div>
                     </div><!--end col--> --}}
@@ -316,14 +375,6 @@
         function displayPaymentGateways(){
             $('.payment-options').removeClass('d-none');
         }
-
-         // always check the first payment gateway
-        //  $(".input-check").first().attr('checked', true);
-        // // change form action, show form for checked 'gateway'
-        // let tabid = $(".input-check:checked").data('tabid');
-        // $('#payment').attr('action', $(".input-check:checked").data('action'));
-        // // showDetails(tabid);
-
     </script>
 @endpush
 
