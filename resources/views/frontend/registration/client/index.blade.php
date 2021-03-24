@@ -221,7 +221,7 @@
                             </div> -->
 
                             <div class="mx-auto">
-                                <a class="current-loc-icon current_location" data-id="1" class="text-dark font-weight-bold">myLocation</a>                           
+                                {{-- <a class="current-loc-icon current_location" data-id="1" class="text-dark font-weight-bold">myLocation</a>                            --}}
                             </div>
 
                             <div class="col-md-12">

@@ -18,7 +18,7 @@ class Status extends Model
 
     // whether the key is automatically incremented or not
     public $incrementing = false;
-    
+
     protected $fillable = [
         'user_id', 'name', 'sub_status', 'ranking',
     ];
@@ -39,9 +39,10 @@ class Status extends Model
      */
     protected static function booted()
     {
-        // Create a uuid when a new Status is to be created 
+        // Create a uuid when a new Status is to be created
         static::creating(function ($status) {
-            $status->uuid = (string) Str::uuid(); 
+            $status->uuid = (string) Str::uuid();
         });
     }
+
 }

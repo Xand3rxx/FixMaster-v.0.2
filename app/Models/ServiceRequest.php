@@ -30,9 +30,9 @@ class ServiceRequest extends Model
      *
      * @var array
      */
-    protected $hidden = [
-        'id'
-    ];
+    // protected $hidden = [
+    //     'id'
+    // ];
 
     /**
      * The "booted" method of the model.
@@ -61,11 +61,18 @@ class ServiceRequest extends Model
         return $this->belongsTo(User::class)->with('account', 'roles');
     }
 
-    public function account()
-    {
-        return $this->belongsTo(Account::class);
+    public function state(){
+        return $this->belongsTo(State::class);
     }
-    
+
+    public function lga(){
+        return $this->belongsTo(Lga::class);
+    }
+
+    public function price(){
+        return $this->belongsTo(Price::class, 'id');
+    }
+
     public function client()
     {
         return $this->belongsTo(User::class);
@@ -89,6 +96,11 @@ class ServiceRequest extends Model
     public function invoice()
     {
         return $this->hasOne(Invoice::class);
+    }
+
+    public function phone()
+    {
+        return $this->belongsTo(Phone::class);
     }
 
     public function invoices()
@@ -122,13 +134,17 @@ class ServiceRequest extends Model
         return $this->belongsTo(PaymentDisbursed::class);
     }
 
+     public function address(){
+         return $this->belongsTo(Address::class);
+     }
+
     public function status(){
         return $this->hasOne(Status::class, 'id');
     }
 
     public function clientAccount()
     {
-        return $this->belongsToMany(Account::class, 'user_id', 'client_id');
+        return $this->hasOne(Account::class, 'user_id', 'client_id');
     }
 
 }

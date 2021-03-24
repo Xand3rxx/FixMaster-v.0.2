@@ -38,7 +38,7 @@
                                 <tr>
                                     <th class="text-center">#</th>
                                     <th>Roles</th>
-                                    <th>Earnings (%)</th>
+                                    <th class="text-center">Earnings (%)</th>
                                     <th class="text-center">Action</th>
                                 </tr>
                                 </thead>
@@ -47,12 +47,12 @@
                                     <tr>
                                         <td class="tx-color-03 tx-center">{{ $loop->iteration }}</td>
                                         <td class="tx-medium">{{ $earning['role_name'] }}</td>
-                                        <td class="tx-medium">{{ $earning['earnings']*100 }}</td>
-                                        <td class=" text-center">
+                                        <td class="tx-medium text-center">{{ $earning['earnings']*100 }}</td>
+                                        <td class="text-center">
                                             <div class="dropdown-file">
                                                 <a href="" class="dropdown-link" data-toggle="dropdown"><i data-feather="more-vertical"></i></a>
                                                 <div class="dropdown-menu dropdown-menu-right">
-                                                    <a href="{{ route('admin.edit_earnings', ['locale' => app()->getLocale(), 'earning' => $earning['uuid']]) }}" class="dropdown-item details text-info"><i class="far fa-edit"></i> Edit</a>
+                                                    <a href="{{ route('admin.edit_earnings', ['locale' => app()->getLocale(), 'earning' => $earning['uuid']]) }}" class="dropdown-item details text-warning"><i class="far fa-edit"></i> Edit</a>
                                                     <a href="{{ route('admin.delete_earnings', ['locale' => app()->getLocale(), 'earning' => $earning['uuid']]) }}" class="dropdown-item details text-danger"><i class="fas fa-trash"></i> Delete</a>
                                                 </div>
                                             </div>

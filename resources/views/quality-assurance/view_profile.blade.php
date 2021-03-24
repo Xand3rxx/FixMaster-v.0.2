@@ -49,10 +49,10 @@
                   <label class="tx-10 tx-medium tx-spacing-1 tx-color-03 tx-uppercase tx-sans mg-b-10">Mobile Phone</label>
                   <p class="tx-primary tx-rubik mg-b-0">{{$user->phone->number}}</p>
                 </div>
-                
+
                 <div class="col-sm-6 mg-t-20 mg-sm-t-30">
                   <label class="tx-10 tx-medium tx-spacing-1 tx-color-03 tx-uppercase tx-sans mg-b-10">Home Address</label>
-                  <p class="mg-b-0">{{$user->address->name ?? 'UNAVAILABLE'}}</p>
+                  <p class="mg-b-0">{{$user->address->address ?? 'UNAVAILABLE'}}</p>
                 </div>
                 <div class="col-sm-6 mg-t-20 mg-sm-t-30">
                   <label class="tx-10 tx-medium tx-spacing-1 tx-color-03 tx-uppercase tx-sans mg-b-10">Rating</label>

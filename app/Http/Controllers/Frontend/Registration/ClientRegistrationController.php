@@ -30,7 +30,7 @@ class ClientRegistrationController extends Controller
             'states' => \App\Models\State::all(),
             'activeEstates' => \App\Models\Estate::select('id', 'estate_name')
                 ->orderBy('estates.estate_name', 'ASC')
-                ->where('estates.is_active', 'reinstated')
+                ->where('estates.is_active', 'approved')
                 ->get(),
         ]);
     }

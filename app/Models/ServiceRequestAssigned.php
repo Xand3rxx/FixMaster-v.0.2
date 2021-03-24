@@ -22,35 +22,10 @@ class ServiceRequestAssigned extends Model
         return $this->belongsTo(ServiceRequest::class)->with('users', 'client');
     }
 
-    // public function scopeServicies($query){
-    //     return $query->select('*')
-    //     ->orderBy('user_id', 'ASC');
-       
-    // }
-
-    public function user()
+    public function users()
     {
-        return $this->belongsTo(User::class, 'user_id')->withDefault();
+        return $this->belongsTo(User::class, 'user_id');
     }
 
-    // public function users()
-    // {
-    //     return $this->hasMany(User::class, 'user_id')->withDefault();
-    // }
-
-    // public function service_requests()
-    // {
-    //     return $this->belongsTo(ServiceRequest::class, 'service_request_id');
-    // }
-
-    // public function request_status()
-    // {
-    //     return $this->belongsTo(Status::class, 'user_id');
-    // }
-
-    // public function client_requesting_service()
-    // {
-    //     return $this->belongsTo(Account::class, 'user_id');
-    // }
 
 }

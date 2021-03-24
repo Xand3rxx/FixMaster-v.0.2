@@ -181,7 +181,7 @@ p{margin-bottom:.3em;}
                     
                     @if($discounts->count() > 0)
                     <div class="col-md-12 form-group">
-                        <h5><span class="font-weight-bold">Available Service Request</span></h5>
+                        <h5><span class="font-weight-bold">Available Discounts</span></h5>
                         <small class="text-danger">The selected discount will be applied on final invoice.</small>
                     </div>
 
@@ -219,7 +219,7 @@ p{margin-bottom:.3em;}
                             <label class="custom-control-label" for="pay_offline">Pay Offline</label>
                         </div>
                     </div>
-                    <input type="hidden" value="{{$balance->closing_balance}}" name="balance">
+                    <input type="hidden" value="{{!empty($balance->closing_balance) ? $balance->closing_balance : '0'}}" name="balance">
                     <!-- <div class="row d-none payment-options">
                         <div class="col-md-6">
                             <div class="media key-feature align-items-center p-3 rounded shadow mt-4">

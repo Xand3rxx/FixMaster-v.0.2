@@ -35,7 +35,7 @@
                 </div>
                 <div class="media-body">
                   <h6 class="tx-sans tx-uppercase tx-10 tx-spacing-1 tx-color-03 tx-semibold tx-nowrap mg-b-5 mg-md-b-8">Total Requests</h6>
-                <h4 class="tx-20 tx-sm-18 tx-md-20 tx-normal tx-rubik mg-b-0"></h4>
+                <h4 class="tx-20 tx-sm-18 tx-md-20 tx-normal tx-rubik mg-b-0">{{$results->count()}}</h4>
                 </div>
               </div>
 
@@ -59,44 +59,68 @@
                 </tr>
               </thead>
               <tbody>
-                {{-- @php $sn = 1; @endphp
+                @php $sn = 1; @endphp
                 @foreach ($results as $serviceRequest)
                  <tr>
                   <td class="tx-color-03 tx-center">{{$sn++}}</td>
                   <td class="tx-medium">{{$serviceRequest->service_request->unique_id}}</td>
-                  <td class="tx-medium">{{$serviceRequest->service_request->client}}</td>
-                  <td class="tx-medium">{{'Admin'}}</td>
-                  <td class="tx-medium">{{'CSE'}}</td>
-                  <td class="text-medium text-center">{{'Technician'}}</td>
+                  <td class="tx-medium">{{$serviceRequest->service_request->clientAccount->first_name}} {{$serviceRequest->service_request->clientAccount->last_name}}</td>
+                  <td class="tx-medium">
+                    @foreach($serviceRequest->service_request->users as $data)
+                    @foreach($data->roles as $res)
+                    @if($res->url == "admin")
+                       {{$data->account->first_name}} {{$data->account->last_name}}
+                    @endif
+                    @endforeach
+                    @endforeach
+                  </td>
+                  <td class="tx-medium">
+                  @foreach($serviceRequest->service_request->users as $data)
+                  @foreach($data->roles as $res)
+                  @if($res->url == "cse")
+                     {{$data->account->first_name}} {{$data->account->last_name}}
+                  @endif
+                  @endforeach
+                  @endforeach
+                </td>
+                  <td class="text-medium text-center">
+                    @foreach($serviceRequest->service_request->users as $data)
+                    @foreach($data->roles as $res)
+                    @if($res->url == "technician")
+                       {{$data->account->first_name}} {{$data->account->last_name}}
+                    @endif
+                    @endforeach
+                    @endforeach
+                  </td>
                   <td class="text-medium text-center">
                         ₦{{ number_format($serviceRequest->service_request->total_amount) }}
                   </td>
-
+                    {{--{{$serviceRequest->service_request->status_id}} --}}
                   @if($serviceRequest->service_request->status_id == 1)
-                    <td class="text-medium text-warning">{{ $serviceRequest->service_request->status->name }}</td>
-                  @elseif($serviceRequest->service_request->service_request_status_id == 2)
-                    <td class="text-medium text-danger">{{ $serviceRequest->service_request->status->name }}</td>
-                  @elseif($serviceRequest->service_request->service_request_status_id == 3)
-                    <td class="text-medium text-success">{{ $serviceRequest->service_request->status->name }}</td>
-                  @elseif($serviceRequest->service_request->service_request_status_id == 4)
-                    <td class="text-medium text-info">{{ $serviceRequest->service_request->status->name }}</td>
+                    <td class="text-medium text-warning">Pending</td>
+                  @elseif($serviceRequest->service_request->status_id == 2)
+                  <td class="text-medium text-info">Ongoing</td>
+                  @elseif($serviceRequest->service_request->status_id == 3)
+                    <td class="text-medium text-danger">Cancelled</td>
+                  @elseif($serviceRequest->service_request->status_id == 4)
+                    <td class="text-medium text-success">Completed</td>
+                  @else
+                 <td class="text-medium text-warning">{{$serviceRequest->service_request->status}}</td>
                   @endif
 
-                  <td class="text-medium">{{$serviceRequest->service_request->created_at}}</td>
+                  <td class="text-medium">{{ Carbon\Carbon::parse($serviceRequest->service_request->created_at, 'UTC')->isoFormat('MMMM Do YYYY, h:mm:ssa') }}</td>
                   <td class=" text-center">
                     <div class="dropdown-file">
                       <a href="" class="dropdown-link" data-toggle="dropdown"><i data-feather="more-vertical"></i></a>
                       <div class="dropdown-menu dropdown-menu-right">
-                      <a href="{{ url('quality.request_details') }}" class="dropdown-item details"><i class="far fa-clipboard"></i> Details</a>
+                      <a href="{{ route('quality-assurance.request_details', [$serviceRequest->service_request->uuid, 'locale'=>app()->getLocale()]) }}" class="dropdown-item details"><i class="far fa-clipboard"></i> Details</a>
                       </div>
                     </div>
                   </td>
-                </tr> 
-                
-                @endforeach
-                --}}
+                </tr>
 
-                <tr>
+                @endforeach
+                {{-- <tr>
                   <td class="tx-color-03 tx-center">1</td>
                   <td class="tx-medium">REF-234234723</td>
                   <td class="tx-medium">Kelvin Adesanya</td>
@@ -114,7 +138,7 @@
                       </div>
                     </div>
                   </td>
-                </tr>
+                </tr> --}}
 
               </tbody>
             </table>

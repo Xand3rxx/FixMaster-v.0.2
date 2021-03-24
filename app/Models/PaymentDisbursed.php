@@ -40,4 +40,8 @@ class PaymentDisbursed extends Model
     {
         return $this->hasOne(PaymentMode::class, 'id', 'payment_mode_id');
     }
+
+    public function user(){
+        return $this->belongsTo(User::class);
+    }
 }

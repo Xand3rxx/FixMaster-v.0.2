@@ -18,9 +18,9 @@
 
         <tr>
         <td class="tx-color-03 tx-center">{{ $sn++ }}</td>
-        <td class="tx-medium">{{$result->service_request->uuid}}</td>
+        <td class="tx-medium">{{$result->service_request->unique_id}}</td>
           <td class="tx-medium">{{$result->payment_reference}}</td>
-          <td class="tx-medium">Admin</td>
+          <td class="tx-medium">{{$result->user->account->first_name}} {{$result->user->account->last_name}}</td>
           <td class="tx-medium">₦{{ number_format($result->amount)}}</td>
           <td class="tx-medium">{{$result->mode->name}}</td>
           <td class="tx-medium">{{$result->comment}}</td>
