@@ -182,7 +182,7 @@
                           </tr>
                           <tr>
                             <td class="tx-medium">Service Required</td>
-                            <td class="tx-color-03">{{ $serviceRequests->description ?? '' }}</td>
+                            <td class="tx-color-03">{{$serviceRequests->service->name}}</td>
                           </tr>
                           <tr>
                             <td class="tx-medium">Scheduled Date & Time</td>
@@ -206,7 +206,17 @@
                           </tr>
                           <tr>
                             <td class="tx-medium">Supervised By</td>
-                            <td class="tx-color-03">David Akinsola</td>
+                            <td class="tx-color-03">David Akinsola {{-- @foreach($serviceRequests->users as $data)
+                            @foreach($data->roles as $res)
+                            @if($res->url == "admin")
+                            <td class="tx-color-03">
+
+                                {{$data->account->first_name}} {{$data->account->last_name}}
+
+                            </td>
+                            @endif
+                            @endforeach
+                            @endforeach--}}</td>
                           </tr>
                           <tr>
                             <td class="tx-medium">CSE's Assigned</td>
