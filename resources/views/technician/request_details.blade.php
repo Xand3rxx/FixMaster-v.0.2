@@ -206,17 +206,15 @@
                           </tr>
                           <tr>
                             <td class="tx-medium">Supervised By</td>
-                            <td class="tx-color-03">David Akinsola {{-- @foreach($serviceRequests->users as $data)
+                            <td class="tx-color-03">@foreach($serviceRequests->users as $data)
                             @foreach($data->roles as $res)
                             @if($res->url == "admin")
-                            <td class="tx-color-03">
-
-                                {{$data->account->first_name}} {{$data->account->last_name}}
-
-                            </td>
+                            
+                                {{$data->account->first_name}} {{$data->account->last_name ?? ''}}
+                            
                             @endif
                             @endforeach
-                            @endforeach--}}</td>
+                            @endforeach</td>
                           </tr>
                           <tr>
                             <td class="tx-medium">CSE's Assigned</td>
