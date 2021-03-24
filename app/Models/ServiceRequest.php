@@ -66,7 +66,7 @@ class ServiceRequest extends Model
 
     public function user()
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(User::class)->with('account', 'roles');
     }
 
     public function client()
@@ -77,6 +77,10 @@ class ServiceRequest extends Model
     public function account()
     {
         return $this->belongsTo(Account::class);
+    }
+
+    public function lga(){
+        return $this->belongsTo(Lga::class);
     }
 
     public function users()
@@ -145,5 +149,9 @@ class ServiceRequest extends Model
 
     public function address(){
         return $this->belongsTo(Address::class);
+    }
+
+    public function state(){
+        return $this->belongsTo(State::class);
     }
 }

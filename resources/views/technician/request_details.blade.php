@@ -218,10 +218,22 @@
                           </tr>
                           <tr>
                             <td class="tx-medium">CSE's Assigned</td>
+                            <@foreach($serviceRequests->users as $data)
+                            @foreach($data->roles as $res)
+                            @if($res->url == "technician")
                             <td class="tx-color-03">
-                              (1) Benedict Mayowa<br>
-                              (2) Other CSE's Assigned
+                                @php $sn = 1; @endphp
+                                {{-- @if($res->count() > 1 && $res->url == "cse") --}}
+                                {{-- @foreach($data->account as $output) --}}
+                                  {{$data->account->first_name}} {{$data->account->last_name}}<br>
+                                {{-- @endforeach --}}
+                              {{-- (1) Benedict Mayowa<br>
+                              (2) Other CSE's Assigned  {{($sn++)}}--}}
+                              {{-- @endif --}}
                             </td>
+                            @endif
+                            @endforeach
+                            @endforeach
                           </tr>
                           <tr>
                             <td class="tx-medium">Technicians Assigned</td>
@@ -232,18 +244,24 @@
                           </tr>
                           <tr>
                             <td class="tx-medium">Quality Assurance Managers Assigned</td>
+                            @foreach($serviceRequests->users as $data)
+                            @foreach($data->roles as $res)
+                            @if($res->url == "quality-assurance")
                             <td class="tx-color-03">
-                              (1) {{ $serviceRequests->service_request->cse ?? '' }}<br>
-                              (2) Other QA's Assigned
+                              
+                              {{$data->account->first_name}} {{$data->account->last_name}}<br>
                             </td>
+                            @endif
+                            @endforeach
+                            @endforeach
                           </tr>
                           <tr>
                             <td class="tx-medium">L.G.A</td>
-                            <td class="tx-color-03">{{ $serviceRequests->address->lga ?? '' }}</td>
+                            <td class="tx-color-03">{{$serviceRequests->lga->name}}</td>
                           </tr>
                           <tr>
                             <td class="tx-medium">Town/City</td>
-                            <td class="tx-color-03">{{ $serviceRequests->service_request->cse ?? '' }}</td>
+                            <td class="tx-color-03">{{$serviceRequests->lga->name}}</td>
                           </tr>
                           <tr>
                             <td class="tx-medium">Request Address</td>
