@@ -85,20 +85,6 @@
                         </div>
 
 
-                        <div class="form-group col-md-12 show-service" id="add-users">
-                            <label class='add-page service'>Add Users</label>
-                            <select class="selectpicker show-tick select-user" id="service-users" name="users[]"
-                                title="select..." multiple="multiple" data-selected-text-format="count>3"
-                                data-live-search="true">
-                                <option value="">Select...</option>
-                            </select>
-                            @error('users')
-                            <span class="invalid-feedback-err">
-                                <strong>{{ $message }}</strong>
-                            </span>
-                            @enderror
-                        </div>
-
 
                         <div class="form-group col-md-6 show-service">
                             <label class='add-page'>Select Service Category</label>
@@ -124,7 +110,19 @@
                             </select>
                         </div>
 
-                     
+                        <div class="form-group col-md-12 show-service" id="add-users">
+                            <label class='add-page service'>Add Users</label>
+                            <select class="selectpicker show-tick select-user" id="service-users" name="users[]"
+                                title="select..." multiple="multiple" data-selected-text-format="count>3"
+                                data-live-search="true">
+                                <option value="">Select...</option>
+                            </select>
+                            @error('users')
+                            <span class="invalid-feedback-err">
+                                <strong>{{ $message }}</strong>
+                            </span>
+                            @enderror
+                        </div>
 
                         <div class="form-group col-md-12">
                             <hr />
