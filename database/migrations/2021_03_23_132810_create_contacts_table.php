@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateAddressesTable extends Migration
+class CreateContactsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,19 +13,21 @@ class CreateAddressesTable extends Migration
      */
     public function up()
     {
-        Schema::create('addresses', function (Blueprint $table) {
+        Schema::create('contacts', function (Blueprint $table) {
             $table->engine = 'InnoDB';
             $table->charset = 'utf8mb4';
             $table->collation = 'utf8mb4_unicode_ci';
-
             $table->id();
 
             $table->foreignId('user_id')->index();
             $table->foreignId('account_id')->index();
             $table->foreignId('country_id')->index();
+
+            $table->string('phone_number', 30)->unique();
             $table->longText('address');
             $table->double('address_longitude');
             $table->double('address_latitude');
+
             $table->timestamps();
         });
     }
@@ -37,6 +39,6 @@ class CreateAddressesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('addresses');
+        Schema::dropIfExists('contacts');
     }
 }
