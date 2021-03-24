@@ -26,6 +26,9 @@ use App\Http\Controllers\SimulationController;
 use App\Http\Controllers\Admin\User\Administrator\SummaryController;
 use App\Http\Controllers\Admin\StatusController;
 use App\Http\Controllers\ReportController;
+use App\Http\Controllers\QualityAssurance\ServiceRequestController;
+use App\Http\Controllers\QualityAssurance\QualityAssuranceProfileController;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -276,18 +279,18 @@ Route::prefix('/quality-assurance')->group(function () {
     Route::name('quality-assurance.')->group(function () {
         //All routes regarding quality_assurance should be in here
         //Route::view('/', 'quality-assurance.index')->name('index'); //Take me to quality_assurance Dashboard
-        Route::get('/', [App\Http\Controllers\QualityAssurance\ServiceRequestController::class, 'index'])->name('index');
-        Route::get('/profile',    [App\Http\Controllers\QualityAssurance\QualityAssuranceProfileController::class,'view_profile'])->name('view_profile');
-        Route::get('/profile/edit_profile', [App\Http\Controllers\QualityAssurance\QualityAssuranceProfileController::class,'edit'])->name('edit_profile');
-        Route::patch('/profile/update_profile', [App\Http\Controllers\QualityAssurance\QualityAssuranceProfileController::class,'update'])->name('update_profile');
-        Route::patch('/update_password', [App\Http\Controllers\QualityAssurance\QualityAssuranceProfileController::class,'update_password'])->name('update_password');
-        Route::get('/requests', [App\Http\Controllers\QualityAssurance\ServiceRequestController::class, 'get_requests'])->name('requests');
-        Route::get('/payments', [App\Http\Controllers\QualityAssurance\PaymentController::class, 'get_qa_disbursed_payments'])->name('payments');
+        Route::get('/', [ServiceRequestController::class, 'index'])->name('index');
+        Route::get('/profile',    [QualityAssuranceProfileController::class,'view_profile'])->name('view_profile');
+        Route::get('/profile/edit_profile', [QualityAssuranceProfileController::class,'edit'])->name('edit_profile');
+        Route::patch('/profile/update_profile', [QualityAssuranceProfileController::class,'update'])->name('update_profile');
+        Route::patch('/update_password', [QualityAssuranceProfileController::class,'update_password'])->name('update_password');
+        Route::get('/requests', [ServiceRequestController::class, 'get_requests'])->name('requests');
+        Route::get('/payments', [PaymentController::class, 'get_qa_disbursed_payments'])->name('payments');
         Route::view('/messages/inbox', 'quality-assurance.messages.inbox')->name('messages.inbox');
         Route::view('/messages/sent', 'quality-assurance.messages.sent')->name('messages.sent');
-        Route::post('/disbursed_payments_sorting', [App\Http\Controllers\QualityAssurance\PaymentController::class, 'sortDisbursedPayments'])->name('disbursed_payments_sorting');
-        Route::get('/get_chart_data', [App\Http\Controllers\QualityAssurance\ServiceRequestController::class, 'chat_data']);
-        Route::view('/requests/details',    'quality-assurance.request_details')->name('request_details');
+        Route::post('/disbursed_payments_sorting', [PaymentController::class, 'sortDisbursedPayments'])->name('disbursed_payments_sorting');
+        Route::get('/get_chart_data', [ServiceRequestController::class, 'chat_data']);
+        Route::get('/requests/details/{uuid}',  [ServiceRequestController::class, 'show'])->name('request_details');
 
     });
 });

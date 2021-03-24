@@ -15,10 +15,11 @@ use App\Models\QA;
 use App\Rules\MatchOldPassword;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
+use App\Traits\PasswordUpdator;
 
 class QualityAssuranceProfileController extends Controller
 {
-    use Loggable;
+    use Loggable, PasswordUpdator;
 
     /**
      * This method will redirect users back to the login page if not properly authenticated
@@ -99,8 +100,8 @@ class QualityAssuranceProfileController extends Controller
     ]);
 
     $user->address->update([
-        'user_id'=>$user->id,
-        'name'=>$request->full_address,
+        //'user_id'=>$user->id,
+        'address'=>$request->full_address,
     ]);
 
     $this->log($type, $severity, $actionUrl, $message);
@@ -113,31 +114,33 @@ class QualityAssuranceProfileController extends Controller
 
     public function update_password(Request $request){
 
-        $user = User::where('id', Auth::id())->first();
-        $current_password = $request->input('current_password');
-        $new_password = $request->input('new_password');
-        $new_confirm_password = $request->input('new_confirm_password');
+        // $user = User::where('id', Auth::id())->first();
+        // $current_password = $request->input('current_password');
+        // $new_password = $request->input('new_password');
+        // $new_confirm_password = $request->input('new_confirm_password');
 
-        $type = "Profile";
-        $severity = "Informational";
-        $actionUrl = Route::currentRouteAction();
-        $message = $user->email.' profile successfully updated';
+        // $type = "Profile";
+        // $severity = "Informational";
+        // $actionUrl = Route::currentRouteAction();
+        // $message = $user->email.' profile successfully updated';
 
-         if($new_password === $new_confirm_password){
+        //  if($new_password === $new_confirm_password){
 
-        if(Hash::check($request->current_password, $user->password)){
-           $changed_password = Hash::make($new_password);
-           $user->update(['password' => $changed_password]);
+        // if(Hash::check($request->current_password, $user->password)){
+        //    $changed_password = Hash::make($new_password);
+        //    $user->update(['password' => $changed_password]);
 
-           $this->log($type, 'informational', $actionUrl, $user->email.' Password changed successfully');
-           return redirect()->back()->with('success', 'Password changed successfully!');
-            }
-            $this->log($type, 'error', $actionUrl,  $user->email. 'Password updating failed, current password do not match our record');
-            return redirect()->back()->with('error', 'Your current password do not match our record');
+        //    $this->log($type, 'informational', $actionUrl, $user->email.' Password changed successfully');
+        //    return redirect()->back()->with('success', 'Password changed successfully!');
+        //     }
+        //     $this->log($type, 'error', $actionUrl,  $user->email. 'Password updating failed, current password do not match our record');
+        //     return redirect()->back()->with('error', 'Your current password do not match our record');
 
-          }
-          $this->log($type, 'error', $actionUrl,  $user->email.' Password updating failed, new password and confirm password do not match');
-         return redirect()->back()->with('error', 'Your new password and confirm password do not match');
+        //   }
+        //   $this->log($type, 'error', $actionUrl,  $user->email.' Password updating failed, new password and confirm password do not match');
+        //  return redirect()->back()->with('error', 'Your new password and confirm password do not match');
+
+        return $this->passwordUpdator($request);
 
     }
 }

@@ -138,7 +138,7 @@
                             <!-- Full Address -->
                             <div class="form-group col-md-12">
                               <label for="inputAddress2">Full Address</label>
-                              <textarea rows="3" class="user_address form-control @error('full_address') is-invalid @enderror" id="" name="full_address" value="{{ old('full_address')?? $result->address->name }}"></textarea>
+                              <textarea rows="3" class="user_address form-control @error('full_address') is-invalid @enderror" id="" name="full_address" value="{{ old('full_address')?? $result->address->address }}">{{$result->address->address}}</textarea>
                               @error('full_address')
                             <span class="invalid-feedback" role="alert">
                                 <strong>{{ $message }}</strong>
@@ -163,6 +163,7 @@
                         <div class="form-group col-md-4">
                           <label for="current_password">Current Password</label>
                           <input type="password" class="form-control @error('current_password') is-invalid @enderror" id="current_password" name="current_password">
+                          <small style="color:red">Password must be minimum of 6 characters</small>
                           @error('current_password')
                             <span class="invalid-feedback" role="alert">
                                 <strong>{{ $message }}</strong>

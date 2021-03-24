@@ -63,9 +63,9 @@
                 @foreach ($results as $serviceRequest)
                  <tr>
                   <td class="tx-color-03 tx-center">{{$sn++}}</td>
-                  <td class="tx-medium">{{$serviceRequest->service_request}}</td>
-                  {{-- <td class="tx-medium">{{$serviceRequest->clientAccount}} {{$serviceRequest->clientAccount}}</td> --}}
-                  {{-- <td class="tx-medium">
+                  <td class="tx-medium">{{$serviceRequest->service_request->unique_id}}</td>
+                  <td class="tx-medium">{{$serviceRequest->service_request->clientAccount->first_name}} {{$serviceRequest->service_request->clientAccount->last_name}}</td>
+                  <td class="tx-medium">
                     @foreach($serviceRequest->service_request->users as $data)
                     @foreach($data->roles as $res)
                     @if($res->url == "admin")
@@ -73,8 +73,8 @@
                     @endif
                     @endforeach
                     @endforeach
-                  </td> --}}
-                  {{-- <td class="tx-medium">
+                  </td>
+                  <td class="tx-medium">
                   @foreach($serviceRequest->service_request->users as $data)
                   @foreach($data->roles as $res)
                   @if($res->url == "cse")
@@ -82,8 +82,8 @@
                   @endif
                   @endforeach
                   @endforeach
-                </td> --}}
-                  {{-- <td class="text-medium text-center">
+                </td>
+                  <td class="text-medium text-center">
                     @foreach($serviceRequest->service_request->users as $data)
                     @foreach($data->roles as $res)
                     @if($res->url == "technician")
@@ -91,37 +91,36 @@
                     @endif
                     @endforeach
                     @endforeach
-                  </td> --}}
-                  {{-- <td class="text-medium text-center">
+                  </td>
+                  <td class="text-medium text-center">
                         ₦{{ number_format($serviceRequest->service_request->total_amount) }}
-                  </td> --}}
+                  </td>
+                    {{--{{$serviceRequest->service_request->status_id}} --}}
+                  @if($serviceRequest->service_request->status_id == 1)
+                    <td class="text-medium text-warning">Pending</td>
+                  @elseif($serviceRequest->service_request->status_id == 2)
+                  <td class="text-medium text-info">Ongoing</td>
+                  @elseif($serviceRequest->service_request->status_id == 3)
+                    <td class="text-medium text-danger">Cancelled</td>
+                  @elseif($serviceRequest->service_request->status_id == 4)
+                    <td class="text-medium text-success">Completed</td>
+                  @else
+                 <td class="text-medium text-warning">{{$serviceRequest->service_request->status}}</td>
+                  @endif
 
-                  {{-- @if($serviceRequest->service_request->status_id == 1)
-                    <td class="text-medium text-warning">{{'Pending'}}</td>
-                  @elseif($serviceRequest->service_request->service_request_status_id == 2)
-                    <td class="text-medium text-danger">Ongoing</td>
-                  @elseif($serviceRequest->service_request->service_request_status_id == 3)
-                    <td class="text-medium text-success">Cancelled</td>
-                  @elseif($serviceRequest->service_request->service_request_status_id == 4)
-                    <td class="text-medium text-info">Completed</td>
-                  @endif --}}
-
-                  {{-- <td class="text-medium">{{ Carbon\Carbon::parse($serviceRequest->service_request->created_at, 'UTC')->isoFormat('MMMM Do YYYY, h:mm:ssa') }}</td>
+                  <td class="text-medium">{{ Carbon\Carbon::parse($serviceRequest->service_request->created_at, 'UTC')->isoFormat('MMMM Do YYYY, h:mm:ssa') }}</td>
                   <td class=" text-center">
                     <div class="dropdown-file">
                       <a href="" class="dropdown-link" data-toggle="dropdown"><i data-feather="more-vertical"></i></a>
-                      <div class="dropdown-menu dropdown-menu-right">{{---- {{ url('quality.request_details') }}---}
-                          z
-                      <a href="#" class="dropdown-item details"><i class="far fa-clipboard"></i> Details</a>
+                      <div class="dropdown-menu dropdown-menu-right">
+                      <a href="{{ route('quality-assurance.request_details', [$serviceRequest->service_request->uuid, 'locale'=>app()->getLocale()]) }}" class="dropdown-item details"><i class="far fa-clipboard"></i> Details</a>
                       </div>
                     </div>
-                  </td> --}}
+                  </td>
                 </tr>
 
                 @endforeach
-
-
-                <tr>
+                {{-- <tr>
                   <td class="tx-color-03 tx-center">1</td>
                   <td class="tx-medium">REF-234234723</td>
                   <td class="tx-medium">Kelvin Adesanya</td>
@@ -139,7 +138,7 @@
                       </div>
                     </div>
                   </td>
-                </tr>
+                </tr> --}}
 
               </tbody>
             </table>
