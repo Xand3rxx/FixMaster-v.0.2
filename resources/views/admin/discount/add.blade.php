@@ -85,6 +85,21 @@
                         </div>
 
 
+                        <div class="form-group col-md-12 show-service" id="add-users">
+                            <label class='add-page service'>Add Users</label>
+                            <select class="selectpicker show-tick select-user" id="service-users" name="users[]"
+                                title="select..." multiple="multiple" data-selected-text-format="count>3"
+                                data-live-search="true">
+                                <option value="">Select...</option>
+                            </select>
+                            @error('users')
+                            <span class="invalid-feedback-err">
+                                <strong>{{ $message }}</strong>
+                            </span>
+                            @enderror
+                        </div>
+
+
                         <div class="form-group col-md-6 show-service">
                             <label class='add-page'>Select Service Category</label>
                             <select class="selectpicker show-tick select-all-service" id="category_id" name="category[]"
@@ -109,6 +124,7 @@
                             </select>
                         </div>
 
+                     
 
                         <div class="form-group col-md-12">
                             <hr />
@@ -187,7 +203,7 @@
 
                                 <div class="form-group col-md-3 parameter">
                                     <label for="entity">States</label>
-                                    <select id="state_id" name="state" class="custom-select cs-select">
+                                    <select id="state_id" name="specified_request_state" class="custom-select cs-select">
                                         <option selected value="">Select...</option>
                                         @foreach($states as $state)
                                         <option value="{{ $state->id }}"
@@ -199,7 +215,7 @@
                                 </div>
                                 <div class="form-group col-md-3 parameter">
                                     <label>LGAs</label>
-                                    <select class="custom-select cs-select" name="parameter" id="lga_id">
+                                    <select class="custom-select cs-select" name="specified_request_lga" id="lga_id">
                                         <option selected value="">Select...</option>
                                     </select>
                                 </div>
@@ -472,7 +488,7 @@ $(document).ready(function() {
     });
     $('#get_users').on("click", function() {
         var entity = $('#entity_id').children("option:selected").val();
-        if (entity != 'estate') {
+        if (entity != '') {
             $.ajax({
                 url: "{{ route('admin.discount_users',app()->getLocale()) }}",
                 method: "POST",
@@ -484,6 +500,7 @@ $(document).ready(function() {
                 success: function(data) {
                     if (data) {
                         $("#users").html(data.options).selectpicker('refresh');
+                        $("#service-users").html(data.options).selectpicker('refresh');
                     } else {
                         var message =
                             'Error occured while trying to get Enity Parameter List`s in ';
@@ -643,6 +660,7 @@ $(document).ready(function() {
             success: function(data) {
                 if (data) {
                     $("#users").html(data.options).selectpicker('refresh');
+                    $("#service-users").html(data.options).selectpicker('refresh');
                 } else {
                     var message =
                         'Error occured while trying to get Enity Parameter List`s in ';
@@ -739,6 +757,7 @@ $(document).ready(function() {
                 success: function(data) {
                     if (data) {
                         $("#users").html(data.options).selectpicker('refresh');
+                        $("#service-users").html(data.options).selectpicker('refresh');
                     } else {
                         var message =
                             'Error occured while trying to get Enity Users List`s in ';
