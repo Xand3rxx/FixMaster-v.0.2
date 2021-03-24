@@ -269,16 +269,19 @@
                           </tr>
                           <tr>
                             <td class="tx-medium">Request Description</td>
-                            <td class="tx-color-03">My pc no longer comes on even when plugged into a power source.</td>
+                            <td class="tx-color-03">{{$serviceRequests->service->description ?? ''}}</td>
                           </tr>
 
                           {{-- If theres a cancellation, make this row visible --}}
                           {{-- @if(!empty($requestDetail->serviceRequestCancellationReason->reason)) --}}
+                          
+                          {{-- @endif --}}
+                          @if($serviceRequests->status_id == 3)
                           <tr>
                             <td class="tx-medium">Reason for Cancellation </td>
                             <td class="tx-color-03">I'm no longer interested. <span class="text-danger">(Only visible if the request was cancelled)</span></td>
                           </tr>
-                          {{-- @endif --}}
+                          @endif
                         </tbody>
                       </table>
 
