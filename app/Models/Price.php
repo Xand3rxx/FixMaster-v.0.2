@@ -64,4 +64,9 @@ class Price extends Model
     {
         return $this->hasMany(PriceHistory::class, 'price_id', 'id')->orderBy('created_at', 'DESC');
     }
+
+    public function service_requests()
+    {
+        return $this->hasMany(ServiveRequest::class, 'user_id')->withDefault();
+    }
 }

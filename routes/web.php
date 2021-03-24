@@ -18,6 +18,7 @@ use App\Http\Controllers\Admin\User\QualityAssuranceController;
 use App\Http\Controllers\Admin\User\CustomerServiceExecutiveController;
 use App\Http\Controllers\Admin\User\ClientController as AdministratorClientController;
 use App\Http\Controllers\Technician\TechnicianProfileController;
+
 use App\Http\Controllers\Admin\EWalletController;
 use App\Http\Controllers\AdminLocationRequestController;
 use App\Http\Controllers\Admin\PriceController;
@@ -237,13 +238,14 @@ Route::prefix('/technician')->group(function () {
         Route::get('/location-request',                 [TechnicianProfileController::class, 'locationRequest'])->name('location_request');
         //Route::get('/payments',                         [TechnicianProfileController::class, 'payments'])->name('payments');                
         Route::get('/requests',                         [TechnicianProfileController::class, 'serviceRequests'])->name('requests');
-        Route::get('/requests/details/{serviceRequest:id}',                 [TechnicianProfileController::class, 'serviceRequestDetails'])->name('request_details');
+        Route::get('/requests/details/{details:uuid}',                 [TechnicianProfileController::class, 'serviceRequestDetails'])->name('request_details');
 
         Route::get('/profile/',                         [TechnicianProfileController::class, 'viewProfile'])->name('view_profile');
         Route::get('/profile/edit',                     [TechnicianProfileController::class, 'editProfile'])->name('edit_profile');
         Route::patch('/update_profile',                     [TechnicianProfileController::class, 'updateProfile'])->name('update_profile');
         Route::patch('/update_password',                     [TechnicianProfileController::class, 'updatePassword'])->name('update_password');
         Route::get('/payments', [TechnicianProfileController::class, 'get_technician_disbursed_payments'])->name('payments');
+        Route::post('/disbursed_payments_sorting', [TechnicianProfileController::class, 'sortDisbursedPayments'])->name('disbursed_payments_sorting');
         Route::view('/messages/inbox', 'technician.messages.inbox')->name('messages.inbox');
         Route::view('/messages/sent', 'technician.messages.outbox')->name('messages.outbox');
     });

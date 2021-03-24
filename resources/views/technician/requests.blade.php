@@ -35,7 +35,7 @@
                 </div>
                 <div class="media-body">
                   <h6 class="tx-sans tx-uppercase tx-10 tx-spacing-1 tx-color-03 tx-semibold tx-nowrap mg-b-5 mg-md-b-8">Total Requests</h6>
-                <h4 class="tx-20 tx-sm-18 tx-md-20 tx-normal tx-rubik mg-b-0">{{count($serviceRequest)}}</h4>
+                <h4 class="tx-20 tx-sm-18 tx-md-20 tx-normal tx-rubik mg-b-0">{{count($serviceRequests)}}</h4>
                 </div>
               </div>
               
@@ -57,29 +57,35 @@
                 </tr>
               </thead>
               <tbody>
-              @foreach ($serviceRequest as $serviceRequest)
+              @foreach ($serviceRequests as $serviceRequest)
                 <tr>
-                  <td class="tx-color-03 tx-center">{{ $loop->iteration }}</td>
-                  <td class="tx-medium">{{ $serviceRequest['job_reference'] }}</td>
-                  <td class="tx-medium">Kelvin Adesanya</td>
-                  <td class="tx-medium">David Akinsola</td>
-                  <td class="text-medium text-center">₦{{ number_format($serviceRequest['total_amount'] )}}</td>
-                  @if($serviceRequest->service_request_status_id === 4)
-                    <td class="text-medium text-danger">Ongoing</td>
-                  @elseif($serviceRequest->service_request_status_id === 3)
-                    <td class="text-medium text-success">Completed</td>
-                  @elseif($serviceRequest->service_request_status_id === 5)
-                   <td class="text-medium text-danger">Enroute to Client's Location</td>
-                  @elseif($serviceRequest->service_request_status_id === 6)
-                    <td class="text-medium text-pending">Performing Diagnosis</td>
+                  <td class="tx-color-03 tx-center">{{ $loop->iteration ?? ''}}</td>
+                  <td class="tx-medium">{{ $serviceRequest->service_request->unique_id ?? ''}}</td>
+                  <td class="tx-medium">{{ $serviceRequest->account->first_name. ' '.$serviceRequest->account->last_name ?? '' }}</td>
+                  <td class="tx-medium">{{-- @foreach($serviceRequest->service_request->users as $data)
+                    @foreach($data->roles as $res)
+                    @if($res->url == "admin")
+                       {{$data->account->first_name}} {{$data->account->last_name}}
+                    @endif
+                    @endforeach
+                    @endforeach --}}{{'CSE'}}</td>
+                  <td class="text-medium text-center">₦{{ number_format($serviceRequest->service_request->total_amount) ?? ''}}</td>
+                  @if($serviceRequest->service_request->status_id === 1)
+                    <td class="text-medium text-warning">{{ $serviceRequest->service_request->status->name ?? ''}}</td>
+                  @elseif($serviceRequest->service_request->status_id === 2)
+                    <td class="text-medium text-danger">{{ $serviceRequest->service_request->status->name ?? ''}}</td>
+                  @elseif($serviceRequest->service_request->status_id === 3)
+                   <td class="text-medium text-success">{{ $serviceRequest->service_request->status->name ?? ''}}</td>
+                  @elseif($serviceRequest->service_request->status_id === 4)
+                    <td class="text-medium text-pending">{{ $serviceRequest->service_request->status->name ?? ''}}</td>
                   @endif
                   
-                  <td class="text-medium">{{ Carbon\Carbon::parse($serviceRequest->created_at, 'UTC')->isoFormat('MMMM Do YYYY, h:mm:ssa') }} ({{ $serviceRequest->created_at->diffForHumans() }})</td>
+                  <td class="text-medium">{{ Carbon\Carbon::parse($serviceRequest->service_request->created_at, 'UTC')->isoFormat('MMMM Do YYYY, h:mm:ssa') }} </td>
                   <td class=" text-center">
                     <div class="dropdown-file">
                       <a href="" class="dropdown-link" data-toggle="dropdown"><i data-feather="more-vertical"></i></a>
                       <div class="dropdown-menu dropdown-menu-right">
-                      <a href="{{ route('technician.request_details',['serviceRequest'=>$serviceRequest['id'], app()->getLocale()]) }}" class="dropdown-item details"><i class="far fa-clipboard"></i> Details</a>
+                     <a href="{{ route('technician.request_details', ['details'=>$serviceRequest->service_request->uuid, 'locale'=>app()->getLocale()]) }}" class="dropdown-item details"><i class="far fa-clipboard"></i> Details</a>
                       </div>
                     </div>
                   </td>

@@ -38,10 +38,17 @@
                             <div class="mg-sm-r-30">
                                 <div class="pos-relative d-inline-block mg-b-20">
                                   <a href="#">
-                                  {{-- {{asset('assets/technician_images/'.$result->account->avatar)}} --}}
-                                    <div class="avatar avatar-xxl">  
+                                  @php
+                                  if($result->account->gender == "male")
+                                   $photo = "default-male-avatar.png";
+                                  elseif($result->account->gender == "female")
+                                  $photo = "default-female-avatar.png";
+                                  else
+                                  $photo = "no-image-available.png";
+                                  @endphp
+                                    <div class="avatar avatar-xxl">
                                       <div class="user-img">
-                                        <img class="rounded-circle wh-150p img-fluid image profile_image_preview" src="{{ asset('assets/images/no-image-available.png') }}" alt="user-image">
+                                        <img class="rounded-circle wh-150p img-fluid image profile_image_preview" src="{{!empty($result->account->avatar) ? asset('assets/user-avatars/'.$result->account->avatar) : asset('assets/user-avatars/'.$photo)}}" alt="user-image">
                                       </div>
                                     </div>
                                   </a>
@@ -91,7 +98,7 @@
                             <!-- Email -->
                             <div class="form-group col-md-4">
                               <label for="inputEmail4">Email</label>
-                              <input type="email" class="form-control @error('email') is-invalid @enderror" id="email" value="{{$result->email}}" disabled>
+                              <input type="email" class="form-control @error('email') is-invalid @enderror" id="email" name="email" value="{{$result->email ?? 'Null' }}" readonly>
                               @error('email')
                               <span class="invalid-feedback" role="alert">
                                   <strong>{{ $message }}</strong>
@@ -137,15 +144,7 @@
                             </span>
                             @enderror
                             </div>
-                            <div class="form-group col-md-6">
-                                <label for="inputAddress2">Work Address</label>
-                                <textarea rows="3" class="user_address2 form-control @error('work_address') is-invalid @enderror" placeholder="e.g. Block A2, Broad Street, Marina, Lagos, Nigeria"  id="" name="work_address" required></textarea>
-                                @error('work_address')
-                            <span class="invalid-feedback" role="alert">
-                                <strong>{{ $message }}</strong>
-                            </span>
-                            @enderror
-                            </div>
+                            
                       </div>
 
                         <button type="submit" class="btn btn-primary">Update Profile</button>
@@ -157,7 +156,6 @@
                   <h6>CHANGE PASSWORD</h6>
                   <p class="mg-b-0 text-danger">In order to change your password, you need to provide the current password.</p>
                   <div class="card-body pd-20 pd-lg-25">
-                  
                   <form action="{{route('technician.update_password', app()->getLocale())}}" method="post" role="form" enctype="multipart/form-data">
                       {{ csrf_field() }}
                       @method('PATCH')
@@ -173,7 +171,7 @@
                           </div>
                         <div class="form-group col-md-4">
                           <label for="new_password">New Password</label>
-                          <input type="password" class="form-control @error('new_password') is-invalid @enderror" id="new_password" name="new_password" required>
+                          <input type="password" class="form-control @error('new_password') is-invalid @enderror" id="new_password" name="new_password" onkeyup='check();' required>
                           @error('new_password')
                             <span class="invalid-feedback" role="alert">
                                 <strong>{{ $message }}</strong>
@@ -182,7 +180,8 @@
                         </div>
                         <div class="form-group col-md-4">
                           <label for="new_confirm_password">Confirm Password</label>
-                          <input type="password" class="form-control @error('confirm_password') is-invalid @enderror" id="new_confirm_password" name="new_confirm_password" required>
+                          <input type="password" class="form-control @error('confirm_password') is-invalid @enderror" id="new_confirm_password" onkeyup='check();' name="new_confirm_password" required>
+                          <span id='message'></span>
                           @error('new_confirm_password')
                             <span class="invalid-feedback" role="alert">
                                 <strong>{{ $message }}</strong>
@@ -226,12 +225,10 @@
             autocomplete = new google.maps.places.Autocomplete((document.querySelector('.user_address')), {
                 types: ['geocode']
             });
-            autocomplete = new google.maps.places.Autocomplete((document.querySelector('.user_address2')), {
-                types: ['geocode']
-            });
+            
             // Chain request to html element on the page
             google.maps.event.addDomListener(document.querySelector('.user_address'), 'focus');
-            google.maps.event.addDomListener(document.querySelector('.user_address2'), 'focus');
+            
         }
     });
 </script>
@@ -290,6 +287,17 @@
     })
 
  })(jQuery);
+
+ var check = function() {
+  if (document.getElementById('new_password').value ==
+    document.getElementById('new_confirm_password').value) {
+    document.getElementById('message').style.color = 'green';
+    document.getElementById('message').innerHTML = 'Password Match Correctly';
+  } else {
+    document.getElementById('message').style.color = 'red';
+    document.getElementById('message').innerHTML = 'Password does not Match';
+  }
+}
 
 </script>
 @endsection
