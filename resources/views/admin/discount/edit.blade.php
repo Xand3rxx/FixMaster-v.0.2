@@ -24,7 +24,7 @@
                 <a href="{{ route('admin.discount_list',app()->getLocale()) }}" class="btn btn-primary"><i
                         class="fas fa-arrow-left"></i> Discount List</a>
                 <a href="{{ route('admin.add_discount',app()->getLocale()) }}" class="btn btn-warning"><i
-                        class="fas fa-plus"></i> Edit Discount</a>
+                        class="fas fa-plus"></i> Add Discount</a>
 
             </div>
         </div>
@@ -40,7 +40,7 @@
                         <div class="form-group col-md-12">
                             <label for="entity">Select Entity</label>
                             <select id="entity_id" name="entity" class="custom-select cs-select" id>
-                                <option value="{{ $status->entity }}"> {{$status->entity }} </option>
+                               
                                 @foreach($entities as $key => $value)
                                 <option value="{{ strtolower($value->name) }}"
                                     {{ $status->entity ==  strtolower($value->name) ? 'selected' : ''}}>

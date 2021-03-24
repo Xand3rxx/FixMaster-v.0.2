@@ -44,8 +44,8 @@
                                     <th>Entity</th>
                                     <th class="text-center">Rate</th>
                                     <th class="text-center">Duration</th>
-                                    <th class="text-center">Service Category</th>
-                                    <th>Services Name</th>
+                                    <!-- <th class="text-center">Service Category</th>
+                                    <th>Services Name</th> -->
                                     <th>Available</th>
                                     <th>Date Created</th>
                              
@@ -61,8 +61,8 @@
                                     <td class="tx-medium text-center">{{ucfirst($discount->entity)}}</td>
                                     <td class="tx-medium text-center">{{$discount->rate.'%'}}</td>
                                <td class="tx-medium text-center">{{CustomHelpers::displayTime($discount->duration_start, $discount->duration_end) }}</td>
-                                    <td class="tx-medium">{{$discount->service_category != ''? $discount->service_category: 'Nil'}}</td>
-                                    <td class="tx-medium text-center">{{$discount->service_name != ''? $discount->service_name: 'Nil'}}
+                                    <!-- <td class="tx-medium">{{$discount->service_category != ''? $discount->service_category: 'Nil'}}</td>
+                                    <td class="tx-medium text-center">{{$discount->service_name != ''? $discount->service_name: 'Nil'}} -->
                                     </td>
                                     @if($discount->availability  == 'used')
                                     <td class="text-medium text-success">Used</td>
