@@ -69,77 +69,64 @@ class ServiceRequest extends Model
         return $this->belongsTo(Lga::class);
     }
 
-    public function price(){
-        return $this->belongsTo(Price::class, 'id');
-    }
+    // public function price(){
+    //     return $this->belongsTo(Price::class, 'id');
+    // }
 
     public function client()
     {
         return $this->belongsTo(User::class);
     }
 
-    public function clients()
-    {
-        return $this->belongsToMany(User::class);
-    }
-
-    public function cse()
+    public function account()
     {
         return $this->belongsTo(Account::class);
     }
 
     public function users()
     {
+        return $this->belongsToMany(User::class);
+    }
+    public function cse()
+    {
+        return $this->belongsTo(Account::class);
+    }
+    public function cses()
+    {
         return $this->belongsToMany(User::class, 'service_request_assigned')->with('account', 'roles');
     }
-
     public function invoice()
     {
         return $this->hasOne(Invoice::class);
     }
-
-    public function phone()
-    {
-        return $this->belongsTo(Phone::class);
-    }
-
     public function invoices()
     {
         return $this->hasMany(Invoice::class);
     }
-
     public function service(){
         return $this->hasOne(Service::class, 'id', 'service_id');
     }
-
     public function services(){
             return $this->hasMany(Service::class, 'id', 'service_id');
     }
-
-    public function serviceRequestAssigned(){
-        return $this->hasMany(ServiceRequestAssigned::class)->with('service_request');
-    }
-
     public function rfq()
     {
         return $this->hasOne(Rfq::class, 'service_request_id');
     }
-
     public function rfqs()
     {
         return $this->hasMany(Rfq::class, 'service_request_id');
     }
-
     public function payment_disbursed(){
         return $this->belongsTo(PaymentDisbursed::class);
     }
 
-     public function address(){
-         return $this->belongsTo(Address::class);
-     }
-
     public function status(){
         return $this->hasOne(Status::class, 'id');
+    }
+
+    public function service_request(){
+        return $this->hasOne(ServiceRequest::class, 'uuid', 'service_request_id');
     }
 
     public function clientAccount()
@@ -147,4 +134,16 @@ class ServiceRequest extends Model
         return $this->hasOne(Account::class, 'user_id', 'client_id');
     }
 
+    public function technicianAccount()
+    {
+        
+            return $this->hasOne(Account::class, 'user_id', 'service_id');
+    }
+
+    
+    public function price()
+    {
+        
+            return $this->hasOne(Price::class, 'user_id', 'client_id')->withDefault();
+    }
 }

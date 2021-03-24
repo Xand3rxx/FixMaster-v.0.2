@@ -61,31 +61,33 @@
               <tbody>
               @foreach ($serviceRequests as $serviceRequest)
                 <tr>
-                  <td class="tx-color-03 tx-center">{{ $loop->iteration }}</td>
-                  <td class="tx-medium">{{ $serviceRequest->unique_id}}</td>
-                  <td class="tx-medium">{{ $serviceRequest->first_name. ' '. $serviceRequest->middle_name. ' '. $serviceRequest->last_name ?? '' }}</td>
-                  <td class="tx-medium">{{ $serviceRequest->first_name. ' '. $serviceRequest->middle_name. ' '. $serviceRequest->last_name ?? '' }}</td>
-                  <td class="tx-medium">{{ $serviceRequest->first_name. ' '. $serviceRequest->middle_name. ' '. $serviceRequest->last_name ?? '' }}</td>
-                  <td class="tx-medium">{{ $serviceRequest->first_name. ' '. $serviceRequest->middle_name. ' '. $serviceRequest->last_name ?? '' }}</td>
+                  <td class="tx-color-03 tx-center">{{ $loop->iteration ?? ''}}</td>
+                  <td class="tx-medium">{{ $serviceRequest->service_request->unique_id ?? ''}}</td>
+                  {{-- <td class="tx-medium">{{ $serviceRequest->account->first_name. ' '.$serviceRequest->account->last_name ?? '' }}</td> --}}
+                  <td class="tx-medium">{{-- @foreach($serviceRequest->service_request->users as $data)
+                    @foreach($data->roles as $res)
+                    @if($res->url == "admin")
+                       {{$data->account->first_name}} {{$data->account->last_name}}
+                    @endif
+                    @endforeach
+                    @endforeach --}}{{'CSE'}}</td>
+                  <td class="text-medium text-center">₦{{ number_format($serviceRequest->service_request->total_amount) ?? ''}}</td>
+                  @if($serviceRequest->service_request->status_id === 1)
+                    <td class="text-medium text-warning">{{ $serviceRequest->service_request->status->name ?? ''}}</td>
+                  @elseif($serviceRequest->service_request->status_id === 2)
+                    <td class="text-medium text-danger">{{ $serviceRequest->service_request->status->name ?? ''}}</td>
+                  @elseif($serviceRequest->service_request->status_id === 3)
+                   <td class="text-medium text-success">{{ $serviceRequest->service_request->status->name ?? ''}}</td>
+                  @elseif($serviceRequest->service_request->status_id === 4)
+                    <td class="text-medium text-pending">{{ $serviceRequest->service_request->status->name ?? ''}}</td>
+                  @endif
                   
-                  <td class="text-medium text-center">₦{{ number_format($serviceRequest->total_amount )}}</td>
-                  
-                  @if($serviceRequest->status_id === 1)
-                    <td class="text-medium text-warning">Pending</td>
-                  @elseif($serviceRequest->status_id === 2)
-                    <td class="text-medium text-danger">Ongoing</td>
-                  @elseif($serviceRequest->status_id === 3)
-                    <td class="text-medium text-success">Cancelled</td>
-                  @else 
-                  <td class="text-medium text-info">Completed</td> 
-                  @endif 
-                  <td class="text-medium">{{ Carbon\Carbon::parse($serviceRequest->created_at, 'UTC')->isoFormat('MMMM Do YYYY, h:mm:ssa') }}</td>
+                  <td class="text-medium">{{ Carbon\Carbon::parse($serviceRequest->service_request->created_at, 'UTC')->isoFormat('MMMM Do YYYY, h:mm:ssa') }} </td>
                   <td class=" text-center">
                     <div class="dropdown-file">
                       <a href="" class="dropdown-link" data-toggle="dropdown"><i data-feather="more-vertical"></i></a>
                       <div class="dropdown-menu dropdown-menu-right">
-                      <a href="{{ route('technician.request_details', ['serviceRequests'=>$serviceRequest->uuid, 'locale'=>app()->getLocale()]) }}" class="dropdown-item details"><i class="far fa-clipboard"></i> Details</a>
-                      
+                     <a href="{{ route('technician.request_details', ['details'=>$serviceRequest->service_request->uuid, 'locale'=>app()->getLocale()]) }}" class="dropdown-item details"><i class="far fa-clipboard"></i> Details</a>
                       </div>
                       
                     </div>

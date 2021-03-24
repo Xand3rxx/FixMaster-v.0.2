@@ -38,10 +38,17 @@
                             <div class="mg-sm-r-30">
                                 <div class="pos-relative d-inline-block mg-b-20">
                                   <a href="#">
-                                  {{-- {{asset('assets/technician_images/'.$result->account->avatar)}} --}}
-                                    <div class="avatar avatar-xxl">  
+                                  @php
+                                  if($result->account->gender == "male")
+                                   $photo = "default-male-avatar.png";
+                                  elseif($result->account->gender == "female")
+                                  $photo = "default-female-avatar.png";
+                                  else
+                                  $photo = "no-image-available.png";
+                                  @endphp
+                                    <div class="avatar avatar-xxl">
                                       <div class="user-img">
-                                        <img class="rounded-circle wh-150p img-fluid image profile_image_preview" src="{{ asset('assets/images/no-image-available.png') }}" alt="user-image">
+                                        <img class="rounded-circle wh-150p img-fluid image profile_image_preview" src="{{!empty($result->account->avatar) ? asset('assets/user-avatars/'.$result->account->avatar) : asset('assets/user-avatars/'.$photo)}}" alt="user-image">
                                       </div>
                                     </div>
                                   </a>
@@ -91,7 +98,7 @@
                             <!-- Email -->
                             <div class="form-group col-md-4">
                               <label for="inputEmail4">Email</label>
-                              <input type="email" class="form-control @error('email') is-invalid @enderror" id="email" name="email" value="{{$result->email}}" readonly>
+                              <input type="email" class="form-control @error('email') is-invalid @enderror" id="email" name="email" value="{{$result->email ?? 'Null' }}" readonly>
                               @error('email')
                               <span class="invalid-feedback" role="alert">
                                   <strong>{{ $message }}</strong>
@@ -149,7 +156,6 @@
                   <h6>CHANGE PASSWORD</h6>
                   <p class="mg-b-0 text-danger">In order to change your password, you need to provide the current password.</p>
                   <div class="card-body pd-20 pd-lg-25">
-                  
                   <form action="{{route('technician.update_password', app()->getLocale())}}" method="post" role="form" enctype="multipart/form-data">
                       {{ csrf_field() }}
                       @method('PATCH')
@@ -222,7 +228,7 @@
             
             // Chain request to html element on the page
             google.maps.event.addDomListener(document.querySelector('.user_address'), 'focus');
-           
+            
         }
     });
 </script>

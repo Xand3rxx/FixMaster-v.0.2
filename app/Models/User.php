@@ -179,12 +179,11 @@ class User extends Authenticatable
     {
         return $this->hasMany(ServiceRequest::class);
     }
-
+    
     public function clientRequest()
     {
         return $this->hasOne(ServiceRequest::class, 'client_id');
     }
-
     public function clientRequests()
     {
         return $this->hasMany(ServiceRequest::class, 'client_id');

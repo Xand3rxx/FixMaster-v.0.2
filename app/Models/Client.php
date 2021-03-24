@@ -38,12 +38,12 @@ class Client extends Model
         return $this->belongsTo(User::class)->with(['account', 'phones']);
     }
 
+    
+
     public function account()
     {
         return $this->belongsTo(Account::class);
     }
-
-
-
-
+    
 }
+
