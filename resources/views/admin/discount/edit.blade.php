@@ -57,14 +57,13 @@
                         </div>
 
 
-                        <div class="form-group col-md-12 parameter" id="add-users">
+                        <div class="form-group col-md-10 parameter add-users">
                             <label class='add-page'>Add Users</label>
                             <select class="selectpicker show-tick select-user" id="users" name="users[]"
                                 title="select..." multiple="multiple" data-selected-text-format="count>3"
                                 data-live-search="true">
                                 <option value="">Select...</option>
                             </select>
-
                             @error('users')
                             <span class="invalid-feedback-err">
                                 <strong>{{ $message }}</strong>
@@ -74,7 +73,13 @@
                         </div>
 
 
-                        <div class="form-group col-md-6 show-estate">
+                        <div class="form-group col-md-2 parameter add-users">
+                            <label class='add-page'>Users' Count</label>
+                            <input type="number" disabled class="form-control user-count"/>
+                        
+                        </div>
+
+                        <div class="form-group col-md-5 show-estate">
                             <label>Select Estate</label>
                             <select class="custom-select cs-select" name="estate_name" id="estate_id">
                                 <option selected value="">Select...</option>
@@ -82,7 +87,7 @@
                             <input type="hidden" id="estate_value" name="estate_value" value="{{$estate}}" />
                         </div>
 
-                        <div class="form-group col-md-6 parameter show-estate" id="estate-users">
+                        <div class="form-group col-md-5 parameter show-estate" id="estate-users">
                             <label class='add-page not-users'>Add Estate Users</label>
                             <select class="selectpicker show-tick select-user" id="estate-user" name="users[]"
                                 title="select..." multiple="multiple" data-selected-text-format="count>3"
@@ -96,20 +101,13 @@
                             @enderror
                         </div>
 
-                        <div class="form-group col-md-12 show-service" id="add-users">
-                            <label class='add-page service'>Add Users</label>
-                            <select class="selectpicker show-tick select-user" id="service-users" name="users[]"
-                                title="select..." multiple="multiple" data-selected-text-format="count>3"
-                                data-live-search="true">
-                                <option value="">Select...</option>
-                            </select>
-                            @error('users')
-                            <span class="invalid-feedback-err">
-                                <strong>{{ $message }}</strong>
-                            </span>
-                            @enderror
+                        <div class="form-group col-md-2 parameter show-estate" >
+                            <label class='add-page not-users'>Users' Count</label>
+                            <input type="number" disabled class="form-control user-count-estate" />
+                        
                         </div>
 
+                     
 
 
                         <div class="form-group col-md-6 show-service">
@@ -134,7 +132,24 @@
                             </select>
                         </div>
 
-
+                        <div class="form-group col-md-10 show-service" >
+                            <label class='add-page service'>Add Users</label>
+                            <select class="selectpicker show-tick select-user" id="service-users" name="users[]"
+                                title="select..." multiple="multiple" data-selected-text-format="count>3"
+                                data-live-search="true">
+                                <option value="">Select...</option>
+                            </select>
+                            @error('users')
+                            <span class="invalid-feedback-err">
+                                <strong>{{ $message }}</strong>
+                            </span>
+                            @enderror
+                        </div>
+                        <div class="form-group col-md-2 show-service">
+                            <label class='add-page'>Users' Count</label>
+                            <input type="number" disabled class="form-control user-count"/>
+                        
+                        </div>
 
 
                         <div class="form-group col-md-12">
@@ -142,18 +157,17 @@
                         </div>
 
 
-                        <fieldset class="form-fieldset col-md-12">
+                        <fieldset class="form-fieldset col-md-12 parameter">
                             <legend>Filter By Additional Fields</legend>
 
                             <div class="form-row">
 
-                                <div class="form-group col-md-3 parameter">
+                                <div class="form-group col-md-3">
                                     @php $specified_request_count_morethan =
                                     isset($field->specified_request_count_morethan)?
                                     $field->specified_request_count_morethan : ''; @endphp
-                                    <label for="specified_request_count_morethan">Total Count of Services Requests(more
-                                        than)</label>
-                                    <input type="number" min="1" class="form-control custom-input-1"
+                                    <label for="specified_request_count_morethan">Count of Services Requests Range(From)</label>
+                                    <input type="number" min="1" class="form-control custom-input-1 get_users"
                                         id="specified_request_count_morethan" name="specified_request_count_morethan"
                                         value="{{$specified_request_count_morethan}}" autocomplete="off">
 
@@ -163,13 +177,12 @@
                                         </span>
                                         @enderror
                                 </div>
-                                <div class="form-group col-md-3 parameter">
+                                <div class="form-group col-md-3">
                                     @php $specified_request_count_equalto =
                                     isset($field->specified_request_count_equalto)?
                                     $field->specified_request_count_equalto : ''; @endphp
-                                    <label for="specified_request_count_equalto">Total Count of Services Requests(equal
-                                        to)</label>
-                                    <input type="number" min="1" class="form-control custom-input-1"
+                                    <label for="specified_request_count_equalto">Count of Services Requests Range(To)</label>
+                                    <input type="number" min="1" class="form-control custom-input-1 get_users"
                                         id="specified_request_count_equalto" name="specified_request_count_equalto"
                                         value="{{$specified_request_count_equalto}}" autocomplete="off">
                                         @error('specified_request_count_equalto')
@@ -178,12 +191,12 @@
                                         </span>
                                         @enderror
                                 </div>
-                                <div class="form-group col-md-3 parameter">
+                                <div class="form-group col-md-3">
                                     @php $specified_request_amount_from = isset($field->specified_request_amount_from)?
                                     $field->specified_request_amount_from : ''; @endphp
-                                    <label for="specified_request_amount_from">Total Sum of Services Requests
+                                    <label for="specified_request_amount_from">Sum of Services Requests
                                         Amount(from)</label>
-                                    <input type="number" min="1" class="form-control custom-input-1"
+                                    <input type="number" min="1" class="form-control custom-input-1 get_users"
                                         id="specified_request_amount_from" name="specified_request_amount_from"
                                         value="{{ $specified_request_amount_from }}" autocomplete="off">
                                         @error('specified_request_amount_from')
@@ -193,12 +206,12 @@
                                         @enderror
                                 </div>
 
-                                <div class="form-group col-md-3 parameter">
+                                <div class="form-group col-md-3">
                                     @php $specified_request_amount_to = isset($field->specified_request_amount_to)?
                                     $field->specified_request_amount_to : ''; @endphp
-                                    <label for="specified_request_amount_to">Total Sum of Services Requests
+                                    <label for="specified_request_amount_to">Sum of Services Requests
                                         Amount(To)</label>
-                                    <input type="number" min="1" class="form-control custom-input-1"
+                                    <input type="number" min="1" class="form-control custom-input-1 get_users"
                                         id="specified_request_amount_to" name="specified_request_amount_to"
                                         value="{{ $specified_request_amount_to }}" autocomplete="off">
                                         @error('specified_request_amount_to')
@@ -208,7 +221,7 @@
                                         @enderror
                                 </div>
 
-                                <div class="form-group col-md-3 parameter">
+                                <div class="form-group col-md-3">
                                     @php $specified_request_start_date = isset($field->specified_request_start_date)?
                                     Carbon\Carbon::parse( $field->specified_request_start_date,
                                     'UTC')->isoFormat("Y-MM-DD") : ''; @endphp
@@ -219,7 +232,7 @@
                                 </div>
 
 
-                                <div class="form-group col-md-3 parameter">
+                                <div class="form-group col-md-3">
                                     @php $specified_request_end_date = isset($field->specified_request_end_date)?
                                     Carbon\Carbon::parse($specified_request_end_date, 'UTC')->isoFormat("Y-MM-DD") : '';
                                     @endphp
@@ -230,7 +243,7 @@
                                 </div>
 
 
-                                <div class="form-group col-md-3 parameter">
+                                <div class="form-group col-md-3">
                                     <label for="entity">States</label>
                                     @php $name = isset($request_state->name)? $request_state->name : ''; @endphp
                                     @php $id = isset($request_state->id)? $request_state->id : ''; @endphp
@@ -244,7 +257,7 @@
                                     </select>
 
                                 </div>
-                                <div class="form-group col-md-3 parameter">
+                                <div class="form-group col-md-3">
                                     @php $specified_request_lga = isset($field->specified_request_lga)?
                                     $field->specified_request_lga : ''; @endphp
                                     @php $name = isset($request_lga->name)?$request_lga->name : ''; @endphp
@@ -255,11 +268,7 @@
                                     </select>
                                 </div>
 
-                                <div class="form-group col-md-12 parameter">
-                                    <br />
-                                    <button id="get_users" type="button" class="btn btn-primary btn-block">Get
-                                        Users</button>
-                                </div>
+                              
 
                             </div>
                         </fieldset>
@@ -270,7 +279,7 @@
                         </div>
 
 
-                        <div class="form-group col-md-6">
+                        <div class="form-group col-md-4">
                             <label for="discount_name">Name of discount</label>
                             <input type="text" class="form-control custom-input-1" id="discount_name"
                                 name="discount_name" value="{{ $status->name }}" autocomplete="off">
@@ -284,7 +293,7 @@
 
 
 
-                        <div class="form-group col-md-6">
+                        <div class="form-group col-md-4">
                             <label for="rate">Rate</label>
                             <div class="input-group">
                                 <input type="number" min="0.1" step="any" id="rate" class="form-control" name="rate"
@@ -301,6 +310,26 @@
                                 @enderror
                             </div>
                         </div>
+
+                        <div class="form-group col-md-4">
+                                    <label for="entity">Apply Discount To</label>
+                                    <select id="apply_id" name="apply_discount" class="custom-select cs-select">
+                                        <option selected value="">Select...</option>
+                                        @foreach($apply_discounts as $apply)
+                                            <option value="{{ $apply}}"
+                                        {{ $status->apply_discount ==  $apply ? 'selected' : ''}}>
+                                        {{ $apply }}
+                                    </option>
+                                        @endforeach
+                                    </select>
+                                    @error('apply_discount')
+                                <span class="invalid-feedback-err">
+                                    <strong>{{ $message }}</strong>
+                                </span>
+                                @enderror
+                                </div>
+
+
                         <div class="form-group col-md-6">
                             <label for="start_date">Duaration(Start)</label>
                             <input type="date" class="form-control custom-input-1" id="start_date"
@@ -373,7 +402,7 @@ $('.selectpicker').selectpicker();
 $('.show-estate').hide();
 $('.show-service').hide();
 $('.parameter').hide();
-$('#add-users').hide();
+$('.add-users').hide();
 $('.add-page').hide();
 
 $(document).ready(function() {
@@ -521,7 +550,7 @@ $(document).ready(function() {
             },
         })
     });
-    $('#get_users').on("click", function() {
+    $('.get_users').on("click", function() {
         var entity = $('#entity_id').children("option:selected").val();
         if (entity) {
             $.ajax({
@@ -536,6 +565,8 @@ $(document).ready(function() {
                     if (data) {
                         $("#users").html(data.options).selectpicker('refresh');
                         $("#service-users").html(data.options).selectpicker('refresh');
+                        $('.user-count').val(data.count).selectpicker('refresh');
+                       
                     } else {
                         var message =
                             'Error occured while trying to get Enity Parameter List`s in ';
@@ -563,6 +594,7 @@ $(document).ready(function() {
             success: function(data) {
                 if (data) {
                     $("#estate-user").html(data.options).selectpicker('refresh');
+                    $('.user-count-estate').val(data.count).selectpicker('refresh');
                 } else {
                     var message =
                         'Error occured while trying to get Enity Parameter List`s in ';
@@ -622,7 +654,7 @@ $(document).ready(function() {
     if (entity === 'client') {
         $('.show-service').hide();
         $('.parameter').show();
-        $('#add-users').show();
+        $('.add-users').show();
         $('.add-page').show();
         editUsers = $('#edit_users').val();
     }
@@ -631,7 +663,7 @@ $(document).ready(function() {
         $('.show-estate').show();
         $('.show-service').hide();
         $('.parameter').show();
-        $('#add-users').hide();
+        $('.add-users').hide();
         $('.not-users').show();
 
         $.ajax({
@@ -765,14 +797,14 @@ $(document).ready(function() {
         if (entity === 'client') {
             $('.show-service').hide();
             $('.parameter').show();
-            $('#add-users').show();
+            $('.add-users').show();
             $('.add-page').show();
         }
         if (entity === 'estate') {
             $('.show-estate').show();
             $('.show-service').hide();
             $('.parameter').show();
-            $('#add-users').hide();
+            $('.add-users').hide();
             $('.not-users').show();
 
             $.ajax({
@@ -843,10 +875,13 @@ $(document).ready(function() {
                 success: function(data) {
                     if (data && entity == 'client') {
                         $("#users").html(data.options).selectpicker('refresh');
+                        $('.user-count').val(data.count).selectpicker('refresh');
+                 
                     }
                     if (data && entity == 'estate') {
                         $("#estate-user").html(data.options).selectpicker('refresh');
                         $("#service-users").html(data.options).selectpicker('refresh');
+                        $('.user-count-estate').val(data.count).selectpicker('refresh');
                     }
                     if (data && entity == 'service') {
                         $("#service-users").html(data.options).selectpicker('refresh');
