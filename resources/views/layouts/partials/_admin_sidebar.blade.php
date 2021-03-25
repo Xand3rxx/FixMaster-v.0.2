@@ -102,7 +102,7 @@
         <li class="nav-item with-sub">
           <a href="" class="nav-link"><i data-feather="crop"></i> <span>Loyalty Management</span></a>
           <ul>
-            <li class=""><a href="#">Add</a></li>
+          <li class="{{ Route::currentRouteNamed('admin.add_loyalty') ? 'active' : '' }}"><a href="{{ route('admin.add_loyalty',  app()->getLocale()) }}">Add</a></li>
             <li class=""><a href="#">List</a></li>
           </ul>
         </li>
