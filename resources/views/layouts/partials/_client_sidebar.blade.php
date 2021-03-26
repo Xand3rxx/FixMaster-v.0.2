@@ -92,9 +92,9 @@
                                     <h6 class="title text-dark h6 my-0">Logout</h6>
                                 </a>
 
-                                <form id="logout-form" action="{{ route('logout', app()->getLocale()) }}" method="POST" style="display: none;">
+                                {{-- <form id="logout-form" action="{{ route('logout', app()->getLocale()) }}" method="POST" style="display: none;">
                                     @csrf
-                                </form>
+                                </form> --}}
                             </div><!--end col-->
                         </div><!--end row-->
                     </div>

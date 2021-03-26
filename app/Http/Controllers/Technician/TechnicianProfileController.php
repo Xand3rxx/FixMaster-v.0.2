@@ -7,9 +7,11 @@ use Illuminate\Http\Request;
 use App\Traits\Loggable;
 use Illuminate\Support\Facades\Route;
 use Auth;
+use Session;
 use App\Models\PaymentDisbursed;
 use App\Models\User;
 use App\Models\ServiceRequest;
+use App\Models\ServiceRequestAssigned;
 use App\Traits\PasswordUpdator;
 use Illuminate\Support\Facades\Validator;
 
@@ -55,30 +57,45 @@ class TechnicianProfileController extends Controller
     /**
      * Return Service Requests Page 
      */
-    public function serviceRequests($language, ServiceRequest $serviceRequest)
+    public function serviceRequests($language, ServiceRequestAssigned $serviceRequest)
     {
 
-        $user_id = auth()->user()->id; // gets the current user id
+       
 
-        $serviceRequest = ServiceRequest::where('technician_id', $user_id)->orderBy('id', 'DESC')->paginate(15);
+    $serviceRequests = ServiceRequestAssigned::where('user_id', Auth::id())->with('service_request')->get();
 
-        return view('technician.requests', compact('serviceRequest'));
+        //return $serviceRequests;
 
-        //return view('technician.requests')->with('i');
+        return view('technician.requests', compact('serviceRequests'));
     }
 
-    /**
-     * Return Service Requests Details Page 
-     */
-    public function serviceRequestDetails($language, ServiceRequest $serviceRequest)
+   
+
+    public function serviceRequestDetails($language, $details)
     {
+       
+        $serviceRequests = ServiceRequest::where('uuid', $details)->first();
 
-        $user_id = auth()->user()->id; // gets the current user id
+        
 
-        $serviceRequest = ServiceRequest::where('technician_id', $user_id)->orderBy('id', 'DESC')->paginate(15);
+        return view('technician.request_details', compact('serviceRequests'));
 
-        return view('technician.request_details', compact('serviceRequest'));
+
+        
+        
     }
+
+
+
+
+
+
+
+
+
+
+
+
 
     /**
      * Return View Profile Page 
@@ -106,6 +123,7 @@ class TechnicianProfileController extends Controller
     public function updateProfile(Request $request)
     {
         $user = User::where('id', Auth::id())->first();
+        
         if ($user->account->gender == "male") {
             $res = "his";
         } else {
@@ -125,7 +143,7 @@ class TechnicianProfileController extends Controller
             'phone_number' => 'required',
             'profile_avater' => 'mimes:jpeg,jpg,png,gif',
             'full_address' => 'required',
-            'work_address' => '',
+            
 
         ];
 
@@ -143,12 +161,12 @@ class TechnicianProfileController extends Controller
 
         $validator = Validator::make($request->all(), $rules, $messages);
         if ($validator->fails()) {
-            return redirect()->back()->with('errors', $validator->errors());
+            return redirect()->back()->withInput()->withErrors($validator);
         } else {
 
             if ($request->hasFile('profile_avater')) {
                 $filename = $request->profile_avater->getClientOriginalName();
-                $request->profile_avater->move('assets/qa_images', $filename);
+                $request->profile_avater->move('assets/user-avatars', $filename);
             } else {
                 $filename = $user->account->avatar;
             }
@@ -172,6 +190,12 @@ class TechnicianProfileController extends Controller
                 'number' => $request->phone_number,
             ]);
 
+          /* $user->address->update([
+                'user_id' => $user->id,
+                'address' => $request->full_address,
+               
+            ]);*/
+            
             $this->log($type, $severity, $actionUrl, $message);
 
             return redirect()->back()->with('success', 'Your profile has been updated successfully');
@@ -203,12 +227,104 @@ class TechnicianProfileController extends Controller
         return $this->passwordUpdator($request);
     }
 
-    public function get_technician_disbursed_payments(Request $request)
+   /* public function get_technician_disbursed_payments(Request $request)
     {
-
-
         $payments = PaymentDisbursed::where('recipient_id', Auth::id())->get();
-
         return view('technician.payments', compact('payments'));
+    }*/
+
+    public function get_technician_disbursed_payments(Request $request){
+
+        // $user = Auth::user();
+        // $payments = $user->payments();
+        $payments = PaymentDisbursed::where('recipient_id',Auth::id())
+        ->orderBy('created_at', 'DESC')->get();
+        return view('technician.payments', compact('payments'));
+    }
+
+    public function sortDisbursedPayments(Request $request){
+        if($request->ajax()){
+
+            // return $request;
+            //Get current activity sorting level
+            $level =  $request->get('sort_level');
+            //Get the activity sorting type
+            $type =  $request->get('type');
+            //Get activity log for a specific date
+            $specificDate =  $request->get('date');
+            //Get activity log for a specific year
+            $specificYear =  $request->get('year');
+            //Get activity log for a specific month
+            $specificMonth =  date('m', strtotime($request->get('month')));
+            //Get activity log for a specific month name
+             $specificMonthName =  $request->get('month');
+            //Get activity log for a date range
+            $dateFrom =  $request->get('date_from');
+            $dateTo =  $request->get('date_to');
+
+            if($level === 'Level One'){
+
+                $payments = PaymentDisbursed::where('type', $type)
+                ->orderBy('created_at', 'DESC')->get();
+
+                $message = 'Showing Disbursed Payment of "'.$type.'"';
+
+                return view('technician._disbursed_table', compact('payments','message'));
+            }
+
+            if($level === 'Level Two'){
+
+                if(!empty($specificDate)){
+                    $payments = PaymentDisbursed::whereDate('created_at', $specificDate)
+                    ->where('recipient_id', Auth::id())
+                    ->orderBy('created_at', 'DESC')->get();
+
+                    $message = 'Showing Disbursed Payments for '.\Carbon\Carbon::parse($specificDate, 'UTC')->isoFormat('LL');
+                }
+
+                return view('technician._disbursed_table', compact('payments','message'));
+
+            }
+
+            if($level === 'Level Three'){
+
+                if(!empty($specificYear)){
+                    $payments = PaymentDisbursed::whereYear('created_at', $specificYear)
+                    ->where('recipient_id', Auth::id())
+                    ->orderBy('created_at', 'DESC')->get();
+
+                    $message = 'Showing Disbursed Payments for year '.$specificYear;
+                }
+
+                return view('technician._disbursed_table', compact('payments','message'));
+            }
+
+            if($level === 'Level Four'){
+
+                if(!empty($specificYear) && !empty($specificMonth)){
+                    $payments = PaymentDisbursed::whereYear('created_at', $specificYear)
+                    ->whereMonth('created_at', $specificMonth)
+                    ->where('recipient_id', Auth::id())
+                    ->orderBy('created_at', 'DESC')->get();
+
+                    $message = 'Showing Disbursed Payments for "'.$specificMonthName.'" in year '.$specificYear;
+                }
+
+                return view('technician._disbursed_table', compact('payments','message'));
+            }
+
+            if($level === 'Level Five'){
+
+                if(!empty($dateFrom) && !empty($dateTo)){
+                    $payments = PaymentDisbursed::whereBetween('created_at', [$dateFrom, $dateTo])
+                    ->where('recipient_id', Auth::id())
+                    ->orderBy('created_at', 'DESC')->get();
+
+                    $message = 'Showing Disbursed Payments from "'.\Carbon\Carbon::parse($dateFrom, 'UTC')->isoFormat('LL').'" to "'.\Carbon\Carbon::parse($dateTo, 'UTC')->isoFormat('LL').'"';
+                }
+
+                 return view('technician._disbursed_table', compact('payments','message'));
+            }
+        }
     }
 }

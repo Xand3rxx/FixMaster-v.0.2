@@ -100,9 +100,9 @@
 
                         <li class="{{ Route::currentRouteNamed('') ? 'active' : '' }}"><a href="#">Payments</a></li>
 
-                        <li class="{{ Route::currentRouteNamed('') ? 'active' : '' }}"><a href="#">Messages</a></li>
+                        <li class="{{ Route::currentRouteNamed('') ? 'active' : '' }}"><a href="#">Messages</a></li> 
 
-                        <li class="{{ Route::currentRouteNamed('') ? 'active' : '' }}"><a href="#">Settings</a></li>
+                        <li class="{{ Route::currentRouteNamed('') ? 'active' : '' }}"><a href="{{ route('client.settings', app()->getLocale()) }}">Settings</a></li>
 
                         {{-- <li><a href="{{ route('login') }}">Logout</a></li> --}}
                     </ul>
@@ -111,9 +111,9 @@
                 <li title="Logout"><a href="#" onclick="event.preventDefault();
                     document.getElementById('logout-form').submit();" href="{{ route('logout', app()->getLocale()) }}"><i class="uil uil-sign-out-alt" style="font-size: 20px" ></i></a></li>
 
-<form id="logout-form" action="{{ route('logout', app()->getLocale()) }}" method="POST" style="display: none;">
-    @csrf
-</form>
+                <form id="logout-form" action="{{ route('logout', app()->getLocale()) }}" method="POST" style="display: none;">
+                    @csrf
+                </form>
 
             </ul><!--end navigation menu-->
         </div><!--end navigation-->

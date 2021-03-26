@@ -39,7 +39,7 @@
                     </div>
                 </div>
                 <div class="mt-4 pt-2">
-                    <a href="#" class="btn btn-primary">Request Service</a>
+                    <a href="{{ route('client.services.quote', ['service'=>$service->uuid, 'locale'=>app()->getLocale()]) }}" class="btn btn-primary">Request Service</a>
                 </div>
             </div><!--end col-->
 

@@ -12,7 +12,7 @@
                         <ol class="breadcrumb breadcrumb-style1 mg-b-10">
                             <li class="breadcrumb-item"><a href="{{ route('admin.index', app()->getLocale()) }}">Dashboard</a></li>
                             <li class="breadcrumb-item"><a href="{{ route('admin.income', app()->getLocale()) }}">Incomes</a></li>
-                            <li class="breadcrumb-item active" aria-current="page">Add Income</li>
+                            <li class="breadcrumb-item active" aria-current="page">Edit Income</li>
                         </ol>
                     </nav>
 {{--                    <h4 class="mg-b-0 tx-spacing--1">Create New Income</h4>--}}

@@ -14,9 +14,9 @@
           @foreach ($priceHistories as $priceHistory)
             <tr>
                 <td class="tx-color-03 tx-center">{{ ++$i }}</td>
-                <td>{{ $priceHistory->user->email }}</td>
-                <td class="tx-medium text-center">{{ $priceHistory->amount }}</td>
-                <td>{{ Carbon\Carbon::parse($priceHistory->created_at, 'UTC')->isoFormat('MMMM Do YYYY, h:mm:ssa') }}</td>
+                <td>{{ !empty($priceHistory->user->email) ? $priceHistory->user->email : 'UNAVAILABLE' }}</td>
+                <td class="tx-medium text-center">{{ !empty($priceHistory->amount) ? number_format($priceHistory->amount) : '0' }}</td>
+                <td>{{ Carbon\Carbon::parse($priceHistory->created_at, 'UTC')->isoFormat('MMMM Do YYYY, h:mm:ssa') ?? Carbon\Carbon::now('UTC')->isoFormat('MMMM Do YYYY, h:mm:ssa') }}</td>
             </tr>
           @endforeach
       </tbody>

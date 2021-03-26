@@ -20,11 +20,13 @@ class CreateToolRequestsTable extends Migration
             
             $table->id();
             $table->uuid('uuid')->unique();
+            $table->string('unique_id')->unique()->comment('e.g TRF-C85BEA04');
             $table->foreignId('requested_by');
             $table->foreignId('approved_by')->nullable();
             $table->foreignId('service_request_id');
-            $table->foreignId('tool_requests_batch_id');
             $table->enum('status', ['Pending', 'Approved', 'Declined'])->default('Pending');
+            $table->enum('is_returned', ['0', '1'])->nullable()->default(0);
+            $table->softDeletes();
             $table->timestamps();
         });
     }

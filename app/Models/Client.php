@@ -14,7 +14,7 @@ class Client extends Model
      * The attributes that aren't mass assignable.
      *
      * @var array
-     * 
+     *
      */
     protected $guarded = ['created_at', 'updated_at', 'firsttime','unique_id'];
 
@@ -39,4 +39,11 @@ class Client extends Model
     }
 
     
+
+    public function account()
+    {
+        return $this->belongsTo(Account::class);
+    }
+    
 }
+

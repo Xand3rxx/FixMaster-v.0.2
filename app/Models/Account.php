@@ -43,24 +43,30 @@ class Account extends Model
     {
         return $this->hasMany(Phone::class, 'user_id', 'user_id');
     }
-
     public function payment()
     {
         return $this->hasMany(PaymentDisbursed::class, 'user_id', 'user_id');
     }
-
     public function state()
     {
         return $this->belongsTo(State::class, 'id');
     }
-
     public function lga()
     {
         return $this->belongsTo(Lga::class, 'id');
     }
-
     public function profession()
     {
         return $this->belongsTo(Profession::class, 'id');
     }
+
+    public function client()
+    {
+        return $this->hasOne(client::class);
+    }
+    public function service_request()
+    {
+        return $this->hasMany(ServiceRequest::class, 'user_id', 'client_id');
+    }
 }
+

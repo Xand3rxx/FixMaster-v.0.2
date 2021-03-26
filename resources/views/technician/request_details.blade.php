@@ -15,16 +15,16 @@
               <li class="breadcrumb-item active" aria-current="page">Request Details</li>
             </ol>
           </nav>
-          @foreach ($serviceRequest as $serviceRequest)
-          <h4 class="mg-b-0 tx-spacing--1">Job: {{ $serviceRequest['job_reference'] }}</h4><hr>
+         
+          <h4 class="mg-b-0 tx-spacing--1"></h4><hr>
           <div class="media align-items-center">
             <span class="tx-color-03 d-none d-sm-block">
               {{-- <i data-feather="credit-card" class="wd-60 ht-60"></i> --}}
               <img src="{{ asset('assets/images/default-male-avatar.png') }}" class="avatar rounded-circle" alt="Male Avatar">
             </span>
             <div class="media-body mg-sm-l-20">
-              <h4 class="tx-18 tx-sm-20 mg-b-2">Kelvin Adesanya</h4>
-              <p class="tx-13 tx-color-03 mg-b-0">08173682832</p>
+              <h4 class="tx-18 tx-sm-20 mg-b-2"></h4>
+              <p class="tx-13 tx-color-03 mg-b-0"></p>
             </div>
           </div><!-- media -->
         </div>
@@ -56,14 +56,23 @@
                         </tr>
                       </thead>
                       <tbody>
-                    
+                     
                           <tr>
-                            <td class="tx-color-03 tx-center">{{$loop->iteration }}</td>
-                            <td class="tx-medium">David Akinsola (CSE)</td>
-                            <td class="tx-medium text-success">Enroute to Clien't house</td>
-                            <td class="text-center">{{ Carbon\Carbon::parse('2020-12-28 16:58:54', 'UTC')->isoFormat('MMMM Do YYYY, h:mm:ssa') }}</td>
+
+                            <td class="tx-color-03 tx-center"></td>
+                            <td class="tx-medium">{{ $serviceRequests->first_name. ' '. $serviceRequests->middle_name. ' '. $serviceRequests->last_name ?? '' }}</td>
+                            
+                            @if($serviceRequests->status_id == 2)
+                            <td class="text-medium text-warning">Pending</td>
+                          @elseif($serviceRequests->status_id == 4)
+                            <td class="text-medium text-success">Approved</td>
+                          @else
+                            <td class="text-medium text-danger">Declined</td>
+                          @endif
+                            <td class="text-center">{{ Carbon\Carbon::parse($serviceRequests->created_at, 'UTC')->isoFormat('MMMM Do YYYY, h:mm:ssa') }}</td>
+
                           </tr>
-                          @endforeach
+                        
                       </tbody>
                     </table>
                   </div><!-- table-responsive -->
@@ -168,32 +177,42 @@
                         <tbody>
                           <tr>
                             <td class="tx-medium">Job Reference</td>
-                            <td class="tx-color-03">REF-234234723</td>
+                            <td class="tx-color-03">{{ $serviceRequests->unique_id ?? '' }}</td>
                           </tr>
                           <tr>
                             <td class="tx-medium">Service Required</td>
-                            <td class="tx-color-03">Eletronics (Computer & Laptops)</td>
+                            <td class="tx-color-03">{{$serviceRequests->service->name}}</td>
                           </tr>
                           <tr>
                             <td class="tx-medium">Scheduled Date & Time</td>
-                            <td class="tx-color-03">{{ Carbon\Carbon::parse('2020-12-28 16:58:54', 'UTC')->isoFormat('MMMM Do YYYY, h:mm:a') }}</td>
+                            <td class="tx-color-03">{{ Carbon\Carbon::parse($serviceRequests->preferred_time, 'UTC')->isoFormat('MMMM Do YYYY, h:mm:ssa') }}</td>
                           </tr>
                           <tr>
                             <td class="tx-medium">Initial Service Charge</td>
-                            <td class="tx-color-03">₦{{ number_format(10000) }} Standard</td>
+                            <td class="tx-color-03">₦{{ number_format($serviceRequests->total_amount )}}</td>
                           </tr>
                           <tr>
                             <td class="tx-medium">Current Service Charge</td>
-                            <td class="tx-color-03">₦{{ number_format(15000) }}</td>
+                            <td class="tx-color-03">₦{{ number_format($serviceRequests->total_amount )}}</td>
                           </tr>
                           <tr>
                             <td class="tx-medium">Security Code</td>
-                            <td class="tx-color-03">SEC-27AEC73E</td>
+                            <td class="tx-color-03">{{ $serviceRequests->client_security_code ?? '' }}</td>
                           </tr>
                           {{-- <tr>
                             <td class="tx-medium">Supervised By</td>
-                            <td class="tx-color-03"></td>
-                          </tr> --}}
+                            <td class="tx-color-03">David Akinsola {{-- @foreach($serviceRequests->users as $data)
+                            @foreach($data->roles as $res)
+                            @if($res->url == "admin")
+                            <td class="tx-color-03">
+
+                                {{$data->account->first_name}} {{$data->account->last_name}}
+
+                            </td>
+                            @endif
+                            @endforeach
+                            @endforeach--}}</td>
+                          </tr>
                           <tr>
                             <td class="tx-medium">CSE Assigned</td>
                             <td class="tx-color-03">David Akinsola</td>
@@ -216,7 +235,7 @@
                           </tr>
                           <tr>
                             <td class="tx-medium">Request Address</td>
-                            <td class="tx-color-03">27B, Bourdillon Road off Falomo, Ikoyi-Lagos.</td>
+                            <td class="tx-color-03">{{$serviceRequests->address->address}}</td>
                           </tr>
                           <tr>
                             <td class="tx-medium">Request Description</td>
@@ -303,7 +322,6 @@
 <script>
   $(function(){
     'use strict'
-
     $(document).on('click', '#tool-request-details', function(event) {
       event.preventDefault();
       let route = $(this).attr('data-url');
@@ -332,7 +350,6 @@
           timeout: 8000
       })
     });
-
     $(document).on('click', '#rfq-details', function(event) {
       event.preventDefault();
       let route = $(this).attr('data-url');
@@ -361,14 +378,10 @@
           timeout: 8000
       })
     });
-
     $('.close').click(function (){
       $(".modal-backdrop").remove();
     });
-
   });
-
-
 </script>
 @endpush
 

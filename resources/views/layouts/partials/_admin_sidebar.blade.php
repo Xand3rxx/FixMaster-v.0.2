@@ -146,9 +146,9 @@
         <li class="nav-item with-sub {{ Route::currentRouteNamed('admin.category', 'admin.job', 'admin.category_reviews') ? 'active show' : '' }}">
           <a href="" class="nav-link"><i data-feather="star"></i> <span>Rating</span></a>
           <ul>
-            <li class="{{ Route::currentRouteNamed('admin.category') ? 'active' : '' }}"><a href="{{ route('admin.category',  app()->getLocale()) }}">Category Rating</a></li>
-            <li class="{{ Route::currentRouteNamed('admin.job') ? 'active' : '' }}"><a href="{{ route('admin.job',  app()->getLocale()) }}">Job Rating</a></li>
-            <li class="{{ Route::currentRouteNamed('admin.category_reviews') ? 'active' : '' }}"><a href="{{ route('admin.category_reviews',  app()->getLocale()) }}">Category Reviews</a></li>
+            <li class="{{ Route::currentRouteNamed('admin.category') ? 'active' : '' }}"><a href="{{ route('admin.category',  app()->getLocale()) }}">CSE Diagnosis Rating</a></li>
+            <li class="{{ Route::currentRouteNamed('admin.job') ? 'active' : '' }}"><a href="{{ route('admin.job',  app()->getLocale()) }}">Service Rating</a></li>
+            <li class="{{ Route::currentRouteNamed('admin.category_reviews') ? 'active' : '' }}"><a href="{{ route('admin.category_reviews',  app()->getLocale()) }}">Service Reviews</a></li>
           </ul>
         </li>
 
@@ -160,7 +160,18 @@
           </ul>
         </li>
 
-        <li class="nav-item"><a href="" class="nav-link"><i data-feather="pie-chart"></i> <span>Reports</span></a></li>
+        <li class="nav-item with-sub">
+          <a href="" class="nav-link"><i data-feather="git-pull-request"></i> <span>Reports</span></a>
+          <ul>
+            
+            <li class=""><a href="#">CSE</a></li>
+            <li class=""><a href="#">Supplier</a></li>
+            <li class=""><a href="#">Job MGT</a></li>
+            <li class=""><a href="#">Technician</a></li>
+            <li class=""><a href="#">Customer</a></li>
+            <li class=""><a href="#">Marketing</a></li>
+          </ul>
+        </li>
 
         <li class="nav-item with-sub">
           <a href="" class="nav-link"><i data-feather="git-pull-request"></i> <span>Requests</span></a>

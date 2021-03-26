@@ -4,6 +4,7 @@ namespace App\Traits;
 
 use App\Models\Category;
 use App\Models\Service;
+use App\Models\ClientDiscount;
 
 trait Services
 {
@@ -100,5 +101,16 @@ trait Services
     public function bookingFees(){
 
         return \App\Models\Price::all('id', 'name', 'description', 'amount');
+    }
+
+    /**
+     * Return client active discounts
+     *
+     * @return array
+     *
+     */
+    public function clientDiscounts(){
+
+        return ClientDiscount::ClientServiceRequestsDiscounts()->get();
     }
 }

@@ -25,6 +25,7 @@ class CreateFranchiseesTable extends Migration
             $table->foreignId('user_id')->index();
             $table->foreignId('account_id')->index();
 
+            $table->string('name')->default('FixMaster');
             $table->longText('franchise_description');
 
             $table->date('established_on');

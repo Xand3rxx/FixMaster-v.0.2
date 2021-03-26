@@ -17,7 +17,7 @@ class TechnicianArtisanController extends Controller
     public function index()
     {
         return view('admin.users.technician-artisan.index')->with([
-            'users' => \App\Models\Technician::with('user')->get(),
+            'users' => \App\Models\Technician::with('user')->latest()->get(),
         ]);
     }
 

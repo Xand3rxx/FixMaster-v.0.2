@@ -36,14 +36,14 @@ $(document).ready(function () {
     });
 
 
-    //Prevent characters or string asides number in ohone number input field
+    //Prevent characters or string asides number in phone number input field
     $("#phone_number, #other_phone_number, #account_number, .amount").on("keypress keyup blur", function(event) {
         $(this).val($(this).val().replace(/[^\d].+/, ""));
         if ((event.which < 48 || event.which > 57)) {
             event.preventDefault();
         }
     });
-    
+
     //Close bootstrap modal backdrop on click
     $('.close').click(function (){
       $(".modal-backdrop").remove();
@@ -100,7 +100,7 @@ $(document).ready(function () {
     });
 
   });
-  
+
 //Initialise TinyMCE editor
 tinymce.init({
     selector: '#message_body',

@@ -38,8 +38,8 @@
                                 <tr>
                                     <th class="text-center">#</th>
                                     <th>Income Type</th>
-                                    <th>Amount</th>
-                                    <th>Percentage (%)</th>
+                                    <th class="text-center">Amount</th>
+                                    <th class="text-center">Percentage (%)</th>
                                     <th class="text-center">Action</th>
                                 </tr>
                                 </thead>
@@ -49,20 +49,20 @@
                                     <td class="tx-color-03 tx-center">{{ $loop->iteration }}</td>
                                     <td class="tx-medium">{{ $income['income_name'] }}</td>
                                     @if($income['amount'] == null)
-                                        <td class="tx-medium"> - </td>
+                                        <td class="tx-medium text-center"> - </td>
                                     @else
-                                        <td class="tx-medium"> {{ $income['amount'] }} </td>
+                                        <td class="tx-medium text-center"> {{ $income['amount'] }} </td>
                                     @endif
                                     @if($income['percentage'] == null)
-                                        <td class="tx-medium"> - </td>
+                                        <td class="tx-medium text-center"> - </td>
                                     @else
-                                        <td class="tx-medium"> {{ $income['percentage']*100 }} </td>
+                                        <td class="tx-medium text-center"> {{ $income['percentage']*100 }} </td>
                                     @endif
                                     <td class=" text-center">
                                         <div class="dropdown-file">
                                             <a href="" class="dropdown-link" data-toggle="dropdown"><i data-feather="more-vertical"></i></a>
                                             <div class="dropdown-menu dropdown-menu-right">
-                                                <a href="{{ route('admin.edit_income', ['locale' => app()->getLocale(), 'income' => $income['uuid']]) }}" class="dropdown-item details text-info"><i class="far fa-edit"></i> Edit</a>
+                                                <a href="{{ route('admin.edit_income', ['locale' => app()->getLocale(), 'income' => $income['uuid']]) }}" class="dropdown-item details text-warning"><i class="far fa-edit"></i> Edit</a>
                                                 <a href="{{ route('admin.delete_income', ['locale' => app()->getLocale(), 'income' => $income['uuid']]) }}" class="dropdown-item details text-danger"><i class="fas fa-trash"></i> Delete</a>
                                             </div>
                                         </div>
