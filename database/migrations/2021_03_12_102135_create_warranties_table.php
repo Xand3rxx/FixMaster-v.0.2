@@ -19,9 +19,11 @@ class CreateWarrantiesTable extends Migration
             $table->collation = 'utf8mb4_unicode_ci';
             
             $table->id();
+            $table->uuid('uuid');
+            $table->foreignId('user_id');
+            $table->string('unique_id')->comment('e.g. WAR-09328932');
             $table->string('name')->unique();
-            $table->unsignedInteger('amount');
-            $table->dateTime('expiration_date')->nullable();
+            $table->unsignedInteger('amount')->nullable()->default(0);
             $table->enum('warranty_type', ['free', 'extended']);
             $table->text('description')->nullable();
             $table->softDeletes();

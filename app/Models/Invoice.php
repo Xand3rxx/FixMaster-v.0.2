@@ -22,6 +22,16 @@ class Invoice extends Model
         return $this->belongsToMany(User::class);
     }
 
+    public function client()
+    {
+        return $this->belongsTo(Client::class);
+    }
+
+    public function clients()
+    {
+        return $this->belongsToMany(Client::class);
+    }
+
     public function request()
     {
         return $this->belongsTo(ServiceRequest::class, 'service_request_id');

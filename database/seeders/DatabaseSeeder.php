@@ -42,7 +42,12 @@ class DatabaseSeeder extends Seeder
             StatusSeeder::class,
             AdministratorSeeder::class,
             ServiceRequestSeeder::class,
-
+            EarningsSeeder::class,
+            IncomeSeeder::class,
+            PaymentSeeder::class,
+            WalletTransactionSeeder::class,
+            WarrantySeeder::class,
+            ServiceRequestPaymentSeeder::class,
         ]);
     }
 }

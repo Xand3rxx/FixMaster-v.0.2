@@ -19,6 +19,8 @@ class Price extends Model
     // whether the key is automatically incremented or not
     public $incrementing = false;
     
+    protected $table = 'prices';
+
     protected $fillable = [
         'uuid', 'user_id', 'name', 'description', 'amount'
     ];
@@ -63,5 +65,10 @@ class Price extends Model
     public function priceHistories()
     {
         return $this->hasMany(PriceHistory::class, 'price_id', 'id')->orderBy('created_at', 'DESC');
+    }
+
+    public function service_requests()
+    {
+        return $this->hasMany(ServiveRequest::class, 'user_id')->withDefault();
     }
 }

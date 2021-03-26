@@ -21,7 +21,7 @@ class Service extends Model
     public $incrementing = false;
 
     protected $fillable = [
-        'user_id', 'category_id', 'name', 'url', 'description', 'status', 'image'
+        'user_id', 'category_id', 'name', 'service_charge', 'description', 'status', 'image'
     ];
 
     /**
@@ -43,7 +43,6 @@ class Service extends Model
         // Create a uuid when a new serivce uuid and url is to be created
         static::creating(function ($service) {
             $service->uuid = (string) Str::uuid();
-            $service->url = (string) Str::uuid();
         });
     }
 
@@ -104,9 +103,17 @@ class Service extends Model
 
     public function serviceRequests()
     {
-        return $this->hasMany(ServiceRequest::class, 'id', 'service_id');
+        return $this->hasMany(ServiceRequest::class, 'service_id', 'id');
     }
 
+    public function clientDiscount()
+    {
+        return $this->belongsTo(ClientDiscount::class, 'client_id');
+    }
 
+    public function clientDiscounts()
+    {
+        return $this->hasMany(ClientDiscount::class, 'client_id');
+    }
 
 }

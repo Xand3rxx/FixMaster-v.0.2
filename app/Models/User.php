@@ -142,28 +142,9 @@ class User extends Authenticatable implements MustVerifyEmail
         return $this->hasMany(ActivityLog::class);
     }
 
-    /**
-     * Get the phone associated with the user.
-     */
-    public function phone()
+    public function address()
     {
-        return $this->hasOne(Phone::class);
-    }
-
-    /**
-     * Get the phone associated with the user.
-     */
-    public function phones()
-    {
-        return $this->hasMany(Phone::class);
-    }
-
-    /**
-     * Get the phone associated with the user.
-     */
-    public function addresses()
-    {
-        return $this->hasMany(Address::class);
+        return $this->hasOne(Address::class, 'user_id');
     }
 
     public function estate()
@@ -198,5 +179,14 @@ class User extends Authenticatable implements MustVerifyEmail
     public function serviceRequests()
     {
         return $this->hasMany(ServiceRequest::class);
+    }
+    
+    public function clientRequest()
+    {
+        return $this->hasOne(ServiceRequest::class, 'client_id');
+    }
+    public function clientRequests()
+    {
+        return $this->hasMany(ServiceRequest::class, 'client_id');
     }
 }

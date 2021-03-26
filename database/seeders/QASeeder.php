@@ -32,9 +32,13 @@ class QASeeder extends Seeder
         // AQ Roles and Permissions
         $qaRole = \App\Models\Role::where('slug', 'quality-assurance-user')->first();
         $qa->roles()->attach($qaRole);
+        $qa1->roles()->attach($qaRole);
+        $qa2->roles()->attach($qaRole);
 
         $qa_permission = \App\Models\Permission::where('slug', 'view-qa')->first();
         $qa->permissions()->attach($qa_permission);
+        $qa1->permissions()->attach($qa_permission);
+        $qa2->permissions()->attach($qa_permission);
 
         // QA User Type
         $qaType = new \App\Models\UserType();
@@ -57,30 +61,36 @@ class QASeeder extends Seeder
 
         // QA Account
         $qaAccount = \App\Models\Account::create([
-            'user_id'       =>  $qa->id,
-            'first_name'    => "Yvonne",
-            'middle_name'   => "Obuchi",
-            'last_name'     => "Okoye",
-            'gender'        => 'female',
-            'avatar'        => 'default-female-avatar.png',
+            'user_id'           =>  $qa->id,
+            'first_name'        =>  "Yvonne",
+            'middle_name'       =>  "Obuchi",
+            'last_name'         =>  "Okoye",
+            'gender'            =>  'female',
+            'bank_id'           =>  3,
+            'account_number'    =>  '3082632813',
+            'avatar'            =>  'default-female-avatar.png',
         ]);
 
         $qaAccount1 = \App\Models\Account::create([
-            'user_id'       =>  $qa1->id,
-            'first_name'    => "Desmond",
-            'middle_name'   => "",
-            'last_name'     => "John",
-            'gender'        => 'male',
-            'avatar'        => 'default-male-avatar.png',
+            'user_id'           =>  $qa1->id,
+            'first_name'        => "Desmond",
+            'middle_name'       => "",
+            'last_name'         => "John",
+            'gender'            => 'male',
+            'bank_id'           =>  5,
+            'account_number'    =>  '1236322078',
+            'avatar'            => 'default-male-avatar.png',
         ]);
 
         $qaAccount2 = \App\Models\Account::create([
-            'user_id'       =>  $qa2->id,
-            'first_name'    => "Bidemi",
-            'middle_name'   => "Damian",
-            'last_name'     => "Johnson",
-            'gender'        => 'male',
-            'avatar'        => 'default-male-avatar.png',
+            'user_id'           =>  $qa2->id,
+            'first_name'        => "Bidemi",
+            'middle_name'       => "Damian",
+            'last_name'         => "Johnson",
+            'gender'            => 'male',
+            'bank_id'           =>  23,
+            'account_number'    =>  '7112572853',
+            'avatar'            => 'default-male-avatar.png',
         ]);
 
         // QA Table
@@ -88,46 +98,24 @@ class QASeeder extends Seeder
         $qaTable->user_id = $qa->id;
         $qaTable->account_id = $qaAccount->id;
         // $qaTable->unique_id = 'QA-19807654';
-        $qaTable->bank_id = 3;
         $qaTable->save();
 
         $qaTable = new \App\Models\QA();
         $qaTable->user_id = $qa1->id;
         $qaTable->account_id = $qaAccount1->id;
         // $qaTable->unique_id = 'QA-19807654';
-        $qaTable->bank_id = 7;
         $qaTable->save();
 
         $qaTable = new \App\Models\QA();
         $qaTable->user_id = $qa2->id;
         $qaTable->account_id = $qaAccount2->id;
         // $qaTable->unique_id = 'QA-19807654';
-        $qaTable->bank_id = 5;
         $qaTable->save();
 
-        // // QA Phone Record 
-        // $qaPhone = \App\Models\Phone::create([
-        //     'user_id' =>  $qa->id,
-        //     'account_id'  => $qaAccount->id,
-        //     'country_id'  => 156, //Nigeria
-        //     'number'   => "09033319908"
-        // ]);
-
-        // $qaPhone = \App\Models\Phone::create([
-        //     'user_id' =>  $qa1->id,
-        //     'account_id'  => $qaAccount1->id,
-        //     'country_id'  => 156, //Nigeria
-        //     'number'   => "08030919912"
-        // ]);
-
-        // $qaPhone = \App\Models\Phone::create([
-        //     'user_id' =>  $qa2->id,
-        //     'account_id'  => $qaAccount2->id,
-        //     'country_id'  => 156, //Nigeria
-        //     'number'   => "08235610015"
-        // ]);
-
+    
         // Sample Implementation for storing Contact Details of a user
-        \App\Models\Contact::attemptToStore($qa2->id, $qaAccount2->id, 156, '08235610015', "8 Oremeji St, Oke Odo, Lagos", "3.346660", "6.586420",);
+        \App\Models\Contact::attemptToStore($qa->id, $qaAccount->id, 156, '08153782719', "1 Bankole Oki St, Ikoyi 101233, Lagos", "3.424338", "6.454340");
+        \App\Models\Contact::attemptToStore($qa1->id, $qaAccount1->id, 156, '09086279121', "Adeniran/Ogunsanya, Surulere, Lagos", "3.35686779761115", "6.49797144337352");
+        \App\Models\Contact::attemptToStore($qa2->id, $qaAccount2->id, 156, '09033319908', "10 Blueroof Avenue idowu-egba bus/stop along lasu-, Isheri Rd, Lagos", "3.2607962300662363", "6.577210941382072");
     }
 }

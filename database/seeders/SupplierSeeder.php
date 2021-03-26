@@ -32,9 +32,13 @@ class SupplierSeeder extends Seeder
         // supplier Roles and Permissions
         $supplierRole = \App\Models\Role::where('slug', 'supplier-user')->first();
         $supplier->roles()->attach($supplierRole);
+        $supplier1->roles()->attach($supplierRole);
+        $supplier2->roles()->attach($supplierRole);
 
         $supplierPermission = \App\Models\Permission::where('slug', 'view-suppliers')->first();
         $supplier->permissions()->attach($supplierPermission);
+        $supplier1->permissions()->attach($supplierPermission);
+        $supplier2->permissions()->attach($supplierPermission);
 
         // supplier User Type
         $supplierType = new \App\Models\UserType();
@@ -123,28 +127,10 @@ class SupplierSeeder extends Seeder
         $supplierTable->business_description = 'Take a risk and keep testing, because what works today won\'t work tomorrow, but what worked yesterday may work again';
         $supplierTable->save();
 
-        // // supplier Phone record Account
-        // $supplierPhone = \App\Models\Phone::create([
-        //     'user_id' =>  $supplier->id,
-        //     'account_id'  => $supplierAccount->id,
-        //     'country_id'  => 156, //Nigeria
-        //     'number'   => "08168900129"
-        // ]);
-
-        // $supplierPhone = \App\Models\Phone::create([
-        //     'user_id' =>  $supplier1->id,
-        //     'account_id'  => $supplierAccount1->id,
-        //     'country_id'  => 156, //Nigeria
-        //     'number'   => "08134362177"
-        // ]);
-
-        // $supplierPhone = \App\Models\Phone::create([
-        //     'user_id' =>  $supplier2->id,
-        //     'account_id'  => $supplierAccount2->id,
-        //     'country_id'  => 156, //Nigeria
-        //     'number'   => "08016706323"
-        // ]);
+       
         // Sample Implementation for storing Contact Details of a user
-        \App\Models\Contact::attemptToStore($supplier2->id, $supplierAccount2->id, 156, '09072354902', "8 Oremeji St, Oke Odo, Lagos", "3.346660", "6.586420",);
+        \App\Models\Contact::attemptToStore($supplier->id, $supplierAccount->id, 156, '08165551727', "3-28 Segun Adesanya St, Ejigbo, Lagos", "3.2875562", "6.5604542");
+        \App\Models\Contact::attemptToStore($supplier1->id, $supplierAccount1->id, 156, '08039473705', "9 Gregal Mission St, Iju, Lagos", "3.3386946", "6.6654238");
+        \App\Models\Contact::attemptToStore($supplier2->id, $supplierAccount2->id, 156, '08145318883', "Suite 8a Tafawa Balewa Square Onikan, 101231, Lagos", "3.3992997", "6.4486122");
     }
 }

@@ -110,29 +110,9 @@ class AdministratorSeeder extends Seeder
         $adminTable->account_id = $adminAccount2->id;
         $adminTable->save();
 
-        // // Administrator Phone record Account
-        // $adminPhone = \App\Models\Phone::create([
-        //     'user_id' =>  $admin->id,
-        //     'account_id'  => $adminAccount->id,
-        //     'country_id'  => 156, //Nigeria
-        //     'number'   => "07057384920"
-        // ]);
-
-        // $adminPhone = \App\Models\Phone::create([
-        //     'user_id' =>  $admin1->id,
-        //     'account_id'  => $adminAccount1->id,
-        //     'country_id'  => 156, //Nigeria
-        //     'number'   => "08053782391"
-        // ]);
-
-        // $adminPhone = \App\Models\Phone::create([
-        //     'user_id' =>  $admin2->id,
-        //     'account_id'  => $adminAccount2->id,
-        //     'country_id'  => 156, //Nigeria
-        //     'number'   => "08027438470"
-        // ]);
-
         // Sample Implementation for storing Contact Details of a user
-        \App\Models\Contact::attemptToStore($admin2->id, $adminAccount2->id, 156, '09182354902', "8 Oremeji St, Oke Odo, Lagos", "3.346660", "6.586420");
+        \App\Models\Contact::attemptToStore($admin->id, $adminAccount->id, 156, '08063508280', "Camp 1 block1 flat 6, Nigeria Army cantonment ojo, 300001, Lagos", "3.223188", "6.4683588");
+        \App\Models\Contact::attemptToStore($admin1->id, $adminAccount1->id, 156, '08124300984', "Omole Phase 2, Isheri, Lagos", "3.3730327", "6.6304984");
+        \App\Models\Contact::attemptToStore($admin2->id, $adminAccount2->id, 156, '07064894565', "1-11 Ernest Orachiri Cl, Araromi, Lagos", "3.3858776", "6.5499573");
     }
 }

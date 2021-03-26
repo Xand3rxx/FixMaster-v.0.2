@@ -19,12 +19,12 @@ class CreateServiceRequestWarrantiesTable extends Migration
             $table->collation = 'utf8mb4_unicode_ci';
 
             $table->id();
+            $table->foreignId('created_by');
             $table->foreignId('warranty_id');
             $table->foreignId('service_request_id')->unique();
             $table->dateTime('start_date');
-            $table->dateTime('expiration_date')->nullable();
-            $table->enum('warranty_type', ['free', 'extended']);
-            $table->text('reason')->nullable();
+            $table->dateTime('expiration_date');
+            $table->timestamps();
         });
     }
 
