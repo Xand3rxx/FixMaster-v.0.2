@@ -507,12 +507,15 @@ class ClientController extends Controller
         
             $all = $request->all();
             dd($all);
+            // $nttr = $request->get("booking_fee");
+            // $services = implode(',', (array) $request->input('booking_fee'));
+            // dd($services);
             
 
             //if payment method is wallet
             if($request->payment_method == 'Wallet'){
+                // if wallet balance is less than the service fee
                 if($request->balance<$request->booking_fee){
-
                     $service_request                        = new Servicerequest;  
                     $service_request->cliend_id             = auth()->user()->id;
                     $service_request->service_id            = $request->service_id;
@@ -529,7 +532,7 @@ class ClientController extends Controller
                     $service_request->closing_balance       = $request->balance;
                     dd($service_request);
                 }else{
-                        Session::flash('alert', 'sorry!, service amount is less than wallet balance');
+                        Session::flash('alert', 'sorry!, your wallet balance is less than the service amount, pls use other payment method or add more fund to your wallet');
                     }                  
                 }
                 if ($request->payment_method == 'Offline') {
