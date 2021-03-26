@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateToolRequestsTable extends Migration
+class CreateServiceRequestProgressesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,19 +13,16 @@ class CreateToolRequestsTable extends Migration
      */
     public function up()
     {
-        Schema::create('tool_requests', function (Blueprint $table) {
+        Schema::create('service_request_progresses', function (Blueprint $table) {
             $table->engine = 'InnoDB';
             $table->charset = 'utf8mb4';
             $table->collation = 'utf8mb4_unicode_ci';
-            
+
             $table->id();
-            $table->uuid('uuid')->unique();
-            $table->string('unique_id')->unique()->comment('e.g TRF-C85BEA04');
-            $table->foreignId('requested_by');
-            $table->foreignId('approved_by')->nullable();
+            $table->foreignId('user_id');
             $table->foreignId('service_request_id');
-            $table->enum('status', ['Pending', 'Approved', 'Declined'])->default('Pending');
-            $table->enum('is_returned', ['0', '1'])->nullable()->default(0);
+            $table->foreignId('status_id');
+            $table->text('progress');
             $table->softDeletes();
             $table->timestamps();
         });
@@ -38,6 +35,6 @@ class CreateToolRequestsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('tool_requests');
+        Schema::dropIfExists('service_request_progresses');
     }
 }

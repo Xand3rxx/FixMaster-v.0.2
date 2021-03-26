@@ -16,42 +16,6 @@ class ServiceRequestSeeder extends Seeder
      */
     public function run()
     {
-        // $serviceRequest = new ServiceRequest();
-        // $serviceRequest->user_id = '2';
-        // $serviceRequest->admin_id = '1';
-        // $serviceRequest->cse_id = '2';
-        // $serviceRequest->technician_id = '13';
-        // $serviceRequest->service_id = '2';
-        // $serviceRequest->job_reference = 'REF-66EB5A26';
-        // $serviceRequest->security_code = 'SEC-27AEC73E';
-        // $serviceRequest->service_request_status_id = '1';
-        // $serviceRequest->total_amount = '4500';
-        // $serviceRequest->save();
-
-        // $serviceRequest = new ServiceRequest();
-        // $serviceRequest->user_id = '2';
-        // $serviceRequest->admin_id = '1';
-        // $serviceRequest->cse_id = '2';
-        // $serviceRequest->technician_id = '13';
-        // $serviceRequest->service_id = '1';
-        // $serviceRequest->job_reference = 'REF-330CB862';
-        // $serviceRequest->security_code = 'SEC-88AC1B19';
-        // $serviceRequest->service_request_status_id = '1';
-        // $serviceRequest->total_amount = '2500';
-        // $serviceRequest->save();
-
-        // $serviceRequest = new ServiceRequest();
-        // $serviceRequest->user_id = '2';
-        // $serviceRequest->admin_id = '1';
-        // $serviceRequest->cse_id = '3';
-        // $serviceRequest->technician_id = '10';
-        // $serviceRequest->service_id = '3';
-        // $serviceRequest->job_reference = 'REF-27D2F0BE';
-        // $serviceRequest->security_code = 'SEC-88AC1B19';
-        // $serviceRequest->service_request_status_id = '1';
-        // $serviceRequest->total_amount = '3500';
-        // $serviceRequest->save();
-
         DB::table('service_requests')->delete();
         DB::table('service_request_cancellations')->delete();
         DB::table('service_request_assigned')->delete();
@@ -75,11 +39,11 @@ class ServiceRequestSeeder extends Seeder
                 'price_id'              => 1, 
                 'phone_id'              => 1, 
                 'address_id'            => 1, 
-                'client_discount_id'    => NULL, 
+                'client_discount_id'    => 1, 
                 'client_security_code'  => 'SEC-02E65DEF',
                 'status_id'             => 2, 
                 'description'           => 'My PC no longer comes on even when plugged into a power source.', 
-                'total_amount'          => 3500, 
+                'total_amount'          => 1500, 
                 'preferred_time'        => NULL,
             ),
             array(
@@ -97,7 +61,7 @@ class ServiceRequestSeeder extends Seeder
                 'client_security_code'  => 'SEC-27AEC73E', 
                 'status_id'             => 2, 
                 'description'           => 'Hello FixMaster, my dish washer pipe broke an hour ago, now water is spilling profusely, please send help quickly. Thanks', 
-                'total_amount'          => 2500, 
+                'total_amount'          => 2000, 
                 'preferred_time'        => \Carbon\Carbon::now('UTC'),
             ),
             array(
@@ -115,7 +79,7 @@ class ServiceRequestSeeder extends Seeder
                 'client_security_code'  => 'SEC-88AC1B19', 
                 'status_id'             => 2, 
                 'description'           => 'Washing machine plug is sparking. the cable appears melted. Thermocool washing machine.', 
-                'total_amount'          => 4700, 
+                'total_amount'          => 1000, 
                 'preferred_time'        => \Carbon\Carbon::now('UTC'),
             ),
             array(
@@ -133,7 +97,7 @@ class ServiceRequestSeeder extends Seeder
                 'client_security_code'  => 'SEC-35FA9E28', 
                 'status_id'             => 3, 
                 'description'           => 'Please I urgently need a repair for my computer, It goes off saying overheating. I think the fan is faulty. You know it\'s New Year, so I\'ll need as swift response, thanks.', 
-                'total_amount'          => 2500, 
+                'total_amount'          => 2000, 
                 'preferred_time'        => \Carbon\Carbon::now('UTC'),
             ),
             array(
@@ -151,7 +115,7 @@ class ServiceRequestSeeder extends Seeder
                 'client_security_code'  => 'SEC-92F0978A', 
                 'status_id'             => 4, 
                 'description'           => 'System crash error message displayed on screen.', 
-                'total_amount'          => 6000, 
+                'total_amount'          => 2000, 
                 'preferred_time'        => \Carbon\Carbon::now('UTC'),
             ),
             array(
@@ -169,7 +133,7 @@ class ServiceRequestSeeder extends Seeder
                 'client_security_code'  => 'SEC-EBC1D654', 
                 'status_id'             => 1, 
                 'description'           => 'I cannot really explain what my dilemma is at the moment, just send someone over.', 
-                'total_amount'          => 3500, 
+                'total_amount'          => 2000, 
                 'preferred_time'        => \Carbon\Carbon::now('UTC'),
             ),
             array(
@@ -187,7 +151,7 @@ class ServiceRequestSeeder extends Seeder
                 'client_security_code'  => 'SEC-A62C515E', 
                 'status_id'             => 1, 
                 'description'           => 'My generator refuses to come on after several attempts.', 
-                'total_amount'          => 2500, 
+                'total_amount'          => 1500, 
                 'preferred_time'        => \Carbon\Carbon::now('UTC'),
             ),
 

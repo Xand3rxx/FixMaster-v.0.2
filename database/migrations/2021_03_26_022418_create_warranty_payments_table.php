@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreatePaymentsTable extends Migration
+class CreateWarrantyPaymentsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,21 +13,17 @@ class CreatePaymentsTable extends Migration
      */
     public function up()
     {
-        Schema::create('payments', function (Blueprint $table) {
+        Schema::create('warranty_payments', function (Blueprint $table) {
             $table->engine = 'InnoDB';
             $table->charset = 'utf8mb4';
             $table->collation = 'utf8mb4_unicode_ci';
 
             $table->id();
             $table->foreignId('user_id');
+            $table->foreignId('payment_id');
+            $table->foreignId('warranty_id');
+            $table->string('unique_id', 191)->comment('e.g. WAR-36786429');
             $table->integer('amount')->unsigned();
-            $table->enum('payment_channel', ['paystack','flutterwave','offline','wallet']);
-            $table->enum('payment_for', ['e-wallet','service-request','warranty']);
-            $table->string('unique_id')->comment('e.g. REF-330CB862, WAL-23782382, WAR-09328932');
-            $table->string('reference_id', 191)->unique();
-            $table->string('transaction_id', 191)->nullable();
-
-            $table->enum('status', ['success','pending','failed','timeout']);
             $table->softDeletes();
             $table->timestamps();
         });
@@ -40,6 +36,6 @@ class CreatePaymentsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('payments');
+        Schema::dropIfExists('warranty_payments');
     }
 }

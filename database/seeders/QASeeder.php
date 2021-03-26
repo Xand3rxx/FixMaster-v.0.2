@@ -114,8 +114,8 @@ class QASeeder extends Seeder
 
     
         // Sample Implementation for storing Contact Details of a user
-        \App\Models\Contact::attemptToStore($qa->id, $qaAccount->id, 156, '08153782719', "1 Bankole Oki St, Ikoyi 101233, Lagos", "3.424338", "6.454340",);
-        \App\Models\Contact::attemptToStore($qa1->id, $qaAccount1->id, 156, '09086279121', "Adeniran/Ogunsanya, Surulere, Lagos", "3.35686779761115", "6.49797144337352",);
-        \App\Models\Contact::attemptToStore($qa2->id, $qaAccount2->id, 156, '09033319908', "10 Blueroof Avenue idowu-egba bus/stop along lasu-, Isheri Rd, Lagos", "3.2607962300662363", "6.577210941382072",);
+        \App\Models\Contact::attemptToStore($qa->id, $qaAccount->id, 156, '08153782719', "1 Bankole Oki St, Ikoyi 101233, Lagos", "3.424338", "6.454340");
+        \App\Models\Contact::attemptToStore($qa1->id, $qaAccount1->id, 156, '09086279121', "Adeniran/Ogunsanya, Surulere, Lagos", "3.35686779761115", "6.49797144337352");
+        \App\Models\Contact::attemptToStore($qa2->id, $qaAccount2->id, 156, '09033319908', "10 Blueroof Avenue idowu-egba bus/stop along lasu-, Isheri Rd, Lagos", "3.2607962300662363", "6.577210941382072");
     }
 }

@@ -44,6 +44,10 @@ class DatabaseSeeder extends Seeder
             ServiceRequestSeeder::class,
             EarningsSeeder::class,
             IncomeSeeder::class,
+            PaymentSeeder::class,
+            WalletTransactionSeeder::class,
+            WarrantySeeder::class,
+            ServiceRequestPaymentSeeder::class,
         ]);
     }
 }

@@ -128,7 +128,7 @@ class FranchiseeSeeder extends Seeder
         $franchiseeTable->save();
 
         // Sample Implementation for storing Contact Details of a user
-        \App\Models\Contact::attemptToStore($franchisee->id, $franchiseeAccount->id, 156, '081657163289', "75 Adisa Bashua St, Surulere, Lagos", "3.351161", "6.496493");
+        \App\Models\Contact::attemptToStore($franchisee->id, $franchiseeAccount->id, 156, '08165716389', "75 Adisa Bashua St, Surulere, Lagos", "3.351161", "6.496493");
         \App\Models\Contact::attemptToStore($franchisee1->id, $franchiseeAccount1->id, 156, '08026819127', "Alaba International Market Rd, Ojo, Lagos", "3.140905", "6.4679");
         \App\Models\Contact::attemptToStore($franchisee2->id, $franchiseeAccount2->id, 156, '09082354903', "2 Ayeronwi St, Ikotun, Lagos", "3.33639", "6.50536");
     }

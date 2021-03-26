@@ -116,6 +116,8 @@ class CSESeeder extends Seeder
         $cseTable->save();
 
         // Sample Implementation for storing Contact Details of a user
-        \App\Models\Contact::attemptToStore($cse->id, $cseAccount->id, 156, '09082354909', "22c Senrolu street, Off Ligali Ayorinde St, Victoria Island, Lagos", "3.4415315157748347", "6.4253969715941475");
+        \App\Models\Contact::attemptToStore($cse->id, $cseAccount->id, 156, '09082354909', "22c Senrolu street, Off Ligali Ayorinde St, Victoria Island, Lagos", "3.4393863", "6.425007");
+        \App\Models\Contact::attemptToStore($cse1->id, $cseAccount1->id, 156, '07063498499', "139 Adeniji Adele St, Lagos Island, Lagos", "3.3867822", "6.4651394");
+        \App\Models\Contact::attemptToStore($cse2->id, $cseAccount2->id, 156, '08129444994', "14 421 Rd, Festac Town, Lagos", "3.2809022", "6.4785962");
     }   
 }
