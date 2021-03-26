@@ -134,22 +134,6 @@ class User extends Authenticatable implements MustVerifyEmail
         return $this->hasMany(ActivityLog::class);
     }
 
-    /**
-     * Get the phone associated with the user.
-     */
-    public function phone()
-    {
-        return $this->hasOne(Phone::class);
-    }
-
-    /**
-     * Get the phone associated with the user.
-     */
-    public function phones()
-    {
-        return $this->hasMany(Phone::class);
-    }
-
     public function address()
     {
         return $this->hasOne(Address::class, 'user_id');

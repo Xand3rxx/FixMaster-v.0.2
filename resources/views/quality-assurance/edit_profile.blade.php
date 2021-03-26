@@ -88,11 +88,10 @@
                           <div class="form-group col-md-3">
                             <label>Gender</label>
                             <select name="gender" id="gender" class="form-control @error('gender') is-invalid @enderror" required>
-                              <option value="{{$result->account->gender}}">{{$result->account->gender}}</option>
-                              <option value="">Choose....</option>
-                              <option value="male">Male</option>
-                              <option value="female">Female</option>
-                              <option value="others">Others</option>
+                              <option value="">Select...</option>
+                              <option value="male" {{ old('gender') ?? $result->account->gender == 'male' ? 'selected' : ''}}>Male</option>
+                              <option value="female" {{ old('gender') ?? $result->account->gender == 'female' ? 'selected' : ''}}>Female</option>
+                              <option value="others" {{ old('gender') ?? $result->account->gender == 'others' ? 'selected' : ''}}>Others</option>
                            </select>
                            @error('gender')
                            <span class="invalid-feedback" role="alert">
@@ -113,7 +112,7 @@
                           <!-- Phone Number -->
                           <div class="form-group col-md-4">
                             <label for="inputEmail4">Phone Number</label>
-                            <input type="tel" class="form-control @error('phone_number') is-invalid @enderror" id="phone_number" name="phone_number" maxlength="11" value="{{ old('phone_number')?? $result->phone->number }}">
+                            <input type="tel" class="form-control @error('phone_number') is-invalid @enderror" id="phone_number" name="phone_number" maxlength="11" value="{{ old('phone_number') }}">
                             @error('phone_number')
                               <span class="invalid-feedback" role="alert">
                                   <strong>{{ $message }}</strong>
@@ -135,33 +134,40 @@
                                 </div>
                               </div>
 
-                            <!-- Full Address -->
-                            <div class="form-group col-md-12">
-                              <label for="inputAddress2">Full Address</label>
-                              <textarea rows="3" class="user_address form-control @error('full_address') is-invalid @enderror" id="" name="full_address" value="{{ old('full_address')?? $result->address->address }}">{{$result->address->address}}</textarea>
-                              @error('full_address')
+                            <div class="form-group col-md-6">
+                              <label>Bank</label>
+                              <select name="bank_id" id="bank_id" class="form-control @error('bank_id') is-invalid @enderror" required>
+                                <option value="">Select...</option>
+                                @foreach($banks as $bank)
+                                <option value="{{ $bank->id }}" {{ old('bank_id') == $bank->id ? 'selected' : ''}}>{{ $bank->name }}</option>
+                                @endforeach
+                            </select>
+                            @error('bank_id')
                             <span class="invalid-feedback" role="alert">
                                 <strong>{{ $message }}</strong>
                             </span>
                             @enderror
                             </div>
 
-                            <div class="divider-text mt-4">Bank Account Details</div>
                             <div class="form-group col-md-6">
-                              <label>Bank</label>
-                              <select name="bank_id" id="bank_id" class="form-control @error('bank_id') is-invalid @enderror" required>
-                                <option value="">Choose....</option>
-                                <option value="male">Male</option>
-                                <option value="female">Female</option>
-                                <option value="others">Others</option>
-                            </select>
-                            @error('bank_id')
+                              <label for="inputEmail4">Account Number</label>
+                              <input type="tel" class="form-control @error('account_number') is-invalid @enderror" id="account_number" name="account_number" maxlength="11" value="{{ old('account_number') }}" required>
+                              @error('account_number')
+                                <span class="invalid-feedback" role="alert">
+                                    <strong>{{ $message }}</strong>
+                                </span>
+                              @enderror
+                            </div>
+
+                            <!-- Full Address -->
+                            <div class="form-group col-md-12">
+                              <label for="inputAddress2">Full Address</label>
+                              <textarea rows="3" class="user_address form-control @error('full_address') is-invalid @enderror" id="" name="full_address" value="{{ old('full_address') }}"></textarea>
+                              @error('full_address')
                             <span class="invalid-feedback" role="alert">
                                 <strong>{{ $message }}</strong>
                             </span>
-                            </div>
-
-                            <div class="form-group col-md-6">
+                            @enderror
                             </div>
 
                         </div>
@@ -191,7 +197,7 @@
                         <div class="form-group col-md-4">
                           <label for="new_password">New Password</label>
                           <input type="password" class="form-control @error('new_password') is-invalid @enderror" id="new_password" name="new_password">
-                          <small style="color:red">Password must be 6 characters at least.</small>
+                          <small class="text-muted">Password must be minimum of 6 characters</small>
                           @error('new_password')
                             <span class="invalid-feedback" role="alert">
                                 <strong>{{ $message }}</strong>

@@ -41,10 +41,7 @@ class QualityAssuranceProfileController extends Controller
 
         $banks = \App\Models\Bank::get(['id', 'name']);
         
-
-        return $banks;
-
-        return view('quality-assurance.edit_profile', compact('result'));
+        return view('quality-assurance.edit_profile', compact('result', 'banks'));
     }
 
     public function update(Request $request){

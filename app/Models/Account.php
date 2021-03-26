@@ -36,13 +36,7 @@ class Account extends Model
         return $this->belongsTo(User::class);
     }
 
-    /**
-     * Get the phone associated with the user.
-     */
-    public function phone()
-    {
-        return $this->hasMany(Phone::class, 'user_id', 'user_id');
-    }
+    
     public function payment()
     {
         return $this->hasMany(PaymentDisbursed::class, 'user_id', 'user_id');
