@@ -54,7 +54,9 @@
                                             <td class="tx-medium">{{ $estate['estate_name'] }}</td>
                                             <td class="tx-medium">{{ $estate['first_name'] .' '.$estate['last_name'] }}</td>
                                             <td class="tx-medium">{{ $estate['phone_number'] }}</td>
-                                            <td class="text-medium">5</td>
+                                            <td class="text-medium">
+                                                {{ \App\Models\Client::where('estate_id', $estate['id'])->count() }}
+                                            </td>
                                             @if($estate['approved_by'] == null)
                                                 <td class="text-medium text-danger">Pending</td>
                                             @else
@@ -76,9 +78,6 @@
                                                     <div class="dropdown-menu dropdown-menu-right">
                                                         <a href="{{ route('admin.estate_summary', [ 'estate'=>$estate['uuid'], 'locale'=>app()->getLocale() ]) }}" class="dropdown-item details text-primary"><i class="far fa-user"></i> Summary</a>
                                                         <a href="{{ route('admin.edit_estate', [ 'estate'=>$estate['uuid'], 'locale'=>app()->getLocale() ]) }}" class="dropdown-item details text-info"><i class="far fa-edit"></i> Edit</a>
-                                                        <a href="" class="dropdown-item details text-secondary"><i class="fa fa-percent"></i> Discount </a>
-
-
                                                         @if($estate['approved_by'] == null || $estate['is_active'] == 'declined' || $estate['is_active'] == 'pending')
                                                         @if($estate['approved_by'] != null || $estate['is_active'] == 'declined' || $estate['is_active'] == 'pending')
                                                             <a href="{{ route('admin.approve_estate', ['estate'=>$estate->uuid, 'locale'=>app()->getLocale()]) }}" class="dropdown-item details text-success"><i class="fas fa-ban"></i> Approve</a>

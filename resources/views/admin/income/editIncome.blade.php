@@ -60,7 +60,7 @@
                                 </div>
                                 <div class="form-group col-md-12 @if($income['income_type'] != 'percentage') d-none @endif d-percentage">
                                     <label for="percentage">Percentage <strong>(%)</strong> </label>
-                                    <input type="text" class="form-control @error('percentage') is-invalid @enderror" id="percentage" name="percentage" placeholder="Percentage" value="{{ $income['percentage'] }}">
+                                    <input type="text" class="form-control @error('percentage') is-invalid @enderror" id="percentage" name="percentage" placeholder="Percentage" value="{{ $income['percentage']*100 }}">
                                     @error('percentage')
                                     <span class="invalid-feedback" role="alert">
                                                 <strong>{{ $message }}</strong>

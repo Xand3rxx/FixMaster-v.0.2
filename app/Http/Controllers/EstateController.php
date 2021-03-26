@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Client;
 use Route;
 use Auth;
 use Illuminate\Support\Facades\URL;
@@ -32,8 +33,8 @@ class EstateController extends Controller
         $getAdminId = Estate::select('approved_by')->pluck('approved_by');
         $approvedBy = User::find($getAdminId);
 
-        $userRole = Auth::user()->type->role->url;
-        // dd($userRole);
+//        $clientEstateCount = Client::where('estate_id', 1)->count();
+//         dd($clientEstateCount);
 
         return view('admin.estate.list', compact('estates', 'approvedBy'));
     }
@@ -142,7 +143,9 @@ class EstateController extends Controller
      */
     public function estateSummary($language, Estate $estate)
     {
-        return view('admin.estate.summary', compact('estate'));
+        $registeredClients = Client::where('estate_id', $estate->id)->get();
+//        dd($registeredClients);
+        return view('admin.estate.summary', compact('estate', 'registeredClients'));
     }
 
     /**

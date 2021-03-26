@@ -20,10 +20,8 @@ class SimulationController extends Controller
     public function diagnosticSimulation()
     {
         $serviceRequests = ServiceRequest::all();
-        $invoices = Invoice::select('*')->where('service_request_id', 1)->get();
         $data = [
             'serviceRequests' => $serviceRequests,
-            'invoices' => $invoices
         ];
         return view('admin.simulation.diagnostic', $data);
     }
@@ -42,7 +40,7 @@ class SimulationController extends Controller
 //        dd($user_id, $service_request_id, $invoice_type, $total, $amount_due, $amount_paid, $hours_spent, $status);
 
         $this->diagnosticInvoice($user_id, $service_request_id, $invoice_type, $total, $amount_due, $amount_paid, $hours_spent, $status);
-        return redirect()->route('admin.diagnostic', app()->getLocale());
+        return redirect()->route('admin.rfq', app()->getLocale());
     }
 
     public function completeService($language, ServiceRequest $serviceRequest)
@@ -65,10 +63,8 @@ class SimulationController extends Controller
     public function rfqSimulation()
     {
         $serviceRequests = ServiceRequest::all();
-        $invoices = Invoice::select('*')->where('service_request_id', 1)->get();
         $data = [
             'serviceRequests' => $serviceRequests,
-            'invoices' => $invoices
         ];
         return view('admin.simulation.rfq', $data);
     }
@@ -172,12 +168,8 @@ class SimulationController extends Controller
 
     public function invoice($language, Invoice $invoice)
     {
-//        dd($invoice);
-        $data = [
-          'invoice' => $invoice
-        ];
-
-
-        return view('admin.invoices.invoice', $data);
+        return view('admin.invoices.invoice')->with([
+            'invoice' => $invoice
+        ]);
     }
 }

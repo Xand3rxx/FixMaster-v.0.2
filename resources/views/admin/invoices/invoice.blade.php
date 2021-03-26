@@ -218,7 +218,7 @@
                                                         <div class="row">
                                                             <div class="col-lg-4 col-md-5 ml-auto">
                                                                 <ul class="list-unstyled h5 font-weight-normal mt-4 mb-0">
-                                                                    <li class="d-flex justify-content-between">Total :<span>₦ {{ number_format($invoice->rfqs->total_amount) }}</span></li>
+                                                                    <li class="d-flex justify-content-between">Total :<span>₦ {{ number_format($invoice->rfqs->total_amount + $invoice->rfqs->rfqSupplier->devlivery_fee) }}</span></li>
 {{--                                                                    <li class="text-muted d-flex justify-content-between">Labour Cost :<span> ₦ {{ number_format(3500) }}</span></li>--}}
 {{--                                                                    <li class="text-muted d-flex justify-content-between">FixMaster Royalty :<span> ₦ {{ number_format(5000) }}</span></li>--}}
 {{--                                                                    <li class="text-muted d-flex justify-content-between">Taxes :<span> ₦ {{ number_format(253) }}</span></li>--}}
