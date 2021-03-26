@@ -35,15 +35,7 @@ class CustomerServiceExecutiveController extends Controller
             'banks' => \App\Models\Bank::select('id', 'name')->orderBy('name', 'ASC')->get(),
             'franchisees' => \App\Models\Franchisee::select('id', 'cac_number')->latest()->get(),
             // 'town' => \App\Models\Town::select('id', 'name')->latest()->get(),
-            // services
-            'services' => [
-                'Electronics'        => [
-                    '1' => 'Computer & Laptops'
-                ],
-                'Household Appliances' => [
-                    '1' => 'Dish & Washing Machine'
-                ]
-            ],
+
         ]);
     }
 
@@ -55,10 +47,9 @@ class CustomerServiceExecutiveController extends Controller
      */
     public function store(Request $request)
     {
-        // Validate Request
-        $valid = $this->validateCreateCustomerServiceExecutive($request);
+        (array) $valid = $this->validateCreateCustomerServiceExecutive($request);
         // Register a CSE
-        $registered = $this->register($valid);
+        (bool) $registered = $this->register($valid);
 
         return ($registered == true)
             ? redirect()->route('admin.users.cse.index', app()->getLocale())->with('success', "A Customer Service Executive Account Created Successfully!!")

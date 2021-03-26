@@ -87,37 +87,4 @@
     </div><!-- container -->
 </div>
 
-
-@section('scripts')
-<script>
-    $(document).ready(function() {
-
-        $('#request-sorting').on('change', function() {
-            let option = $("#request-sorting").find("option:selected").val();
-            switch (option) {
-                case 'Date':
-                    $('.specific-date').removeClass('d-none');
-                    $('.sort-by-year, .date-range').addClass('d-none');
-                    break;
-
-                case 'Month':
-                    $('.sort-by-year').removeClass('d-none');
-                    $('.specific-date, .date-range').addClass('d-none');
-                    break;
-
-                case 'Date Range':
-                    $('.date-range').removeClass('d-none');
-                    $('.specific-date, .sort-by-year').addClass('d-none');
-                    break;
-
-                default:
-                    $('.specific-date, .sort-by-year, .date-range').addClass('d-none');
-                    break;
-            }
-
-        });
-    });
-</script>
-@endsection
-
 @endsection

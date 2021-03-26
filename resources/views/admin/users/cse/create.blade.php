@@ -70,6 +70,15 @@
                         </div>
 
                         <div class="form-group col-md-4">
+                            <label for="phone_number">Phone Number</label>
+                            <input type="tel" class="form-control @error('phone_number') is-invalid @enderror" placeholder="Phone Number" name="phone_number" id="phone_number" value="{{ old('phone_number') }}" maxlength="11" required autocomplete="off">
+                            @error('phone_number')
+                            <x-alert :message="$message" />
+                            @enderror
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-md-4">
                             <label>Select a Franchisee</label>
                             <select id="franchisee_id" name="franchisee_id" class="custom-select franchisee_id @error('franchisee_id') is-invalid @enderror">
                                 <option selected disabled value="0">Select...</option>
@@ -81,22 +90,18 @@
                             <x-alert :message="$message" />
                             @enderror
                         </div>
-
-
-                    </div>
-                    <div class="form-row">
-                        <div class="form-group col-md-6">
+                        <div class="form-group col-md-4">
                             <label for="password">Password</label>
                             <input type="password" class="form-control @error('password') is-invalid @enderror" id="password" name="password" placeholder="Password" autocomplete="off">
                             <small id="passwordHelpBlock" class="form-text text-muted">
                                 Password must be 6 characters at least.
-                                <a href="{{ route('admin.users.cse.index', app()->getLocale()) }}" class="random-password"> Generate random password </a>
+                                <a href="{{ route('admin.users.cse.index', app()->getLocale()) }}" class="random-password"> Generate random</a>
                             </small>
                             @error('password')
                             <x-alert :message="$message" />
                             @enderror
                         </div>
-                        <div class="form-group col-md-6">
+                        <div class="form-group col-md-4">
                             <label for="confirm_password">Confirm Password</label>
                             <input type="password" class="form-control @error('confirm_password') is-invalid @enderror" id="confirm_password" name="confirm_password" placeholder="Confirm Password" autocomplete="off">
                             @error('confirm_password')
@@ -105,7 +110,7 @@
                         </div>
                     </div>
                     <div class="form-row">
-                        <div class="form-group col-md-12">
+                        <div class="form-group col-md-4">
                             <label>Profile Avatar</label>
                             <div class="custom-file">
                                 <input type="file" accept="image/*" class="custom-file-input @error('avatar') is-invalid @enderror" name="avatar" id="avatar">
@@ -116,8 +121,8 @@
                             </div>
                         </div>
                         <!-- If status is needed re add it here -->
-                        
-                        <div class="form-group col-md-6">
+
+                        <div class="form-group col-md-4">
                             <label>Bank Name</label>
                             <select id="bank_id" name="bank_id" class="custom-select bank_id @error('bank_id') is-invalid @enderror">
                                 <option selected value="">Select...</option>
@@ -129,7 +134,7 @@
                             <x-alert :message="$message" />
                             @enderror
                         </div>
-                        <div class="form-group col-md-6">
+                        <div class="form-group col-md-4">
                             <label for="account_number">Account Number</label>
                             <input type="tel" required class="form-control @error('account_number') is-invalid @enderror" id="account_number" name="account_number" value="{{ old('account_number') }}" placeholder="Account Number" maxlength="10" autocomplete="off">
                             @error('account_number')
@@ -172,16 +177,9 @@
                     </div>
 
                     <div class="form-row">
-                        <div class="form-group col-md-4">
-                            <label for="phone_number">Phone Number</label>
-                            <input type="tel" class="form-control @error('phone_number') is-invalid @enderror" placeholder="Phone Number" name="phone_number" id="phone_number" value="{{ old('phone_number') }}" maxlength="11" required autocomplete="off">
-                            @error('phone_number')
-                            <x-alert :message="$message" />
-                            @enderror
-                        </div>
-                        <div class="form-group col-md-8">
+                        <div class="form-group col-md-12">
                             <label for="inputAddress2">Full Address</label>
-                            <textarea id="user_address" class="user_address form-control @error('full_address') is-invalid @enderror" rows="3" name="full_address" id="full_address" placeholder="e.g. 284B, Ajose Adeogun Street, Victoria Island, Lagos, Nigeria.">{{ old('full_address') }}</textarea>
+                            <textarea id="user_address" class="user_address form-control @error('full_address') is-invalid @enderror" rows="1" name="full_address" id="full_address" placeholder="e.g. 284B, Ajose Adeogun Street, Victoria Island, Lagos, Nigeria.">{{ old('full_address') }}</textarea>
                             @error('full_address')
                             <x-alert :message="$message" />
                             @enderror

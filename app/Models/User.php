@@ -119,11 +119,19 @@ class User extends Authenticatable implements MustVerifyEmail
     }
 
     /**
-     * Get the Administrator associated with the user.
+     * Get the CSE associated with the user.
      */
     public function cse()
     {
         return $this->hasOne(Cse::class);
+    }
+
+    /**
+     * Get the Franchisee associated with the user.
+     */
+    public function franchisee()
+    {
+        return $this->hasOne(Franchisee::class);
     }
 
     /**
