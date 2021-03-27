@@ -69,17 +69,18 @@
                     @endif
                     @endforeach
                     @endforeach</td>
-                  <td class="text-medium text-center">₦{{ number_format($serviceRequest->service_request->total_amount) ?? ''}}</td>
-                  @if($serviceRequest->service_request->status_id === 1)
-                    <td class="text-medium text-warning">{{ $serviceRequest->service_request->status->name ?? ''}}</td>
-                  @elseif($serviceRequest->service_request->status_id === 2)
-                    <td class="text-medium text-danger">{{ $serviceRequest->service_request->status->name ?? ''}}</td>
-                  @elseif($serviceRequest->service_request->status_id === 3)
-                   <td class="text-medium text-success">{{ $serviceRequest->service_request->status->name ?? ''}}</td>
-                  @elseif($serviceRequest->service_request->status_id === 4)
-                    <td class="text-medium text-pending">{{ $serviceRequest->service_request->status->name ?? ''}}</td>
+                  @if($serviceRequest->service_request->status_id == 1)
+                    <td class="text-medium text-warning">Pending</td>
+                  @elseif($serviceRequest->service_request->status_id == 2)
+                  <td class="text-medium text-info">Ongoing</td>
+                  @elseif($serviceRequest->service_request->status_id == 3)
+                    <td class="text-medium text-danger">Cancelled</td>
+                  @elseif($serviceRequest->service_request->status_id == 4)
+                    <td class="text-medium text-success">Completed</td>
+                  @else
+                 <td class="text-medium text-warning">{{$serviceRequest->service_request->status}}</td>
                   @endif
-                  
+                  <td class="text-medium text-center">₦{{ number_format($serviceRequest->service_request->total_amount) ?? ''}}</td>
                   <td class="text-medium">{{ Carbon\Carbon::parse($serviceRequest->service_request->created_at, 'UTC')->isoFormat('MMMM Do YYYY, h:mm:ssa') }} </td>
                   <td class=" text-center">
                     <div class="dropdown-file">

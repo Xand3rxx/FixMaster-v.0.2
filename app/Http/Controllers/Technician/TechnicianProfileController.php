@@ -116,16 +116,17 @@ class TechnicianProfileController extends Controller
     {
 
         $result = User::findOrFail(Auth::id());
+        
         $banks = \App\Models\Bank::get(['id', 'name']);
 
         return view('technician.edit_profile', compact('result', 'banks'));
 
-        //return view('technician.edit_profile');
     }
 
     public function updateProfile(Request $request)
     {
         $user = User::where('id', Auth::id())->first();
+        
         
         if ($user->account->gender == "male") {
             $res = "his";
@@ -180,6 +181,8 @@ class TechnicianProfileController extends Controller
                 'middle_name' => $request->middle_name,
                 'last_name' => $request->last_name,
                 'gender' => $request->gender,
+                'bank_id' => $request->bank_id,
+                'account_number' => $request->account_number,
                 'avatar' => $filename
             ]);
 
@@ -188,16 +191,13 @@ class TechnicianProfileController extends Controller
                 'email' => $request->email,
             ]);
 
-            $user->phone->update([
+            $user->contact->update([
                 'user_id' => $user->id,
-                'number' => $request->phone_number,
+                'phone_number' => $request->phone_number,
+                'address' => $request->full_address,
             ]);
 
-          /* $user->address->update([
-                'user_id' => $user->id,
-                'address' => $request->full_address,
-               
-            ]);*/
+           
             
             $this->log($type, $severity, $actionUrl, $message);
 

@@ -43,19 +43,19 @@
               <div class="row row-sm">
                 <div class="col-6 col-sm-4">
                   <label class="tx-10 tx-medium tx-spacing-1 tx-color-03 tx-uppercase tx-sans mg-b-10">Email Address</label>
-                  <p class="tx-primary mg-b-0">{{$user->email}}</p>
+                  <p class="tx-primary mg-b-0">{{$user->email ?? ''}}</p>
                 </div>
                 <div class="col-6 col-sm-4">
                   <label class="tx-10 tx-medium tx-spacing-1 tx-color-03 tx-uppercase tx-sans mg-b-10">Mobile Phone</label>
-                  <p class="tx-primary tx-rubik mg-b-0"></p>
+                  <p class="tx-primary tx-rubik mg-b-0">{{$user->contact->phone_number ?? ''}}</p>
                 </div>
                 <div class="col-6 col-sm-4">
                   <label class="tx-10 tx-medium tx-spacing-1 tx-color-03 tx-uppercase tx-sans mg-b-10">Date Created</label>
-                  <p class="tx-primary tx-rubik mg-b-0"></p>
+                  <p class="tx-primary tx-rubik mg-b-0">{{$user->contact->created_at ?? '' }}</p></p>
                 </div>
                 <div class="col-sm-6 mg-t-20 mg-sm-t-30">
                   <label class="tx-10 tx-medium tx-spacing-1 tx-color-03 tx-uppercase tx-sans mg-b-10">Home Address</label>
-                  <p class="mg-b-0">8284 Ajose Adeogun Street, Victoria Island, Lagos, Nigeria</p>
+                  <p class="mg-b-0">{{$user->contact->address ?? ''}}</p></p>
                 </div>
                 <div class="col-sm-6 mg-t-20 mg-sm-t-30">
                     <label class="tx-10 tx-medium tx-spacing-1 tx-color-03 tx-uppercase tx-sans mg-b-10">Rating</label>
@@ -79,11 +79,11 @@
               <div class="row row-sm">
                 <div class="col-6 col-sm-6">
                   <label class="tx-10 tx-medium tx-spacing-1 tx-color-03 tx-uppercase tx-sans mg-b-10">Bank</label>
-                  <p class="tx-rubik mg-b-0">Ecobank Nigeria PLC</p>
+                  <p class="tx-rubik mg-b-0">{{$user->bank->name ?? ''}}</p>
                 </div>
                 <div class="col-sm-6">
                   <label class="tx-10 tx-medium tx-spacing-1 tx-color-03 tx-uppercase tx-sans mg-b-10">Account Number</label>
-                  <p class="tx-primary mg-b-0">1111111111</p>
+                  <p class="tx-primary mg-b-0">{{$user->account->account_number ?? ''}}</p>
                 </div>
                 
 

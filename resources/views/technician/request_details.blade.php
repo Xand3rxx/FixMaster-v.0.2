@@ -16,15 +16,15 @@
             </ol>
           </nav>
          
-          <h4 class="mg-b-0 tx-spacing--1"></h4><hr>
+          <h4 class="mg-b-0 tx-spacing--1">Job: {{$serviceRequests->unique_id}}</h4><hr>
           <div class="media align-items-center">
             <span class="tx-color-03 d-none d-sm-block">
               {{-- <i data-feather="credit-card" class="wd-60 ht-60"></i> --}}
               <img src="{{ asset('assets/images/default-male-avatar.png') }}" class="avatar rounded-circle" alt="Male Avatar">
             </span>
             <div class="media-body mg-sm-l-20">
-              <h4 class="tx-18 tx-sm-20 mg-b-2"></h4>
-              <p class="tx-13 tx-color-03 mg-b-0"></p>
+              <h4 class="tx-18 tx-sm-20 mg-b-2">{{$serviceRequests->clientAccount->first_name}} {{$serviceRequests->clientAccount->middle_name}} {{$serviceRequests->clientAccount->last_name}}</h4>
+              <p class="tx-13 tx-color-03 mg-b-0">{{$serviceRequests->phone->number}}</p>
             </div>
           </div><!-- media -->
         </div>
@@ -60,7 +60,7 @@
                           <tr>
 
                             <td class="tx-color-03 tx-center"></td>
-                            <td class="tx-medium">{{ $serviceRequests->first_name. ' '. $serviceRequests->middle_name. ' '. $serviceRequests->last_name ?? '' }}</td>
+                            <td class="tx-medium">{{ $serviceRequests->clientAccount->first_name. ' '.$serviceRequests->clientAccount->last_name ?? '' }}</td>
                             
                             @if($serviceRequests->status_id == 2)
                             <td class="text-medium text-warning">Pending</td>
@@ -189,7 +189,7 @@
                           </tr>
                           <tr>
                             <td class="tx-medium">Initial Service Charge</td>
-                            <td class="tx-color-03">₦{{ number_format($serviceRequests->total_amount )}}</td>
+                            <td class="tx-color-03">₦{{ number_format($serviceRequests->price->amount )}}</td>
                           </tr>
                           <tr>
                             <td class="tx-medium">Current Service Charge</td>
@@ -215,15 +215,54 @@
                           </tr>
                           <tr>
                             <td class="tx-medium">CSE's Assigned</td>
-                            <td class="tx-color-03">List all CSE's assigned on this request</td>
+                            @foreach($serviceRequests->users as $data)
+                            @foreach($data->roles as $res)
+                            @if($res->url == "cse")
+                            <td class="tx-color-03">
+                                @php $sn = 1; @endphp
+                                {{-- @if($res->count() > 1 && $res->url == "cse") --}}
+                                {{-- @foreach($data->account as $output) --}}
+                                  {{$data->account->first_name}} {{$data->account->last_name}}<br>
+                                {{-- @endforeach --}}
+                              {{-- (1) Benedict Mayowa<br>
+                              (2) Other CSE's Assigned  {{($sn++)}}--}}
+                              {{-- @endif --}}
+                            </td>
+                            @endif
+                            @endforeach
+                            @endforeach
                           </tr>
                           <tr>
                             <td class="tx-medium">Technician's Assigned</td>
-                            <td class="tx-color-03">List all Technician's assigned on this request</td>
+                            <@foreach($serviceRequests->users as $data)
+                            @foreach($data->roles as $res)
+                            @if($res->url == "technician")
+                            <td class="tx-color-03">
+                                @php $sn = 1; @endphp
+                                {{-- @if($res->count() > 1 && $res->url == "cse") --}}
+                                {{-- @foreach($data->account as $output) --}}
+                                  {{$data->account->first_name}} {{$data->account->last_name}}<br>
+                                {{-- @endforeach --}}
+                              {{-- (1) Benedict Mayowa<br>
+                              (2) Other CSE's Assigned  {{($sn++)}}--}}
+                              {{-- @endif --}}
+                            </td>
+                            @endif
+                            @endforeach
+                            @endforeach
                           </tr>
                           <tr>
                             <td class="tx-medium">QA's Assigned</td>
-                            <td class="tx-color-03">List all QA's assigned on this request</td>
+                            @foreach($serviceRequests->users as $data)
+                            @foreach($data->roles as $res)
+                            @if($res->url == "quality-assurance")
+                            <td class="tx-color-03">
+                              
+                              {{$data->account->first_name}} {{$data->account->last_name}}<br>
+                            </td>
+                            @endif
+                            @endforeach
+                            @endforeach
                           </tr>
                           <tr>
                             <td class="tx-medium">Payment Status</td>
@@ -231,7 +270,7 @@
                           </tr>
                           <tr>
                             <td class="tx-medium">L.G.A</td>
-                            <td class="tx-color-03">Eti-Osa</td>
+                            <td class="tx-color-03">{{$serviceRequests->lga->name}}</td>
                           </tr>
                           <tr>
                             <td class="tx-medium">Town/City</td>
@@ -239,20 +278,19 @@
                           </tr>
                           <tr>
                             <td class="tx-medium">Request Address</td>
-                            <td class="tx-color-03"></td>
+                            <td class="tx-color-03">{{$serviceRequests->address->address}}</td>
                           </tr>
                           <tr>
                             <td class="tx-medium">Request Description</td>
-                            <td class="tx-color-03">My pc no longer comes on even when plugged into a power source.</td>
+                            <td class="tx-color-03">{{$serviceRequests->service->description ?? ''}}</td>
                           </tr>
 
-                          {{-- If theres a cancellation, make this row visible --}}
-                          {{-- @if(!empty($requestDetail->serviceRequestCancellationReason->reason)) --}}
+                          @if($serviceRequests->status_id == 3)
                           <tr>
-                            <td class="tx-medium">Reason for Cancellation</td>
-                            <td class="tx-color-03">I'm no longer interested.</td>
+                            <td class="tx-medium">Reason for Cancellation </td>
+                            <td class="tx-color-03">I'm no longer interested. <span class="text-danger">(Only visible if the request was cancelled)</span></td>
                           </tr>
-                          {{-- @endif --}}
+                          @endif
                         </tbody>
                       </table>
 

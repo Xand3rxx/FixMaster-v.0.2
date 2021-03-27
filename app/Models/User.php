@@ -107,7 +107,7 @@ class User extends Authenticatable implements MustVerifyEmail
      */
     public function contact()
     {
-        return $this->hasOne(Contact::class);
+        return $this->hasOne(Contact::class, 'user_id');
     }
 
     /**
@@ -136,7 +136,7 @@ class User extends Authenticatable implements MustVerifyEmail
 
     public function address()
     {
-        return $this->hasOne(Address::class, 'user_id');
+        return $this->hasOne(Contact::class, 'user_id');
     }
 
     public function estate()
@@ -180,5 +180,10 @@ class User extends Authenticatable implements MustVerifyEmail
     public function clientRequests()
     {
         return $this->hasMany(ServiceRequest::class, 'client_id');
+    }
+
+    public function bank()
+    {
+        return $this->hasOne(Bank::class, 'id');
     }
 }
