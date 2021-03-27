@@ -266,7 +266,7 @@
                           </tr>
                           <tr>
                             <td class="tx-medium">Payment Status</td>
-                            <td class="tx-color-03">Paid</td>
+                            <td class="tx-color-03">{{$serviceRequests->payment_status->status ?? ''}}</td>
                           </tr>
                           <tr>
                             <td class="tx-medium">L.G.A</td>

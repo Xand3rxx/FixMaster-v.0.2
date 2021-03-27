@@ -155,4 +155,9 @@ class ServiceRequest extends Model
     {
         return $this->belongsTo(Contact::class);
     }
+
+    public function payment_status()
+    {
+        return $this->belongsTo(Payment::class, 'id', 'user_id');
+    }
 }
