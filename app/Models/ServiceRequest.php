@@ -147,11 +147,4 @@ class ServiceRequest extends Model
             return $this->hasOne(Price::class, 'user_id', 'client_id')->withDefault();
     }
 
-    public function address(){
-        return $this->belongsTo(Address::class);
-    }
-    public function phone()
-    {
-        return $this->belongsTo(Phone::class);
-    }
 }

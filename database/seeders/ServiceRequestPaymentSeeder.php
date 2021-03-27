@@ -52,6 +52,13 @@ class ServiceRequestPaymentSeeder extends Seeder
         $serviceRequestProgress = array(
 
             array(
+                'user_id'               =>  1,
+                'service_request_id'    =>  1,
+                'status_id'             =>  1,
+                'progress'              =>  'Pending',
+                'created_at'            =>  '2021-03-26 02:21:38'
+            ),
+            array(
                 'user_id'               =>  2,
                 'service_request_id'    =>  1,
                 'status_id'             =>  2,

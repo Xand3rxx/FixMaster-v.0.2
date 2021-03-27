@@ -8,7 +8,7 @@
         <div>
           <nav aria-label="breadcrumb">
             <ol class="breadcrumb breadcrumb-style1 mg-b-10">
-            <li class="breadcrumb-item"><a href="{{ route('technician.index', app()->getLocale()) }}">Dashboard</a></li>
+            <li class="breadcrumb-item"><a href="{{ route('franchisee.index', app()->getLocale()) }}">Dashboard</a></li>
               <li class="breadcrumb-item active" aria-current="page">Edit Profile</li>
             </ol>
           </nav>
@@ -31,24 +31,17 @@
                 <div class="tab-pane fade show active" id="description3" role="tabpanel" aria-labelledby="description-tab3">
                   <h6>UPDATE PROFILE</h6>
                   <div class="card-body pd-20 pd-lg-25">
-                    <form action="{{route('technician.update_profile', app()->getLocale())}}" method="post" role="form" enctype="multipart/form-data">
+                    <form action="" method="post" role="form" enctype="multipart/form-data">
                       {{ csrf_field() }}
                       @method('PATCH')
                       <div class="d-sm-flex float-left">
                             <div class="mg-sm-r-30">
                                 <div class="pos-relative d-inline-block mg-b-20">
                                   <a href="#">
-                                  @php
-                                  if($result->account->gender == "male")
-                                   $photo = "default-male-avatar.png";
-                                  elseif($result->account->gender == "female")
-                                  $photo = "default-female-avatar.png";
-                                  else
-                                  $photo = "no-image-available.png";
-                                  @endphp
+                                  
                                     <div class="avatar avatar-xxl">
                                       <div class="user-img">
-                                        <img class="rounded-circle wh-150p img-fluid image profile_image_preview" src="{{!empty($result->account->avatar) ? asset('assets/user-avatars/'.$result->account->avatar) : asset('assets/user-avatars/'.$photo)}}" alt="user-image">
+                                      <img class="rounded-circle wh-150p img-fluid image profile_image_preview" src="{{ asset('assets/user-avatars/default-male-avatar.png') }}" alt="user-image">
                                       </div>
                                     </div>
                                   </a>
@@ -58,7 +51,7 @@
                         <div class="form-row">
                           <div class="form-group col-md-3">
                             <label for="inputEmail4">First Name</label>
-                            <input type="text" class="form-control @error('first_name') is-invalid @enderror" name="first_name" id="first_name" value="{{$result->account->first_name}}" required>
+                            <input type="text" class="form-control @error('first_name') is-invalid @enderror" name="first_name" id="first_name" value="">
                             @error('first_name')
                             <span class="invalid-feedback" role="alert">
                                 <strong>{{ $message }}</strong>
@@ -67,7 +60,7 @@
                         </div>
                         <div class="form-group col-md-3">
                           <label for="inputEmail4">Middle Name</label>
-                          <input type="text" class="form-control" id="middle_name" name="middle_name" value="{{$result->account->middle_name}}" required>
+                          <input type="text" class="form-control @error('middle_name') is-invalid @enderror" id="middle_name" name="middle_name" value="">
                           @error('middle_name')
                           <span class="invalid-feedback" role="alert">
                               <strong>{{ $message }}</strong>
@@ -77,7 +70,7 @@
                             <!-- Last Name -->
                             <div class="form-group col-md-3">
                               <label for="inputEmail4">Last Name</label>
-                              <input type="text" class="form-control @error('last_name') is-invalid @enderror" id="last_name" name="last_name" value="{{$result->account->last_name}}" required>
+                              <input type="text" class="form-control @error('last_name') is-invalid @enderror" id="last_name" name="last_name" value="">
                               @error('last_name')
                               <span class="invalid-feedback" role="alert">
                                   <strong>{{ $message }}</strong>
@@ -88,16 +81,22 @@
                           <div class="form-group col-md-3">
                             <label>Gender</label>
                             <select name="gender" id="gender" class="form-control @error('gender') is-invalid @enderror" required>
-                              <option value="">Select...</option>
-                              <option value="male" {{ old('gender') ?? $result->account->gender == 'male' ? 'selected' : ''}}>Male</option>
-                              <option value="female" {{ old('gender') ?? $result->account->gender == 'female' ? 'selected' : ''}}>Female</option>
-                              <option value="others" {{ old('gender') ?? $result->account->gender == 'others' ? 'selected' : ''}}>Others</option>
+                              <option value="</option>
+                              <option value="">Choose....</option>
+                              <option value="male"}>Male</option>
+                              <option value="female">Female</option>
+                              <option value="others">Others</option>
                            </select>
+                           @error('gender')
+                           <span class="invalid-feedback" role="alert">
+                               <strong>{{ $message }}</strong>
+                           </span>
+                         @enderror
                           </div>
                             <!-- Email -->
                             <div class="form-group col-md-4">
                               <label for="inputEmail4">Email</label>
-                              <input type="email" class="form-control @error('email') is-invalid @enderror" id="email" name="email" value="{{$result->email ?? 'Null' }}" readonly>
+                              <input type="email" class="form-control @error('email') is-invalid @enderror" id="email" value="" disabled>
                               @error('email')
                               <span class="invalid-feedback" role="alert">
                                   <strong>{{ $message }}</strong>
@@ -107,7 +106,7 @@
                           <!-- Phone Number -->
                           <div class="form-group col-md-4">
                             <label for="inputEmail4">Phone Number</label>
-                            <input type="tel" class="form-control @error('phone_number') is-invalid @enderror" id="phone_number" name="phone_number" maxlength="11" value="{{ old('phone_number') }}" required>
+                            <input type="tel" class="form-control @error('phone_number') is-invalid @enderror" id="phone_number" name="phone_number" maxlength="11" value="">
                             @error('phone_number')
                               <span class="invalid-feedback" role="alert">
                                   <strong>{{ $message }}</strong>
@@ -115,61 +114,55 @@
                             @enderror
                           </div>
 
-
-                              <!-- Profile Avatar -->
-                              <div class="form-group col-md-4">
-                                <label>Profile Avatar</label>
-                                <div class="custom-file">
-                                  <input type="file" accept="image/*" class="custom-file-input @error('image') is-invalid @enderror" name="profile_avater" id="profile_image">
-                                  <label class="custom-file-label" id="imagelabel" for="profile_image">Upload Profile Avatar</label>
-
-                                  @error('image')
-                                  <span class="invalid-feedback" role="alert">
-                                      <strong>{{ $message }}</strong>
-                                  </span>
-                                  @enderror
-                                </div>
-
-                              </div>
-
-                            <div class="form-group col-md-6">
-                              <label>Bank</label>
-                              <select name="bank_id" id="bank_id" class="form-control @error('bank_id') is-invalid @enderror" required>
-                                <option value="">Select...</option>
-                                @foreach($banks as $bank)
-                                <option value="{{ $bank->id }}" {{ old('bank_id') == $bank->id ? 'selected' : ''}}>{{ $bank->name }}</option>
-                                @endforeach
-                            </select>
-                            @error('bank_id')
-                            <span class="invalid-feedback" role="alert">
-                                <strong>{{ $message }}</strong>
-                            </span>
-                            @enderror
-                            </div>
-
-                            <div class="form-group col-md-6">
-                              <label for="inputEmail4">Account Number</label>
-                              <input type="tel" class="form-control @error('account_number') is-invalid @enderror" id="account_number" name="account_number" maxlength="11" value="{{ old('account_number') }}" required>
-                              @error('account_number')
-                                <span class="invalid-feedback" role="alert">
-                                    <strong>{{ $message }}</strong>
-                                </span>
+                          <!-- Profile Avatar -->
+                          <div class="form-group col-md-4">
+                            <label>Profile Avatar</label>
+                            <div class="custom-file">
+                              <input type="file" accept="image/*" class="custom-file-input @error('image') is-invalid @enderror" name="profile_avater" id="profile_image">
+                              <label class="custom-file-label" id="imagelabel" for="profile_image">Upload Profile Avatar</label>
+                              @error('image')
+                              <span class="invalid-feedback" role="alert">
+                                  <strong>{{ $message }}</strong>
+                              </span>
                               @enderror
                             </div>
+                          </div>
+                          <div class="form-group col-md-6">
+                            <label>Bank</label>
+                            <select name="bank_id" id="bank_id" class="form-control @error('bank_id') is-invalid @enderror" required>
+                              <option value="">Select...</option>
+                              @foreach($banks as $bank)
+                              <option value="{{ $bank->id }}" {{ old('bank_id') == $bank->id ? 'selected' : ''}}>{{ $bank->name }}</option>
+                              @endforeach
+                          </select>
+                          @error('bank_id')
+                          <span class="invalid-feedback" role="alert">
+                              <strong>{{ $message }}</strong>
+                          </span>
+                          @enderror
+                          </div>
 
+                          <div class="form-group col-md-6">
+                            <label for="inputEmail4">Account Number</label>
+                            <input type="tel" class="form-control @error('account_number') is-invalid @enderror" id="account_number" name="account_number" maxlength="11" value="{{ old('account_number') }}" required>
+                            @error('account_number')
+                              <span class="invalid-feedback" role="alert">
+                                  <strong>{{ $message }}</strong>
+                              </span>
+                            @enderror
+                          </div>
 
                             <!-- Full Address -->
                             <div class="form-group col-md-12">
                               <label for="inputAddress2">Full Address</label>
-                              <textarea rows="3" class="user_address form-control @error('full_address') is-invalid @enderror" placeholder="e.g. 284B, Ajose Adeogun Street, Victoria Island, Lagos, Nigeria." id="inputAddress2" name="full_address" required></textarea>
+                              <textarea rows="3" class="user_address form-control @error('full_address') is-invalid @enderror" id="" name="full_address" value=""></textarea>
                               @error('full_address')
                             <span class="invalid-feedback" role="alert">
                                 <strong>{{ $message }}</strong>
                             </span>
                             @enderror
                             </div>
-                            
-                      </div>
+                        </div>
 
                         <button type="submit" class="btn btn-primary">Update Profile</button>
                     </form>
@@ -180,7 +173,7 @@
                   <h6>CHANGE PASSWORD</h6>
                   <p class="mg-b-0 text-danger">In order to change your password, you need to provide the current password.</p>
                   <div class="card-body pd-20 pd-lg-25">
-                  <form action="{{route('technician.update_password', app()->getLocale())}}" method="post" role="form" enctype="multipart/form-data">
+                    <form action="" method="post">
                       {{ csrf_field() }}
                       @method('PATCH')
                       <div class="form-row">
@@ -195,19 +188,16 @@
                           </div>
                         <div class="form-group col-md-4">
                           <label for="new_password">New Password</label>
-                          <input type="password" class="form-control @error('new_password') is-invalid @enderror" id="new_password" name="new_password" onkeyup='check();' required>
+                          <input type="password" class="form-control @error('new_password') is-invalid @enderror" id="new_password" name="new_password">
                           @error('new_password')
-                          
                             <span class="invalid-feedback" role="alert">
                                 <strong>{{ $message }}</strong>
                             </span>
                           @enderror
-                          <small class="text-muted">Password must be minimum of 6 characters</small>
                         </div>
                         <div class="form-group col-md-4">
                           <label for="new_confirm_password">Confirm Password</label>
-                          <input type="password" class="form-control @error('confirm_password') is-invalid @enderror" id="new_confirm_password" onkeyup='check();' name="new_confirm_password" required>
-                          <span id='message'></span>
+                          <input type="password" class="form-control @error('confirm_password') is-invalid @enderror" id="new_confirm_password" name="new_confirm_password">
                           @error('new_confirm_password')
                             <span class="invalid-feedback" role="alert">
                                 <strong>{{ $message }}</strong>
@@ -227,66 +217,72 @@
     </div>
 </div>
 @endsection
-
-
-@section('scripts')
-
 @push('scripts')
-<script src="{{ asset('assets/dashboard/assets/js/bootstrap-multiselect.js') }}"></script>
-<script src="{{ asset('assets/js/password-generator.js') }}"></script>
 <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDeDLVAiaU13p2O0d3jfcPjscsbVsCQUzc&v=3.exp&libraries=places"></script>
 
+
 <script>
-    $('.selectpicker').selectpicker();
-    $(document).ready(function() {
+
+$(document).ready(function() {
         "use strict";
         let autocomplete;
         initialize();
-        
+
+
+
         function initialize() {
             // Create the autocomplete object, restricting the search to geographical location types.
             autocomplete = new google.maps.places.Autocomplete((document.querySelector('.user_address')), {
                 types: ['geocode']
             });
-            
+            autocomplete = new google.maps.places.Autocomplete((document.querySelector('.user_address2')), {
+                types: ['geocode']
+            });
             // Chain request to html element on the page
             google.maps.event.addDomListener(document.querySelector('.user_address'), 'focus');
-            
+            google.maps.event.addDomListener(document.querySelector('.user_address2'), 'focus');
         }
     });
+
 </script>
 
-@endpush
-
-
 <script>
+
   (function($){
     "use scrict";
     $(document).ready(function(){
+
       $(document).on('change','#profile_image', function(){
         readURL(this);
       })
+
       reader.readAsDataURL(input.files[0]);
+
       function readURL(input){
         if(input.files && input.files[0]){
           var reader = new FileReader();
           var res = isImage(input.files[0].name);
+
           if(res==false){
             var msg = 'Image should be png/PNG, jpg/JPG & jpeg/JPG';
             Snackbar.show({text: msg, pos: 'bottom-right',backgroundColor:'#d32f2f', actionTextColor:'#fff' });
             return false;
           }
+
           reader.onload = function(e){
             $('.profile_image_preview').attr('src', e.target.result);
             $("imagelabel").text((input.files[0].name));
           }
+
           reader.readAsDataURL(input.files[0]);
         }
       }
+
       function getExtension(filename) {
           var parts = filename.split('.');
           return parts[parts.length - 1];
       }
+
       function isImage(filename) {
           var ext = getExtension(filename);
           switch (ext.toLowerCase()) {
@@ -298,17 +294,14 @@
           }
           return false;
       }
-    })
+
+
+
+
+    });
+
  })(jQuery);
- var check = function() {
-  if (document.getElementById('new_password').value ==
-    document.getElementById('new_confirm_password').value) {
-    document.getElementById('message').style.color = 'green';
-    document.getElementById('message').innerHTML = 'Password Match Correctly';
-  } else {
-    document.getElementById('message').style.color = 'red';
-    document.getElementById('message').innerHTML = 'Password does not Match';
-  }
-}
+
+
 </script>
-@endsection
+@endpush

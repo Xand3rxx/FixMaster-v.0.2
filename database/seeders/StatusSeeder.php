@@ -18,19 +18,19 @@ class StatusSeeder extends Seeder
         DB::table('statuses')->delete();
 
         $ongoingSubStatuses = [
-            'Phase 1' => 'Assigned CSE', 
-            'Phase 2' => 'Assigned Technician', 
-            'Phase 3' => 'Contacted Client for availabilty',  
-            'Phase 4' => 'En-route to Client\'s address', 
-            'Phase 5' => 'Arrived', 
-            'Phase 6' => 'Perfoming diagnosis', 
-            'Phase 7' => 'Completed diagnosis', 
-            'Phase 8' => 'Issued RFQ', 
-            'Phase 9' =>  'Awaiting supplier\'s feedback', 
-            'Phase 10' => 'RFQ Delivery: Pending', 
-            'Phase 11' => 'RFQ Delivery: Shipped', 
-            'Phase 12' => 'RFQ Delivered', 
-            'Phase 13' => 'Job Completed'
+            'Phase1' => 'Assigned CSE', 
+            'Phase2' => 'Assigned Technician', 
+            'Phase3' => 'Contacted Client for availabilty',  
+            'Phase4' => 'En-route to Client\'s address', 
+            'Phase5' => 'Arrived', 
+            'Phase6' => 'Perfoming diagnosis', 
+            'Phase7' => 'Completed diagnosis', 
+            'Phase8' => 'Issued RFQ', 
+            'Phase9' =>  'Awaiting supplier\'s feedback', 
+            'Phase10' => 'RFQ Delivery: Pending', 
+            'Phase11' => 'RFQ Delivery: Shipped', 
+            'Phase12' => 'RFQ Delivered', 
+            'Phase13' => 'Job Completed'
         ];
 
         $status = array(

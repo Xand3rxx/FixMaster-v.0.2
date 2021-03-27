@@ -214,12 +214,16 @@
                             @endforeach--}}</td>
                           </tr>
                           <tr>
-                            <td class="tx-medium">CSE Assigned</td>
-                            <td class="tx-color-03">David Akinsola</td>
+                            <td class="tx-medium">CSE's Assigned</td>
+                            <td class="tx-color-03">List all CSE's assigned on this request</td>
                           </tr>
                           <tr>
-                            <td class="tx-medium">Technician Assigned</td>
-                            <td class="tx-color-03">Jamal Diwa</td>
+                            <td class="tx-medium">Technician's Assigned</td>
+                            <td class="tx-color-03">List all Technician's assigned on this request</td>
+                          </tr>
+                          <tr>
+                            <td class="tx-medium">QA's Assigned</td>
+                            <td class="tx-color-03">List all QA's assigned on this request</td>
                           </tr>
                           <tr>
                             <td class="tx-medium">Payment Status</td>
@@ -235,7 +239,7 @@
                           </tr>
                           <tr>
                             <td class="tx-medium">Request Address</td>
-                            <td class="tx-color-03">{{$serviceRequests->address->address}}</td>
+                            <td class="tx-color-03"></td>
                           </tr>
                           <tr>
                             <td class="tx-medium">Request Description</td>
@@ -254,6 +258,7 @@
 
                       {{-- @if(!empty($requestDetail->serviceRequestDetail->media_file)) --}}
                       <div class="divider-text">Media Files</div>
+                      <small class="text-danger">This portion is only visible if a media file is available. Aslo revmove this text once the check is completed.</small>
                         <div class="row">
                           <div class="pd-20 pd-lg-25 pd-xl-30">
                 

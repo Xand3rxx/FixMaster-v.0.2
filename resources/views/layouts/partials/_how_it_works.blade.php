@@ -33,8 +33,8 @@
                         <div class="media">
                             <i data-feather="hash" class="fea icon-ex-md text-primary mr-2 mt-1"></i>
                             <div class="media-body">
-                                <h5 class="mt-0 texty">Get a dedicated Client Service Executive</h5>
-                                <p class="answer text-muted mb-0">We assign a dedicated Client Service Executive to you who ensures your job is completed promptly and professionally.</p>
+                                <h5 class="mt-0 texty">Get a dedicated Customer Service Executive</h5>
+                                <p class="answer text-muted mb-0">We assign a dedicated Customer Service Executive to you who ensures your job is completed promptly and professionally.</p>
                             </div>
                         </div>
                     </div>

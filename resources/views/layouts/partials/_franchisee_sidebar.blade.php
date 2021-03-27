@@ -32,7 +32,6 @@
         </div>
         <div class="collapse {{ Route::currentRouteNamed('franchisee.view_profile', 'franchisee.edit_profile') ? 'show' : '' }}" id="loggedinMenu">
           <ul class="nav nav-aside mg-b-0">
-            {{-- <li class="nav-item"><a href="" class="nav-link"><i data-feather="edit"></i> <span>Edit Profile</span></a></li> --}}
             <li class="nav-item {{ Route::currentRouteNamed('franchisee.view_profile') ? 'active' : '' }}"><a href="{{ route('franchisee.view_profile', app()->getLocale()) }}" class="nav-link"><i data-feather="user"></i> <span>View Profile</span></a></li>
 
             <li class="nav-item {{ Route::currentRouteNamed('franchisee.edit_profile') ? 'active' : '' }}"><a href="{{ route('franchisee.edit_profile',app()->getLocale()) }}" class="nav-link"><i data-feather="settings"></i> <span>Account Settings</span></a></li>
@@ -43,6 +42,8 @@
         <li class="nav-label">Components</li>
         <li class="nav-item {{ Route::currentRouteNamed('franchisee.index') ? 'active' : '' }}"><a href="{{ route('franchisee.index', app()->getLocale()) }}" class="nav-link"><i data-feather="airplay"></i> <span>Home</span></a></li>
 
+        <li class="nav-item {{ Route::currentRouteNamed('franchisee.location_request') ? 'active' : '' }}"><a href="{{ route('franchisee.location_request', app()->getLocale()) }}" class="nav-link"><i data-feather="map-pin"></i> <span>Location Request</span></a></li>
+
         <li class="nav-item with-sub {{ Route::currentRouteNamed('inbox_messages', 'outbox_messages') ? 'active show' : '' }}">
           <a href="" class="nav-link"><i data-feather="message-circle"></i> <span>Messages</span></a>
           <ul>
@@ -52,8 +53,9 @@
           </ul>
         </li>
 
-        <li class="nav-item {{ Route::currentRouteNamed('franchisee.requests', 'franchisee.request_details') ? 'active show' : '' }}"><a href="{{ route('franchisee.requests', app()->getLocale()) }}" class="nav-link"><i data-feather="git-pull-request"></i> <span>Requests</span></a></li>
         <li class="nav-item {{ Route::currentRouteNamed('franchisee.payments') ? 'active show' : '' }}"><a href="{{ route('franchisee.payments', app()->getLocale()) }}" class="nav-link"><i data-feather="credit-card"></i> <span>Payments</span></a></li>
+
+        <li class="nav-item {{ Route::currentRouteNamed('franchisee.requests', 'franchisee.request_details') ? 'active show' : '' }}"><a href="{{ route('franchisee.requests', app()->getLocale()) }}" class="nav-link"><i data-feather="git-pull-request"></i> <span>Requests</span></a></li>
 
       </ul>
     </div>

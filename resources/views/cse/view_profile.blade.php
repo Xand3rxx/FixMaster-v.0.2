@@ -18,7 +18,7 @@
               <div class="d-flex align-items-center justify-content-between mg-b-25">
                 <h5 class="mg-b-0">Personal Details</h5>
                 <div class="d-flex">
-                  <a href="{{ route('quality-assurance.edit_profile',app()->getLocale()) }}" class="btn btn-sm btn-white d-flex align-items-center mg-r-5"><i data-feather="edit-2"></i><span class="d-none d-sm-inline mg-l-5"> Edit</span></a>
+                  <a href="{{ route('franchisee.edit_profile',app()->getLocale()) }}" class="btn btn-sm btn-white d-flex align-items-center mg-r-5"><i data-feather="edit-2"></i><span class="d-none d-sm-inline mg-l-5"> Edit</span></a>
 
                 </div>
               </div>
@@ -26,15 +26,15 @@
               <div class="row">
                 <div class="col-6 col-sm">
                   <label class="tx-10 tx-medium tx-spacing-1 tx-color-03 tx-uppercase tx-sans mg-b-10">Firstname</label>
-                  <p class="mg-b-0">{{$user->account->first_name}}</p></p>
+                  <p class="mg-b-0">First Name</p>
                 </div><!-- col -->
                 <div class="col-6 col-sm">
                   <label class="tx-10 tx-medium tx-spacing-1 tx-color-03 tx-uppercase tx-sans mg-b-10">Middlename</label>
-                  <p class="mg-b-0">{{$user->account->middle_name}}</p>
+                  <p class="mg-b-0">Middle Name</p>
                 </div><!-- col -->
                 <div class="col-sm mg-t-20 mg-sm-t-0">
                   <label class="tx-10 tx-medium tx-spacing-1 tx-color-03 tx-uppercase tx-sans mg-b-10">Lastname</label>
-                  <p class="mg-b-0">{{$user->account->last_name}}</p>
+                  <p class="mg-b-0">Last name</p>
                 </div><!-- col -->
               </div><!-- row -->
 
@@ -43,21 +43,23 @@
               <div class="row row-sm">
                 <div class="col-6 col-sm-4">
                   <label class="tx-10 tx-medium tx-spacing-1 tx-color-03 tx-uppercase tx-sans mg-b-10">Email Address</label>
-                  <p class="tx-primary mg-b-0">{{$user->email}}</p>
+                  <p class="tx-primary mg-b-0">User Email</p>
                 </div>
                 <div class="col-6 col-sm-4">
                   <label class="tx-10 tx-medium tx-spacing-1 tx-color-03 tx-uppercase tx-sans mg-b-10">Mobile Phone</label>
-                  <p class="tx-primary tx-rubik mg-b-0"></p>
+                  <p class="tx-primary tx-rubik mg-b-0">User Phone Number</p>
                 </div>
-                <div class="col-6 col-sm-4">
-                  <label class="tx-10 tx-medium tx-spacing-1 tx-color-03 tx-uppercase tx-sans mg-b-10">Date Created</label>
-                  <p class="tx-primary tx-rubik mg-b-0"></p>
+                <div class="col-6 col-sm-4 mg-t-20 mg-sm-t-0">
+                  <label class="tx-10 tx-medium tx-spacing-1 tx-color-03 tx-uppercase tx-sans mg-b-10">Franchisee ID</label>
+                  <p class="tx-primary mg-b-0">FR-39B53ACC</p>
                 </div>
-                <div class="col-sm-6 mg-t-20 mg-sm-t-30">
-                  <label class="tx-10 tx-medium tx-spacing-1 tx-color-03 tx-uppercase tx-sans mg-b-10">Home Address</label>
-                  <p class="mg-b-0">8284 Ajose Adeogun Street, Victoria Island, Lagos, Nigeria</p>
+                
+                <div class="col-sm-4 mg-t-20 mg-sm-t-30">
+                  <label class="tx-10 tx-medium tx-spacing-1 tx-color-03 tx-uppercase tx-sans mg-b-10">Address</label>
+                  <p class="mg-b-0">USER ADDRESS</p>
                 </div>
-                <div class="col-sm-6 mg-t-20 mg-sm-t-30">
+                
+                <div class="col-sm-4 mg-t-20 mg-sm-t-30">
                     <label class="tx-10 tx-medium tx-spacing-1 tx-color-03 tx-uppercase tx-sans mg-b-10">Rating</label>
                     <p class="mg-b-0">
                         <div class="pd-t-10 pd-b-15 d-flex align-items-baseline">
@@ -85,8 +87,6 @@
                   <label class="tx-10 tx-medium tx-spacing-1 tx-color-03 tx-uppercase tx-sans mg-b-10">Account Number</label>
                   <p class="tx-primary mg-b-0">1111111111</p>
                 </div>
-                
-
               </div><!-- row -->
             </div>
           </div><!-- tab-content -->

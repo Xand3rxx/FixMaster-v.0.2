@@ -104,6 +104,7 @@ class TechnicianProfileController extends Controller
     {
 
         $user = User::where('id', Auth::id())->first();
+
         return view('technician.view_profile', compact('user'));
         //return view('technician.view_profile');
     }
@@ -115,7 +116,9 @@ class TechnicianProfileController extends Controller
     {
 
         $result = User::findOrFail(Auth::id());
-        return view('technician.edit_profile', compact('result'));
+        $banks = \App\Models\Bank::get(['id', 'name']);
+
+        return view('technician.edit_profile', compact('result', 'banks'));
 
         //return view('technician.edit_profile');
     }
