@@ -292,7 +292,10 @@ Route::prefix('/cse')->group(function () {
             ]
         )->name('request_details');
         Route::view('/profile',             'cse.view_profile')->name('view_profile');
-        Route::view('/profile/edit',        'cse.edit_profile')->name('edit_profile');
+        Route::view('/profile/edit',        'cse.edit_profile', [
+            'banks' => \App\Models\Bank::all(),
+
+        ])->name('edit_profile');
         Route::view('/location-request',    'cse.location_request')->name('location_request');
     });
 });

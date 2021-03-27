@@ -127,6 +127,30 @@
                               @enderror
                             </div>
                           </div>
+                          <div class="form-group col-md-6">
+                            <label>Bank</label>
+                            <select name="bank_id" id="bank_id" class="form-control @error('bank_id') is-invalid @enderror" required>
+                              <option value="">Select...</option>
+                              @foreach($banks as $bank)
+                              <option value="{{ $bank->id }}" {{ old('bank_id') == $bank->id ? 'selected' : ''}}>{{ $bank->name }}</option>
+                              @endforeach
+                          </select>
+                          @error('bank_id')
+                          <span class="invalid-feedback" role="alert">
+                              <strong>{{ $message }}</strong>
+                          </span>
+                          @enderror
+                          </div>
+
+                          <div class="form-group col-md-6">
+                            <label for="inputEmail4">Account Number</label>
+                            <input type="tel" class="form-control @error('account_number') is-invalid @enderror" id="account_number" name="account_number" maxlength="11" value="{{ old('account_number') }}" required>
+                            @error('account_number')
+                              <span class="invalid-feedback" role="alert">
+                                  <strong>{{ $message }}</strong>
+                              </span>
+                            @enderror
+                          </div>
 
                             <!-- Full Address -->
                             <div class="form-group col-md-12">
