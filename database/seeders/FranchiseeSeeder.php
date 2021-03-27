@@ -68,6 +68,8 @@ class FranchiseeSeeder extends Seeder
             'middle_name'   => "Emeka",
             'last_name'     => "Zuwa",
             'gender'        => 'male',
+            'bank_id'           =>  15,
+            'account_number'    =>  '0086218211',
             'avatar'        => 'default-male-avatar.png',
         ]);
 
@@ -79,6 +81,8 @@ class FranchiseeSeeder extends Seeder
             'middle_name'   => "Efetobore",
             'last_name'     => "Badmus",
             'gender'        => 'male',
+            'bank_id'           =>  7,
+            'account_number'    =>  '3278901791',
             'avatar'        => 'default-male-avatar.png',
         ]);
 
@@ -90,6 +94,8 @@ class FranchiseeSeeder extends Seeder
             'middle_name'   => "Chiamaka",
             'last_name'     => "Ibe",
             'gender'        => 'female',
+            'bank_id'           =>  18,
+            'account_number'    =>  '0912681210',
             'avatar'        => 'default-female-avatar.png',
         ]);
 
@@ -121,54 +127,9 @@ class FranchiseeSeeder extends Seeder
         $franchiseeTable->established_on = '2021-01-02';
         $franchiseeTable->save();
 
-        // Franchisee Phone record Account
-        $franchiseePhone = \App\Models\Phone::create([
-            'user_id' =>  $franchisee->id,
-            'account_id'  => $franchiseeAccount->id,
-            'country_id'  => 156, //Nigeria
-            'number'   => "08068236128"
-        ]);
-
-        $franchiseePhone = \App\Models\Phone::create([
-            'user_id' =>  $franchisee1->id,
-            'account_id'  => $franchiseeAccount1->id,
-            'country_id'  => 156, //Nigeria
-            'number'   => "08124367777"
-        ]);
-
-        $franchiseePhone = \App\Models\Phone::create([
-            'user_id' =>  $franchisee2->id,
-            'account_id'  => $franchiseeAccount2->id,
-            'country_id'  => 156, //Nigeria
-            'number'   => "07014728999"
-        ]);
-
-        $franchiseeAddress = \App\Models\Address::create([
-            'user_id'           =>  $franchisee->id,
-            'account_id'        =>  $franchiseeAccount->id,
-            'country_id'        =>  156, //Nigeria
-            'address'           =>  "6 Ikoyi Club 1938 Rd, Ikoyi, Lagos",
-            'address_longitude' =>  "3.428400",
-            'address_latitude'  =>  "6.452420",
-        ]);
-
-        $franchiseeAddress = \App\Models\Address::create([
-            'user_id'           =>  $franchisee1->id,
-            'account_id'        =>  $franchiseeAccount1->id,
-            'country_id'        =>  156, //Nigeria
-            'address'           =>  "Ipaja Rd, Alagba, Lagos",
-            'address_longitude' =>  "3.303510",
-            'address_latitude'  =>  "6.623930",
-        ]);
-
-        $franchiseeAddress = \App\Models\Address::create([
-            'user_id'           =>  $franchisee2->id,
-            'account_id'        =>  $franchiseeAccount2->id,
-            'country_id'        =>  156, //Nigeria
-            'address'           =>  "Akerele St, Surulere, Lagos",
-            'address_longitude' =>  "3.358380",
-            'address_latitude'  =>  "6.503340",
-        ]);
-
+        // Sample Implementation for storing Contact Details of a user
+        \App\Models\Contact::attemptToStore($franchisee->id, $franchiseeAccount->id, 156, '08165716389', "75 Adisa Bashua St, Surulere, Lagos", "3.351161", "6.496493");
+        \App\Models\Contact::attemptToStore($franchisee1->id, $franchiseeAccount1->id, 156, '08026819127', "Alaba International Market Rd, Ojo, Lagos", "3.140905", "6.4679");
+        \App\Models\Contact::attemptToStore($franchisee2->id, $franchiseeAccount2->id, 156, '09082354903', "2 Ayeronwi St, Ikotun, Lagos", "3.33639", "6.50536");
     }
 }

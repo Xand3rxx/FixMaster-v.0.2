@@ -2,10 +2,26 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class Town extends Model
 {
-    use HasFactory;
+    /**
+     * The attributes that are mass assignable.
+     *
+     * @var array
+     */
+    protected $fillable = ['name'];
+
+    /**
+     * Save Town details
+     * 
+     * @param  string   $name
+     * 
+     * @return \App\Model\Town|Null
+     */
+    protected static function saveTown(string $name)
+    {
+        return Town::firstOrCreate(['name' => $name]);
+    }
 }

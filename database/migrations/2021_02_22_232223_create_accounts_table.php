@@ -35,6 +35,7 @@ class CreateAccountsTable extends Migration
 
             $table->enum('gender', ['male', 'female', 'others']);
 
+            $table->foreignId('bank_id')->index()->nullable();
             $table->string('account_number', '30')->unique()->nullable();
 
             $table->string('avatar')->nullable();

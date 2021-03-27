@@ -23,10 +23,11 @@ class CreateWalletTransactionsTable extends Migration
             $table->foreignId('payment_id');
             $table->integer('amount')->unsigned();
             $table->enum('payment_type', ['funding','service-request','refund']);
-            $table->string('unique_id', 191)->unique();
+            $table->string('unique_id', 191)->comment('e.g. WAL-36786429');
             $table->enum('transaction_type', ['debit', 'credit']);
             $table->unsignedInteger('opening_balance');
             $table->unsignedInteger('closing_balance');
+            $table->enum('status', ['success','pending','failed']);
             $table->softDeletes();
             $table->timestamps();
         });

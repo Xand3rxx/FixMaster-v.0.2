@@ -135,7 +135,7 @@ p{margin-bottom:.3em;}
                         <label>Contact Number:<span class="text-danger">*</span></label>
 
                         <div class="custom-control custom-checkbox form-group position-relative">
-                            <input type="radio" id="customRadio1" name="phone_number" value="yes" class="custom-control-input">
+                            <input type="radio" id="customRadio1" name="use_my_phone_number" value="yes" class="custom-control-input">
                             <label class="custom-control-label" for="customRadio1">Use my saved Phone Number</label>
                         </div>
                     
@@ -159,7 +159,7 @@ p{margin-bottom:.3em;}
                         <label>Address:<span class="text-danger">*</span></label>
 
                         <div class="custom-control custom-checkbox form-group position-relative">
-                            <input type="radio" id="customRadio3" name="address" class="custom-control-input" value="yes">
+                            <input type="radio" id="customRadio3" name="use_my_address" class="custom-control-input" value="yes">
                             <label class="custom-control-label" for="customRadio3">Use my saved Address</label>
                         </div>
                     
@@ -220,7 +220,7 @@ p{margin-bottom:.3em;}
                             <label class="custom-control-label" for="pay_offline">Pay Offline</label>
                         </div>
                     </div>
-                    <input type="hidden" value="{{$balance->closing_balance}}" name="balance">
+                    <input type="hidden" value="{{!empty($balance->closing_balance) ? $balance->closing_balance : '0'}}" name="balance">
                     <!-- <div class="row d-none payment-options">
                         <div class="col-md-6">
                             <div class="media key-feature align-items-center p-3 rounded shadow mt-4">

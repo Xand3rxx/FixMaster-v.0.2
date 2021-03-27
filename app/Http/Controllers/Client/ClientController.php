@@ -506,7 +506,8 @@ class ClientController extends Controller
         //   ]);
         
             $all = $request->all();
-            dd($all);
+            // dd($all);
+
             // $nttr = $request->get("booking_fee");
             // $services = implode(',', (array) $request->input('booking_fee'));
             // dd($services);
@@ -517,7 +518,7 @@ class ClientController extends Controller
                 // if wallet balance is less than the service fee
                 if($request->balance<$request->booking_fee){
                     $service_request                        = new Servicerequest;  
-                    $service_request->cliend_id             = auth()->user()->id;
+                    $service_request->client_id             = auth()->user()->id;
                     $service_request->service_id            = $request->service_id;
                     $service_request->unique_id             = 'REF-'.$this->generateReference();
                     $service_request->price_id              = $request->price_id;
@@ -529,8 +530,22 @@ class ClientController extends Controller
                     $service_request->description           = $request->description;
                     $service_request->total_amount          = $request->booking_fee;
                     $service_request->preferred_time        = $request->timestamp;
-                    $service_request->closing_balance       = $request->balance;
-                    dd($service_request);
+
+                    // if ($service_request->use_my_address == 'yes') {
+                    //     # code... 
+                    // }
+                    // if ($service_request->use_my_phone_number == 'yes') {
+                    //     # code... 
+                    // }
+                    $service_request->save();
+                    
+                    $wallet_transaction = WalletTransaction::findOrFail(auth()->user()->id);
+                    $wallet_transaction->opening_balance = $request->balance; 
+                    $wallet_transaction->closing_balance = $request->balance - $request->booking_fee; 
+                    $wallet_transaction->closing_balance = 'debit';
+                    // $service_request->closing_balance       = $request->balance;
+                    dd($service_request); 
+                    $wallet_transaction->save();
                 }else{
                         Session::flash('alert', 'sorry!, your wallet balance is less than the service amount, pls use other payment method or add more fund to your wallet');
                     }                  
