@@ -15,27 +15,9 @@ class InvoiceController extends Controller
      */
     public function index()
     {
-        return view('admin.invoices.index');
-    }
-
-   public static function storeDiagnosticInvoice($user_id, $service_request_id, $invoice_type, $total_amount, $amount_due, $amount_paid) {
-        $createDiagnosticInvoice = Invoice::create([
-            'uuid' => Str::uuid('uuid'),
-            'user_id' => $user_id,
-            'service_request_id'
+        return view('admin.invoices.index')->with([
+            'invoices' => \App\Models\Invoice::with('user')->get()
         ]);
-
-   }
-
-    public static function storeRFQInvoice($user_id, $service_request_id, $invoice_type, $total_amount, $amount_due, $amount_paid) {
-
     }
 
-    public static function storeSupplierInvoice($user_id, $service_request_id, $invoice_type, $total_amount, $amount_due, $amount_paid) {
-
-    }
-
-    public static function storeTotalInvoice($user_id, $service_request_id, $invoice_type, $total_amount, $amount_due, $amount_paid) {
-
-    }
 }

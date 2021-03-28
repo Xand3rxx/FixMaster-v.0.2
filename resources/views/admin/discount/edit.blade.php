@@ -24,7 +24,7 @@
                 <a href="{{ route('admin.discount_list',app()->getLocale()) }}" class="btn btn-primary"><i
                         class="fas fa-arrow-left"></i> Discount List</a>
                 <a href="{{ route('admin.add_discount',app()->getLocale()) }}" class="btn btn-warning"><i
-                        class="fas fa-plus"></i> Edit Discount</a>
+                        class="fas fa-plus"></i> Add Discount</a>
 
             </div>
         </div>
@@ -40,7 +40,7 @@
                         <div class="form-group col-md-12">
                             <label for="entity">Select Entity</label>
                             <select id="entity_id" name="entity" class="custom-select cs-select" id>
-                                <option value="{{ $status->entity }}"> {{$status->entity }} </option>
+                               
                                 @foreach($entities as $key => $value)
                                 <option value="{{ strtolower($value->name) }}"
                                     {{ $status->entity ==  strtolower($value->name) ? 'selected' : ''}}>
@@ -85,6 +85,20 @@
                         <div class="form-group col-md-6 parameter show-estate" id="estate-users">
                             <label class='add-page not-users'>Add Estate Users</label>
                             <select class="selectpicker show-tick select-user" id="estate-user" name="users[]"
+                                title="select..." multiple="multiple" data-selected-text-format="count>3"
+                                data-live-search="true">
+                                <option value="">Select...</option>
+                            </select>
+                            @error('users')
+                            <span class="invalid-feedback-err">
+                                <strong>{{ $message }}</strong>
+                            </span>
+                            @enderror
+                        </div>
+
+                        <div class="form-group col-md-12 show-service" id="add-users">
+                            <label class='add-page service'>Add Users</label>
+                            <select class="selectpicker show-tick select-user" id="service-users" name="users[]"
                                 title="select..." multiple="multiple" data-selected-text-format="count>3"
                                 data-live-search="true">
                                 <option value="">Select...</option>
@@ -220,7 +234,7 @@
                                     <label for="entity">States</label>
                                     @php $name = isset($request_state->name)? $request_state->name : ''; @endphp
                                     @php $id = isset($request_state->id)? $request_state->id : ''; @endphp
-                                    <select id="state_id" name="state" class="custom-select cs-select">
+                                    <select id="state_id" name="specified_request_state" class="custom-select cs-select">
                                         <option value="{{$id }}"> {{$name}} </option>
                                         @foreach($states as $state)
                                         <option value="{{ $state->id }}"
@@ -521,6 +535,7 @@ $(document).ready(function() {
                 success: function(data) {
                     if (data) {
                         $("#users").html(data.options).selectpicker('refresh');
+                        $("#service-users").html(data.options).selectpicker('refresh');
                     } else {
                         var message =
                             'Error occured while trying to get Enity Parameter List`s in ';
@@ -695,6 +710,9 @@ $(document).ready(function() {
                 if (data && entity == 'estate') {
                     $("#estate-user").html(data.options).selectpicker('refresh');
                 }
+                if (data && entity == 'service') {
+                        $("#service-users").html(data.options).selectpicker('refresh');
+                    }
 
                 if (!data) {
                     var message =
@@ -797,6 +815,7 @@ $(document).ready(function() {
                 success: function(data) {
                     if (data) {
                         $('#category_id').html(data.category).selectpicker('refresh');
+                        $("#service-users").html(data.options).selectpicker('refresh');
 
                     } else {
                         var message =
@@ -827,6 +846,10 @@ $(document).ready(function() {
                     }
                     if (data && entity == 'estate') {
                         $("#estate-user").html(data.options).selectpicker('refresh');
+                        $("#service-users").html(data.options).selectpicker('refresh');
+                    }
+                    if (data && entity == 'service') {
+                        $("#service-users").html(data.options).selectpicker('refresh');
                     }
                     if (!data) {
                         var message =

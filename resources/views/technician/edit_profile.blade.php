@@ -38,10 +38,17 @@
                             <div class="mg-sm-r-30">
                                 <div class="pos-relative d-inline-block mg-b-20">
                                   <a href="#">
-                                  {{-- {{asset('assets/technician_images/'.$result->account->avatar)}} --}}
-                                    <div class="avatar avatar-xxl">  
+                                  @php
+                                  if($result->account->gender == "male")
+                                   $photo = "default-male-avatar.png";
+                                  elseif($result->account->gender == "female")
+                                  $photo = "default-female-avatar.png";
+                                  else
+                                  $photo = "no-image-available.png";
+                                  @endphp
+                                    <div class="avatar avatar-xxl">
                                       <div class="user-img">
-                                        <img class="rounded-circle wh-150p img-fluid image profile_image_preview" src="{{ asset('assets/images/no-image-available.png') }}" alt="user-image">
+                                        <img class="rounded-circle wh-150p img-fluid image profile_image_preview" src="{{!empty($result->account->avatar) ? asset('assets/user-avatars/'.$result->account->avatar) : asset('assets/user-avatars/'.$photo)}}" alt="user-image">
                                       </div>
                                     </div>
                                   </a>
@@ -81,17 +88,16 @@
                           <div class="form-group col-md-3">
                             <label>Gender</label>
                             <select name="gender" id="gender" class="form-control @error('gender') is-invalid @enderror" required>
-                              <option value="{{$result->account->gender}}">{{$result->account->gender}}</option>
-                              <option value="">Choose....</option>
-                              <option value="male"}>Male</option>
-                              <option value="female">Female</option>
-                              <option value="others">Others</option>
+                              <option value="">Select...</option>
+                              <option value="male" {{ old('gender') ?? $result->account->gender == 'male' ? 'selected' : ''}}>Male</option>
+                              <option value="female" {{ old('gender') ?? $result->account->gender == 'female' ? 'selected' : ''}}>Female</option>
+                              <option value="others" {{ old('gender') ?? $result->account->gender == 'others' ? 'selected' : ''}}>Others</option>
                            </select>
                           </div>
                             <!-- Email -->
                             <div class="form-group col-md-4">
                               <label for="inputEmail4">Email</label>
-                              <input type="email" class="form-control @error('email') is-invalid @enderror" id="email" name="email" value="{{$result->email}}" readonly>
+                              <input type="email" class="form-control @error('email') is-invalid @enderror" id="email" name="email" value="{{$result->email ?? 'Null' }}" readonly>
                               @error('email')
                               <span class="invalid-feedback" role="alert">
                                   <strong>{{ $message }}</strong>
@@ -101,7 +107,7 @@
                           <!-- Phone Number -->
                           <div class="form-group col-md-4">
                             <label for="inputEmail4">Phone Number</label>
-                            <input type="tel" class="form-control @error('phone_number') is-invalid @enderror" id="phone_number" name="phone_number" maxlength="11" value="{{ old('phone_number')?? $result->phone->number }}" required>
+                            <input type="tel" class="form-control @error('phone_number') is-invalid @enderror" id="phone_number" name="phone_number" maxlength="11" value="{{ old('phone_number') }}" required>
                             @error('phone_number')
                               <span class="invalid-feedback" role="alert">
                                   <strong>{{ $message }}</strong>
@@ -126,11 +132,36 @@
 
                               </div>
 
+                            <div class="form-group col-md-6">
+                              <label>Bank</label>
+                              <select name="bank_id" id="bank_id" class="form-control @error('bank_id') is-invalid @enderror" required>
+                                <option value="">Select...</option>
+                                @foreach($banks as $bank)
+                                <option value="{{ $bank->id }}" {{ old('bank_id') == $bank->id ? 'selected' : ''}}>{{ $bank->name }}</option>
+                                @endforeach
+                            </select>
+                            @error('bank_id')
+                            <span class="invalid-feedback" role="alert">
+                                <strong>{{ $message }}</strong>
+                            </span>
+                            @enderror
+                            </div>
+
+                            <div class="form-group col-md-6">
+                              <label for="inputEmail4">Account Number</label>
+                              <input type="tel" class="form-control @error('account_number') is-invalid @enderror" id="account_number" name="account_number" maxlength="11" value="{{ old('account_number') }}" required>
+                              @error('account_number')
+                                <span class="invalid-feedback" role="alert">
+                                    <strong>{{ $message }}</strong>
+                                </span>
+                              @enderror
+                            </div>
+
 
                             <!-- Full Address -->
                             <div class="form-group col-md-12">
                               <label for="inputAddress2">Full Address</label>
-                              <textarea rows="3" class="user_address form-control @error('full_address') is-invalid @enderror" placeholder="e.g. 284B, Ajose Adeogun Street, Victoria Island, Lagos, Nigeria." id="inputAddress2" name="full_address" required>{{$result->address}}</textarea>
+                              <textarea rows="3" class="user_address form-control @error('full_address') is-invalid @enderror" placeholder="e.g. 284B, Ajose Adeogun Street, Victoria Island, Lagos, Nigeria." id="inputAddress2" name="full_address" required></textarea>
                               @error('full_address')
                             <span class="invalid-feedback" role="alert">
                                 <strong>{{ $message }}</strong>
@@ -149,7 +180,6 @@
                   <h6>CHANGE PASSWORD</h6>
                   <p class="mg-b-0 text-danger">In order to change your password, you need to provide the current password.</p>
                   <div class="card-body pd-20 pd-lg-25">
-                  
                   <form action="{{route('technician.update_password', app()->getLocale())}}" method="post" role="form" enctype="multipart/form-data">
                       {{ csrf_field() }}
                       @method('PATCH')
@@ -167,10 +197,12 @@
                           <label for="new_password">New Password</label>
                           <input type="password" class="form-control @error('new_password') is-invalid @enderror" id="new_password" name="new_password" onkeyup='check();' required>
                           @error('new_password')
+                          
                             <span class="invalid-feedback" role="alert">
                                 <strong>{{ $message }}</strong>
                             </span>
                           @enderror
+                          <small class="text-muted">Password must be minimum of 6 characters</small>
                         </div>
                         <div class="form-group col-md-4">
                           <label for="new_confirm_password">Confirm Password</label>
@@ -206,14 +238,11 @@
 
 <script>
     $('.selectpicker').selectpicker();
-
     $(document).ready(function() {
         "use strict";
         let autocomplete;
         initialize();
-
         
-
         function initialize() {
             // Create the autocomplete object, restricting the search to geographical location types.
             autocomplete = new google.maps.places.Autocomplete((document.querySelector('.user_address')), {
@@ -222,7 +251,7 @@
             
             // Chain request to html element on the page
             google.maps.event.addDomListener(document.querySelector('.user_address'), 'focus');
-           
+            
         }
     });
 </script>
@@ -234,38 +263,30 @@
   (function($){
     "use scrict";
     $(document).ready(function(){
-
       $(document).on('change','#profile_image', function(){
         readURL(this);
       })
-
       reader.readAsDataURL(input.files[0]);
-
       function readURL(input){
         if(input.files && input.files[0]){
           var reader = new FileReader();
           var res = isImage(input.files[0].name);
-
           if(res==false){
             var msg = 'Image should be png/PNG, jpg/JPG & jpeg/JPG';
             Snackbar.show({text: msg, pos: 'bottom-right',backgroundColor:'#d32f2f', actionTextColor:'#fff' });
             return false;
           }
-
           reader.onload = function(e){
             $('.profile_image_preview').attr('src', e.target.result);
             $("imagelabel").text((input.files[0].name));
           }
-
           reader.readAsDataURL(input.files[0]);
         }
       }
-
       function getExtension(filename) {
           var parts = filename.split('.');
           return parts[parts.length - 1];
       }
-
       function isImage(filename) {
           var ext = getExtension(filename);
           switch (ext.toLowerCase()) {
@@ -277,11 +298,8 @@
           }
           return false;
       }
-
     })
-
  })(jQuery);
-
  var check = function() {
   if (document.getElementById('new_password').value ==
     document.getElementById('new_confirm_password').value) {
@@ -292,6 +310,5 @@
     document.getElementById('message').innerHTML = 'Password does not Match';
   }
 }
-
 </script>
 @endsection

@@ -181,52 +181,53 @@
                           </tr>
                           <tr>
                             <td class="tx-medium">Service Required</td>
-                            <td class="tx-color-03">{{ $serviceRequests->description ?? '' }}</td>
+                            <td class="tx-color-03">{{$serviceRequests->service->name}}</td>
                           </tr>
                           <tr>
                             <td class="tx-medium">Scheduled Date & Time</td>
                             <td class="tx-color-03">{{ Carbon\Carbon::parse($serviceRequests->preferred_time, 'UTC')->isoFormat('MMMM Do YYYY, h:mm:ssa') }}</td>
                           </tr>
                           <tr>
-                            <td class="tx-medium">Payment Status</td>
-                            <td class="tx-color-03"><span class="text-success">Success</span>(Paystack or Flutterwave or E-Wallet or Offline)</td>
-                          </tr>
-                          <tr>
                             <td class="tx-medium">Initial Service Charge</td>
                             <td class="tx-color-03">₦{{ number_format($serviceRequests->total_amount )}}</td>
                           </tr>
                           <tr>
-                            <td class="tx-medium">Total Service Charge</td>
+                            <td class="tx-medium">Current Service Charge</td>
                             <td class="tx-color-03">₦{{ number_format($serviceRequests->total_amount )}}</td>
                           </tr>
                           <tr>
                             <td class="tx-medium">Security Code</td>
                             <td class="tx-color-03">{{ $serviceRequests->client_security_code ?? '' }}</td>
                           </tr>
-                          <tr>
+                          {{-- <tr>
                             <td class="tx-medium">Supervised By</td>
-                            <td class="tx-color-03">David Akinsola</td>
+                            <td class="tx-color-03">David Akinsola {{-- @foreach($serviceRequests->users as $data)
+                            @foreach($data->roles as $res)
+                            @if($res->url == "admin")
+                            <td class="tx-color-03">
+
+                                {{$data->account->first_name}} {{$data->account->last_name}}
+
+                            </td>
+                            @endif
+                            @endforeach
+                            @endforeach--}}</td>
                           </tr>
                           <tr>
                             <td class="tx-medium">CSE's Assigned</td>
-                            <td class="tx-color-03">
-                              (1) Benedict Mayowa<br>
-                              (2) Other CSE's Assigned
-                            </td>
+                            <td class="tx-color-03">List all CSE's assigned on this request</td>
                           </tr>
                           <tr>
-                            <td class="tx-medium">Technicians Assigned</td>
-                            <td class="tx-color-03">
-                              (1) Jamal Diwa<br>
-                              (2) Other technicians Assigned
-                            </td>
+                            <td class="tx-medium">Technician's Assigned</td>
+                            <td class="tx-color-03">List all Technician's assigned on this request</td>
                           </tr>
                           <tr>
-                            <td class="tx-medium">Quality Assurance Managers Assigned</td>
-                            <td class="tx-color-03">
-                              (1) UNAVAILABLE<br>
-                              (2) Other QA's Assigned
-                            </td>
+                            <td class="tx-medium">QA's Assigned</td>
+                            <td class="tx-color-03">List all QA's assigned on this request</td>
+                          </tr>
+                          <tr>
+                            <td class="tx-medium">Payment Status</td>
+                            <td class="tx-color-03">Paid</td>
                           </tr>
                           <tr>
                             <td class="tx-medium">L.G.A</td>
@@ -238,7 +239,7 @@
                           </tr>
                           <tr>
                             <td class="tx-medium">Request Address</td>
-                            <td class="tx-color-03">{{ $serviceRequests->address ?? '' }}</td>
+                            <td class="tx-color-03"></td>
                           </tr>
                           <tr>
                             <td class="tx-medium">Request Description</td>
@@ -248,8 +249,8 @@
                           {{-- If theres a cancellation, make this row visible --}}
                           {{-- @if(!empty($requestDetail->serviceRequestCancellationReason->reason)) --}}
                           <tr>
-                            <td class="tx-medium">Reason for Cancellation </td>
-                            <td class="tx-color-03">I'm no longer interested. <span class="text-danger">(Only visible if the request was cancelled)</span></td>
+                            <td class="tx-medium">Reason for Cancellation</td>
+                            <td class="tx-color-03">I'm no longer interested.</td>
                           </tr>
                           {{-- @endif --}}
                         </tbody>
@@ -257,6 +258,7 @@
 
                       {{-- @if(!empty($requestDetail->serviceRequestDetail->media_file)) --}}
                       <div class="divider-text">Media Files</div>
+                      <small class="text-danger">This portion is only visible if a media file is available. Aslo revmove this text once the check is completed.</small>
                         <div class="row">
                           <div class="pd-20 pd-lg-25 pd-xl-30">
                 
@@ -325,7 +327,6 @@
 <script>
   $(function(){
     'use strict'
-
     $(document).on('click', '#tool-request-details', function(event) {
       event.preventDefault();
       let route = $(this).attr('data-url');
@@ -354,7 +355,6 @@
           timeout: 8000
       })
     });
-
     $(document).on('click', '#rfq-details', function(event) {
       event.preventDefault();
       let route = $(this).attr('data-url');
@@ -383,14 +383,10 @@
           timeout: 8000
       })
     });
-
     $('.close').click(function (){
       $(".modal-backdrop").remove();
     });
-
   });
-
-
 </script>
 @endpush
 

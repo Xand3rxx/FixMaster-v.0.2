@@ -8,12 +8,53 @@
     .avatar.avatar-ex-smm { max-height: 75px; }
 </style>
 
+<style>
+.cc-selector input{
+    margin:0;padding:0;
+    -webkit-appearance:none;
+       -moz-appearance:none;
+            appearance:none;
+}
+.paystack{background-image:url({{ asset('assets/images') }}/paystack.png);}
+.flutter{background-image:url({{ asset('assets/images') }}/flutter.png);}
+
+.cc-selector input:active +.drinkcard-cc{opacity: .5;}
+.cc-selector input:checked +.drinkcard-cc{
+    -webkit-filter: none;
+       -moz-filter: none;
+            filter: none;
+}
+.drinkcard-cc{
+    cursor:pointer;
+    background-size:contain;
+    background-repeat:no-repeat;
+    display:inline-block;
+    width:100px;height:10em;
+    -webkit-transition: all 100ms ease-in;
+       -moz-transition: all 100ms ease-in;
+            transition: all 100ms ease-in;
+    -webkit-filter: brightness(1.8) grayscale(1) opacity(.7);
+       -moz-filter: brightness(1.8) grayscale(1) opacity(.7);
+            filter: brightness(1.8) grayscale(1) opacity(.7);
+}
+.drinkcard-cc:hover{
+    -webkit-filter: brightness(1.2) grayscale(.5) opacity(.9);
+       -moz-filter: brightness(1.2) grayscale(.5) opacity(.9);
+            filter: brightness(1.2) grayscale(.5) opacity(.9);
+}
+
+/* Extras */
+a:visited{color:#888}
+a{color:#999;text-decoration:none;}
+p{margin-bottom:.3em;}
+</style>
+
 <div class="col-lg-8 col-12">
     <div class="card custom-form border-0">
         <div class="card-body mt-4">
             {{-- <h5><span class="font-weight-bold">{{ $service->name }}</span> Service Request</h5> --}}
             <div class="card blog">
-            <div class="position-relative" style="height: 100px !important">
+            <!-- <div class="position-relative" style="height: 100px !important">
                 @if(empty($service->image))
                         <img src="{{ asset('assets/images/no-image-available.png') }}" alt="Image not available" class="card-img-top rounded-top" height="100px !important">
                 @else
@@ -24,7 +65,7 @@
                     @endif
                 @endif
                 <div class="overlay rounded-top bg-dark"></div>
-            </div>
+            </div> -->
 
             <div class="author">
                 <h4 class="text-light user d-block"><i class="mdi mdi-bookmark"></i> {{ !empty($service->name) ? $service->name : 'UNAVAILABLE' }}</h4>
@@ -32,11 +73,11 @@
             </div>
             </div>
 
-            <form class="rounded p-4" method="POST" action="" enctype="multipart/form-data">
+            <form class="rounded p-4" method="POST" action="{{ route('client.services.serviceRequest', app()->getLocale()) }}" enctype="multipart/form-data">
                 @csrf
                 <small class="text-danger">A Booking Fee deposit is required to validate this order and enable our AI assign a Customer Service Executice(CSE) to your Job.</small>
 
-                <input type="hidden" class="d-none" value="{{ $service->service_id }}" name="service_id">
+                <input type="hidden" class="d-none" value="{{ $service->id }}" name="service_id">
 
                 <div class="row" id="pills-tab" role="tablist">
                     <ul class="nav nav-pills bg-white nav-justified flex-column mb-0" id="pills-tab" role="tablist">
@@ -48,6 +89,7 @@
                                         <p class="text-muted tab-para mb-0">{{ !empty($bookingFee->description) ? $bookingFee->description : 'No description found' }}</p>
                                         <input type="radio" name="price_id" value="{{ $bookingFee->id }}" class="custom-control-input booking-fee" @if(old('price_id') == $bookingFee->id) checked @endif>
 
+                                        <input type="hidden" name="booking_fee" value="{{$bookingFee->amount}}">
                                     </div>
                                 </a><!--end nav link-->
                             </li><!--end nav item-->
@@ -139,7 +181,7 @@
                     
                     @if($discounts->count() > 0)
                     <div class="col-md-12 form-group">
-                        <h5><span class="font-weight-bold">Available Service Request</span></h5>
+                        <h5><span class="font-weight-bold">Available Discounts</span></h5>
                         <small class="text-danger">The selected discount will be applied on final invoice.</small>
                     </div>
 
@@ -177,8 +219,8 @@
                             <label class="custom-control-label" for="pay_offline">Pay Offline</label>
                         </div>
                     </div>
-
-                    <div class="row d-none payment-options">
+                    <input type="hidden" value="{{!empty($balance->closing_balance) ? $balance->closing_balance : '0'}}" name="balance">
+                    <!-- <div class="row d-none payment-options">
                         <div class="col-md-6">
                             <div class="media key-feature align-items-center p-3 rounded shadow mt-4">
                                 <a href="#" data-toggle="modal" data-target="#modal-form">
@@ -207,7 +249,37 @@
                                     </a>
                                 </div>
                             </div>
-                        </div>
+                        </div> -->
+
+
+         @foreach($gateways as $val) 
+            <div class="col-md-6 cc-selector d-none payment-options">
+                      <!-- <input id="{{$val->name}}" type="radio" name="credit-card" value="{{$val->name}}" />
+                      <label class="drinkcard-cc {{$val->name}}" for="{{$val->name}}"></label> -->
+                <div class="media key-feature align-items-center p-3 rounded shadow mt-4">
+                <a href="#" data-toggle="modal" data-target="#modal-form{{$val->id}}" >
+                    <img src="{{ asset('assets/images') }}/{{$val->name}}.png" class="avatar avatar-ex-smm" alt="">
+                </a>
+                <a href="javascript:void(0)" class="text-primary">
+                <div class="media-body content ml-3">
+                <a href="#" data-toggle="modal" data-target="#modal-form{{$val->id}}" >
+                    <h4 class="title mb-0">{{$val->name}}</h4>
+                    </a>
+                </div>
+                </a>
+                </div>
+            </div>
+        @endforeach
+
+
+    <!-- <div class="col-md-6 cc-selector d-none payment-options">
+        @foreach($gateways as $val) 
+          <input id="{{$val->name}}" type="radio" name="credit-card" value="{{$val->name}}" />
+          <label class="drinkcard-cc {{$val->name}}" for="{{$val->name}}"></label>
+        @endforeach
+    </div> -->
+
+
                     </div>
                         {{-- </div>
                     </div><!--end col--> --}}

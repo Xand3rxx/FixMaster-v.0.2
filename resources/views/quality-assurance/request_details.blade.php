@@ -23,7 +23,7 @@
             </span>
             <div class="media-body mg-sm-l-20">
               <h4 class="tx-18 tx-sm-20 mg-b-2">{{$result->clientAccount->first_name}} {{$result->clientAccount->middle_name}} {{$result->clientAccount->last_name}}</h4>
-              <p class="tx-13 tx-color-03 mg-b-0">{{$result->phone->number}}</p>
+              <p class="tx-13 tx-color-03 mg-b-0"></p>
             </div>
           </div><!-- media -->
         </div>
@@ -271,7 +271,7 @@
                           </tr>
                           <tr>
                             <td class="tx-medium">Request Address</td>
-                            <td class="tx-color-03">{{$result->address->address}}</td>
+                            <td class="tx-color-03"></td>
                           </tr>
                           <tr>
                             <td class="tx-medium">Request Description</td>
@@ -291,6 +291,8 @@
 
                       {{-- @if(!empty($requestDetail->serviceRequestDetail->media_file)) --}}
                       <div class="divider-text">Media Files</div>
+                      <small class="text-danger">This portion is only visible if a media file is available. Aslo revmove this text once the check is completed.</small>
+
                         <div class="row">
                           <div class="pd-20 pd-lg-25 pd-xl-30">
 

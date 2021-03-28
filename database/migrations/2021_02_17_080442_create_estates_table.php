@@ -40,8 +40,8 @@ class CreateEstatesTable extends Migration
             $table->enum('is_active', ['approved', 'declined', 'pending', 'deactivated', 'reinstated'])->default('pending');
             $table->string('slug');
             $table->json('discounted')->nullable();
-            $table->softDeletes();
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

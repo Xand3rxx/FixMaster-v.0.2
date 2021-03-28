@@ -136,163 +136,49 @@ class ClientSeeder extends Seeder
         // Client Table
         $clientTable = new \App\Models\Client();
         $clientTable->user_id = $client->id;
-        $clientTable->unique_id = 'WAL-23782382';
+        $clientTable->unique_id = 'WAL-760BCC86';
         $clientTable->account_id = $clientAccount->id;
         $clientTable->estate_id = '1';
-        $clientTable->	profession_id = '18';
+        $clientTable->profession_id = '18';
         $clientTable->save();
 
         $clientTable = new \App\Models\Client();
         $clientTable->user_id = $client1->id;
-        $clientTable->unique_id = 'WAL-21780953';
+        $clientTable->unique_id = 'WAL-A3C9FAC4';
         $clientTable->account_id = $clientAccount1->id;
         $clientTable->estate_id = '1';
-        $clientTable->	profession_id = '12';
+        $clientTable->profession_id = '12';
         $clientTable->save();
 
         $clientTable = new \App\Models\Client();
         $clientTable->user_id = $client2->id;
-        $clientTable->unique_id = 'WAL-50B6D80A';
+        $clientTable->unique_id = 'WAL-1D61A777';
         $clientTable->account_id = $clientAccount2->id;
         $clientTable->estate_id = '2';
-        $clientTable->	profession_id = '3';
+        $clientTable->profession_id = '3';
         $clientTable->save();
 
         $clientTable = new \App\Models\Client();
         $clientTable->user_id = $client3->id;
-        $clientTable->unique_id = 'WAL-BFE41F23';
+        $clientTable->unique_id = 'WAL-DCE47AD1';
         $clientTable->account_id = $clientAccount3->id;
         $clientTable->estate_id = '3';
-        $clientTable->	profession_id = '14';
+        $clientTable->profession_id = '14';
         $clientTable->save();
 
         $clientTable = new \App\Models\Client();
         $clientTable->user_id = $client4->id;
-        $clientTable->unique_id = 'WAL-DB9DBC86';
+        $clientTable->unique_id = 'WAL-19362ADF';
         $clientTable->account_id = $clientAccount4->id;
         $clientTable->estate_id = '3';
-        $clientTable->	profession_id = '22';
+        $clientTable->profession_id = '22';
         $clientTable->save();
 
-        $clientPhone = \App\Models\Phone::create([
-            'user_id' =>  $client->id,
-            'account_id'  => $clientAccount->id,
-            'country_id'  => 156, //Nigeria
-            'number'   => "07069836642"
-        ]);
-
-        $clientPhone = \App\Models\Phone::create([
-            'user_id' =>  $client1->id,
-            'account_id'  => $clientAccount1->id,
-            'country_id'  => 156, //Nigeria
-            'number'   => "08069386642"
-        ]);
-
-        $clientPhone = \App\Models\Phone::create([
-            'user_id' =>  $client2->id,
-            'account_id'  => $clientAccount2->id,
-            'country_id'  => 156, //Nigeria
-            'number'   => "08069386641"
-        ]);
-
-        $clientPhone = \App\Models\Phone::create([
-            'user_id' =>  $client3->id,
-            'account_id'  => $clientAccount2->id,
-            'country_id'  => 156, //Nigeria
-            'number'   => "07036722889"
-        ]);
-
-        $clientPhone = \App\Models\Phone::create([
-            'user_id' =>  $client4->id,
-            'account_id'  => $clientAccount2->id,
-            'country_id'  => 156, //Nigeria
-            'number'   => "09082354902"
-        ]);
-
-        $clientAddress = \App\Models\Address::create([
-            'user_id'           =>  $client->id,
-            'account_id'        =>  $clientAccount->id,
-            'country_id'        =>  156, //Nigeria
-            'address'           =>  "14 Idowu Martins St, Victoria Island, Lagos",
-            'address_longitude' =>  "3.420010",
-            'address_latitude'  =>  "6.432820",
-        ]);
-
-        $clientAddress = \App\Models\Address::create([
-            'user_id'           =>  $client1->id,
-            'account_id'        =>  $clientAccount1->id,
-            'country_id'        =>  156, //Nigeria
-            'address'           =>  "1-9 Reeve Rd, Ikoyi, Lagos",
-            'address_longitude' =>  "3.441440",
-            'address_latitude'  =>  "6.453120",
-        ]);
-
-        $clientAddress = \App\Models\Address::create([
-            'user_id'           =>  $client2->id,
-            'account_id'        =>  $clientAccount2->id,
-            'country_id'        =>  156, //Nigeria
-            'address'           =>  "Bisola Durosinmi Etti Drive, The Rock Dr, Lekki Phase 1, Lagos",
-            'address_longitude' =>  "3.464150",
-            'address_latitude'  =>  "6.437240",
-        ]);
-
-        $clientAddress = \App\Models\Address::create([
-            'user_id'           =>  $client3->id,
-            'account_id'        =>  $clientAccount3->id,
-            'country_id'        =>  156, //Nigeria
-            'address'           =>  "8 Oba Akinjobi Way, Ikeja GRA, Ikeja",
-            'address_longitude' =>  "3.346660",
-            'address_latitude'  =>  "6.586420",
-        ]);
-
-        $clientAddress = \App\Models\Address::create([
-            'user_id'           =>  $client4->id,
-            'account_id'        =>  $clientAccount4->id,
-            'country_id'        =>  156, //Nigeria
-            'address'           =>  "8 Oremeji St, Oke Odo, Lagos",
-            'address_longitude' =>  "3.346660",
-            'address_latitude'  =>  "6.586420",
-        ]);
-
-        $clientDiscount = \App\Models\ClientDiscount::create([
-            'discount_id'      =>  1, 
-            'client_id'        =>  $client->id, 
-            'estate_id'        =>  NULL,
-            'service_id'       =>  NULL, 
-            'availability'     =>  'unused', 
-        ]);
-
-        $clientDiscount = \App\Models\ClientDiscount::create([
-            'discount_id'      =>  1, 
-            'client_id'        =>  $client1->id, 
-            'estate_id'        =>  NULL,
-            'service_id'       =>  NULL, 
-            'availability'     =>  'unused', 
-        ]);
-
-        $clientDiscount = \App\Models\ClientDiscount::create([
-            'discount_id'      =>  1, 
-            'client_id'        =>  $client2->id, 
-            'estate_id'        =>  NULL,
-            'service_id'       =>  NULL, 
-            'availability'     =>  'unused', 
-        ]);
-
-        $clientDiscount = \App\Models\ClientDiscount::create([
-            'discount_id'      =>  1, 
-            'client_id'        =>  $client3->id, 
-            'estate_id'        =>  NULL,
-            'service_id'       =>  NULL, 
-            'availability'     =>  'unused', 
-        ]);
-
-        $clientDiscount = \App\Models\ClientDiscount::create([
-            'discount_id'       =>  1, 
-            'client_id'         =>  $client4->id, 
-            'estate_id'         =>  NULL,
-            'service_id'        =>  NULL, 
-            'availability'      =>  'unused', 
-        ]);
+        // Sample Implementation for storing Contact Details of a user
+        \App\Models\Contact::attemptToStore($client->id, $clientAccount->id, 156, '07069836642', "14 Idowu Martins St, Victoria Island, Lagos", "3.420010", "6.432820");
+        \App\Models\Contact::attemptToStore($client1->id, $clientAccount1->id, 156, '08069386642', "1-9 Reeve Rd, Ikoyi, Lagos", "3.441440", "6.453120");
+        \App\Models\Contact::attemptToStore($client2->id, $clientAccount2->id, 156, '08069386641', "Bisola Durosinmi Etti Drive, The Rock Dr, Lekki Phase 1, Lagos", "3.464150", "6.437240");
+        \App\Models\Contact::attemptToStore($client3->id, $clientAccount3->id, 156, '07036722889', "8 Oba Akinjobi Way, Ikeja GRA, Ikeja", "3.346660", "6.586420");
+        \App\Models\Contact::attemptToStore($client4->id, $clientAccount4->id, 156, '09082354911', "8 Oremeji St, Oke Odo, Lagos", "3.299630", "6.618710");
     }
 }
-

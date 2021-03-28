@@ -128,17 +128,18 @@
           <h5 class="mg-t-40 mg-b-20">Contact Details</h5>
 
           <div class="row row-sm">
-            <div class="col-6 col-sm mg-t-20">
+            <div class="col-4 col-sm mg-t-20">
               <label class="tx-10 tx-medium tx-spacing-1 tx-color-03 tx-uppercase tx-sans mg-b-10">Phone Number</label>
               <p class="tx-primary tx-rubik mg-b-0">001111111</p>
             </div>
-            <div class="col-6 col-sm mg-t-20">
-              <label class="tx-10 tx-medium tx-spacing-1 tx-color-03 tx-uppercase tx-sans mg-b-10">Other Phone Number</label>
-              <p class="tx-primary tx-rubik mg-b-0">001111111</p>
-            </div>
-            <div class="col-6 col-sm mg-t-20">
+            <div class="col-4 col-sm mg-t-20">
               <label class="tx-10 tx-medium tx-spacing-1 tx-color-03 tx-uppercase tx-sans mg-b-10">Email Address</label>
               <p class="tx-primary mg-b-0">jd@test.com</p>
+            </div>
+
+            <div class="col-4 col-sm mg-t-20">
+              <label class="tx-10 tx-medium tx-spacing-1 tx-color-03 tx-uppercase tx-sans mg-b-10">Franchise</label>
+              <p class="tx-rubik mg-b-0">FixMaster(RN-234FSH32)</p>
             </div>
           </div>
 
@@ -177,10 +178,6 @@
           <div class="table-responsive">
             <table class="table table-striped table-sm mg-b-0">
               <tbody>
-                <tr>
-                  <td class="tx-medium">Service Category</td>
-                  <td class="tx-color-03"><?php $m = 0; ?>@if(!empty($categoryNames)) @foreach ($categoryNames as $name) ({{ ++$m }}) {{ $name }}<br> @endforeach @else Not Assigned @endif</td>
-                </tr>
                 <tr>
                   <td class="tx-medium">Status</td>
                   <td class="tx-color-03">@if($user->is_active == '1') Active @else Inactive @endif</td>
@@ -234,12 +231,12 @@
                       <th>Job Ref.</th>
                       <th>Client</th>
                       <th>Supervised By</th>
+                      <th>QA</th>
                       <th>Technician</th>
-                      <th class="text-center">Amount</th>
-                      <th class="text-center">Fee Type</th>
+                      <th class="text-center">Total Amount</th>
                       <th class="text-center">Status</th>
                       <th class="text-center">Scheduled Date</th>
-                      {{-- <th class="text-center">Action</th> --}}
+                      <th class="text-center">Action</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -247,29 +244,29 @@
                     
                     <tr>
                       <td class="tx-color-03 tx-center">1</td>
-                      <td class="tx-medium">ref123</td>
-                      <td class="tx-medium">Jane doe</td>
-                      <td class="tx-medium">Jane Doe</td>
-                      <td class="tx-medium">Tom Jones</td>
-                      <td class="tx-medium text-center">
-                        
-                      </td>
-                      <td>12</td>
+                      <td class="tx-medium">REF-79A722D6</td>
+                      <td class="tx-medium">Kelvin Adesanya</td>
+                      <td class="tx-medium">Charles Famoriyo</td>
+                      <td class="tx-medium">Yvonne Okoye</td>
+                      <td class="tx-medium">Jamal Diwa</td>
+                      <td>20,0000</td>
+                      <td class="tx-medium text-center text-success">Completed</td>
                       
-                      <td class="text-center">12:00</td>
-                      {{-- <td class=" text-center">
+                      <td class="text-center">March 23rd 2021, 12:00pm</td>
+                      <td class=" text-center">
                         <div class="dropdown-file">
                           <a href="" class="dropdown-link" data-toggle="dropdown"><i data-feather="more-vertical"></i></a>
                           <div class="dropdown-menu dropdown-menu-right">
-                          <a href="" class="dropdown-item details"><i class="far fa-clipboard"></i> Details</a>
+                          <a href="#serviceRequestDetails" data-toggle="modal" class="dropdown-item details"><i class="far fa-clipboard"></i> Details</a>
                           </div>
                         </div>
-                      </td> --}}
+                      </td>
                     </tr>
                     
                     <tr>
                       <td class="text-center" colspan="5">Total</td>
-                      <td class="text-center tx-medium">₦{{ number_format(1000) }}</td>
+                      <td class="text-center tx-medium">₦{{ number_format(20000) }}</td>
+                      <td></td>
                       <td></td>
                       <td></td>
                       <td></td>
@@ -403,103 +400,241 @@
           {{-- <div class="d-flex align-items-center justify-content-between mg-b-30"> --}}
 
               <h6 class="tx-15 mg-b-0">Activity Log</h6>
-              <div class="table-responsive mt-4">
-                <div class="row mt-1 mb-1 ml-1 mr-1">
-                <input value="" type="hidden" id="user_id">
-                <input value="" type="hidden" id="route">
+              <div class="card mg-b-10">
+                <div class="card-header pd-t-20 d-sm-flex align-items-start justify-content-between bd-b-0 pd-b-0">
+                  <div>
+                    <h6 class="mg-b-5">Activity Log</h6>
+                    <p class="tx-13 tx-color-03 mg-b-0">Use the select dropdowns to sort Activity Logs.</p>
+                  </div>
+                  
+                </div><!-- card-header -->
                
-                  <div class="col-md-3">
-                    <div class="form-group">
-                        <label>Sort Type</label>
-                        <select class="custom-select" id="activity_log_type">
-                            <option selected value="None">Select...</option>
-                              <option value="Errors">Errors</option>
-                              <option value="Login">Login</option>
-                              <option value="Logout">Logout</option>
-                              <option value="Others">Others</option>
-                              <option value="Payments">Payments</option>
-                              <option value="Profile">Profile</option>
-                              <option value="Request">Requests</option>
-                              <option value="Unauthorized">Unauthorized</option>
-                        </select>
-                    </div>
-                  </div><!--end col-->
+                <div class="table-responsive">
+                  <div class="row mt-1 mb-1 ml-1 mr-1">
+                      <div class="col-md-3">
+                        <div class="form-group">
+                            <label>Sort Type</label>
+                            <select class="custom-select" id="activity_log_type">
+                                <option selected value="None">Select...</option>
+                                <option value="Errors">Errors</option>
+                                <option value="Login">Login</option>
+                                <option value="Logout">Logout</option>
+                                <option value="Others">Others</option>
+                                <option value="Payments">Payments</option>
+                                <option value="Profile">Profile</option>
+                                <option value="Unauthorized">Unauthorized</option>
+                            </select>
+                        </div>
+                      </div><!--end col-->
+        
+        
+                      <div class="col-md-3">
+                          <div class="form-group">
+                              <label>Sort Date</label>
+                              <select class="custom-select" id="sort_by_range">
+                                  <option value="None">Select...</option>
+                                  <option value="Date">Date</option>
+                                  <option value="Month">Month</option>
+                                  <option value="Year">Year</option>
+                                  <option value="Date Range">Date Range</option>
+                              </select>
+                          </div>
+                      </div><!--end col-->
+          
+                      <div class="col-md-3 specific-date d-none">
+                          <div class="form-group position-relative">
+                              <label>Specify Date <span class="text-danger">*</span></label>
+                              <input name="name" id="specific_date" type="date" class="form-control pl-5">
+                          </div>
+                      </div>
+          
+                      <div class="col-md-3 sort-by-year d-none">
+                          <div class="form-group position-relative">
+                              <label>Specify Year <span class="text-danger">*</span></label>
+                              <select class="form-control custom-select" id="sort_by_year">
+                                  <option value="">Select...</option>
+                                    <option value="2017">2021</option>
+                              </select>
+                          </div>
+                      </div>
+          
+                      <div class="col-md-3 sort-by-year d-none" id="sort-by-month">
+                          <div class="form-group position-relative">
+                              <label>Specify Month <span class="text-danger">*</span></label>
+                              <select class="form-control custom-select" id="sort_by_month">
+                                  <option value="">Select...</option>
+                                  <option value="January">January</option>
+                                  <option value="February">February</option>
+                                  <option value="March">March</option>
+                                  <option value="April">April</option>
+                                  <option value="May">May</option>
+                                  <option value="June">June</option>
+                                  <option value="July">July</option>
+                                  <option value="August">August</option>
+                                  <option value="September">September</option>
+                                  <option value="October">October</option>
+                                  <option value="November">November</option>
+                                  <option value="December">December</option>
+                              </select>
+                          </div>
+                      </div>
+          
+                      <div class="col-md-3 date-range d-none">
+                          <div class="form-group position-relative">
+                              <label>From <span class="text-danger">*</span></label>
+                              <input name="name" id="date_from" type="date" class="form-control pl-5">
+                          </div>
+                      </div>
+          
+                      <div class="col-md-3 date-range d-none">
+                          <div class="form-group position-relative">
+                              <label>To <span class="text-danger">*</span></label>
+                              <input name="name" id="date_to" type="date" class="form-control pl-5">
+                          </div>
+                      </div>
+                  </div>
+          
+                  <table class="table table-dashboard mg-b-0" id="basicExample">
+                  <thead>
+                      <tr>
+                      <th width="5%">#</th>
+                      <th width="10%">Type</th>
+                      <th width="20%">Date Created</th>
+                      <th width="65%">Message</th>
+                      </tr>
+                  </thead>
+                  <tbody>
+                      <tr>
+                      <td class="tx-color-03">1</td>
+                      <td class="tx-medium">Login</td>
+                      <td class="tx-medium">March 23rd 2021, 9:30:37am</td>
+                      <td class="tx-medium">Justus Ochei logged in <a href="#activityLogDetailsModal" data-toggle="modal" data-url="#" id="activity-log-details" title="View activity log details"> <i class="fas fa-info-circle"></i></a></td>
+                      </tr>
+
+                      <tr>
+                      <td class="tx-color-03">2</td>
+                      <td class="tx-medium">Logout</td>
+                      <td class="tx-medium">March 23rd 2021, 9:30:37am</td>
+                      <td class="tx-medium">Justus Ochei logged out at March 23rd 2021, 11:45:09am with a session duration of (00:02:15 dd:hr:m:s) <a href="#activityLogDetailsModal" data-toggle="modal" data-url="#" id="activity-log-details" title="View activity log details"> <i class="fas fa-info-circle"></i></a></td>
+                      </tr>
+
+                      <tr class="alert alert-danger">
+                      <td class="tx-color-03">3</td>
+                      <td class="tx-medium">Unauthorized</td>
+                      <td class="tx-medium">March 23rd 2021, 9:30:37am</td>
+                      <td class="tx-medium">An Unauthorized entity tried to login with Email: fake@email.com and Password: thefake368guy<a href="#activityLogDetailsModal" data-toggle="modal" data-url="#" id="activity-log-details" title="View activity log details"> <i class="fas fa-info-circle"></i></a></td>
+                      </tr>
+                  </tbody>
+                  </table>
+                </div><!-- table-responsive -->
     
-    
-                  <div class="col-md-3">
-                      <div class="form-group">
-                          <label>Sort Date</label>
-                          <select class="custom-select" id="sort_by_range">
-                              <option value="None">Select...</option>
-                              <option value="Date">Date</option>
-                              <option value="Month">Month</option>
-                              <option value="Year">Year</option>
-                              <option value="Date Range">Date Range</option>
-                          </select>
-                      </div>
-                  </div><!--end col-->
-      
-                  <div class="col-md-3 specific-date d-none">
-                      <div class="form-group position-relative">
-                          <label>Specify Date <span class="text-danger">*</span></label>
-                          <input name="name" id="specific_date" type="date" class="form-control pl-5">
-                      </div>
-                  </div>
-      
-                  <div class="col-md-3 sort-by-year d-none">
-                      <div class="form-group position-relative">
-                          <label>Specify Year <span class="text-danger">*</span></label>
-                          <select class="form-control custom-select" id="sort_by_year">
-                              <option value="">Select...</option>
-                             
-                                <option value="">2020</option>
-                              
-                          </select>
-                      </div>
-                  </div>
-      
-                  <div class="col-md-3 sort-by-year d-none" id="sort-by-month">
-                      <div class="form-group position-relative">
-                          <label>Specify Month <span class="text-danger">*</span></label>
-                          <select class="form-control custom-select" id="sort_by_month">
-                              <option value="">Select...</option>
-                              <option value="January">January</option>
-                              <option value="February">February</option>
-                              <option value="March">March</option>
-                              <option value="April">April</option>
-                              <option value="May">May</option>
-                              <option value="June">June</option>
-                              <option value="July">July</option>
-                              <option value="August">August</option>
-                              <option value="September">September</option>
-                              <option value="October">October</option>
-                              <option value="November">November</option>
-                              <option value="December">December</option>
-                          </select>
-                      </div>
-                  </div>
-      
-                  <div class="col-md-3 date-range d-none">
-                      <div class="form-group position-relative">
-                          <label>From <span class="text-danger">*</span></label>
-                          <input name="name" id="date_from" type="date" class="form-control pl-5">
-                      </div>
-                  </div>
-      
-                  <div class="col-md-3 date-range d-none">
-                      <div class="form-group position-relative">
-                          <label>To <span class="text-danger">*</span></label>
-                          <input name="name" id="date_to" type="date" class="form-control pl-5">
-                      </div>
-                  </div>
-                </div>
-    
-                
-              </div><!-- table-responsive -->
+              
+              </div><!-- card -->
           {{-- </div> --}}
         </div><!-- tab-pane -->
 
       </div><!-- tab-content -->
     </div><!-- contact-content-body -->
 </div>
+
+<div class="modal fade" id="serviceRequestDetails" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel2" aria-hidden="true" data-keyboard="false" data-backdrop="static">
+  <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+    <div class="modal-content tx-14">
+      <div class="modal-header">
+        <h6 class="modal-title" id="exampleModalLabel2">Service Details</h6>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body pd-x-25 pd-sm-x-30 pd-t-40 pd-sm-t-20 pd-b-15 pd-sm-b-20" id="modal-body">
+        <table class="table table-striped table-sm mg-b-0">
+          <tbody>
+            <tr>
+              <td class="tx-medium">Job Reference</td>
+              <td class="tx-color-03">REF-234234723</td>
+            </tr>
+            <tr>
+              <td class="tx-medium">Service Required</td>
+              <td class="tx-color-03">Eletronics (Computer & Laptops)</td>
+            </tr>
+            <tr>
+              <td class="tx-medium">Scheduled Date & Time</td>
+              <td class="tx-color-03">{{ Carbon\Carbon::parse('2020-12-28 16:58:54', 'UTC')->isoFormat('MMMM Do YYYY, h:mm:a') }}</td>
+            </tr>
+            <tr>
+              <td class="tx-medium">Payment Status</td>
+              <td class="tx-color-03"><span class="text-success">Success</span>(Paystack or Flutterwave or E-Wallet or Offline)</td>
+            </tr>
+            <tr>
+              <td class="tx-medium">Initial Service Charge</td>
+              <td class="tx-color-03">₦{{ number_format(10000) }} (Standard Price)</td>
+            </tr>
+            <tr>
+              <td class="tx-medium">Total Service Charge</td>
+              <td class="tx-color-03">₦{{ number_format(15000) }}</td>
+            </tr>
+            <tr>
+              <td class="tx-medium">Security Code</td>
+              <td class="tx-color-03">SEC-27AEC73E</td>
+            </tr>
+            <tr>
+              <td class="tx-medium">Supervised By</td>
+              <td class="tx-color-03">David Akinsola</td>
+            </tr>
+            <tr>
+              <td class="tx-medium">CSE's Assigned</td>
+              <td class="tx-color-03">
+                (1) Benedict Mayowa<br>
+                (2) Other CSE's Assigned
+              </td>
+            </tr>
+            <tr>
+              <td class="tx-medium">Technicians Assigned</td>
+              <td class="tx-color-03">
+                (1) Jamal Diwa<br>
+                (2) Other technicians Assigned
+              </td>
+            </tr>
+            <tr>
+              <td class="tx-medium">Quality Assurance Managers Assigned</td>
+              <td class="tx-color-03">
+                (1) UNAVAILABLE<br>
+                (2) Other QA's Assigned
+              </td>
+            </tr>
+            <tr>
+              <td class="tx-medium">State</td>
+              <td class="tx-color-03">Lagos</td>
+            </tr>
+            <tr>
+              <td class="tx-medium">L.G.A</td>
+              <td class="tx-color-03">Eti-Osa</td>
+            </tr>
+            <tr>
+              <td class="tx-medium">Town/City</td>
+              <td class="tx-color-03">Ikoyi</td>
+            </tr>
+            <tr>
+              <td class="tx-medium">Request Address</td>
+              <td class="tx-color-03">27B, Bourdillon Road off Falomo, Ikoyi-Lagos.</td>
+            </tr>
+            <tr>
+              <td class="tx-medium">Request Description</td>
+              <td class="tx-color-03">My pc no longer comes on even when plugged into a power source.</td>
+            </tr>
+
+            {{-- If theres a cancellation, make this row visible --}}
+            {{-- @if(!empty($requestDetail->serviceRequestCancellationReason->reason)) --}}
+            <tr>
+              <td class="tx-medium">Reason for Cancellation </td>
+              <td class="tx-color-03">I'm no longer interested. <span class="text-danger">(Only visible if the request was cancelled)</span></td>
+            </tr>
+            {{-- @endif --}}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
 @endsection
