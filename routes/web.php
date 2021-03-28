@@ -277,7 +277,7 @@ Route::prefix('/client')->middleware('verified')->group(function () {
     });
 });
 
-Route::resource('cse', CseController::class);
+// Route::resource('cse', CseController::class);
 
 // Route::prefix('/cse')->group(function () {
 //     Route::name('cse.')->group(function () {
