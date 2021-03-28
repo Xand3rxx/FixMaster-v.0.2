@@ -6,15 +6,17 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Str;
 
-class LoyaltyManagementHistory extends Model
+
+class ClientLoyaltyWithdrawal extends Model
 {
     use HasFactory;
 
     protected $fillable = [
      
-        'client_id','wallet','points', 'type','amount','loyalty_mgt_id'
+        'client_id','wallet','withdrawal', 'type','loyalty_mgt_id'
     
     ];
+
 
     protected static function boot()
     {
@@ -23,5 +25,4 @@ class LoyaltyManagementHistory extends Model
             $model->uuid = Str::uuid()->toString();
         });
     }
-
 }

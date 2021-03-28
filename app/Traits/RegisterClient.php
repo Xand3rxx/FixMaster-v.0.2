@@ -51,13 +51,15 @@ trait RegisterClient
                 'profession_id' => $valid['profession_id'] ?? "0",
             ]);
 
-            // Store in referrals table
-            $code = $valid['ref'];
-            if ($code) {
-                Referral::where('referral_code', $code)->increment('referral_count', 1);
-                Referral::create(['user_id' => $user->id, 'referral' => $code, 'referral_count' => 0]);
-            }
-
+             // Store in referrals table
+             if(isset($valid['ref'])){
+                $code = $valid['ref'];
+                if($code){
+                   Referral::where('referral_code', $code )->increment('referral_count' , 1);
+                   Referral::create(['user_id'=> $user->id, 'referral'=> $code, 'referral_count'=> 0]);  
+                }
+               }
+           
             // update registered to be true
             $registred = true;
             $this->guard()->login($user);

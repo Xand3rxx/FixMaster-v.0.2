@@ -14,7 +14,7 @@ class LoyaltyManagement extends Model
     protected $table = "loyalty_managements";
     protected $fillable = [
      
-        'client_id','wallet','points', 'type'
+        'client_id','wallet','points', 'type','amount'
     
     ];
 

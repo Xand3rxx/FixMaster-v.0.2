@@ -41,6 +41,8 @@
                                     <th class="text-center">#</th>
                                     <th>Name</th>
                                     <th>Points</th>
+                                    <th>Amount</th>
+                                    <th>loyalty in Naira</th>
                                     <th>Date Created</th>
                                     <th class="text-center">Action</th>
                                 </tr>
@@ -53,8 +55,8 @@
                                     <td class="tx-medium">{{ucfirst($row->first_name) }} {{ucfirst($row->last_name) }}</td>
                                     <td class="tx-medium">{{ $row->points}}</td>
                              
-                                 
-                      
+                                    <td class="tx-medium">{{ $row->amount}}</td>
+                                    <td class="tx-medium">{{ $row->points/100 * $row->amount }} &#8358;</td>
                                     <td class="text-medium">
                                         {{ Carbon\Carbon::parse($row->created_at, 'UTC')->isoFormat('MMMM Do YYYY, h:mm:ssa') }}
                                     </td>
@@ -74,7 +76,7 @@
                                              
 
                                                 <a href="#" id="delete" 
-                                                    data-url="{{ route('admin.delete_loyalty', [ 'loyalty'=>$row->uuid, 'locale'=>app()->getLocale() ]) }}"
+                                                    data-url="{{ route('admin.delete_loyalty', [ 'loyalty'=>$row->uuid, 'client'=>$row->client_id,'locale'=>app()->getLocale() ]) }}"
                                                     class="dropdown-item details text-danger" title="Delete Discount"><i
                                                         class="fas fa-trash"></i> Delete</a>
 
