@@ -30,7 +30,7 @@ class ClientRegistrationController extends Controller
             'states' => \App\Models\State::all(),
             'activeEstates' => \App\Models\Estate::select('id', 'estate_name')
                 ->orderBy('estates.estate_name', 'ASC')
-                ->where('estates.is_active', 'reinstated')
+                ->where('estates.is_active', 'approved')
                 ->get(),
         ]);
     }
@@ -66,7 +66,7 @@ class ClientRegistrationController extends Controller
         // dd($request->all());
         // Validate Client Registration
         $oldvalid = $this->validateCreateClient($request); 
-      ;
+      
        $valid = array_merge($oldvalid, ["ref" =>  $request->ref]);
        
         // Register a Client User
@@ -146,8 +146,9 @@ class ClientRegistrationController extends Controller
             'confirm_password'          =>   'required|same:password',
             'full_address'              =>   'required',
             'terms_and_conditions'      =>   'required|accepted',
-            'estate_id'                 =>   'nullable|numeric'
-         
+            'estate_id'                 =>   'nullable|numeric',
+            'address_latitude'          =>   'required|string',
+            'address_longitude'          =>   'required|string',
         ]);
     }
 }

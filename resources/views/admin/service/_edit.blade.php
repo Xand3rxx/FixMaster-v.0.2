@@ -6,7 +6,7 @@
   <div class="row row-xs">
     <div class="col-md-12">
       <div class="form-row">
-          <div class="form-group col-md-4">
+          <div class="form-group col-md-3">
               <label for="name">Name</label>
               <input type="text" class="form-control @error('name') is-invalid @enderror" name="name" id="name" placeholder="Name" value="{{ old('name') ?? $category->name }}" autocomplete="off">
               @error('name')
@@ -15,7 +15,7 @@
                 </span>
               @enderror
           </div>
-          <div class="form-group col-md-4">
+          <div class="form-group col-md-3">
             <label>Service</label>
             <select class="custom-select @error('category_id') is-invalid @enderror" name="category_id">
               <option selected value="">Select...</option>
@@ -31,7 +31,16 @@
               </span>
             @enderror
           </div>
-          <div class="form-group col-md-4">
+          <div class="form-group col-md-3">
+            <label for="service_charge">Service Charge</label>
+            <input type="number" min="1" maxlength="7" class="form-control @error('service_charge') is-invalid @enderror" name="service_charge" id="service_charge" placeholder="Service Charge" value="{{ old('service_charge') ?? $category->service_charge }}" autocomplete="off">
+            @error('service_charge')
+              <span class="invalid-feedback" role="alert">
+                  <strong>{{ $message }}</strong>
+              </span>
+            @enderror
+        </div>
+          <div class="form-group col-md-3">
             <label>Category Cover Image</label>
             <div class="custom-file">
               <input type="file" accept="image/*" class="custom-file-input @error('image') is-invalid @enderror" name="image" id="image">

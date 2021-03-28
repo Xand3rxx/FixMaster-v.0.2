@@ -23,3 +23,10 @@
   @include('layouts.partials._technician_sidebar')
 @endif
 <!-- END TECHNICIAN & ARTISAN SIDEBAR MENU -->
+
+<!-- START FRANCHISEE SIDEBAR MENU -->
+@if(Auth::user()->type->role->name === 'Franchisee(CSE Coordinator)')
+  @include('layouts.partials._franchisee_sidebar')
+@endif
+<!-- END FRANCHISEE SIDEBAR MENU -->
+

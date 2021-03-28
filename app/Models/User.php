@@ -5,9 +5,10 @@ namespace App\Models;
 use Illuminate\Support\Str;
 use App\Traits\RolesAndPermissions;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 
-class User extends Authenticatable
+class User extends Authenticatable implements MustVerifyEmail
 {
     use Notifiable, RolesAndPermissions;
 
@@ -102,6 +103,14 @@ class User extends Authenticatable
     }
 
     /**
+     * Get the Account associated with the user.
+     */
+    public function contact()
+    {
+        return $this->hasOne(Contact::class);
+    }
+
+    /**
      * Get the Administrator associated with the user.
      */
     public function administrator()
@@ -125,28 +134,9 @@ class User extends Authenticatable
         return $this->hasMany(ActivityLog::class);
     }
 
-    /**
-     * Get the phone associated with the user.
-     */
-    public function phone()
+    public function address()
     {
-        return $this->hasOne(Phone::class);
-    }
-
-    /**
-     * Get the phone associated with the user.
-     */
-    public function phones()
-    {
-        return $this->hasMany(Phone::class);
-    }
-
-    /**
-     * Get the phone associated with the user.
-     */
-    public function addresses()
-    {
-        return $this->hasMany(Address::class);
+        return $this->hasOne(Address::class, 'user_id');
     }
 
     public function estate()
@@ -181,5 +171,14 @@ class User extends Authenticatable
     public function serviceRequests()
     {
         return $this->hasMany(ServiceRequest::class);
+    }
+    
+    public function clientRequest()
+    {
+        return $this->hasOne(ServiceRequest::class, 'client_id');
+    }
+    public function clientRequests()
+    {
+        return $this->hasMany(ServiceRequest::class, 'client_id');
     }
 }

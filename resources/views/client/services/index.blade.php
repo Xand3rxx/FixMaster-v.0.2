@@ -50,11 +50,20 @@
                     <div class="col-md-4 mt-4 pt-2">
                         <div class="card blog rounded border-0 shadow">
                             <div class="position-relative">
-                            <img alt="{{ $item->name }}" src="{{ asset('assets/service-images/'.$item->image) }}"  class="card-img-top rounded-top" />
+                                @if(empty($item->image))
+                                        <img src="{{ asset('assets/images/no-image-available.png') }}" alt="Image not available" class="card-img-top rounded-top" height="100px !important">
+                                @else
+                                    @if(file_exists(public_path().'/assets/service-images/'.$item->image))
+                                        <img src="{{ asset('assets/service-images/'.$item->image) }}" alt="{{ !empty($item->name) ? $item->name : 'UNAVAILABLE'  }}" class="card-img-top rounded-top">
+                                    @else
+                                        <img src="{{ asset('assets/images/no-image-available.png') }}" alt="Image not available" class="card-img-top rounded-top" height="100px !important">
+                                    @endif
+                                @endif
+
                                 <div class="overlay rounded-top bg-dark"></div>
                             </div>
                             <div class="card-body content">
-                                <h5><a href="javascript:void(0)" class="card-title title text-dark">{{ $item->name }}</a> <a href="{{ route('client.services.details', ['service'=>$item->uuid, 'locale'=>app()->getLocale()]) }}" title="View {{ $item->name }} service details"> <i data-feather="info" class="text-primary"></i></a></h5>
+                                <h5><a href="javascript:void(0)" class="card-title title text-dark">{{ !empty($item->name) ? $item->name : 'UNAVAILABLE' }}</a> <a href="{{ route('client.services.details', ['service'=>$item->uuid, 'locale'=>app()->getLocale()]) }}" title="View {{ !empty($item->name) ? $item->name : 'UNAVAILABLE' }} service details"> <i data-feather="info" class="text-primary"></i></a></h5>
                                 <div class="post-meta d-flex justify-content-between mt-3">
                                     <a href="{{ route('client.services.quote', ['service'=>$item->uuid, 'locale'=>app()->getLocale()]) }}" class="text-muted readmore">Request Service <i class="mdi mdi-chevron-right"></i></a>
                                 </div>

@@ -43,12 +43,15 @@ class ClientController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
+     * @param  string  $language
+     * @param  string  $uuid
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show($language, $uuid)
     {
-        //
+        return view('admin.users.client.show', [
+            // 
+        ]);
     }
 
     /**

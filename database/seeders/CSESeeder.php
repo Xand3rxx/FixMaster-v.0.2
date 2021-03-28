@@ -64,30 +64,36 @@ class CSESeeder extends Seeder
 
         // CSE Account
         $cseAccount = \App\Models\Account::create([
-            'user_id' =>  $cse->id,
-            'first_name'    => "Benedict",
-            'middle_name'   => "Mayowa",
-            'last_name'     => "Olaoye",
-            'gender'        => 'male',
-            'avatar'        => 'default-male-avatar.png'
+            'user_id'           =>  $cse->id,
+            'first_name'        => "Benedict",
+            'middle_name'       => "Mayowa",
+            'last_name'         => "Olaoye",
+            'gender'            => 'male',
+            'bank_id'           =>  9,
+            'account_number'    =>  '0927628912',
+            'avatar'            => 'default-male-avatar.png'
         ]);
 
         $cseAccount1 = \App\Models\Account::create([
-            'user_id' =>  $cse1->id,
-            'first_name'    => "Susan",
-            'middle_name'   => "Ngozi",
-            'last_name'     => "Simpson",
-            'gender'        => 'male',
-            'avatar'        => 'default-female-avatar.png'
+            'user_id'           =>  $cse1->id,
+            'first_name'        => "Susan",
+            'middle_name'       => "Ngozi",
+            'last_name'         => "Simpson",
+            'gender'            => 'male',
+            'bank_id'           =>  3,
+            'account_number'    =>  '1092732912',
+            'avatar'            => 'default-female-avatar.png'
         ]);
 
         $cseAccount2 = \App\Models\Account::create([
-            'user_id' =>  $cse2->id,
-            'first_name'    => "Jackson",
-            'middle_name'   => "Chisom",
-            'last_name'     => "Okoye",
-            'gender'        => 'male',
-            'avatar'        => 'default-male-avatar.png'
+            'user_id'           =>  $cse2->id,
+            'first_name'        => "Jackson",
+            'middle_name'       => "Chisom",
+            'last_name'         => "Okoye",
+            'gender'            => 'male',
+            'bank_id'           =>  3,
+            'account_number'    =>  '8921220232',
+            'avatar'            => 'default-male-avatar.png'
         ]);
 
         // CSE Table
@@ -95,21 +101,23 @@ class CSESeeder extends Seeder
         $cseTable->user_id = $cse->id;
         $cseTable->account_id = $cseAccount->id;
         $cseTable->referral_id = '1';
-        $cseTable->bank_id = '1';
         $cseTable->save();
 
         $cseTable = new Cse();
         $cseTable->user_id = $cse1->id;
         $cseTable->account_id = $cseAccount1->id;
         $cseTable->referral_id = '2';
-        $cseTable->bank_id = '2';
         $cseTable->save();
 
         $cseTable = new Cse();
         $cseTable->user_id = $cse2->id;
         $cseTable->account_id = $cseAccount2->id;
         $cseTable->referral_id = '3';
-        $cseTable->bank_id = '3';
         $cseTable->save();
+
+        // Sample Implementation for storing Contact Details of a user
+        \App\Models\Contact::attemptToStore($cse->id, $cseAccount->id, 156, '09082354909', "22c Senrolu street, Off Ligali Ayorinde St, Victoria Island, Lagos", "3.4393863", "6.425007");
+        \App\Models\Contact::attemptToStore($cse1->id, $cseAccount1->id, 156, '07063498499', "139 Adeniji Adele St, Lagos Island, Lagos", "3.3867822", "6.4651394");
+        \App\Models\Contact::attemptToStore($cse2->id, $cseAccount2->id, 156, '08129444994', "14 421 Rd, Festac Town, Lagos", "3.2809022", "6.4785962");
     }   
 }

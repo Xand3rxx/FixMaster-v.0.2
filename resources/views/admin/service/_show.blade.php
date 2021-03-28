@@ -26,8 +26,12 @@
             <td class="tx-color-03" width="75%">{{ $category->name }}</td>
         </tr>
         <tr>
-            <td class="tx-medium" width="25%">Service</td>
+            <td class="tx-medium" width="25%">Category</td>
             <td class="tx-color-03" width="75%">{{ $category->category->name }}</td>
+        </tr>
+        <tr>
+            <td class="tx-medium" width="25%">Service Charge</td>
+            <td class="tx-color-03" width="75%">{{ $category->service_charge }}</td>
         </tr>
         <tr>
             <td class="tx-medium" width="25%">Created By</td>
@@ -43,11 +47,7 @@
         </tr>
         <tr>
             <td class="tx-medium" width="25%">Requests</td>
-            <td class="tx-color-03" width="75%">0</td>
-        </tr>
-        <tr>
-            <td class="tx-medium" width="25%">Franchses</td>
-            <td class="tx-color-03" width="75%"3">0</td>
+            <td class="tx-color-03" width="75%">{{ $category->serviceRequests->count() }}</td>
         </tr>
         <tr>
             <td class="tx-medium" width="25%">Description</td>

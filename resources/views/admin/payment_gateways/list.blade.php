@@ -1,5 +1,5 @@
 @extends('layouts.dashboard')
-@section('title', 'Franchise List')
+@section('title', 'List of payment gateways')
 @include('layouts.partials._messages')
 @section('content')
 
@@ -51,11 +51,11 @@
                           <div class="selectgroup">
                             <label class="selectgroup-item">
                               <input type="radio" name="status" value="1" class="selectgroup-input" {{$paystack->status == 1 ? 'checked' : ''}}>
-                              <span class="selectgroup-button">Active</span>
+                              <span class="selectgroup-button">Activate</span>
                             </label>
                             <label class="selectgroup-item">
                               <input type="radio" name="status" value="0" class="selectgroup-input" {{$paystack->status == 0 ? 'checked' : ''}}>
-                              <span class="selectgroup-button">Inactive</span>
+                              <span class="selectgroup-button">Deactivate</span>
                             </label>
                           </div>
                         </div>
@@ -119,11 +119,11 @@
                             <div class="selectgroup">
                               <label class="selectgroup-item">
                                 <input type="radio" name="status" value="1" class="selectgroup-input" {{$flutter->status == 1 ? 'checked' : ''}}>
-                                <span class="selectgroup-button">Active</span>
+                                <span class="selectgroup-button">Activate</span>
                               </label>
                               <label class="selectgroup-item">
                                 <input type="radio" name="status" value="0" class="selectgroup-input" {{$flutter->status == 0 ? 'checked' : ''}}>
-                                <span class="selectgroup-button">Inactive</span>
+                                <span class="selectgroup-button">Deactivate</span>
                               </label>
                             </div>
                         </div>

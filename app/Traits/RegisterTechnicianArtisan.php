@@ -14,8 +14,10 @@ trait RegisterTechnicianArtisan
      * @param  array $valid
      * @return bool 
      */
-    public function register(array $valid, bool $registred = false)
+    public function register(array $valid)
     {
+        (bool) $registred = false;
+        
         DB::transaction(function () use ($valid, &$registred) {
             // Register the User
             $user = $this->createUser($valid);
@@ -45,7 +47,7 @@ trait RegisterTechnicianArtisan
                 'country_id' => 156,
                 'name' => $valid['full_address']
             ]);
-            
+
 
             dd($user, $valid);
         });

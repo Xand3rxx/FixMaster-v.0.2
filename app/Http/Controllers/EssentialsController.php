@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Models\State;
-use Illuminate\Http\Request;
+use App\Models\ServiceRequest;
+use App\Models\ServiceRequestAssigned; 
+use Illuminate\Http\Request;  
 
 class EssentialsController extends Controller
 {
@@ -31,5 +33,11 @@ class EssentialsController extends Controller
 
         return response()->json($data);
 
+    }
+
+    public function getServiceDetails(Request $request){
+        // $serviceRequests = ServiceRequestAssigned::where('user_id', 1)->with('service_request')->get();
+        $serviceRequests = ServiceRequest::with('serviceRequestAssigned')->get();
+        return $serviceRequests;
     }
 }

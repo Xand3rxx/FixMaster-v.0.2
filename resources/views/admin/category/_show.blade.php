@@ -15,10 +15,10 @@
             @foreach ($categoryServices as $categoryService)
             <tr>
                 <td width="5%" class="tx-color-03 tx-center">{{ ++$i }}</td>
-                <td width="25%" class="tx-medium">{{ $categoryService->name }}</td>
+                <td width="25%" class="tx-medium">{{ !empty($categoryService->name) ? $categoryService->name : 'UNAVAILABLE' }}</td>
+            <td width="5%" class="tx-medium text-center">{{ $categoryService->serviceRequests->count() ?? '0' }}</td>
                 <td width="5%" class="tx-medium text-center">0</td>
-                <td width="5%" class="tx-medium text-center">0</td>
-                <td width="65%" class="tx-medium">{{ $categoryService->description }}</td>
+                <td width="65%" class="tx-medium">{{ !empty($categoryService->description) ?$categoryService->description : 'No description found' }}</td>
             </tr>
             @endforeach
         </tbody>
