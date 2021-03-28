@@ -62,7 +62,7 @@
                       <div class="tx-18">
                         <i class="icon ion-md-star lh-0 tx-orange"></i>
                         <i class="icon ion-md-star lh-0 tx-orange"></i>
-                        <i class="icon ion-md-star lh-0 tx-orange"></i>
+                        <i class="icon ion-md-star lh-0 tx-gray-300"></i>
                         <i class="icon ion-md-star lh-0 tx-orange"></i>
                         <i class="icon ion-md-star lh-0 tx-gray-300"></i>
                       </div>
