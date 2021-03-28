@@ -64,7 +64,7 @@
                   <td class="tx-medium">{{ $serviceRequest->account->first_name. ' '.$serviceRequest->account->last_name ?? '' }}</td>
                   <td class="tx-medium"> @foreach($serviceRequest->service_request->users as $data)
                     @foreach($data->roles as $res)
-                    @if($res->url == "admin")
+                    @if($res->url == "cse")
                        {{$data->account->first_name}} {{$data->account->last_name ?? ''}}
                     @endif
                     @endforeach

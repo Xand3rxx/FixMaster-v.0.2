@@ -137,7 +137,7 @@
                               <select name="bank_id" id="bank_id" class="form-control @error('bank_id') is-invalid @enderror" required>
                                 <option value="">Select...</option>
                                 @foreach($banks as $bank)
-                                <option value="{{ $bank->id }}" {{ old('bank_id') == $bank->id ? 'selected' : ''}}>{{ $bank->name }}</option>
+                                <option value="{{ $bank->id }}" {{ old('bank_id') == $bank->id ? 'selected' : ''}}>{{$bank->name ?? ''}}</option>
                                 @endforeach
                             </select>
                             @error('bank_id')

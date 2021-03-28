@@ -170,7 +170,7 @@ class User extends Authenticatable implements MustVerifyEmail
 
     public function serviceRequests()
     {
-        return $this->hasMany(ServiceRequest::class);
+        return $this->hasMany(ServiceRequestAssigned::class, 'user_id');
     }
     
     public function clientRequest()
@@ -185,5 +185,20 @@ class User extends Authenticatable implements MustVerifyEmail
     public function bank()
     {
         return $this->hasOne(Bank::class, 'id');
+    }
+
+    public function serviceCompleted()
+    {
+        return $this->hasMany(Status::class, 'user_id')->where('name','=', 'Completed');
+    }
+
+    public function serviceCancelled()
+    {
+        return $this->hasMany(Status::class, 'user_id')->where('name','=', 'Cancelled');
+    }
+
+    public function cse_jobs()
+    {
+        return $this->hasOne(ServiceRequest::class, 'uuid', 'uuid');
     }
 }

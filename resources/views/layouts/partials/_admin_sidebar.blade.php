@@ -151,7 +151,7 @@
           </ul>
         </li>
 
-        <li class="nav-item with-sub {{ Route::currentRouteNamed('admin.add_referral', 'admin.referral_list') ? 'active show' : '' }}"">
+        <li class="nav-item with-sub {{ Route::currentRouteNamed('admin.add_referral', 'admin.referral_list') ? 'active show' : '' }}">
           <a href="" class="nav-link"><i data-feather="external-link"></i> <span>Referral</span></a>
           <ul>
             <li class="{{ Route::currentRouteNamed('admin.add_referral') ? 'active' : '' }}"><a href="{{ route('admin.add_referral',  app()->getLocale()) }}">Add</a></li>
@@ -163,8 +163,8 @@
           <a href="" class="nav-link"><i data-feather="git-pull-request"></i> <span>Reports</span></a>
           <ul>
             
-            <li class=""><a href="#">CSE</a></li>
-            <li class=""><a href="#">Supplier</a></li>
+          <li class="nav-item {{ Route::currentRouteNamed('admin.cse_reports') ? 'active' : '' }}"><a href="{{ route('admin.cse_reports', app()->getLocale()) }}">CSE</a></li>
+            <li class="{{ Route::currentRouteNamed('admin.cse_reports') ? 'active' : '' }}"><a href="{{ route('admin.add_referral',  app()->getLocale()) }}">Supplier</a></li>
             <li class=""><a href="#">Job MGT</a></li>
             <li class=""><a href="#">Technician</a></li>
             <li class=""><a href="#">Customer</a></li>

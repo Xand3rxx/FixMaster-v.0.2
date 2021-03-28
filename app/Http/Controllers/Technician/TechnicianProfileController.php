@@ -11,6 +11,8 @@ use Session;
 use App\Models\PaymentDisbursed;
 use App\Models\User;
 use App\Models\ServiceRequest;
+use App\Models\Status;
+use App\Models\Bank;
 use App\Models\ServiceRequestAssigned;
 use App\Traits\PasswordUpdator;
 use Illuminate\Support\Facades\Validator;
@@ -86,17 +88,6 @@ class TechnicianProfileController extends Controller
     }
 
 
-
-
-
-
-
-
-
-
-
-
-
     /**
      * Return View Profile Page 
      */
@@ -117,7 +108,7 @@ class TechnicianProfileController extends Controller
 
         $result = User::findOrFail(Auth::id());
         
-        $banks = \App\Models\Bank::get(['id', 'name']);
+        $banks = Bank::get(['id', 'name']);
 
         return view('technician.edit_profile', compact('result', 'banks'));
 
@@ -126,7 +117,8 @@ class TechnicianProfileController extends Controller
     public function updateProfile(Request $request)
     {
         $user = User::where('id', Auth::id())->first();
-        
+        //$banks = Bank::get(['id', 'name']);
+       // dd($request->bank_id);
         
         if ($user->account->gender == "male") {
             $res = "his";
@@ -230,18 +222,11 @@ class TechnicianProfileController extends Controller
         return $this->passwordUpdator($request);
     }
 
-   /* public function get_technician_disbursed_payments(Request $request)
-    {
-        $payments = PaymentDisbursed::where('recipient_id', Auth::id())->get();
-        return view('technician.payments', compact('payments'));
-    }*/
-
     public function get_technician_disbursed_payments(Request $request){
 
-        // $user = Auth::user();
-        // $payments = $user->payments();
-        $payments = PaymentDisbursed::where('recipient_id',Auth::id())
-        ->orderBy('created_at', 'DESC')->get();
+        $payments = PaymentDisbursed::where('recipient_id', Auth::id())->with('user')->get();
+       // $payments = PaymentDisbursed::where('recipient_id',Auth::id())
+       // ->orderBy('created_at', 'DESC')->get();
         return view('technician.payments', compact('payments'));
     }
 
