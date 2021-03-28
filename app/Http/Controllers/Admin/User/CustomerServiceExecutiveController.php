@@ -17,9 +17,9 @@ class CustomerServiceExecutiveController extends Controller
      */
     public function index()
     {
+        // dd(\App\Models\Cse::with('user', 'user.account', 'user.contact', 'user.roles')->withCount('service_request_assgined')->get());
         return view('admin.users.cse.index')->with([
-            'users' => \App\Models\Cse::with('user', 'user.account', 'user.contact', 'user.roles')->get(),
-            // 'requests' => \App\Models\ServiceRequestAssigned::where('user_id', auth()->user()->id)->withCount('service_request')
+            'users' => \App\Models\Cse::with('user', 'user.account', 'user.contact', 'user.roles')->withCount('service_request_assgined')->get(),
         ]);
     }
 
@@ -112,7 +112,7 @@ class CustomerServiceExecutiveController extends Controller
     }
 
     /**
-     * Validate the create administrator user request.
+     * Validate the create customer service executive user request.
      *
      * @param  \Illuminate\Http\Request  $request
      * @return array
@@ -127,16 +127,11 @@ class CustomerServiceExecutiveController extends Controller
             'last_name'                 =>   'required|string|max:180',
             'email'                     =>   'required|email|unique:users,email',
             'franchisee_id'             =>   'required|numeric|exists:franchisees,id',
-
             'gender'                    =>   'required|in:Male,Female,Others',
-            // 'status'                    =>   'required|in:active,inactive',
-
             'password'                  =>   'required|min:8',
             'confirm_password'          =>   'required|same:password',
-
             'bank_id'                   =>   'required|numeric',
             'account_number'            =>   'required|numeric',
-
             'state_id'                  =>   'required|numeric',
             'lga_id'                    =>   'required|numeric',
             'town'                      =>   'required|string',
@@ -144,7 +139,6 @@ class CustomerServiceExecutiveController extends Controller
             'address_latitude'          =>   'required|string',
             'address_longitude'         =>   'required|string',
             'phone_number'              =>   'required|numeric|unique:contacts,phone_number',
-
             'avatar'                    => 'sometimes|image'
         ]);
     }

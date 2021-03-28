@@ -4,8 +4,7 @@ namespace App\Traits;
 
 use Illuminate\Support\Facades\DB;
 
-
-trait RegisterFranchisee
+trait RegisterSupplier
 {
     use RegisterUser;
 
@@ -13,38 +12,38 @@ trait RegisterFranchisee
     protected $valid;
 
     /**
-     * Handle registration of a Franchisee request for the application.
+     * Handle registration of a Supplier request for the application.
      *
      * @param  array $valid
      * @return bool 
      */
     public function register(array $valid)
     {
-        return $this->attemptRegisteringFranchisee($valid);
+        return $this->attemptRegisteringSupplier($valid);
     }
 
     /**
-     * Handle registration of a Franchisee
+     * Handle registration of a Supplier
      *
      * @param  array $valid
      * 
      * @throws Illuminate\Database\Eloquent\ModelNotFoundException
      * @return bool
      */
-    protected function attemptRegisteringFranchisee(array $valid)
+    protected function attemptRegisteringSupplier(array $valid)
     {
         (bool) $registred = false;
 
         DB::transaction(function () use ($valid, &$registred) {
             // Register the User
             $user = $this->createUser($valid);
-            // find Franchisee role using slug of franchisee-user
-            $role = \App\Models\Role::where('slug', 'franchisee-user')->firstOrFail();
+            // find Supplier role using slug of supplier-user
+            $role = \App\Models\Role::where('slug', 'supplier-user')->firstOrFail();
             $user->roles()->attach($role);
-            // Register Franchisee Permissions
-            $franchisee_permission = \App\Models\Permission::where('slug', 'view-franchisees')->firstOrFail();
-            $user->permissions()->attach($franchisee_permission);
-            // Franchisee User Type
+            // Register Supplier Permissions
+            $supplier_permission = \App\Models\Permission::where('slug', 'view-suppliers')->firstOrFail();
+            $user->permissions()->attach($supplier_permission);
+            // Supplier User Type
             \App\Models\UserType::store($user->id, $role->id, $role->url);
             // Register Town details
             $town =  \App\Models\Town::saveTown($valid['town']);
@@ -62,15 +61,16 @@ trait RegisterFranchisee
                 'avatar'            => !empty($valid['avatar']) ? $valid['avatar']->store('user-avatar') : $valid['gender'] = 'male' ? 'default-male-avatar.png' : 'default-female-avatar.png',
             ]);
 
-            // Register the Franchisee Account
-            $user->franchisee()->create([
+            // Register the Supplier Account
+            $user->supplier()->create([
                 'account_id' => $account->id,
                 'cac_number' => $valid['cac_number'],
-                'name' => $valid['franchisee_name'],
-                'franchise_description' => $valid['franchisee_description'],
+                'business_name' => $valid['supplier_name'],
+                'business_description' => $valid['supplier_description'],
                 'established_on' => $valid['established_on'],
+                'education_level' =>$valid['education_level'],
             ]);
-            // Register Franchisee Contact Details
+            // Register Supplier Contact Details
             \App\Models\Contact::attemptToStore($user->id, $account->id, 156, $valid['phone_number'], $valid['full_address'], $valid['address_longitude'], $valid['address_latitude']);
             // update registered to be true
             $registred = true;

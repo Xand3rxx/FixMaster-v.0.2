@@ -17,7 +17,7 @@
                 <h4 class="mg-b-0 tx-spacing--1">Franchisee List</h4>
             </div>
             <div class="d-md-block">
-                <a href="{{ route('admin.users.cse.create', app()->getLocale()) }}" class="btn btn-primary"><i class="fas fa-plus"></i> Add New</a>
+                <a href="{{ route('admin.users.franchisee.create', app()->getLocale()) }}" class="btn btn-primary"><i class="fas fa-plus"></i> Add New</a>
             </div>
         </div>
 

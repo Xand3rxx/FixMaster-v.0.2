@@ -28,54 +28,34 @@
                             <label for="first_name">First Name</label>
                             <input type="text" class="form-control @error('first_name') is-invalid @enderror" id="first_name" name="first_name" value="{{ old('first_name') }}" placeholder="First Name" autocomplete="off">
                             @error('first_name')
-                            <span class="invalid-feedback" role="alert">
-                                <strong>{{ $message }}</strong>
-                            </span>
+                            <x-alert :message="$message" />
                             @enderror
                         </div>
                         <div class="form-group col-md-4">
                             <label for="middle_name">Middle Name</label>
                             <input type="text" class="form-control" id="middle_name" name="middle_name" value="{{ old('middle_name') }}" autocomplete="off" placeholder="Middle Name">
+                            @error('middle_name')
+                            <x-alert :message="$message" />
+                            @enderror
                         </div>
                         <div class="form-group col-md-4">
                             <label for="last_name">Last Name</label>
                             <input type="text" class="form-control @error('last_name') is-invalid @enderror" id="last_name" name="last_name" value="{{ old('last_name') }}" autocomplete="off" placeholder="Last Name">
                             @error('last_name')
-                            <span class="invalid-feedback" role="alert">
-                                <strong>{{ $message }}</strong>
-                            </span>
+                            <x-alert :message="$message" />
                             @enderror
                         </div>
                     </div>
                     <div class="form-row">
-                        <div class="form-group col-md-3">
+                        <div class="form-group col-md-4">
                             <label for="inputEmail4">Email</label>
                             <input type="email" class="form-control @error('email') is-invalid @enderror" placeholder="E-Mail" name="email" id="email" value="{{ old('email') }}" required autocomplete="off">
                             @error('email')
-                            <span class="invalid-feedback" role="alert">
-                                <strong>{{ $message }}</strong>
-                            </span>
+                            <x-alert :message="$message" />
                             @enderror
                         </div>
-                        <div class="form-group col-md-3">
-                            <label for="phone_number">Phone Number</label>
-                            <input type="tel" class="form-control @error('phone_number') is-invalid @enderror" placeholder="Phone Number" name="phone_number" id="phone_number" value="{{ old('phone_number') }}" maxlength="11" required autocomplete="off">
-                            @error('phone_number')
-                            <span class="invalid-feedback" role="alert">
-                                <strong>{{ $message }}</strong>
-                            </span>
-                            @enderror
-                        </div>
-                        <div class="form-group col-md-3">
-                            <label for="other_phone_number">Other Phone Number</label>
-                            <input type="tel" class="form-control @error('other_phone_number') is-invalid @enderror" placeholder="Other Phone Number" name="other_phone_number" id="other_phone_number" value="{{ old('other_phone_number') }}" maxlength="11" autocomplete="off">
-                            @error('other_phone_number')
-                            <span class="invalid-feedback" role="alert">
-                                <strong>{{ $message }}</strong>
-                            </span>
-                            @enderror
-                        </div>
-                        <div class="form-group col-md-3">
+
+                        <div class="form-group col-md-4">
                             <label for="gender">Gender</label>
                             <select class="form-control @error('gender') is-invalid @enderror" name="gender" id="gender" required>
                                 <option selected disabled value="0">Select...</option>
@@ -84,130 +64,92 @@
                                 <option value="Others" {{ old('gender') == 'Others' ? 'selected' : ''}}>Others</option>
                             </select>
                             @error('gender')
-                            <span class="invalid-feedback" role="alert">
-                                <strong>{{ $message }}</strong>
-                            </span>
+                            <x-alert :message="$message" />
                             @enderror
                         </div>
-                    </div>
-                    <div class="form-row">
-                        <div class="form-group col-md-4">
-                            <label for="password">Password</label>
-                            <input type="password" class="form-control @error('password') is-invalid @enderror" id="password" name="password" placeholder="Password" autocomplete="off">
-                            <small id="passwordHelpBlock" class="form-text text-muted">
-                                Password must be 6 characters at least.
-                                <a href="{{ route('admin.users.technician-artisan.create', app()->getLocale()) }}" class="random-password"> Generate random password </a>
-                            </small>
 
-                            @error('password')
-                            <span class="invalid-feedback" role="alert">
-                                <strong>{{ $message }}</strong>
-                            </span>
-                            @enderror
-                        </div>
                         <div class="form-group col-md-4">
-                            <label for="confirm_password">Confirm Password</label>
-                            <input type="password" class="form-control @error('confirm_password') is-invalid @enderror" id="confirm_password" name="confirm_password" placeholder="Confirm Password" autocomplete="off">
-                            @error('confirm_password')
-                            <span class="invalid-feedback" role="alert">
-                                <strong>{{ $message }}</strong>
-                            </span>
-                            @enderror
-                        </div>
-                        <div class="form-group col-md-4">
-                            <label>Status</label>
-                            <select class="custom-select @error('is_active') is-invalid @enderror" name="is_active" id="is_active">
-                                <option selected value="">Select...</option>
-                                <option value="1" {{ old('is_active') == '1' ? 'selected' : ''}}>Active</option>
-                                <option value="0" {{ old('is_active') == '0' ? 'selected' : ''}}>Inactive</option>
-                            </select>
-                            @error('is_active')
-                            <span class="invalid-feedback" role="alert">
-                                <strong>{{ $message }}</strong>
-                            </span>
+                            <label for="phone_number">Phone Number</label>
+                            <input type="tel" class="form-control @error('phone_number') is-invalid @enderror" placeholder="Phone Number" name="phone_number" id="phone_number" value="{{ old('phone_number') }}" maxlength="11" required autocomplete="off">
+                            @error('phone_number')
+                            <x-alert :message="$message" />
                             @enderror
                         </div>
                     </div>
                     <div class="form-row">
-                        <div class="form-group col-md-3">
-                            <label>Profile Avatar</label>
-                            <div class="custom-file">
-                                <input type="file" accept="image/*" class="custom-file-input @error('avatar') is-invalid @enderror" name="avatar" id="avatar">
-                                <label class="custom-file-label" id="image-name" for="image">Upload Profile Avatar</label>
-                                @error('avatar')
-                                <span class="invalid-feedback" role="alert">
-                                    <strong>{{ $message }}</strong>
-                                </span>
-                                @enderror
-                            </div>
-                        </div>
-                        <div class="form-group col-md-3">
-                            <label>Service Category</label>
-                            <select class="selectpicker @error('technician_category') is-invalid @enderror" id="technician_category" name="technician_category[]" multiple="multiple" data-live-search="true">
-                                @foreach ($services as $service => $categories)
-                                <optgroup label="{{ $service}}">
-                                    @foreach($categories as $key => $item)
-                                    <option value="{{ $key }}" {{ old('technician_category') == $key ? 'selected' : ''}}>{{ $item }}</option>
-                                    @endforeach
-                                </optgroup>
-                                @endforeach
-                            </select>
-                            @error('technician_category')
-                            <span class="invalid-feedback" role="alert">
-                                <strong>{{ $message }}</strong>
-                            </span>
-                            @enderror
-                        </div>
-                        <div class="form-group col-md-3">
+                       
+                    <div class="form-group col-md-4">
                             <label>Bank Name</label>
-                            <select id="bank_id" name="bank_id" class="custom-select bank_id @error('bank_id') is-invalid @enderror">
+                            <select required id="bank_id" name="bank_id" class="custom-select bank_id @error('bank_id') is-invalid @enderror">
                                 <option selected value="">Select...</option>
                                 @foreach($banks as $bank)
                                 <option value="{{ $bank->id }}" {{ old('bank_id') == $bank->id ? 'selected' : ''}}>{{ $bank->name }}</option>
                                 @endforeach
                             </select>
                             @error('bank_id')
-                            <span class="invalid-feedback" role="alert">
-                                <strong>{{ $message }}</strong>
-                            </span>
+                            <x-alert :message="$message" />
                             @enderror
                         </div>
-                        <div class="form-group col-md-3">
+                        <div class="form-group col-md-4">
                             <label for="account_number">Account Number</label>
-                            <input type="tel" class="form-control @error('account_number') is-invalid @enderror" id="account_number" name="account_number" value="{{ old('account_number') }}" placeholder="Account Number" maxlength="10" autocomplete="off">
+                            <input type="tel" required class="form-control @error('account_number') is-invalid @enderror" id="account_number" name="account_number" value="{{ old('account_number') }}" placeholder="Account Number" maxlength="10" autocomplete="off">
                             @error('account_number')
-                            <span class="invalid-feedback" role="alert">
-                                <strong>{{ $message }}</strong>
-                            </span>
+                            <x-alert :message="$message" />
                             @enderror
                         </div>
                     </div>
+                    <div class="form-row">
+                        <div class="form-group col-md-4">
+                            <label>Profile Avatar</label>
+                            <div class="custom-file">
+                                <input type="file" accept="image/*" class="custom-file-input @error('avatar') is-invalid @enderror" name="avatar" id="avatar">
+                                <label class="custom-file-label" id="image-name" for="image">Upload Profile Avatar</label>
+                                @error('avatar')
+                                <x-alert :message="$message" />
+                                @enderror
+                            </div>
+                        </div>
 
+                        <div class="form-group col-md-4">
+                            <label for="password">Password</label>
+                            <input type="password" class="form-control @error('password') is-invalid @enderror" id="password" name="password" placeholder="Password" required minlength="8" autocomplete="off">
+                            <small id="passwordHelpBlock" class="form-text text-muted">
+                                Password must be 8 characters at least.
+                                <a href="{{ route('admin.users.supplier.index', app()->getLocale()) }}" class="random-password"> Generate random </a>
+                            </small>
+                            @error('password')
+                            <x-alert :message="$message" />
+                            @enderror
+                        </div>
+                        <div class="form-group col-md-4">
+                            <label for="confirm_password">Confirm Password</label>
+                            <input type="password" required class="form-control @error('confirm_password') is-invalid @enderror" id="confirm_password" name="confirm_password" minlength="8 placeholder=" Confirm Password" autocomplete="off">
+                            @error('confirm_password')
+                            <x-alert :message="$message" />
+                            @enderror
+                        </div>
+                    </div>
                     <div class="form-row">
                         <div class="form-group col-md-4">
                             <label>State</label>
-                            <select class="form-control @error('state_id') is-invalid @enderror" name="state_id" id="state_id">
-                                <option selected value="">Select...</option>
+                            <select required class="form-control @error('state_id') is-invalid @enderror" name="state_id" id="state_id">
+                                <option selected disabled value="0">Select...</option>
                                 @foreach($states as $state)
                                 <option value="{{ $state->id }}">{{ $state->name }}</option>
                                 @endforeach
                             </select>
                             @error('state_id')
-                            <span class="invalid-feedback" role="alert">
-                                <strong>{{ $message }}</strong>
-                            </span>
+                            <x-alert :message="$message" />
                             @enderror
                         </div>
 
-                        <div id="lga-content" class="form-group col-md-4 d-none">
+                        <div id="lga-content" class="form-group col-md-4">
                             <label>L.G.A</label>
-                            <select class="form-control @error('lga_id') is-invalid @enderror" name="lga_id" id="lga_id">
-                                <option selected value="">Select...</option>
+                            <select required class="form-control @error('lga_id') is-invalid @enderror" name="lga_id" id="lga_id">
+                                <option disabled selected value="0">Select a State first</option>
                             </select>
                             @error('lga_id')
-                            <span class="invalid-feedback" role="alert">
-                                <strong>{{ $message }}</strong>
-                            </span>
+                            <x-alert :message="$message" />
                             @enderror
                         </div>
 
@@ -215,9 +157,7 @@
                             <label>Town/City</label>
                             <input type="text" class="form-control @error('town') is-invalid @enderror" placeholder="e.g. CMS, Ikoyi, Egbeda" name="town" id="town" value="{{ old('town') }}" required>
                             @error('town')
-                            <span class="invalid-feedback" role="alert">
-                                <strong>{{ $message }}</strong>
-                            </span>
+                            <x-alert :message="$message" />
                             @enderror
                         </div>
                     </div>
@@ -225,16 +165,14 @@
                     <div class="form-row">
                         <div class="form-group col-md-12">
                             <label for="inputAddress2">Full Address</label>
-                            <textarea class="user_address form-control @error('full_address') is-invalid @enderror" rows="3" name="full_address" id="full_address" placeholder="e.g. 284B, Ajose Adeogun Street, Victoria Island, Lagos, Nigeria.">{{ old('full_address') }}</textarea>
+                            <textarea required id="user_address" class="user_address form-control @error('full_address') is-invalid @enderror" rows="3" name="full_address" id="full_address" placeholder="e.g. 284B, Ajose Adeogun Street, Victoria Island, Lagos, Nigeria.">{{ old('full_address') }}</textarea>
                             @error('full_address')
-                            <span class="invalid-feedback" role="alert">
-                                <strong>{{ $message }}</strong>
-                            </span>
+                            <x-alert :message="$message" />
                             @enderror
                         </div>
                     </div>
 
-                    <button type="submit" class="btn btn-primary">Create New Technician</button>
+                    <button type="submit" class="btn btn-primary">Create New Technician & Artisan </button>
                 </div>
             </div>
         </form>
@@ -243,16 +181,13 @@
 </div>
 
 @push('scripts')
-<script src="{{ asset('assets/dashboard/assets/js/bootstrap-multiselect.js') }}"></script>
 <script src="{{ asset('assets/js/password-generator.js') }}"></script>
-<script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDeDLVAiaU13p2O0d3jfcPjscsbVsCQUzc&v=3.exp&libraries=places"></script>
+<script src="{{ asset('assets/js/geolocation.js') }}"></script>
 
 <script>
-    $('.selectpicker').selectpicker();
     $(document).ready(function() {
         "use strict";
-        let autocomplete;
-        initialize();
+
         //Append the image name from file options to post cover field
         $('input[type="file"]').change(function(e) {
             let fileName = e.target.files[0].name;
@@ -292,16 +227,8 @@
             $('#password').val(random_password)
             $('#confirm_password').val(random_password)
         });
-
-        function initialize() {
-            // Create the autocomplete object, restricting the search to geographical location types.
-            autocomplete = new google.maps.places.Autocomplete((document.querySelector('.user_address')), {
-                types: ['geocode']
-            });
-            // Chain request to html element on the page
-            google.maps.event.addDomListener(document.querySelector('.user_address'), 'focus');
-        }
     });
 </script>
+
 @endpush
 @endsection

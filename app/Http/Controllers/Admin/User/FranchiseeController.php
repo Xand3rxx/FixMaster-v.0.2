@@ -97,7 +97,7 @@ class FranchiseeController extends Controller
     }
 
     /**
-     * Validate the create administrator user request.
+     * Validate the create franchisee user request.
      *
      * @param  \Illuminate\Http\Request  $request
      * @return array
@@ -113,7 +113,7 @@ class FranchiseeController extends Controller
             'email'                     =>   'required|email|unique:users,email|bail',
             'phone_number'              =>   'required|numeric|unique:contacts,phone_number|bail',
             'franchisee_name'           =>   'required|string|max:180',
-            'cac_number'                =>   'required|string|unique:franchisees,cac_number|bail',
+            'cac_number'                =>   'required|string|max:14|unique:franchisees,cac_number|bail',
             'established_on'            =>   'required|string|date',
             'franchisee_description'    =>   'required|string',
             'bank_id'                   =>   'required|numeric',

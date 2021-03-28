@@ -37,7 +37,7 @@ class Cse extends Model
      */
     protected static function createCSEReferralID($user_id, string $unique_id)
     {
-        return collect($referral = Referral::create(['user_id' => $user_id, 'referral_code' => $unique_id, 'created_by' => auth()->user()->email]))->isNotEmpty()
+        return collect($referral = Referral::create(['user_id' => $user_id, 'referral_code' => $unique_id, 'created_by' => auth()->user()->email ?? 'admin@fix-master.com']))->isNotEmpty()
             ? $referral->id : 0;
     }
 
@@ -49,14 +49,22 @@ class Cse extends Model
         return $this->belongsTo(User::class);
     }
 
-    public function serviceRequest()
+    /**
+     * Get the service request of the CSE
+     */
+    public function service_request_assgined()
     {
-        return $this->hasOne(ServiceRequest::class);
+        return $this->hasMany(ServiceRequestAssigned::class, 'user_id', 'user_id');
     }
 
-    public function serviceRequests()
-    {
-        return $this->hasMany(ServiceRequest::class);
-    }
+    // public function serviceRequest()
+    // {
+    //     return $this->hasOne(ServiceRequest::class);
+    // }
+
+    // public function serviceRequests()
+    // {
+    //     return $this->hasMany(ServiceRequest::class);
+    // }
 
 }

@@ -1,5 +1,5 @@
 @extends('layouts.dashboard')
-@section('title', 'Admin Dashboard')
+@section('title', 'Customer Service Executive Dashboard')
 @include('layouts.partials._messages')
 @section('content')
 
@@ -13,14 +13,8 @@
             {{-- <li class="breadcrumb-item active" aria-current="page">Website Analytics</li> --}}
           </ol>
         </nav>
-        <h4 class="mg-b-0 tx-spacing--1">Welcome to Fix<span style="color: #E97D1F;">Master</span> Admin Dashboard</h4>
+        <h4 class="mg-b-0 tx-spacing--1">Welcome to Fix<span style="color: #E97D1F;">Master</span> Customer Service Executive Dashboard</h4>
       </div>
-      {{-- <div class="d-none d-md-block">
-        <button class="btn btn-sm pd-x-15 btn-white btn-uppercase"><i data-feather="save" class="wd-10 mg-r-5"></i> Save</button>
-        <button class="btn btn-sm pd-x-15 btn-white btn-uppercase mg-l-5"><i data-feather="upload" class="wd-10 mg-r-5"></i> Export</button>
-        <button class="btn btn-sm pd-x-15 btn-white btn-uppercase mg-l-5"><i data-feather="share-2" class="wd-10 mg-r-5"></i> Share</button>
-        <button class="btn btn-sm pd-x-15 btn-primary btn-uppercase mg-l-5"><i data-feather="sliders" class="wd-10 mg-r-5"></i> Settings</button>
-      </div> --}}
     </div>
 
     <div class="row row-xs">
@@ -31,7 +25,7 @@
                 <div class="form-group">
                     <label>Sort</label>
                     <select class="custom-select" id="request-sorting">
-                        <option value="None">Select...</option>
+                        <option selected disabled value="None">Select...</option>
                         <option value="Date">Date</option>
                         <option value="Month">Month</option>
                         <option value="Date Range">Date Range</option>

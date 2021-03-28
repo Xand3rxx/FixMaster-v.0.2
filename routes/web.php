@@ -32,6 +32,7 @@ use App\Http\Controllers\ReportController;
 use App\Http\Controllers\QualityAssurance\ServiceRequestController;
 use App\Http\Controllers\QualityAssurance\QualityAssuranceProfileController;
 
+use App\Http\Controllers\CSE\CustomerServiceExecutiveController as CseController;
 
 /*
 |--------------------------------------------------------------------------
@@ -276,14 +277,15 @@ Route::prefix('/client')->middleware('verified')->group(function () {
     });
 });
 
+Route::resource('cse', CseController::class);
 
-Route::prefix('/cse')->group(function () {
-    Route::name('cse.')->group(function () {
-        //All routes regarding CSE's should be in here
-        Route::view('/',                   'cse.index')->name('index'); //Take me to CSE Dashboard
+// Route::prefix('/cse')->group(function () {
+//     Route::name('cse.')->group(function () {
+//         //All routes regarding CSE's should be in here
+//         Route::view('/',                   'cse.index')->name('index'); //Take me to CSE Dashboard
 
-    });
-});
+//     });
+// });
 
 Route::prefix('/supplier')->group(function () {
     Route::name('supplier.')->group(function () {

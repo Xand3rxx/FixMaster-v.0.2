@@ -135,6 +135,22 @@ class User extends Authenticatable implements MustVerifyEmail
     }
 
     /**
+     * Get the Supplier associated with the user.
+     */
+    public function supplier()
+    {
+        return $this->hasOne(Supplier::class);
+    }
+
+    /**
+     * Get the Technician & Artisan associated with the user.
+     */
+    public function technician()
+    {
+        return $this->hasOne(Technician::class);
+    }
+
+    /**
      * Get the Administrator associated with the user.
      */
     public function logs()
@@ -180,7 +196,7 @@ class User extends Authenticatable implements MustVerifyEmail
     {
         return $this->hasMany(ServiceRequest::class);
     }
-    
+
     public function clientRequest()
     {
         return $this->hasOne(ServiceRequest::class, 'client_id');
