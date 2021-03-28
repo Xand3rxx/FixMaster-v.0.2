@@ -286,6 +286,28 @@ Route::resource('cse', CseController::class);
 
 //     });
 // });
+Route::prefix('/cse')->group(function () {
+    Route::name('cse.')->group(function () {
+        //All routes regarding CSE's should be in here
+        Route::view('/',                    'cse.index')->name('index'); //Take me to CSE Dashboard
+        Route::view('/messages/inbox',      'cse.messages.inbox')->name('messages.inbox');
+        Route::view('/messages/sent',       'cse.messages.sent')->name('messages.sent');
+        Route::view('/payments',            'cse.payments')->name('payments');
+        Route::view('/requests',            'cse.requests')->name('requests');
+        Route::view('/requests/details',    'cse.request_details',
+            [
+                'tools' => \App\Models\ToolInventory::all(),
+                'statuses' => \App\Models\Status::all()
+            ]
+        )->name('request_details');
+        Route::view('/profile',             'cse.view_profile')->name('view_profile');
+        Route::view('/profile/edit',        'cse.edit_profile', [
+            'banks' => \App\Models\Bank::all(),
+
+        ])->name('edit_profile');
+        Route::view('/location-request',    'cse.location_request')->name('location_request');
+    });
+});
 
 Route::prefix('/supplier')->group(function () {
     Route::name('supplier.')->group(function () {
@@ -346,6 +368,7 @@ Route::prefix('/franchisee')->group(function () {
         Route::view('/requests/details',    'franchisee.request_details')->name('request_details');
         Route::view('/profile',             'franchisee.view_profile')->name('view_profile');
         Route::view('/profile/edit',        'franchisee.edit_profile')->name('edit_profile');
+        Route::view('/location-request',    'franchisee.location_request')->name('location_request');
     });
 });
 

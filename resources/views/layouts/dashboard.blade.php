@@ -46,19 +46,49 @@
         margin-top: 1em;
         margin-left: 1.5em;
       }
+
+      button.dt-button, div.dt-button, a.dt-button, input.dt-button {
+        font-size: inherit !important;
+        color: #fff !important;
+        background-color: #E97D1F !important;
+        background: linear-gradient(to bottom, rgb(233 125 31) 0%, rgb(233 125 31) 100%);
+        border-color: #E97D1F !important;
+        display: inline-block !important;
+        font-weight: 400 !important;
+        text-align: center !important;
+        vertical-align: middle !important;
+        user-select: none !important;
+        background-color: transparent !important;
+        border: 1px solid transparent !important;
+        padding: 0.46875rem 0.9375rem !important;
+        font-size: 0.875rem !important;
+        line-height: 1.5 !important;
+        border-radius: 0.25rem !important;
+        transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out, border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out !important;
+        line-height: 1.5 i !important;
+        text-decoration: none;
+        outline: none;
+        text-overflow: ellipsis;
+      }
+
+      button.dt-button:hover, div.dt-button:hover, a.dt-button:hover, input.dt-button:hover {
+        color: #fff !important;
+        background-color: #E97D1F !important;
+        background: linear-gradient(to bottom, rgb(233 125 31) 0%, rgb(233 125 31) 100%);
+        border-color: #E97D1F !important;
+      }
+
+
     </style>
 
     @include('layouts.partials._dashboard_sidebar')
-    {{-- @include('layouts.partials._qa_sidebar') --}}
 
     <div class="content ht-100v pd-0">
       @include('layouts.partials._dashboard_header')
       @yield('content')
-    {{-- </div> --}}
     </div>
 
     <script src="{{ asset('assets/dashboard/lib/jquery/jquery.min.js') }}"></script>
-    {{-- <script src="{{ asset('assets/frontend/js/jquery-3.5.1.min.js') }}"></script> --}}
     <script src="{{ asset('assets/dashboard/lib/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
     <script src="{{ asset('assets/dashboard/assets/js/dashforge.settings.js') }}"></script>
     <script src="{{ asset('assets/dashboard/assets/js/dashforge.js') }}"></script>
