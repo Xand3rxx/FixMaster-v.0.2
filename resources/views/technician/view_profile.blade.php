@@ -51,7 +51,7 @@
                 </div>
                 <div class="col-6 col-sm-4">
                   <label class="tx-10 tx-medium tx-spacing-1 tx-color-03 tx-uppercase tx-sans mg-b-10">Date Created</label>
-                  <p class="tx-primary tx-rubik mg-b-0">{{$user->contact->created_at ?? '' }}</p></p>
+                  <p class="tx-primary tx-rubik mg-b-0">{{ Carbon\Carbon::parse($user->contact->created_at ?? '', 'UTC')->isoFormat('MMMM Do YYYY, h:mm:ssa') }}</p></p>
                 </div>
                 <div class="col-sm-6 mg-t-20 mg-sm-t-30">
                   <label class="tx-10 tx-medium tx-spacing-1 tx-color-03 tx-uppercase tx-sans mg-b-10">Home Address</label>
