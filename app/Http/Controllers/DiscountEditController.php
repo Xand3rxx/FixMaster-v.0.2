@@ -616,7 +616,7 @@ class DiscountEditController extends Controller
         foreach ($accounts as $user)
         {           
         DiscountHistory::create([
-            'discount_id' => $discounts->id,
+            'discount_id' => $discount->id,
             'client_name' => $user->first_name.' '.$user->last_name,
             'client_id' => $user->user_id,
            
