@@ -187,6 +187,21 @@ Route::prefix('admin')->group(function () {
         Route::get('/referral/deactivate/{referral:id}',                    [App\Http\Controllers\ReferralController::class, 'deactivate'])->name('deactivate_referral');
         Route::get('/referral/activate/{referral:id}',                    [App\Http\Controllers\ReferralController::class, 'reinstate'])->name('activate_referral');
 
+        Route::get('/loyalty/add',                     [App\Http\Controllers\LoyaltyManagementController::class, 'create'])->name('add_loyalty');
+        Route::post('/loyalty/store',                    [App\Http\Controllers\LoyaltyManagementController::class, 'store'])->name('loyalty_store');
+        Route::get('/loyalty/list',                       [App\Http\Controllers\LoyaltyManagementController::class, 'index'])->name('loyalty_list');
+        Route::post('/loyalty/users',                             [App\Http\Controllers\LoyaltyManagementController::class, 'loyaltyUsers'])->name('loyalty_users');
+        Route::get('/loyalty/summary/{loyalty:id}',                    [App\Http\Controllers\LoyaltyManagementController::class, 'show'])->name('loyalty_summary');
+        Route::get('/loyalty/delete/{loyalty:id}/{client:id}',                    [App\Http\Controllers\LoyaltyManagementController::class, 'delete'])->name('delete_loyalty');
+        Route::get('/loyalty/edit/{loyalty:id}',                    [App\Http\Controllers\LoyaltyManagementController::class, 'edit'])->name('edit_loyalty');
+        Route::post('/loyalty/users-edit',                             [App\Http\Controllers\LoyaltyManagementController::class, 'loyaltyUsersEdit'])->name('loyalty_users_edit');
+        Route::post('/loyalty/store-edit',                    [App\Http\Controllers\LoyaltyManagementController::class, 'store_edit'])->name('loyalty_store_edit');
+        Route::get('/loyalty/history',                    [App\Http\Controllers\LoyaltyManagementController::class, 'history'])->name('loyalty_history');
+
+       
+
+
+
 
         //Admin payment Routes
         Route::get('/payment-gateway/list',                 [GatewayController::class, 'index'])->name('list_payment_gateway');
@@ -219,7 +234,7 @@ Route::prefix('admin')->group(function () {
 // Route::resource('client', ClientController::class);
 
 //All routes regarding clients should be in here
-Route::prefix('/client')->middleware('verified')->group(function () {
+Route::prefix('/client')->group(function () {
     Route::name('client.')->group(function () {
         //All routes regarding clients should be in here
         Route::get('/',                   [ClientController::class, 'index'])->name('index'); //Take me to Supplier Dashboard
@@ -242,6 +257,8 @@ Route::prefix('/client')->middleware('verified')->group(function () {
             // Route::get('/requests',          [ClientRequestController::class, 'index'])->name('client.requests');
             Route::get('wallet',                [ClientController::class, 'wallet'])->name('wallet');
             Route::any('fund',                  [ClientController::class, 'walletSubmit'])->name('wallet.submit');
+            Route::get('loyalty',                [ClientController::class, 'loyalty'])->name('loyalty');
+            Route::any('loyalty/submit',                 [ClientController::class, 'loyaltySubmit'])->name('loyalty.submit');
 
             Route::post('/ipnpaystack',         [ClientController::class, 'paystackIPN'])->name('ipn.paystack');
             Route::get('/apiRequest',           [ClientController::class, 'apiRequest'])->name('ipn.paystackApiRequest');

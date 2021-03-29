@@ -1,6 +1,7 @@
 <?php
 namespace App\Helpers;
 use Carbon\Carbon;
+use App\Models\LoyaltyManagement;
 
 class CustomHelpers
 {
@@ -39,6 +40,19 @@ class CustomHelpers
     // function checkIfStringExists($randomString) {
     //     return User::whereRandomNumber($number)->exists();
     // }
+
+
+    static function ifLoyaltyExist($user)
+    {
+        $loyaltyExist = LoyaltyManagement::select('client_id')->where('client_id', $user)->get();
+        if(count($loyaltyExist) > 0){
+            return 1;
+        }else{
+            return 0;
+        }
+       
+    }
+
 
     
 }

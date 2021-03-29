@@ -43,6 +43,7 @@
                                     <th>Entity</th>
                                     <th>Created By</th>
                                     <th class="text-center">Rate</th>
+                                    <th class="text-center">Applied To</th>
                                     <th class="text-center">Duration</th>
                                     <th class="text-center">Description</th>
                                     <th>Notification Status</th>
@@ -60,6 +61,7 @@
                                     <td class="tx-medium">{{ ucfirst($discount->entity)}}</td>
                                     <td class="tx-medium text-center">{{$discount->created_by}}</td>
                                     <td class="tx-medium text-center">{{$discount->rate.'%'}}</td>
+                                    <td class="tx-medium text-center">{{$discount->apply_discount}}</td>
                                <td class="tx-medium text-center">{{CustomHelpers::displayTime($discount->duration_start, $discount->duration_end) }}</td>
                                     <td class="tx-medium">{{$discount->description}}</td>
                                     <td class="tx-medium text-center">{{$discount->notify == 1 ? ' Sent': 'Not Sent'}}

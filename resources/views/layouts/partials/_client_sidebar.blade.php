@@ -63,7 +63,15 @@
                                     <h6 class="title text-dark h6 my-0">E-Wallet</h6>
                                 </a>
                             </div><!--end col-->
-
+                          
+                            @if(CustomHelpers::ifLoyaltyExist(auth()->user()->id) == 1)
+                            <div class="col-6 mt-4 pt-2">
+                            <a href="{{ route('client.loyalty', app()->getLocale()) }}" class="accounts rounded d-block shadow text-center py-3 {{ Route::currentRouteNamed('client.loyalty') ? 'active' : '' }}">
+                                    <span class="pro-icons h3 text-muted"><i class="uil uil-file"></i></span>
+                                    <h6 class="title text-dark h6 my-0">Loyalty Wallet </h6>
+                                </a>
+                            </div><!--end col-->
+                            @endif
                             <div class="col-6 mt-4 pt-2">
                             <a href="#" class="accounts rounded d-block shadow text-center py-3 {{ Route::currentRouteNamed('') ? 'active' : '' }}">
                                     <span class="pro-icons h3 text-muted"><i class="uil uil-envelope-star text-danger" data-toggle="tooltip" title="You have 0 unread messages"></i></span>

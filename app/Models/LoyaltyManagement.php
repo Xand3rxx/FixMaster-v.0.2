@@ -6,15 +6,19 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Str;
 
-class Discount extends Model
+
+class LoyaltyManagement extends Model
 {
     use HasFactory;
 
-  
-
+    protected $table = "loyalty_managements";
     protected $fillable = [
-        'name',  'entity', 'rate', 'apply_discount','notify', 'duration_start', 'duration_end', 'description','parameter','created_by','status'
+     
+        'client_id','wallet','points', 'type','amount'
+    
     ];
+
+ 
 
     protected $softDelete = true;
 
@@ -25,6 +29,4 @@ class Discount extends Model
             $model->uuid = Str::uuid()->toString();
         });
     }
-
-
 }
