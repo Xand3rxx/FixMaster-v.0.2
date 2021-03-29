@@ -244,8 +244,8 @@
         <li class="nav-item with-sub">
           <a href="" class="nav-link"><i data-feather="hard-drive"></i> <span>Suppliers</span></a>
           <ul>
-            <li class=""><a href="#">Add</a></li>
-            <li class=""><a href="#">List</a></li>
+            <li class=""><a href="{{route('admin.users.supplier.create', app()->getLocale())}}">Add</a></li>
+            <li class=""><a href="{{route('admin.users.supplier.index', app()->getLocale())}}">List</a></li>
           </ul>
         </li>
 

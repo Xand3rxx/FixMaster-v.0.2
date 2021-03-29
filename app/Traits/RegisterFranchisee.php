@@ -2,49 +2,49 @@
 
 namespace App\Traits;
 
-use App\Traits\GenerateUniqueIdentity as Generator;
 use Illuminate\Support\Facades\DB;
 
 
-trait RegisterCSE
+trait RegisterFranchisee
 {
-    use RegisterUser, Generator;
+    use RegisterUser;
 
     protected $registred;
+    protected $valid;
 
     /**
-     * Handle registration of a CSE request for the application.
+     * Handle registration of a Franchisee request for the application.
      *
      * @param  array $valid
      * @return bool 
      */
     public function register(array $valid)
     {
-        return $this->attemptRegisteringCSE($valid);
+        return $this->attemptRegisteringFranchisee($valid);
     }
 
     /**
-     * Handle registration of a CSE
+     * Handle registration of a Franchisee
      *
      * @param  array $valid
      * 
      * @throws Illuminate\Database\Eloquent\ModelNotFoundException
      * @return bool
      */
-    protected function attemptRegisteringCSE(array $valid)
+    protected function attemptRegisteringFranchisee(array $valid)
     {
         (bool) $registred = false;
 
         DB::transaction(function () use ($valid, &$registred) {
             // Register the User
             $user = $this->createUser($valid);
-            // find client role using slug of client-user
-            $role = \App\Models\Role::where('slug', 'cse-user')->firstOrFail();
+            // find Franchisee role using slug of franchisee-user
+            $role = \App\Models\Role::where('slug', 'franchisee-user')->firstOrFail();
             $user->roles()->attach($role);
-            // Register CSE Permissions
-            $cse_permission = \App\Models\Permission::where('slug', 'view-cse')->firstOrFail();
-            $user->permissions()->attach($cse_permission);
-            // CSE User Type
+            // Register Franchisee Permissions
+            $franchisee_permission = \App\Models\Permission::where('slug', 'view-franchisees')->firstOrFail();
+            $user->permissions()->attach($franchisee_permission);
+            // Franchisee User Type
             \App\Models\UserType::store($user->id, $role->id, $role->url);
             // Register Town details
             $town =  \App\Models\Town::saveTown($valid['town']);
@@ -55,19 +55,22 @@ trait RegisterCSE
                 'town_id'           => $town->id,
                 'first_name'        => $valid['first_name'],
                 'middle_name'       => $valid['middle_name'] ?: "",
-                'last_name'         => $valid['last_name'],
-                'gender'            => $valid['gender'],
-                'bank_id'           => $valid['bank_id'],
+                'last_name'         => $valid['last_name'] ?: "",
+                'gender'            => 'others',
+                'bank_id'           => (int)$valid['bank_id'],
                 'account_number'    => $valid['account_number'],
                 'avatar'            => !empty($valid['avatar']) ? $valid['avatar']->store('user-avatar') : $valid['gender'] = 'male' ? 'default-male-avatar.png' : 'default-female-avatar.png',
             ]);
-            
-            // Register the CSE Account
-            $user->cse()->create([
+
+            // Register the Franchisee Account
+            $user->franchisee()->create([
                 'account_id' => $account->id,
-                'franchisee_id' => $valid['franchisee_id'],
+                'cac_number' => $valid['cac_number'],
+                'name' => $valid['franchisee_name'],
+                'franchise_description' => $valid['franchisee_description'],
+                'established_on' => $valid['established_on'],
             ]);
-            // Register CSE Contact Details
+            // Register Franchisee Contact Details
             \App\Models\Contact::attemptToStore($user->id, $account->id, 156, $valid['phone_number'], $valid['full_address'], $valid['address_longitude'], $valid['address_latitude']);
             // update registered to be true
             $registred = true;

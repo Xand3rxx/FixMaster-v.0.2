@@ -19,7 +19,7 @@ class Administrator extends Model
      */
     public function user()
     {
-        return $this->belongsTo(User::class)->with(['account','phones','roles']);
+        return $this->belongsTo(User::class)->with(['account','contact','roles']);
     }
    
     /**

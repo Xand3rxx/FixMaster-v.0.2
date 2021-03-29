@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Http\Controllers\Admin\User;
+namespace App\Http\Controllers\CSE;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
-class ClientController extends Controller
+class CustomerServiceExecutiveController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -14,9 +14,8 @@ class ClientController extends Controller
      */
     public function index()
     {
-        return view('admin.users.client.index')->with([
-            'users' => \App\Models\Client::with('user')->withCount('service_request')->get(),
-        ]);
+        // dd(request()->all());
+        return view('cse.index');
     }
 
     /**
@@ -43,15 +42,12 @@ class ClientController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  string  $language
-     * @param  string  $uuid
+     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($language, $uuid)
+    public function show($id)
     {
-        return view('admin.users.client.show', [
-            // 
-        ]);
+        //
     }
 
     /**
