@@ -51,7 +51,7 @@ class RequestController extends Controller
     {
         return view('cse.requests.show', [
             'tools' => \App\Models\ToolInventory::all(),
-            'statuses' => \App\Models\Status::all()
+            'statuses' => \App\Models\Status::where('name','Ongoing')->select('sub_status')->first()
         ]);
     }
 

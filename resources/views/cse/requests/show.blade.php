@@ -33,24 +33,68 @@
             <div class="col-lg-12 col-xl-12">
                 <div class="card">
                     <ul class="nav nav-tabs nav-justified" id="myTab3" role="tablist">
+
                         <li class="nav-item">
                             <a class="nav-link active" id="update-tab3" data-toggle="tab" href="#update3" role="tab" aria-controls="update" aria-selected="true">Service Request Actions</a>
                         </li>
+
                         <li class="nav-item">
                             <a class="nav-link" id="description-tab3" data-toggle="tab" href="#description3" role="tab" aria-controls="description" aria-selected="true">Description</a>
                         </li>
+
                         <li class="nav-item">
                             <a class="nav-link" id="media-tab3" data-toggle="tab" href="#media3" role="tab" aria-controls="media" aria-selected="false">Service Request Summary</a>
                         </li>
                     </ul>
                     <div class="tab-content bd bd-gray-300 bd-t-0 pd-20" id="myTabContent3">
+
                         <div class="tab-pane fade show active" id="update3" role="tabpanel" aria-labelledby="update-tab3">
                             <small class="text-danger">This tab is only visible onc the Service request has an Ongoing status. Which logically is updated by the system or the CSE Coordinator by assigning a CSE to the request</small>
+
+                            <form method="POST" action="">
+                                @csrf
+
+                                <div class="form-row mt-4">
+                                    <div class="tx-13 mg-b-25">
+                                        <div id="wizard3">
+
+                                            <h3>Project Progress</h3>
+                                            <section>
+                                                <p class="mg-b-0">Specify the current progress of the job.</p>
+                                                <div class="form-row mt-4">
+                                                    <div class="form-group col-md-8">
+                                                        This portion will display only Ongoing Status Sub statuses<br>
+                                                       
+
+                                                        <select class="form-control custom-select @error('status_id') is-invalid @enderror" name="status_id">
+                                                            <option value="" selected>Select...</option>
+                                                            @foreach ($statuses as $key => $sub)
+                                                            <option value="{{$key}}" selected>{{$key}}</option>
+                                                            @endforeach
+                                                        </select>
+                                                        @error('status_id')
+                                                        <span class="invalid-feedback" role="alert">
+                                                            <strong>{{ $message }}</strong>
+                                                        </span>
+                                                        @enderror
+                                                    </div>
+                                                </div>
+                                            </section>
+
+                                        </div>
+                                    </div>
+                                </div><!-- df-example -->
+
+                                <button type="submit" class="btn btn-primary d-none" id="update-progress">Update Progress</button>
+
+                            </form>
 
                         </div>
 
                         <div class="tab-pane fade" id="description3" role="tabpanel" aria-labelledby="description-tab3">
+
                             <div class="divider-text">Service Request Description</div>
+
                             <h6>SERVICE REQUEST DESCRIPTION</h6>
                             <div class="row row-xs mt-4">
                                 <div class="col-lg-12 col-xl-12">
@@ -248,6 +292,8 @@
                                 </table>
                             </div><!-- table-responsive -->
                         </div>
+
+
                     </div>
                 </div>
             </div>
