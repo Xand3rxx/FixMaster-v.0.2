@@ -122,7 +122,7 @@ class ServiceRequest extends Model
     }
 
     public function status(){
-        return $this->hasOne(Status::class, 'id');
+        return $this->hasOne(Status::class, 'id', 'status_id');
     }
 
     public function service_request(){
@@ -136,14 +136,14 @@ class ServiceRequest extends Model
 
     public function technicianAccount()
     {
-        
+
             return $this->hasOne(Account::class, 'user_id', 'service_id');
     }
 
-    
+
     public function price()
     {
-        
+
             return $this->hasOne(Price::class, 'user_id', 'client_id')->withDefault();
     }
 
