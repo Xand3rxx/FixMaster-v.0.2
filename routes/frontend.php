@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Frontend\ApplicantsForm\CSEFormController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Frontend\Registration\ClientRegistrationController;
@@ -40,7 +41,7 @@ Route::post('/estate/add',                  [\App\Http\Controllers\EstateControl
 Route::view('/faq',                         'frontend.faq')->name('frontend.faq');
 Route::view('/register',                    'auth.register')->name('frontend.register');
 
-
+Route::post('customer-service-executive', [CSEFormController::class, '__invoke'])->name('frontend.customer-service-executive.store');
 
 Route::get('/contact-us',                   [App\Http\Controllers\PageController::class, 'contactUs'])->name('frontend.contact');
 Route::post('/contact-us',                  [App\Http\Controllers\PageController::class, 'sendContactMail'])->name('frontend.send_contact_mail');
