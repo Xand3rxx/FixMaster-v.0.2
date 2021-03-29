@@ -40,7 +40,7 @@
 
                           <div class="contact-content-header mt-4">
                             <nav class="nav">
-                              <a href="#summary" class="nav-link active" data-toggle="tab">Summary</a>
+                              <a href="#summary" class="nav-link active" data-toggle="tab">Summaryfsgsh</a>
                               <a href="#discount" class="nav-link" data-toggle="tab"><span>Discount History</a>
                               <a href="#client" class="nav-link" data-toggle="tab"><span>Registered Clients</a>
                               {{-- <a href="#activityLog" class="nav-link" data-toggle="tab"><span>Activity Log</a> --}}

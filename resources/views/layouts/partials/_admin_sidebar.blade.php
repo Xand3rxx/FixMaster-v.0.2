@@ -58,7 +58,7 @@
           </ul>
         </li>
 
-        <li class="nav-item with-sub {{ Route::currentRouteNamed('admin.add_discount', 'admin.discount_list', 'admin.edit_discount') ? 'active show' : '' }}">
+        <li class="nav-item with-sub {{ Route::currentRouteNamed('admin.add_discount', 'admin.discount_list', 'admin.edit_discount', 'admin.discount_history') ? 'active show' : '' }}">
           <a href="" class="nav-link"><i data-feather="percent"></i> <span>Discount/Promotion</span></a>
           <ul>
           <li class="{{ Route::currentRouteNamed('admin.add_discount') ? 'active' : '' }}"><a href="{{ route('admin.add_discount',  app()->getLocale()) }}">Add</a></li>
@@ -99,11 +99,13 @@
 
         <li class="nav-item {{ Route::currentRouteNamed('admin.location_request') ? 'active' : '' }}"><a href="{{ route('admin.location_request', app()->getLocale()) }}" class="nav-link"><i data-feather="map-pin"></i> <span>Location Request</span></a></li>
 
-        <li class="nav-item with-sub">
+        <li class="nav-item with-sub {{ Route::currentRouteNamed('admin.add_loyalty', 'admin.loyalty_list', 'admin.loyalty_history') ? 'active show' : '' }}">
           <a href="" class="nav-link"><i data-feather="crop"></i> <span>Loyalty Management</span></a>
           <ul>
-            <li class=""><a href="#">Add</a></li>
-            <li class=""><a href="#">List</a></li>
+          <li class="{{ Route::currentRouteNamed('admin.add_loyalty') ? 'active' : '' }}"><a href="{{ route('admin.add_loyalty',  app()->getLocale()) }}">Add</a></li>
+          <li class="{{ Route::currentRouteNamed('admin.loyalty_list') ? 'active' : '' }}"><a href="{{ route('admin.loyalty_list',  app()->getLocale()) }}">List</a></li>
+          <li class="{{ Route::currentRouteNamed('admin.loyalty_history') ? 'active' : '' }}"><a href="{{ route('admin.loyalty_history',  app()->getLocale()) }}">History</a></li>
+
           </ul>
         </li>
 
@@ -151,7 +153,7 @@
           </ul>
         </li>
 
-        <li class="nav-item with-sub {{ Route::currentRouteNamed('admin.add_referral', 'admin.referral_list') ? 'active show' : '' }}"">
+        <li class="nav-item with-sub {{ Route::currentRouteNamed('admin.add_referral', 'admin.referral_list') ? 'active show' : '' }}">
           <a href="" class="nav-link"><i data-feather="external-link"></i> <span>Referral</span></a>
           <ul>
             <li class="{{ Route::currentRouteNamed('admin.add_referral') ? 'active' : '' }}"><a href="{{ route('admin.add_referral',  app()->getLocale()) }}">Add</a></li>
@@ -163,8 +165,8 @@
           <a href="" class="nav-link"><i data-feather="git-pull-request"></i> <span>Reports</span></a>
           <ul>
             
-            <li class=""><a href="#">CSE</a></li>
-            <li class=""><a href="#">Supplier</a></li>
+          <li class="nav-item {{ Route::currentRouteNamed('admin.cse_reports') ? 'active' : '' }}"><a href="{{ route('admin.cse_reports', app()->getLocale()) }}">CSE</a></li>
+            <li class="{{ Route::currentRouteNamed('admin.cse_reports') ? 'active' : '' }}"><a href="{{ route('admin.add_referral',  app()->getLocale()) }}">Supplier</a></li>
             <li class=""><a href="#">Job MGT</a></li>
             <li class=""><a href="#">Technician</a></li>
             <li class=""><a href="#">Customer</a></li>

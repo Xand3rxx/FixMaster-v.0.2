@@ -29,10 +29,10 @@ class CreateServiceRequestAssignedTable extends Migration
                 ->onDelete('cascade');
 
             $table->enum('job_accepted', ['Yes', 'No'])->nullable();
-            $table->dateTime('job_acceptance_time')->nullbale();
-            $table->dateTime('job_diagnostic_date')->nullbale();
-            $table->dateTime('job_declined_time')->nullbale();
-            $table->dateTime('job_completed_date')->nullbale();
+            $table->timestamp('job_acceptance_time')->nullable();
+            $table->timestamp('job_diagnostic_date')->nullable();
+            $table->timestamp('job_declined_time')->nullable();
+            $table->timestamp('job_completed_date')->nullable();
             $table->primary(['user_id', 'service_request_id']);
             $table->timestamps();
         });

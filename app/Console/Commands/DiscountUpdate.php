@@ -50,9 +50,7 @@ class DiscountUpdate extends Command
        
          ]); 
        ClientDiscount::where([ 'discount_id'=>$discount->uuid])->delete();
-       if($discount->entity == 'service'){
-        ServiceDiscount::where('discount_id', $discount->uuid)->delete();
-       }
+   
        
         }
         $this->info('Discount Update has been send successfully');
