@@ -11,10 +11,10 @@
                 <nav aria-label="breadcrumb">
                     <ol class="breadcrumb breadcrumb-style1 mg-b-10">
                         <li class="breadcrumb-item"><a href="{{ route('admin.index', app()->getLocale()) }}">Dashboard</a></li>
-                        <li class="breadcrumb-item active" aria-current="page">Customer Service Executive List</li>
+                        <li class="breadcrumb-item active" aria-current="page">Customer Service Executive</li>
                     </ol>
                 </nav>
-                <h4 class="mg-b-0 tx-spacing--1">Customer Service Executive List</h4>
+                <h4 class="mg-b-0 tx-spacing--1">Customer Service Executive Job Assigned Report</h4>
             </div>
             
         </div>
@@ -79,16 +79,16 @@
                                 @foreach($serviceRequests as $serviceRequest)
                                 <tr>
                                     <td class="tx-color-03 tx-center">{{ $loop->iteration }}</td>
-                                    <td class="tx-medium">{{ $serviceRequest->service_request->unique_id ?? ''}}</td>
+                                    <td class="tx-medium">{{ $serviceRequest->unique_id ?? ''}}</td>
                                    
-                  <td class="tx-medium"> @foreach($serviceRequest->service_request->users as $data)
+                  <td class="tx-medium"> @foreach($serviceRequest->users as $data)
                   @foreach($data->roles as $res)
                   @if($res->url == "cse")
                      {{$data->cse->unique_id ?? ''}}
                   @endif
                   @endforeach
                   @endforeach</td>
-                  <td class="tx-medium"> @foreach($serviceRequest->service_request->users as $data)
+                  <td class="tx-medium"> @foreach($serviceRequest->users as $data)
                   @foreach($data->roles as $res)
                   @if($res->url == "cse")
                      {{$data->account->first_name}} {{$data->account->last_name}}
@@ -97,19 +97,19 @@
                   @endforeach</td>
                                     
                                 
-                  <td class="text-medium">{{ Carbon\Carbon::parse($serviceRequest->service_request->created_at, 'UTC')->isoFormat('MMMM Do YYYY, h:mm:ssa') }}</td>
-                  <td class="text-medium">{{ Carbon\Carbon::parse($serviceRequest->service_request->created_at, 'UTC')->isoFormat('MMMM Do YYYY, h:mm:ssa') }}</td> 
+                  <td class="text-medium">{{ Carbon\Carbon::parse($serviceRequest->created_at, 'UTC')->isoFormat('MMMM Do YYYY, h:mm:ssa') }}</td>
+                  <td class="text-medium">{{ Carbon\Carbon::parse($serviceRequest->created_at, 'UTC')->isoFormat('MMMM Do YYYY, h:mm:ssa') }}</td> 
                   
-                  @if($serviceRequest->service_request->status_id == 1)
+                  @if($serviceRequest->status_id == 1)
                     <td class="text-medium text-warning">Pending</td>
-                  @elseif($serviceRequest->service_request->status_id == 2)
+                  @elseif($serviceRequest->status_id == 2)
                   <td class="text-medium text-info">Ongoing</td>
-                  @elseif($serviceRequest->service_request->status_id == 3)
+                  @elseif($serviceRequest->status_id == 3)
                     <td class="text-medium text-danger">Cancelled</td>
-                  @elseif($serviceRequest->service_request->status_id == 4)
+                  @elseif($serviceRequest->status_id == 4)
                     <td class="text-medium text-success">Completed</td>
                   @else
-                 <td class="text-medium text-warning">{{$serviceRequest->service_request->status}}</td>
+                 <td class="text-medium text-warning">{{$serviceRequest->status}}</td>
                   @endif
                   
                               
@@ -117,7 +117,7 @@
                     <div class="dropdown-file">
                       <a href="" class="dropdown-link" data-toggle="dropdown"><i data-feather="more-vertical"></i></a>
                       <div class="dropdown-menu dropdown-menu-right">
-                     <a href="{{ route('admin.cse_report_details', ['details'=>$serviceRequest->service_request->uuid, 'locale'=>app()->getLocale()]) }}" class="dropdown-item details"><i class="far fa-clipboard"></i> Details</a>
+                     <a href="{{ route('admin.cse_report_details', ['details'=>$serviceRequest->uuid, 'locale'=>app()->getLocale()]) }}" class="dropdown-item details"><i class="far fa-clipboard"></i> Details</a>
                       </div>
                     </div>
                   </td>

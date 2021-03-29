@@ -63,13 +63,13 @@
                                           <tbody>
                                           <tr>
                                               <td class="tx-medium">CSE ID</td>
-                                              <td>{{--@foreach($serviceRequests->service_request->users as $data)
+                                              <td>@foreach($serviceRequests->users as $data)
                   @foreach($data->roles as $res)
                   @if($res->url == "cse")
                      {{$data->cse->unique_id ?? ''}}
                   @endif
                   @endforeach
-                  @endforeach --}}</td>
+                  @endforeach </td>
                                           </tr>
                                           <tr>
                                               <td class="tx-medium">JOB ID</td>
@@ -97,7 +97,17 @@
                                           </tr>
                                           <tr>
                                               <td class="tx-medium">JOB STATUS</td>
-                                              <td class="tx-color-03"> {{ $serviceRequests->unique_id ?? '' }} </td>
+                                              @if($serviceRequests->status_id == 1)
+                    <td class="text-medium text-warning">Pending</td>
+                  @elseif($serviceRequests->status_id == 2)
+                  <td class="text-medium text-info">Ongoing</td>
+                  @elseif($serviceRequests->status_id == 3)
+                    <td class="text-medium text-danger">Cancelled</td>
+                  @elseif($serviceRequests->status_id == 4)
+                    <td class="text-medium text-success">Completed</td>
+                  @else
+                 <td class="text-medium text-warning">{{$serviceRequests->status}}</td>
+                  @endif
                                           </tr>
                                           <tr>
                                               <td class="tx-medium">Days between Booking / Acceptance</td>

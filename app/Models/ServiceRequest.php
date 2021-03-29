@@ -160,4 +160,8 @@ class ServiceRequest extends Model
     {
         return $this->belongsTo(Payment::class, 'id', 'user_id');
     }
+
+    public function cse_service_request(){
+        return $this->belongsTo(ServiceRequestAssigned::class, 'service_request_id')->with('users', 'client');
+    }
 }

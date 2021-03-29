@@ -170,7 +170,7 @@
                 </div>
 
                 <div class="tab-pane fade" id="description3" role="tabpanel" aria-labelledby="description-tab3">
-                  <h6>SERVICE REQUEST DESCRIPTION</h6>
+                <h6>SERVICE REQUEST DESCRIPTION</h6>
                   <div class="row row-xs mt-4">
                     <div class="col-lg-12 col-xl-12">
                       <table class="table table-striped table-sm mg-b-0">
@@ -234,7 +234,7 @@
                           </tr>
                           <tr>
                             <td class="tx-medium">Technician's Assigned</td>
-                            <@foreach($serviceRequests->users as $data)
+                            @foreach($serviceRequests->users as $data)
                             @foreach($data->roles as $res)
                             @if($res->url == "technician")
                             <td class="tx-color-03">
@@ -294,7 +294,7 @@
                         </tbody>
                       </table>
 
-                      {{-- @if(!empty($requestDetail->serviceRequestDetail->media_file)) --}}
+                      @if(!empty($requestDetail->serviceRequestDetail->media_file)) --}}
                       <div class="divider-text">Media Files</div>
                       <small class="text-danger">This portion is only visible if a media file is available. Aslo revmove this text once the check is completed.</small>
                         <div class="row">
@@ -316,7 +316,7 @@
                             
                           </div>
                         </div>
-                      {{-- @endif --}}
+                       @endif 
                     </div><!-- df-example -->
                   </div>
                 </div>

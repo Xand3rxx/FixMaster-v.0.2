@@ -55,6 +55,10 @@ class ServiceRequestAssigned extends Model
     {
         return $this->belongsTo(Account::class, 'user_id', 'service_id' );
     }
+
+    public function cse_service_request(){
+        return $this->belongsTo(ServiceRequestAssigned::class)->with('users', 'client');
+    }
 }
 
 

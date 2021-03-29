@@ -36,7 +36,7 @@ class ReportController extends Controller
     public function cseReports()
     {
 
-       $serviceRequests = ServiceRequestAssigned::orderBy('created_at', 'DESC')->with('service_request')->get();
+       $serviceRequests = ServiceRequest::orderBy('created_at', 'DESC')->with('cse_service_request')->get();
 
        return view('admin.reports.cse_reports', compact('serviceRequests'));
     }

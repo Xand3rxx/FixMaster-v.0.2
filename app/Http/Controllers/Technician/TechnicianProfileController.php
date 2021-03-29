@@ -62,28 +62,18 @@ class TechnicianProfileController extends Controller
     public function serviceRequests($language, ServiceRequestAssigned $serviceRequest)
     {
 
-       
-
-    $serviceRequests = ServiceRequestAssigned::where('user_id', Auth::id())->with('service_request')->get();
-
-        //return $serviceRequests;
+    
+        $serviceRequests = ServiceRequestAssigned::where('user_id', Auth::id())->with('service_request')->get();
 
         return view('technician.requests', compact('serviceRequests'));
     }
-
-   
 
     public function serviceRequestDetails($language, $details)
     {
        
         $serviceRequests = ServiceRequest::where('uuid', $details)->first();
 
-        
-
         return view('technician.request_details', compact('serviceRequests'));
-
-
-        
         
     }
 

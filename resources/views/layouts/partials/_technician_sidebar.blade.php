@@ -11,7 +11,7 @@
     <div class="aside-loggedin">
       <div class="d-flex align-items-center justify-content-start">
        
-        <img class="rounded-circle wh-150p img-fluid image profile_image_preview" src="{{!empty($result->account->avatar) ? asset('assets/user-avatars/'.$result->account->avatar) : asset('assets/user-avatars/'.$photo)}}" alt="user-image">
+        <img class="rounded-circle wh-150p img-fluid image profile_image_preview" src="{{--!empty($result->account->avatar) ? asset('assets/user-avatars/'.$result->account->avatar) : asset('assets/user-avatars/'.$photo ?? '')--}}" alt="user-image">
         <div class="aside-alert-link">
           <a href="#" class="new" data-toggle="tooltip" title="You have 0 unread messages"><i data-feather="message-square"></i></a>
           {{-- <a href="" class="new" data-toggle="tooltip" title="You have 4 new notifications"><i data-feather="bell"></i></a> --}}
