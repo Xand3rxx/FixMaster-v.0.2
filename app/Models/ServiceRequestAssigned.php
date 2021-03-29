@@ -16,7 +16,9 @@ class ServiceRequestAssigned extends Model
      *
      * @var array
      */
-    protected $fillable = ['user_id', 'service_request_id'];
+    protected $fillable = [
+        'user_id', 'service_request_id', 'job_accepted', 'job_acceptance_time', 'job_diagnostic_date', 'job_declined_time', 'job_completed_date'
+    ];
 
     public function service_request(){
         return $this->belongsTo(ServiceRequest::class)->with('users', 'client', 'status');
