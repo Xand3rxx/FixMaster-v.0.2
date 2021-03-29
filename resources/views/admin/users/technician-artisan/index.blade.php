@@ -57,10 +57,9 @@
                                     <td class="tx-medium">{{ $technician_artisan['unique_id']}}</td>
                                     <td class="tx-medium">{{ Str::title($technician_artisan['user']['account']['last_name'] ." ". $technician_artisan['user']['account']['first_name']) }}</td>
                                     <td class="tx-medium">{{ $technician_artisan['user']['email'] }}</td>
-                                    <td class="tx-medium">{{ $technician_artisan['user']['phones'][0]['number'] ?? 'UNAVAILABLE' }}</td>
+                                    <td class="tx-medium">{{ $technician_artisan['user']['contact']['phone_number'] ?? 'UNAVAILABLE' }}</td>
                                     <td class="tx-medium">{{ $technician_artisan['user']['account']['gender'] }}</td>
 
-                                    <!-- <td class="tx-medium text-info">{{ $technician_artisan['user']['roles'][0]['name']}}</td> -->
                                     <td class="text-medium text-success">{{is_null($technician_artisan['user']['deleted_at']) ? 'Active' : InActive}}</td>
                                     <td class="text-medium">{{ Carbon\Carbon::parse($technician_artisan->created_at, 'UTC')->isoFormat('MMMM Do YYYY, h:mm:ssa') }}</td>
                                     <td class=" text-center">

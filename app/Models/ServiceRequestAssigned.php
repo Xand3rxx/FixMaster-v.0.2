@@ -16,10 +16,12 @@ class ServiceRequestAssigned extends Model
      *
      * @var array
      */
-    protected $fillable = ['user_id', 'service_request_id'];
+    protected $fillable = [
+        'user_id', 'service_request_id', 'job_accepted', 'job_acceptance_time', 'job_diagnostic_date', 'job_declined_time', 'job_completed_date'
+    ];
 
     public function service_request(){
-        return $this->belongsTo(ServiceRequest::class)->with('users', 'client');
+        return $this->belongsTo(ServiceRequest::class)->with('users', 'client', 'status');
     }
 
     public function users()
@@ -45,7 +47,7 @@ class ServiceRequestAssigned extends Model
         return $this->belongsTo(Status::class, 'user_id');
     }
 
-    
+
     public function client_requesting_service()
     {
         return $this->belongsTo(Account::class, 'user_id');
@@ -54,6 +56,10 @@ class ServiceRequestAssigned extends Model
     public function tech_account()
     {
         return $this->belongsTo(Account::class, 'user_id', 'service_id' );
+    }
+
+    public function cse_service_request(){
+        return $this->belongsTo(ServiceRequestAssigned::class)->with('users', 'client');
     }
 }
 

@@ -6,11 +6,11 @@
 @endif
 <!-- END ADMIN SIDEBAR MENU -->
 
-<!-- START CLIENT SERVICE EXECUTIVE SIDEBAR MENU -->
+<!-- START Customer Service Executive SIDEBAR MENU -->
 @if(Auth::user()->type->role->name === 'Customer Service Executive')
   @include('layouts.partials._cse_sidebar')
 @endif
-<!-- END CLIENT SERVICE EXECUTIVE SIDEBAR MENU -->
+<!-- END Customer Service Executive SIDEBAR MENU -->
 
 <!-- START QUALITY ASSURANCE SIDEBAR MENU -->
 @if(Auth::user()->type->role->name === 'Quality Assurance Manager')

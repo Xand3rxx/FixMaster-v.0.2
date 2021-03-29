@@ -17,7 +17,7 @@ class DiscountHistoryController extends Controller
     //
     public function index()
     {
-        $discounts = DiscountHistory::select('discounts.name', 'discounts.entity', 'discounts.rate', 'availability',
+        $discounts = DiscountHistory::select('discounts.name', 'discounts.entity', 'discounts.rate', 'discounts.apply_discount', 'availability',
         'discounts.duration_start', 'discounts.duration_end', 'discount_histories.*')
         ->orderBy('discount_histories.id', 'DESC')
         ->join('discounts', 'discounts.id', '=', 'discount_histories.discount_id')

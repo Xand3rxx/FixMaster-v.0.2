@@ -52,8 +52,8 @@
                                     <td class="tx-color-03 tx-center">{{ $loop->iteration }}</td>
                                     <td class="tx-medium">{{ Str::title($client['user']['account']['last_name'] ." ". $client['user']['account']['first_name']) }}</td>
                                     <td class="tx-medium">{{ $client['user']['email'] }}</td>
-                                    <td class="tx-medium">{{ $client['user']['phones'][0]['number'] ?? 'UNAVAILABLE' }}</td>
-                                    <td class="tx-medium text-info">{{ $client['user']['requests'] ?? 'UNAVAILABLE'  }}</td>
+                                    <td class="tx-medium">{{ $client['user']['contact']['phone_number'] ?? 'UNAVAILABLE' }}</td>
+                                    <td class="tx-medium text-info">{{ $client['service_request_count'] ?? 0 }}</td>
                                     <td class="text-medium text-success">{{is_null($client['user']['deleted_at']) ? 'Active' : InActive}}</td>
                                     <td class="text-medium">{{ Carbon\Carbon::parse($client->created_at, 'UTC')->isoFormat('MMMM Do YYYY, h:mm:ssa') }}</td>
                                     <td class=" text-center">

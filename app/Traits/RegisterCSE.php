@@ -2,12 +2,14 @@
 
 namespace App\Traits;
 
+use App\Traits\GenerateUniqueIdentity as Generator;
 use Illuminate\Support\Facades\DB;
 
 
 trait RegisterCSE
 {
-    use RegisterUser;
+    use RegisterUser, Generator;
+
     protected $registred;
 
     /**
@@ -59,10 +61,10 @@ trait RegisterCSE
                 'account_number'    => $valid['account_number'],
                 'avatar'            => !empty($valid['avatar']) ? $valid['avatar']->store('user-avatar') : $valid['gender'] = 'male' ? 'default-male-avatar.png' : 'default-female-avatar.png',
             ]);
+            
             // Register the CSE Account
             $user->cse()->create([
                 'account_id' => $account->id,
-                'referral_id' => 2,
                 'franchisee_id' => $valid['franchisee_id'],
             ]);
             // Register CSE Contact Details

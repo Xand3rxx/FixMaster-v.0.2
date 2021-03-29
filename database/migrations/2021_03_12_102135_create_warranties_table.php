@@ -25,6 +25,7 @@ class CreateWarrantiesTable extends Migration
             $table->string('name')->unique();
             $table->unsignedInteger('amount')->nullable()->default(0);
             $table->enum('warranty_type', ['free', 'extended']);
+            $table->unsignedInteger('duration')->comment('i.e 1month equals 30days.');
             $table->text('description')->nullable();
             $table->softDeletes();
             $table->timestamps();

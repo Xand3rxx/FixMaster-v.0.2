@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Frontend\ApplicantsForm\CSEFormController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Frontend\Registration\ClientRegistrationController;
@@ -40,7 +41,7 @@ Route::post('/estate/add',                  [\App\Http\Controllers\EstateControl
 Route::view('/faq',                         'frontend.faq')->name('frontend.faq');
 Route::view('/register',                    'auth.register')->name('frontend.register');
 
-
+Route::post('customer-service-executive', [CSEFormController::class, '__invoke'])->name('frontend.customer-service-executive.store');
 
 Route::get('/contact-us',                   [App\Http\Controllers\PageController::class, 'contactUs'])->name('frontend.contact');
 Route::post('/contact-us',                  [App\Http\Controllers\PageController::class, 'sendContactMail'])->name('frontend.send_contact_mail');
@@ -48,7 +49,7 @@ Route::post('/contact-us',                  [App\Http\Controllers\PageController
 // //Essential Routes
 Route::post('/lga-list',                    [App\Http\Controllers\EssentialsController::class, 'lgasList'])->name('lga_list');
 Route::get("/getServiceDetails",            [App\Http\Controllers\EssentialsController::class, 'getServiceDetails'])->name("getServiceDetails");
-// Route::post('/avalaible-tool-quantity',     [App\Http\Controllers\EssentialsController::class, 'getAvailableToolQuantity'])->name('available_quantity');
+Route::post('/avalaible-tool-quantity',     [App\Http\Controllers\EssentialsController::class, 'getAvailableToolQuantity'])->name('available_quantity');
 // Route::get('/administrators-list',          [App\Http\Controllers\EssentialsController::class, 'getAdministratorsList'])->name('administrators_list');
 // Route::get('/clients-list',                 [App\Http\Controllers\EssentialsController::class, 'getClientsList'])->name('clients_list');
 // Route::get('/technicians-list',             [App\Http\Controllers\EssentialsController::class, 'getTechniciansList'])->name('technicians_list');

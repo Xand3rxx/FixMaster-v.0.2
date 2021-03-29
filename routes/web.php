@@ -28,10 +28,11 @@ use App\Http\Controllers\InvoiceController;
 use App\Http\Controllers\SimulationController;
 use App\Http\Controllers\Admin\User\Administrator\SummaryController;
 use App\Http\Controllers\Admin\StatusController;
-use App\Http\Controllers\ReportController;
+use App\Http\Controllers\Admin\ReportController;
 use App\Http\Controllers\QualityAssurance\ServiceRequestController;
 use App\Http\Controllers\QualityAssurance\QualityAssuranceProfileController;
 
+use App\Http\Controllers\CSE\CustomerServiceExecutiveController as CseController;
 
 /*
 |--------------------------------------------------------------------------
@@ -125,7 +126,7 @@ Route::prefix('admin')->group(function () {
             ->name('services.deactivate');
         Route::get('/services/reinstate/{service}',         [ServiceController::class, 'reinstate'])->name('services.reinstate');
         Route::get('/services/delete/{service}',            [ServiceController::class, 'destroy'])->name('services.delete');
-        Route::resource('services',                         ServiceController::class); 
+        Route::resource('services',                         ServiceController::class);
 
 
 
@@ -133,7 +134,7 @@ Route::prefix('admin')->group(function () {
         Route::get('/location-request',                     [AdminLocationRequestController::class, 'index'])->name('location_request');
         // Route::post('/get-names',                           [AdminLocationRequestController::class, 'getNames'])->name('get_names');
         // Route::post('/request-location',                    [AdminLocationRequestController::class, 'requestLocation'])->name('request_location');
-        
+
         // Route::post("/getUsersAssigned",                    [AdminLocationRequestController::class, 'getUsersAssigned'])->name("getUsersAssigned");
         // Route::post("/getServiceDetails",                    [AdminLocationRequestController::class, 'getServiceDetails'])->name("getServiceDetails");
 
@@ -146,7 +147,7 @@ Route::prefix('admin')->group(function () {
         Route::get('/reports/sorting',      [ReportController::class, 'cseReports'])->name('cse_reports');
         Route::get('/reports/sort_cse_report',      [ReportController::class, 'sortCSEReports'])->name('sort_cse_reports');
         Route::get('/reports/cse_report_details/{activity_log}',      [ReportController::class, 'cseReportDetails'])->name('report_details');
-
+        Route::get('/reports/details/{details:uuid}',                 [ReportController::class, 'cseSummary'])->name('cse_report_details');
 
 
         //Routes for Tools & Tools Request Management
@@ -187,6 +188,21 @@ Route::prefix('admin')->group(function () {
         Route::get('/referral/deactivate/{referral:id}',                    [App\Http\Controllers\ReferralController::class, 'deactivate'])->name('deactivate_referral');
         Route::get('/referral/activate/{referral:id}',                    [App\Http\Controllers\ReferralController::class, 'reinstate'])->name('activate_referral');
 
+        Route::get('/loyalty/add',                     [App\Http\Controllers\LoyaltyManagementController::class, 'create'])->name('add_loyalty');
+        Route::post('/loyalty/store',                    [App\Http\Controllers\LoyaltyManagementController::class, 'store'])->name('loyalty_store');
+        Route::get('/loyalty/list',                       [App\Http\Controllers\LoyaltyManagementController::class, 'index'])->name('loyalty_list');
+        Route::post('/loyalty/users',                             [App\Http\Controllers\LoyaltyManagementController::class, 'loyaltyUsers'])->name('loyalty_users');
+        Route::get('/loyalty/summary/{loyalty:id}',                    [App\Http\Controllers\LoyaltyManagementController::class, 'show'])->name('loyalty_summary');
+        Route::get('/loyalty/delete/{loyalty:id}/{client:id}',                    [App\Http\Controllers\LoyaltyManagementController::class, 'delete'])->name('delete_loyalty');
+        Route::get('/loyalty/edit/{loyalty:id}',                    [App\Http\Controllers\LoyaltyManagementController::class, 'edit'])->name('edit_loyalty');
+        Route::post('/loyalty/users-edit',                             [App\Http\Controllers\LoyaltyManagementController::class, 'loyaltyUsersEdit'])->name('loyalty_users_edit');
+        Route::post('/loyalty/store-edit',                    [App\Http\Controllers\LoyaltyManagementController::class, 'store_edit'])->name('loyalty_store_edit');
+        Route::get('/loyalty/history',                    [App\Http\Controllers\LoyaltyManagementController::class, 'history'])->name('loyalty_history');
+
+       
+
+
+
 
         //Admin payment Routes
         Route::get('/payment-gateway/list',                 [GatewayController::class, 'index'])->name('list_payment_gateway');
@@ -219,7 +235,7 @@ Route::prefix('admin')->group(function () {
 // Route::resource('client', ClientController::class);
 
 //All routes regarding clients should be in here
-Route::prefix('/client')->middleware('verified')->group(function () {
+Route::prefix('/client')->group(function () {
     Route::name('client.')->group(function () {
         //All routes regarding clients should be in here
         Route::get('/',                   [ClientController::class, 'index'])->name('index'); //Take me to Supplier Dashboard
@@ -231,10 +247,10 @@ Route::prefix('/client')->middleware('verified')->group(function () {
         // Route::get('/profile/edit',             [ClientController::class, 'edit_profile'])->name('client.edit_profile');
         Route::post('/profile/update',              [ClientController::class, 'update_profile'])->name('updateProfile');
         Route::post('/updatePassword',      [ClientController::class, 'updatePassword'])->name('updatePassword');
-       
+
         // Route::get('/requests',                    [ClientRequestController::class, 'index'])->name('client.requests');
- 
-        // E-wallet Routes for clients 
+
+        // E-wallet Routes for clients
         //Profile and password update
         Route::get('/settings',                 [ClientController::class, 'settings'])->name('settings');
 
@@ -242,6 +258,8 @@ Route::prefix('/client')->middleware('verified')->group(function () {
             // Route::get('/requests',          [ClientRequestController::class, 'index'])->name('client.requests');
             Route::get('wallet',                [ClientController::class, 'wallet'])->name('wallet');
             Route::any('fund',                  [ClientController::class, 'walletSubmit'])->name('wallet.submit');
+            Route::get('loyalty',                [ClientController::class, 'loyalty'])->name('loyalty');
+            Route::any('loyalty/submit',                 [ClientController::class, 'loyaltySubmit'])->name('loyalty.submit');
 
             Route::post('/ipnpaystack',         [ClientController::class, 'paystackIPN'])->name('ipn.paystack');
             Route::get('/apiRequest',           [ClientController::class, 'apiRequest'])->name('ipn.paystackApiRequest');
@@ -272,16 +290,39 @@ Route::prefix('/client')->middleware('verified')->group(function () {
             // Route::post('servicesRequest',              [ClientController::class, 'serviceRequest'])->name('paystack.submit');
             // Route::post('servicesRequest',              [ClientController::class, 'serviceRequest'])->name('flutter.submit');
 
-            
+
     });
 });
 
+// Route::resource('cse', CseController::class);
 
+// Route::prefix('/cse')->group(function () {
+//     Route::name('cse.')->group(function () {
+//         //All routes regarding CSE's should be in here
+//         Route::view('/',                   'cse.index')->name('index'); //Take me to CSE Dashboard
+
+//     });
+// });
 Route::prefix('/cse')->group(function () {
     Route::name('cse.')->group(function () {
         //All routes regarding CSE's should be in here
-        Route::view('/',                   'cse.index')->name('index'); //Take me to CSE Dashboard
+        Route::view('/',                    'cse.index')->name('index'); //Take me to CSE Dashboard
+        Route::view('/messages/inbox',      'cse.messages.inbox')->name('messages.inbox');
+        Route::view('/messages/sent',       'cse.messages.sent')->name('messages.sent');
+        Route::view('/payments',            'cse.payments')->name('payments');
+        Route::view('/requests',            'cse.requests')->name('requests');
+        Route::view('/requests/details',    'cse.request_details',
+            [
+                'tools' => \App\Models\ToolInventory::all(),
+                'statuses' => \App\Models\Status::all()
+            ]
+        )->name('request_details');
+        Route::view('/profile',             'cse.view_profile')->name('view_profile');
+        Route::view('/profile/edit',        'cse.edit_profile', [
+            'banks' => \App\Models\Bank::all(),
 
+        ])->name('edit_profile');
+        Route::view('/location-request',    'cse.location_request')->name('location_request');
     });
 });
 
@@ -344,6 +385,7 @@ Route::prefix('/franchisee')->group(function () {
         Route::view('/requests/details',    'franchisee.request_details')->name('request_details');
         Route::view('/profile',             'franchisee.view_profile')->name('view_profile');
         Route::view('/profile/edit',        'franchisee.edit_profile')->name('edit_profile');
+        Route::view('/location-request',    'franchisee.location_request')->name('location_request');
     });
 });
 
