@@ -28,7 +28,7 @@ use App\Http\Controllers\InvoiceController;
 use App\Http\Controllers\SimulationController;
 use App\Http\Controllers\Admin\User\Administrator\SummaryController;
 use App\Http\Controllers\Admin\StatusController;
-use App\Http\Controllers\ReportController;
+use App\Http\Controllers\Admin\ReportController;
 use App\Http\Controllers\QualityAssurance\ServiceRequestController;
 use App\Http\Controllers\QualityAssurance\QualityAssuranceProfileController;
 
@@ -146,7 +146,7 @@ Route::prefix('admin')->group(function () {
         Route::get('/reports/sorting',      [ReportController::class, 'cseReports'])->name('cse_reports');
         Route::get('/reports/sort_cse_report',      [ReportController::class, 'sortCSEReports'])->name('sort_cse_reports');
         Route::get('/reports/cse_report_details/{activity_log}',      [ReportController::class, 'cseReportDetails'])->name('report_details');
-
+        Route::get('/reports/details/{details:uuid}',                 [ReportController::class, 'cseSummary'])->name('cse_report_details');
 
 
         //Routes for Tools & Tools Request Management

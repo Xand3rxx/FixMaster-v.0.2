@@ -121,3 +121,4 @@ class CSESeeder extends Seeder
         \App\Models\Contact::attemptToStore($cse2->id, $cseAccount2->id, 156, '08129444994', "14 421 Rd, Festac Town, Lagos", "3.2809022", "6.4785962");
     }   
 }
+
