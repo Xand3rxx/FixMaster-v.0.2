@@ -3,9 +3,10 @@
 namespace App\Http\Controllers\CSE;
 
 use App\Http\Controllers\Controller;
+use App\Models\Cse;
 use Illuminate\Http\Request;
 
-class CustomerServiceExecutiveController extends Controller
+class RequestController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -14,7 +15,9 @@ class CustomerServiceExecutiveController extends Controller
      */
     public function index()
     {
-        return view('cse.index');
+        return view('cse.requests.index', [
+            'requests' => \App\Models\ServiceRequestAssigned::where('user_id', auth()->user()->id)->with(['service_request', 'service_request.users', 'service_request.client'])->get(),
+        ]);
     }
 
     /**
@@ -46,7 +49,10 @@ class CustomerServiceExecutiveController extends Controller
      */
     public function show($id)
     {
-        //
+        return view('cse.requests.show', [
+            'tools' => \App\Models\ToolInventory::all(),
+            'statuses' => \App\Models\Status::all()
+        ]);
     }
 
     /**
