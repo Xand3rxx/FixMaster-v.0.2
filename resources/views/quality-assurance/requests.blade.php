@@ -152,50 +152,8 @@
                 </div><!-- col -->
             </div><!-- row -->
 
-            <button type="button" class="btn btn-success btn-lg" data-toggle="modal" data-target="#modalDetails">Open
-                Modal</button>
-
-            <div class="modal fade" id="modalDetails" tabindex="-1" role="dialog" aria-hidden="true">
-                <div class="modal-dialog modal-dialog-centered modal-lg wd-sm-650" role="document">
-                    <div class="modal-content">
-                        <div class="modal-body pd-x-25 pd-sm-x-30 pd-t-40 pd-sm-t-20 pd-b-15 pd-sm-b-20">
-                            <a href="" role="button" class="close pos-absolute t-15 r-15" data-dismiss="modal"
-                                aria-label="Close">
-                                <span aria-hidden="true">&times;</span>
-                            </a>
-
-<h6 class="text-center">Kindly rate and review to get a 10% loyalty reward</h6>
-                                    <form>
-                                        <div class="row">
-                                            <div class="col-md-12 col-lg-12 col-12">
-                                                <div class="tx-40 text-center" id="rate">
-                                                    <i class="icon ion-md-star rat lh-0 tx-gray-300" data-number="1"></i>
-                                                    {{-- <i class="icon ion-md-star lh-0 tx-orange"></i> --}}
-                                                    <i class="icon ion-md-star rat lh-0 tx-gray-300" data-number="2"></i>
-                                                    <i class="icon ion-md-star rat lh-0 tx-gray-300" data-number="3"></i>
-                                                    <i class="icon ion-md-star rat lh-0 tx-gray-300" data-number="4"></i>
-                                                    <i class="icon ion-md-star rat lh-0 tx-gray-300" data-number="5"></i>
-                                                  </div>
-                                            </div>
-
-                                                <div class="form-group col-md-12 col-lg-12">
-                                                    <label>Leave a review</label>
-                                                    <textarea class="form-control" rows="4"
-                                                        placeholder=""></textarea>
-                                                </div>
-                                            <div class="col-sm-12">
-                                                <button type="submit" class="btn btn-primary">Submit</button>
-                                                <button type="button" class="btn btn-danger" data-dismiss="modal" aria-label="Close">
-                                                    Close
-                                                  </button>
-                                            </div>
-
-                                        </div>
-                                    </form>
-                        </div><!-- modal-body -->
-                    </div><!-- modal-content -->
-                </div><!-- modal-dialog -->
-            </div><!-- modal -->
+            {{-- <button type="button" class="btn btn-success btn-lg" data-toggle="modal" data-target="#modalDetails">Open
+                Modal</button> --}}
 
         </div><!-- container -->
     </div>
