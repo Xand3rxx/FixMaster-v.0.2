@@ -134,7 +134,7 @@
                 <img src="{{ asset('assets/images/job/Circleci.svg') }}" class="avatar avatar-ex-sm" alt="">
                 <div class="media-body content ml-3">
                     <h4 class="title mb-0">E-Wallet</h4>
-                    <p class="text-muted mb-0">&#8358; {{$ewallet}}</p>
+                    <p class="text-muted mb-0">&#8358; {{ceil($ewallet)}}</p>
 
                 </div>
             </div>
@@ -169,7 +169,7 @@
                 <li class="nav-item">
                     <a class="nav-link rounded active" id="fund-account-tab" data-toggle="pill" href="#fund-account" role="tab" aria-controls="fund-account" aria-selected="false">
                         <div class="text-center pt-1 pb-1">
-                            <h4 class="title font-weight-normal mb-0">Fund E-Wallet</h4>
+                            <h4 class="title font-weight-normal mb-0">Credit E-Wallet</h4>
                         </div>
                     </a><!--end nav link-->
                 </li><!--end nav item-->

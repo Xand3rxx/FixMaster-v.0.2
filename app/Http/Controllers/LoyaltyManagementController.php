@@ -120,7 +120,7 @@ class LoyaltyManagementController extends Controller
            $amount = $request->amount;
            if($amount != ''){
 
-           $dataArry = ServiceRequest::select('client_id','first_name', 'last_name')->where('total_amount', '=', $amount)
+           $dataArry = ServiceRequest::select('client_id','first_name', 'last_name')->where(['total_amount'=> $amount, 'status_id'=> '4'])
            ->join('accounts', 'accounts.user_id', '=', 'service_requests.client_id')
                 ->get();
 
@@ -134,6 +134,7 @@ class LoyaltyManagementController extends Controller
 
             $dataArry = ServiceRequest::select('client_id','first_name', 'last_name')
             ->join('accounts', 'accounts.user_id', '=', 'service_requests.client_id')
+            ->where(['status_id'=> '4'])
             ->groupBy('client_id')
                  ->get();
  
@@ -302,7 +303,7 @@ class LoyaltyManagementController extends Controller
 
            if($amount != ''){
 
-           $dataArry = ServiceRequest::select('client_id','first_name', 'last_name')->where('total_amount', '=', $amount)
+           $dataArry = ServiceRequest::select('client_id','first_name', 'last_name')->where(['total_amount'=> $amount, 'status_id'=> '4'])
            ->join('accounts', 'accounts.user_id', '=', 'service_requests.client_id')
                 ->get();
 
@@ -316,7 +317,7 @@ class LoyaltyManagementController extends Controller
 
             $dataArry = ServiceRequest::select('client_id','first_name', 'last_name')
             ->join('accounts', 'accounts.user_id', '=', 'service_requests.client_id')
-            ->where('total_amount', '=',  $edit_amount)
+            ->where(['total_amount'=> $amount, 'status_id'=> '4'])
             ->groupBy('client_id')
                  ->get();
  

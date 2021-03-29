@@ -381,7 +381,7 @@
                                 </div>
                             </span>
 
-                            <button type="submit" class="btn btn-primary pull-right-1">Edit</button>
+                            <button type="submit" class="btn btn-primary pull-right-1">Update</button>
                         </div>
 
                     </div>

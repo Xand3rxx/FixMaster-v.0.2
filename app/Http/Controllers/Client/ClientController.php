@@ -591,9 +591,7 @@ class ClientController extends Controller
         $data['total_loyalty'] = ($total_loyalty[0]->total_points *  $total_loyalty[0]->amounts ) / ($total_loyalty[0]->total_no_amount * 100);
 
         $json = $data['loyalty']->withdrawal != NULL? json_decode($data['loyalty']->withdrawal): [];
-        // $data['withdraws']= ( !isset($json->withdraw)? [] : is_array($json->withdraw) )? $json->withdraw: [ 0 => $json->withdraw];
-        // $data['withdraw_date']= ( !isset($json->date)? [] : is_array($json->date) )? $json->date: [ 0 => $json->date];
-
+      
        
         $ifwithdraw = isset($json->withdraw)? $json->withdraw: '';
         $ifwithdraw_date = isset($json->date)? $json->date: '';

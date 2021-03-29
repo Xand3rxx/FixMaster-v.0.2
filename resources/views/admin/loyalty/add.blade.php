@@ -81,7 +81,7 @@
                             @enderror
                         </div>
 
-                        <div class="form-group col-md-2" >
+                        <div class="form-group col-md-6" >
                             <label class='add-page not-users'>Users' Count</label>
                             <input type="number" disabled class="form-control user-count" />
                         

@@ -88,7 +88,7 @@
                             <input type="hidden" value="{{$wallet}}" name="wallet"/>
                         </div>
 
-                        <div class="form-group col-md-2" >
+                        <div class="form-group col-md-6" >
                             <label class='add-page not-users'>Users' Count</label>
                             <input type="number" disabled class="form-control user-count" />
                         
@@ -98,7 +98,7 @@
 
                         <div class="form-row">
                         <div class="form-group col-md-12">
-                        <button type="submit" class="btn btn-primary float-right">Edit Loyalty Points</button>
+                        <button type="submit" class="btn btn-primary float-right">Update Loyalty Points</button>
                         </div>
 
                     </div>
