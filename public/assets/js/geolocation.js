@@ -51,7 +51,7 @@
 
                 // $('#user_latitude').val(value.geometry.location.lat);
                 // $('#user_longitude').val(value.geometry.location.lng);
-                // console.log(place.formatted_address);
+                console.log(place.formatted_address);
                 // console.log(value.geometry.location.lat);
                 // console.log(value.geometry.location.lng);
 

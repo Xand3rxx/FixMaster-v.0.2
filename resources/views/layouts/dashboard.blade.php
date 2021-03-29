@@ -126,11 +126,10 @@
     <script src="https://cdn.datatables.net/buttons/1.6.5/js/buttons.print.min.js"></script>
     <script src="{{asset('assets/frontend/js/custom.js')}}"></script>
     <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDeDLVAiaU13p2O0d3jfcPjscsbVsCQUzc&v=3.exp&libraries=places"></script>
-    <script src="{{asset('assets/frontend/js/geolocation.js')}}"></script> --}}
     <script src="{{ asset('assets/dashboard/assets/js/48a9782e-3e2b-4055-a9bb-8a926a937e2c.js') }}"></script>
 
     @yield('scripts')
-    {{-- @stack('scripts') --}}
+    @stack('scripts')
 
   </body>
 </html>

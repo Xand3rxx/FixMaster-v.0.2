@@ -33,6 +33,7 @@ class ServiceRequestController extends Controller
     {
         $results = ServiceRequestAssigned::where('user_id', Auth::id())->with('users', 'service_request')
                  ->orderBy('created_at', 'DESC')->get();
+                //  dd($results);
         return view('quality-assurance.requests', compact('results'));
     }
 

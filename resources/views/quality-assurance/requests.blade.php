@@ -108,13 +108,13 @@
                                             </td>
                                             {{-- {{$serviceRequest->service_request->status_id}} --}}
                                             @if ($serviceRequest->service_request->status_id == 1)
-                                                <td class="text-medium text-warning">Pending</td>
+                                                <td class="text-medium text-warning">{{Str::title($serviceRequest['service_request']['status']['name'])}}</td>
                                             @elseif($serviceRequest->service_request->status_id == 2)
-                                                <td class="text-medium text-info">Ongoing</td>
+                                                <td class="text-medium text-info">{{Str::title($serviceRequest['service_request']['status']['name'])}}</td>
                                             @elseif($serviceRequest->service_request->status_id == 3)
-                                                <td class="text-medium text-danger">Cancelled</td>
+                                                <td class="text-medium text-danger">{{Str::title($serviceRequest['service_request']['status']['name'])}}</td>
                                             @elseif($serviceRequest->service_request->status_id == 4)
-                                                <td class="text-medium text-success">Completed</td>
+                                                <td class="text-medium text-success">{{Str::title($serviceRequest['service_request']['status']['name']) ?: 'Unavailable'}}</td>
                                             @else
                                                 <td class="text-medium text-warning">
                                                     {{ $serviceRequest->service_request->status }}</td>
@@ -135,13 +135,13 @@
                                                 </div>
                                             </td>
                                         </tr>
-       @if($serviceRequest->service_request->status_id == 4)
+       {{-- @if($serviceRequest->service_request->status_id == 4)
   @section('scripts')
 <script defer async>
   $("#modalDetails").modal({show:true});
 </script>
 @endsection
-       @endif
+       @endif --}}
                                     @endforeach
 
                                 </tbody>
@@ -152,8 +152,8 @@
                 </div><!-- col -->
             </div><!-- row -->
 
-            {{-- <button type="button" class="btn btn-success btn-lg" data-toggle="modal" data-target="#modalDetails">Open
-                Modal</button> --}}
+            <button type="button" class="btn btn-success btn-lg" data-toggle="modal" data-target="#modalDetails">Open
+                Modal</button>
 
             <div class="modal fade" id="modalDetails" tabindex="-1" role="dialog" aria-hidden="true">
                 <div class="modal-dialog modal-dialog-centered modal-lg wd-sm-650" role="document">
@@ -181,11 +181,15 @@
                                                 <div class="form-group col-md-12 col-lg-12">
                                                     <label>Leave a review</label>
                                                     <textarea class="form-control" rows="4"
-                                                        placeholder="For Example: Briefly explain if internal or external tools will be used and incurred cost"></textarea>
+                                                        placeholder=""></textarea>
                                                 </div>
                                             <div class="col-sm-12">
                                                 <button type="submit" class="btn btn-primary">Submit</button>
+                                                <button type="button" class="btn btn-danger" data-dismiss="modal" aria-label="Close">
+                                                    Close
+                                                  </button>
                                             </div>
+
                                         </div>
                                     </form>
                         </div><!-- modal-body -->
