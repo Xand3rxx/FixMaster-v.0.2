@@ -19,18 +19,19 @@ class StatusSeeder extends Seeder
 
         $ongoingSubStatuses = [
             'Phase1' => 'Assigned CSE', 
-            'Phase2' => 'Assigned Technician', 
-            'Phase3' => 'Contacted Client for availabilty',  
-            'Phase4' => 'En-route to Client\'s address', 
-            'Phase5' => 'Arrived', 
-            'Phase6' => 'Perfoming diagnosis', 
-            'Phase7' => 'Completed diagnosis', 
-            'Phase8' => 'Issued RFQ', 
-            'Phase9' =>  'Awaiting supplier\'s feedback', 
-            'Phase10' => 'RFQ Delivery: Pending', 
-            'Phase11' => 'RFQ Delivery: Shipped', 
-            'Phase12' => 'RFQ Delivered', 
-            'Phase13' => 'Job Completed'
+            'Phase2' => 'Assigned QA', 
+            'Phase3' => 'Assigned Technician', 
+            'Phase4' => 'Contacted Client for availabilty',  
+            'Phase5' => 'En-route to Client\'s address', 
+            'Phase6' => 'Arrived', 
+            'Phase7' => 'Perfoming diagnosis', 
+            'Phase8' => 'Completed diagnosis', 
+            'Phase9' => 'Issued RFQ', 
+            'Phase10' =>  'Awaiting supplier\'s feedback', 
+            'Phase11' => 'RFQ Delivery: Pending', 
+            'Phase12' => 'RFQ Delivery: Shipped', 
+            'Phase13' => 'RFQ Delivered', 
+            'Phase14' => 'Job Completed'
         ];
 
         $status = array(
