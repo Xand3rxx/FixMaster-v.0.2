@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateWarrantiesTable extends Migration
+class CreateSubServicesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,21 +13,18 @@ class CreateWarrantiesTable extends Migration
      */
     public function up()
     {
-        Schema::create('warranties', function (Blueprint $table) {
+        Schema::create('sub_services', function (Blueprint $table) {
             $table->engine = 'InnoDB';
             $table->charset = 'utf8mb4';
             $table->collation = 'utf8mb4_unicode_ci';
-            
+
             $table->id();
-            $table->uuid('uuid');
+            $table->uuid('uuid')->unique();
             $table->foreignId('user_id');
-            $table->string('unique_id')->comment('e.g. WAR-09328932');
+            $table->foreignId('service_id');
             $table->string('name')->unique();
-            $table->unsignedInteger('amount')->nullable()->default(0);
-            $table->enum('warranty_type', ['free', 'extended']);
-            $table->unsignedInteger('duration')->comment('i.e 1month equals 30days.');
-            $table->text('description')->nullable();
-            $table->softDeletes();
+            $table->unsignedInteger('first_hour_charge');
+            $table->unsignedInteger('subsequent_hour_charge');
             $table->timestamps();
         });
     }
@@ -39,6 +36,6 @@ class CreateWarrantiesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('warranties');
+        Schema::dropIfExists('sub_services');
     }
 }
