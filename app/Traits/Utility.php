@@ -12,6 +12,7 @@ use App\Mail\MailNotify;
 use App\Traits\GenerateUniqueIdentity as Generator;
 use Session;
 use Auth;
+use DB;
 
 trait Utility
 {
@@ -271,5 +272,33 @@ trait Utility
     }
 
     return $results;
+  }
+
+  /* Return distinct year from a particulat table's created at
+  *  string  $tableName
+  *  return array
+  */
+  public function getDistinctYears($tableName){
+        //Array to
+        $yearList = array();
+
+        //Get a collection of `created_at` from $tableName
+        $years = DB::table($tableName)->orderBy('created_at', 'ASC')->pluck('created_at');
+
+        $years = json_decode($years);
+
+        if(!empty($years)){
+            foreach($years as $year){
+                $date = new \DateTime($year);
+
+                $yearNumber = $date->format('y');
+
+                $yearName = $date->format('Y');
+                
+                array_push($yearList, $yearName);
+            }
+        }
+
+        return array_unique($yearList);
   }
 }

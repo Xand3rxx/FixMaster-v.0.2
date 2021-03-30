@@ -11,7 +11,18 @@
     <div class="aside-loggedin">
       <div class="d-flex align-items-center justify-content-start">
        
-        <img class="rounded-circle wh-150p img-fluid image profile_image_preview" src="{{--!empty($result->account->avatar) ? asset('assets/user-avatars/'.$result->account->avatar) : asset('assets/user-avatars/'.$photo ?? '')--}}" alt="user-image">
+        <a href="" class="avatar">
+          @if(!empty($profile->avatar) && file_exists(public_path().'/assets/user-avatars/'.$profile->avatar))
+            <img src="{{ asset('assets/user-avatars/'.$profile->avatar) }}" class="rounded-circle" alt="Technician avatar" />
+        @else
+            @if($profile->gender == 'male')
+                <img src="{{ asset('assets/images/default-male-avatar.png') }}" alt="Default male profile avatar" class="rounded-circle" />
+            @else
+                <img src="{{ asset('assets/images/default-female-avatar.png') }}" alt="Default female profile avatar" class="rounded-circle" />
+            @endif
+        @endif
+        </a>
+
         <div class="aside-alert-link">
           <a href="#" class="new" data-toggle="tooltip" title="You have 0 unread messages"><i data-feather="message-square"></i></a>
           {{-- <a href="" class="new" data-toggle="tooltip" title="You have 4 new notifications"><i data-feather="bell"></i></a> --}}

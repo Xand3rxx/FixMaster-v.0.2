@@ -23,7 +23,7 @@ class Status extends Model
         'user_id', 'name', 'sub_status', 'ranking',
     ];
 
-    public const PAYMENT_E_WALLET = [
+    public const ONGOING_SUBSTATUSES = [
         '0' => 'Assigned CSE', 
         '1' => 'Assigned QA', 
         '2' => 'Assigned Technician', 
