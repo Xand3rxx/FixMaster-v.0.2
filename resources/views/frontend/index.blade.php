@@ -198,7 +198,7 @@
                                     <div class="title-heading text-center">
                                         <h1 class="heading mb-3" style="color: #ffffff;">Get A <span class="type"></span> <br> <span class="texty"> Client Service
                                                 Executive</span> </h1>
-                                        <p class="para-desc mx-auto text-muted1">We assign a dedicated Client Service Executive to you who ensures your job is completed promptly and professionally</p>
+                                        <p class="para-desc mx-auto text-muted1">We assign a dedicated Customer Service Executive to you who ensures your job is completed promptly and professionally</p>
                                         <p class="texty2">WE REPAIR while YOU RELAX!!!</p>
                                         <div class="mt-4">
                                             <a href="{{ route('services.list', app()->getLocale()) }}" class="btn btn-prim mt-2 mr-2 js-scroll-trigger">Book a Service</a>

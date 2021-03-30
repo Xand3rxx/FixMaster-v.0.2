@@ -40,7 +40,7 @@ class QualityAssuranceProfileController extends Controller
         $result = User::findOrFail(Auth::id());
 
         $banks = \App\Models\Bank::get(['id', 'name']);
-        
+
         return view('quality-assurance.edit_profile', compact('result', 'banks'));
     }
 
@@ -63,9 +63,11 @@ class QualityAssuranceProfileController extends Controller
             'gender' => 'required|max:255',
             'phone_number' => 'required',
             'profile_avater' => 'mimes:jpeg,jpg,png,gif',
-            'full_address' => 'required'
-            // 'work_address' => '',
-
+            'full_address' => 'required',
+            'address_longitude'=> 'required|numeric',
+            'address_latitude'=> 'required|numeric',
+            'account_number' => 'required|numeric',
+            'bank_id' => 'required|numeric'
           ];
 
           $messages = [
@@ -74,7 +76,9 @@ class QualityAssuranceProfileController extends Controller
              'last_name.required' => 'Last Name field can not be empty',
              'gender.required' => 'Please select gender',
              'phone_number.required' => 'Please select phone number',
-             'profile_avater.mimes'    => 'Unsupported Image Format'
+             'profile_avater.mimes'    => 'Unsupported Image Format',
+             'address_latitude.float' => 'Unsupported Address Latitude Format',
+             'address_longitude.float' => 'Unsupported Address Longitude Format'
           ];
 
           $validator = Validator::make($request->all(), $rules, $messages);
@@ -95,17 +99,17 @@ class QualityAssuranceProfileController extends Controller
         'middle_name'=>$request->middle_name,
         'last_name'=>$request->last_name,
         'gender'=>$request->gender,
-        'avatar'=>$filename
+        'avatar'=>$filename,
+        'bank_id' => $request->bank_id,
+        'account_number' =>$request->account_number
     ]);
 
-    $user->phone->update([
+    $user->contact->update([
         'user_id'=>$user->id,
-        'number'=>$request->phone_number,
-    ]);
-
-    $user->address->update([
-        //'user_id'=>$user->id,
+        'phone_number'=>$request->phone_number,
         'address'=>$request->full_address,
+        'address_longitude' => $request->address_longitude,
+        'address_latitude' => $request->address_longitude
     ]);
 
     $this->log($type, $severity, $actionUrl, $message);
@@ -117,32 +121,6 @@ class QualityAssuranceProfileController extends Controller
 
 
     public function update_password(Request $request){
-
-        // $user = User::where('id', Auth::id())->first();
-        // $current_password = $request->input('current_password');
-        // $new_password = $request->input('new_password');
-        // $new_confirm_password = $request->input('new_confirm_password');
-
-        // $type = "Profile";
-        // $severity = "Informational";
-        // $actionUrl = Route::currentRouteAction();
-        // $message = $user->email.' profile successfully updated';
-
-        //  if($new_password === $new_confirm_password){
-
-        // if(Hash::check($request->current_password, $user->password)){
-        //    $changed_password = Hash::make($new_password);
-        //    $user->update(['password' => $changed_password]);
-
-        //    $this->log($type, 'informational', $actionUrl, $user->email.' Password changed successfully');
-        //    return redirect()->back()->with('success', 'Password changed successfully!');
-        //     }
-        //     $this->log($type, 'error', $actionUrl,  $user->email. 'Password updating failed, current password do not match our record');
-        //     return redirect()->back()->with('error', 'Your current password do not match our record');
-
-        //   }
-        //   $this->log($type, 'error', $actionUrl,  $user->email.' Password updating failed, new password and confirm password do not match');
-        //  return redirect()->back()->with('error', 'Your new password and confirm password do not match');
 
         return $this->passwordUpdator($request);
 

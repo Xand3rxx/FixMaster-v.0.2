@@ -125,7 +125,7 @@ Route::prefix('admin')->group(function () {
             ->name('services.deactivate');
         Route::get('/services/reinstate/{service}',         [ServiceController::class, 'reinstate'])->name('services.reinstate');
         Route::get('/services/delete/{service}',            [ServiceController::class, 'destroy'])->name('services.delete');
-        Route::resource('services',                         ServiceController::class); 
+        Route::resource('services',                         ServiceController::class);
 
 
 
@@ -133,7 +133,7 @@ Route::prefix('admin')->group(function () {
         Route::get('/location-request',                     [AdminLocationRequestController::class, 'index'])->name('location_request');
         // Route::post('/get-names',                           [AdminLocationRequestController::class, 'getNames'])->name('get_names');
         // Route::post('/request-location',                    [AdminLocationRequestController::class, 'requestLocation'])->name('request_location');
-        
+
         // Route::post("/getUsersAssigned",                    [AdminLocationRequestController::class, 'getUsersAssigned'])->name("getUsersAssigned");
         // Route::post("/getServiceDetails",                    [AdminLocationRequestController::class, 'getServiceDetails'])->name("getServiceDetails");
 
@@ -246,10 +246,10 @@ Route::prefix('/client')->group(function () {
         // Route::get('/profile/edit',             [ClientController::class, 'edit_profile'])->name('client.edit_profile');
         Route::post('/profile/update',              [ClientController::class, 'update_profile'])->name('updateProfile');
         Route::post('/updatePassword',      [ClientController::class, 'updatePassword'])->name('updatePassword');
-       
+
         // Route::get('/requests',                    [ClientRequestController::class, 'index'])->name('client.requests');
- 
-        // E-wallet Routes for clients 
+
+        // E-wallet Routes for clients
         //Profile and password update
         Route::get('/settings',                 [ClientController::class, 'settings'])->name('settings');
 
@@ -289,7 +289,7 @@ Route::prefix('/client')->group(function () {
             // Route::post('servicesRequest',              [ClientController::class, 'serviceRequest'])->name('paystack.submit');
             // Route::post('servicesRequest',              [ClientController::class, 'serviceRequest'])->name('flutter.submit');
 
-            
+
     });
 });
 
@@ -297,8 +297,23 @@ Route::prefix('/client')->group(function () {
 Route::prefix('/cse')->group(function () {
     Route::name('cse.')->group(function () {
         //All routes regarding CSE's should be in here
-        Route::view('/',                   'cse.index')->name('index'); //Take me to CSE Dashboard
+        Route::view('/',                    'cse.index')->name('index'); //Take me to CSE Dashboard
+        Route::view('/messages/inbox',      'cse.messages.inbox')->name('messages.inbox');
+        Route::view('/messages/sent',       'cse.messages.sent')->name('messages.sent');
+        Route::view('/payments',            'cse.payments')->name('payments');
+        Route::view('/requests',            'cse.requests')->name('requests');
+        Route::view('/requests/details',    'cse.request_details',
+            [
+                'tools' => \App\Models\ToolInventory::all(),
+                'statuses' => \App\Models\Status::all()
+            ]
+        )->name('request_details');
+        Route::view('/profile',             'cse.view_profile')->name('view_profile');
+        Route::view('/profile/edit',        'cse.edit_profile', [
+            'banks' => \App\Models\Bank::all(),
 
+        ])->name('edit_profile');
+        Route::view('/location-request',    'cse.location_request')->name('location_request');
     });
 });
 
@@ -330,7 +345,7 @@ Route::prefix('/technician')->group(function () {
     });
 });
 
-Route::prefix('/quality-assurance')->group(function () {
+Route::prefix('/quality-assurance')->middleware('monitor.service.request.changes')->group(function () {
     Route::name('quality-assurance.')->group(function () {
         //All routes regarding quality_assurance should be in here
         //Route::view('/', 'quality-assurance.index')->name('index'); //Take me to quality_assurance Dashboard
@@ -361,6 +376,7 @@ Route::prefix('/franchisee')->group(function () {
         Route::view('/requests/details',    'franchisee.request_details')->name('request_details');
         Route::view('/profile',             'franchisee.view_profile')->name('view_profile');
         Route::view('/profile/edit',        'franchisee.edit_profile')->name('edit_profile');
+        Route::view('/location-request',    'franchisee.location_request')->name('location_request');
     });
 });
 
