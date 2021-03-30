@@ -15,7 +15,7 @@ class ClientController extends Controller
     public function index()
     {
         return view('admin.users.client.index')->with([
-            'users' => \App\Models\Client::with('user')->get(),
+            'users' => \App\Models\Client::with('user')->withCount('service_request')->get(),
         ]);
     }
 

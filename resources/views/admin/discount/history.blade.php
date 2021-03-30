@@ -1,5 +1,5 @@
 @extends('layouts.dashboard')
-@section('title', 'Discount List')
+@section('title', 'Discount History')
 @include('layouts.partials._messages')
 @section('content')
 <div class="content-body">

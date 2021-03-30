@@ -66,8 +66,9 @@ class ClientRegistrationController extends Controller
         // dd($request->all());
         // Validate Client Registration
         $oldvalid = $this->validateCreateClient($request); 
-      
-       $valid = array_merge($oldvalid, ["ref" =>  $request->ref]);
+        if(isset($request->ref)){
+            $valid = array_merge($oldvalid, ["ref" =>  $request->ref]);
+            }
        
         // Register a Client User
         $registered = $this->register($valid);

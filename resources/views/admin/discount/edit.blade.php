@@ -381,7 +381,7 @@
                                 </div>
                             </span>
 
-                            <button type="submit" class="btn btn-primary pull-right-1">Edit</button>
+                            <button type="submit" class="btn btn-primary pull-right-1">Update</button>
                         </div>
 
                     </div>
@@ -550,7 +550,7 @@ $(document).ready(function() {
             },
         })
     });
-    $('.get_users').on("click", function() {
+    $('.get_users').on("change", function() {
         var entity = $('#entity_id').children("option:selected").val();
         if (entity) {
             $.ajax({

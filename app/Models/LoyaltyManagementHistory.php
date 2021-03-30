@@ -12,15 +12,16 @@ class LoyaltyManagementHistory extends Model
 
     protected $fillable = [
      
-        'client_id','loyalty_id'
+        'client_id','wallet','points', 'type','amount','loyalty_mgt_id'
     
     ];
 
- 
-
-    protected $softDelete = true;
-
- 
-
+    protected static function boot()
+    {
+        parent::boot();
+        self::creating(function ($model) {
+            $model->uuid = Str::uuid()->toString();
+        });
+    }
 
 }

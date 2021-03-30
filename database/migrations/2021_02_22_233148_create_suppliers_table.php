@@ -25,10 +25,10 @@ class CreateSuppliersTable extends Migration
             $table->foreignId('account_id')->index();
 
             $table->string('business_name')->unique();
-            $table->unsignedTinyInteger('years_of_business');
-            $table->enum('education_level', ['none', 'primary-school', 'secondary-school', 'technical-school', 'college-of-education', 'polytechnic', 'university']);
+            $table->date('established_on');
+            $table->enum('education_level', \App\Models\Supplier::EDUCATIONLEVEL);
 
-            $table->string('registered_identification_number')->unique();
+            $table->string('cac_number', 14)->unique();
             $table->longText('business_description');
 
             $table->timestamps();

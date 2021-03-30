@@ -9,7 +9,7 @@
       <div>
         <nav aria-label="breadcrumb">
           <ol class="breadcrumb breadcrumb-style1 mg-b-10">
-          <li class="breadcrumb-item"><a href="{{ route('quality-assurance.index', app()->getLocale()) }}">Dashboard</a></li>
+            <li class="breadcrumb-item"><a href="{{ route('quality-assurance.index', app()->getLocale()) }}">Dashboard</a></li>
             <li class="breadcrumb-item active" aria-current="page">Service Requests</li>
           </ol>
         </nav>
@@ -23,7 +23,7 @@
           <div class="card-header pd-t-20 d-sm-flex align-items-start justify-content-between bd-b-0 pd-b-0">
             <div>
               <h6 class="mg-b-5">Your Most Recent Requests</h6>
-              <p class="tx-13 tx-color-03 mg-b-0">This table displays a list of all <strong>Service Requests</strong> assigned to you  by FixMaster AI or your CSE Coodinator after careful understudy of each request and with assumed initial payments made by the clients.</p>
+              <p class="tx-13 tx-color-03 mg-b-0">This table displays a list of all <strong>Service Requests</strong> assigned to you by FixMaster AI or your CSE Coodinator after careful understudy of each request and with assumed initial payments made by the clients.</p>
             </div>
 
           </div><!-- card-header -->
@@ -35,7 +35,7 @@
                 </div>
                 <div class="media-body">
                   <h6 class="tx-sans tx-uppercase tx-10 tx-spacing-1 tx-color-03 tx-semibold tx-nowrap mg-b-5 mg-md-b-8">Total Requests</h6>
-                <h4 class="tx-20 tx-sm-18 tx-md-20 tx-normal tx-rubik mg-b-0"></h4>
+                  <h4 class="tx-20 tx-sm-18 tx-md-20 tx-normal tx-rubik mg-b-0"></h4>
                 </div>
               </div>
 
@@ -50,8 +50,7 @@
                   <th>Job Ref.</th>
                   <th>Client</th>
                   <th>Supervised By</th>
-                  <th>CSE</th>
-                  {{-- <th>Technician</th> --}}
+                  <th>Technician</th>
                   <th class="text-center">Amount</th>
                   <th>Status</th>
                   <th class="text-center">Date</th>
@@ -59,24 +58,39 @@
                 </tr>
               </thead>
               <tbody>
+                @foreach ($requests as $request)
                 <tr>
-                  <td class="tx-color-03 tx-center">1</td>
-                  <td class="tx-medium">REF-234234723</td>
-                  <td class="tx-medium">Kelvin Adesanya</td>
-                  <td class="tx-medium">David Akinsola</td>
-                  <td class="tx-medium">Benedict Mayowa</td>
-                  <td class="text-medium text-center">₦{{ number_format(10000) }}</td>
-                  <td class="text-medium text-info">Ongoing</td>
-                  <td class="text-medium">{{ Carbon\Carbon::parse('2020-12-28 16:58:54', 'UTC')->isoFormat('MMMM Do YYYY') }}</td>
+                  <td class="tx-color-03 tx-center">{{$loop->iteration}}</td>
+                  <td class="tx-medium">{{$request['service_request']['unique_id']}}</td>
+                  <td class="tx-medium"> {{Str::title($request['service_request']['client']['account']['last_name'] .' '. $request['service_request']['client']['account']['first_name'])}} </td>
+                  @foreach ($request['service_request']['users'] as $user)
+                    @if($user['roles'][0]['slug'] == 'admin-user')
+                    <td class="tx-medium">
+                      {{Str::title($user['account']['last_name'] .' '. $user['account']['first_name'])}}
+                    </td>
+                    @endif
+                  @endforeach
+                  @foreach ($request['service_request']['users'] as $user)
+                    @if($user['roles'][0]['slug'] == 'technician-artisans')
+                    <td class="tx-medium">
+                      {{Str::title($user['account']['last_name'] .' '. $user['account']['first_name'])}}
+                    </td>
+                    @endif
+                  @endforeach
+                  <td class="text-medium text-center">₦{{number_format($request['service_request']['total_amount']) }}</td>
+                  <td class="text-medium text-info">{{$request['service_request']['status']['name']}}</td>
+                  <td class="text-medium">{{ Carbon\Carbon::parse($request['service_request']['created_at'] ?? '2020-12-28 16:58:54', 'UTC')->isoFormat('MMMM Do YYYY') }}</td>
                   <td class=" text-center">
                     <div class="dropdown-file">
                       <a href="" class="dropdown-link" data-toggle="dropdown"><i data-feather="more-vertical"></i></a>
                       <div class="dropdown-menu dropdown-menu-right">
-                      <a href="{{ route('cse.request_details', app()->getLocale()) }}" class="dropdown-item details"><i class="far fa-clipboard"></i> Details</a>
+                        <a href="{{ route('cse.requests.show', [app()->getLocale(), $request['service_request']['uuid']]) }}" class="dropdown-item details"><i class="far fa-clipboard"></i> Details</a>
                       </div>
                     </div>
                   </td>
                 </tr>
+                @endforeach
+
 
               </tbody>
             </table>

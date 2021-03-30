@@ -29,6 +29,13 @@
           <i data-feather="chevron-down"></i>
         </a>
         <p class="tx-color-03 tx-12 mg-b-0">Customer Service Executive(CSE)</p>
+        <p class="tx-15 mg-b-0 mt-4 font-weight-bold text-center">Job Availabilty</p><br>
+        <div class="custom-control custom-switch" style="margin-left: 4rem !important; margin-top: -12px !important;">
+          <input type="checkbox" checked class="custom-control-input" id="cse-availability">
+          <label class="custom-control-label font-weight-bold" for="cse-availability"></label>
+        </div>
+        <p class="text-center tx-14 text-success tx-12 mt-1 mg-b-0">Available</p><br>
+
       </div>
       <div class="collapse {{ Route::currentRouteNamed('cse.view_profile', 'cse.edit_profile') ? 'show' : '' }}" id="loggedinMenu">
         <ul class="nav nav-aside mg-b-0">
@@ -54,7 +61,7 @@
       
       <li class="nav-item {{ Route::currentRouteNamed('cse.payments') ? 'active show' : '' }}"><a href="{{ route('cse.payments', app()->getLocale()) }}" class="nav-link"><i data-feather="credit-card"></i> <span>Payments</span></a></li>
 
-      <li class="nav-item {{ Route::currentRouteNamed('cse.requests', 'cse.request_details') ? 'active show' : '' }}"><a href="{{ route('cse.requests', app()->getLocale()) }}" class="nav-link"><i data-feather="git-pull-request"></i> <span>Requests</span></a></li>
+      <li class="nav-item {{ Route::currentRouteNamed('cse.requests.index', 'cse.request_details') ? 'active show' : '' }}"><a href="{{ route('cse.requests.index', app()->getLocale()) }}" class="nav-link"><i data-feather="git-pull-request"></i> <span>Requests</span></a></li>
 
     </ul>
   </div>

@@ -19,8 +19,13 @@ class CreateLoyaltyManagementHistoriesTable extends Migration
             $table->collation = 'utf8mb4_unicode_ci';
 
             $table->id();
-            $table->foreignId('loyalty_id')->nullable();
+            $table->uuid('uuid')->unique();
             $table->foreignId('client_id')->nullable();
+            $table->foreignId('loyalty_mgt_id')->nullable();
+            $table->float('points');
+            $table->float('amount');
+            $table->enum('type', ['none','debited', 'credited'])->default('none');
+            $table->float('wallet');
             $table->timestamps();
         });
     }

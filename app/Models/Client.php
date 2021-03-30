@@ -35,7 +35,7 @@ class Client extends Model
      */
     public function user()
     {
-        return $this->belongsTo(User::class)->with(['account']);
+        return $this->belongsTo(User::class)->with(['account', 'contact']);
     }
 
 
@@ -45,15 +45,13 @@ class Client extends Model
         return $this->belongsTo(Account::class);
     }
 
-    public function invoice()
+    /**
+     * Get the service request of the Client
+     */
+    public function service_request()
     {
-        return $this->hasOne(Invoice::class);
+        return $this->hasMany(ServiceRequest::class, 'client_id', 'user_id');
     }
-
-    public function invoices()
-    {
-        return $this->hasMany(Invoice::class);
-    }
-
+    
 }
 
