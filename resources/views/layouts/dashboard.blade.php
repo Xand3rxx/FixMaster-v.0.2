@@ -101,34 +101,82 @@
                             <span aria-hidden="true">&times;</span>
                         </a>
 
-     <h6 class="text-center">Kindly rate and review to get a 10% loyalty reward</h6>
-                                <form>
-                                    <div class="row">
-                                        <div class="col-md-12 col-lg-12 col-12">
-                                            <div class="tx-40 text-center" id="rate">
-                                                <i class="icon ion-md-star rat lh-0 tx-gray-300" data-number="1"></i>
-                                                {{-- <i class="icon ion-md-star lh-0 tx-orange"></i> --}}
-                                                <i class="icon ion-md-star rat lh-0 tx-gray-300" data-number="2"></i>
-                                                <i class="icon ion-md-star rat lh-0 tx-gray-300" data-number="3"></i>
-                                                <i class="icon ion-md-star rat lh-0 tx-gray-300" data-number="4"></i>
-                                                <i class="icon ion-md-star rat lh-0 tx-gray-300" data-number="5"></i>
-                                              </div>
-                                        </div>
+            {{-- <h6 class="text-center">Kindly rate and review to get a 10% loyalty reward</h6> --}}
+            <form action="{{url('cse/submit_ratings', app()->getLocale())}}" method="POST" id="cse_form">
+                @csrf
+                <div class="row">
+            <div class="col-md-12 col-lg-12 col-12">
+                <div class="row">
+                     <div class="col-md-4 col-lg-4 col-4">
+                   <p id="user0" style="margin-top:20px;"></p>
+                     </div>
 
-                                            <div class="form-group col-md-12 col-lg-12">
-                                                <label>Leave a review</label>
-                                                <textarea class="form-control" rows="4"
-                                                    placeholder=""></textarea>
-                                            </div>
-                                        <div class="col-sm-12">
-                                            <button type="submit" class="btn btn-primary">Submit</button>
-                                            <button type="button" class="btn btn-danger" data-dismiss="modal" aria-label="Close">
-                                                Close
-                                              </button>
-                                        </div>
+                     <div class="col-md-8 col-lg-8 col-8">
+                        <div class="tx-40 text-center" id="rate">
+                            <i class="icon ion-md-star rat lh-0 tx-gray-300" data-number="1"></i>
+                            {{-- <i class="icon ion-md-star lh-0 tx-orange"></i> --}}
+                            <i class="icon ion-md-star rat lh-0 tx-gray-300" data-number="2"></i>
+                            <i class="icon ion-md-star rat lh-0 tx-gray-300" data-number="3"></i>
+                            <i class="icon ion-md-star rat lh-0 tx-gray-300" data-number="4"></i>
+                            <i class="icon ion-md-star rat lh-0 tx-gray-300" data-number="5"></i>
+                            <input type="hidden" name="star" id="star" readonly>
+                            <input type="hidden" name="technician" id="technician_id" readonly>
+                        </div>
+                     </div>
+                </div>
 
-                                    </div>
-                                </form>
+
+                <div class="row">
+                    <div class="col-md-4 col-lg-4 col-4">
+                  <p id="user1" style="margin-top:20px;"></p>
+                    </div>
+
+                    <div class="col-md-8 col-lg-8 col-8 pull-left">
+                       <div class="tx-40 text-center" id="rates">
+                           <i class="icon ion-md-star rats lh-0 tx-gray-300" data-int="1"></i>
+                           <i class="icon ion-md-star rats lh-0 tx-gray-300" data-int="2"></i>
+                           <i class="icon ion-md-star rats lh-0 tx-gray-300" data-int="3"></i>
+                           <i class="icon ion-md-star rats lh-0 tx-gray-300" data-int="4"></i>
+                           <i class="icon ion-md-star rats lh-0 tx-gray-300" data-int="5"></i>
+                           <input type="hidden" name="star1" id="star1" readonly>
+                           <input type="hidden" name="technician" id="qa_id" readonly>
+                       </div>
+                    </div>
+               </div>
+
+               <div class="row">
+                <div class="col-md-4 col-lg-4 col-4">
+              <p id="user2" style="margin-top:20px;"></p>
+                </div>
+
+                <div class="col-md-8 col-lg-8 col-8 pull-left">
+                   <div class="tx-40 text-center" id="rated">
+                       <i class="icon ion-md-star ratd lh-0 tx-gray-300" data-inte="1"></i>
+                       <i class="icon ion-md-star ratd lh-0 tx-gray-300" data-inte="2"></i>
+                       <i class="icon ion-md-star ratd lh-0 tx-gray-300" data-inte="3"></i>
+                       <i class="icon ion-md-star ratd lh-0 tx-gray-300" data-inte="4"></i>
+                       <i class="icon ion-md-star ratd lh-0 tx-gray-300" data-inte="5"></i>
+                       <input type="hidden" name="star2" id="star2" readonly>
+                       <input type="hidden" name="technician" id="client_id" readonly>
+                   </div>
+                </div>
+           </div>
+                    </div>
+
+                        {{-- <div class="form-group col-md-12 col-lg-12">
+                            <label>Leave a review</label>
+                            <textarea name="review" class="form-control" rows="4"
+                                placeholder=""></textarea>
+                        </div> --}}
+                    <div class="col-sm-12">
+                        <button type="submit" class="btn btn-primary">Submit</button>
+                        <button type="button" class="btn btn-danger" data-dismiss="modal" aria-label="Close">
+                            Skip
+                            </button>
+                    </div>
+
+                </div>
+            </form>
                     </div><!-- modal-body -->
                 </div><!-- modal-content -->
             </div><!-- modal-dialog -->
@@ -180,11 +228,69 @@
     @yield('scripts')
     @stack('scripts')
 
-    @if (\Request::filled('results'))
+    @if (\Request::filled('results') && \Request::filled('users'))
         <script>
             console.log('{{\Request::get('results')}}');
-            //alert('i got serve');
+            const data = @json(\Request::get('users'));
+            console.log(data);
+            $.each(data.users, function( key, value ) {
+            //console.log();
+
+
+            $.each(value.roles, function( key, res ) {
+               if(res.name == "Technicians & Artisans"){
+                $("#user0").html(value.account.first_name+" "+value.account.last_name+" "+"("+res.url+")");
+                 $("#technician_id").val(value.account.user_id);
+             }
+
+             if(res.name == "Quality Assurance Manager"){
+                $("#user1").html(value.account.first_name+" "+value.account.last_name+" "+"("+res.url+")");
+                $("#qa_id").val(value.account.user_id);
+             }
+
+             if(res.name == "Ordinary Clients"){
+                $("#user2").html(value.account.first_name+" "+value.account.last_name+" "+"("+res.url+")");
+                $("#client_id").val(value.account.user_id);
+             }
+            //  else if(res.name == "Ordinary Clients"){
+
+            //     $("#cse").html(value.account.first_name+" "+value.account.last_name+" "+"("+res.url+")");
+            //     // $("#cse_id").val(value.account.user_id);
+            //     // $("#cse_form").show();
+            //     $("#modalDet").modal({show:true});
+            //  }
+
+            });
+
+            });
+
+
+                $('.rat').on('click', function(){
+                $("#star").val(($(this).data('number')));
+                $(this).parent().children().removeClass('tx-orange').addClass('tx-gray-300');
+                $(this).prevUntil("#rate").removeClass('tx-gray-300').addClass('tx-orange');
+                $(this).removeClass('tx-gray-300').addClass('tx-orange');
+            });
+
+
+            $('.rats').on('click', function(){
+                $("#star1").val(($(this).data('int')));
+                $("#aq_id").val(value.account.user_id);
+                $(this).parent().children().removeClass('tx-orange').addClass('tx-gray-300');
+                $(this).prevUntil("#rates").removeClass('tx-gray-300').addClass('tx-orange');
+                $(this).removeClass('tx-gray-300').addClass('tx-orange');
+            });
+
+            $('.ratd').on('click', function(){
+                $("#star2").val(($(this).data('inte')));
+                $("#client_id").val(value.account.user_id);
+                $(this).parent().children().removeClass('tx-orange').addClass('tx-gray-300');
+                $(this).prevUntil("#rated").removeClass('tx-gray-300').addClass('tx-orange');
+                $(this).removeClass('tx-gray-300').addClass('tx-orange');
+            });
+
             $("#modalDetails").modal({show:true});
+        //});
         </script>
     @endif
 

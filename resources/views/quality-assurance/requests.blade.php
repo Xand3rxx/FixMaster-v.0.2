@@ -152,24 +152,24 @@
                 </div><!-- col -->
             </div><!-- row -->
 
-            {{-- <button type="button" class="btn btn-success btn-lg" data-toggle="modal" data-target="#modalDetails">Open
-                Modal</button> --}}
+            <button type="button" class="btn btn-success btn-lg" data-toggle="modal" data-target="#modalDetails">Open
+                Modal</button>
 
         </div><!-- container -->
     </div>
     @section('scripts')
     <script>
 
-        $(document).ready(function(){
-            // $(document).on('click', '.rat', function (){
-                $('.rat').on('click', function(){
-                console.log($(this).data('number'));
-                $(this).parent().children().removeClass('tx-orange').addClass('tx-gray-300');
-                $(this).prevUntil("#rate").removeClass('tx-gray-300').addClass('tx-orange');
-                $(this).removeClass('tx-gray-300').addClass('tx-orange');
+        // $(document).ready(function(){
+        //     // $(document).on('click', '.rat', function (){
+        //         $('.rat').on('click', function(){
+        //         console.log($(this).data('number'));
+        //         $(this).parent().children().removeClass('tx-orange').addClass('tx-gray-300');
+        //         $(this).prevUntil("#rate").removeClass('tx-gray-300').addClass('tx-orange');
+        //         $(this).removeClass('tx-gray-300').addClass('tx-orange');
 
-            });
-        });
+        //     });
+        // });
 
     </script>
 @endsection

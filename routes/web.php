@@ -31,6 +31,7 @@ use App\Http\Controllers\Admin\StatusController;
 use App\Http\Controllers\ReportController;
 use App\Http\Controllers\QualityAssurance\ServiceRequestController;
 use App\Http\Controllers\QualityAssurance\QualityAssuranceProfileController;
+use App\Http\Controllers\RatingController;
 
 
 /*
@@ -218,9 +219,9 @@ Route::prefix('admin')->group(function () {
 
 // Route::resource('client', ClientController::class);
 
-//All routes regarding clients should be in here
-Route::prefix('/client')->middleware('verified')->group(function () {
-    Route::name('client.')->group(function () {
+//All routes regarding clients should be in here ->middleware('verified')
+Route::prefix('/client')->group(function () {
+    Route::name('client.')->middleware('monitor.service.request.changes')->group(function () {
         //All routes regarding clients should be in here
         Route::get('/',                   [ClientController::class, 'index'])->name('index'); //Take me to Supplier Dashboard
 
@@ -277,7 +278,7 @@ Route::prefix('/client')->middleware('verified')->group(function () {
 });
 
 
-Route::prefix('/cse')->group(function () {
+Route::prefix('/cse')->middleware('monitor.cseservice.request.changes')->group(function () {
     Route::name('cse.')->group(function () {
         //All routes regarding CSE's should be in here
         Route::view('/',                    'cse.index')->name('index'); //Take me to CSE Dashboard
@@ -297,6 +298,7 @@ Route::prefix('/cse')->group(function () {
 
         ])->name('edit_profile');
         Route::view('/location-request',    'cse.location_request')->name('location_request');
+        Route::post('submit_ratings',  [RatingController::class, 'store'])->name('submit_ratings');
     });
 });
 
@@ -328,7 +330,7 @@ Route::prefix('/technician')->group(function () {
     });
 });
 
-Route::prefix('/quality-assurance')->middleware('monitor.service.request.changes')->group(function () {
+Route::prefix('/quality-assurance')->group(function () {
     Route::name('quality-assurance.')->group(function () {
         //All routes regarding quality_assurance should be in here
         //Route::view('/', 'quality-assurance.index')->name('index'); //Take me to quality_assurance Dashboard
@@ -344,7 +346,6 @@ Route::prefix('/quality-assurance')->middleware('monitor.service.request.changes
         Route::post('/disbursed_payments_sorting', [PaymentController::class, 'sortDisbursedPayments'])->name('disbursed_payments_sorting');
         Route::get('/get_chart_data', [ServiceRequestController::class, 'chat_data']);
         Route::get('/requests/details/{uuid}',  [ServiceRequestController::class, 'show'])->name('request_details');
-
     });
 });
 

@@ -50,20 +50,10 @@
 
   <body>
 
-    {{-- <div id="preloader">
-      <div id="status">
-          <div class="spinner">
-              <div class="double-bounce1"></div>
-              <div class="double-bounce2"></div>
-          </div>
-      </div>
-  </div> --}}
-
     @include('layouts.partials._messages')
     @include('layouts.partials._client_header')
     @include('layouts.partials._client_sidebar')
     @include('layouts.partials._client_footer')
-
 
     <script src="{{asset('assets/frontend/js/jquery-3.5.1.min.js')}}"></script>
     {{-- <script src="{{asset('assets/client/js/jquery.min.js')}}"></script> --}}
@@ -94,11 +84,14 @@
     <script src="{{ asset('assets/client/js/sweetalert2.min.js') }}"></script>
 
     <script src="{{ asset('assets/dashboard/assets/js/jquery.tinymce.min.js') }}"></script>
-    
+
     <!-- geolocation asset starts here -->
     <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDeDLVAiaU13p2O0d3jfcPjscsbVsCQUzc&v=3.exp&libraries=places"></script>
     <script src="{{asset('assets/frontend/js/geolocation.js')}}"></script>
     <!-- geolocation asset starts here -->
+    {{-- @yield('scripts')
+    @stack('scripts') --}}
+
 
     <script>
       tinymce.init({
@@ -120,7 +113,7 @@
 
     <script>
         function displayMessage(message, type){
-      
+
           const Toast = swal.mixin({
               toast: true,
               position: 'top-end',
@@ -137,12 +130,9 @@
                 //   type: 'success',
                   title: message
           });
-      
+
         }
     </script>
- 
- @yield('scripts')
- @stack('scripts')
 
     <script>
       $(document).ready(function () {
@@ -158,13 +148,13 @@
         });
 
 
-        //Prevent characters or string asides number in ohone number input field 
+        //Prevent characters or string asides number in ohone number input field
         $("#number, #phone_number, #alternate_phone_number").on("keypress keyup blur", function(event) {
             $(this).val($(this).val().replace(/[^\d].+/, ""));
             if ((event.which < 48 || event.which > 57)) {
                 event.preventDefault();
             }
-        });  
+        });
 
         // Url for more info on datepicker options https://xdsoft.net/jqplugins/datetimepicker/
         $(document).on('click', '#service-date-time', function(){
@@ -182,43 +172,43 @@
 
         $('#customRadio1').change(function () {
             if ($(this).prop('checked')) {
-                $('.display-phone').addClass('d-none');    
+                $('.display-phone').addClass('d-none');
             }else {
-                $('.display-phone').removeClass('d-none');            
+                $('.display-phone').removeClass('d-none');
             }
         });
 
         $('#customRadio2').change(function () {
             if ($(this).prop('checked')) {
-                $('.display-phone').removeClass('d-none');    
+                $('.display-phone').removeClass('d-none');
             }
         });
 
         $('#customRadio3').change(function () {
             if ($(this).prop('checked')) {
-                $('.display-address').addClass('d-none');    
+                $('.display-address').addClass('d-none');
             }else {
-                $('.display-address').removeClass('d-none');            
+                $('.display-address').removeClass('d-none');
             }
         });
 
         $('#customRadio4').change(function () {
             if ($(this).prop('checked')) {
-                $('.display-address').removeClass('d-none');    
+                $('.display-address').removeClass('d-none');
             }
         });
 
         $('#customRadio33').change(function () {
             if ($(this).prop('checked')) {
-                $('.add-card').addClass('d-none');    
+                $('.add-card').addClass('d-none');
             }else {
-                $('.add-card').removeClass('d-none');            
+                $('.add-card').removeClass('d-none');
             }
         });
 
         $('#customRadio34').change(function () {
             if ($(this).prop('checked')) {
-                $('.add-card').removeClass('d-none');    
+                $('.add-card').removeClass('d-none');
             }
         });
 
@@ -249,11 +239,11 @@
 
       // })
 
-      
-      
+
+
       });
     </script>
-   
+
 
   </body>
 </html>
