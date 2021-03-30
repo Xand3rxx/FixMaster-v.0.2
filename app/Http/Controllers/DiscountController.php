@@ -11,6 +11,7 @@ use App\Models\Discount;
 use App\Models\ClientDiscount;
 use App\Models\ServiceDiscount;
 use App\Models\ServiceRequest;
+use App\Models\EstateDiscountHistory;
 use App\Models\Service;
 use App\Models\Category;
 use App\Models\Account;
@@ -731,7 +732,7 @@ class DiscountController extends Controller
         }
         foreach ($accounts as $user)
         {           
-          DiscountHistory::create([
+          $discountHistory = DiscountHistory::create([
             'discount_id' => $discounts->id,
             'estate_id' =>  $estates->id,
             'client_name' => $user->first_name.' '.$user->last_name,
@@ -739,8 +740,17 @@ class DiscountController extends Controller
             'estate_name'=> $request->estate_name
            
                 ]);
+
+
+                EstateDiscountHistory::create([
+                    'discount_id' => $discounts->id,
+                    'discount_history_id' => $discountHistory->id,
+                    'estate_id' =>  $estates->id,
+                ]);
+                 
         }
-         
+
+      
         return true;
     }
 
