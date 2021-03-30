@@ -199,6 +199,6 @@ class User extends Authenticatable implements MustVerifyEmail
 
     public function cse_jobs()
     {
-        return $this->hasOne(ServiceRequest::class, 'uuid', 'uuid');
+        return $this->hasMany(ServiceRequestAssigned::class, 'user_id');
     }
 }

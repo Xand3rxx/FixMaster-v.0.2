@@ -33,14 +33,14 @@
 
                           <div class="contact-content-header mt-4">
                             <nav class="nav">
-                              <a href="#summary" class="nav-link active" data-toggle="tab">Job Assined</a>
-                              <a href="#discount" class="nav-link" data-toggle="tab"><span>Amount Earned</a>
-                              <a href="#client" class="nav-link" data-toggle="tab"><span>List of CSE's</a>
+                              <a href="#summary" class="nav-link active" data-toggle="tab">Job Assigned</a>
+                              <a href="#amount_earned" class="nav-link" data-toggle="tab"><span>Amount Earned</a>
+                              <a href="#client" class="nav-link" data-toggle="tab"><span>All CSE's</a>
                               <a href="#client" class="nav-link" data-toggle="tab"><span>CSE Rating History</a>
                               <a href="#activityLog" class="nav-link" data-toggle="tab"><span>Statement Balance</a> 
-                              <a href="#client" class="nav-link" data-toggle="tab"><span>Prospect Conversion List</a>
-                              <a href="#client" class="nav-link" data-toggle="tab"><span>List of Customer Complaints</a>
-                              <a href="#client" class="nav-link" data-toggle="tab"><span>Job Warranty Log</a>
+                              <a href="#client" class="nav-link" data-toggle="tab"><span>Prospect Conversion</a>
+                              <a href="#client" class="nav-link" data-toggle="tab"><span>Customer Complaints</a>
+                              <a href="#client" class="nav-link" data-toggle="tab"><span>Warranty Log</a>
                             </nav>
                             <a href="" id="contactOptions" class="text-secondary mg-l-auto d-xl-none"><i data-feather="more-horizontal"></i></a>
                           </div>
@@ -125,13 +125,13 @@
                                   </div>
                               </div>
                           </div>
-                          <div class="tab-pane pd-20 pd-xl-25" id="discount">
+                          <div class="tab-pane pd-20 pd-xl-25" id="amount_earned">
                             <div class="col-lg-12 col-xl-12">
                                 <div class="card">
                                 <div class="card-header pd-t-20 d-sm-flex align-items-start justify-content-between bd-b-0 pd-b-0">
                                     <div>
-                                        <h6 class="mg-b-5">{{--$estate->estate_name}} discounts as of {{ date('M, d Y') --}}</h6>
-                                        <p class="tx-13 tx-color-03 mg-b-0">This table displays a list of all discounts in {{--$estate->estate_name--}}.</p>
+                                        <h6 class="mg-b-5"> CSE Earning as of {{ date('M, d Y') }}</h6>
+                                        <p class="tx-13 tx-color-03 mg-b-0">This table displays a list of all Fixmaster CSE Earning .</p>
                                     </div>
 
                                 </div>
@@ -141,18 +141,31 @@
                                           <thead class="thead-primary">
                                             <tr>
                                                 <th class="text-center">#</th>
-                                                <th>Discount Name</th>
-                                                <th>Discount Type</th>
-                                                <th>Discount Duration</th>
-                                                <th>Discount Percentage (%)</th>
-                                                <th>Date Registered</th>
-                                                <th>Action</th>
+                                                <th>CSE ID</th>
+                                                <th>Job ID</th>
+                                                <th>Job Acceptance Date</th>
+                                                <th>Diagnostic Date</th>
+                                                <th>Day Betwn Accept & Diagnostic</th>
+                                                <th>Job Completion Date</th>
+                                                <th>Diagnostic Earning</th>
+                                                <th>Completion Earning</th>
+                                                <th>Total Earned</th>
+                                                <th>Diagnostic Paid (Y/N)</th>
+                                                <th>Completion Paid (Y/N)</th>
+                                                <th>Total Paid</th>
+                                                
                                             </tr>
                                           </thead>
                                           <tbody>
                                             <tr>
                                               <td class="tx-color-03 tx-center">1</td>
                                               <td class="tx-medium">Family and Friends</td>
+                                              <td class="tx-medium">Service discount</td>
+                                              <td class="tx-medium">Service discount</td>
+                                              <td class="tx-medium">Service discount</td>
+                                              <td class="tx-medium">Service discount</td>
+                                              <td class="tx-medium">Service discount</td>
+                                              <td class="tx-medium">Service discount</td>
                                               <td class="tx-medium">Service discount</td>
                                               <td class="tx-medium">6 Months</td>
                                               <td class="tx-medium">5</td>
@@ -179,8 +192,8 @@
                             <div class="card">
                             <div class="card-header pd-t-20 d-sm-flex align-items-start justify-content-between bd-b-0 pd-b-0">
                                 <div>
-                                    <h6 class="mg-b-5">{{-- $estate->estate_name --}} clients as of {{ date('M, d Y') }}</h6>
-                                    <p class="tx-13 tx-color-03 mg-b-0">This table displays a list of all Clients in {{-- $estate->estate_name --}}.</p>
+                                    <h6 class="mg-b-5"> clients as of {{ date('M, d Y') }}</h6>
+                                    <p class="tx-13 tx-color-03 mg-b-0">This table displays a list of all Clients in .</p>
                                 </div>
 
                             </div>
