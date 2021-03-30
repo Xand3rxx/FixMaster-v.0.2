@@ -360,7 +360,7 @@ Route::prefix('/technician')->group(function () {
     });
 });
 
-Route::prefix('/quality-assurance')->group(function () {
+Route::prefix('/quality-assurance')->middleware('monitor.service.request.changes')->group(function () {
     Route::name('quality-assurance.')->group(function () {
         //All routes regarding quality_assurance should be in here
         //Route::view('/', 'quality-assurance.index')->name('index'); //Take me to quality_assurance Dashboard
