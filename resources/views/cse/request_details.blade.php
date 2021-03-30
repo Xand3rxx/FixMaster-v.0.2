@@ -10,7 +10,7 @@
           <nav aria-label="breadcrumb">
             <ol class="breadcrumb breadcrumb-style1 mg-b-10">
             <li class="breadcrumb-item"><a href="{{ route('cse.index', app()->getLocale()) }}">Dashboard</a></li>
-            <li class="breadcrumb-item"><a href="{{ route('cse.requests', app()->getLocale()) }}">Requests</a></li>
+            <li class="breadcrumb-item"><a href="{{ route('cse.requests.index', app()->getLocale()) }}">Requests</a></li>
               <li class="breadcrumb-item active" aria-current="page">Request Details</li>
             </ol>
           </nav>
@@ -47,8 +47,8 @@
             </ul>
               <div class="tab-content bd bd-gray-300 bd-t-0 pd-20" id="myTabContent3">
 
-                <div class="tab-pane fade show active" id="update" role="tabpanel" aria-labelledby="update-tab3">
-                  <small class="text-danger">This tab is only visible if the Service request is still Ongoing.</small>
+                <div class="tab-pane fade show active" id="update3" role="tabpanel" aria-labelledby="update-tab3">
+                  <small class="text-danger">This tab is only visible onc the Service request has an Ongoing status. Which logically is updated by the system or the CSE Coordinator by assigning a CSE to the request</small>
 
                   <form method="POST" action="">
                     @csrf
@@ -56,39 +56,33 @@
                     <div class="form-row mt-4">
                       <div class="tx-13 mg-b-25">
                         <div id="wizard3">
-                          <h3>Project Progress</h3>
-                          <section>
-                            <p class="mg-b-0">Specify the current progress of the job.</p>
-                            <div class="form-row mt-4">
-                              <div class="form-group col-md-8">
-                                  This portion will display only Ongoing Status Sub statuses<br>
-                                  @foreach($statuses as $key => $value)
-                                      @if($key == 1)
-                                        @php 
-                                          $array = json_decode($value->sub_status);
-                                          $iteration  = 1;
-                                        @endphp
-                                      @endif
-                                  @endforeach
 
-                                <select class="form-control custom-select @error('status_id') is-invalid @enderror" name="status_id">
+                          <h3>Job Acceptance</h3>
+                          <section>
+                            <div class="form-row mt-4">
+                              <div class="form-group col-md-6">
+                                <label for="name">Accept job request?</label>
+                                    <select class="form-control custom-select @error('job_accepted') is-invalid @enderror" name="job_accepted">
+                                        <option value="" selected>Select...</option>
+                                        <option value="Yes">Yes</option>
+                                        <option value="No">No</option>
+                                    </select>
+                                    @error('job_accepted')
+                                      <span class="invalid-feedback" role="alert">
+                                          <strong>{{ $message }}</strong>
+                                      </span>
+                                    @enderror
+                              </div>
+
+                              <div class="form-group col-md-6">
+                                <label for="name">Assign Technician</label>
+                                <select class="form-control custom-select @error('user_id') is-invalid @enderror" name="user_id">
                                     <option value="" selected>Select...</option>
-                                         {{-- @for ($i = 0; $i < 13; $i++) --}}
-                                            <option value="{{ $key }}">{{ $array->Phase2 }}</option>
-                                            <option value="{{ $key }}">{{ $array->Phase3 }}</option>
-                                            <option value="{{ $key }}">{{ $array->Phase4 }}</option>
-                                            <option value="{{ $key }}">{{ $array->Phase5 }}</option>
-                                            <option value="{{ $key }}">{{ $array->Phase6 }}</option>
-                                            <option value="{{ $key }}">{{ $array->Phase7 }}</option>
-                                            <option value="{{ $key }}">{{ $array->Phase8 }}</option>
-                                            <option value="{{ $key }}">{{ $array->Phase9 }}</option>
-                                            <option value="{{ $key }}">{{ $array->Phase10 }}</option>
-                                            <option value="{{ $key }}">{{ $array->Phase11 }}</option>
-                                            <option value="{{ $key }}">{{ $array->Phase12 }}</option>
-                                            <option value="{{ $key }}">{{ $array->Phase13 }}</option>
-                                         {{-- @endfor  --}}
+                                    <option value="">Jamal Diwa</option>
+                                    <option value="">Andrew Nwankwo</option>
+                                    <option value="">Taofeek Adedokun</option>
                                 </select>
-                                @error('status_id')
+                                @error('user_id')
                                   <span class="invalid-feedback" role="alert">
                                       <strong>{{ $message }}</strong>
                                   </span>
@@ -97,6 +91,29 @@
                             </div>
                           </section>
 
+                          <h3>Project Progress</h3>
+                          <section>
+                            <p class="mg-b-0">Specify the current progress of the job.</p>
+                            <div class="form-row mt-4">
+                              <div class="form-group col-md-12">
+                                  {{-- This portion will display only Ongoing Status Sub statuses<br> --}}
+
+                                <select class="form-control custom-select @error('sub_status_id') is-invalid @enderror" name="sub_status_id">
+                                  <option value="">Select...</option>
+                                  @foreach($ongoingSubStatuses as $status)
+                                    {{-- @if($status->id > 6) --}}
+                                      <option value="{{ $status->id }}">{{ $status->name }}</option>
+                                    {{-- @endif --}}
+                                  @endforeach
+                                </select>
+                                @error('sub_status_id')
+                                  <span class="invalid-feedback" role="alert">
+                                      <strong>{{ $message }}</strong>
+                                  </span>
+                                @enderror
+                              </div>
+                            </div>
+                          </section>
 
                           <h3>Project Cost Estimate</h3>
                           <section>
@@ -105,19 +122,7 @@
                             
                             
                             <div class="mt-4 form-row">
-                              <div class="form-group col-md-4">
-                                <label for="name">Do wish to continue?</label>
-                                    <select class="form-control custom-select @error('proceed') is-invalid @enderror" name="proceed">
-                                        <option value="" selected>Select...</option>
-                                        <option value="Yes">Yes</option>
-                                        <option value="No">No</option>
-                                    </select>
-                                    @error('proceed')
-                                      <span class="invalid-feedback" role="alert">
-                                          <strong>{{ $message }}</strong>
-                                      </span>
-                                    @enderror
-                              </div>
+                              
         
                               <div class="form-group col-md-4">
                                 <label for="estimated_hours">Estimated Work Hours</label>
@@ -144,6 +149,21 @@
                               </div>
 
                               <div class="form-group col-md-4">
+                                <label for="estimated_hours">Warranty</label>
+                                <select class="form-control custom-select @error('proceed') is-invalid @enderror" name="proceed">
+                                    <option value="" selected>Select...</option>
+                                    @foreach($warranties as $warranty)
+                                <option value="{{ $warranty->id }}">{{ $warranty->name }}({{$warranty->percentage}}%)</option>
+                                    @endforeach
+                                </select>
+                                @error('estimated_hours')
+                                  <span class="invalid-feedback" role="alert">
+                                      <strong>{{ $message }}</strong>
+                                  </span>
+                                @enderror
+                              </div>
+
+                              <div class="form-group col-md-4">
                                 <label for="estimated_hours">Computer & Laptop Sub-Services</label>
                                 <select class="form-control custom-select @error('sub_service_id') is-invalid @enderror" name="sub_service_id">
                                     <option value="" selected>Select...</option>
@@ -161,31 +181,83 @@
 
                           </section>
 
-                         
-                          <h3>RFQ Acceptance</h3>
+                          <h3>Material Acceptance</h3>
                           <section>
-                            {{-- <small class="text-danger">This portion will display only if the CSE initially executed a RFQ, the Client paid for the components and the Supplier has made the delivery.</small> --}}
 
                             This portion will display only if the CSE initially executed a RFQ, the Client paid for the components and the Supplier has made the delivery.
 
-                            <div class="form-row">
-
-                              <div class="form-group col-md-8">
-                                <label for="accepted">RFQ Acceptance</label>
-                                <select class="form-control custom-select" id="accepted" name="accepted">
-                                  <option value="" selected>Select...</option>
-                                  <option value="Yes" value="{{ old('Yes') }}" {{ old('accepted') == 'Yes' ? 'selected' : ''}}>Yes, all ordered components were delivered</option>
-                                  <option value="No" value="{{ old('No') }}" {{ old('accepted') == 'No' ? 'selected' : ''}}>No, all ordered components were not delivered</option>
-                              </select>
-                              @error('accepted')
-                                <span class="invalid-feedback" role="alert">
-                                    <strong>{{ $message }}</strong>
-                                </span>
-                              @enderror
+                              <div class="mt-4 form-row">
+                                <div class="form-group col-md-4">
+                                  <label for="name">Supplier's Name</label>
+                                  <input type="text" class="form-control @error('name') is-invalid @enderror" id="name" value="{{ old('name') }}" name="name">
+                                  @error('name')
+                                    <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $message }}</strong>
+                                    </span>
+                                  @enderror
+                                </div>
+          
+                                <div class="form-group col-md-4">
+                                  <label for="devlivery_fee">Delivery Fee</label>
+                                  <input type="tel" class="form-control amount @error('devlivery_fee') is-invalid @enderror" id="devlivery_fee" name="devlivery_fee" value="{{ old('devlivery_fee') }}">
+                                  @error('devlivery_fee')
+                                    <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $message }}</strong>
+                                    </span>
+                                  @enderror
+                                </div>
+                  
+                                <div class="form-group col-md-4">
+                                  <label for="delivery_time">Delivery Time</label>
+                                <input type="text" min="{{ \Carbon\Carbon::now()->isoFormat('MMMM Do YYYY, h:mm') }}" class="form-control @error('delivery_time') is-invalid @enderror" name="delivery_time" id="service-date-time" value="{{ old('delivery_time') }}" readonly>
+                                  @error('delivery_time')
+                                    <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $message }}</strong>
+                                    </span>
+                                  @enderror
+                                </div>
                               </div>
-                            </div>
+  
+                              <div class="form-row">
+                                  <div class="form-group col-md-4">
+                                    <label for="component_name">Component Name</label>
+                                    <input type="text" class="form-control" id="component_name" name="component_name" value="{{ old('component_name') }}" readonly>
+                                  </div>
+                    
+                                  <div class="form-group col-md-3">
+                                    <label for="model_number">Model Number</label>
+                                    <input type="text" class="form-control" id="model_number" name="model_number" value="{{ old('model_number') }}" readonly>
+                                  </div>
+                                  <div class="form-group col-md-2">
+                                    <label for="quantity">Quantity</label>
+                                    <input type="number" class="form-control" id="quantity" name="quantity[]" value="{{ old('quantity') }}" min="" max="" readonly>
+                                  </div>
+                                  <div class="form-group col-md-3">
+                                    <label for="amount">Amount</label>
+                                    <input type="tel" class="form-control amount" id="amount" placeholder="" value="{{ old('amount') }}" name="amount[]" autocomplete="off">
+                                  </div>
+                              </div>
+
+                              <h5>Accept Materials Delivery</h5>
+                              <div class="form-row">
+                                <div class="form-group col-md-12">
+                                  <label for="accepted">Accept Delivery</label>
+                                  <select class="form-control custom-select" id="accepted" name="accepted">
+                                    <option value="" selected>Select...</option>
+                                    <option value="Yes" value="{{ old('Yes') }}" {{ old('accepted') == 'Yes' ? 'selected' : ''}}>Yes, all ordered components were delivered</option>
+                                    <option value="No" value="{{ old('No') }}" {{ old('accepted') == 'No' ? 'selected' : ''}}>No, all ordered components were not delivered</option>
+                                </select>
+                                @error('accepted')
+                                  <span class="invalid-feedback" role="alert">
+                                      <strong>{{ $message }}</strong>
+                                  </span>
+                                @enderror
+                                </div>
+                              </div>
+                            {{-- </div> --}}
 
                           </section>
+
                           <h3>New RFQ</h3>
                           <section>
                             <p class="mg-b-0">A request for quotation is a business process in which a company or public entity requests a quote from a supplier for the purchase of specific products or services.</p>
@@ -307,6 +379,23 @@
                                 </div>
                           </section>
 
+                          <h3>Assign Additional Technician</h3>
+                          <section>
+                            <div class="form-group col-md-12">
+                              <label for="name">Assign Technician</label>
+                              <select class="form-control custom-select @error('user_id') is-invalid @enderror" name="user_id">
+                                  <option value="" selected>Select...</option>
+                                  <option value="">Jamal Diwa</option>
+                                  <option value="">Andrew Nwankwo</option>
+                                  <option value="">Taofeek Adedokun</option>
+                              </select>
+                              @error('user_id')
+                                <span class="invalid-feedback" role="alert">
+                                    <strong>{{ $message }}</strong>
+                                </span>
+                              @enderror
+                            </div>
+                          </section>
                         </div>
                       </div>
                     </div><!-- df-example -->

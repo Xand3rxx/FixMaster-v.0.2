@@ -36,7 +36,7 @@
         </div>
         @if(Route::currentRouteNamed('frontend.index', 'frontend.about', 'frontend.contact', 'frontend.how_it_works', 'frontend.why_home_fix', 'frontend.careers', 'frontend.faq', 'frontend.services'))
             <div class="buy-button">
-                <a href="{{ route('frontend.services', app()->getLocale()) }}">
+                <a href="{{ route('frontend.index', app()->getLocale()) }}">
                     <div class="btn btn-primary login-btn-primary">Book a Service</div>
                     <div class="btn btn-light login-btn-light buy-btn-two">Book a Service</div>
                 </a>

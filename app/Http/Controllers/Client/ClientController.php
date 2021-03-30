@@ -24,8 +24,8 @@ use App\Traits\RegisterPaymentTransaction;
 use App\Traits\Services;
 use App\Traits\PasswordUpdator;
 use Auth;
-
-
+use App\Models\LoyaltyManagement;
+use App\Models\ClientLoyaltyWithdrawal;
 use Session; 
 
 class ClientController extends Controller
@@ -234,14 +234,17 @@ class ClientController extends Controller
         return redirect()->back();
     }
 
+
     public function wallet()
     {
         $data['gateways']     = PaymentGateway::whereStatus(1)->orderBy('id', 'DESC')->get();
         $data['mytransactions']    = Payment::where('user_id', auth()->user()->id)->orderBy('id', 'DESC')->get();
         $myWallet    = WalletTransaction::where('user_id', auth()->user()->id)->orderBy('id', 'DESC')->get();
-        // dd($data['myWallet']);
         return view('client.wallet', compact('myWallet')+$data);
     }
+
+
+
 
 
     public function walletSubmit(Request $request)
@@ -573,6 +576,72 @@ class ClientController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function customService(){
+        
+    }
+
+
+
+
+    public function loyalty()
+    {
+        $data['title']     = 'Fund your Loyalty wallet';
+        $data['loyalty']   = ClientLoyaltyWithdrawal::select('wallet', 'withdrawal')->where('client_id', auth()->user()->id)->first();
+        $total_loyalty    = LoyaltyManagement::selectRaw('SUM(amount) as amounts, SUM(points) as total_points, COUNT(amount) as total_no_amount')->where('client_id', auth()->user()->id)->get();
+      
+        $data['total_loyalty'] = ($total_loyalty[0]->total_points *  $total_loyalty[0]->amounts ) / ($total_loyalty[0]->total_no_amount * 100);
+
+        $json = $data['loyalty']->withdrawal != NULL? json_decode($data['loyalty']->withdrawal): [];
+      
+       
+        $ifwithdraw = isset($json->withdraw)? $json->withdraw: '';
+        $ifwithdraw_date = isset($json->date)? $json->date: '';
+        $data['withdraws']=  empty($json) ? [] : (is_array($ifwithdraw) ? $ifwithdraw : [ 0 => $ifwithdraw]);
+        $data['withdraw_date']= empty($json)? [] : ( is_array( $ifwithdraw_date) ?  $ifwithdraw_date: [ 0 =>  $ifwithdraw_date]);
+
+        $data['sum_of_withdrawals'] = empty($json)? 0 : (is_array($ifwithdraw) ? array_sum($ifwithdraw): $ifwithdraw);
+
+
+        $data['mytransactions']    = Payment::where('user_id', auth()->user()->id)->orderBy('id', 'DESC')->get();
+        $data['ewallet'] = !isset($json->withdraw)? '10000.00': (is_array($json->withdraw) ?  (float)'10000.00' + (float)array_sum($json->withdraw): (float)'10000.00' + (float)$json->withdraw) ;
+        $myWallet    = WalletTransaction::where('user_id', auth()->user()->id)->orderBy('id', 'DESC')->get();
+        return view('client.loyalty', compact('myWallet')+$data);
+    }
+
+  
+    public function loyaltySubmit(Request $request)
+    { 
+        // dd($request);
+    
+ 
+       $wallet  = ClientLoyaltyWithdrawal::select('wallet', 'withdrawal')->where('client_id', auth()->user()->id)->first();
+       if($wallet->withdrawal != NULL){
+        $other_withdrawals = json_decode($wallet->withdrawal, true);
+        $withdrawal = array_merge_recursive($other_withdrawals,  ['withdraw' => $request->amount, 'date'=> date('Y-m-d h:m:s')]);
+       }
+
+       if($wallet->withdrawal == NULL){
+        $withdrawal = [
+            'withdraw' => $request->amount,
+            'date'=> date('Y-m-d h:m:s')
+           ];
+       }
+
+       if((float)$wallet->wallet > (float)$request->amount){
+        $update_wallet = (float)$wallet->wallet - (float)$request->amount;
+        ClientLoyaltyWithdrawal::where(['client_id'=> auth()->user()->id])->update([
+            'withdrawal'=> json_encode($withdrawal),
+            'wallet'=>  $update_wallet
+             ]);
+
+             return redirect()->route('client.loyalty', app()->getLocale())
+             ->with('success', 'Funds transfered  successfully ');
+
+       }else{
+        return redirect()->route('client.loyalty', app()->getLocale())
+        ->with('error', 'Insufficient Wallet Balance');
+
+       }
+   
         
     }
 

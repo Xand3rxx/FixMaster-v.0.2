@@ -1,5 +1,5 @@
 @extends('layouts.dashboard')
-@section('title', 'Technician Payments')
+@section('title', 'Quality Assurance Payments')
 @include('layouts.partials._messages')
 @section('content')
 
@@ -9,7 +9,7 @@
       <div>
         <nav aria-label="breadcrumb">
           <ol class="breadcrumb breadcrumb-style1 mg-b-10">
-          <li class="breadcrumb-item"><a href="{{ route('technician.index',app()->getLocale()) }}">Dashboard</a></li>
+          <li class="breadcrumb-item"><a href="{{ route('quality-assurance.index',app()->getLocale()) }}">Dashboard</a></li>
             <li class="breadcrumb-item active" aria-current="page">Payments</li>
           </ol>
         </nav>
@@ -44,11 +44,10 @@
           <div class="table-responsive">
             <div class="row mt-1 mb-1 ml-1 mr-1">
                 <div class="col-md-4">
-                    <input value="{{ route("technician.disbursed_payments_sorting", app()->getLocale()) }}" type="hidden" id="route">
-                    
+                    <input value="{{ route("quality-assurance.disbursed_payments_sorting", app()->getLocale()) }}" type="hidden" id="route">
                     <div class="form-group">
                         <label>Sort</label>
-                        <select class="custom-select" id="request-sorting">
+                        <select class="custom-select" id="sort_by_range">
                             <option value="None">Select...</option>
                             <option value="Date">Date</option>
                             <option value="Month">Month</option>
@@ -69,11 +68,10 @@
                     <div class="form-group position-relative">
                         <label>Specify Year <span class="text-danger">*</span></label>
                         <select class="form-control custom-select" id="sort_by_year">
-                            <option>Select...</option>
-                            <option value="2018">2018</option>
-                            <option value="2019">2019</option>
-                            <option value="2020">2020</option>
-                            <option value="2021">2021</option>
+                            <option value="">Select...</option>
+                            @foreach ($years as $year)
+                              <option value="{{ $year }}">{{ $year }}</option>
+                            @endforeach
                         </select>
                     </div>
                 </div>
@@ -115,7 +113,7 @@
               </div>
 
               <div id="sort_table">
-              @include('technician._disbursed_table')
+              @include('quality-assurance._disbursed_table')
               </div>
           </div><!-- table-responsive -->
         </div><!-- card -->
@@ -126,10 +124,8 @@
 
   </div><!-- container -->
 </div>
-
+@endsection
 @section('scripts')
+<script src="{{ asset('assets/dashboard/assets/js/qa-payments-sortings.js') }}"></script>
 @endsection
-<script src="{{ asset('assets/dashboard/assets/js/technician-payments-sorting.js') }}"></script>
 
-
-@endsection

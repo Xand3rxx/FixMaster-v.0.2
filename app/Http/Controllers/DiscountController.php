@@ -36,6 +36,7 @@ class DiscountController extends Controller
     public function create()
     {
         $data['entities'] = $this->entityArray();
+        $data['apply_discount'] = ['Total bill', 'Materials', 'Labour cost', 'FixMaster royalty', 'Logistics'];
         $data['states'] = State::select('id', 'name')->orderBy('name', 'ASC')
             ->get();
         return response()
@@ -83,7 +84,8 @@ class DiscountController extends Controller
              'description' => $request->input('description') , 
             'parameter' => json_encode($parameterArray) ,
             'created_by' => Auth::user()->email,
-            'status' => 'activate'
+            'status' => 'activate',
+            'apply_discount'=> $request->input('apply_discount'),
             ]);
 
          
@@ -146,9 +148,9 @@ class DiscountController extends Controller
     {
         if($request->entity == 'service'){
            
-            return request()->validate(['discount_name' => 'required|unique:discounts,name|max:250', 'entity' => 'required', 'rate' => 'required', 'start_date' => 'required', 'category' =>  'required|array|min:1', 'end_date' => 'required', 'description' => 'max:250']);
+            return request()->validate(['discount_name' => 'required|unique:discounts,name|max:250', 'apply_discount'=>'required', 'entity' => 'required', 'rate' => 'required', 'start_date' => 'required', 'category' =>  'required|array|min:1', 'end_date' => 'required', 'description' => 'max:250']);
         }else{
-            return request()->validate(['discount_name' => 'required|unique:discounts,name|max:250', 'entity' => 'required', 'rate' => 'required', 'start_date' => 'required', 'users' => 'required|array|min:1', 'end_date' => 'required', 'description' => 'max:250']);
+            return request()->validate(['discount_name' => 'required|unique:discounts,name|max:250', 'apply_discount'=>'required', 'entity' => 'required', 'rate' => 'required', 'start_date' => 'required', 'users' => 'required|array|min:1', 'end_date' => 'required', 'description' => 'max:250']);
 
         }
     }
@@ -292,20 +294,27 @@ class DiscountController extends Controller
 
                 ];
 
-            if ($fields['specified_request_count_morethan'] != '')
+            if ($fields['specified_request_count_morethan'] != '' && $fields['specified_request_count_equalto'] == '')
             {
                 $whx[] ="sr.users >='".$fields['specified_request_count_morethan']."'";
                 $groupby = 'group by client_id';
 
             }
 
-            if ($fields['specified_request_count_equalto'] != '')
+            if ($fields['specified_request_count_equalto'] != '' && $fields['specified_request_count_morethan'] == '')
             {
-                $whx[] ="sr.users >='".$fields['specified_request_count_equalto']."'";
+                $whx[] ="sr.users <='".$fields['specified_request_count_equalto']."'";
                 $groupby = 'group by client_id';
             }
 
-            if ($fields['specified_request_amount_from'] != '')
+
+            if ($fields['specified_request_count_equalto'] != '' && $fields['specified_request_count_morethan'] != '')
+            {
+                $whx[] ="sr.users between'".$fields['specified_request_count_morethan']."' and  '".$fields['specified_request_count_equalto']."'";
+                $groupby = 'group by client_id';
+            }
+
+            if ($fields['specified_request_amount_from'] != '' && $fields['specified_request_amount_to'] == '')
             {
                 $wh[] ="total_amount >='".$fields['specified_request_amount_from']."'";
                 $replace_amount = "total_amount";
@@ -314,7 +323,7 @@ class DiscountController extends Controller
                
             }
 
-            if ($fields['specified_request_amount_to'] != '')
+            if ($fields['specified_request_amount_to'] != '' && $fields['specified_request_amount_from'] == '')
             {
                
                 $wh[] ="total_amount <='".$fields['specified_request_amount_to']."'";
@@ -325,7 +334,18 @@ class DiscountController extends Controller
 
             }
 
-            if ($fields['specified_request_start_date'] != '')
+            if ($fields['specified_request_amount_to'] != '' && $fields['specified_request_amount_from'] != '')
+            {
+               
+                $wh[] ="total_amount between'".$fields['specified_request_amount_from']."' and '".$fields['specified_request_amount_to']."'";
+                $replace_amount = "total_amount";
+                $replace_user = 'total_amount, client_id';
+                $groupby = 'group by total_amount';
+              
+
+            }
+
+            if ($fields['specified_request_start_date'] != '' && $fields['specified_request_end_date'] == '')
             {
                 $start_date = date('Y-m-d', strtotime($fields['specified_request_start_date']));
                 $wh[] ="preferred_time <='".$start_date."'";
@@ -335,11 +355,21 @@ class DiscountController extends Controller
               
             }
 
-            if ($fields['specified_request_end_date'] != '')
+            if ($fields['specified_request_end_date'] != '' && $fields['specified_request_start_date'] == '')
             {
                 $end_date = date('Y-m-d', strtotime($fields['specified_request_end_date']));
-                $wh[] = ['sr.preferred_time', '<=',  "\"$end_date\""];
                 $wh[] ="preferred_time <='".$end_date."'";
+                $replace_amount = "preferred_time";
+                $replace_user = 'preferred_time, client_id';
+                $groupby = 'group by client_id';
+              
+            }
+
+            if ($fields['specified_request_end_date'] != '' && $fields['specified_request_start_date'] != '')
+            {
+                $end_date = date('Y-m-d', strtotime($fields['specified_request_end_date']));
+                $start_date = date('Y-m-d', strtotime($fields['specified_request_start_date']));              
+                $wh[] ="preferred_time between'".$start_date."' and '".$end_date."'";
                 $replace_amount = "preferred_time";
                 $replace_user = 'preferred_time, client_id';
                 $groupby = 'group by client_id';
@@ -366,6 +396,8 @@ class DiscountController extends Controller
             if (isset($fields['estate_name']) && $fields['estate_name'] != '')
             {
                 $est[] = ['estate_name', '=', $fields['estate_name']];
+                $whx[] = "estate_name = '".$fields['estate_name']."'";
+                
             }
 
 
@@ -434,12 +466,14 @@ class DiscountController extends Controller
                 
 
                     $data = array(
-                        'options' => $optionValue
+                        'options' => $optionValue,
+                        'count'=> count($dataArry)
                     );
 
                 break;
                 case 'estate':
-                    if (count(array_filter($chk_fields)) > 0)
+                    $dataArry=[];
+                    if (count(array_filter($chk_fields)) > 0 && count($est) > 0)
                     {
                      
                             $dataArry = ServiceRequest::select('sr.client_id', $replace_amount, 'ac.first_name', 'ac.last_name')
@@ -458,7 +492,7 @@ class DiscountController extends Controller
                             }
         
                     }
-                    else
+                  if(count($est) > 0)
                     {
                         $dataArry = Account::select('accounts.user_id', 'accounts.first_name', 'accounts.last_name')
                         ->join('clients', 'accounts.user_id', '=', 'clients.account_id')
@@ -476,12 +510,11 @@ class DiscountController extends Controller
                             $optionValue .= "<option value='$row->user_id' {{ old('user') == $row->user_id ? 'selected' : ''}}>$name</option>";
                         }
     
-                    }
-
-                  
-                 
+                    } 
+                   
                     $data = array(
-                        'options' => $optionValue
+                        'options' => $optionValue,
+                        'count'=> count($dataArry)
                     );
 
                 break;
@@ -527,7 +560,8 @@ class DiscountController extends Controller
                     }
                  
                     $data = array(
-                        'options' => $optionValue
+                        'options' => $optionValue,
+                        'count'=> count($dataArry)
                     );
                    break;
                 default:
