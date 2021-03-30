@@ -68,9 +68,7 @@
 
                                                         <select class="form-control custom-select @error('status_id') is-invalid @enderror" name="status_id">
                                                             <option value="" selected>Select...</option>
-                                                            @foreach ($statuses as $key => $sub)
-                                                            <option value="{{$key}}" selected>{{$key}}</option>
-                                                            @endforeach
+                                                            <option value="" selected></option>
                                                         </select>
                                                         @error('status_id')
                                                         <span class="invalid-feedback" role="alert">

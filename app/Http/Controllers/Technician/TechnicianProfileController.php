@@ -15,13 +15,14 @@ use App\Models\Status;
 use App\Models\Bank;
 use App\Models\ServiceRequestAssigned;
 use App\Traits\PasswordUpdator;
+use App\Traits\Utility;
 use Illuminate\Support\Facades\Validator;
 
 class TechnicianProfileController extends Controller
 {
-    use Loggable, PasswordUpdator;
-    /**
-     * This method will redirect users back to the login page if not properly authenticated
+    use Loggable, PasswordUpdator, Utility; 
+
+     /* This method will redirect users back to the login page if not properly authenticated
      * @return void
      */
     public function __construct()
@@ -107,9 +108,7 @@ class TechnicianProfileController extends Controller
     public function updateProfile(Request $request)
     {
         $user = User::where('id', Auth::id())->first();
-        //$banks = Bank::get(['id', 'name']);
-       // dd($request->bank_id);
-        
+      
         if ($user->account->gender == "male") {
             $res = "his";
         } else {
@@ -214,10 +213,12 @@ class TechnicianProfileController extends Controller
 
     public function get_technician_disbursed_payments(Request $request){
 
+        $years =  $this->getDistinctYears($tableName = 'payments_disbursed'); 
+
         $payments = PaymentDisbursed::where('recipient_id', Auth::id())->with('user')->get();
        // $payments = PaymentDisbursed::where('recipient_id',Auth::id())
        // ->orderBy('created_at', 'DESC')->get();
-        return view('technician.payments', compact('payments'));
+        return view('technician.payments', compact('payments', 'years'));
     }
 
     public function sortDisbursedPayments(Request $request){

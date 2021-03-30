@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 
 class PaymentController extends Controller
 {
+
     public function get_technician_disbursed_payments(Request $request){
 
         // $user = Auth::user();

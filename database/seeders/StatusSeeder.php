@@ -15,24 +15,8 @@ class StatusSeeder extends Seeder
      */
     public function run()
     {
+        DB::table('sub_statuses')->delete();
         DB::table('statuses')->delete();
-
-        $ongoingSubStatuses = [
-            'Phase1' => 'Assigned CSE', 
-            'Phase2' => 'Assigned QA', 
-            'Phase3' => 'Assigned Technician', 
-            'Phase4' => 'Contacted Client for availabilty',  
-            'Phase5' => 'En-route to Client\'s address', 
-            'Phase6' => 'Arrived', 
-            'Phase7' => 'Perfoming diagnosis', 
-            'Phase8' => 'Completed diagnosis', 
-            'Phase9' => 'Issued RFQ', 
-            'Phase10' =>  'Awaiting supplier\'s feedback', 
-            'Phase11' => 'RFQ Delivery: Pending', 
-            'Phase12' => 'RFQ Delivery: Shipped', 
-            'Phase13' => 'RFQ Delivered', 
-            'Phase14' => 'Job Completed'
-        ];
 
         $status = array(
 
@@ -40,33 +24,174 @@ class StatusSeeder extends Seeder
                 'uuid'          =>  Str::uuid('uuid'),      
                 'user_id'       =>  1,
                 'name'          =>  'Pending',
-                'sub_status'    =>  NULL,
                 'ranking'       =>  1,
             ),
             array(
                 'uuid'          =>  Str::uuid('uuid'),      
                 'user_id'       =>  1,
                 'name'          =>  'Ongoing',
-                'sub_status'    =>  json_encode($ongoingSubStatuses),
                 'ranking'       =>  2,
             ),
             array(
                 'uuid'          =>  Str::uuid('uuid'),      
                 'user_id'       =>  1,
                 'name'          =>  'Cancelled',
-                'sub_status'    =>  NULL,
                 'ranking'       =>  3,
             ),
             array(
                 'uuid'          =>  Str::uuid('uuid'),      
                 'user_id'       =>  1,
                 'name'          =>  'Completed',
-                'sub_status'    =>  NULL,
                 'ranking'       =>  4,
             ),
 
         );
 
+        $subStatuses = array(
+            array(
+                'user_id'       =>  1,
+                'status_id'     =>  1,
+                'name'          =>  'Pending',
+                'phase'         =>  1,
+                'status'        =>  'active',
+            ),
+            array(
+                'user_id'       =>  1,
+                'status_id'     =>  1,
+                'name'          =>  'FixMaster AI assigned a CSE',
+                'phase'         =>  1,
+                'status'        =>  'active',
+            ),
+            array(
+                'user_id'       =>  1,
+                'status_id'     =>  1,
+                'name'          =>  'FixMaster AI assigned a Franchise as fallback',
+                'phase'         =>  2,
+                'status'        =>  'active',
+            ),
+            array(
+                'user_id'       =>  1,
+                'status_id'     =>  2,
+                'name'          =>  'Fanchisee assigned a CSE',
+                'phase'         =>  1,
+                'status'        =>  'active',
+            ),
+            array(
+                'user_id'       =>  1,
+                'status_id'     =>  2,
+                'name'          =>  'FixMaster Admin assigned a QA',
+                'phase'         =>  1,
+                'status'        =>  'active',
+            ),
+            array(
+                'user_id'       =>  1,
+                'status_id'     =>  2,
+                'name'          =>  'Accepted the job and assigned a Technician',
+                'phase'         =>  2,
+                'status'        =>  'active',
+            ),
+            array(
+                'user_id'       =>  1,
+                'status_id'     =>  2,
+                'name'          =>  'Contacted Client for date and time availabilty',
+                'phase'         =>  3,
+                'status'        =>  'active',
+            ),
+            array(
+                'user_id'       =>  1,
+                'status_id'     =>  2,
+                'name'          =>  'En-route to Client\'s address',
+                'phase'         =>  4,
+                'status'        =>  'active',
+            ),
+            array(
+                'user_id'       =>  1,
+                'status_id'     =>  2,
+                'name'          =>  'Arrived at Client\'s address',
+                'phase'         =>  5,
+                'status'        =>  'active',
+            ),
+            array(
+                'user_id'       =>  1,
+                'status_id'     =>  2,
+                'name'          =>  'Perfoming diagnosis',
+                'phase'         =>  6,
+                'status'        =>  'active',
+            ),
+            array(
+                'user_id'       =>  1,
+                'status_id'     =>  2,
+                'name'          =>  'Completed diagnosis and issued Final Invoice to Client',
+                'phase'         =>  7,
+                'status'        =>  'active',
+            ),
+            array(
+                'user_id'       =>  1,
+                'status_id'     =>  2,
+                'name'          =>  'Client accepted Final Invoice',
+                'phase'         =>  8,
+                'status'        =>  'active',
+            ),
+            array(
+                'user_id'       =>  1,
+                'status_id'     =>  2,
+                'name'          =>  'Client declined Final Invoice',
+                'phase'         =>  9,
+                'status'        =>  'active',
+            ),
+            array(
+                'user_id'       =>  1,
+                'status_id'     =>  2,
+                'name'          =>  'Awaiting Supplier\'s feedback on RFQ intiated as part of Final Invoice issued',
+                'phase'         =>  10,
+                'status'        =>  'active',
+            ),
+            array(
+                'user_id'       =>  1,
+                'status_id'     =>  2,
+                'name'          =>  'Supplier Delivery: Pending',
+                'phase'         =>  11,
+                'status'        =>  'active',
+            ),
+            array(
+                'user_id'       =>  1,
+                'status_id'     =>  2,
+                'name'          =>  'Supplier Delivery: Components are in transit',
+                'phase'         =>  12,
+                'status'        =>  'active',
+            ),
+            array(
+                'user_id'       =>  1,
+                'status_id'     =>  2,
+                'name'          =>  'Supplier has made delivery',
+                'phase'         =>  12,
+                'status'        =>  'active',
+            ),
+            array(
+                'user_id'       =>  1,
+                'status_id'     =>  2,
+                'name'          =>  'Work in progress',
+                'phase'         =>  13,
+                'status'        =>  'active',
+            ),
+            array(
+                'user_id'       =>  1,
+                'status_id'     =>  2,
+                'name'          =>  'Job completed for the day and it\'s to continue on a scheduled date',
+                'phase'         =>  14,
+                'status'        =>  'active',
+            ),
+            array(
+                'user_id'       =>  1,
+                'status_id'     =>  2,
+                'name'          =>  'Job is fully completed',
+                'phase'         =>  15,
+                'status'        =>  'active',
+            ),
+
+        );
+
         DB::table('statuses')->insert($status);
+        DB::table('sub_statuses')->insert($subStatuses);
     }
 }

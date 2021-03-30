@@ -14,32 +14,6 @@ class Status extends Model
     ];
 
     /**
-     * The attributes that should be cast.
-     *
-     * @var array
-     */
-    protected $casts = [
-        'sub_status' => 'array',
-    ];
-
-    const ONGOING_SUBSTATUSES = [
-        '0' => 'Assigned CSE',
-        '1' => 'Assigned QA',
-        '2' => 'Assigned Technician',
-        '3' => 'Contacted Client for availabilty',
-        '4' => 'En-route to Client\'s address',
-        '5' => 'Arrived',
-        '6' => 'Perfoming diagnosis',
-        '7' => 'Completed diagnosis',
-        '8' => 'Issued RFQ',
-        '9' =>  'Awaiting supplier\'s feedback',
-        '10' => 'RFQ Delivery: Pending',
-        '11' => 'RFQ Delivery: Shipped',
-        '12' => 'RFQ Delivered',
-        '13' => 'Job Completed'
-    ];
-
-    /**
      * The attributes that should be hidden for arrays.
      *
      * @var array

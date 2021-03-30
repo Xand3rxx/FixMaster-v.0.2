@@ -319,7 +319,8 @@ Route::prefix('/cse')->group(function () {
         Route::view('/request/details',    'cse.request_details',
             [
                 'tools' => \App\Models\ToolInventory::all(),
-                'statuses' => \App\Models\Status::all()
+                'ongoingSubStatuses' => \App\Models\SubStatus::where('status_id', 2)->get(['id', 'name']),
+                'warranties' => \App\Models\Warranty::all(),
             ]
         )->name('request_details');
         Route::view('/profile',             'cse.view_profile')->name('view_profile');

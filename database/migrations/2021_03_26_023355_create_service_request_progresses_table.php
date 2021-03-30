@@ -23,7 +23,6 @@ class CreateServiceRequestProgressesTable extends Migration
             $table->foreignId('service_request_id');
             $table->foreignId('status_id');
             $table->foreignId('sub_status_id')->nullable();
-            $table->text('progress');
             $table->softDeletes();
             $table->timestamps();
         });

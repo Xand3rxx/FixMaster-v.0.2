@@ -18,7 +18,6 @@ class CreateStatusesTable extends Migration
             $table->uuid('uuid')->unique();
             $table->foreignId('user_id');
             $table->string('name');
-            $table->json('sub_status')->nullable();
             $table->unsignedTinyInteger('ranking');
             $table->softDeletes();
             $table->timestamps();
