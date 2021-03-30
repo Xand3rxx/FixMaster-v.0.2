@@ -75,7 +75,7 @@ class ServiceRequest extends Model
 
     public function client()
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(User::class, 'client_id');
     }
 
     public function account()
@@ -85,7 +85,7 @@ class ServiceRequest extends Model
 
     public function users()
     {
-        return $this->belongsToMany(User::class, 'service_request_assigned')->with('account', 'roles');
+        return $this->belongsToMany(User::class, 'service_request_assigned');
     }
     public function cse()
     {

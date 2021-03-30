@@ -33,6 +33,7 @@ use App\Http\Controllers\QualityAssurance\ServiceRequestController;
 use App\Http\Controllers\QualityAssurance\QualityAssuranceProfileController;
 
 use App\Http\Controllers\CSE\CustomerServiceExecutiveController as CseController;
+use App\Http\Controllers\CSE\RequestController;
 
 /*
 |--------------------------------------------------------------------------
@@ -310,11 +311,16 @@ Route::prefix('/cse')->group(function () {
         Route::view('/messages/inbox',      'cse.messages.inbox')->name('messages.inbox');
         Route::view('/messages/sent',       'cse.messages.sent')->name('messages.sent');
         Route::view('/payments',            'cse.payments')->name('payments');
-        Route::view('/requests',            'cse.requests')->name('requests');
-        Route::view('/requests/details',    'cse.request_details',
+        
+        Route::resource('requests', RequestController::class);
+
+        // Route::view('/requests',            'cse.requests')->name('requests');
+
+        Route::view('/request/details',    'cse.request_details',
             [
                 'tools' => \App\Models\ToolInventory::all(),
-                'statuses' => \App\Models\Status::all()
+                'ongoingSubStatuses' => \App\Models\SubStatus::where('status_id', 2)->get(['id', 'name']),
+                'warranties' => \App\Models\Warranty::all(),
             ]
         )->name('request_details');
         Route::view('/profile',             'cse.view_profile')->name('view_profile');

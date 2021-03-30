@@ -10,7 +10,7 @@
           <nav aria-label="breadcrumb">
             <ol class="breadcrumb breadcrumb-style1 mg-b-10">
             <li class="breadcrumb-item"><a href="{{ route('cse.index', app()->getLocale()) }}">Dashboard</a></li>
-            <li class="breadcrumb-item"><a href="{{ route('cse.requests', app()->getLocale()) }}">Requests</a></li>
+            <li class="breadcrumb-item"><a href="{{ route('cse.requests.index', app()->getLocale()) }}">Requests</a></li>
               <li class="breadcrumb-item active" aria-current="page">Request Details</li>
             </ol>
           </nav>
@@ -95,35 +95,18 @@
                           <section>
                             <p class="mg-b-0">Specify the current progress of the job.</p>
                             <div class="form-row mt-4">
-                              <div class="form-group col-md-8">
-                                  This portion will display only Ongoing Status Sub statuses<br>
-                                  @foreach($statuses as $key => $value)
-                                      @if($key == 1)
-                                        @php 
-                                          $array = json_decode($value->sub_status);
-                                          $iteration  = 1;
-                                        @endphp
-                                      @endif
-                                  @endforeach
+                              <div class="form-group col-md-12">
+                                  {{-- This portion will display only Ongoing Status Sub statuses<br> --}}
 
-                                <select class="form-control custom-select @error('status_id') is-invalid @enderror" name="status_id">
-                                    <option value="" selected>Select...</option>
-                                         {{-- @for ($i = 0; $i < 13; $i++) --}}
-                                            <option value="{{ $key }}">{{ $array->Phase2 }}</option>
-                                            <option value="{{ $key }}">{{ $array->Phase3 }}</option>
-                                            <option value="{{ $key }}">{{ $array->Phase4 }}</option>
-                                            <option value="{{ $key }}">{{ $array->Phase5 }}</option>
-                                            <option value="{{ $key }}">{{ $array->Phase6 }}</option>
-                                            <option value="{{ $key }}">{{ $array->Phase7 }}</option>
-                                            <option value="{{ $key }}">{{ $array->Phase8 }}</option>
-                                            <option value="{{ $key }}">{{ $array->Phase9 }}</option>
-                                            <option value="{{ $key }}">{{ $array->Phase10 }}</option>
-                                            <option value="{{ $key }}">{{ $array->Phase11 }}</option>
-                                            <option value="{{ $key }}">{{ $array->Phase12 }}</option>
-                                            <option value="{{ $key }}">{{ $array->Phase13 }}</option>
-                                         {{-- @endfor  --}}
+                                <select class="form-control custom-select @error('sub_status_id') is-invalid @enderror" name="sub_status_id">
+                                  <option value="">Select...</option>
+                                  @foreach($ongoingSubStatuses as $status)
+                                    {{-- @if($status->id > 6) --}}
+                                      <option value="{{ $status->id }}">{{ $status->name }}</option>
+                                    {{-- @endif --}}
+                                  @endforeach
                                 </select>
-                                @error('status_id')
+                                @error('sub_status_id')
                                   <span class="invalid-feedback" role="alert">
                                       <strong>{{ $message }}</strong>
                                   </span>
@@ -131,7 +114,6 @@
                               </div>
                             </div>
                           </section>
-
 
                           <h3>Project Cost Estimate</h3>
                           <section>
@@ -142,7 +124,7 @@
                             <div class="mt-4 form-row">
                               
         
-                              <div class="form-group col-md-6">
+                              <div class="form-group col-md-4">
                                 <label for="estimated_hours">Estimated Work Hours</label>
                                 <select class="form-control custom-select @error('proceed') is-invalid @enderror" name="proceed">
                                     <option value="" selected>Select...</option>
@@ -166,7 +148,22 @@
                                 @enderror
                               </div>
 
-                              <div class="form-group col-md-6">
+                              <div class="form-group col-md-4">
+                                <label for="estimated_hours">Warranty</label>
+                                <select class="form-control custom-select @error('proceed') is-invalid @enderror" name="proceed">
+                                    <option value="" selected>Select...</option>
+                                    @foreach($warranties as $warranty)
+                                <option value="{{ $warranty->id }}">{{ $warranty->name }}({{$warranty->percentage}}%)</option>
+                                    @endforeach
+                                </select>
+                                @error('estimated_hours')
+                                  <span class="invalid-feedback" role="alert">
+                                      <strong>{{ $message }}</strong>
+                                  </span>
+                                @enderror
+                              </div>
+
+                              <div class="form-group col-md-4">
                                 <label for="estimated_hours">Computer & Laptop Sub-Services</label>
                                 <select class="form-control custom-select @error('sub_service_id') is-invalid @enderror" name="sub_service_id">
                                     <option value="" selected>Select...</option>
@@ -184,7 +181,6 @@
 
                           </section>
 
-                         
                           <h3>Material Acceptance</h3>
                           <section>
 
@@ -242,7 +238,7 @@
                                   </div>
                               </div>
 
-                              <h3>Accept Materials Delivery</h3>
+                              <h5>Accept Materials Delivery</h5>
                               <div class="form-row">
                                 <div class="form-group col-md-12">
                                   <label for="accepted">Accept Delivery</label>
@@ -261,6 +257,7 @@
                             {{-- </div> --}}
 
                           </section>
+
                           <h3>New RFQ</h3>
                           <section>
                             <p class="mg-b-0">A request for quotation is a business process in which a company or public entity requests a quote from a supplier for the purchase of specific products or services.</p>
