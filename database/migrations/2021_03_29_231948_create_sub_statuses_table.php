@@ -21,8 +21,9 @@ class CreateSubStatusesTable extends Migration
             $table->id();
             $table->foreignId('user_id');
             $table->foreignId('status_id');
-            $table->string('name');
+            $table->text('name');
             $table->integer('phase');
+            $table->enum('recurrence', ['Yes', 'No']);
             $table->enum('status', ['active', 'inactive']);
             $table->softDeletes();
             $table->timestamps();
