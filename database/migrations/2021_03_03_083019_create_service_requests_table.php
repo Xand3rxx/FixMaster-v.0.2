@@ -36,6 +36,8 @@ class CreateServiceRequestsTable extends Migration
             $table->text('description');
             $table->bigInteger('total_amount')->unsigned();
             $table->dateTime('preferred_time')->nullable();
+            $table->enum('has_client_rated', ['Yes', 'No'])->default('No');
+            $table->enum('has_cse_rated', ['Yes', 'No'])->default('No');
             $table->softDeletes();
             $table->timestamps();
         });
