@@ -28,6 +28,7 @@ use App\Models\LoyaltyManagement;
 use App\Models\ClientLoyaltyWithdrawal;
 use Session; 
 
+
 class ClientController extends Controller
 {
     use RegisterPaymentTransaction, Generator, Services, PasswordUpdator;
@@ -602,7 +603,10 @@ class ClientController extends Controller
 
 
         $data['mytransactions']    = Payment::where('user_id', auth()->user()->id)->orderBy('id', 'DESC')->get();
-        $data['ewallet'] = !isset($json->withdraw)? '10000.00': (is_array($json->withdraw) ?  (float)'10000.00' + (float)array_sum($json->withdraw): (float)'10000.00' + (float)$json->withdraw) ;
+        $walTrans = WalletTransaction::where('user_id', auth()->user()->id)->orderBy('id', 'DESC')->first();
+        //  $data['ewallet'] = !isset($json->withdraw)? $walTrans->closing_balance: (is_array($json->withdraw) ?  (float)$walTrans->closing_balance + (float)array_sum($json->withdraw): (float)'1000.000' + (float)$json->withdraw) ;
+
+        $data['ewallet'] =  $walTrans->closing_balance;
         $myWallet    = WalletTransaction::where('user_id', auth()->user()->id)->orderBy('id', 'DESC')->get();
         return view('client.loyalty', compact('myWallet')+$data);
     }
@@ -610,15 +614,13 @@ class ClientController extends Controller
   
     public function loyaltySubmit(Request $request)
     { 
-        // dd($request);
     
- 
        $wallet  = ClientLoyaltyWithdrawal::select('wallet', 'withdrawal')->where('client_id', auth()->user()->id)->first();
        if($wallet->withdrawal != NULL){
         $other_withdrawals = json_decode($wallet->withdrawal, true);
         $withdrawal = array_merge_recursive($other_withdrawals,  ['withdraw' => $request->amount, 'date'=> date('Y-m-d h:m:s')]);
        }
-
+ 
        if($wallet->withdrawal == NULL){
         $withdrawal = [
             'withdraw' => $request->amount,
@@ -627,22 +629,42 @@ class ClientController extends Controller
        }
 
        if((float)$wallet->wallet > (float)$request->amount){
+        $client = Client::where('user_id', auth()->user()->id)->first();
+        $generatedVal = $this->generateReference();        
+        $payment = $this->payment($request->amount, 'loyalty', 'e-wallet', $client->unique_id, 'success', $generatedVal);
+        if($payment){
+
+            $walTrans = new WalletTransaction;
+            $walTrans->user_id = auth()->user()->id;
+            $walTrans->payment_id = $payment->id;
+            $walTrans->amount =  $payment->amount;
+            $walTrans->payment_type = 'funding';
+            $walTrans->unique_id = $payment->unique_id;
+            $walTrans->transaction_type = 'credit';
+            $walTrans->opening_balance = $request->opening_balance;
+            $walTrans->closing_balance = (float)$payment->amount + (float)$request->opening_balance;
+            $walTrans->save();
+
         $update_wallet = (float)$wallet->wallet - (float)$request->amount;
         ClientLoyaltyWithdrawal::where(['client_id'=> auth()->user()->id])->update([
             'withdrawal'=> json_encode($withdrawal),
             'wallet'=>  $update_wallet
              ]);
-
+            
              return redirect()->route('client.loyalty', app()->getLocale())
              ->with('success', 'Funds transfered  successfully ');
 
        }else{
+   
         return redirect()->route('client.loyalty', app()->getLocale())
-        ->with('error', 'Insufficient Wallet Balance');
+        ->with('error', 'Insufficient Loyalty Wallet Balance');
 
        }
+
+    }
    
         
     }
+
 
 }
