@@ -39,7 +39,7 @@
                         <div class="form-row mt-4">
                             <div class="tx-13 mg-b-25">
 
-                                @if($requestDetail->rfq()->where('status', '0')->count() > 0)
+                                @if($requestDetail->rfq()->where('status', 'Pending')->count() > 0)
 
                                     <h3>Price Tagging</h3>
                                     <section>

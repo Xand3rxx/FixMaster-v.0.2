@@ -24,6 +24,9 @@ class ServiceRequest extends Model
     protected $fillable = [
         'client_id', 'service_id', 'unique_id', 'state_id', 'lga_id', 'town_id', 'price_id', 'phone_id', 'address_id', 'client_discount_id', 'client_security_code', 'status_id', 'description', 'total_amount', 'preferred_time'
     ];
+    /**
+     * @var mixed
+     */
 
     /**
      * The attributes that should be hidden for arrays.
@@ -136,15 +139,15 @@ class ServiceRequest extends Model
 
     public function technicianAccount()
     {
-        
+
             return $this->hasOne(Account::class, 'user_id', 'service_id');
     }
 
-    
+
     public function price()
     {
-        
-            return $this->hasOne(Price::class, 'user_id', 'client_id')->withDefault();
+
+            return $this->hasOne(Price::class, 'user_id', 'price_id')->withDefault();
     }
 
 }

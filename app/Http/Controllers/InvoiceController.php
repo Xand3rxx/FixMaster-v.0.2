@@ -16,7 +16,7 @@ class InvoiceController extends Controller
     public function index()
     {
         return view('admin.invoices.index')->with([
-            'invoices' => \App\Models\Invoice::with('user')->get()
+            'invoices' => \App\Models\Invoice::all()
         ]);
     }
 

@@ -55,7 +55,7 @@
                                         <td class="tx-color-03 tx-center">{{ $loop->iteration }}</td>
                                         <td class="tx-medium">{{ $invoice['invoice_number'] }}</td>
                                         <td class="tx-medium">{{ $invoice['invoice_type'] }}</td>
-                                        <td class="tx-medium">{{ Str::title($invoice['user']['account']['first_name']. ' '.$invoice['user']['account']['last_name']) }}</td>
+                                        <td class="tx-medium">{{ Str::title($invoice['client']['account']['first_name']. ' '.$invoice['client']['account']['last_name']) }}</td>
                                         <td class="tx-medium">{{ Carbon\Carbon::parse($invoice->created_at, 'UTC')->isoFormat('MMMM Do YYYY, h:mm:ssa') }}</td>
                                         <td class="text-medium">{{ $invoice['total_amount'] ?? '0' }}</td>
                                         <td class="text-medium">{{ $invoice['amount_due'] ?? '0' }}</td>
@@ -64,7 +64,7 @@
                                             <div class="dropdown-file">
                                                 <a href="" class="dropdown-link" data-toggle="dropdown"><i data-feather="more-vertical"></i></a>
                                                 <div class="dropdown-menu dropdown-menu-right">
-                                                    <a href="{{ route('admin.invoice', ['locale' => app()->getLocale(), 'invoice' => $invoice['id']]) }}" class="dropdown-item details text-primary"><i class="far fa-file-text"></i> View Invoice</a>
+                                                    <a href="{{ route('admin.invoice', ['locale' => app()->getLocale(), 'invoice' => $invoice['uuid']]) }}" class="dropdown-item details text-primary"><i class="far fa-file-text"></i> View Invoice</a>
                                                 </div>
                                             </div>
                                         </td>

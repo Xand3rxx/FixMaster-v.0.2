@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Client;
+use App\Models\DiscountHistory;
 use Route;
 use Auth;
 use Illuminate\Support\Facades\URL;
@@ -144,8 +145,9 @@ class EstateController extends Controller
     public function estateSummary($language, Estate $estate)
     {
         $registeredClients = Client::where('estate_id', $estate->id)->get();
+        $estateDiscounts = DiscountHistory::where('estate_id', $estate->id)->get();
 //        dd($registeredClients);
-        return view('admin.estate.summary', compact('estate', 'registeredClients'));
+        return view('admin.estate.summary', compact('estate', 'registeredClients', 'estateDiscounts'));
     }
 
     /**

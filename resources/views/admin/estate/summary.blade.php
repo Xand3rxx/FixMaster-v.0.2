@@ -149,11 +149,11 @@
                                           <thead class="thead-primary">
                                             <tr>
                                                 <th class="text-center">#</th>
-                                                <th>Discount Name</th>
-                                                <th>Discount Type</th>
-                                                <th>Discount Duration</th>
-                                                <th>Discount Percentage (%)</th>
-                                                <th>Date Registered</th>
+                                                <th>Name</th>
+                                                <th>Duration</th>
+                                                <th>Applied To</th>
+                                                <th>Rate (%)</th>
+                                                <th>Date Created</th>
                                                 <th>Action</th>
                                             </tr>
                                           </thead>

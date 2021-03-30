@@ -10,7 +10,7 @@ class Rfq extends Model
     use HasFactory;
 
     protected $fillable = [
-        'issued_by', 'client_id', 'invoice_id', 'service_request_id', 'batch_number', 'invoice_number', 'status', 'accepted', 'total_amount', 'created_at', 'updated_at'
+        'uuid', 'unique_id', 'issued_by', 'client_id', 'invoice_id', 'service_request_id', 'invoice_number', 'status', 'accepted', 'total_amount', 'created_at', 'updated_at'
     ];
 
     public function invoice()

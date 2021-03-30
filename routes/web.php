@@ -94,7 +94,7 @@ Route::prefix('admin')->group(function () {
         Route::get('/diagnostic', [SimulationController::class, 'diagnosticSimulation'])->name('diagnostic');
         Route::get('/end-service/{service_request:uuid}', [SimulationController::class, 'endService'])->name('end_service');
         Route::get('/complete-service/{service_request:uuid}', [SimulationController::class, 'completeService'])->name('complete_service');
-        Route::get('/invoice/{invoice:id}', [SimulationController::class, 'invoice'])->name('invoice');
+        Route::get('/invoice/{invoice:uuid}', [SimulationController::class, 'invoice'])->name('invoice');
 
         Route::get('/rfq',                                  [SimulationController::class, 'rfqSimulation'])->name('rfq');
         Route::get('/rfq/details/{serviceRequest:id}',    [SimulationController::class, 'rfqDetailsSimulation'])->name('rfq_details');
@@ -125,7 +125,7 @@ Route::prefix('admin')->group(function () {
             ->name('services.deactivate');
         Route::get('/services/reinstate/{service}',         [ServiceController::class, 'reinstate'])->name('services.reinstate');
         Route::get('/services/delete/{service}',            [ServiceController::class, 'destroy'])->name('services.delete');
-        Route::resource('services',                         ServiceController::class); 
+        Route::resource('services',                         ServiceController::class);
 
 
 
@@ -133,7 +133,7 @@ Route::prefix('admin')->group(function () {
         Route::get('/location-request',                     [AdminLocationRequestController::class, 'index'])->name('location_request');
         // Route::post('/get-names',                           [AdminLocationRequestController::class, 'getNames'])->name('get_names');
         // Route::post('/request-location',                    [AdminLocationRequestController::class, 'requestLocation'])->name('request_location');
-        
+
         // Route::post("/getUsersAssigned",                    [AdminLocationRequestController::class, 'getUsersAssigned'])->name("getUsersAssigned");
         // Route::post("/getServiceDetails",                    [AdminLocationRequestController::class, 'getServiceDetails'])->name("getServiceDetails");
 
@@ -240,10 +240,10 @@ Route::prefix('/client')->middleware('verified')->group(function () {
         // Route::get('/profile/edit',             [ClientController::class, 'edit_profile'])->name('client.edit_profile');
         Route::post('/profile/update',              [ClientController::class, 'update_profile'])->name('updateProfile');
         Route::post('/updatePassword',      [ClientController::class, 'updatePassword'])->name('updatePassword');
-       
+
         // Route::get('/requests',                    [ClientRequestController::class, 'index'])->name('client.requests');
- 
-        // E-wallet Routes for clients 
+
+        // E-wallet Routes for clients
         //Profile and password update
         Route::get('/settings',                 [ClientController::class, 'settings'])->name('settings');
 
@@ -281,7 +281,7 @@ Route::prefix('/client')->middleware('verified')->group(function () {
             // Route::post('servicesRequest',              [ClientController::class, 'serviceRequest'])->name('paystack.submit');
             // Route::post('servicesRequest',              [ClientController::class, 'serviceRequest'])->name('flutter.submit');
 
-            
+
     });
 });
 
