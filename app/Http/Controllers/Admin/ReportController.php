@@ -37,8 +37,11 @@ class ReportController extends Controller
     {
 
        $serviceRequests = ServiceRequest::orderBy('created_at', 'DESC')->with('cse_service_request')->get();
+       $users = Cse::with('user', 'user.account', 'user.contact', 'user.roles', 'user.cse_jobs')->get();
+        // 'requests' => \App\Models\ServiceRequestAssigned::where('user_id', auth()->user()->id)->withCount('service_request')
+   
 
-       return view('admin.reports.cse_reports', compact('serviceRequests'));
+       return view('admin.reports.cse_reports', compact('serviceRequests', 'users'));
     }
 
     public function cseSummary($language, $details)
