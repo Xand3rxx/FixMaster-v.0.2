@@ -57,24 +57,10 @@
                       <div class="tx-13 mg-b-25">
                         <div id="wizard3">
 
-                          <h3>Job Acceptance</h3>
+                          <h3>Assign Technician</h3>
                           <section>
                             <div class="form-row mt-4">
-                              <div class="form-group col-md-6">
-                                <label for="name">Accept job request?</label>
-                                    <select class="form-control custom-select @error('job_accepted') is-invalid @enderror" name="job_accepted">
-                                        <option value="" selected>Select...</option>
-                                        <option value="Yes">Yes</option>
-                                        <option value="No">No</option>
-                                    </select>
-                                    @error('job_accepted')
-                                      <span class="invalid-feedback" role="alert">
-                                          <strong>{{ $message }}</strong>
-                                      </span>
-                                    @enderror
-                              </div>
-
-                              <div class="form-group col-md-6">
+                              <div class="form-group col-md-12">
                                 <label for="name">Assign Technician</label>
                                 <select class="form-control custom-select @error('user_id') is-invalid @enderror" name="user_id">
                                     <option value="" selected>Select...</option>

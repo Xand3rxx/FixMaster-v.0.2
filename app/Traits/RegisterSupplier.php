@@ -68,7 +68,7 @@ trait RegisterSupplier
                 'business_name' => $valid['supplier_name'],
                 'business_description' => $valid['supplier_description'],
                 'established_on' => $valid['established_on'],
-                'education_level' =>$valid['education_level'],
+                'education_level' => $valid['education_level'],
             ]);
             // Register Supplier Contact Details
             \App\Models\Contact::attemptToStore($user->id, $account->id, 156, $valid['phone_number'], $valid['full_address'], $valid['address_longitude'], $valid['address_latitude']);

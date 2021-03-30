@@ -5,10 +5,11 @@ namespace App\Http\Controllers\Admin\User;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Traits\RegisterTechnicianArtisan;
+use App\Traits\Services;
 
 class TechnicianArtisanController extends Controller
 {
-    use RegisterTechnicianArtisan;
+    use RegisterTechnicianArtisan, Services;
     /**
      * Display a listing of the resource.
      *
@@ -28,10 +29,11 @@ class TechnicianArtisanController extends Controller
      */
     public function create()
     {
+        $service = $this->categoryAndServices();
         return view('admin.users.technician-artisan.create')->with([
             'states' => \App\Models\State::select('id', 'name')->orderBy('name', 'ASC')->get(),
             'banks' => \App\Models\Bank::select('id', 'name')->orderBy('name', 'ASC')->get(),
-            // services
+            'services' => $service['services']
         ]);
     }
 
@@ -44,10 +46,9 @@ class TechnicianArtisanController extends Controller
     public function store(Request $request)
     {
         // Validate Request
-        $valid = $this->validateCreateTechnicianArtisan($request);
+        (array) $valid = $this->validateCreateTechnicianArtisan($request);
         // Register a Technician-Artisan
-        $registered = $this->register($valid);
-        // dd($registered);
+        (bool) $registered = $this->register($valid);
         return ($registered == true)
             ? redirect()->route('admin.users.technician-artisan.index', app()->getLocale())->with('success', "A Technician/Artisan Created Successfully!!")
             : back()->with('error', "An error occurred while creating User");
@@ -125,8 +126,9 @@ class TechnicianArtisanController extends Controller
             'full_address'              =>   'required|string',
             'address_latitude'          =>   'required|string',
             'address_longitude'         =>   'required|string',
-            'avatar'                    => 'sometimes|image'
-
+            'avatar'                    => 'sometimes|image',
+            'technician_category'       =>   'required|array',
+            'technician_category.*'     =>   'required|string',
         ]);
     }
 }
