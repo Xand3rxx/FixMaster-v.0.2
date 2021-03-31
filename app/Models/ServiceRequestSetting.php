@@ -6,11 +6,11 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Str;
 
-class PaymentGateway extends Model
+class ServiceRequestSetting extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['name', 'information', 'keyword', 'status'];
+    protected $fillable = ['radius', 'max_ongoing_jobs'];
 
     /** 
      * The "booted" method of the model.
@@ -19,8 +19,8 @@ class PaymentGateway extends Model
      */
     protected static function booted()
     {
-        static::creating(function ($paymentGateway) {
-            $paymentGateway->uuid = (string) Str::uuid(); // Create uuid when a new payment gateway is to be created
+        static::creating(function ($serviceRequestSetting) {
+            $serviceRequestSetting->uuid = (string) Str::uuid(); // Create uuid when a new payment gateway is to be created
         });
     }
 

@@ -180,5 +180,45 @@ class ClientSeeder extends Seeder
         \App\Models\Contact::attemptToStore($client2->id, $clientAccount2->id, 156, '08069386641', "Bisola Durosinmi Etti Drive, The Rock Dr, Lekki Phase 1, Lagos", "3.464150", "6.437240");
         \App\Models\Contact::attemptToStore($client3->id, $clientAccount3->id, 156, '07036722889', "8 Oba Akinjobi Way, Ikeja GRA, Ikeja", "3.346660", "6.586420");
         \App\Models\Contact::attemptToStore($client4->id, $clientAccount4->id, 156, '09082354911', "8 Oremeji St, Oke Odo, Lagos", "3.299630", "6.618710");
+
+        $clientDiscount = \App\Models\ClientDiscount::create([
+            'discount_id'      =>  1, 
+            'client_id'        =>  $client->id, 
+            'estate_id'        =>  NULL,
+            'service_id'       =>  NULL, 
+            'availability'     =>  'unused', 
+        ]);
+
+        $clientDiscount = \App\Models\ClientDiscount::create([
+            'discount_id'      =>  1, 
+            'client_id'        =>  $client1->id, 
+            'estate_id'        =>  NULL,
+            'service_id'       =>  NULL, 
+            'availability'     =>  'unused', 
+        ]);
+
+        $clientDiscount = \App\Models\ClientDiscount::create([
+            'discount_id'      =>  1, 
+            'client_id'        =>  $client2->id, 
+            'estate_id'        =>  NULL,
+            'service_id'       =>  NULL, 
+            'availability'     =>  'unused', 
+        ]);
+
+        $clientDiscount = \App\Models\ClientDiscount::create([
+            'discount_id'      =>  1, 
+            'client_id'        =>  $client3->id, 
+            'estate_id'        =>  NULL,
+            'service_id'       =>  NULL, 
+            'availability'     =>  'unused', 
+        ]);
+
+        $clientDiscount = \App\Models\ClientDiscount::create([
+            'discount_id'       =>  1, 
+            'client_id'         =>  $client4->id, 
+            'estate_id'         =>  NULL,
+            'service_id'        =>  NULL, 
+            'availability'      =>  'unused', 
+        ]);
     }
 }

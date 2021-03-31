@@ -80,7 +80,7 @@
 
 
     </style>
-
+<input type="hidden" id="path_admin" value="{{url('/')}}">
     @include('layouts.partials._dashboard_sidebar')
 
     <div class="content ht-100v pd-0">
