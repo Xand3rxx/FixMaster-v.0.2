@@ -31,16 +31,9 @@ class SimulationController extends Controller
 
     public function endService($language, ServiceRequest $serviceRequest)
     {
-        $client_id = $serviceRequest->client_id;
         $service_request_id = $serviceRequest->id;
-        $invoice_type = 'Diagnostic Invoice';
-        $hours_spent = 1;
-        $total = $serviceRequest->total_amount;
-        $amount_due = $serviceRequest->total_amount;
-        $amount_paid = $serviceRequest->total_amount;
-        $status = '1';
 
-        $this->diagnosticInvoice($client_id, $service_request_id, $invoice_type, $total, $amount_due, $amount_paid, $hours_spent, $status);
+        $this->diagnosticInvoice($service_request_id);
         return redirect()->route('admin.rfq', app()->getLocale());
     }
 
@@ -48,15 +41,12 @@ class SimulationController extends Controller
     {
         $client_id = $serviceRequest->client_id;
         $service_request_id = $serviceRequest->id;
-        $rfq_id = isset($serviceRequest->rfq->id) ? $serviceRequest->rfq->id : null ;
-        $invoice_type = 'Completion Invoice';
-        $materials_cost = isset($serviceRequest->rfq->id) ? $serviceRequest->rfq->total_amount : 0;
+        $rfq_id = isset($serviceRequest->rfq->id) ? $serviceRequest->rfq->id : null;
+        $warranty_id = 1;
+        $sub_service_id = 1;
         $hours_spent = '2';
-        $status = '1';
 
-
-        $this->completedServiceInvoice($client_id, $service_request_id, $rfq_id, $invoice_type, $materials_cost, $hours_spent, $status);
-
+        $this->completedServiceInvoice($service_request_id, $rfq_id, $warranty_id, $sub_service_id, $hours_spent);
         return redirect()->route('admin.rfq', app()->getLocale());
     }
 
@@ -124,8 +114,7 @@ class SimulationController extends Controller
 
 //            (int $user_id, int $service_request_id, int $rfq_id, string $invoice_type, int $total_amount, int $amount_due, int $amount_paid, string  $status)
 
-            $this->supplierInvoice($clientId, $serviceRequestId, $rfId, 'Supplier Invoice', $totalAmount, $totalAmount, 0, 1);
-
+            $this->supplierInvoice($serviceRequestId, $rfId);
             return redirect()->route('admin.rfq', app()->getLocale());
 
         }
@@ -150,7 +139,7 @@ class SimulationController extends Controller
             $status = '1';
 
 
-            $this->rfqInvoice($client_id, $service_request_id, $rfq_id, $invoice_type, $status);
+            $this->rfqInvoice($service_request_id, $rfq_id);
 
 
             //Create entries on `rfq_batches` table for a single RFQ Batch record
@@ -180,11 +169,26 @@ class SimulationController extends Controller
         $sub_total = $materials_cost + $invoice->labour_cost;
 
         $fixMasterRoyalty = $fixMaster_royalty_value * ( $invoice->labour_cost + $materials_cost + $logistics_cost );
-        $warrantyCost = 0.1 * ( $invoice->labour_cost + $materials_cost );
-        $bookingCost = $invoice->serviceRequest->price->amount;
 
-        $tax_cost = $tax * $sub_total;
-        $total_cost = $invoice->total_amount + $fixMasterRoyalty + $tax_cost + $warrantyCost + $logistics_cost - $bookingCost - 1500;
+        $warrantyCost = '';
+        $bookingCost = '';
+        $tax_cost = '';
+        $total_cost = '';
+
+        if($invoice->invoice_type == 'Diagnostic Invoice')
+        {
+            $warrantyCost = 0;
+            $bookingCost = 0;
+            $tax_cost = $tax * ( $invoice->total_amount + $logistics_cost + $fixMasterRoyalty );
+            $total_cost = $invoice->total_amount + $fixMasterRoyalty + $tax_cost + $logistics_cost - 1500;
+        }
+        else
+        {
+            $warrantyCost = 0.1 * ( $invoice->labour_cost + $materials_cost );
+            $bookingCost = $invoice->serviceRequest->price->amount;
+            $tax_cost = $tax * $sub_total;
+            $total_cost = $invoice->total_amount + $fixMasterRoyalty + $warrantyCost + $logistics_cost - $bookingCost - 1500 + $tax_cost;
+        }
 
         return view('admin.invoices.invoice')->with([
             'invoice' => $invoice,

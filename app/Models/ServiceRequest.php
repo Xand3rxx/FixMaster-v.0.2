@@ -147,7 +147,7 @@ class ServiceRequest extends Model
     public function price()
     {
 
-            return $this->hasOne(Price::class, 'user_id', 'price_id')->withDefault();
+        return $this->hasOne(Price::class, 'id', 'price_id');
     }
 
     public function address(){

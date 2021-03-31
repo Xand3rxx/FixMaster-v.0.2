@@ -604,7 +604,7 @@ class DiscountController extends Controller
         {
 
             $estates = [];
-            $estates = Estate::select('id', 'estate_name')->where('is_actiive', 'reinstated')->orderBy('estate_name', 'ASC')
+            $estates = Estate::select('id', 'estate_name')->where('is_active', 'reinstated')->orderBy('estate_name', 'ASC')
                 ->get();
             $select = $request->estate_name? str_replace('"', "", $request->estate_name ): 'select';
             $optionValue = '';
@@ -731,7 +731,7 @@ class DiscountController extends Controller
 
         }
         foreach ($accounts as $user)
-        {           
+        {
           $discountHistory = DiscountHistory::create([
             'discount_id' => $discounts->id,
             'estate_id' =>  $estates->id,
@@ -747,10 +747,10 @@ class DiscountController extends Controller
                     'discount_history_id' => $discountHistory->id,
                     'estate_id' =>  $estates->id,
                 ]);
-                 
+
         }
 
-      
+
         return true;
     }
 

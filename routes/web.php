@@ -200,7 +200,7 @@ Route::prefix('admin')->group(function () {
         Route::post('/loyalty/store-edit',                    [App\Http\Controllers\LoyaltyManagementController::class, 'store_edit'])->name('loyalty_store_edit');
         Route::get('/loyalty/history',                    [App\Http\Controllers\LoyaltyManagementController::class, 'history'])->name('loyalty_history');
 
-       
+
 
 
 
@@ -311,7 +311,7 @@ Route::prefix('/cse')->group(function () {
         Route::view('/messages/inbox',      'cse.messages.inbox')->name('messages.inbox');
         Route::view('/messages/sent',       'cse.messages.sent')->name('messages.sent');
         Route::view('/payments',            'cse.payments')->name('payments');
-        
+
         Route::resource('requests', RequestController::class);
 
         // Route::view('/requests',            'cse.requests')->name('requests');

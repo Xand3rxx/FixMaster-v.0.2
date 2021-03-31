@@ -16,9 +16,8 @@
                     <h4 class="mg-b-0 tx-spacing--1">Invoices</h4>
                 </div>
                 <div class="d-md-block">
-                    <a href="{{ route('admin.invoices', app()->getLocale()) }}" class="btn btn-primary"><i class="fas fa-plus"></i>Invoices</a>
-                    <a href="{{ route('admin.diagnostic', app()->getLocale()) }}" class="btn btn-primary"><i class="fas fa-plus"></i> Diagnostic Invoice</a>
-                    <a href="{{ route('admin.rfq', app()->getLocale()) }}" class="btn btn-primary"><i class="fas fa-plus"></i> RFQ Issuance</a>
+                    <a href="{{ route('admin.invoices', app()->getLocale()) }}" class="btn btn-primary">Invoices</a>
+                    <a href="{{ route('admin.rfq', app()->getLocale()) }}" class="btn btn-primary">Simulations</a>
                 </div>
             </div>
 

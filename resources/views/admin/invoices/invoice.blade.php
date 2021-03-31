@@ -17,8 +17,7 @@
                 </div>
                 <div class="d-md-block">
                     <a href="{{ route('admin.invoices', app()->getLocale()) }}" class="btn btn-primary">Invoices</a>
-                    <a href="{{ route('admin.diagnostic', app()->getLocale()) }}" class="btn btn-primary"><i class="fas fa-plus"></i> Diagnostic Invoice</a>
-                    <a href="{{ route('admin.rfq', app()->getLocale()) }}" class="btn btn-primary"><i class="fas fa-plus"></i> RFQ Issuance</a>
+                    <a href="{{ route('admin.rfq', app()->getLocale()) }}" class="btn btn-primary"><i class="fas fa-plus"></i> Simulation</a>
                 </div>
             </div>
 
@@ -130,8 +129,8 @@
                                                             <tbody>
                                                                 <tr>
                                                                     <td class="text-left">Diagnostics Completion</td>
-                                                                    <td class="text-left">₦ {{ number_format(10000) }}</td>
-                                                                    <td class="text-left">₦ {{ number_format(10000) }}</td>
+                                                                    <td class="text-left">₦ {{ number_format($invoice['total_amount']) }}</td>
+                                                                    <td class="text-left">₦ {{ number_format($invoice['total_amount']) }}</td>
                                                                 </tr>
                                                             </tbody>
                                                         </table>
@@ -139,10 +138,12 @@
                                                     <div class="row">
                                                         <div class="col-lg-4 col-md-5 ml-auto">
                                                             <ul class="list-unstyled h5 font-weight-normal mt-4 mb-0">
-                                                                <li class="text-muted d-flex justify-content-between">Subtotal :<span>₦ {{ number_format(10000) }}</span></li>
-                                                                   <li class="text-muted d-flex justify-content-between">FixMaster Royalty :<span> ₦ {{ number_format( 0.1 * 10000) }}</span></li>
-                                                                   <li class="text-muted d-flex justify-content-between">Taxes :<span> ₦ {{ number_format(253) }}</span></li>
-                                                                   <li class="d-flex justify-content-between">Total :<span>₦ {{ number_format(10000 + 0.1 * 10000 + 253) }}</span></li>
+                                                                <li class="text-muted d-flex justify-content-between">Subtotal :<span>₦ {{ number_format($invoice['total_amount']) }}</span></li>
+                                                                   <li class="text-muted d-flex justify-content-between">FixMaster Royalty :<span> ₦ {{ number_format( $fixmaster_royalty ) }}</span></li>
+                                                                   <li class="text-muted d-flex justify-content-between">Logistics :<span> ₦ {{ number_format( $logistics ) }}</span></li>
+                                                                   <li class="text-muted d-flex justify-content-between">Taxes :<span> ₦ {{ number_format($taxes) }}</span></li>
+                                                                <li class="d-flex justify-content-between text-danger">Discount :<span> - ₦ {{ number_format( 0.5 * $logistics ) }}</span></li>
+                                                                   <li class="d-flex justify-content-between">Total :<span>₦ {{ number_format($total_cost) }}</span></li>
                                                             </ul>
                                                         </div><!--end col-->
                                                     </div>
@@ -290,7 +291,7 @@
                                                                        <span> ₦ {{ number_format( $fixmaster_royalty ) }}</span>
                                                                        @endif
                                                                     </li>
-                                                                    <li class="text-muted d-flex justify-content-between">Warranty Cost :<span> ₦ {{ number_format(0.1 * ($invoice['materials_cost'] + $invoice['labour_cost'])) }}</span></li>
+                                                                    <li class="text-muted d-flex justify-content-between">Warranty Cost :<span> ₦ {{ number_format($warranty) }}</span></li>
                                                                     <li class="text-muted d-flex justify-content-between">Logistics :<span> ₦ {{ number_format($logistics) }}</span></li>
                                                                     <li class="d-flex justify-content-between text-danger">Booking :<span> - ₦ {{ number_format($invoice->serviceRequest->price->amount) }}</span></li>
                                                                     <li class="d-flex justify-content-between text-danger">Discount :<span> - ₦ {{ number_format( 0.5 * $logistics ) }}</span></li>
