@@ -318,14 +318,14 @@ Route::prefix('/cse')->group(function () {
 
         Route::view('/request/details',    'cse.request_details',
             [
-                'tools' => \App\Models\ToolInventory::all(),
-                'ongoingSubStatuses' => \App\Models\SubStatus::where('status_id', 2)->get(['id', 'name']),
-                'warranties' => \App\Models\Warranty::all(),
+                // 'tools' => \App\Models\ToolInventory::all(),
+                // 'ongoingSubStatuses' => \App\Models\SubStatus::where('status_id', 2)->get(['id', 'name']),
+                // 'warranties' => \App\Models\Warranty::all(),
             ]
         )->name('request_details');
         Route::view('/profile',             'cse.view_profile')->name('view_profile');
         Route::view('/profile/edit',        'cse.edit_profile', [
-            'banks' => \App\Models\Bank::all(),
+            // 'banks' => \App\Models\Bank::all(),
 
         ])->name('edit_profile');
         Route::view('/location-request',    'cse.location_request')->name('location_request');

@@ -3,6 +3,7 @@
 namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
+use DB;
 
 class SupplierSeeder extends Seeder
 {
@@ -132,5 +133,57 @@ class SupplierSeeder extends Seeder
         \App\Models\Contact::attemptToStore($supplier->id, $supplierAccount->id, 156, '08165551727', "3-28 Segun Adesanya St, Ejigbo, Lagos", "3.2875562", "6.5604542");
         \App\Models\Contact::attemptToStore($supplier1->id, $supplierAccount1->id, 156, '08039473705', "9 Gregal Mission St, Iju, Lagos", "3.3386946", "6.6654238");
         \App\Models\Contact::attemptToStore($supplier2->id, $supplierAccount2->id, 156, '08145318883', "Suite 8a Tafawa Balewa Square Onikan, 101231, Lagos", "3.3992997", "6.4486122");
+
+        // DB::table('users_services')->delete();
+
+        $supplierServices = array(
+            array(
+                'user_id'       =>  10,
+                'service_id'    =>  1,
+                'role_id'       =>  6,
+            ),
+            array(
+                'user_id'       =>  10,
+                'service_id'    =>  22,
+                'role_id'       =>  6,
+            ),
+            array(
+                'user_id'       =>  10,
+                'service_id'    =>  24,
+                'role_id'       =>  6,
+            ),
+            array(
+                'user_id'       =>  11,
+                'service_id'    =>  1,
+                'role_id'       =>  6,
+            ),
+            array(
+                'user_id'       =>  11,
+                'service_id'    =>  6,
+                'role_id'       =>  6,
+            ),
+            array(
+                'user_id'       =>  11,
+                'service_id'    =>  11,
+                'role_id'       =>  6,
+            ),
+            array(
+                'user_id'       =>  12,
+                'service_id'    =>  1,
+                'role_id'       =>  6,
+            ),
+            array(
+                'user_id'       =>  12,
+                'service_id'    =>  10,
+                'role_id'       =>  6,
+            ),
+            array(
+                'user_id'       =>  12,
+                'service_id'    =>  2,
+                'role_id'       =>  6,
+            ),
+        );
+
+        DB::table('users_services')->insert($supplierServices);
     }
 }
