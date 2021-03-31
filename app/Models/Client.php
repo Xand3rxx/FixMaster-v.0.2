@@ -46,4 +46,3 @@ class Client extends Model
     }
     
 }
-

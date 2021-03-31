@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateClientDiscountsTable extends Migration
+class CreateSubStatusesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -12,18 +12,20 @@ class CreateClientDiscountsTable extends Migration
      * @return void
      */
     public function up()
-    { 
-        Schema::create('client_discounts', function (Blueprint $table) {
+    {
+        Schema::create('sub_statuses', function (Blueprint $table) {
             $table->engine = 'InnoDB';
             $table->charset = 'utf8mb4';
             $table->collation = 'utf8mb4_unicode_ci';
 
             $table->id();
-            $table->foreignId('discount_id');
-            $table->foreignId('client_id');
-            $table->foreignId('estate_id')->nullable();
-            $table->foreignId('service_id')->nullable();
-            $table->enum('availability', ['used', 'unused'])->default('unused');
+            $table->foreignId('user_id');
+            $table->foreignId('status_id');
+            $table->text('name');
+            $table->integer('phase');
+            $table->enum('recurrence', ['Yes', 'No']);
+            $table->enum('status', ['active', 'inactive']);
+            $table->softDeletes();
             $table->timestamps();
         });
     }
@@ -35,6 +37,6 @@ class CreateClientDiscountsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('client_discounts');
+        Schema::dropIfExists('sub_statuses');
     }
 }
