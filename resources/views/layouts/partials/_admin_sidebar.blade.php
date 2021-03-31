@@ -172,6 +172,7 @@
             <li class=""><a href="#">Ongoing</a></li>
             <li class=""><a href="#">Completed</a></li>
             <li class=""><a href="#">Cancelled</a></li>
+            <li class=""><a href="{{ Route::currentRouteNamed('admin.serviceCriteria.index') ? 'active' : '' }}">Settings</a></li>
           </ul>
         </li>
 

@@ -47,7 +47,7 @@
         margin-left: 1.5em;
       }
     </style>
-
+<input type="hidden" id="path_admin" value="{{url('/')}}">
     @include('layouts.partials._dashboard_sidebar')
     {{-- @include('layouts.partials._qa_sidebar') --}}
 

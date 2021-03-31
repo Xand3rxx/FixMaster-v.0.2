@@ -32,7 +32,7 @@ class Cse extends Model
      */
     public function user()
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(User::class)->with(['account', 'contact']);
     }
 
     public function serviceRequest()

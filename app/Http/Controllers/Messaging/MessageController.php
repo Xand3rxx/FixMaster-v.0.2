@@ -131,6 +131,8 @@ class MessageController extends Controller
         });
     }
 
+    
+
     private function replacePlaceHolders($variables, $messageTemp){
         foreach($variables as $key => $value){
             $messageTemp = str_replace('{'.$key.'}', $value, $messageTemp);

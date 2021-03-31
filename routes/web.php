@@ -24,8 +24,9 @@ use App\Http\Controllers\Admin\PriceController;
 use App\Http\Controllers\InvoiceController;
 use App\Http\Controllers\SimulationController;
 use App\Http\Controllers\Admin\User\Administrator\SummaryController;
-use App\Http\Controllers\Admin\StatusController;
+use App\Http\Controllers\Admin\StatusController; 
 use App\Http\Controllers\ReportController;
+use App\Http\Controllers\Admin\ServiceRequestSettingController;
 
 /*
 |--------------------------------------------------------------------------
@@ -192,8 +193,13 @@ Route::prefix('admin')->group(function () {
         //Routes for Status Management
         Route::resource('statuses',                         StatusController::class);
 
+    //Setting controller
+    // Route::get('service/request/criteria',           [ServiceRequestSettingController::class, 'index'])->name('serviceReq.index');
+    // Route::get('service/request/criteria/{id}',      [ServiceRequestSettingController::class, 'Edit'])->name('editCriteria');
+    // Route::post('service/request/criteriaUpdate',    [ServiceRequestSettingController::class, 'update'])->name('serviceReq.update'); 
 
-
+    Route::get('/serviceCriteria/delete/{criteria}',              [ServiceRequestSettingController::class, 'destroy'])->name('serviceReq.delete');
+    Route::resource('serviceCriteria',                            ServiceRequestSettingController::class);
     });
 });
 
@@ -216,8 +222,8 @@ Route::prefix('/client')->group(function () {
         // Route::get('/requests',                    [ClientRequestController::class, 'index'])->name('client.requests');
  
         // E-wallet Routes for clients 
-        //Profile and password update
         Route::get('/settings',                 [ClientController::class, 'settings'])->name('settings');
+        Route::any('/getDistanceDifference',    [ClientController::class, 'getDistanceDifference'])->name('getDistanceDifference');
 
         // Route::get('/wallet',                [ClientController::class, 'wallet'])->name('wallet'); //Take me to Supplier Dashboard
             // Route::get('/requests',          [ClientRequestController::class, 'index'])->name('client.requests');

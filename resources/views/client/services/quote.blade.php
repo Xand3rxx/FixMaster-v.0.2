@@ -87,10 +87,8 @@ p{margin-bottom:.3em;}
                                     <div class="p-3 text-left">
                                     <h5 class="title">{{ !empty($bookingFee->name) ? $bookingFee->name : 'UNAVAILABLE' }}: ₦{{ number_format(!empty($bookingFee->amount) ? $bookingFee->amount : '0') }}</h5>
                                         <p class="text-muted tab-para mb-0">{{ !empty($bookingFee->description) ? $bookingFee->description : 'No description found' }}</p>
-                                        <!-- <input type="radio" name="price_id" value="{{ $bookingFee->id }}" class="custom-control-input booking-fee" @if(old('price_id') == $bookingFee->id) checked @endif> -->
-                                        <input type="radio" name="booking_fee" value="{{ $bookingFee->amount }}" class="custom-control-input booking-fee" @if(old('price_id') == $bookingFee->id) checked @endif>
-
-                                        <!-- <input type="hidden" name="booking_fee" value="{{$bookingFee->amount}}" {{old('booking_fee') == $bookingFee->amount ? 'checked' : ''}}> -->
+                                        <input type="radio" name="price_id" value="{{ old('price_id') ?? $bookingFee->id }}" class="custom-control-input booking-fee" >
+                                        <input type="radio" name="booking_fee" value="{{ old('booking_fee') ?? $bookingFee->amount }}" class="custom-control-input booking-fee" >
                                     </div>
                                 </a><!--end nav link-->
                             </li><!--end nav item-->
@@ -129,7 +127,7 @@ p{margin-bottom:.3em;}
                             <input type="file" class="form-control-file btn btn-primary btn-sm" id="fileupload" name="media_file" accept="image/*,.txt,.doc,.docx,.pdf">
                             <small style="font-size: 10px;" class="text-muted">File must not be more than 2MB</small>
                         </div>                                                                               
-                    </div><!--end col-->
+                    </div><!--end col-->            
 
                     <div class="col-md-6 form-group mt-2">
                         <label>Contact Number:<span class="text-danger">*</span></label>

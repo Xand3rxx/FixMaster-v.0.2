@@ -52,7 +52,7 @@ class User extends Authenticatable implements MustVerifyEmail
         static::creating(function ($user) {
             $user->uuid = (string) Str::uuid(); // Create uuid when a new user is to be created
         });
-    }
+    } 
 
     /**
      * Get the Type associated with the user.

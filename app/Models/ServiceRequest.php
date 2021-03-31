@@ -104,7 +104,7 @@ class ServiceRequest extends Model
         return $this->hasMany(Invoice::class);
     }
     public function service(){
-        return $this->hasOne(Service::class, 'id', 'service_id');
+       return $this->hasOne(Service::class, 'id', 'service_id');
     }
     public function services(){
             return $this->hasMany(Service::class, 'id', 'service_id');

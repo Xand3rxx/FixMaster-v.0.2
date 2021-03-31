@@ -40,4 +40,9 @@ class EssentialsController extends Controller
         $serviceRequests = ServiceRequest::with('serviceRequestAssigned')->get();
         return $serviceRequests;
     }
+
+    public function Edit($id){
+        $data = ServiceRequestSettingController::find($id);
+        return $data;
+      }
 }
