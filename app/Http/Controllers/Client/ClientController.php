@@ -34,7 +34,7 @@ use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\SMTP;
 use PHPMailer\PHPMailer\Exception;
 
-
+ 
 use Session; 
 
 class ClientController extends Controller
@@ -784,6 +784,12 @@ class ClientController extends Controller
      */
     public function customService(){
         
+    }
+
+    public function myServiceRequest(){
+        // $data['myServiceRequests'] = Servicerequest::orderBy('id','DESC')->get();
+        return \App\Models\Client::where('user_id', auth()->user()->id)->with('user')->firstOrFail();
+        // return view('client.services.list', $data);
     }
 
 }

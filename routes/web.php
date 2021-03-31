@@ -243,6 +243,8 @@ Route::prefix('/client')->group(function () {
             Route::get('services/custom/',              [ClientController::class, 'customService'])->name('services.custom');
 
             Route::post('servicesRequest',              [ClientController::class, 'serviceRequest'])->name('services.serviceRequest');
+            // view all my service request
+            Route::get('myServicesRequest',              [ClientController::class, 'myServiceRequest'])->name('service.all');
 
             //Flutterwave Routes
             Route::post('/request/flutterwave/submit',              [ClientController::class, 'storeFlutterServiceRequest'])->name('flutterwave.submit');
