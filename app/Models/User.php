@@ -107,7 +107,7 @@ class User extends Authenticatable implements MustVerifyEmail
      */
     public function contact()
     {
-        return $this->hasOne(Contact::class);
+        return $this->hasOne(Contact::class, 'user_id');
     }
 
     /**
@@ -119,11 +119,35 @@ class User extends Authenticatable implements MustVerifyEmail
     }
 
     /**
-     * Get the Administrator associated with the user.
+     * Get the CSE associated with the user.
      */
     public function cse()
     {
         return $this->hasOne(Cse::class);
+    }
+
+    /**
+     * Get the Franchisee associated with the user.
+     */
+    public function franchisee()
+    {
+        return $this->hasOne(Franchisee::class);
+    }
+
+    /**
+     * Get the Supplier associated with the user.
+     */
+    public function supplier()
+    {
+        return $this->hasOne(Supplier::class);
+    }
+
+    /**
+     * Get the Technician & Artisan associated with the user.
+     */
+    public function technician()
+    {
+        return $this->hasOne(Technician::class);
     }
 
     /**
@@ -136,7 +160,7 @@ class User extends Authenticatable implements MustVerifyEmail
 
     public function address()
     {
-        return $this->hasOne(Address::class, 'user_id');
+        return $this->hasOne(Contact::class, 'user_id');
     }
 
     public function estate()
@@ -170,7 +194,7 @@ class User extends Authenticatable implements MustVerifyEmail
 
     public function serviceRequests()
     {
-        return $this->hasMany(ServiceRequest::class);
+        return $this->hasMany(ServiceRequestAssigned::class, 'user_id');
     }
     
     public function clientRequest()
@@ -180,5 +204,25 @@ class User extends Authenticatable implements MustVerifyEmail
     public function clientRequests()
     {
         return $this->hasMany(ServiceRequest::class, 'client_id');
+    }
+
+    public function bank()
+    {
+        return $this->hasOne(Bank::class, 'id');
+    }
+
+    public function serviceCompleted()
+    {
+        return $this->hasMany(Status::class, 'user_id')->where('name','=', 'Completed');
+    }
+
+    public function serviceCancelled()
+    {
+        return $this->hasMany(Status::class, 'user_id')->where('name','=', 'Cancelled');
+    }
+
+    public function cse_jobs()
+    {
+        return $this->hasMany(ServiceRequestAssigned::class, 'user_id');
     }
 }

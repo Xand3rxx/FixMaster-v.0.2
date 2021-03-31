@@ -55,42 +55,43 @@ class ServiceRequestPaymentSeeder extends Seeder
                 'user_id'               =>  1,
                 'service_request_id'    =>  1,
                 'status_id'             =>  1,
-                'progress'              =>  'Pending',
+                'sub_status_id'         =>  1,
+                'created_at'            =>  '2021-03-26 02:21:38'
+            ),
+            array(
+                'user_id'               =>  2,
+                'service_request_id'    =>  1,
+                'status_id'             =>  1,
+                'sub_status_id'         =>  2,
                 'created_at'            =>  '2021-03-26 02:21:38'
             ),
             array(
                 'user_id'               =>  2,
                 'service_request_id'    =>  1,
                 'status_id'             =>  2,
-                'progress'              =>  'Assigned CSE',
-                'created_at'            =>  '2021-03-26 02:21:38'
-            ),
-            array(
-                'user_id'               =>  2,
-                'service_request_id'    =>  1,
-                'status_id'             =>  2,
-                'progress'              =>  'Assigned Technician',
+                'sub_status_id'         =>  6,
                 'created_at'            =>  '2021-03-26 08:05:13'
             ),
             array(
                 'user_id'               =>  2,
                 'service_request_id'    =>  1,
                 'status_id'             =>  2,
-                'progress'              =>  'Contacted Client for availabilty',
+                'sub_status_id'         =>  7,
                 'created_at'            =>  '2021-03-26 10:30:46'
             ),
             array(
                 'user_id'               =>  2,
                 'service_request_id'    =>  1,
                 'status_id'             =>  2,
-                'progress'              =>  'En-route to Client\'s address',
+                'sub_status_id'         =>  8,
                 'created_at'            =>  '2021-03-26 10:45:19'
             ),
             array(
                 'user_id'               =>  2,
                 'service_request_id'    =>  1,
                 'status_id'             =>  2,
-                'progress'              =>  'Arrived',
+                'sub_status_id'         =>  1,
+                'sub_status_id'         =>  8,
                 'created_at'            =>  '2021-03-26 11:33:51'
             ),
             

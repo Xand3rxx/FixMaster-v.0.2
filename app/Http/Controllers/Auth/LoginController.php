@@ -51,9 +51,8 @@ class LoginController extends Controller
    * @param  \Illuminate\Http\Request  $request
    * @param  mixed  $user
    * @return mixed
-   * 
+   *
    */
-
   protected function authenticated(Request $request, $user)
   {
     $this->updateVerifiedUsers($user);
@@ -69,7 +68,7 @@ class LoginController extends Controller
   public function logout(Request $request)
   {
     $this->log('logout', 'Informational', Route::currentRouteAction(), $request->user()->email . ' logged out.');
-    
+
     $this->guard()->logout();
 
     $request->session()->invalidate();

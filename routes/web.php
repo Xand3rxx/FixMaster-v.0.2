@@ -5,6 +5,8 @@ use App\Http\Controllers\Client\ClientController;
 use App\Http\Controllers\Admin\User\AdministratorController;
 use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\EstateController;
+use App\Http\Controllers\EarningController;
+use App\Http\Controllers\IncomeController;
 use App\Http\Controllers\Admin\ServiceController;
 use App\Http\Controllers\Admin\ActivityLogController;
 use App\Http\Controllers\Admin\ToolInventoryController;
@@ -18,15 +20,20 @@ use App\Http\Controllers\Admin\User\QualityAssuranceController;
 use App\Http\Controllers\Admin\User\CustomerServiceExecutiveController;
 use App\Http\Controllers\Admin\User\ClientController as AdministratorClientController;
 use App\Http\Controllers\Technician\TechnicianProfileController;
+
 use App\Http\Controllers\Admin\EWalletController;
 use App\Http\Controllers\AdminLocationRequestController;
 use App\Http\Controllers\Admin\PriceController;
 use App\Http\Controllers\InvoiceController;
 use App\Http\Controllers\SimulationController;
 use App\Http\Controllers\Admin\User\Administrator\SummaryController;
-use App\Http\Controllers\Admin\StatusController; 
-use App\Http\Controllers\ReportController;
-use App\Http\Controllers\Admin\ServiceRequestSettingController;
+use App\Http\Controllers\Admin\StatusController;
+use App\Http\Controllers\Admin\ReportController;
+use App\Http\Controllers\QualityAssurance\ServiceRequestController;
+use App\Http\Controllers\QualityAssurance\QualityAssuranceProfileController;
+
+use App\Http\Controllers\CSE\CustomerServiceExecutiveController as CseController;
+use App\Http\Controllers\CSE\RequestController;
 
 /*
 |--------------------------------------------------------------------------
@@ -95,6 +102,17 @@ Route::prefix('admin')->group(function () {
         Route::get('/rfq/details/{serviceRequest:id}',    [SimulationController::class, 'rfqDetailsSimulation'])->name('rfq_details');
         Route::post('/rfq/ongoing/update',                  [SimulationController::class, 'simulateOngoingProcess'])->name('rfq_update');
 
+        //Routes for Income Management
+        Route::get('/earnings', [EarningController::class, 'index'])->name('earnings');
+        Route::get('/edit-earnings/{earning:uuid}', [EarningController::class, 'editEarning'])->name('edit_earnings');
+        Route::patch('/update-earnings/{earning:uuid}', [EarningController::class, 'updateEarnings'])->name('update_earnings');
+        Route::get('/delete-earning/{earning:uuid}', [EarningController::class, 'deleteEarning'])->name('delete_earnings');
+
+        Route::get('/income', [IncomeController::class, 'index'])->name('income');
+        Route::get('/edit-income/{income:uuid}', [IncomeController::class, 'editIncome'])->name('edit_income');
+        Route::patch('/update-income/{income:uuid}', [IncomeController::class, 'updateIncome'])->name('update_income');
+        Route::get('/delete-income/{income:uuid}', [IncomeController::class, 'deleteIncome'])->name('delete_income');
+
 
         //Routes for Category Management
         Route::get('/categories/reassign/{category}',       [CategoryController::class, 'reassign'])->name('categories.reassign');
@@ -109,7 +127,7 @@ Route::prefix('admin')->group(function () {
             ->name('services.deactivate');
         Route::get('/services/reinstate/{service}',         [ServiceController::class, 'reinstate'])->name('services.reinstate');
         Route::get('/services/delete/{service}',            [ServiceController::class, 'destroy'])->name('services.delete');
-        Route::resource('services',                         ServiceController::class); 
+        Route::resource('services',                         ServiceController::class);
 
 
 
@@ -117,7 +135,7 @@ Route::prefix('admin')->group(function () {
         Route::get('/location-request',                     [AdminLocationRequestController::class, 'index'])->name('location_request');
         // Route::post('/get-names',                           [AdminLocationRequestController::class, 'getNames'])->name('get_names');
         // Route::post('/request-location',                    [AdminLocationRequestController::class, 'requestLocation'])->name('request_location');
-        
+
         // Route::post("/getUsersAssigned",                    [AdminLocationRequestController::class, 'getUsersAssigned'])->name("getUsersAssigned");
         // Route::post("/getServiceDetails",                    [AdminLocationRequestController::class, 'getServiceDetails'])->name("getServiceDetails");
 
@@ -130,7 +148,7 @@ Route::prefix('admin')->group(function () {
         Route::get('/reports/sorting',      [ReportController::class, 'cseReports'])->name('cse_reports');
         Route::get('/reports/sort_cse_report',      [ReportController::class, 'sortCSEReports'])->name('sort_cse_reports');
         Route::get('/reports/cse_report_details/{activity_log}',      [ReportController::class, 'cseReportDetails'])->name('report_details');
-
+        Route::get('/reports/details/{details:uuid}',                 [ReportController::class, 'cseSummary'])->name('cse_report_details');
 
 
         //Routes for Tools & Tools Request Management
@@ -161,6 +179,8 @@ Route::prefix('admin')->group(function () {
         Route::get('/discount/delete/{discount:id}',                    [App\Http\Controllers\DiscountController::class, 'delete'])->name('delete_discount');
         Route::get('/discount/deactivate/{discount:id}',                    [App\Http\Controllers\DiscountController::class, 'deactivate'])->name('deactivate_discount');
         Route::get('/discount/activate/{discount:id}',                    [App\Http\Controllers\DiscountController::class, 'reinstate'])->name('activate_discount');
+        Route::get('/discount/history',                       [App\Http\Controllers\DiscountHistoryController::class, 'index'])->name('discount_history');
+
 
         Route::get('/referral/add',                     [App\Http\Controllers\ReferralController::class, 'create'])->name('add_referral');
         Route::post('/referral/store',                    [App\Http\Controllers\ReferralController::class, 'store'])->name('referral_store');
@@ -168,6 +188,21 @@ Route::prefix('admin')->group(function () {
         Route::get('/referral/delete/{referral:id}',                    [App\Http\Controllers\ReferralController::class, 'delete'])->name('delete_referral');
         Route::get('/referral/deactivate/{referral:id}',                    [App\Http\Controllers\ReferralController::class, 'deactivate'])->name('deactivate_referral');
         Route::get('/referral/activate/{referral:id}',                    [App\Http\Controllers\ReferralController::class, 'reinstate'])->name('activate_referral');
+
+        Route::get('/loyalty/add',                     [App\Http\Controllers\LoyaltyManagementController::class, 'create'])->name('add_loyalty');
+        Route::post('/loyalty/store',                    [App\Http\Controllers\LoyaltyManagementController::class, 'store'])->name('loyalty_store');
+        Route::get('/loyalty/list',                       [App\Http\Controllers\LoyaltyManagementController::class, 'index'])->name('loyalty_list');
+        Route::post('/loyalty/users',                             [App\Http\Controllers\LoyaltyManagementController::class, 'loyaltyUsers'])->name('loyalty_users');
+        Route::get('/loyalty/summary/{loyalty:id}',                    [App\Http\Controllers\LoyaltyManagementController::class, 'show'])->name('loyalty_summary');
+        Route::get('/loyalty/delete/{loyalty:id}/{client:id}',                    [App\Http\Controllers\LoyaltyManagementController::class, 'delete'])->name('delete_loyalty');
+        Route::get('/loyalty/edit/{loyalty:id}',                    [App\Http\Controllers\LoyaltyManagementController::class, 'edit'])->name('edit_loyalty');
+        Route::post('/loyalty/users-edit',                             [App\Http\Controllers\LoyaltyManagementController::class, 'loyaltyUsersEdit'])->name('loyalty_users_edit');
+        Route::post('/loyalty/store-edit',                    [App\Http\Controllers\LoyaltyManagementController::class, 'store_edit'])->name('loyalty_store_edit');
+        Route::get('/loyalty/history',                    [App\Http\Controllers\LoyaltyManagementController::class, 'history'])->name('loyalty_history');
+
+       
+
+
 
 
         //Admin payment Routes
@@ -218,10 +253,11 @@ Route::prefix('/client')->group(function () {
         // Route::get('/profile/edit',             [ClientController::class, 'edit_profile'])->name('client.edit_profile');
         Route::post('/profile/update',              [ClientController::class, 'update_profile'])->name('updateProfile');
         Route::post('/updatePassword',      [ClientController::class, 'updatePassword'])->name('updatePassword');
-       
+
         // Route::get('/requests',                    [ClientRequestController::class, 'index'])->name('client.requests');
- 
-        // E-wallet Routes for clients 
+
+        // E-wallet Routes for clients
+        //Profile and password update
         Route::get('/settings',                 [ClientController::class, 'settings'])->name('settings');
         Route::any('/getDistanceDifference',    [ClientController::class, 'getDistanceDifference'])->name('getDistanceDifference');
 
@@ -229,6 +265,8 @@ Route::prefix('/client')->group(function () {
             // Route::get('/requests',          [ClientRequestController::class, 'index'])->name('client.requests');
             Route::get('wallet',                [ClientController::class, 'wallet'])->name('wallet');
             Route::any('fund',                  [ClientController::class, 'walletSubmit'])->name('wallet.submit');
+            Route::get('loyalty',                [ClientController::class, 'loyalty'])->name('loyalty');
+            Route::any('loyalty/submit',                 [ClientController::class, 'loyaltySubmit'])->name('loyalty.submit');
 
             Route::post('/ipnpaystack',         [ClientController::class, 'paystackIPN'])->name('ipn.paystack');
             Route::get('/apiRequest',           [ClientController::class, 'apiRequest'])->name('ipn.paystackApiRequest');
@@ -261,16 +299,44 @@ Route::prefix('/client')->group(function () {
             // Route::post('servicesRequest',              [ClientController::class, 'serviceRequest'])->name('paystack.submit');
             // Route::post('servicesRequest',              [ClientController::class, 'serviceRequest'])->name('flutter.submit');
 
-            
+
     });
 });
 
+// Route::resource('cse', CseController::class);
 
+// Route::prefix('/cse')->group(function () {
+//     Route::name('cse.')->group(function () {
+//         //All routes regarding CSE's should be in here
+//         Route::view('/',                   'cse.index')->name('index'); //Take me to CSE Dashboard
+
+//     });
+// });
 Route::prefix('/cse')->group(function () {
     Route::name('cse.')->group(function () {
         //All routes regarding CSE's should be in here
-        Route::view('/',                   'cse.index')->name('index'); //Take me to CSE Dashboard
+        Route::view('/',                    'cse.index')->name('index'); //Take me to CSE Dashboard
+        Route::view('/messages/inbox',      'cse.messages.inbox')->name('messages.inbox');
+        Route::view('/messages/sent',       'cse.messages.sent')->name('messages.sent');
+        Route::view('/payments',            'cse.payments')->name('payments');
+        
+        Route::resource('requests', RequestController::class);
 
+        // Route::view('/requests',            'cse.requests')->name('requests');
+
+        Route::view('/request/details',    'cse.request_details',
+            [
+                // 'tools' => \App\Models\ToolInventory::all(),
+                // 'ongoingSubStatuses' => \App\Models\SubStatus::where('status_id', 2)->get(['id', 'name']),
+                // 'warranties' => \App\Models\Warranty::all(),
+            ]
+        )->name('request_details');
+        Route::view('/profile',             'cse.view_profile')->name('view_profile');
+        Route::view('/profile/edit',        'cse.edit_profile', [
+            // 'banks' => \App\Models\Bank::all(),
+
+        ])->name('edit_profile');
+        Route::view('/location-request',    'cse.location_request')->name('location_request');
     });
 });
 
@@ -289,13 +355,14 @@ Route::prefix('/technician')->group(function () {
         Route::get('/location-request',                 [TechnicianProfileController::class, 'locationRequest'])->name('location_request');
         //Route::get('/payments',                         [TechnicianProfileController::class, 'payments'])->name('payments');
         Route::get('/requests',                         [TechnicianProfileController::class, 'serviceRequests'])->name('requests');
-        Route::get('/requests/details/{serviceRequests:service_request_id}',                 [TechnicianProfileController::class, 'serviceRequestDetails'])->name('request_details');
+        Route::get('/requests/details/{details:uuid}',                 [TechnicianProfileController::class, 'serviceRequestDetails'])->name('request_details');
 
         Route::get('/profile',                         [TechnicianProfileController::class, 'viewProfile'])->name('view_profile');
         Route::get('/profile/edit',                     [TechnicianProfileController::class, 'editProfile'])->name('edit_profile');
         Route::patch('/update_profile',                     [TechnicianProfileController::class, 'updateProfile'])->name('update_profile');
         Route::patch('/update_password',                     [TechnicianProfileController::class, 'updatePassword'])->name('update_password');
         Route::get('/payments', [TechnicianProfileController::class, 'get_technician_disbursed_payments'])->name('payments');
+        Route::post('/disbursed_payments_sorting', [TechnicianProfileController::class, 'sortDisbursedPayments'])->name('disbursed_payments_sorting');
         Route::view('/messages/inbox', 'technician.messages.inbox')->name('messages.inbox');
         Route::view('/messages/sent', 'technician.messages.outbox')->name('messages.outbox');
     });
@@ -304,19 +371,19 @@ Route::prefix('/technician')->group(function () {
 Route::prefix('/quality-assurance')->group(function () {
     Route::name('quality-assurance.')->group(function () {
         //All routes regarding quality_assurance should be in here
-        Route::view('/', 'quality-assurance.index')->name('index'); //Take me to quality_assurance Dashboard
-
-        Route::get('/profile',    [App\Http\Controllers\QualityAssurance\QualityAssuranceProfileController::class,'view_profile'])->name('view_profile');
-        Route::get('/profile/edit_profile', [App\Http\Controllers\QualityAssurance\QualityAssuranceProfileController::class,'edit'])->name('edit_profile');
-        Route::patch('/profile/update_profile', [App\Http\Controllers\QualityAssurance\QualityAssuranceProfileController::class,'update'])->name('update_profile');
-        Route::patch('/update_password', [App\Http\Controllers\QualityAssurance\QualityAssuranceProfileController::class,'update_password'])->name('update_password');
-        Route::get('/requests', [App\Http\Controllers\QualityAssurance\ServiceRequestController::class, 'index'])->name('requests');
-        Route::get('/payments', [App\Http\Controllers\QualityAssurance\PaymentController::class, 'get_qa_disbursed_payments'])->name('payments');
+        //Route::view('/', 'quality-assurance.index')->name('index'); //Take me to quality_assurance Dashboard
+        Route::get('/', [ServiceRequestController::class, 'index'])->name('index');
+        Route::get('/profile',    [QualityAssuranceProfileController::class,'view_profile'])->name('view_profile');
+        Route::get('/profile/edit_profile', [QualityAssuranceProfileController::class,'edit'])->name('edit_profile');
+        Route::patch('/profile/update_profile', [QualityAssuranceProfileController::class,'update'])->name('update_profile');
+        Route::patch('/update_password', [QualityAssuranceProfileController::class,'update_password'])->name('update_password');
+        Route::get('/requests', [ServiceRequestController::class, 'get_requests'])->name('requests');
+        Route::get('/payments', [PaymentController::class, 'get_qa_disbursed_payments'])->name('payments');
         Route::view('/messages/inbox', 'quality-assurance.messages.inbox')->name('messages.inbox');
         Route::view('/messages/sent', 'quality-assurance.messages.sent')->name('messages.sent');
-        Route::post('/disbursed_payments_sorting', [App\Http\Controllers\QualityAssurance\PaymentController::class, 'sortDisbursedPayments'])->name('disbursed_payments_sorting');
-        Route::get('/get_chart_data', [App\Http\Controllers\QualityAssurance\ServiceRequestController::class, 'chat_data']);
-        Route::view('/requests/details',    'quality-assurance.request_details')->name('request_details');
+        Route::post('/disbursed_payments_sorting', [PaymentController::class, 'sortDisbursedPayments'])->name('disbursed_payments_sorting');
+        Route::get('/get_chart_data', [ServiceRequestController::class, 'chat_data']);
+        Route::get('/requests/details/{uuid}',  [ServiceRequestController::class, 'show'])->name('request_details');
 
     });
 });
@@ -332,5 +399,7 @@ Route::prefix('/franchisee')->group(function () {
         Route::view('/requests/details',    'franchisee.request_details')->name('request_details');
         Route::view('/profile',             'franchisee.view_profile')->name('view_profile');
         Route::view('/profile/edit',        'franchisee.edit_profile')->name('edit_profile');
+        Route::view('/location-request',    'franchisee.location_request')->name('location_request');
     });
 });
+

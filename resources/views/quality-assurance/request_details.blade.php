@@ -10,30 +10,30 @@
         <div>
           <nav aria-label="breadcrumb">
             <ol class="breadcrumb breadcrumb-style1 mg-b-10">
-            <li class="breadcrumb-item"><a href="{{ route('franchisee.index', app()->getLocale()) }}">Dashboard</a></li>
-            <li class="breadcrumb-item"><a href="{{ route('franchisee.requests', app()->getLocale()) }}">Requests</a></li>
+            <li class="breadcrumb-item"><a href="{{ route('quality-assurance.index', app()->getLocale()) }}">Dashboard</a></li>
+            <li class="breadcrumb-item"><a href="{{ route('quality-assurance.requests', app()->getLocale()) }}">Requests</a></li>
               <li class="breadcrumb-item active" aria-current="page">Request Details</li>
             </ol>
           </nav>
-          <h4 class="mg-b-0 tx-spacing--1">Job: REF-234234723</h4><hr>
+          <h4 class="mg-b-0 tx-spacing--1">Job: {{$result->unique_id}}</h4><hr>
           <div class="media align-items-center">
             <span class="tx-color-03 d-none d-sm-block">
               {{-- <i data-feather="credit-card" class="wd-60 ht-60"></i> --}}
               <img src="{{ asset('assets/images/default-male-avatar.png') }}" class="avatar rounded-circle" alt="Male Avatar">
             </span>
             <div class="media-body mg-sm-l-20">
-              <h4 class="tx-18 tx-sm-20 mg-b-2">Kelvin Adesanya</h4>
-              <p class="tx-13 tx-color-03 mg-b-0">08173682832</p>
+              <h4 class="tx-18 tx-sm-20 mg-b-2">{{$result->clientAccount->first_name}} {{$result->clientAccount->middle_name}} {{$result->clientAccount->last_name}}</h4>
+              <p class="tx-13 tx-color-03 mg-b-0"></p>
             </div>
           </div><!-- media -->
         </div>
       </div>
-     
+
       <div class="row row-xs">
         <div class="col-lg-12 col-xl-12">
           <div class="card">
             <ul class="nav nav-tabs nav-justified" id="myTab3" role="tablist">
-              
+
               <li class="nav-item">
                 <a class="nav-link active" id="media-tab3" data-toggle="tab" href="#media3" role="tab" aria-controls="media" aria-selected="false">Service Request Summary</a>
               </li>
@@ -58,12 +58,12 @@
                         </tr>
                       </thead>
                       <tbody>
-                    
+
                           <tr>
                             <td class="tx-color-03 tx-center">1</td>
                             <td class="tx-medium">David Akinsola (CSE)</td>
                             <td class="tx-medium text-success">Enroute to Clien't house</td>
-                            <td class="text-center">{{ Carbon\Carbon::parse('2020-12-28 16:58:54', 'UTC')->isoFormat('MMMM Do YYYY, h:mm:ssa') }}</td>
+                            <td class="text-center">{{ Carbon\Carbon::parse($result->created, 'UTC')->isoFormat('MMMM Do YYYY, h:mm:ssa') }}</td>
                           </tr>
                       </tbody>
                     </table>
@@ -115,7 +115,7 @@
                           <td class="tx-medium">Charles Famoriyo</td>
                           <td class="tx-medium">David Akinsola (CSE)</td>
                           <td class="text-medium text-success">Approved</td>
-                         
+
                           <td class="text-medium">{{ Carbon\Carbon::parse('2020-12-28 16:58:54', 'UTC')->isoFormat('MMMM Do YYYY, h:mm:ssa') }}</td>
                           <td class=" text-center">
                             <a href="#toolsRequestDetails" data-toggle="modal" class="btn btn-sm btn-primary" title="View TRF-C85BEA04 details" data-batch-number="TRF-C85BEA04" data-url="#" id="tool-request-details">Details</a>
@@ -128,7 +128,7 @@
 
                   <h5 class="mt-4 text-primary">Request For Quotation</h5>
                   <div class="table-responsive">
-                  
+
                     <table class="table table-hover mg-b-0 mt-4">
                       <thead class="">
                         <tr>
@@ -170,15 +170,15 @@
                         <tbody>
                           <tr>
                             <td class="tx-medium">Job Reference</td>
-                            <td class="tx-color-03">REF-234234723</td>
+                            <td class="tx-color-03">{{$result->unique_id}}</td>
                           </tr>
                           <tr>
                             <td class="tx-medium">Service Required</td>
-                            <td class="tx-color-03">Eletronics (Computer & Laptops)</td>
+                            <td class="tx-color-03">{{$result->service->name}}</td>{{--  (Computer & Laptops) ---}}
                           </tr>
                           <tr>
                             <td class="tx-medium">Scheduled Date & Time</td>
-                            <td class="tx-color-03">{{ Carbon\Carbon::parse('2020-12-28 16:58:54', 'UTC')->isoFormat('MMMM Do YYYY, h:mm:a') }}</td>
+                            <td class="tx-color-03">{{ Carbon\Carbon::parse($result->preferred_time, 'UTC')->isoFormat('MMMM Do YYYY, h:mm:a') }}</td>
                           </tr>
                           <tr>
                             <td class="tx-medium">Payment Status</td>
@@ -186,91 +186,130 @@
                           </tr>
                           <tr>
                             <td class="tx-medium">Initial Service Charge</td>
-                            <td class="tx-color-03">₦{{ number_format(10000) }} Standard Price</td>
+                            <td class="tx-color-03"></td>{{----₦{{$result->price}} Standard Price---}}
                           </tr>
                           <tr>
                             <td class="tx-medium">Total Service Charge</td>
-                            <td class="tx-color-03">₦{{ number_format(15000) }}</td>
+                            <td class="tx-color-03">₦{{ number_format($result->total_amount) }}</td>
                           </tr>
                           <tr>
                             <td class="tx-medium">Security Code</td>
-                            <td class="tx-color-03">SEC-27AEC73E</td>
+                            <td class="tx-color-03">{{$result->client_security_code}}</td>
                           </tr>
                           <tr>
                             <td class="tx-medium">Supervised By</td>
-                            <td class="tx-color-03">David Akinsola</td>
+                            @foreach($result->users as $data)
+                            @foreach($data->roles as $res)
+                            @if($res->url == "admin")
+                            <td class="tx-color-03">
+
+                                {{$data->account->first_name}} {{$data->account->last_name}}
+
+                            </td>
+                            @endif
+                            @endforeach
+                            @endforeach
                           </tr>
                           <tr>
                             <td class="tx-medium">CSE's Assigned</td>
+                            @foreach($result->users as $data)
+                            @foreach($data->roles as $res)
+                            @if($res->url == "cse")
                             <td class="tx-color-03">
-                              (1) Benedict Mayowa<br>
-                              (2) Other CSE's Assigned
+                                @php $sn = 1; @endphp
+                                {{-- @if($res->count() > 1 && $res->url == "cse") --}}
+                                {{-- @foreach($data->account as $output) --}}
+                                  {{$data->account->first_name}} {{$data->account->last_name}}<br>
+                                {{-- @endforeach --}}
+                              {{-- (1) Benedict Mayowa<br>
+                              (2) Other CSE's Assigned  {{($sn++)}}--}}
+                              {{-- @endif --}}
                             </td>
+                            @endif
+                            @endforeach
+                            @endforeach
                           </tr>
                           <tr>
                             <td class="tx-medium">Technicians Assigned</td>
+                            @foreach($result->users as $data)
+                            @foreach($data->roles as $res)
+                            @if($res->url == "technician")
                             <td class="tx-color-03">
-                              (1) Jamal Diwa<br>
-                              (2) Other technicians Assigned
+                              {{-- (1) Jamal Diwa<br>
+                              (2) Other technicians Assigned --}}
+                              {{$data->account->first_name}} {{$data->account->last_name}}<br>
                             </td>
+                            @endif
+                            @endforeach
+                            @endforeach
                           </tr>
                           <tr>
                             <td class="tx-medium">Quality Assurance Managers Assigned</td>
+                            @foreach($result->users as $data)
+                            @foreach($data->roles as $res)
+                            @if($res->url == "quality-assurance")
                             <td class="tx-color-03">
-                              (1) UNAVAILABLE<br>
-                              (2) Other QA's Assigned
+                              {{-- (1) UNAVAILABLE<br>
+                              (2) Other QA's Assigned --}}
+                              {{$data->account->first_name}} {{$data->account->last_name}}<br>
                             </td>
+                            @endif
+                            @endforeach
+                            @endforeach
                           </tr>
                           <tr>
                             <td class="tx-medium">State</td>
-                            <td class="tx-color-03">Lagos</td>
+                            <td class="tx-color-03">{{$result->state->name}}</td>
                           </tr>
                           <tr>
                             <td class="tx-medium">L.G.A</td>
-                            <td class="tx-color-03">Eti-Osa</td>
+                            <td class="tx-color-03">{{$result->lga->name}}</td>
                           </tr>
                           <tr>
                             <td class="tx-medium">Town/City</td>
-                            <td class="tx-color-03">Ikoyi</td>
+                            <td class="tx-color-03">{{$result->service->name}}</td>
                           </tr>
                           <tr>
                             <td class="tx-medium">Request Address</td>
-                            <td class="tx-color-03">27B, Bourdillon Road off Falomo, Ikoyi-Lagos.</td>
+                            <td class="tx-color-03"></td>
                           </tr>
                           <tr>
                             <td class="tx-medium">Request Description</td>
-                            <td class="tx-color-03">My pc no longer comes on even when plugged into a power source.</td>
+                            <td class="tx-color-03">{{$result->service->description}}</td>
                           </tr>
 
                           {{-- If theres a cancellation, make this row visible --}}
                           {{-- @if(!empty($requestDetail->serviceRequestCancellationReason->reason)) --}}
+                          @if($result->status_id == 3)
                           <tr>
                             <td class="tx-medium">Reason for Cancellation </td>
                             <td class="tx-color-03">I'm no longer interested. <span class="text-danger">(Only visible if the request was cancelled)</span></td>
                           </tr>
-                          {{-- @endif --}}
+                          @endif
                         </tbody>
                       </table>
 
                       {{-- @if(!empty($requestDetail->serviceRequestDetail->media_file)) --}}
                       <div class="divider-text">Media Files</div>
+                      <small class="text-danger">This portion is only visible if a media file is available. Aslo revmove this text once the check is completed.</small>
+
                         <div class="row">
                           <div class="pd-20 pd-lg-25 pd-xl-30">
-                
+
                             <div class="row row-xs">
                               <div class="col-6 col-sm-6 col-md-6 col-xl mg-t-10 mg-sm-t-0">
                                 <div class="card card-file">
-                              
-                                  
+
+
                                   {{-- Media file design will come in here afterwrds --}}
                                   <div class="placeholder-media wd-100p wd-sm-55p wd-md-45p">
                                     <div class="line"></div>
                                   </div>
                                 </div>
                               </div><!-- col -->
-                              
+
                             </div><!-- row -->
-                            
+
                           </div>
                         </div>
                       {{-- @endif --}}
@@ -328,7 +367,7 @@
       event.preventDefault();
       let route = $(this).attr('data-url');
       let batchNumber = $(this).attr('data-batch-number');
-      
+
       $.ajax({
           url: route,
           beforeSend: function() {
@@ -357,7 +396,7 @@
       event.preventDefault();
       let route = $(this).attr('data-url');
       let batchNumber = $(this).attr('data-batch-number');
-      
+
       $.ajax({
           url: route,
           beforeSend: function() {

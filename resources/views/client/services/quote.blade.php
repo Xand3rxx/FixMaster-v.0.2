@@ -180,7 +180,7 @@ p{margin-bottom:.3em;}
                     
                     @if($discounts->count() > 0)
                     <div class="col-md-12 form-group">
-                        <h5><span class="font-weight-bold">Available Service Request</span></h5>
+                        <h5><span class="font-weight-bold">Available Discounts</span></h5>
                         <small class="text-danger">The selected discount will be applied on final invoice.</small>
                     </div>
 

@@ -2,19 +2,12 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Traits\GenerateUniqueIdentity as Generator;
 
 class Franchisee extends Model
 {
     use Generator;
-
-    protected $table = "franchisees";
-
-    protected $fillable = [
-        'unique_id', 'cac_number', 'user_id', 'account_id', 'franchise_description', 'established_on'
-    ];
 
     /**
      * The attributes that aren't mass assignable.
@@ -41,6 +34,6 @@ class Franchisee extends Model
      */
     public function user()
     {
-        return $this->belongsTo(User::class)->with(['account', 'phones', 'roles']);
+        return $this->belongsTo(User::class)->with(['account', 'contact', 'roles']);
     }
 }

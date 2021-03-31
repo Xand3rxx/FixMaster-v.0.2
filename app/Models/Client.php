@@ -44,5 +44,14 @@ class Client extends Model
     {
         return $this->belongsTo(Account::class);
     }
+
+    /**
+     * Get the service request of the Client
+     */
+    public function service_request()
+    {
+        return $this->hasMany(ServiceRequest::class, 'client_id', 'user_id');
+    }
     
 }
+

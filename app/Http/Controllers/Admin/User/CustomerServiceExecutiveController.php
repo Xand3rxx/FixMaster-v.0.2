@@ -2,13 +2,14 @@
 
 namespace App\Http\Controllers\Admin\User;
 
-use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
 use App\Traits\Utility;
+use App\Traits\RegisterCSE;
+use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
 
 class CustomerServiceExecutiveController extends Controller
 {
-    use Utility;
+    use Utility, RegisterCSE;
     /**
      * Display a listing of the resource.
      *
@@ -16,8 +17,9 @@ class CustomerServiceExecutiveController extends Controller
      */
     public function index()
     {
+        // dd(\App\Models\Cse::with('user', 'user.account', 'user.contact', 'user.roles')->withCount('service_request_assgined')->get());
         return view('admin.users.cse.index')->with([
-            'users' => \App\Models\Cse::with('user')->get(),
+            'users' => \App\Models\Cse::with('user', 'user.account', 'user.contact', 'user.roles')->withCount('service_request_assgined')->get(),
         ]);
     }
 
@@ -31,15 +33,9 @@ class CustomerServiceExecutiveController extends Controller
         return view('admin.users.cse.create')->with([
             'states' => \App\Models\State::select('id', 'name')->orderBy('name', 'ASC')->get(),
             'banks' => \App\Models\Bank::select('id', 'name')->orderBy('name', 'ASC')->get(),
-            // services
-            'services' => [
-                'Electronics'        => [
-                    '1' => 'Computer & Laptops'
-                ],
-                'Household Appliances' => [
-                    '1' => 'Dish & Washing Machine'
-                ]
-            ],
+            'franchisees' => \App\Models\Franchisee::select('id', 'cac_number')->latest()->get(),
+            // 'town' => \App\Models\Town::select('id', 'name')->latest()->get(),
+
         ]);
     }
 
@@ -51,26 +47,33 @@ class CustomerServiceExecutiveController extends Controller
      */
     public function store(Request $request)
     {
-        // Validate Request
-        $valid = $this->validateCreateCustomerServiceExecutive($request);
-  
+        (array) $valid = $this->validateCreateCustomerServiceExecutive($request);
+        // Register a CSE
+        (bool) $registered = $this->register($valid);
+
+        return ($registered == true)
+            ? redirect()->route('admin.users.cse.index', app()->getLocale())->with('success', "A Customer Service Executive Account Created Successfully!!")
+            : back()->with('error', "An error occurred while creating Account");
     }
 
     /**
      * Display the specified resource.
      *
+     * @param  string  $language
      * @param  string  $uuid
      * @return \Illuminate\Http\Response
      */
     public function show($language, $uuid)
     {
-        $user = \App\Models\User::where('uuid', $uuid)->with('account', 'cse', 'permissions', 'phones')->firstOrFail();
-        return view('admin.users.cse.show',[
+        $user = \App\Models\User::where('uuid', $uuid)->with('account', 'cse', 'permissions', 'contact')->firstOrFail();
+        return view('admin.users.cse.show', [
             'user' => $user,
             'last_seen' => $user->load(['logs' => function ($query) {
-                $query->where('type', 'logout')->orderBy('created_at', 'asc');}]),
+                $query->where('type', 'logout')->orderBy('created_at', 'asc');
+            }]),
             'logs' => $user->loadCount(['logs' => function ($query) {
-                $query->where('type', 'login');}])
+                $query->where('type', 'login');
+            }])
         ]);
     }
 
@@ -109,7 +112,7 @@ class CustomerServiceExecutiveController extends Controller
     }
 
     /**
-     * Validate the create administrator user request.
+     * Validate the create customer service executive user request.
      *
      * @param  \Illuminate\Http\Request  $request
      * @return array
@@ -123,21 +126,20 @@ class CustomerServiceExecutiveController extends Controller
             'middle_name'               =>   'sometimes|max:180',
             'last_name'                 =>   'required|string|max:180',
             'email'                     =>   'required|email|unique:users,email',
-            'phone_number'              =>   'required|numeric|unique:phones,number',
-            'other_phone_number'        =>   'sometimes|numeric|unique:phones,number',
+            'franchisee_id'             =>   'required|numeric|exists:franchisees,id',
             'gender'                    =>   'required|in:Male,Female,Others',
             'password'                  =>   'required|min:8',
             'confirm_password'          =>   'required|same:password',
-            'technician_category'       =>   'required|array',
-            'technician_category.*'     =>   'required|string',
-
             'bank_id'                   =>   'required|numeric',
+            'account_number'            =>   'required|numeric',
             'state_id'                  =>   'required|numeric',
             'lga_id'                    =>   'required|numeric',
             'town'                      =>   'required|string',
             'full_address'              =>   'required|string',
-            'account_number'            =>   'required|numeric',
-
+            'address_latitude'          =>   'required|string',
+            'address_longitude'         =>   'required|string',
+            'phone_number'              =>   'required|numeric|unique:contacts,phone_number',
+            'avatar'                    => 'sometimes|image'
         ]);
     }
 }

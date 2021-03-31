@@ -30,6 +30,7 @@ class DiscountSeeder extends Seeder
         $discount->entity = 'client';
         $discount->notify = '1';
         $discount->rate = 5;
+        $discount->apply_discount = 'Total bill';
         $discount->duration_start =  '2021-04-01 00:00:00';
         $discount->duration_end =  '2022-04-01 00:00:00';
         $discount->description =  'This is a discount which entitles all clients to 5% off their first job booking upon email verification.';

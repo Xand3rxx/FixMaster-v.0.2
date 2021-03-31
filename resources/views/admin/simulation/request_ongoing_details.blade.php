@@ -33,7 +33,7 @@
                 <div class="col-lg-12 col-xl-12">
                     <form method="POST" action="{{ route('admin.rfq_update', app()->getLocale()) }}">
                         @csrf
-                        <input type="hidden" value="{{ $serviceRequests['user_id'] }}" name="client_id" required>
+                        <input type="hidden" value="{{ $serviceRequests['client_id'] }}" name="client_id" required>
                         <input type="hidden" value="{{ $serviceRequests['id'] }}" name="service_request_id" required>
 
                         <div class="form-row mt-4">

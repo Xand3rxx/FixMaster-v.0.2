@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\ServiceRequestAssigned;
+use App\Models\ServiceRequest;
 
 class ServiceRequestController extends Controller
 {
@@ -16,25 +17,26 @@ class ServiceRequestController extends Controller
      */
     public function index(Request $request)
     {
+        $allRequests = ServiceRequestAssigned::where('user_id', Auth::id())->get();
 
-         return $results = ServiceRequestAssigned::where('user_id', Auth::id())->with( 'service_request')->get();
-
-
-        return view('quality-assurance.requests', compact('results'));
+        return view('quality-assurance.index', compact('allRequests'));
     }
 
-    // public function chat_data(){
-
-    //     $result = ServiceRequestAssigned::where('user_id', Auth::id())->get();
-
-
-    // }
 
     /**
      * Show the form for creating a new resource.
      *
      * @return \Illuminate\Http\Response
      */
+
+    public function get_requests(Request $request)
+    {
+        $results = ServiceRequestAssigned::where('user_id', Auth::id())->with('users', 'service_request')
+                 ->orderBy('created_at', 'DESC')->get();
+                //  dd($results);
+        return view('quality-assurance.requests', compact('results'));
+    }
+
     public function create()
     {
         //
@@ -57,9 +59,13 @@ class ServiceRequestController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show($language, $uuid)
     {
-        //
+
+        $result = ServiceRequest::where('uuid', $uuid)
+                  ->orderBy('created_at', 'DESC')->first();
+
+        return view('quality-assurance.request_details', compact('result'));
     }
 
     /**

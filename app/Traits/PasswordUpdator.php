@@ -16,19 +16,19 @@ trait PasswordUpdator
 
     /**
      * Update password of the current request user
-     * 
+     *
      * PLEASE INCLUDE IN FORM REQUEST THE NAME:
-     * 
+     *
      * 1: current_password
-     * 
+     *
      * 2: new_password
-     * 
-     * 3: new_confirm_password 
-     * 
-     * 
+     *
+     * 3: new_confirm_password
+     *
+     *
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\RedirectResponse
-     * 
+     *
      * @throws \Illuminate\Validation\ValidationException
      */
     public function passwordUpdator(Request $request)
@@ -45,7 +45,7 @@ trait PasswordUpdator
      *
      * @param  App\Models\User $user
      * @param  array  $valid
-     * 
+     *
      * @return \Illuminate\Http\RedirectResponse
      */
     protected function handlePasswordChange(\App\Models\User $user, array $valid)
@@ -83,7 +83,7 @@ trait PasswordUpdator
      *
      * @param  \Illuminate\Http\Request  $request
      * @return \App\Models\User $user
-     * 
+     *
      * @throws \Illuminate\Auth\AuthenticationException
      */
     protected function verifyRequestUser(Request $request)
@@ -148,7 +148,7 @@ trait PasswordUpdator
      *
      * @param  App\Models\User $user
      * @param  string  $password
-     * 
+     *
      * @return bool|\Illuminate\Http\RedirectResponse
      */
     protected function checkPasswordMatch(\App\Models\User $user, string $password)

@@ -52,15 +52,15 @@
                                     <td class="tx-color-03 tx-center">{{ $loop->iteration }}</td>
                                     <td class="tx-medium">{{ Str::title($client['user']['account']['last_name'] ." ". $client['user']['account']['first_name']) }}</td>
                                     <td class="tx-medium">{{ $client['user']['email'] }}</td>
-                                    <td class="tx-medium">{{ $client['user']['phones'][0]['number'] ?? 'UNAVAILABLE' }}</td>
-                                    <td class="tx-medium text-info">{{ $client['user']['requests'] ?? 'UNAVAILABLE'  }}</td>
+                                    <td class="tx-medium">{{ $client['user']['contact']['phone_number'] ?? 'UNAVAILABLE' }}</td>
+                                    <td class="tx-medium text-info">{{ $client['service_request_count'] ?? 0 }}</td>
                                     <td class="text-medium text-success">{{is_null($client['user']['deleted_at']) ? 'Active' : InActive}}</td>
                                     <td class="text-medium">{{ Carbon\Carbon::parse($client->created_at, 'UTC')->isoFormat('MMMM Do YYYY, h:mm:ssa') }}</td>
                                     <td class=" text-center">
                                         <div class="dropdown-file">
                                             <a href="" class="dropdown-link" data-toggle="dropdown"><i data-feather="more-vertical"></i></a>
                                             <div class="dropdown-menu dropdown-menu-right">
-                                                <a href="#" class="dropdown-item details text-primary"><i class="far fa-user"></i> Summary</a>
+                                                <a href="{{route('admin.users.clients.show', [app()->getLocale(),$client['user']['uuid'] ])}}" class="dropdown-item details text-primary"><i class="far fa-user"></i> Summary</a>
                                                 <a href="#" class="dropdown-item details"><i class="fas fa-address-card"></i> Activitiy Log</a>
                                                 <a href="#" class="dropdown-item details text-warning"><i class="fas fa-ban"></i> Deactivate</a>
                                                 <a href="#" class="dropdown-item details text-danger"><i class="fas fa-trash"></i> Delete</a>

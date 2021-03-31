@@ -8,7 +8,6 @@ use Illuminate\Support\Str;
 
 class Status extends Model
 {
-    use HasFactory;
 
     // column name of key
     protected $primaryKey = 'uuid';
