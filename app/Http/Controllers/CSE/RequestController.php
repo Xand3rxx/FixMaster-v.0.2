@@ -44,11 +44,20 @@ class RequestController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
+     * @param  string  $labguage
+     * @param  string  $uuid
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show($language, $uuid)
     {
+
+        // find the service reqquest using the uuid and relations
+        $service_request = \App\Models\ServiceRequest::where('uuid', $uuid)->with(['price'])->firstOrFail();
+        $technicainsRole = \App\Models\Role::where('slug', 'technician-artisans')->first();
+
+        $technicains = \App\Models\UserService::where('service_id', $service_request->service_id)->where('role_id', $technicainsRole)->get();
+
+        dd($service_request, $technicainsRole, $technicains);
         return view('cse.requests.show', [
             'tools' => \App\Models\ToolInventory::all(),
             'ongoingSubStatuses' => \App\Models\SubStatus::where('status_id', 2)->get(['id', 'name']),
