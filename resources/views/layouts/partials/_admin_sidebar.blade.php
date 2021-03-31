@@ -161,16 +161,16 @@
           </ul>
         </li>
 
-        <li class="nav-item with-sub">
+        <li class="nav-item with-sub {{ Route::currentRouteNamed('admin.cse_reports') ? 'active show' : '' }}">
           <a href="" class="nav-link"><i data-feather="git-pull-request"></i> <span>Reports</span></a>
           <ul>
             
           <li class="nav-item {{ Route::currentRouteNamed('admin.cse_reports') ? 'active' : '' }}"><a href="{{ route('admin.cse_reports', app()->getLocale()) }}">CSE</a></li>
-            <li class="{{ Route::currentRouteNamed('admin.cse_reports') ? 'active' : '' }}"><a href="{{ route('admin.add_referral',  app()->getLocale()) }}">Supplier</a></li>
-            <li class=""><a href="#">Job MGT</a></li>
-            <li class=""><a href="#">Technician</a></li>
             <li class=""><a href="#">Customer</a></li>
+            <li class=""><a href="#">Job Management</a></li>
             <li class=""><a href="#">Marketing</a></li>
+            <li class=""><a href="#">Supplier</a></li>
+            <li class=""><a href="#">Technician</a></li>
           </ul>
         </li>
 

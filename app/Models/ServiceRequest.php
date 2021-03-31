@@ -148,7 +148,7 @@ class ServiceRequest extends Model
     }
 
     public function address(){
-        return $this->belongsTo(Contact::class);
+        return $this->belongsTo(Contact::class, 'contact_id');
     }
 
     public function phone()
