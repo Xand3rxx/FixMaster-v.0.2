@@ -115,7 +115,7 @@ class TechnicianSeeder extends Seeder
         \App\Models\Contact::attemptToStore($technician1->id, $technicianAccount1->id, 156, '07052222678', "2 Bello St, Volkswagen, Lagos", "3.2198137", "6.4563318");
         \App\Models\Contact::attemptToStore($technician2->id, $technicianAccount2->id, 156, '08035413397', "21-13 Ayo Adeife St, Idimu, Lagos", "3.286114654549155", "6.59493974136504");
 
-        DB::table('users_services')->delete();
+        // DB::table('users_services')->delete();
 
         $technicianServices = array(
             array(

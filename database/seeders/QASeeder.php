@@ -120,7 +120,7 @@ class QASeeder extends Seeder
         \App\Models\Contact::attemptToStore($qa2->id, $qaAccount2->id, 156, '09033319908', "10 Blueroof Avenue idowu-egba bus/stop along lasu-, Isheri Rd, Lagos", "3.2607962300662363", "6.577210941382072");
 
         
-        DB::table('users_services')->delete();
+        // DB::table('users_services')->delete();
 
         $qaServices = array(
             array(
@@ -171,7 +171,6 @@ class QASeeder extends Seeder
         );
 
         DB::table('users_services')->insert($qaServices);
-
 
     }
 }
