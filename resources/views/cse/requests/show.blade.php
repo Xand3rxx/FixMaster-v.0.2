@@ -50,349 +50,47 @@
 
                 <div class="tab-pane fade show active" id="update3" role="tabpanel" aria-labelledby="update-tab3">
                   <small class="text-danger">This tab is only visible onc the Service request has an Ongoing status. Which logically is updated by the system or the CSE Coordinator by assigning a CSE to the request</small>
-
-                  <form method="POST" action="">
+                  @if (!empty($technicains))
+                  <form class="form-data" method="POST" action="{{route('cse.assign.technician', [app()->getLocale()])}}">
                     @csrf
-                    
                     <div class="form-row mt-4">
                       <div class="tx-13 mg-b-25">
                         <div id="wizard3">
-
+                         
                           <h3>Assign Technician</h3>
                           <section>
                             <div class="form-row mt-4">
                               <div class="form-group col-md-12">
                                 <label for="name">Assign Technician</label>
-                                <select class="form-control custom-select @error('user_id') is-invalid @enderror" name="user_id">
-                                    <option value="" selected>Select...</option>
-                                    <option value="">Jamal Diwa</option>
-                                    <option value="">Andrew Nwankwo</option>
-                                    <option value="">Taofeek Adedokun</option>
-                                </select>
-                                @error('user_id')
-                                  <span class="invalid-feedback" role="alert">
-                                      <strong>{{ $message }}</strong>
-                                  </span>
-                                @enderror
-                              </div>
-                            </div>
-                          </section>
-
-                          <h3>Project Progress</h3>
-                          <section>
-                            <p class="mg-b-0">Specify the current progress of the job.</p>
-                            <div class="form-row mt-4">
-                              <div class="form-group col-md-12">
-                                  {{-- This portion will display only Ongoing Status Sub statuses<br> --}}
-
-                                <select class="form-control custom-select @error('sub_status_id') is-invalid @enderror" name="sub_status_id">
-                                  <option value="">Select...</option>
-                                  @foreach($ongoingSubStatuses as $status)
-                                    {{-- @if($status->id > 6) --}}
-                                      <option value="{{ $status->id }}">{{ $status->name }}</option>
-                                    {{-- @endif --}}
+                                <select required class="form-control custom-select @error('technician_user_id') is-invalid @enderror" name="technician_user_id">
+                                  <option selected disabled value="0" selected>Select...</option>
+                                  @foreach ($technicains as $technicain)
+                                  <option value="{{$technicain['user']['id']}}">{{$technicain['user']['account']['last_name'] .' '. $technicain['user']['account']['first_name']}}</option>
                                   @endforeach
                                 </select>
-                                @error('sub_status_id')
-                                  <span class="invalid-feedback" role="alert">
-                                      <strong>{{ $message }}</strong>
-                                  </span>
-                                @enderror
-                              </div>
-                            </div>
-                          </section>
-
-                          <h3>Project Cost Estimate</h3>
-                          <section>
-                            
-                            <small class="text-danger">This portion will be displayed only if the CSE selects "Completed Diganosis" and the Client chooses to continue with the Service Request</small>
-                            
-                            
-                            <div class="mt-4 form-row">
-                              
-        
-                              <div class="form-group col-md-4">
-                                <label for="estimated_hours">Estimated Work Hours</label>
-                                <select class="form-control custom-select @error('proceed') is-invalid @enderror" name="proceed">
-                                    <option value="" selected>Select...</option>
-                                    <option value="1">1</option>
-                                    <option value="2">2</option>
-                                    <option value="3">3</option>
-                                    <option value="4">4</option>
-                                    <option value="5">5</option>
-                                    <option value="6">6</option>
-                                    <option value="7">7</option>
-                                    <option value="8">8</option>
-                                    <option value="9">9</option>
-                                    <option value="10">10</option>
-                                    <option value="11">11</option>
-                                    <option value="12">12</option>
-                                </select>
-                                @error('estimated_hours')
-                                  <span class="invalid-feedback" role="alert">
-                                      <strong>{{ $message }}</strong>
-                                  </span>
-                                @enderror
-                              </div>
-
-                              <div class="form-group col-md-4">
-                                <label for="estimated_hours">Warranty</label>
-                                <select class="form-control custom-select @error('proceed') is-invalid @enderror" name="proceed">
-                                    <option value="" selected>Select...</option>
-                                    @foreach($warranties as $warranty)
-                                <option value="{{ $warranty->id }}">{{ $warranty->name }}({{$warranty->percentage}}%)</option>
-                                    @endforeach
-                                </select>
-                                @error('estimated_hours')
-                                  <span class="invalid-feedback" role="alert">
-                                      <strong>{{ $message }}</strong>
-                                  </span>
-                                @enderror
-                              </div>
-
-                              <div class="form-group col-md-4">
-                                <label for="estimated_hours">Computer & Laptop Sub-Services</label>
-                                <select class="form-control custom-select @error('sub_service_id') is-invalid @enderror" name="sub_service_id">
-                                    <option value="" selected>Select...</option>
-                                    <option value="1">Motherboard</option>
-                                    <option value="2">Keyboards</option>
-                                    <option value="3">Monitors & Screens</option>
-                                </select>
-                                @error('sub_service_id')
-                                  <span class="invalid-feedback" role="alert">
-                                      <strong>{{ $message }}</strong>
-                                  </span>
-                                @enderror
-                              </div>
-                            </div>
-
-                          </section>
-
-                          <h3>Material Acceptance</h3>
-                          <section>
-
-                            This portion will display only if the CSE initially executed a RFQ, the Client paid for the components and the Supplier has made the delivery.
-
-                              <div class="mt-4 form-row">
-                                <div class="form-group col-md-4">
-                                  <label for="name">Supplier's Name</label>
-                                  <input type="text" class="form-control @error('name') is-invalid @enderror" id="name" value="{{ old('name') }}" name="name">
-                                  @error('name')
-                                    <span class="invalid-feedback" role="alert">
-                                        <strong>{{ $message }}</strong>
-                                    </span>
-                                  @enderror
-                                </div>
-          
-                                <div class="form-group col-md-4">
-                                  <label for="devlivery_fee">Delivery Fee</label>
-                                  <input type="tel" class="form-control amount @error('devlivery_fee') is-invalid @enderror" id="devlivery_fee" name="devlivery_fee" value="{{ old('devlivery_fee') }}">
-                                  @error('devlivery_fee')
-                                    <span class="invalid-feedback" role="alert">
-                                        <strong>{{ $message }}</strong>
-                                    </span>
-                                  @enderror
-                                </div>
-                  
-                                <div class="form-group col-md-4">
-                                  <label for="delivery_time">Delivery Time</label>
-                                <input type="text" min="{{ \Carbon\Carbon::now()->isoFormat('MMMM Do YYYY, h:mm') }}" class="form-control @error('delivery_time') is-invalid @enderror" name="delivery_time" id="service-date-time" value="{{ old('delivery_time') }}" readonly>
-                                  @error('delivery_time')
-                                    <span class="invalid-feedback" role="alert">
-                                        <strong>{{ $message }}</strong>
-                                    </span>
-                                  @enderror
-                                </div>
-                              </div>
-  
-                              <div class="form-row">
-                                  <div class="form-group col-md-4">
-                                    <label for="component_name">Component Name</label>
-                                    <input type="text" class="form-control" id="component_name" name="component_name" value="{{ old('component_name') }}" readonly>
-                                  </div>
-                    
-                                  <div class="form-group col-md-3">
-                                    <label for="model_number">Model Number</label>
-                                    <input type="text" class="form-control" id="model_number" name="model_number" value="{{ old('model_number') }}" readonly>
-                                  </div>
-                                  <div class="form-group col-md-2">
-                                    <label for="quantity">Quantity</label>
-                                    <input type="number" class="form-control" id="quantity" name="quantity[]" value="{{ old('quantity') }}" min="" max="" readonly>
-                                  </div>
-                                  <div class="form-group col-md-3">
-                                    <label for="amount">Amount</label>
-                                    <input type="tel" class="form-control amount" id="amount" placeholder="" value="{{ old('amount') }}" name="amount[]" autocomplete="off">
-                                  </div>
-                              </div>
-
-                              <h5>Accept Materials Delivery</h5>
-                              <div class="form-row">
-                                <div class="form-group col-md-12">
-                                  <label for="accepted">Accept Delivery</label>
-                                  <select class="form-control custom-select" id="accepted" name="accepted">
-                                    <option value="" selected>Select...</option>
-                                    <option value="Yes" value="{{ old('Yes') }}" {{ old('accepted') == 'Yes' ? 'selected' : ''}}>Yes, all ordered components were delivered</option>
-                                    <option value="No" value="{{ old('No') }}" {{ old('accepted') == 'No' ? 'selected' : ''}}>No, all ordered components were not delivered</option>
-                                </select>
-                                @error('accepted')
-                                  <span class="invalid-feedback" role="alert">
-                                      <strong>{{ $message }}</strong>
-                                  </span>
-                                @enderror
-                                </div>
-                              </div>
-                            {{-- </div> --}}
-
-                          </section>
-
-                          <h3>New RFQ</h3>
-                          <section>
-                            <p class="mg-b-0">A request for quotation is a business process in which a company or public entity requests a quote from a supplier for the purchase of specific products or services.</p>
-                            <h4 id="section1" class="mt-4 mb-2">Initiate RFQ?</h4>
-            
-                            <div class="form-row mt-4">
-                                <div class="form-group col-md-4">
-                                    <div class="custom-control custom-radio">
-                                    <input type="radio" class="custom-control-input" id="rfqYes" name="intiate_rfq" value="yes">
-                                    <label class="custom-control-label" for="rfqYes">Yes</label><br>
-                                    </div>
-                                </div>
-                                <div class="form-group col-md-4 d-flex align-items-end">
-                                    <div class="custom-control custom-radio">
-                                    <input type="radio" class="custom-control-input" id="rfqNo" name="intiate_rfq" value="no">
-                                    <label class="custom-control-label" for="rfqNo">No</label><br>
-                                    </div>
-                                </div>
-                            </div>
-            
-                            <div class="d-none d-rfq">
-                                <h4 id="section1" class="mt-4 mb-2">Make Request</h4>
-                                <div class="form-row">
-                                    <div class="form-group col-md-4">
-                                      <label for="component_name">Component Name</label>
-                                      <input type="text" class="form-control @error('component_name') is-invalid @enderror" id="component_name" name="component_name[]" value="{{ old('component_name') }}">
-                                      @error('component_name')
-                                        <span class="invalid-feedback" role="alert">
-                                            <strong>{{ $message }}</strong>
-                                        </span>
-                                      @enderror
-                                    </div>
-                      
-                                    <div class="form-group col-md-3">
-                                      <label for="model_number">Model Number</label>
-                                      <input type="text" class="form-control @error('model_number') is-invalid @enderror" id="model_number" name="model_number[]" placeholder="" value="{{ old('model_number') }}">
-                                      @error('model_number')
-                                        <span class="invalid-feedback" role="alert">
-                                            <strong>{{ $message }}</strong>
-                                        </span>
-                                      @enderror
-                                    </div>
-            
-                                    <div class="form-group col-md-2">
-                                      <label for="quantity">Quantity</label>
-                                      <input type="number" class="form-control @error('quantity') is-invalid @enderror" id="quantity" name="quantity[]" min="1" pattern="\d*" maxlength="2" value="{{ old('quantity') }}">
-                                      @error('quantity')
-                                        <span class="invalid-feedback" role="alert">
-                                            <strong>{{ $message }}</strong>
-                                        </span>
-                                      @enderror
-                                    </div>
-            
-                                    <div class="form-group col-md-1 mt-1">
-                                        <button class="btn btn-sm pd-x-15 btn-primary btn-uppercase mg-l-5 mt-4 add-rfq" type="button"><i class="fas fa-plus" class="wd-10 mg-r-5" ></i></button>
-                                    </div>
-                                </div>
-            
-                                <span class="add-rfq-row"></span>
-            
-                            </div>
-                          </section>
-            
-                          <h3>New Tools Request</h3>
-                          <section>
-                              <p class="mg-b-0">A request form to procure tools and equipments from <span>FixMaster</span> to properly carry out a Service Request.</p>
-            
-                                <h4 id="section1" class="mt-4 mb-2">Initiate Tools Request?</h4>
-                                <div class="form-row mt-4 ">
-                                    <div class="form-group col-md-4">
-                                        <div class="custom-control custom-radio">
-                                        <input type="radio" class="custom-control-input" id="trfYes" name="intiate_trf" value="yes">
-                                        <label class="custom-control-label" for="trfYes">Yes</label><br>
-                                        </div>
-                                    </div>
-                                    <div class="form-group col-md-4 d-flex align-items-end">
-                                        <div class="custom-control custom-radio">
-                                        <input type="radio" class="custom-control-input" id="trfNo" name="intiate_trf" value="no">
-                                        <label class="custom-control-label" for="trfNo">No</label><br>
-                                        </div>
-                                    </div>
-                                </div>
-            
-                                <div class="d-none d-trf">
-                                    
-                                    <h4 id="section1" class="mt-4 mb-2">Make Request</h4>
-                                    <div class="form-row tool-request">
-                                        <div class="form-group col-md-4">
-                                          <label for="tool_id">Equipment/Tools Name</label>
-                                          <select class="form-control custom-select @error('tool_id') is-invalid @enderror tool_id" id="tool_id" name="tool_id[]" >
-                                              <option value="" selected>Select...</option>
-                                              @foreach($tools as $tool)
-                                                <option value="{{ $tool->uuid }}" {{ old('tool_id') == $tool->uuid ? 'selected' : ''}} data-id="tool_quantity">{{ $tool->name }}</option>
-                                              @endforeach
-                                          </select>
-                                          @error('tool_id')
-                                            <span class="invalid-feedback" role="alert">
-                                                <strong>{{ $message }}</strong>
-                                            </span>
-                                          @enderror
-                                        </div>
-                          
-                                        <div class="form-group quantity-section col-md-2">
-                                          <label for="tool_quantity">Quantity</label>
-                                          <input type="number" class="form-control @error('tool_quantity') is-invalid @enderror tool_quantity" name="tool_quantity[]" id="tool_quantity" min="1" pattern="\d*" maxlength="2" value="{{ old('tool_quantity') }}">
-                                          @error('tool_quantity')
-                                            <span class="invalid-feedback" role="alert">
-                                                <strong>{{ $message }}</strong>
-                                            </span>
-                                          @enderror
-                                        </div>
-                                        <div class="form-group col-md-2 mt-1">
-                                            <button class="btn btn-sm pd-x-15 btn-primary btn-uppercase mg-l-5 mt-4 add-trf" type="button"><i class="fas fa-plus" class="wd-10 mg-r-5" ></i></button>
-                                        </div>
-                                    </div>
-            
-                                    <span class="add-trf-row"></span>
-            
-                                </div>
-                          </section>
-
-                          <h3>Assign Additional Technician</h3>
-                          <section>
-                            <div class="form-group col-md-12">
-                              <label for="name">Assign Technician</label>
-                              <select class="form-control custom-select @error('user_id') is-invalid @enderror" name="user_id">
-                                  <option value="" selected>Select...</option>
-                                  <option value="">Jamal Diwa</option>
-                                  <option value="">Andrew Nwankwo</option>
-                                  <option value="">Taofeek Adedokun</option>
-                              </select>
-                              @error('user_id')
+                                @error('technician_user_id')
                                 <span class="invalid-feedback" role="alert">
-                                    <strong>{{ $message }}</strong>
+                                  <strong>{{ $message }}</strong>
                                 </span>
-                              @enderror
+                                @enderror
+                              </div>
                             </div>
                           </section>
+                          
+                          
                         </div>
                       </div>
                     </div><!-- df-example -->
-
+                    
+                    <input type="hidden" value="{{$service_request->uuid}}" name="service_request_uuid">
+                    
                     <button type="submit" class="btn btn-primary d-none" id="update-progress">Update Progress</button>
 
                   </form>
-
+                  @endif
                 </div>
                 
+                <!-- Service Description Tab -->
                 <div class="tab-pane fade" id="description3" role="tabpanel" aria-labelledby="description-tab3">
 
                   <div class="divider-text">Service Request Description</div>
@@ -499,7 +197,9 @@
                     </div><!-- df-example -->
                   </div>
                 </div>
+                <!-- End of Service Description Tab -->
 
+                <!-- Service Request Summary Tab -->
                 <div class="tab-pane fade" id="media3" role="tabpanel" aria-labelledby="media-tab3">
                   <h5 class="mt-4 text-primary">Service Request Progress</h5>
                   <div class="table-responsive mb-4">
@@ -594,8 +294,7 @@
                     </table>
                   </div><!-- table-responsive -->
                 </div>
-
-                
+                <!-- End Service Request Summary Tab -->
               </div>
           </div>
         </div>
@@ -638,6 +337,8 @@
 </div>
 
 @push('scripts')
+<script src="https://cdn.jsdelivr.net/npm/jquery-validation@1.19.3/dist/jquery.validate.min.js"></script>
+
 <script>
   $(function(){
     'use strict'
@@ -662,6 +363,7 @@
       showFinishButtonAlways: false,
       onFinished: function (event, currentIndex) {
         $('#update-progress').trigger('click');
+        
       },
     });
 

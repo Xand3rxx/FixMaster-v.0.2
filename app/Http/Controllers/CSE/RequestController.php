@@ -52,16 +52,20 @@ class RequestController extends Controller
     {
 
         // find the service reqquest using the uuid and relations
-        $service_request = \App\Models\ServiceRequest::where('uuid', $uuid)->with(['price'])->firstOrFail();
+        $service_request = \App\Models\ServiceRequest::where('uuid', $uuid)->with(['price', 'service', 'service.sub_service'])->firstOrFail();
+        // find the technician role
         $technicainsRole = \App\Models\Role::where('slug', 'technician-artisans')->first();
+        // List of technicians in this service request
+        $technicains = \App\Models\UserService::where('service_id', $service_request->service_id)->where('role_id', $technicainsRole->id)->with('user')->get();
 
-        $technicains = \App\Models\UserService::where('service_id', $service_request->service_id)->where('role_id', $technicainsRole)->get();
-
-        dd($service_request, $technicainsRole, $technicains);
+        // dd($service_request, $technicains);
+        
         return view('cse.requests.show', [
             'tools' => \App\Models\ToolInventory::all(),
             'ongoingSubStatuses' => \App\Models\SubStatus::where('status_id', 2)->get(['id', 'name']),
             'warranties' => \App\Models\Warranty::all(),
+            'service_request' => $service_request,
+            'technicains' => $technicains,
             // 'statuses' => \App\Models\Status::where('name','Ongoing')->select('sub_status')->first()
         ]);
     }

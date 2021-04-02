@@ -29,6 +29,7 @@ use App\Http\Controllers\SimulationController;
 use App\Http\Controllers\Admin\User\Administrator\SummaryController;
 use App\Http\Controllers\Admin\StatusController;
 use App\Http\Controllers\Admin\ReportController;
+use App\Http\Controllers\ServiceRequest\AssignTechnician;
 use App\Http\Controllers\QualityAssurance\ServiceRequestController;
 use App\Http\Controllers\QualityAssurance\QualityAssuranceProfileController;
 
@@ -313,6 +314,8 @@ Route::prefix('/cse')->group(function () {
         Route::view('/payments',            'cse.payments')->name('payments');
         
         Route::resource('requests', RequestController::class);
+
+        Route::post('assign-technician', AssignTechnician::class)->name('assign.technician');
 
         // Route::view('/requests',            'cse.requests')->name('requests');
 

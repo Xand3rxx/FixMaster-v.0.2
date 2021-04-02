@@ -49,7 +49,6 @@ class SupplierController extends Controller
     {
         // Validate Request
         (array) $valid = $this->validateCreateSupplier($request);
-        dd($valid);
         // Register a Supplier
         (bool) $registered = $this->register($valid);
         return ($registered == true)
@@ -133,9 +132,9 @@ class SupplierController extends Controller
             'full_address'              =>   'required|string',
             'address_latitude'          =>   'required|string',
             'address_longitude'         =>   'required|string',
-            'avatar'                    => 'sometimes|image',
-            'supplier_category'       =>   'required|array',
-            'supplier_category.*'     =>   'required|string',
+            'avatar'                    =>   'sometimes|image',
+            'supplier_category'         =>   'required|array',
+            'supplier_category.*'       =>   'required|string',
         ]);
     }
 }

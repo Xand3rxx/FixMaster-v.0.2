@@ -22,7 +22,7 @@ trait Services
         ->where('id', '!=', 1)
         ->orderBy('name', 'ASC')
         ->with(['services'    =>  function($query){
-            return $query->select('name', 'uuid', 'image', 'category_id');
+            return $query->select('id','name', 'uuid', 'image', 'category_id');
         }])
         ->has('services')->get();
 

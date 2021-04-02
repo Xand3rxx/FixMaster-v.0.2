@@ -8,14 +8,14 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class UserType extends Model
 {
-    use HasFactory, RolesAndPermissions;
+    use RolesAndPermissions;
 
     /**
      * The attributes that are mass assignable.
      *
      * @var array
      */
-    protected $fillable = ['user_id', 'role_id',  'url',];
+    protected $fillable = ['user_id', 'role_id',  'url'];
 
     /**
      * The roles relationship.

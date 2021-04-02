@@ -96,9 +96,16 @@ class ServiceRequest extends Model
         return $this->belongsTo(Price::class, 'price_id', 'id');
     }
 
+    /**
+     * Get the service and sub service of the current service request
+     */
+    public function service()
+    {
+        return $this->hasOne(Service::class, 'id', 'service_id');
+    }
 
 
-    
+
     public function cse()
     {
         return $this->belongsTo(Account::class);
@@ -115,10 +122,7 @@ class ServiceRequest extends Model
     {
         return $this->hasMany(Invoice::class);
     }
-    public function service()
-    {
-        return $this->hasOne(Service::class, 'id', 'service_id');
-    }
+    
     public function services()
     {
         return $this->hasMany(Service::class, 'id', 'service_id');
