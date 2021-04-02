@@ -11,15 +11,18 @@ use Session;
 use App\Models\PaymentDisbursed;
 use App\Models\User;
 use App\Models\ServiceRequest;
+use App\Models\Status;
+use App\Models\Bank;
 use App\Models\ServiceRequestAssigned;
 use App\Traits\PasswordUpdator;
+use App\Traits\Utility;
 use Illuminate\Support\Facades\Validator;
 
 class TechnicianProfileController extends Controller
 {
-    use Loggable, PasswordUpdator;
-    /**
-     * This method will redirect users back to the login page if not properly authenticated
+    use Loggable, PasswordUpdator, Utility; 
+
+     /* This method will redirect users back to the login page if not properly authenticated
      * @return void
      */
     public function __construct()
@@ -60,41 +63,20 @@ class TechnicianProfileController extends Controller
     public function serviceRequests($language, ServiceRequestAssigned $serviceRequest)
     {
 
-       
-
-    $serviceRequests = ServiceRequestAssigned::where('user_id', Auth::id())->with('service_request')->get();
-
-        //return $serviceRequests;
+    
+        $serviceRequests = ServiceRequestAssigned::where('user_id', Auth::id())->with('service_request')->get();
 
         return view('technician.requests', compact('serviceRequests'));
     }
-
-   
 
     public function serviceRequestDetails($language, $details)
     {
        
         $serviceRequests = ServiceRequest::where('uuid', $details)->first();
 
-        
-
         return view('technician.request_details', compact('serviceRequests'));
-
-
-        
         
     }
-
-
-
-
-
-
-
-
-
-
-
 
 
     /**
@@ -116,17 +98,17 @@ class TechnicianProfileController extends Controller
     {
 
         $result = User::findOrFail(Auth::id());
-        $banks = \App\Models\Bank::get(['id', 'name']);
+        
+        $banks = Bank::get(['id', 'name']);
 
         return view('technician.edit_profile', compact('result', 'banks'));
 
-        //return view('technician.edit_profile');
     }
 
     public function updateProfile(Request $request)
     {
         $user = User::where('id', Auth::id())->first();
-        
+      
         if ($user->account->gender == "male") {
             $res = "his";
         } else {
@@ -180,6 +162,8 @@ class TechnicianProfileController extends Controller
                 'middle_name' => $request->middle_name,
                 'last_name' => $request->last_name,
                 'gender' => $request->gender,
+                'bank_id' => $request->bank_id,
+                'account_number' => $request->account_number,
                 'avatar' => $filename
             ]);
 
@@ -188,16 +172,13 @@ class TechnicianProfileController extends Controller
                 'email' => $request->email,
             ]);
 
-            $user->phone->update([
+            $user->contact->update([
                 'user_id' => $user->id,
-                'number' => $request->phone_number,
+                'phone_number' => $request->phone_number,
+                'address' => $request->full_address,
             ]);
 
-          /* $user->address->update([
-                'user_id' => $user->id,
-                'address' => $request->full_address,
-               
-            ]);*/
+           
             
             $this->log($type, $severity, $actionUrl, $message);
 
@@ -230,19 +211,14 @@ class TechnicianProfileController extends Controller
         return $this->passwordUpdator($request);
     }
 
-   /* public function get_technician_disbursed_payments(Request $request)
-    {
-        $payments = PaymentDisbursed::where('recipient_id', Auth::id())->get();
-        return view('technician.payments', compact('payments'));
-    }*/
-
     public function get_technician_disbursed_payments(Request $request){
 
-        // $user = Auth::user();
-        // $payments = $user->payments();
-        $payments = PaymentDisbursed::where('recipient_id',Auth::id())
-        ->orderBy('created_at', 'DESC')->get();
-        return view('technician.payments', compact('payments'));
+        $years =  $this->getDistinctYears($tableName = 'payments_disbursed'); 
+
+        $payments = PaymentDisbursed::where('recipient_id', Auth::id())->with('user')->get();
+       // $payments = PaymentDisbursed::where('recipient_id',Auth::id())
+       // ->orderBy('created_at', 'DESC')->get();
+        return view('technician.payments', compact('payments', 'years'));
     }
 
     public function sortDisbursedPayments(Request $request){

@@ -1,72 +1,59 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Admin;
 
-
+use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Auth;
 
 use App\Models\User;
-use App\Models\ActivityLog;
-use App\Models\Service;
 use App\Models\Report;
-use App\Models\ServiceRequest;
-use App\Models\ServiceRequestStatus;
-use App\Models\ServiceRequestCancellation;
-use App\Models\ServiceRequestAssigned;
-use App\Models\Account;
 use App\Models\UserType;
-use App\Models\Category;
-
+use App\Models\ServiceRequestAssigned;
+use App\Models\ServiceRequest;
+use App\Models\Cse;
+use App\Traits\Loggable;
+use Illuminate\Support\Facades\Route;
+use App\Traits\PasswordUpdator;
+use Illuminate\Support\Facades\Validator;
 
 
 class ReportController extends Controller
 {
+    use Loggable, PasswordUpdator;
+
+
+    public function __construct()
+    {
+        $this->middleware('auth:web');
+    }
+    public function index()
+    {
+
+        return view('technician.payments')->with('i');
+    }
+
     public function cseReports()
     {
 
+       $serviceRequests = ServiceRequest::orderBy('created_at', 'DESC')->with('cse_service_request')->get();
+       $users = Cse::with('user', 'user.account', 'user.contact', 'user.roles', 'user.cse_jobs')->get();
+        // 'requests' => \App\Models\ServiceRequestAssigned::where('user_id', auth()->user()->id)->withCount('service_request')
+   
 
-
-         //Return all services,including inactive ones
-         $services = Service::Servicies()->get();
-
-         //Return all active categories
-         $categories = Category::ActiveCategories()->get();
- 
-         $data = [
-             'services'      =>  $services,
-             'categories'    =>  $categories,
-         ];
- 
-         //return view('admin.service.index', $data)->with('i');
-
-        
-        /*$services = Service::orderBy('created_at', 'DESC')->get();
-       
-        $message = '';
-
-        
-        $yearList = array();
-
-        $years = Service::orderBy('created_at', 'ASC')->pluck('created_at');
-
-        
-
-        //Collate collections to $data array
-        $data = [
-            
-            'message'       =>  $message,
-            'years'         =>  $years,
-            'services'      => $services,
-            
-        ];*/
-       
-       return view('admin.reports.cse_reports', $data)->with('i');
-        //return view('admin.reports.cse_reports', compact('data'));
+       return view('admin.reports.cse_reports', compact('serviceRequests', 'users'));
     }
 
-
-
+    public function cseSummary($language, $details)
+    {
+    
+        $serviceRequests = ServiceRequest::where('uuid', $details)->first();
+        
+       return view('admin.reports.report_details', compact('serviceRequests'));
+    
+    }
+  
+     
     public function sortCSEReports($language, Request $request){
 
         // return $request->user;
@@ -90,8 +77,6 @@ class ReportController extends Controller
             $dateFrom =  $request->get('date_from');
             $dateTo =  $request->get('date_to');
 
-            //Verify if user exists on `users` table
-            // $userExists = User::findOrFail($userId);
         
             if($level === 'Level One'){
 

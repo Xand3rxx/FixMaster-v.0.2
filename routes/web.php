@@ -28,10 +28,12 @@ use App\Http\Controllers\InvoiceController;
 use App\Http\Controllers\SimulationController;
 use App\Http\Controllers\Admin\User\Administrator\SummaryController;
 use App\Http\Controllers\Admin\StatusController;
-use App\Http\Controllers\ReportController;
+use App\Http\Controllers\Admin\ReportController;
 use App\Http\Controllers\QualityAssurance\ServiceRequestController;
 use App\Http\Controllers\QualityAssurance\QualityAssuranceProfileController;
 
+use App\Http\Controllers\CSE\CustomerServiceExecutiveController as CseController;
+use App\Http\Controllers\CSE\RequestController;
 
 /*
 |--------------------------------------------------------------------------
@@ -146,7 +148,7 @@ Route::prefix('admin')->group(function () {
         Route::get('/reports/sorting',      [ReportController::class, 'cseReports'])->name('cse_reports');
         Route::get('/reports/sort_cse_report',      [ReportController::class, 'sortCSEReports'])->name('sort_cse_reports');
         Route::get('/reports/cse_report_details/{activity_log}',      [ReportController::class, 'cseReportDetails'])->name('report_details');
-
+        Route::get('/reports/details/{details:uuid}',                 [ReportController::class, 'cseSummary'])->name('cse_report_details');
 
 
         //Routes for Tools & Tools Request Management
@@ -293,7 +295,15 @@ Route::prefix('/client')->group(function () {
     });
 });
 
+// Route::resource('cse', CseController::class);
 
+// Route::prefix('/cse')->group(function () {
+//     Route::name('cse.')->group(function () {
+//         //All routes regarding CSE's should be in here
+//         Route::view('/',                   'cse.index')->name('index'); //Take me to CSE Dashboard
+
+//     });
+// });
 Route::prefix('/cse')->group(function () {
     Route::name('cse.')->group(function () {
         //All routes regarding CSE's should be in here
@@ -301,16 +311,21 @@ Route::prefix('/cse')->group(function () {
         Route::view('/messages/inbox',      'cse.messages.inbox')->name('messages.inbox');
         Route::view('/messages/sent',       'cse.messages.sent')->name('messages.sent');
         Route::view('/payments',            'cse.payments')->name('payments');
-        Route::view('/requests',            'cse.requests')->name('requests');
-        Route::view('/requests/details',    'cse.request_details',
+        
+        Route::resource('requests', RequestController::class);
+
+        // Route::view('/requests',            'cse.requests')->name('requests');
+
+        Route::view('/request/details',    'cse.request_details',
             [
-                'tools' => \App\Models\ToolInventory::all(),
-                'statuses' => \App\Models\Status::all()
+                // 'tools' => \App\Models\ToolInventory::all(),
+                // 'ongoingSubStatuses' => \App\Models\SubStatus::where('status_id', 2)->get(['id', 'name']),
+                // 'warranties' => \App\Models\Warranty::all(),
             ]
         )->name('request_details');
         Route::view('/profile',             'cse.view_profile')->name('view_profile');
         Route::view('/profile/edit',        'cse.edit_profile', [
-            'banks' => \App\Models\Bank::all(),
+            // 'banks' => \App\Models\Bank::all(),
 
         ])->name('edit_profile');
         Route::view('/location-request',    'cse.location_request')->name('location_request');
