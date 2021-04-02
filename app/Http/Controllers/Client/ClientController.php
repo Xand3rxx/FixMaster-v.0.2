@@ -36,7 +36,6 @@ use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\SMTP;
 use PHPMailer\PHPMailer\Exception;
 
-
 use Session; 
 
 
@@ -503,7 +502,9 @@ class ClientController extends Controller
         // ]
         // dd($data['balance']->closing_balance );
         // dd($data['discounts'] );
-        //Return Service details        
+        //Return Service details     
+        $data['myContacts'] = Contact::where('user_id', auth()->user()->id)->get();   
+        // dd($data['myContacts']);
         return view('client.services.quote', $data);
     }
 
@@ -792,8 +793,24 @@ class ClientController extends Controller
         
     }
 
+    /**
+     * Get all my contact for all the services i have requested
+     * @return \Illuminate\Http\Response
+     */
+    // public function myContactList(){
+    //     // $data['myContacts'] = Contact::orderBy('id','DESC')->get();
+    //     $myContacts = Client::where('user_id', auth()->user()->id)->with('contact')->get();
+    //     // dd($data['myContacts']);
+    //     return $myContacts;
+    // }
 
+    public function myServiceRequest(){
+        $myRequest = Client::where('user_id', auth()->user()->id)->with('service_request')->firstOrFail();
+        $data['myServiceRequests'] = $myRequest->service_request;
+        // return $data['myServiceRequests'];
+        return view('client.services.list', $data);
 
+    }
 
     public function loyalty()
     {
