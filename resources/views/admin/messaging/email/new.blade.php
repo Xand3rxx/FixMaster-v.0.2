@@ -80,6 +80,7 @@
 
 @push('scripts')
 <script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.js" defer></script>
+<script src="//cdn.jsdelivr.net/npm/sweetalert2@10"></script>
 <script src="{{ asset('assets/dashboard/assets/jlistbox/js/jquery.transfer.js') }}"></script>
 <script>
     var url = window.location.origin
@@ -128,7 +129,7 @@
                         selected_recipients = items;
                     }
                 };
-                if(user_role==1){
+                if(user_role=="1"){
                     $(".recipients").html("")
                     var newrecipients = $(".recipients").transfer(settings);
                     newrecipients.getSelectedItems();
@@ -151,8 +152,28 @@
             
 
          });
-
-         
+         var xters = 0;
+         var search_val = "";
+         var elm = "";
+         $('body').on('keyup','.transfer-double-list-search-input', function(){
+             xters = $(this).val().length;
+            search_val = $(this).val();
+             if(xters >= 3){
+                // console.log(search_val);
+                $.get( url+"/api/messaging/recipients?search_val="+search_val, function( data ) {
+                var roles = [];
+                $.each(data, function(key, val){
+                    console.log(val);
+                  elm = '<li class="transfer-double-list-li transfer-double-list-li-1f29cb00b1ih913jsc712nsc080  ">';
+                  elm += '<div class="checkbox-group" data-children-count="1">';
+                  elm += '<input type="checkbox" value="'+val[0].email+'" class="checkbox-normal checkbox-item-1f29cb00b1ih913jsc712nsc080" id="itemCheckbox_1_1f29cb00b1ih913jsc712nsc080">';
+                  elm += '<label class="checkbox-name-1f29cb00b1ih913jsc712nsc080" for="itemCheckbox_1_1f29cb00b1ih913jsc712nsc080">'+val[0].first_name+' '+val[0].last_name+'</label></div></li>'
+                  $('.transfer-double-list-ul').append(elm);
+                });
+               
+                });
+             }
+         })
       
             
         });
@@ -164,6 +185,7 @@
 
     var user_role = '<?php  echo Auth::user()->type->role_id ?>';
    $('#btnSendMessage').click(function(){
+            Swal.showLoading();
             var subject = $('#subject').val();
             var recipients = selected_recipients;
            
@@ -182,14 +204,18 @@
             function(data, status){
                 //TODO change display message to sweet alert
                 displayMessage(data.message, 'success');
+                swal.close();
             })
             .fail(function(data, status) {
                 displayMessage(data.responseJSON.message, 'error');
             })
+            
 
 
           
 
          });
         });
+
+
 </script>

@@ -89,6 +89,12 @@ Route::get('messaging/roles', function() {
  
  });
 
+ Route::get('messaging/recipients', function(Request $request) {
+   $messageController = new MessageController();
+    return $messageController->getRecipients($request);
+ 
+ });
+
  Route::post('messaging/save_email', function(Request $request) {
    $messageController = new MessageController();
     return $messageController->saveEmail($request);
