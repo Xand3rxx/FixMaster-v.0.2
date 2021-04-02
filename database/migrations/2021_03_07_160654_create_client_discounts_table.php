@@ -12,7 +12,7 @@ class CreateClientDiscountsTable extends Migration
      * @return void
      */
     public function up()
-    {
+    { 
         Schema::create('client_discounts', function (Blueprint $table) {
             $table->engine = 'InnoDB';
             $table->charset = 'utf8mb4';
