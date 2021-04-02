@@ -1,14 +1,11 @@
 <aside class="aside aside-fixed" id="sidebarMenu">
   <div class="aside-header">
-      <a href="{{ route('cse.index',app()->getLocale())}}" class="aside-logo">
-
-    </a>
+    <a href="{{ route('cse.index', app()->getLocale()) }}" class="aside-logo"></a>
     <a href="" class="aside-menu-link">
       <i data-feather="menu"></i>
       <i data-feather="x"></i>
     </a>
-    <a href="" id="mailSidebar" class="burger-menu d-md-none"><i data-feather="arrow-left"></i></a>
-
+    <a href="" id="chatContentClose" class="burger-menu d-none"><i data-feather="arrow-left"></i></a>
   </div>
   <div class="aside-body">
     <div class="aside-loggedin">
@@ -29,7 +26,7 @@
           <i data-feather="chevron-down"></i>
         </a>
         <p class="tx-color-03 tx-12 mg-b-0">Customer Service Executive(CSE)</p>
-        <p class="tx-15 mg-b-0 mt-4 font-weight-bold text-center">Job Availabilty</p><br>
+        <p class="tx-15 mg-b-0 mt-4 font-weight-bold text-center">Job availability</p><br>
         <div class="custom-control custom-switch" style="margin-left: 4rem !important; margin-top: -12px !important;">
           <input type="checkbox" checked class="custom-control-input" id="cse-availability">
           <label class="custom-control-label font-weight-bold" for="cse-availability"></label>

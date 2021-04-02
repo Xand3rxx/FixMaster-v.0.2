@@ -124,10 +124,10 @@ Route::prefix('admin')->group(function () {
         Route::resource('categories',                       CategoryController::class);
 
         //Routes for Services Management
-        Route::get('/services/deactivate/{service}',        [ServiceController::class, 'deactivate'])
+        Route::get('/services/deactivate/{service:uuid}',        [ServiceController::class, 'deactivate'])
             ->name('services.deactivate');
-        Route::get('/services/reinstate/{service}',         [ServiceController::class, 'reinstate'])->name('services.reinstate');
-        Route::get('/services/delete/{service}',            [ServiceController::class, 'destroy'])->name('services.delete');
+        Route::get('/services/reinstate/{service:uuid}',         [ServiceController::class, 'reinstate'])->name('services.reinstate');
+        Route::get('/services/delete/{service:uuid}',            [ServiceController::class, 'destroy'])->name('services.delete');
         Route::resource('services',                         ServiceController::class);
 
 
@@ -227,6 +227,9 @@ Route::prefix('admin')->group(function () {
         Route::resource('booking-fees',                     PriceController::class);
 
         //Routes for Status Management
+        Route::get('/statuses/deactivate/{status}',         [StatusController::class, 'deactivate'])->name('statuses.deactivate');
+        Route::get('/statuses/reinstate/{status}',          [StatusController::class, 'reinstate'])->name('statuses.reinstate');
+        Route::get('/statuses/delete/{status}',             [StatusController::class, 'destroy'])->name('statuses.delete');
         Route::resource('statuses',                         StatusController::class);
 
     //Setting controller
