@@ -41,7 +41,20 @@ class PaymentDisbursed extends Model
         return $this->hasOne(PaymentMode::class, 'id', 'payment_mode_id');
     }
 
-    public function user(){
+    public function user()
+    {
         return $this->belongsTo(User::class);
     }
+
+    /**
+     * Get the payment disbursed of the current authenticated user
+     * @param \App\Models\User $user
+     * 
+     */
+    public static function getPaymentDisbursed(\App\Models\User $user)
+    {
+        return PaymentDisbursed::where('recipient_id', $user->id)
+            ->orderBy('created_at', 'DESC')->get();
+    }
+   
 }

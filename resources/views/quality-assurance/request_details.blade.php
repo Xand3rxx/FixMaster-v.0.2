@@ -186,7 +186,7 @@
                           </tr>
                           <tr>
                             <td class="tx-medium">Initial Service Charge</td>
-                            <td class="tx-color-03">₦{{$result->price}} Standard Price</td>
+                            <td class="tx-color-03"></td>{{----₦{{$result->price}} Standard Price---}}
                           </tr>
                           <tr>
                             <td class="tx-medium">Total Service Charge</td>

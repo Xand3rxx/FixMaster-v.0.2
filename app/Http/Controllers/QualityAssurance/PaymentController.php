@@ -6,16 +6,21 @@ use Session;
 use App\Http\Controllers\Controller;
 use App\Models\PaymentDisbursed;
 use Illuminate\Http\Request;
+use App\Traits\Utility;
 
 class PaymentController extends Controller
 {
+    use Utility;
+
     public function get_qa_disbursed_payments(Request $request){
 
         // $user = Auth::user();
         // $payments = $user->payments();
+        $years =  $this->getDistinctYears($tableName = 'payments_disbursed'); 
+
         $payments = PaymentDisbursed::where('recipient_id',Auth::id())
         ->orderBy('created_at', 'DESC')->get();
-        return view('quality-assurance.payments', compact('payments'));
+        return view('quality-assurance.payments', compact('payments', 'years'));
     }
 
     public function sortDisbursedPayments(Request $request){

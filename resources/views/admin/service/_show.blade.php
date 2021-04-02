@@ -53,6 +53,15 @@
             <td class="tx-medium" width="25%">Description</td>
             <td class="tx-color-03" width="75%">{{ $category->description }}</td>
         </tr>
+
+        <tr>
+            <td class="tx-medium" width="25%">Sub Services</td>
+            <td class="tx-color-03" width="75%">
+                @foreach ($category->subServices as $subService)
+                    ({{$loop->iteration}}) {{ $subService->name }}<br>
+                @endforeach
+            </td>
+        </tr>
     </tbody>
     </table>
 </div>

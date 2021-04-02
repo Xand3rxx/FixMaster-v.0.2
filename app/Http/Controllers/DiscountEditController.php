@@ -30,6 +30,7 @@ class DiscountEditController extends Controller
     {
         $status = Discount::select('*')->where('uuid', $discount)->first();
         $data = ['status' => $status];
+        $data['apply_discounts'] = ['Total bill', 'Materials', 'Labour cost', 'FixMaster royalty', 'Logistics'];
         $json = json_decode($status->parameter);
         $data['field']= $json->field;
         $data['users']= json_encode($json->users);
@@ -54,8 +55,8 @@ class DiscountEditController extends Controller
             parse_str($request->data['form'], $fields);
             $entity = $fields['entity'];
             $replace_value = 'user_id';
-            $edit_category = json_decode($fields['edit_category'][0]);  
-    
+            $edit_category = json_decode($fields['edit_category'][0]) == ""? []: json_decode($fields['edit_category'][0]);  
+     
             $category = Category::select('id', 'uuid','name')->orderBy('name', 'ASC')
                 ->get();
             $optionValue = '';
@@ -150,88 +151,87 @@ class DiscountEditController extends Controller
                 ];
 
           
-
-                if ($fields['specified_request_count_morethan'] != '')
+                if ($fields['specified_request_count_morethan'] != '' && $fields['specified_request_count_equalto'] == '')
                 {
                     $whx[] ="sr.users >='".$fields['specified_request_count_morethan']."'";
                     $groupby = 'group by client_id';
-                    if ($entity == 'estate')
-                    {
-                        $groupby = 'group by uuid';
-                        $replace_value = " '*'";
-                    }
     
                 }
     
-                if ($fields['specified_request_count_equalto'] != '')
+                if ($fields['specified_request_count_equalto'] != '' && $fields['specified_request_count_morethan'] == '')
                 {
-                    $whx[] ="sr.users >='".$fields['specified_request_count_equalto']."'";
+                    $whx[] ="sr.users <='".$fields['specified_request_count_equalto']."'";
                     $groupby = 'group by client_id';
-                    if ($entity == 'estate')
-                    {
-                        $groupby = 'group by uuid';
-                        $replace_value = " '*'";
-                    }
-    
                 }
     
-                if ($fields['specified_request_amount_from'] != '')
+    
+                if ($fields['specified_request_count_equalto'] != '' && $fields['specified_request_count_morethan'] != '')
+                {
+                    $whx[] ="sr.users between'".$fields['specified_request_count_morethan']."' and  '".$fields['specified_request_count_equalto']."'";
+                    $groupby = 'group by client_id';
+                }
+    
+    
+                if ($fields['specified_request_amount_from'] != '' && $fields['specified_request_amount_to'] == '')
                 {
                     $wh[] ="total_amount >='".$fields['specified_request_amount_from']."'";
                     $replace_amount = "total_amount";
                     $replace_user = 'total_amount, client_id';
                     $groupby = 'group by total_amount';
-                    if ($entity == 'estate')
-                    {
-                        $replace_value = "total_amount";
-                        $groupby = 'group by total_amount, uuid';
-                    }
+                   
                 }
     
-                if ($fields['specified_request_amount_to'] != '')
+                if ($fields['specified_request_amount_to'] != '' && $fields['specified_request_amount_from'] == '')
                 {
                    
                     $wh[] ="total_amount <='".$fields['specified_request_amount_to']."'";
                     $replace_amount = "total_amount";
                     $replace_user = 'total_amount, client_id';
                     $groupby = 'group by total_amount';
-                    if ($entity == 'estate')
-                    {
-                        $replace_value = "total_amount";
-                        $groupby = 'group by total_amount, uuid';
-                    }
-    
                 }
     
-                if ($fields['specified_request_start_date'] != '')
+                if ($fields['specified_request_amount_to'] != '' && $fields['specified_request_amount_from'] != '')
+                {
+                   
+                    $wh[] ="total_amount between'".$fields['specified_request_amount_from']."' and '".$fields['specified_request_amount_to']."'";
+                    $replace_amount = "total_amount";
+                    $replace_user = 'total_amount, client_id';
+                    $groupby = 'group by total_amount';
+                }
+
+
+    
+                if ($fields['specified_request_start_date'] != '' && $fields['specified_request_end_date'] == '')
                 {
                     $start_date = date('Y-m-d', strtotime($fields['specified_request_start_date']));
                     $wh[] ="preferred_time <='".$start_date."'";
                     $replace_amount = "preferred_time";
                     $replace_user = 'preferred_time, client_id';
                     $groupby = 'group by client_id';
-                    if ($entity == 'estate')
-                    {
-                        $replace_value = "preferred_time ";
-                        $groupby = 'group by uuid,preferred_time ';
-                    }
+                  
                 }
     
-                if ($fields['specified_request_end_date'] != '')
+                if ($fields['specified_request_end_date'] != '' && $fields['specified_request_start_date'] == '')
                 {
                     $end_date = date('Y-m-d', strtotime($fields['specified_request_end_date']));
-                    $wh[] = ['sr.preferred_time', '<=',  "\"$end_date\""];
                     $wh[] ="preferred_time <='".$end_date."'";
                     $replace_amount = "preferred_time";
                     $replace_user = 'preferred_time, client_id';
                     $groupby = 'group by client_id';
-                    if ($entity == 'estate')
-                    {
-                        $replace_value = "created_at";
-                        $groupby = 'group by uuid,created_at';
-                    }
+                  
                 }
     
+                if ($fields['specified_request_end_date'] != '' && $fields['specified_request_start_date'] != '')
+                {
+                    $end_date = date('Y-m-d', strtotime($fields['specified_request_end_date']));
+                    $start_date = date('Y-m-d', strtotime($fields['specified_request_start_date']));              
+                    $wh[] ="preferred_time between'".$start_date."' and '".$end_date."'";
+                    $replace_amount = "preferred_time";
+                    $replace_user = 'preferred_time, client_id';
+                    $groupby = 'group by client_id';
+                  
+                }
+
                 if (isset($fields['specified_request_state']) && $fields['specified_request_state'] != '')
                 {
                     // $wh[] = 'state_id', '=', $fields['state'];
@@ -352,12 +352,14 @@ class DiscountEditController extends Controller
                     }
                   
                     $data = array(
-                        'options' => $optionValue
+                        'options' => $optionValue,
+                        'count'=> count($dataArry)
                     );
 
                 break;
                 case 'estate':
-                    if (count(array_filter($chk_fields)) > 0)
+                    $dataArry=[];
+                    if (count(array_filter($chk_fields)) > 0 && count($est) > 0)
                     {
                         $dataArry = ServiceRequest::select('sr.client_id', $replace_amount, 'ac.first_name', 'ac.last_name')
                         ->from(ServiceRequest::raw("(select  $replace_user, count(client_id) as users from service_requests $SQL $groupby)
@@ -376,7 +378,7 @@ class DiscountEditController extends Controller
     
 
                     }
-                    else
+                    if(count($est) > 0)
                     {
                     
                         $dataArry = Account::select('accounts.user_id', 'accounts.first_name', 'accounts.last_name')
@@ -401,9 +403,9 @@ class DiscountEditController extends Controller
                     }
             
                     $data = array(
-                        'options' => $optionValue
+                        'options' => $optionValue,
+                        'count'=> count($dataArry)
                     );
-               
 
                 break;
                 case 'service':
@@ -452,9 +454,9 @@ class DiscountEditController extends Controller
     
                     }
                  
-                  
                     $data = array(
-                        'options' => $optionValue
+                        'options' => $optionValue,
+                        'count'=> count($dataArry)
                     );
                    break;
                 default:
@@ -506,6 +508,7 @@ class DiscountEditController extends Controller
             'description' => $request->input('description') ,
             'parameter' => json_encode($parameterArray) ,
             'created_by' => Auth::user()->email,
+            'apply_discount'=> $request->input('apply_discount') ,
 
             ]);
 
@@ -573,9 +576,9 @@ class DiscountEditController extends Controller
     {
         if($request->entity == 'service'){
            
-            return request()->validate(['discount_name' => 'required|max:250', 'entity' => 'required', 'rate' => 'required', 'start_date' => 'required', 'category' =>  'required|array|min:1', 'end_date' => 'required', 'description' => 'max:250']);
+            return request()->validate(['discount_name' => 'required|max:250', 'apply_discount'=>'required', 'entity' => 'required', 'rate' => 'required', 'start_date' => 'required', 'category' =>  'required|array|min:1', 'end_date' => 'required', 'description' => 'max:250']);
         }else{
-            return request()->validate(['discount_name' => 'required|max:250', 'entity' => 'required', 'rate' => 'required', 'start_date' => 'required', 'users' => 'required|array|min:1', 'end_date' => 'required', 'description' => 'max:250']);
+            return request()->validate(['discount_name' => 'required|max:250', 'apply_discount'=>'required', 'entity' => 'required', 'rate' => 'required', 'start_date' => 'required', 'users' => 'required|array|min:1', 'end_date' => 'required', 'description' => 'max:250']);
 
         }
     }
@@ -613,7 +616,7 @@ class DiscountEditController extends Controller
         foreach ($accounts as $user)
         {           
         DiscountHistory::create([
-            'discount_id' => $discounts->id,
+            'discount_id' => $discount->id,
             'client_name' => $user->first_name.' '.$user->last_name,
             'client_id' => $user->user_id,
            

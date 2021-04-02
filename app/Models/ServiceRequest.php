@@ -75,7 +75,7 @@ class ServiceRequest extends Model
 
     public function client()
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(User::class, 'client_id');
     }
 
     public function account()
@@ -85,7 +85,7 @@ class ServiceRequest extends Model
 
     public function users()
     {
-        return $this->belongsToMany(User::class, 'service_request_assigned')->with('account', 'roles');
+        return $this->belongsToMany(User::class, 'service_request_assigned');
     }
     public function cse()
     {
@@ -95,6 +95,7 @@ class ServiceRequest extends Model
     {
         return $this->belongsToMany(User::class, 'service_request_assigned')->with('account', 'roles');
     }
+    
     public function invoice()
     {
         return $this->hasOne(Invoice::class);
@@ -104,7 +105,7 @@ class ServiceRequest extends Model
         return $this->hasMany(Invoice::class);
     }
     public function service(){
-        return $this->hasOne(Service::class, 'id', 'service_id');
+       return $this->hasOne(Service::class, 'id', 'service_id');
     }
     public function services(){
             return $this->hasMany(Service::class, 'id', 'service_id');
@@ -122,7 +123,7 @@ class ServiceRequest extends Model
     }
 
     public function status(){
-        return $this->hasOne(Status::class, 'id');
+        return $this->hasOne(Status::class, 'id', 'status_id');
     }
 
     public function service_request(){
@@ -136,19 +137,18 @@ class ServiceRequest extends Model
 
     public function technicianAccount()
     {
-        
+
             return $this->hasOne(Account::class, 'user_id', 'service_id');
     }
 
-    
+
     public function price()
     {
-        
-            return $this->hasOne(Price::class, 'user_id', 'service_id')->withDefault();
+        return $this->hasOne(Price::class, 'price_id')->withDefault();
     }
 
     public function address(){
-        return $this->belongsTo(Contact::class);
+        return $this->belongsTo(Contact::class, 'contact_id');
     }
 
     public function phone()

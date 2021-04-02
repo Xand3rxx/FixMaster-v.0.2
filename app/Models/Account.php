@@ -12,7 +12,7 @@ class Account extends Model
      *
      * @var array
      */
-    protected $fillable = ['user_id', 'state_id',  'lga_id', 'town_id', 'first_name', 'middle_name', 'last_name', 'gender', 'account_number', 'avatar'];
+    protected $fillable = ['user_id', 'state_id',  'lga_id', 'town_id', 'first_name', 'middle_name', 'last_name', 'gender', 'account_number', 'bank_id', 'avatar'];
 
     /**
      * The relationships that should always be loaded.
@@ -35,6 +35,12 @@ class Account extends Model
     {
         return $this->belongsTo(User::class);
     }
+
+    public function bank()
+    {
+        return $this->belongsTo(Bank::class);
+    }
+
 
     
     public function payment()

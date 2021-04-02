@@ -60,7 +60,7 @@
 
                                     <td class="tx-medium">{{ Str::title($cse['user']['account']['gender']) }}</td>
 
-                                    <td class="tx-medium text-info">{{ $cse['user']['requests'] ?? '0'  }}</td>
+                                    <td class="tx-medium text-info">{{ $cse['service_request_assgined_count'] ?? '0'  }}</td>
                                     <td class="text-medium text-success">{{is_null($cse['user']['deleted_at']) ? 'Active' : InActive}}</td>
                                     <td class="text-medium">{{ Carbon\Carbon::parse($cse->created_at, 'UTC')->isoFormat('MMMM Do YYYY, h:mm:ssa') }}</td>
                                     <td class=" text-center">
@@ -86,38 +86,5 @@
 
     </div><!-- container -->
 </div>
-
-
-@section('scripts')
-<script>
-    $(document).ready(function() {
-
-        $('#request-sorting').on('change', function() {
-            let option = $("#request-sorting").find("option:selected").val();
-            switch (option) {
-                case 'Date':
-                    $('.specific-date').removeClass('d-none');
-                    $('.sort-by-year, .date-range').addClass('d-none');
-                    break;
-
-                case 'Month':
-                    $('.sort-by-year').removeClass('d-none');
-                    $('.specific-date, .date-range').addClass('d-none');
-                    break;
-
-                case 'Date Range':
-                    $('.date-range').removeClass('d-none');
-                    $('.specific-date, .sort-by-year').addClass('d-none');
-                    break;
-
-                default:
-                    $('.specific-date, .sort-by-year, .date-range').addClass('d-none');
-                    break;
-            }
-
-        });
-    });
-</script>
-@endsection
 
 @endsection

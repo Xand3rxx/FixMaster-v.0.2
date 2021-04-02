@@ -3,6 +3,7 @@
 namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
+use DB;
 
 class TechnicianSeeder extends Seeder
 {
@@ -113,6 +114,59 @@ class TechnicianSeeder extends Seeder
         \App\Models\Contact::attemptToStore($technician->id, $technicianAccount->id, 156, '08175122879', "21 Olugborogan Olusesi Rd, Eti-Osa 100242, Lagos", "3.5372016", "6.4416878");
         \App\Models\Contact::attemptToStore($technician1->id, $technicianAccount1->id, 156, '07052222678', "2 Bello St, Volkswagen, Lagos", "3.2198137", "6.4563318");
         \App\Models\Contact::attemptToStore($technician2->id, $technicianAccount2->id, 156, '08035413397', "21-13 Ayo Adeife St, Idimu, Lagos", "3.286114654549155", "6.59493974136504");
+
+        // DB::table('users_services')->delete();
+
+        $technicianServices = array(
+            array(
+                'user_id'       =>  13,
+                'service_id'    =>  1,
+                'role_id'       =>  5,
+            ),
+            array(
+                'user_id'       =>  13,
+                'service_id'    =>  22,
+                'role_id'       =>  5,
+            ),
+            array(
+                'user_id'       =>  13,
+                'service_id'    =>  24,
+                'role_id'       =>  5,
+            ),
+            array(
+                'user_id'       =>  14,
+                'service_id'    =>  1,
+                'role_id'       =>  5,
+            ),
+            array(
+                'user_id'       =>  14,
+                'service_id'    =>  6,
+                'role_id'       =>  5,
+            ),
+            array(
+                'user_id'       =>  14,
+                'service_id'    =>  11,
+                'role_id'       =>  5,
+            ),
+            array(
+                'user_id'       =>  15,
+                'service_id'    =>  1,
+                'role_id'       =>  5,
+            ),
+            array(
+                'user_id'       =>  15,
+                'service_id'    =>  10,
+                'role_id'       =>  5,
+            ),
+            array(
+                'user_id'       =>  15,
+                'service_id'    =>  2,
+                'role_id'       =>  5,
+            ),
+            
+        );
+
+        DB::table('users_services')->insert($technicianServices);
     }
 }
 

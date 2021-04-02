@@ -112,7 +112,7 @@
                           <!-- Phone Number -->
                           <div class="form-group col-md-4">
                             <label for="inputEmail4">Phone Number</label>
-                            <input type="tel" class="form-control @error('phone_number') is-invalid @enderror" id="phone_number" name="phone_number" maxlength="11" value="{{ old('phone_number') }}">
+                            <input type="tel" class="form-control @error('phone_number') is-invalid @enderror" id="phone_number" name="phone_number" maxlength="11" value="{{$result->contact->phone_number}}">
                             @error('phone_number')
                               <span class="invalid-feedback" role="alert">
                                   <strong>{{ $message }}</strong>
@@ -137,7 +137,8 @@
                             <div class="form-group col-md-6">
                               <label>Bank</label>
                               <select name="bank_id" id="bank_id" class="form-control @error('bank_id') is-invalid @enderror" required>
-                                <option value="">Select...</option>
+                                <option value="selected {{$result->account->bank->id??'Select...'}}">{{$result->account->bank->name??'Select...'}}</option>
+                                {{-- <option value="">Select...</option> --}}
                                 @foreach($banks as $bank)
                                 <option value="{{ $bank->id }}" {{ old('bank_id') == $bank->id ? 'selected' : ''}}>{{ $bank->name }}</option>
                                 @endforeach
@@ -151,7 +152,7 @@
 
                             <div class="form-group col-md-6">
                               <label for="inputEmail4">Account Number</label>
-                              <input type="tel" class="form-control @error('account_number') is-invalid @enderror" id="account_number" name="account_number" maxlength="11" value="{{ old('account_number') }}" required>
+                              <input type="tel" class="form-control @error('account_number') is-invalid @enderror" id="account_number" name="account_number" maxlength="10" value="{{$result->account->account_number??'Unavailable'}}" required>
                               @error('account_number')
                                 <span class="invalid-feedback" role="alert">
                                     <strong>{{ $message }}</strong>
@@ -162,7 +163,7 @@
                             <!-- Full Address -->
                             <div class="form-group col-md-12">
                               <label for="inputAddress2">Full Address</label>
-                              <textarea rows="3" class="user_address form-control @error('full_address') is-invalid @enderror" id="" name="full_address" value="{{ old('full_address') }}"></textarea>
+                              <textarea rows="3" id="user_address" class="user_address form-control @error('full_address') is-invalid @enderror" id="" name="full_address">{{$result->contact->address??'Unavailable'}}</textarea>
                               @error('full_address')
                             <span class="invalid-feedback" role="alert">
                                 <strong>{{ $message }}</strong>
@@ -227,33 +228,7 @@
 </div>
 @endsection
 @push('scripts')
-<script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDeDLVAiaU13p2O0d3jfcPjscsbVsCQUzc&v=3.exp&libraries=places"></script>
-
-
-<script>
-
-$(document).ready(function() {
-        "use strict";
-        let autocomplete;
-        initialize();
-
-
-
-        function initialize() {
-            // Create the autocomplete object, restricting the search to geographical location types.
-            autocomplete = new google.maps.places.Autocomplete((document.querySelector('.user_address')), {
-                types: ['geocode']
-            });
-            autocomplete = new google.maps.places.Autocomplete((document.querySelector('.user_address2')), {
-                types: ['geocode']
-            });
-            // Chain request to html element on the page
-            google.maps.event.addDomListener(document.querySelector('.user_address'), 'focus');
-            google.maps.event.addDomListener(document.querySelector('.user_address2'), 'focus');
-        }
-    });
-
-</script>
+<script src="{{asset('assets/js/geolocation.js')}}"></script>
 
 <script>
 

@@ -64,6 +64,21 @@
          
           <div class="contact-content-body">
                         <div class="tab-content">
+                          <div class="table-responsive">
+                            <div class="row mt-1 mb-1 ml-1 mr-1">
+                              <div class="col-md-4">
+                                <div class="form-group">
+                                    <label>Sort</label>
+                                    <select class="custom-select" id="sort_by_range">
+                                        <option value="None">Select...</option>
+                                        <option value="Date">CSE Name</option>
+                                        <option value="Month">Job Acceptance Date</option>
+                                        <option value="Year">Job Completion Date</option>
+                                        <option value="Date Range">Job Status</option>
+                                    </select>
+                                </div>
+                            </div><!--end col-->
+                            </div>
                           <table class="table table-hover mg-b-0" id="basicExample">
                             <thead class="thead-primary">
                                 <tr>
@@ -85,13 +100,16 @@
                                 @foreach($serviceRequests as $serviceRequest)
                                 <tr>
                                     <td class="tx-color-03 tx-center">{{ $loop->iteration }}</td>
-                                    <td class="tx-medium"> @foreach($serviceRequest->users as $data)
-                  @foreach($data->roles as $res)
-                  @if($res->url == "cse")
-                     {{$data->cse->unique_id ?? ''}}
-                  @endif
-                  @endforeach
-                  @endforeach</td>
+                                    <td class="tx-medium"> 
+                                      @foreach($serviceRequest->users as $data)
+                                        @if(is_null($data->roles)) UNAVAILABLE @endif
+                                        @foreach($data->roles as $res)
+                                          @if($res->url == "cse")
+                                            {{ !empty($data->cse->unique_id) ? $data->cse->unique_id : 'UNAVAILABLE'}}
+                                          @endif
+                                        @endforeach
+                                    @endforeach
+                                  </td>
                    
                   <td class="tx-medium">{{ $serviceRequest->unique_id ?? ''}}</td>
                                    

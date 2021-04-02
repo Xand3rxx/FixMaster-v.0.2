@@ -40,4 +40,20 @@ class EssentialsController extends Controller
         $serviceRequests = ServiceRequest::with('serviceRequestAssigned')->get();
         return $serviceRequests;
     }
+
+    public function getAvailableToolQuantity(Request $request){
+        if($request->ajax()){
+            $toolId = $request->get('tool_id');
+
+            $toolExists = \App\Models\ToolInventory::findOrFail($toolId);
+
+            $availableQuantity =  $toolExists->available;
+
+            return $availableQuantity;
+        }
+    }
+    public function Edit($id){
+        $data = ServiceRequestSettingController::find($id);
+        return $data;
+      }
 }

@@ -20,7 +20,7 @@ class Client extends Model
 
     /**
      * The "booted" method of the model.
-     *
+     * 
      * @return void
      */
     protected static function booted()
@@ -35,7 +35,7 @@ class Client extends Model
      */
     public function user()
     {
-        return $this->belongsTo(User::class)->with(['account', 'phones']);
+        return $this->belongsTo(User::class)->with(['account', 'contact']);
     }
 
     
@@ -43,6 +43,14 @@ class Client extends Model
     public function account()
     {
         return $this->belongsTo(Account::class);
+    }
+
+    /**
+     * Get the service request of the Client
+     */
+    public function service_request()
+    {
+        return $this->hasMany(ServiceRequest::class, 'client_id', 'user_id');
     }
     
 }

@@ -172,8 +172,8 @@
               // format: 'L', //LT for time only
               // inline: true,
               // sideBySide: true,
-              format:'Y/m/d H:i',
-              formatDate:'Y/m/d',
+              format:'Y-m-d H:i:s',
+              formatDate:'Y-m-d',
               minDate:'-1970/01/02', // yesterday is minimum date
               mask: true,
           });

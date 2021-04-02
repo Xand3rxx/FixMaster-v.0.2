@@ -40,34 +40,64 @@
 
 </head>
 
-<body class="app-mail">
+<body>
     <style>
       div.dt-buttons {
         margin-top: 1em;
         margin-left: 1.5em;
       }
-    </style>
 
+      button.dt-button, div.dt-button, a.dt-button, input.dt-button {
+        font-size: inherit !important;
+        color: #fff !important;
+        background-color: #E97D1F !important;
+        background: linear-gradient(to bottom, rgb(233 125 31) 0%, rgb(233 125 31) 100%);
+        border-color: #E97D1F !important;
+        display: inline-block !important;
+        font-weight: 400 !important;
+        text-align: center !important;
+        vertical-align: middle !important;
+        user-select: none !important;
+        background-color: transparent !important;
+        border: 1px solid transparent !important;
+        padding: 0.46875rem 0.9375rem !important;
+        font-size: 0.875rem !important;
+        line-height: 1.5 !important;
+        border-radius: 0.25rem !important;
+        transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out, border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out !important;
+        line-height: 1.5 i !important;
+        text-decoration: none;
+        outline: none;
+        text-overflow: ellipsis;
+      }
+
+      button.dt-button:hover, div.dt-button:hover, a.dt-button:hover, input.dt-button:hover {
+        color: #fff !important;
+        background-color: #E97D1F !important;
+        background: linear-gradient(to bottom, rgb(233 125 31) 0%, rgb(233 125 31) 100%);
+        border-color: #E97D1F !important;
+      }
+
+
+    </style>
+<input type="hidden" id="path_admin" value="{{url('/')}}">
     @include('layouts.partials._dashboard_sidebar')
-    {{-- @include('layouts.partials._qa_sidebar') --}}
 
     <div class="content ht-100v pd-0">
       @include('layouts.partials._dashboard_header')
       @yield('content')
-    {{-- </div> --}}
     </div>
 
     <script src="{{ asset('assets/dashboard/lib/jquery/jquery.min.js') }}"></script>
-    {{-- <script src="{{ asset('assets/frontend/js/jquery-3.5.1.min.js') }}"></script> --}}
     <script src="{{ asset('assets/dashboard/lib/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
-    <script src="{{ asset('assets/dashboard/assets/js/dashforge.settings.js') }}"></script>
     <script src="{{ asset('assets/dashboard/assets/js/dashforge.js') }}"></script>
     <script src="{{ asset('assets/dashboard/assets/js/dashforge.aside.js') }}"></script>
+    <script src="{{ asset('assets/dashboard/assets/js/dashforge.settings.js') }}"></script>
+
     <script src="{{ asset('assets/dashboard/assets/js/dashforge.sampledata.js') }}"></script>
     <script src="{{ asset('assets/dashboard/lib/perfect-scrollbar/perfect-scrollbar.min.js') }}"></script>
     <script src="{{ asset('assets/dashboard/lib/cleave.js/cleave.min.js') }}"></script>
     <script src="{{ asset('assets/dashboard/lib/feather-icons/feather.min.js') }}"></script>
-    <script src="{{ asset('assets/dashboard/lib/perfect-scrollbar/perfect-scrollbar.min.js') }}"></script>
 
     <script src="{{ asset('assets/dashboard/lib/jquery.flot/jquery.flot.js') }}"></script>
     <script src="{{ asset('assets/dashboard/lib/jquery.flot/jquery.flot.stack.js') }}"></script>
@@ -75,7 +105,7 @@
     <script src="{{ asset('assets/dashboard/lib/chart.js/Chart.bundle.min.js') }}"></script>
 
     <!-- append theme customizer -->
-    <script src="{{ asset('assets/dashboard/lib/js-cookie/js.cookie.js') }}"></script>
+    {{-- <script src="{{ asset('assets/dashboard/lib/js-cookie/js.cookie.js') }}"></script> --}}
 
     <script src="{{ asset('assets/dashboard/assets/datatables/dataTables.min.js') }}"></script>
     <script src="{{ asset('assets/dashboard/assets/datatables/dataTables.bootstrap.min.js') }}"></script>
@@ -96,7 +126,6 @@
     <script src="https://cdn.datatables.net/buttons/1.6.5/js/buttons.print.min.js"></script>
     <script src="{{asset('assets/frontend/js/custom.js')}}"></script>
     <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDeDLVAiaU13p2O0d3jfcPjscsbVsCQUzc&v=3.exp&libraries=places"></script>
-    <script src="{{asset('assets/frontend/js/geolocation.js')}}"></script>
     <script src="{{ asset('assets/dashboard/assets/js/48a9782e-3e2b-4055-a9bb-8a926a937e2c.js') }}"></script>
 
     @yield('scripts')
