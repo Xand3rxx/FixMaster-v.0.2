@@ -9,7 +9,8 @@ use Illuminate\Support\Str;
 
 class Warranty extends Model
 {
-    use SoftDeletes, Generator;
+    //use SoftDeletes, Generator;
+    use HasFactory;
 
     protected $fillable = [
         'name', 'unique_id', 'amount', 'warranty_type', 'description'
@@ -32,5 +33,10 @@ class Warranty extends Model
 
         });
 
+    }
+
+    public function scopeWarranties($query){
+        return $query->select('*')
+        ->orderBy('name', 'ASC');
     }
 }

@@ -50,14 +50,7 @@
                       </div><!-- card-header -->
                       <div class="contact-content-body">
                         <div class="tab-content">
-                      {{-- <div class="card-body pd-25"> --}}
-                          <div class="tab-pane show active pd-20 pd-xl-25" id="summary">
-{{--                                <div class="pos-relative d-inline-block mg-b-20">--}}
-{{--                                    <div class="avatar avatar-xxl"><span class="avatar-initial rounded-circle bg-gray-700 tx-normal"><i class="icon ion-md-person"></i></span></div>--}}
-{{--                                    --}}{{-- <a href="" class="contact-edit-photo"><i data-feather="edit-2"></i></a> --}}
-{{--                                </div>--}}
-                              <div class="media-body pd-l-25">
-                                  {{-- <h5 class="mg-b-5 mb-2">Business Type: Marine Cargo</h5> --}}
+                    
                                   <div class="table-responsive">
                                       <table class="table table-striped table-sm mg-b-0">
                                           <tbody>

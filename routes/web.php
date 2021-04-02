@@ -11,6 +11,7 @@ use App\Http\Controllers\Admin\ServiceController;
 use App\Http\Controllers\Admin\ActivityLogController;
 use App\Http\Controllers\Admin\ToolInventoryController;
 use App\Http\Controllers\Admin\TaxController;
+use App\Http\Controllers\WarrantyController;
 use App\Http\Controllers\Admin\GatewayController;
 use App\Http\Controllers\Admin\User\SupplierController;
 use App\Http\Controllers\QualityAssurance\PaymentController;
@@ -88,6 +89,21 @@ Route::prefix('admin')->group(function () {
         Route::get('/estate/delete/{estate:uuid}',      [EstateController::class, 'delete'])->name('delete_estate');
 
         //Routes for Invoice Management
+        Route::get('/warranty',      [WarrantyController::class, 'index'])->name('warranty_list');
+        Route::get('/warranty/summary/{details:uuid}',  [WarrantyController::class, 'show'])->name('warranty_summary');
+        Route::post('/warranty/add',                    [WarrantyController::class, 'store'])->name('store_warranty');
+        Route::get('/warranty/edit/{details:uuid}',  [WarrantyController::class, 'edit'])->name('edit_warranty');
+        Route::put('/warranty/update/{details:uuid}',  [WarrantyController::class, 'update'])->name('update_warranty');
+        Route::get('/warranty/transactions',      [WarrantyController::class, 'warrantyTransaction'])->name('warranty_transaction');
+
+        //Routes for Simulation
+        Route::get('/diagnostic', [SimulationController::class, 'diagnosticSimulation'])->name('diagnostic');
+        Route::get('/end-service/{service_request:uuid}', [SimulationController::class, 'endService'])->name('end_service');
+        Route::get('/complete-service/{service_request:uuid}', [SimulationController::class, 'completeService'])->name('complete_service');
+        Route::get('/invoice/{invoice:id}', [SimulationController::class, 'invoice'])->name('invoice');
+
+
+ //Routes for Invoice Management
         Route::get('/invoices',      [InvoiceController::class, 'index'])->name('invoices');
 
         //Routes for Simulation
@@ -95,6 +111,17 @@ Route::prefix('admin')->group(function () {
         Route::get('/end-service/{service_request:uuid}', [SimulationController::class, 'endService'])->name('end_service');
         Route::get('/complete-service/{service_request:uuid}', [SimulationController::class, 'completeService'])->name('complete_service');
         Route::get('/invoice/{invoice:id}', [SimulationController::class, 'invoice'])->name('invoice');
+
+
+         //Routes for Invoice Management
+         Route::get('/invoices',      [InvoiceController::class, 'index'])->name('invoices');
+
+         //Routes for Simulation
+         Route::get('/diagnostic', [SimulationController::class, 'diagnosticSimulation'])->name('diagnostic');
+         Route::get('/end-service/{service_request:uuid}', [SimulationController::class, 'endService'])->name('end_service');
+         Route::get('/complete-service/{service_request:uuid}', [SimulationController::class, 'completeService'])->name('complete_service');
+         Route::get('/invoice/{invoice:id}', [SimulationController::class, 'invoice'])->name('invoice');
+
 
         Route::get('/rfq',                                  [SimulationController::class, 'rfqSimulation'])->name('rfq');
         Route::get('/rfq/details/{serviceRequest:id}',    [SimulationController::class, 'rfqDetailsSimulation'])->name('rfq_details');

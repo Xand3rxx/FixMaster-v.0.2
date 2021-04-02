@@ -210,7 +210,14 @@
           </ul>
         </li> --}}
 
-        <li class="nav-item"><a href="#" class="nav-link"><i data-feather="thumbs-up"></i> <span>Warranty Management</span></a></li>
+        <li class="nav-item with-sub">
+          <a href="" class="nav-link"><i data-feather="user-check"></i> <span>Warranty Management</span></a>
+          <ul>
+            <li class=""><a href="{{route('admin.warranty_list', app()->getLocale())}}">Add</a></li>
+            <li class=""><a href="{{route('admin.warranty_list', app()->getLocale())}}">List</a></li>
+            <li class=""><a href="{{route('admin.warranty_transaction', app()->getLocale())}}">Transactions</a></li>
+          </ul>
+        </li>
 
         <li class="nav-label mg-t-25">Users</li>
         <li class="nav-item with-sub">
