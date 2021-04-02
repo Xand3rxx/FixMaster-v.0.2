@@ -95,14 +95,6 @@ class ServiceRequest extends Model
     {
         return $this->belongsToMany(User::class, 'service_request_assigned')->with('account', 'roles');
     }
-    public function cse()
-    {
-        return $this->belongsTo(Account::class);
-    }
-    public function cses()
-    {
-        return $this->belongsToMany(User::class, 'service_request_assigned')->with('account', 'roles');
-    }
     public function invoice()
     {
         return $this->hasOne(Invoice::class);
@@ -112,7 +104,7 @@ class ServiceRequest extends Model
         return $this->hasMany(Invoice::class);
     }
     public function service(){
-       return $this->hasOne(Service::class, 'id', 'service_id');
+       return $this->hasOne(Service::class, 'id', 'service_id')->with('user');
     }
     public function services(){
             return $this->hasMany(Service::class, 'id', 'service_id');
@@ -131,10 +123,6 @@ class ServiceRequest extends Model
 
     public function status(){
         return $this->hasOne(Status::class, 'id', 'status_id');
-    }
-
-    public function service_request(){
-        return $this->hasOne(ServiceRequest::class, 'uuid', 'service_request_id');
     }
 
     public function service_request(){

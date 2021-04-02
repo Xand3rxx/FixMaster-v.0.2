@@ -24,7 +24,7 @@ class Cse extends Model
     {
         static::creating(function ($cse) {
             $cse->unique_id = static::generate('cses', 'CSE-'); // Create a Unique cse id
-            $cse->referral_id = static::createCSEReferralID($cse->user_id, $cse->unique_id); // Store referral details
+            // $cse->referral_id = static::createCSEReferralID($cse->user_id, $cse->unique_id); // Store referral details
         });
     }
 
@@ -37,6 +37,7 @@ class Cse extends Model
      */
     protected static function createCSEReferralID($user_id, string $unique_id)
     {
+        // return $this->belongsTo(User::class)->with(['account', 'contact']);
         return $this->belongsTo(User::class)->with(['account', 'contact']);
     }
 
@@ -66,9 +67,9 @@ class Cse extends Model
     //     return $this->hasOne(ServiceRequest::class);
     // }
 
-    // public function serviceRequests()
-    // {
-    //     return $this->hasMany(ServiceRequest::class);
-    // }
+    public function serviceRequests()
+    {
+        return $this->hasMany(ServiceRequest::class);
+    }
 
 }
