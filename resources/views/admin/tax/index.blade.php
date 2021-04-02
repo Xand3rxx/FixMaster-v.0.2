@@ -59,6 +59,7 @@
           <h5 class="mg-b-2"><strong>Create New Tax</strong></h5>
           <div class="form-row mt-4">
             <div class="form-group col-md-12">
+            
               <div class="form-row mt-4">
                 <div class="form-group col-md-4">
                     <label for="name">Name</label>

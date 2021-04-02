@@ -47,6 +47,10 @@
 a:visited{color:#888}
 a{color:#999;text-decoration:none;}
 p{margin-bottom:.3em;}
+
+.address-hide{
+    display:none;
+}
 </style>
 
 <div class="col-lg-8 col-12">
@@ -95,6 +99,171 @@ p{margin-bottom:.3em;}
                         @endforeach
                     </ul><!--end nav pills-->
                 </div>
+
+
+                <div class="d-flex border-bottom bg-light p-3">
+
+    <!-- <div class="row delivery-address">
+                                        <span class="form-group edit-delete">
+                                            <button
+                                                class="btn editAddress"
+                                                data-data='{"id":"1331","user_id":"477","type":"Home","name":"fsdfsdfsd","country_code":"","mobile":"8254644644","alternate_mobile":"456454464545","address":"5","landmark":"55","area_id":"228","city_id":"119","pincode":"56446","state":"fsfsd","country":"sdfsfsd","latitude":"0","longitude":"0","is_default":"0","date_created":"2021-03-25 17:43:34","city_name":"Bhuj","area_name":"Jubulee Circle","minimum_free_delivery_order_amount":"500","delivery_charges":"10"}'
+                                            >
+                                                <em class="fa fa-pencil-alt"></em>
+                                            </button>
+                                            <a href="https://webekart.wrteam.in/address/remove/1331" class="btn"> <em class="fas fa-times text-danger"></em></a>
+                                        </span>
+                                        <span class="form-group ml-2">
+                                            <input type="radio" name="id" value="1331" />
+                                            <label>
+                                                <strong>fsdfsdfsd</strong><br />
+                                                <label class="badge badge-primary">Home</label>
+                                                5, Jubulee Circle<br />
+                                                Bhuj - 56446<br />
+                                                Mobile: 8254644644
+                                            </label>
+                                        </span>
+                                    </div> -->
+
+    </div> 
+
+</div>
+
+<!-- new end -->
+
+</div>        
+
+
+
+
+
+<div class="row">
+<!-- first div -->
+<div class="col-lg-12 col-md-12" id="address">
+    <div class="table-responsive bg-white shadow rounded mt-4" >
+        <table class="table mb-0 table-center">
+            <thead class="bg-light">
+                <tr>
+                    <th scope="col" >Contact</th>
+                     </tr>
+            </thead>
+            <tbody>
+            
+            <?php echo $myContacts?>
+            @if($myContacts)
+            @foreach($myContacts as $k=>$myContact)
+                <tr>
+                    <td>
+                        <div class="media">
+                            <div class="custom-control custom-radio custom-control-inline">
+                                            <div class="form-group mb-0">
+                                                <input type="radio" id="chaquepayment" name="customRadio" class="custom-control-input">
+                                                <label class="custom-control-label" for="chaquepayment">Landrick</label>
+                                            </div>
+                                        </div>
+
+                                <div class="content ml-3">
+                                <a href="f" class="forum-title text-primary font-weight-bold">Introductions: Landrick</a>
+                                <p class="text-muted small mb-0 mt-2">Start working with Landrick that can provide everything you need to generate awareness, drive traffic, connect.</p>
+                            </div>
+
+                        </div>
+                    </td>
+                </tr>
+                @endforeach
+                @endif
+
+                
+            </tbody>
+        </table>
+
+        <div class="d-flex align-items-center justify-content-between mt-4 col-lg-12">                                
+         <a onclick="address()" href="javascript:void(0)" class="btn btn-success btn-lg btn-block">Add New Address</a>
+         <!-- <a href="javascript:void(0)" class="btn btn-primary" id="edit">Confirm</a> -->
+       </div>
+       
+    </div>
+
+</div>
+    <!-- second div -->
+    <!-- new one starts2 -->
+    <div class="row">
+        <div class="col-lg-12 col-md-12" id="editAddress">
+            <div class="rounded shadow-lg p-4">
+                <h5 class="mb-0">Enter new Details :</h5>
+
+                <form class="mt-4">
+                    <div class="row">
+                        <div class="col-6">
+                            <div class="form-group position-relative">
+                                <label>Your Name <span class="text-danger">*</span></label>
+                                <input name="name" id="firstname" type="text" class="form-control" placeholder="First Name :">
+                            </div>
+                        </div><!--end col-->
+                        <div class="col-6">
+                            <div class="form-group position-relative">
+                                <label>Last Name <span class="text-danger">*</span></label>
+                                <input name="name" id="lastname" type="text" class="form-control" placeholder="Last Name :">
+                            </div>
+                        </div><!--end col-->
+                        <div class="col-12">
+                            <div class="form-group position-relative">
+                                <label>Street address <span class="text-danger">*</span></label>
+                                <input type="text" name="address1" id="address1" class="form-control" placeholder="House number and street name :">
+                            </div>
+                        </div><!--end col-->
+                        <div class="col-12">
+                            <div class="form-group position-relative">
+                                <label>Phone Number <span class="text-danger">*</span></label>
+                                <input type="text" name="address1" id="address1" class="form-control" placeholder="09094927392">
+                            </div>
+                        </div><!--end col-->
+
+                        <div class="col-md-6">
+                            <div class="form-group position-relative">
+                                <label>State <span class="text-danger">*</span></label>
+                                <select class="form-control custom-select">
+                                    <option selected="">India</option>
+                                    <option value="AF">Afghanistan</option>
+                                </select>
+                            </div>
+                        </div><!--end col-->
+
+                        <div class="col-md-6">
+                            <div class="form-group position-relative">
+                                <label>LGA <span class="text-danger">*</span></label>
+                                <input type="text" name="state" id="state" class="form-control" placeholder="State Name :">
+                            </div>
+                        </div><!--end col-->
+
+                        <div class="col-md-6">
+                            <div class="form-group position-relative">
+                                <label>Town/City <span class="text-danger">*</span></label>
+                                <input type="text" name="state" id="state" class="form-control" placeholder="State Name :">
+                            </div>
+                        </div> <!--end col-->
+                        
+                    </div><!--end row-->
+                    <div class="d-flex align-items-center justify-content-between mt-4 col-lg-12">                                
+                        <!-- <a onclick="address()" href="javascript:void(0)" class="btn btn-primary">Add New Address</a> -->
+                        <a href="javascript:void(0)" class="btn btn-success btn-lg btn-block" id="edit">Confirm</a>
+                    </div>
+                </form><!--end form-->
+            </div>
+
+        </div><!--end col-->
+
+
+    </div>
+    <!-- new one ends2 -->
+
+
+
+
+</div>
+
+
+
 
                 <div class="row mt-4">
                     <div class="col-md-12">
@@ -374,6 +543,21 @@ p{margin-bottom:.3em;}
         function displayPaymentGateways(){
             $('.payment-options').removeClass('d-none');
         }
+
+        $("#editAddress").addClass("address-hide"); 
+
+        function address() {
+            // if ($("#address").hasClass('address-show')) {
+            //     $("#editAddress").removeClass("address-hide");
+            //     $("#editAddress").addClass("address-show");
+            //     $("#address").removeClass("address-show");
+            //     $("#address").addClass("address-hide");
+            // } else {
+                $("#address").addClass("address-hide");
+                $("#editAddress").removeClass("address-hide");
+            }
+
+
     </script>
 @endpush
 
