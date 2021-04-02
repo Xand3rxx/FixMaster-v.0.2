@@ -75,11 +75,25 @@ class ServiceRequestAssigned extends Model
     // {
     //     return $this->belongsTo(ServiceRequest::class)->with('users', 'client');
     // }
+    public function users()
+    {
+        return $this->belongsTo(User::class, 'user_id');
+    }
 
-    // public function request_status()
-    // {
-    //     return $this->belongsTo(Status::class, 'user_id');
-    // }
+    public function account()
+    {
+        return $this->belongsTo(Account::class, 'service_request_id', 'user_id' );
+    }
+
+
+    public function service_requests(){
+        return $this->belongsTo(ServiceRequest::class)->with('users', 'client');
+    }
+
+    public function request_status()
+    {
+        return $this->belongsTo(Status::class, 'user_id');
+    }
 
 
     // public function client_requesting_service()
@@ -91,4 +105,17 @@ class ServiceRequestAssigned extends Model
     // {
     //     return $this->belongsTo(Account::class, 'user_id', 'service_id');
     // }
+    
+    public function client_requesting_service()
+    {
+        return $this->belongsTo(Account::class, 'user_id');
+    }
+
+    public function tech_account()
+    {
+        return $this->belongsTo(Account::class, 'user_id', 'service_id' );
+    }
 }
+
+
+

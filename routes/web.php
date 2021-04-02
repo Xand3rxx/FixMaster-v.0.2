@@ -35,6 +35,7 @@ use App\Http\Controllers\QualityAssurance\QualityAssuranceProfileController;
 
 use App\Http\Controllers\CSE\CustomerServiceExecutiveController as CseController;
 use App\Http\Controllers\CSE\RequestController;
+use App\Http\Controllers\Admin\ServiceRequestSettingController;
 
 /*
 |--------------------------------------------------------------------------
@@ -124,10 +125,10 @@ Route::prefix('admin')->group(function () {
         Route::resource('categories',                       CategoryController::class);
 
         //Routes for Services Management
-        Route::get('/services/deactivate/{service}',        [ServiceController::class, 'deactivate'])
+        Route::get('/services/deactivate/{service:uuid}',        [ServiceController::class, 'deactivate'])
             ->name('services.deactivate');
-        Route::get('/services/reinstate/{service}',         [ServiceController::class, 'reinstate'])->name('services.reinstate');
-        Route::get('/services/delete/{service}',            [ServiceController::class, 'destroy'])->name('services.delete');
+        Route::get('/services/reinstate/{service:uuid}',         [ServiceController::class, 'reinstate'])->name('services.reinstate');
+        Route::get('/services/delete/{service:uuid}',            [ServiceController::class, 'destroy'])->name('services.delete');
         Route::resource('services',                         ServiceController::class);
 
 
@@ -227,10 +228,18 @@ Route::prefix('admin')->group(function () {
         Route::resource('booking-fees',                     PriceController::class);
 
         //Routes for Status Management
+        Route::get('/statuses/deactivate/{status}',         [StatusController::class, 'deactivate'])->name('statuses.deactivate');
+        Route::get('/statuses/reinstate/{status}',          [StatusController::class, 'reinstate'])->name('statuses.reinstate');
+        Route::get('/statuses/delete/{status}',             [StatusController::class, 'destroy'])->name('statuses.delete');
         Route::resource('statuses',                         StatusController::class);
 
+    //Setting controller
+    // Route::get('service/request/criteria',           [ServiceRequestSettingController::class, 'index'])->name('serviceReq.index');
+    // Route::get('service/request/criteria/{id}',      [ServiceRequestSettingController::class, 'Edit'])->name('editCriteria');
+    // Route::post('service/request/criteriaUpdate',    [ServiceRequestSettingController::class, 'update'])->name('serviceReq.update'); 
 
-
+    Route::get('/serviceCriteria/delete/{criteria}',              [ServiceRequestSettingController::class, 'destroy'])->name('serviceReq.delete');
+    Route::resource('serviceCriteria',                            ServiceRequestSettingController::class);
     });
 });
 
@@ -254,7 +263,10 @@ Route::prefix('/client')->group(function () {
 
         // E-wallet Routes for clients
         //Profile and password update
+ 
+        // E-wallet Routes for clients 
         Route::get('/settings',                 [ClientController::class, 'settings'])->name('settings');
+        Route::any('/getDistanceDifference',    [ClientController::class, 'getDistanceDifference'])->name('getDistanceDifference');
 
         // Route::get('/wallet',                [ClientController::class, 'wallet'])->name('wallet'); //Take me to Supplier Dashboard
             // Route::get('/requests',          [ClientRequestController::class, 'index'])->name('client.requests');

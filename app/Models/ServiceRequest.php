@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Str;
@@ -10,7 +9,7 @@ use App\Traits\GenerateUniqueIdentity as Generator;
 
 class ServiceRequest extends Model
 {
-    use HasFactory, SoftDeletes, Generator;
+    use SoftDeletes, Generator;
 
     // column name of key
     // protected $primaryKey = 'uuid';
@@ -114,6 +113,7 @@ class ServiceRequest extends Model
     {
         return $this->belongsToMany(User::class, 'service_request_assigned')->with('account', 'roles');
     }
+    
     public function invoice()
     {
         return $this->hasOne(Invoice::class);
@@ -161,10 +161,15 @@ class ServiceRequest extends Model
         return $this->hasOne(Account::class, 'user_id', 'service_id');
     }
 
-    // public function address()
+
+    // public function price()
     // {
-    //     return $this->belongsTo(Contact::class);
+    //     return $this->hasOne(Price::class, 'price_id')->withDefault();
     // }
+
+    public function address(){
+        return $this->belongsTo(Contact::class, 'contact_id');
+    }
 
     // public function phone()
     // {

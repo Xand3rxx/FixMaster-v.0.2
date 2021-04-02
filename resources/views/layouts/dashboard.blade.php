@@ -40,7 +40,7 @@
 
 </head>
 
-<body class="app-mail">
+<body>
     <style>
       div.dt-buttons {
         margin-top: 1em;
@@ -80,7 +80,7 @@
 
 
     </style>
-
+<input type="hidden" id="path_admin" value="{{url('/')}}">
     @include('layouts.partials._dashboard_sidebar')
 
     <div class="content ht-100v pd-0">
@@ -90,14 +90,14 @@
 
     <script src="{{ asset('assets/dashboard/lib/jquery/jquery.min.js') }}"></script>
     <script src="{{ asset('assets/dashboard/lib/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
-    <script src="{{ asset('assets/dashboard/assets/js/dashforge.settings.js') }}"></script>
     <script src="{{ asset('assets/dashboard/assets/js/dashforge.js') }}"></script>
     <script src="{{ asset('assets/dashboard/assets/js/dashforge.aside.js') }}"></script>
+    <script src="{{ asset('assets/dashboard/assets/js/dashforge.settings.js') }}"></script>
+
     <script src="{{ asset('assets/dashboard/assets/js/dashforge.sampledata.js') }}"></script>
     <script src="{{ asset('assets/dashboard/lib/perfect-scrollbar/perfect-scrollbar.min.js') }}"></script>
     <script src="{{ asset('assets/dashboard/lib/cleave.js/cleave.min.js') }}"></script>
     <script src="{{ asset('assets/dashboard/lib/feather-icons/feather.min.js') }}"></script>
-    <script src="{{ asset('assets/dashboard/lib/perfect-scrollbar/perfect-scrollbar.min.js') }}"></script>
 
     <script src="{{ asset('assets/dashboard/lib/jquery.flot/jquery.flot.js') }}"></script>
     <script src="{{ asset('assets/dashboard/lib/jquery.flot/jquery.flot.stack.js') }}"></script>
@@ -105,7 +105,7 @@
     <script src="{{ asset('assets/dashboard/lib/chart.js/Chart.bundle.min.js') }}"></script>
 
     <!-- append theme customizer -->
-    <script src="{{ asset('assets/dashboard/lib/js-cookie/js.cookie.js') }}"></script>
+    {{-- <script src="{{ asset('assets/dashboard/lib/js-cookie/js.cookie.js') }}"></script> --}}
 
     <script src="{{ asset('assets/dashboard/assets/datatables/dataTables.min.js') }}"></script>
     <script src="{{ asset('assets/dashboard/assets/datatables/dataTables.bootstrap.min.js') }}"></script>
