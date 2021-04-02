@@ -13,7 +13,7 @@
             <li class="breadcrumb-item"><a href="{{ route('admin.index', app()->getLocale()) }}">Dashboard</a></li>
               <li class="breadcrumb-item active" aria-current="page">Tax List</li>
             </ol>
-          </nav>
+          </nav> 
           <h4 class="mg-b-0 tx-spacing--1">Tax List</h4>
         </div>
       </div>
