@@ -52,4 +52,8 @@ class EssentialsController extends Controller
             return $availableQuantity;
         }
     }
+    public function Edit($id){
+        $data = ServiceRequestSettingController::find($id);
+        return $data;
+      }
 }

@@ -12,7 +12,7 @@ class Service extends Model
     use HasFactory, SoftDeletes;
 
     // column name of key
-    protected $primaryKey = 'uuid';
+    // protected $primaryKey = 'uuid';
 
     // type of key
     protected $keyType = 'string';
@@ -40,7 +40,7 @@ class Service extends Model
      */
     protected static function booted()
     {
-        // Create a uuid when a new serivce uuid and url is to be created
+        // Create a uuid when a new serivce uuid is to be created
         static::creating(function ($service) {
             $service->uuid = (string) Str::uuid();
         });
@@ -60,7 +60,7 @@ class Service extends Model
     }
 
     /** 
-     * Scope a query to only include active banches
+     * Scope a query to only include active services
      * 
      * @param \Illuminate\Database\Eloquent\Builder $query
      * @return \Illuminate\Database\Eloquent\Builder
@@ -116,4 +116,8 @@ class Service extends Model
         return $this->hasMany(ClientDiscount::class, 'client_id');
     }
 
+    public function subServices()
+    {
+        return $this->hasMany(SubService::class);
+    }
 }

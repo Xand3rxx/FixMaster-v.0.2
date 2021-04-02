@@ -19,7 +19,7 @@
           <td>{{ $tax->user->email }}</td>
           <td class="tx-medium text-center">{{ $tax->percentage }}</td>
           @if($tax->applicable == 1) 
-          <td class="text-center text-success">Yes</td>
+          <td class="text-center text-success">Yes</td> 
           @else 
             <td class="text-center text-danger">No</td>
           @endif
