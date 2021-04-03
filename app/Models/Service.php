@@ -45,7 +45,7 @@ class Service extends Model
 
     /** 
      * Scope a query to only include active banches
-     * 
+     *
      * @param \Illuminate\Database\Eloquent\Builder $query
      * @return \Illuminate\Database\Eloquent\Builder
      */
@@ -118,10 +118,5 @@ class Service extends Model
     public function clientDiscounts()
     {
         return $this->hasMany(ClientDiscount::class, 'client_id');
-    }
-
-    public function subServices()
-    {
-        return $this->hasMany(SubService::class);
     }
 }

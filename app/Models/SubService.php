@@ -33,4 +33,9 @@ class SubService extends Model
             $subService->uuid = (string) Str::uuid();
         });
     }
+
+    public function service()
+    {
+        return $this->belongsTo(Service::class, 'service_id', 'id');
+    }
 }

@@ -27,6 +27,7 @@ class CreateSubServicesTable extends Migration
             $table->unsignedInteger('subsequent_hour_charge');
             $table->softDeletes();
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

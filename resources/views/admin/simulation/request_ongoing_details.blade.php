@@ -39,7 +39,7 @@
                         <div class="form-row mt-4">
                             <div class="tx-13 mg-b-25">
 
-                                @if($requestDetail->rfq()->where('status', '0')->count() > 0)
+                                @if($requestDetail->rfq()->where('status', 'Pending')->count() > 0)
 
                                     <h3>Price Tagging</h3>
                                     <section>
@@ -97,7 +97,7 @@
                                                         <input type="number" class="form-control" id="quantity" name="quantity[]" value="{{ old('quantity') ?? $batch->quantity }}" min="{{ $batch->quantity }}" max="{{ $batch->quantity }}" readonly>
                                                     </div>
                                                     <div class="form-group col-md-3">
-                                                        <label for="amount">Amount</label>
+                                                        <label for="amount">Amount <small>(per unit)</small></label>
                                                         <input type="tel" class="form-control amount" id="amount" placeholder="" value="{{ old('amount') }}" name="amount[]" autocomplete="off">
                                                     </div>
                                                 </div>

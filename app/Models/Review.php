@@ -9,3 +9,4 @@ class Review extends Model
 {
     use HasFactory;
 }
+
