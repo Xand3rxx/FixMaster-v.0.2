@@ -52,7 +52,6 @@
                     <th>Recipient</th>
                     <th>Response Timestamp</th>
                     <th>Location</th>
-                    <th class=" text-center">Action</th>
                   </tr>
                 </tr>
               </thead>
@@ -65,8 +64,6 @@
                   <td class="tx-medium">Godfrey Diwa</td>
                   <td class="text-medium"></td>
                   <td class="text-medium"></td>
-                  <td class=" text-center"><a href="#" title="Show location" class="btn btn-success btn-sm"><i class="
-                    fas fa-map-marker-alt"></i></a></td>
                 </tr>
               </tbody>
             </table>
