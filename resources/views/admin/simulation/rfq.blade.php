@@ -40,8 +40,6 @@
                                     <th class="text-center">#</th>
                                     <th>Job Ref.</th>
                                     <th>Client</th>
-                                    <th>Supervised By</th>
-                                    <th>Assigned Technician</th>
                                     <th>Amount</th>
                                     <th>Status</th>
                                     <th>Schedule Date</th>
@@ -54,8 +52,6 @@
                                         <td class="tx-color-03 tx-center">{{ $loop->iteration }}</td>
                                         <td class="tx-medium">{{ $request['unique_id'] }}</td>
                                         <td class="tx-medium">{{ $request['client']->account->first_name }} {{ $request['client']->account->last_name }}</td>
-                                        <td class="tx-medium">{{ $request['cse_id'] }}</td>
-                                        <td class="text-medium">{{ $request['cse_id'] }}</td>
                                         <td class="text-medium">{{ $request['total_amount'] }}</td>
                                         <td class="text-medium text-danger">Unpaid</td>
                                         <td class="text-medium">{{ Carbon\Carbon::parse($request['created_at'], 'UTC')->isoFormat('MMMM Do YYYY, h:mm:ssa') }}</td>

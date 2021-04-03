@@ -15,7 +15,7 @@
                                             <li class="month font-weight-bold">{{ date('M') }}</li>
                                             <li class="month font-weight-bold">{{ date('Y') }}</li>
                                         </ul> --}}
-                                    
+
                                         <div class="media-body content">
                                             <h4><a href="javascript:void(0)" class="text-dark title">Balance</a></h4>
                                         <p class="text-muted location-time"><span class="text-dark h6">₦{{ $myWallet[0]['closing_balance'] ?? number_format(0) }}</span></p>
@@ -34,7 +34,7 @@
                     <div class="widget mt-4 pt-2">
                         <h5 class="widget-title">Profile :</h5>
                     </div>
-                    
+
                     <div class="widget">
                         <div class="row">
                             <div class="col-6 mt-4 pt-2">
@@ -63,7 +63,7 @@
                                     <h6 class="title text-dark h6 my-0">E-Wallet</h6>
                                 </a>
                             </div><!--end col-->
-                          
+
                             @if(CustomHelpers::ifLoyaltyExist(auth()->user()->id) == 1)
                             <div class="col-6 mt-4 pt-2">
                             <a href="{{ route('client.loyalty', app()->getLocale()) }}" class="accounts rounded d-block shadow text-center py-3 {{ Route::currentRouteNamed('client.loyalty') ? 'active' : '' }}">
@@ -80,7 +80,7 @@
                             </div><!--end col-->
 
                             <div class="col-6 mt-4 pt-2">
-                            <a href="#" class="accounts rounded d-block shadow text-center py-3 {{ Route::currentRouteNamed('') ? 'active' : '' }}">
+                            <a href="{{ route('client.payments', app()->getLocale()) }}" class="accounts rounded d-block shadow text-center py-3 {{ Route::currentRouteNamed('client.payments') ? 'active' : '' }}">
                                     <span class="pro-icons h3 text-muted"><i class="uil uil-transaction"></i></span>
                                     <h6 class="title text-dark h6 my-0">Payments</h6>
                                 </a>

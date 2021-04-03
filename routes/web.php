@@ -91,12 +91,12 @@ Route::prefix('admin')->group(function () {
 
         //Routes for Invoice Management
         Route::get('/invoices',      [InvoiceController::class, 'index'])->name('invoices');
+        Route::get('/invoice/{invoice:uuid}', [InvoiceController::class, 'invoice'])->name('invoice');
 
         //Routes for Simulation
         Route::get('/diagnostic', [SimulationController::class, 'diagnosticSimulation'])->name('diagnostic');
         Route::get('/end-service/{service_request:uuid}', [SimulationController::class, 'endService'])->name('end_service');
         Route::get('/complete-service/{service_request:uuid}', [SimulationController::class, 'completeService'])->name('complete_service');
-        Route::get('/invoice/{invoice:uuid}', [SimulationController::class, 'invoice'])->name('invoice');
 
         Route::get('/rfq',                                  [SimulationController::class, 'rfqSimulation'])->name('rfq');
         Route::get('/rfq/details/{serviceRequest:id}',    [SimulationController::class, 'rfqDetailsSimulation'])->name('rfq_details');
@@ -261,6 +261,7 @@ Route::prefix('/client')->group(function () {
             Route::any('fund',                  [ClientController::class, 'walletSubmit'])->name('wallet.submit');
             Route::get('loyalty',                [ClientController::class, 'loyalty'])->name('loyalty');
             Route::any('loyalty/submit',                 [ClientController::class, 'loyaltySubmit'])->name('loyalty.submit');
+            Route::get('payments',          [ClientController::class, 'payments'])->name('payments');
 
             Route::post('/ipnpaystack',         [ClientController::class, 'paystackIPN'])->name('ipn.paystack');
             Route::get('/apiRequest',           [ClientController::class, 'apiRequest'])->name('ipn.paystackApiRequest');

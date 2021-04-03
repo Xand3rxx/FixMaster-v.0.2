@@ -97,7 +97,7 @@
                                                         <input type="number" class="form-control" id="quantity" name="quantity[]" value="{{ old('quantity') ?? $batch->quantity }}" min="{{ $batch->quantity }}" max="{{ $batch->quantity }}" readonly>
                                                     </div>
                                                     <div class="form-group col-md-3">
-                                                        <label for="amount">Amount <small>(per unit)</small></label>
+                                                        <label for="amount">Total Amount</label>
                                                         <input type="tel" class="form-control amount" id="amount" placeholder="" value="{{ old('amount') }}" name="amount[]" autocomplete="off">
                                                     </div>
                                                 </div>

@@ -284,7 +284,7 @@
                                                         <div class="row">
                                                             <div class="col-lg-4 col-md-5 ml-auto">
                                                                 <ul class="list-unstyled h5 font-weight-normal mt-4 mb-0">
-                                                                    <li class="test-muted d-flex justify-content-between">Subtotal :<span>₦ {{ number_format($invoice['total_amount']) }}</span></li>
+                                                                    <li class="test-muted d-flex justify-content-between">Subtotal :<span>₦ {{ number_format($invoice['materials_cost'] + $invoice['labour_cost']) }}</span></li>
                                                                    <li class="text-muted d-flex justify-content-between">
                                                                        FixMaster Royalty :
                                                                        @if($get_fixMaster_royalty['amount'] == null)

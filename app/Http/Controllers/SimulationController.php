@@ -156,48 +156,5 @@ class SimulationController extends Controller
         }
     }
 
-    public function invoice($language, Invoice $invoice)
-    {
-        $get_fixMaster_royalty = Income::select('amount', 'percentage')->where('income_name', 'FixMaster Royalty')->first();
-        $get_logistics = Income::select('amount', 'percentage')->where('income_name', 'Logistics Cost')->first();
-        $get_taxes = Tax::select('percentage')->where('name', 'VAT')->first();
 
-        $tax = $get_taxes->percentage/100;
-        $fixMaster_royalty_value = $get_fixMaster_royalty->percentage;
-        $logistics_cost = $get_logistics->amount;
-        $materials_cost = $invoice->materials_cost == null ? 0 : $invoice->materials_cost;
-        $sub_total = $materials_cost + $invoice->labour_cost;
-
-        $fixMasterRoyalty = $fixMaster_royalty_value * ( $invoice->labour_cost + $materials_cost + $logistics_cost );
-
-        $warrantyCost = '';
-        $bookingCost = '';
-        $tax_cost = '';
-        $total_cost = '';
-
-        if($invoice->invoice_type == 'Diagnostic Invoice')
-        {
-            $warrantyCost = 0;
-            $bookingCost = 0;
-            $tax_cost = $tax * ( $invoice->total_amount + $logistics_cost + $fixMasterRoyalty );
-            $total_cost = $invoice->total_amount + $fixMasterRoyalty + $tax_cost + $logistics_cost - 1500;
-        }
-        else
-        {
-            $warrantyCost = 0.1 * ( $invoice->labour_cost + $materials_cost );
-            $bookingCost = $invoice->serviceRequest->price->amount;
-            $tax_cost = $tax * $sub_total;
-            $total_cost = $invoice->total_amount + $fixMasterRoyalty + $warrantyCost + $logistics_cost - $bookingCost - 1500 + $tax_cost;
-        }
-
-        return view('admin.invoices.invoice')->with([
-            'invoice' => $invoice,
-            'fixmaster_royalty' => $fixMasterRoyalty,
-            'get_fixMaster_royalty' => $get_fixMaster_royalty,
-            'taxes' => $tax_cost,
-            'logistics' => $logistics_cost,
-            'warranty' => $warrantyCost,
-            'total_cost' => $total_cost
-        ]);
-    }
 }

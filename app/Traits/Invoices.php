@@ -10,6 +10,7 @@ use App\Models\Rfq;
 use App\Models\Service;
 use App\Models\ServiceRequest;
 use App\Models\SubService;
+use App\Models\Tax;
 use App\Models\Warranty;
 use Illuminate\Support\Str;
 use phpDocumentor\Reflection\Types\Integer;
@@ -138,7 +139,7 @@ trait Invoices
     protected static function getServiceRequestDetails($service_request_id, $rfq_id, $warranty_id, $sub_service_id, $hours_spent)
     {
         $invoice_type = 'Completion Invoice';
-        $status = 1;
+        $status = '1';
         $amount_paid = 0.00;
         $serviceRequest = ServiceRequest::where('id', $service_request_id)->first();
         $rfq = Rfq::where('id', $rfq_id)->first();
@@ -170,7 +171,7 @@ trait Invoices
 
     protected static function createcompletedServiceInvoice($client_id, $service_request_id, $rfq_id, $warranty_id, $sub_service_id, $invoice_type, $labour_cost, $materials_cost, $hours_spent, $total_amount, $amount_paid, $status)
     {
-        return Invoice::create([
+         $createInvoice = Invoice::create([
             'uuid'                  => Str::uuid('uuid'),
             'client_id'             => $client_id,
             'service_request_id'    => $service_request_id,
@@ -187,16 +188,52 @@ trait Invoices
             'amount_paid'           => $amount_paid,
             'status'                => $status
         ]);
+         $invoice_id = $createInvoice->id;
+         self::getTotalAmount($invoice_id, $labour_cost, $materials_cost, $total_amount);
+         return $createInvoice;
     }
 
-    public static function estimatedInvoices( int $service_request_id, int $rfq_id, string $invoice_type, int $total_amount, int $amount_paid, int $hours_spent, string $status)
+    protected static function getTotalAmount($invoice_id, $labour_cost, $materials_cost, $total_amount)
     {
-        return self::createEstimateInvoice($service_request_id, $rfq_id, $invoice_type, $total_amount, $amount_paid, $hours_spent, $status);
-    }
+        $invoice = Invoice::findOrFail($invoice_id);
 
-    protected static function createEstimateInvoice( int $service_request_id, int $rfq_id, string $invoice_type, int $total_amount, int $amount_paid, int $hours_spent, string $status)
-    {
-        return 'Working';
+        $get_fixMaster_royalty = Income::select('amount', 'percentage')->where('income_name', 'FixMaster Royalty')->first();
+        $get_logistics = Income::select('amount', 'percentage')->where('income_name', 'Logistics Cost')->first();
+        $get_taxes = Tax::select('percentage')->where('name', 'VAT')->first();
+
+        $tax = $get_taxes->percentage/100;
+        $fixMaster_royalty_value = $get_fixMaster_royalty->percentage;
+        $logistics_cost = $get_logistics->amount;
+        $materials_cost = $materials_cost == null ? 0 : $materials_cost;
+        $sub_total = $materials_cost + $labour_cost;
+
+        $fixMasterRoyalty = $fixMaster_royalty_value * ( $labour_cost + $materials_cost + $logistics_cost );
+
+        $warrantyCost = '';
+        $bookingCost = '';
+        $tax_cost = '';
+        $total_cost = '';
+
+        if($invoice->invoice_type == 'Diagnostic Invoice')
+        {
+            $warrantyCost = 0;
+            $bookingCost = 0;
+            $tax_cost = $tax * ( $total_amount + $logistics_cost + $fixMasterRoyalty );
+            $total_cost = $materials_cost + $invoice->labour_cost + $fixMasterRoyalty + $tax_cost + $logistics_cost - 1500;
+        }
+        elseif ($invoice->invoice_type == 'Completion Invoice')
+        {
+            $warrantyCost = 0.1 * ( $invoice->labour_cost + $materials_cost );
+            $bookingCost = $invoice->serviceRequest->price->amount;
+            $tax_cost = $tax * $sub_total;
+            $total_cost = $materials_cost + $invoice->labour_cost + $fixMasterRoyalty + $warrantyCost + $logistics_cost - $bookingCost - 1500 + $tax_cost;
+        }
+
+        $invoice->update([
+           'total_amount'   => $total_cost,
+           'amount_due'     => $total_cost
+        ]);
+
     }
 
 

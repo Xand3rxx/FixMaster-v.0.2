@@ -141,12 +141,12 @@ class EstateController extends Controller
      * Display the specified resource.
      *
      * @param  \App\Models\Estate  $estate
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View|\Illuminate\Http\Response
      */
     public function estateSummary($language, Estate $estate)
     {
         $registeredClients = Client::where('estate_id', $estate->id)->get();
-        $estateDiscounts = EstateDiscountHistory::where('estate_id', $estate->id)->first();
+        $estateDiscounts = EstateDiscountHistory::where('estate_id', $estate->id)->get();
         return view('admin.estate.summary', compact('estate', 'registeredClients', 'estateDiscounts'));
     }
 

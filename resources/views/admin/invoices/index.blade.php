@@ -56,14 +56,14 @@
                                         <td class="tx-medium">{{ $invoice['invoice_type'] }}</td>
                                         <td class="tx-medium">{{ Str::title($invoice['client']['account']['first_name']. ' '.$invoice['client']['account']['last_name']) }}</td>
                                         <td class="tx-medium">{{ Carbon\Carbon::parse($invoice->created_at, 'UTC')->isoFormat('MMMM Do YYYY, h:mm:ssa') }}</td>
-                                        <td class="text-medium">{{ $invoice['total_amount'] ?? '0' }}</td>
-                                        <td class="text-medium">{{ $invoice['amount_due'] ?? '0' }}</td>
+                                        <td class="text-medium">₦ {{ number_format($invoice['total_amount'] ?? '0') }}</td>
+                                        <td class="text-medium">₦ {{ number_format($invoice['amount_due'] ?? '0') }}</td>
                                         <td class="text-medium">{!! $invoice['invoice_type'] == 'RFQ Invoice' ? ' - ' : ($invoice['status'] == 1 ? '<span class="text-danger">Unpaid</span>' : '<span class="text-success">Paid</span>') !!}</td>
                                         <td class=" text-center">
                                             <div class="dropdown-file">
                                                 <a href="" class="dropdown-link" data-toggle="dropdown"><i data-feather="more-vertical"></i></a>
                                                 <div class="dropdown-menu dropdown-menu-right">
-                                                    <a href="{{ route('admin.invoice', ['locale' => app()->getLocale(), 'invoice' => $invoice['uuid']]) }}" class="dropdown-item details text-primary"><i class="far fa-file-text"></i> View Invoice</a>
+                                                    <a href="{{ route('admin.invoice', ['locale' => app()->getLocale(), 'invoice' => $invoice['uuid']]) }}" class="dropdown-item details text-info"><i data-feather="file-text" class="fea icon-sm"></i> View Invoice</a>
                                                 </div>
                                             </div>
                                         </td>
