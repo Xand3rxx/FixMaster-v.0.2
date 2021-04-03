@@ -1,5 +1,5 @@
 @extends('layouts.dashboard')
-@section('title', 'Discount List')
+@section('title', ' Referral List')
 @include('layouts.partials._messages')
 @section('content')
 <div class="content-body">
@@ -83,7 +83,7 @@
                                                 @endif
                                             <a href="#" id="delete" 
                                                 data-url="{{ route('admin.delete_referral', [ 'referral'=>$ref->uuid, 'locale'=>app()->getLocale() ]) }}"
-                                                class="dropdown-item details text-danger" title="Delete Discount"><i
+                                                class="dropdown-item details text-danger" title="Delete  Referral"><i
                                                     class="fas fa-trash"></i> Delete</a>
 
                                         </div>
@@ -107,44 +107,7 @@
 
 @section('scripts')
 @push('scripts')
-<script>
-$(document).ready(function() {
-
-    $(document).on('click', '#delete', function(event) {
-        event.preventDefault();
-        let route = $(this).attr('data-url');
-        let url = "<a href='" + route + "'  class='confirm-link'>Yes Delete</a>";
-        displayAlert(url, 'Would you like to detele this Referral?')
-    });
-    $(document).on('click', '#deactivate', function(event) {
-        event.preventDefault();
-        let route = $(this).attr('data-url');
-        let url = "<a href='" + route + "'  class='confirm-link'>Yes Deactivate</a>";
-        displayAlert(url, 'Would you like to deactivate this Discount?')
-    })
-
-    $(document).on('click', '#activate', function(event) {
-        event.preventDefault();
-        let route = $(this).attr('data-url');
-        let url = "<a href='" + route + "'  class='confirm-link'>Yes Reinstate</a>"
-        displayAlert(url, 'Would you like to reinstate this Discount?')
-    });
-
-
-    function displayAlert(url, message) {
-        Swal.fire({
-            title: 'Are you sure?',
-            text: message,
-            showCancelButton: true,
-            confirmButtonColor: '#E97D1F',
-            cancelButtonColor: '#8392a5',
-            confirmButtonText: url
-        })
-
-    }
-
-});
-</script>
+<script src="{{ asset('assets/dashboard/assets/js/admin/referral/a09fced7-c17b-4b2e-b716-96323e4ab730.js') }}"></script>
 @endpush
 @endsection
 @endsection

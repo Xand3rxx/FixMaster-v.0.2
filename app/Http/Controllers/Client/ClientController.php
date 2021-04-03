@@ -22,7 +22,7 @@ use App\Models\Contact;
 use App\Models\Cse;
 use App\Models\ServiceRequestSetting;
 use DB;
-use App\Models\Servicerequest;
+use App\Models\ServiceRequest;
 use App\Helpers\CustomHelpers;
 use App\Traits\GenerateUniqueIdentity as Generator;
 use App\Traits\RegisterPaymentTransaction;
@@ -50,6 +50,11 @@ class ClientController extends Controller
      */
     public function index()
     {
+
+        $myRequest = ServiceRequest::where('client_id', auth()->user()->id)->with('cse_service_request')->firstOrFail();
+        $data['myServiceRequests'] = $myRequest->service_request;
+
+        dd($myRequest->cse_service_request);
         //Get total available serviecs
         $totalServices = Service::count();
 

@@ -167,7 +167,7 @@ Route::prefix('admin')->group(function () {
         Route::get('/discount/list',                       [App\Http\Controllers\DiscountController::class, 'index'])->name('discount_list');
         Route::post('/discount/add',                    [App\Http\Controllers\DiscountController::class, 'store'])->name('store_discount');
         Route::post('/LGA',                             [App\Http\Controllers\DiscountController::class, 'getLGA'])->name('getLGA');
-        Route::post('/estates',                             [App\Http\Controllers\DiscountController::class, 'estates'])->name('all_estates');
+        Route::post('/discount/estates',                             [App\Http\Controllers\DiscountController::class, 'estates'])->name('all_estates');
         Route::post('/categories-list',                             [App\Http\Controllers\DiscountController::class, 'category'])->name('categories');
         Route::post('/category-services',                             [App\Http\Controllers\DiscountController::class, 'categoryServices'])->name('category_services');
         Route::post('/discount-users',                    [App\Http\Controllers\DiscountController::class, 'discountUsers'])->name('discount_users');
@@ -258,7 +258,7 @@ Route::prefix('/client')->group(function () {
         Route::post('/profile/update',              [ClientController::class, 'update_profile'])->name('updateProfile');
         Route::post('/updatePassword',      [ClientController::class, 'updatePassword'])->name('updatePassword');
 
-        // Route::get('/requests',                    [ClientRequestController::class, 'index'])->name('client.requests');
+        Route::get('/requests',                    [ClientController::class, 'index'])->name('client.requests');
 
         // E-wallet Routes for clients
         //Profile and password update
