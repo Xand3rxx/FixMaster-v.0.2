@@ -22,7 +22,23 @@ class ServiceRequest extends Model
     public $incrementing = false;
 
     protected $fillable = [
-        'client_id', 'service_id', 'unique_id', 'state_id', 'lga_id', 'town_id', 'price_id', 'phone_id', 'address_id', 'client_discount_id', 'client_security_code', 'status_id', 'description', 'total_amount', 'preferred_time'
+        'client_id',
+        'service_id',
+        'unique_id',
+        'state_id',
+        'lga_id',
+        'town_id',
+        'price_id',
+        'phone_id',
+        'address_id',
+        'client_discount_id',
+        'client_security_code',
+        'status_id',
+        'description',
+        'total_amount',
+        'preferred_time',
+        'has_cse_rated',
+        'has_client_rated'
     ];
 
     /**
@@ -143,7 +159,7 @@ class ServiceRequest extends Model
 
     public function price()
     {
-        
+
             return $this->hasOne(Price::class, 'user_id', 'service_id')->withDefault();
     }
 

@@ -19,6 +19,7 @@ class CreateRatingsTable extends Migration
             $table->foreignId('ratee_id')->comment('User being rated')->nullable();
             $table->string('role_name')->nullable();
             $table->foreignId('service_id')->nullable();
+            $table->foreignId('service_request_id')->nullable();
             $table->integer('star');
             $table->integer('service_diagnosis_by')->comment('CSE that performed the diagnosis')->nullable();
 

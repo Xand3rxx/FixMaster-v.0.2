@@ -65,5 +65,6 @@ class Kernel extends HttpKernel
         'throttle' => \Illuminate\Routing\Middleware\ThrottleRequests::class,
         'verified' => \Illuminate\Auth\Middleware\EnsureEmailIsVerified::class,
         'monitor.cseservice.request.changes' => \App\Http\Middleware\CheckCseRating::class,
+        'monitor.clientservice.request.changes' => \App\Http\Middleware\CheckClientRating::class,
     ];
 }

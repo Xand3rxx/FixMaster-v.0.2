@@ -63,7 +63,7 @@ Route::prefix('admin')->group(function () {
         Route::view('/', 'admin.index')->name('index'); //Take me to Admin Dashboard
 
         Route::view('/ratings/cse-diagnosis', 'admin.ratings.cse_diagnosis_rating')->name('category');
-        Route::view('/ratings/services',      'admin.ratings.service_rating')->name('job');
+        // Route::view('/ratings/services',      'admin.ratings.service_rating')->name('job');
         Route::view('/ratings/service-reviews',      'admin.ratings.service_reviews')->name('category_reviews');
 
         Route::prefix('users')->name('users.')->group(function () {
@@ -89,6 +89,7 @@ Route::prefix('admin')->group(function () {
         Route::get('/estate/approve/{estate:uuid}',      [EstateController::class, 'approve'])->name('approve_estate');
         Route::get('/estate/decline/{estate:uuid}',      [EstateController::class, 'decline'])->name('decline_estate');
         Route::get('/estate/delete/{estate:uuid}',      [EstateController::class, 'delete'])->name('delete_estate');
+        Route::get('/ratings/services',      [RatingController::class, 'getServiceRatings'])->name('job');
 
         //Routes for Invoice Management
         Route::get('/invoices',      [InvoiceController::class, 'index'])->name('invoices');
@@ -237,7 +238,7 @@ Route::prefix('admin')->group(function () {
 // Route::resource('client', ClientController::class);
 
 //All routes regarding clients should be in here
-Route::prefix('/client')->group(function () {
+Route::prefix('/client')->middleware('monitor.clientservice.request.changes')->group(function () {
     Route::name('client.')->group(function () {
         //All routes regarding clients should be in here
         Route::get('/',                   [ClientController::class, 'index'])->name('index'); //Take me to Supplier Dashboard
@@ -296,7 +297,7 @@ Route::prefix('/client')->group(function () {
     });
 });
 
-// Route::resource('cse', CseController::class);
+Route::resource('cse', CseController::class);
 
 // Route::prefix('/cse')->group(function () {
 //     Route::name('cse.')->group(function () {
@@ -317,18 +318,20 @@ Route::prefix('/cse')->middleware('monitor.cseservice.request.changes')->group(f
 
         Route::view('/request/details',    'cse.request_details',
             [
-                'tools' => \App\Models\ToolInventory::all(),
-                'ongoingSubStatuses' => \App\Models\SubStatus::where('status_id', 2)->get(['id', 'name']),
-                'warranties' => \App\Models\Warranty::all(),
+                // 'tools' => \App\Models\ToolInventory::all(),
+                // 'ongoingSubStatuses' => \App\Models\SubStatus::where('status_id', 2)->get(['id', 'name']),
+                // 'warranties' => \App\Models\Warranty::all(),
             ]
         )->name('request_details');
         Route::view('/profile',             'cse.view_profile')->name('view_profile');
         Route::view('/profile/edit',        'cse.edit_profile', [
-            'banks' => \App\Models\Bank::all(),
+            // 'banks' => \App\Models\Bank::all(),
 
         ])->name('edit_profile');
         Route::view('/location-request',    'cse.location_request')->name('location_request');
-        Route::post('submit_ratings',  [RatingController::class, 'store'])->name('submit_ratings');
+        Route::post('/submit_ratings',  [CseController::class, 'user_rating'])->name('handle.ratings');
+        Route::post('/update_service_request',  [CseController::class, 'update_cse_service_rating'])->name('update_service_request');
+
     });
 });
 

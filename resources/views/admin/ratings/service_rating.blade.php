@@ -42,10 +42,11 @@
                     </tr>
                   </thead>
                   <tbody>
+                @foreach($resviceRatings as $rating)
                     <tr>
                       <td class="tx-color-03 tx-center">1</td>
-                      <td class="tx-medium">Computer & Laptops</td>
-                      <td class="tx-medium text-center">25</td>
+                      <td class="tx-medium">{{$rating->service->name}}</td>
+                      <td class="tx-medium text-center">{{$rating->star}}</td>
                       <td class="text-medium text-center">5.0</td>
                       <td class=" text-center">
                         <div class="dropdown-file">
@@ -56,36 +57,8 @@
                         </div>
                       </td>
                     </tr>
+ @endforeach
 
-                    <tr>
-                      <td class="tx-color-03 tx-center">2</td>
-                      <td class="tx-medium">Bath-Tubs, Pipes, Kitchen Sink</td>
-                      <td class="tx-medium text-center">20</td>
-                      <td class="text-medium text-center">4.0</td>
-                      <td class=" text-center">
-                        <div class="dropdown-file">
-                            <a href="" class="dropdown-link" data-toggle="dropdown"><i data-feather="more-vertical"></i></a>
-                            <div class="dropdown-menu dropdown-menu-right">
-                            <a href="#serviceDetails" data-toggle="modal" class="dropdown-item details text-primary" title="View Computer & Laptops ratings"><i class="far fa-clipboard"></i> Ratings</a>
-                            </div>
-                        </div>
-                      </td>
-                    </tr>
-
-                    <tr>
-                      <td class="tx-color-03 tx-center">3</td>
-                      <td class="tx-medium">Fuse Box</td>
-                      <td class="tx-medium text-center">15</td>
-                      <td class="text-medium text-center">3.0</td>
-                      <td class=" text-center">
-                        <div class="dropdown-file">
-                            <a href="" class="dropdown-link" data-toggle="dropdown"><i data-feather="more-vertical"></i></a>
-                            <div class="dropdown-menu dropdown-menu-right">
-                            <a href="#serviceDetails" data-toggle="modal" class="dropdown-item details text-primary" title="View Computer & Laptops ratings"><i class="far fa-clipboard"></i> Ratings</a>
-                            </div>
-                        </div>
-                      </td>
-                    </tr>
 
                   </tbody>
                 </table>
