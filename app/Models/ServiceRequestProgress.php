@@ -7,6 +7,14 @@ use Illuminate\Database\Eloquent\Model;
 
 class ServiceRequestProgress extends Model
 {
+    protected $table = 'service_request_progresses';
+
+    /**
+     * The attributes that aren't mass assignable.
+     *
+     * @var array
+     */
+    protected $guarded = ['deleted_at', 'created_at', 'updated_at'];
 
     /**
      * Store record of a Assigned User on the Service Request Progress Table

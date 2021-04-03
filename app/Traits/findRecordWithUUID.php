@@ -35,6 +35,6 @@ trait findRecordWithUUID
      */
     protected static function findWithUUID(string $tableName, string $theUUID)
     {
-        return \Illuminate\Support\Facades\DB::table($tableName)->where('uuid', $theUUID)->findOrFail();
+        return \Illuminate\Support\Facades\DB::table($tableName)->where('uuid', $theUUID)->first();
     }
 }

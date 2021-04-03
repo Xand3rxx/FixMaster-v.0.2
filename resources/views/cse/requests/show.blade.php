@@ -50,28 +50,32 @@
 
                 <div class="tab-pane fade show active" id="update3" role="tabpanel" aria-labelledby="update-tab3">
                   <small class="text-danger">This tab is only visible onc the Service request has an Ongoing status. Which logically is updated by the system or the CSE Coordinator by assigning a CSE to the request</small>
-                  @if (!empty($technicains))
-                  <form class="form-data" method="POST" action="{{route('cse.assign.technician', [app()->getLocale()])}}">
+                  {{-- @if (!empty($technicains)) --}}
+                  <form class="form-data" method="POST" action="{{route('cse.project.progress.update', [app()->getLocale()])}}">
                     @csrf
                     <div class="form-row mt-4">
                       <div class="tx-13 mg-b-25">
                         <div id="wizard3">
                          
-                          <h3>Assign Technician</h3>
+                        <h3>Project Progress</h3>
                           <section>
+                            <p class="mg-b-0">Specify the current progress of the job.</p>
                             <div class="form-row mt-4">
                               <div class="form-group col-md-12">
-                                <label for="name">Assign Technician</label>
-                                <select required class="form-control custom-select @error('technician_user_id') is-invalid @enderror" name="technician_user_id">
-                                  <option selected disabled value="0" selected>Select...</option>
-                                  @foreach ($technicains as $technicain)
-                                  <option value="{{$technicain['user']['id']}}">{{$technicain['user']['account']['last_name'] .' '. $technicain['user']['account']['first_name']}}</option>
+                                  {{-- This portion will display only Ongoing Status Sub statuses<br> --}}
+
+                                <select class="form-control custom-select @error('sub_status_uuid') is-invalid @enderror" name="sub_status_uuid">
+                                  <option selected disabled value="0">Select...</option>
+                                  @foreach($ongoingSubStatuses as $status)
+                                    {{-- @if($status->id > 6) --}}
+                                      <option value="{{ $status->uuid }}">{{ $status->name }}</option>
+                                    {{-- @endif --}}
                                   @endforeach
                                 </select>
-                                @error('technician_user_id')
-                                <span class="invalid-feedback" role="alert">
-                                  <strong>{{ $message }}</strong>
-                                </span>
+                                @error('sub_status_uuid')
+                                  <span class="invalid-feedback" role="alert">
+                                      <strong>{{ $message }}</strong>
+                                  </span>
                                 @enderror
                               </div>
                             </div>
@@ -87,7 +91,7 @@
                     <button type="submit" class="btn btn-primary d-none" id="update-progress">Update Progress</button>
 
                   </form>
-                  @endif
+                  {{-- @endif --}}
                 </div>
                 
                 <!-- Service Description Tab -->

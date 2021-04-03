@@ -60,21 +60,6 @@ class ServiceRequestAssigned extends Model
         ]);
     }
 
-    // public function users()
-    // {
-    //     return $this->belongsTo(User::class, 'user_id');
-    // }
-
-    // public function account()
-    // {
-    //     return $this->belongsTo(Account::class, 'service_request_id', 'user_id');
-    // }
-
-
-    // public function service_requests()
-    // {
-    //     return $this->belongsTo(ServiceRequest::class)->with('users', 'client');
-    // }
     public function users()
     {
         return $this->belongsTo(User::class, 'user_id');
@@ -82,11 +67,12 @@ class ServiceRequestAssigned extends Model
 
     public function account()
     {
-        return $this->belongsTo(Account::class, 'service_request_id', 'user_id' );
+        return $this->belongsTo(Account::class, 'service_request_id', 'user_id');
     }
 
 
-    public function service_requests(){
+    public function service_requests()
+    {
         return $this->belongsTo(ServiceRequest::class)->with('users', 'client');
     }
 
@@ -94,28 +80,4 @@ class ServiceRequestAssigned extends Model
     {
         return $this->belongsTo(Status::class, 'user_id');
     }
-
-
-    // public function client_requesting_service()
-    // {
-    //     return $this->belongsTo(Account::class, 'user_id');
-    // }
-
-    // public function tech_account()
-    // {
-    //     return $this->belongsTo(Account::class, 'user_id', 'service_id');
-    // }
-    
-    public function client_requesting_service()
-    {
-        return $this->belongsTo(Account::class, 'user_id');
-    }
-
-    public function tech_account()
-    {
-        return $this->belongsTo(Account::class, 'user_id', 'service_id' );
-    }
 }
-
-
-
