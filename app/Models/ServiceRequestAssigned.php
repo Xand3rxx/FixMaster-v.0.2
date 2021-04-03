@@ -78,6 +78,16 @@ class ServiceRequestAssigned extends Model
 
     public function request_status()
     {
-        return $this->belongsTo(Status::class, 'user_id');
+        return $this->belongsTo(User::class, 'user_id');
+    }
+
+    public function client_requesting_service()
+    {
+        return $this->belongsTo(Account::class, 'user_id');
+    }
+
+    public function tech_account()
+    {
+        return $this->belongsTo(Account::class, 'user_id', 'service_id' );
     }
 }

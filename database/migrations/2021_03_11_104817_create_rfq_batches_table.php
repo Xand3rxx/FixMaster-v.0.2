@@ -23,7 +23,7 @@ class CreateRfqBatchesTable extends Migration
             $table->string('component_name');
             $table->string('model_number')->nullable();
             $table->unsignedInteger('quantity');
-            $table->unsignedInteger('amount')->nullable();
+            $table->unsignedInteger('amount')->default(0);
         });
     }
 

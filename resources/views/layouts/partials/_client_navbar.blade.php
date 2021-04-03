@@ -141,7 +141,7 @@
 
                         <li class="{{ Route::currentRouteNamed('client.messages') ? 'active' : '' }}"><a href="#">Messages</a></li>
 
-                        <li class="{{ Route::currentRouteNamed('client.settings') ? 'active' : '' }}"><a href="#">Settings</a></li>
+                        <li class="{{ Route::currentRouteNamed('client.settings') ? 'active' : '' }}"><a href="#">Settings</a></li> 
 
                         {{-- <li><a href="{{ route('login') }}">Logout</a></li> --}}
                     </ul>

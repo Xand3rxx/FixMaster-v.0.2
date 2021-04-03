@@ -265,7 +265,6 @@ Route::prefix('/client')->group(function () {
         // E-wallet Routes for clients
         //Profile and password update
 
-        // E-wallet Routes for clients 
         Route::get('/settings',                 [ClientController::class, 'settings'])->name('settings');
         Route::any('/getDistanceDifference',    [ClientController::class, 'getDistanceDifference'])->name('getDistanceDifference');
 
@@ -289,6 +288,10 @@ Route::prefix('/client')->group(function () {
         Route::get('services/custom/',              [ClientController::class, 'customService'])->name('services.custom');
 
         Route::post('servicesRequest',              [ClientController::class, 'serviceRequest'])->name('services.serviceRequest');
+        // view all my service request
+        Route::get('myServicesRequest',              [ClientController::class, 'myServiceRequest'])->name('service.all');
+
+        Route::get('myContactList',                  [ClientController::class, 'myContactList'])->name('service.myContacts');
 
         //Flutterwave Routes
         Route::post('/request/flutterwave/submit',              [ClientController::class, 'storeFlutterServiceRequest'])->name('flutterwave.submit');
