@@ -174,6 +174,7 @@ class ServiceRequestSeeder extends Seeder
                 'job_diagnostic_date'   =>  NULL,
                 'job_declined_time'     =>  NULL,
                 'job_completed_date'    =>  NULL,
+                'status'                =>  NULL,
                 'created_at'            => NULL, 
             ),
             array(
@@ -186,6 +187,7 @@ class ServiceRequestSeeder extends Seeder
                 'job_diagnostic_date'   =>  NULL,
                 'job_declined_time'     =>  NULL,
                 'job_completed_date'    =>  NULL,
+                'status'                =>  'Active',
                 'created_at'            => '2020-12-14 13:43:14',
             ),
             array(
@@ -196,6 +198,7 @@ class ServiceRequestSeeder extends Seeder
                 'job_diagnostic_date'   =>  NULL,
                 'job_declined_time'     =>  NULL,
                 'job_completed_date'    =>  NULL,
+                'status'                =>  NULL,
                 'created_at'            => NULL, 
             ),
             array(
@@ -206,6 +209,7 @@ class ServiceRequestSeeder extends Seeder
                 'job_diagnostic_date'   =>  NULL,
                 'job_declined_time'     =>  NULL,
                 'job_completed_date'    =>  NULL,
+                'status'                =>  NULL,
                 'created_at'            => NULL, 
             ),
 
@@ -217,6 +221,7 @@ class ServiceRequestSeeder extends Seeder
                 'job_diagnostic_date'   =>  NULL,
                 'job_declined_time'     =>  NULL,
                 'job_completed_date'    =>  NULL,
+                'status'                =>  NULL,
                 'created_at'            => NULL, 
             ),
             array(
@@ -227,6 +232,7 @@ class ServiceRequestSeeder extends Seeder
                 'job_diagnostic_date'   =>  '2020-12-16 15:56:17',
                 'job_declined_time'     =>  NULL,
                 'job_completed_date'    =>  NULL,
+                'status'                =>  'Active',
                 'created_at'            => '2020-12-15 10:51:29',
             ),
             array(
@@ -237,6 +243,7 @@ class ServiceRequestSeeder extends Seeder
                 'job_diagnostic_date'   =>  NULL,
                 'job_declined_time'     =>  NULL, 
                 'job_completed_date'    =>  NULL,
+                'status'                =>  NULL,
                 'created_at'            => NULL, 
             ),
             array(
@@ -247,6 +254,7 @@ class ServiceRequestSeeder extends Seeder
                 'job_diagnostic_date'   =>  NULL,
                 'job_declined_time'     =>  NULL, 
                 'job_completed_date'    =>  NULL,
+                'status'                =>  NULL,
                 'created_at'            => NULL, 
             ),
 
@@ -258,6 +266,7 @@ class ServiceRequestSeeder extends Seeder
                 'job_diagnostic_date'   =>  NULL,
                 'job_declined_time'     =>  NULL, 
                 'job_completed_date'    =>  NULL,
+                'status'                =>  NULL,
                 'created_at'            => NULL, 
             ),
             array(
@@ -268,6 +277,7 @@ class ServiceRequestSeeder extends Seeder
                 'job_diagnostic_date'   =>  '2020-01-07 11:19:02',
                 'job_declined_time'     =>  NULL,
                 'job_completed_date'    =>  NULL,
+                'status'                =>  'Active',
                 'created_at'            => '2021-01-05 15:04:48',
             ),
             array(
@@ -278,6 +288,7 @@ class ServiceRequestSeeder extends Seeder
                 'job_diagnostic_date'   =>  NULL,
                 'job_declined_time'     =>  NULL, 
                 'job_completed_date'    =>  NULL,
+                'status'                =>  NULL,
                 'created_at'            => NULL, 
             ),
             array(
@@ -288,6 +299,7 @@ class ServiceRequestSeeder extends Seeder
                 'job_diagnostic_date'   =>  NULL,
                 'job_declined_time'     =>  NULL, 
                 'job_completed_date'    =>  NULL,
+                'status'                =>  NULL,
                 'created_at'            => NULL, 
             ),
 
@@ -299,6 +311,7 @@ class ServiceRequestSeeder extends Seeder
                 'job_diagnostic_date'   =>  NULL,
                 'job_declined_time'     =>  NULL, 
                 'job_completed_date'    =>  NULL,
+                'status'                =>  NULL,
                 'created_at'            => NULL, 
             ),
             array(
@@ -308,6 +321,7 @@ class ServiceRequestSeeder extends Seeder
                 'job_acceptance_time'   => '2020-01-07 09:23:44',
                 'job_diagnostic_date'   =>  '2020-01-07 12:26:09',
                 'job_declined_time'     =>  NULL,
+                'status'                =>  'Active',
                 'job_completed_date'    =>  '2020-01-08 10:34:45',
                 'created_at'            => '2021-01-05 15:04:48',
             ),
@@ -319,6 +333,7 @@ class ServiceRequestSeeder extends Seeder
                 'job_diagnostic_date'   =>  NULL,
                 'job_declined_time'     =>  NULL,
                 'job_completed_date'    =>  NULL, 
+                'status'                =>  NULL,
                 'created_at'            => NULL, 
             ),
             array(
@@ -329,6 +344,7 @@ class ServiceRequestSeeder extends Seeder
                 'job_diagnostic_date'   =>  NULL,
                 'job_declined_time'     =>  NULL, 
                 'job_completed_date'    =>  NULL,
+                'status'                =>  NULL,
                 'created_at'            => NULL, 
             ),
 
