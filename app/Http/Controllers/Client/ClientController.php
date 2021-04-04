@@ -512,7 +512,7 @@ class ClientController extends Controller
 
         $clientContact = new Contact; 
         $clientContact->user_id   = auth()->user()->id;
-        $clientContact->name      = $request->firstName.''.$request->lastName;
+        $clientContact->name      = $request->firstName.' '.$request->lastName;
         $clientContact->state_id  = $request->state;
         $clientContact->lga_id    = $request->lga;
         $clientContact->town_id    = $request->town;

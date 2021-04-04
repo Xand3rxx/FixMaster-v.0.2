@@ -244,7 +244,7 @@ p{margin-bottom:.3em;}
 
 
 
-                <div class="row mt-4">
+<div class="row mt-4">
     <div class="col-md-12">
         <div class="form-group position-relative">
             <label>Tell us more about the service you need :</label>
@@ -502,15 +502,15 @@ p{margin-bottom:.3em;}
             // submitForm =
             e.preventDefault();
             // $('#lga_id').on('change', function() {
-            let firstName = $("#first-name").val();
-            let lastName = $("#last-name").val();
-            let streetAddress = $("#street-address").val();
-            let phoneNumber = $("#phone-number").val();
-            let state = $("#state_id").val();
-            let lga = $("#lga_id").val();
-            let town = $("#town_id").val();
-            let addressLat = $("#user_latitude").val();
-            let addressLng = $("#user_longitude").val();
+            // let firstName = $("#first-name").val();
+            // let lastName = $("#last-name").val();
+            // let streetAddress = $("#street-address").val();
+            // let phoneNumber = $("#phone-number").val();
+            // let state = $("#state_id").val();
+            // let lga = $("#lga_id").val();
+            // let town = $("#town_id").val();
+            // let addressLat = $("#user_latitude").val();
+            // let addressLng = $("#user_longitude").val();
 
             // console.log(firstName);
             // console.log(addressLat);
@@ -528,15 +528,15 @@ p{margin-bottom:.3em;}
                 dataType: "JSON",
                 data: {
                     _token: "{{ csrf_token() }}",
-                    firstName: firstName,
-                    lastName: lastName,
-                    streetAddress: streetAddress,
-                    phoneNumber: phoneNumber,
-                    state: state,
-                    lga: lga,
-                    town: town,
-                    addressLat: user_latitude,
-                    addressLng: user_longitude,
+                    firstName: $("#first-name").val(),
+                    lastName: $("#last-name").val(),
+                    streetAddress: $("#street-address").val(),
+                    phoneNumber: $("#phone-number").val(),
+                    state: $("#state_id").val(),
+                    lga: $("#lga_id").val(),
+                    town: $("#town_id").val(),
+                    addressLat: $("#user_latitude").val(),
+                    addressLng: $("#user_longitude").val(),
                 },
                 success: function (data) {},
             });
