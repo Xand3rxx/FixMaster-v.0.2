@@ -11,8 +11,7 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
     {{-- <meta name="Author" content="Anthony Joboy (Lagos, Nigeria)" />
     <meta name="Telephone" content="Tel: +234 903 554 7107" /> --}}
-    <meta name="description"
-        content="FixMaster is your best trusted one-call solution for a wide range of home maintenance, servicing and repair needs. Our well-trained & certified uniformed technicians are fully insured professionals with robust experience to provide home services to fully meet your needs with singular objective to make you totally relax while your repair requests are professionally handled." />
+    <meta name="description" content="FixMaster is your best trusted one-call solution for a wide range of home maintenance, servicing and repair needs. Our well-trained & certified uniformed technicians are fully insured professionals with robust experience to provide home services to fully meet your needs with singular objective to make you totally relax while your repair requests are professionally handled." />
     <meta name="keywords" content="Home-fix, Home-improvement, Home-repairs, Cleaning-services, Modern" />
     <meta name="email" content="info@homefix.ng" />
     <meta name="website" content="https://www.fixmaster.com.ng" />
@@ -83,7 +82,6 @@
             background: linear-gradient(to bottom, rgb(233 125 31) 0%, rgb(233 125 31) 100%);
             border-color: #E97D1F !important;
         }
-
     </style>
 
     @include('layouts.partials._dashboard_sidebar')
@@ -99,34 +97,15 @@
                             <span aria-hidden="true">&times;</span>
                         </button>
 
-       <form action="{{ route('cse.handle.ratings', app()->getLocale()) }}" method="POST">
+                        <form action="{{ route('cse.handle.ratings', app()->getLocale()) }}" method="POST">
                             @csrf
                             <div class="row">
-                                <div class="row">
-                                    <div class="col-md-4 col-lg-4 col-4">
-                                        <p id="serviceClient" style="margin-top:20px;"></p>
-                                    </div>
-                                    <div class="col-md-8 col-lg-8 col-8">
-                                            <div class="tx-40 text-center client">
-                                                <input type="" name="serviceRequestId" id="service_request_id" readonly>
-                                                <i class="icon ion-md-star count lh-0 tx-gray-300" data-val="1"></i>
-                                                <i class="icon ion-md-star count lh-0 tx-gray-300" data-val="2"></i>
-                                                <i class="icon ion-md-star count lh-0 tx-gray-300" data-val="3"></i>
-                                                <i class="icon ion-md-star count lh-0 tx-gray-300" data-val="4"></i>
-                                                <i class="icon ion-md-star count lh-0 tx-gray-300" data-val="5"></i>
-                                                <input type="" name="clientStar" id="clientStar" readonly>
-                                                <input type="" name="getClient" id="client_id" readonly>
-                                            </div>
-                                        </div>
-                                </div>
                                 <div class="col-md-12 col-lg-12 col-12">
                                     <div id="ratings_users"></div>
                                 </div>
                                 <div class="col-sm-12">
                                     <button type="submit" class="btn btn-primary">Submit</button>
-                                    <button type="button" class="btn btn-danger" aria-label="Close">
-                                        Skip
-                                    </button>
+                                    <button type="button" class="btn btn-danger" aria-label="Close"> Skip </button>
                                 </div>
 
                             </div>
@@ -174,110 +153,117 @@
     <script src="https://cdn.datatables.net/buttons/1.6.5/js/buttons.html5.min.js"></script>
     <script src="https://cdn.datatables.net/buttons/1.6.5/js/buttons.print.min.js"></script>
     <script src="{{ asset('assets/frontend/js/custom.js') }}"></script>
-    <script type="text/javascript"
-        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDeDLVAiaU13p2O0d3jfcPjscsbVsCQUzc&v=3.exp&libraries=places">
+    <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDeDLVAiaU13p2O0d3jfcPjscsbVsCQUzc&v=3.exp&libraries=places">
     </script>
     <script src="{{ asset('assets/dashboard/assets/js/48a9782e-3e2b-4055-a9bb-8a926a937e2c.js') }}"></script>
 
     @yield('scripts')
     @stack('scripts')
 
-    @if (\Request::filled('results') && \Request::filled('users') &&  \Request::filled('client') &&  \Request::filled('serviceRequestId'))
-        <script>
-            //console.log('{{ \Request::get('results') }}');
-            const data = @json(\Request::get('users'));
-            const client = @json(\Request::get('client'));
-            var serviceRequestId = @json(\Request::get('serviceRequestId'));
-            //console.log(serviceRequestId);
-            $("#serviceClient").html(client.first_name + " " + client.last_name+" (Client)" );
-            $("#service_request_id").val(serviceRequestId);
-            $("#client_id").val(client.id );
-            $.each(data, function(key, user) {
-                //console.log(key);
-                if(user.roles[0].name != "Administrator" && user.uuid != '{{Auth::user()->uuid}}'){
-                let ratings_row = `<div class="row">
-                                    <div class="col-md-4 col-lg-4 col-4">
-                                        <p id="user0" style="margin-top:20px;">`+user.account.first_name + " " + user.account.last_name +
-                            " " +"(" + user.roles[0].name + ")" + `</p>
+    @if (\Request::filled('results') && \Request::filled('users') && \Request::filled('client') && \Request::filled('serviceRequestId'))
+    <script>
+        const data = @json(\Request::get('users'));
+        const client = @json(\Request::get('client'));
+        var serviceRequestId = @json(\Request::get('serviceRequestId'));
+        //console.log(serviceRequestId);
+        // $("#serviceClient").html(client.first_name + " " + client.last_name + " (Client)");
+        // $("#service_request_id").val(serviceRequestId);
+        // $("#client_id").val(client.id);
+        // client div to page
+        let ratings_row = `<div class="row">
+                                <div class="col-md-4 col-lg-4 col-4">
+                                    <p id="user0" style="margin-top:20px;">` + client.first_name + " " + client.last_name + " (Client)" + `</p>
+                                </div>
+                                <div class="col-md-8 col-lg-8 col-8">
+                                    <div class="tx-40 text-center rate">
+                                        <i class="icon ion-md-star rates lh-0 tx-gray-300" data-number="1"></i>
+                                        <i class="icon ion-md-star rates lh-0 tx-gray-300" data-number="2"></i>
+                                        <i class="icon ion-md-star rates lh-0 tx-gray-300" data-number="3"></i>
+                                        <i class="icon ion-md-star rates lh-0 tx-gray-300" data-number="4"></i>
+                                        <i class="icon ion-md-star rates lh-0 tx-gray-300" data-number="5"></i>
+                                        <input type="hidden" name="client_star" class="star" readonly>
+                                        <input type="hidden" name="client_id" value=` + client.id + ` readonly>
                                     </div>
-                                    <div class="col-md-8 col-lg-8 col-8">
+                                </div>
+                            </div>`;
+        $('#ratings_users').append(ratings_row);
+        // end of client
+        $.each(data, function(key, user) {
+            //console.log(key);
+            if (user.roles[0].name != "Administrator" && user.uuid != '{{Auth::user()->uuid}}') {
+                let ratings_row = `<div class="row">
+                                        <div class="col-md-4 col-lg-4 col-4">
+                                            <p id="user0" style="margin-top:20px;">` + user.account.first_name + " " + user.account.last_name + " " + "(" + user.roles[0].name + ")" + `</p>
+                                        </div>
+                                        <div class="col-md-8 col-lg-8 col-8">
                                             <div class="tx-40 text-center rate">
                                                 <i class="icon ion-md-star rates lh-0 tx-gray-300" data-number="1"></i>
                                                 <i class="icon ion-md-star rates lh-0 tx-gray-300" data-number="2"></i>
                                                 <i class="icon ion-md-star rates lh-0 tx-gray-300" data-number="3"></i>
                                                 <i class="icon ion-md-star rates lh-0 tx-gray-300" data-number="4"></i>
                                                 <i class="icon ion-md-star rates lh-0 tx-gray-300" data-number="5"></i>
-                                                <input type="" name="star" class="star" readonly>
-                                                <input type="" name="usersIdentity" value=`+user.account.user_id+` readonly>
+                                                <input type="hidden" name="user_star[]" class="star" readonly>
+                                                <input type="hidden" name="user_id[]" value=` + user.account.user_id + ` readonly>
                                             </div>
                                         </div>
-                                </div>`;
+                                    </div>`;
                 $('#ratings_users').append(ratings_row);
-                            }
-
-
- // Users Star Rating
-                $(".rates").each(function(){
-                $('.rates').on('click', function() {
-                $(".star"+key).val(($(this).data('number')));
-                $(this).parent().children().removeClass('tx-orange').addClass('tx-gray-300');
-                $(this).prevUntil(".rate").removeClass('tx-gray-300').addClass('tx-orange');
-                $(this).removeClass('tx-gray-300').addClass('tx-orange');
-            });
-
-       });
-
-            });
-
-            // Client Star Rating
-            $('.count').on('click', function() {
-                $("#clientStar").val(($(this).data('val')));
-                $(this).parent().children().removeClass('tx-orange').addClass('tx-gray-300');
-                $(this).prevUntil(".client").removeClass('tx-gray-300').addClass('tx-orange');
-                $(this).removeClass('tx-gray-300').addClass('tx-orange');
-            });
-
-            $("#modalDetails").modal({show: true});
-
-            $(".btn-danger").on('click', function() {
-                Swal.fire({
-                    title: 'Are you sure you want to skip this rating?',
-                    icon: 'warning',
-                    showCancelButton: true,
-                    confirmButtonColor: '#3085d6',
-                    cancelButtonColor: '#d33',
-                    confirmButtonText: 'Yes'
-                }).then((result) => {
-                    if (result.isConfirmed) {
-                        Swal.fire(
-                            'Rating Skipped'
-                        )
-
-                $.ajaxSetup({
-        headers: {
-        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-        }
-    });
-        $.ajax({
-          url: "{{ route('cse.update_service_request', app()->getLocale()) }}",
-          method: 'POST',
-          data: {"id": serviceRequestId},
-          // return the result
-          success: function(data) {
-              if(data){
-                  alert(data)
-              }else{
-                  alert('No It is not working');
-              }
-        }
-
-      });
-   $("#modalDetails").modal('hide');
-     }
+            }
         });
-            });
 
-        </script>
+        $("#modalDetails").modal({
+            show: true
+        });
+
+        // Users Star Rating Count Integration
+        $('.rates').on('click', function() {
+            let ratedNumber = $(this).data('number');
+            $(this).parent().children('.star').val(ratedNumber);
+            $(this).parent().children().removeClass('tx-orange').addClass('tx-gray-300');
+            $(this).prevUntil(".rate").removeClass('tx-gray-300').addClass('tx-orange');
+            $(this).removeClass('tx-gray-300').addClass('tx-orange');
+        });
+
+        $(".btn-danger").on('click', function() {
+            Swal.fire({
+                title: 'Are you sure you want to skip this rating?',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    Swal.fire(
+                        'Rating Skipped'
+                    )
+
+                    $.ajaxSetup({
+                        headers: {
+                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                        }
+                    });
+                    $.ajax({
+                        url: "{{ route('cse.update_service_request', app()->getLocale()) }}",
+                        method: 'POST',
+                        data: {
+                            "id": serviceRequestId
+                        },
+                        // return the result
+                        success: function(data) {
+                            if (data) {
+                                alert(data)
+                            } else {
+                                alert('No It is not working');
+                            }
+                        }
+
+                    });
+                    $("#modalDetails").modal('hide');
+                }
+            });
+        });
+    </script>
     @endif
 
 </body>

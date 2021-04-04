@@ -21,6 +21,7 @@ class RatingController extends Controller
      */
     public function handleRatings(Request $request)
     {
+        dd($request->all());
         (array) $valid = $this->validateRatingsRequest($request);
     //return $request->clientStar."<br>".$request->getClient."<br>".$request->star."<br>".$request->usersIdentity."<br>".$request->serviceRequestId;
         return self::store($request);
