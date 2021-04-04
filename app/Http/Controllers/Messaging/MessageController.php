@@ -135,7 +135,7 @@ class MessageController extends Controller
             ];
             $this->sendNewMessage("mail",$subject, $senderDetails->email, $user->email, $mail_content, "");
         }
-        Message::insert($mail_objects);
+        //Message::insert($mail_objects);
         return response()->json([
             "message" => "Messages sent successfully!"], 201);
     }
@@ -170,6 +170,27 @@ class MessageController extends Controller
             }
             $message = $this->replacePlaceHolders($mail_data, $template->content);
         }
+
+        $recipient = DB::table('users')
+        ->where('users.email', $to )
+        ->first();
+
+        $sender = DB::table('users')
+        ->where('users.email', $from )
+        ->first();
+      
+            $mail_objects[] = [
+                'title'=>$subject, 
+                'content'=>$message, 
+                'recipient'=>$recipient->id, 
+                'sender'=>$sender->id,
+                'uuid'=>Str::uuid()->toString(),
+                'created_at'        => Carbon::now(),
+                'updated_at'        => Carbon::now(),
+            ];
+        
+        Message::insert($mail_objects);
+
         $message_array = ['to'=>$to, 'from'=>$from, 'subject'=>$subject, 'content'=>$message];
         if($type=='mail')
             $this->dispatch(new PushEmails($message_array));
