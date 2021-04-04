@@ -237,7 +237,7 @@ Route::prefix('admin')->group(function () {
         //Setting controller
         // Route::get('service/request/criteria',           [ServiceRequestSettingController::class, 'index'])->name('serviceReq.index');
         // Route::get('service/request/criteria/{id}',      [ServiceRequestSettingController::class, 'Edit'])->name('editCriteria');
-        // Route::post('service/request/criteriaUpdate',    [ServiceRequestSettingController::class, 'update'])->name('serviceReq.update'); 
+        // Route::post('service/request/criteriaUpdate',    [ServiceRequestSettingController::class, 'update'])->name('serviceReq.update');
 
         Route::get('/serviceCriteria/delete/{criteria}',              [ServiceRequestSettingController::class, 'destroy'])->name('serviceReq.delete');
         Route::resource('serviceCriteria',                            ServiceRequestSettingController::class);
@@ -339,7 +339,7 @@ Route::prefix('/cse')->group(function () {
 
         Route::post('assign-technician', [AssignTechnicianController::class, '__invoke'])->name('assign.technician');
         Route::post('project-progress', [ProjectProgressController::class, '__invoke'])->name('project.progress.update');
-        
+
         // Route::view('/requests',            'cse.requests')->name('requests');
 
         Route::view(

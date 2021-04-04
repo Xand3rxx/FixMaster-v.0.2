@@ -52,7 +52,7 @@ trait Invoices
 
     protected static function createDiagnosticInvoice(int $client_id, int $service_request_id, string $invoice_type, float $total_amount, float $amount_paid, string  $status)
     {
-        return Invoice::create([
+        $createInvoice = Invoice::create([
             'uuid'                  => Str::uuid('uuid'),
             'client_id'             => $client_id,
             'service_request_id'    => $service_request_id,
@@ -63,6 +63,10 @@ trait Invoices
             'amount_paid'           => $amount_paid,
             'status'                => $status
         ]);
+
+        $invoice_id = $createInvoice->id;
+        self::getTotalAmount($invoice_id, 0, 0, $total_amount);
+        return $createInvoice;
     }
 
     /**
@@ -207,7 +211,7 @@ trait Invoices
         $materials_cost = $materials_cost == null ? 0 : $materials_cost;
         $sub_total = $materials_cost + $labour_cost;
 
-        $fixMasterRoyalty = $fixMaster_royalty_value * ( $labour_cost + $materials_cost + $logistics_cost );
+        $fixMasterRoyalty = '';
 
         $warrantyCost = '';
         $bookingCost = '';
@@ -216,15 +220,15 @@ trait Invoices
 
         if($invoice->invoice_type == 'Diagnostic Invoice')
         {
-            $warrantyCost = 0;
-            $bookingCost = 0;
+            $fixMasterRoyalty = $fixMaster_royalty_value * ( $total_amount );
             $tax_cost = $tax * ( $total_amount + $logistics_cost + $fixMasterRoyalty );
-            $total_cost = $materials_cost + $invoice->labour_cost + $fixMasterRoyalty + $tax_cost + $logistics_cost - 1500;
+            $total_cost = $total_amount + $fixMasterRoyalty + $tax_cost + $logistics_cost;
         }
         elseif ($invoice->invoice_type == 'Completion Invoice')
         {
             $warrantyCost = 0.1 * ( $invoice->labour_cost + $materials_cost );
             $bookingCost = $invoice->serviceRequest->price->amount;
+            $fixMasterRoyalty = $fixMaster_royalty_value * ( $labour_cost + $materials_cost + $logistics_cost );
             $tax_cost = $tax * $sub_total;
             $total_cost = $materials_cost + $invoice->labour_cost + $fixMasterRoyalty + $warrantyCost + $logistics_cost - $bookingCost - 1500 + $tax_cost;
         }
