@@ -135,7 +135,7 @@ class MessageController extends Controller
             ];
             $this->sendNewMessage("mail",$subject, $senderDetails->email, $user->email, $mail_content, "");
         }
-        //Message::insert($mail_objects);
+        
         return response()->json([
             "message" => "Messages sent successfully!"], 201);
     }
