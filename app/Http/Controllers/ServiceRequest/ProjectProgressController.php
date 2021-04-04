@@ -87,6 +87,7 @@ class ProjectProgressController extends Controller
             // store in the activity log
             $this->log('request', 'Informational', Route::currentRouteAction(), $user->account->last_name . ' ' . $user->account->first_name . ' ' . $substatus->name . ' for (' . $serviceRequest->unique_id . ') Job.');
             // notify the technicain in Email and In-app notification
+            // $message = new \App\Http\Controllers\Messaging\MessageController();
 
             // update registered to be true
             $registred = true;
