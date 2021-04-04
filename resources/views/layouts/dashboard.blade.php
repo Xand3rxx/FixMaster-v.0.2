@@ -202,8 +202,8 @@
                                                 <i class="icon ion-md-star rates lh-0 tx-gray-300" data-number="3"></i>
                                                 <i class="icon ion-md-star rates lh-0 tx-gray-300" data-number="4"></i>
                                                 <i class="icon ion-md-star rates lh-0 tx-gray-300" data-number="5"></i>
-                                                <input type="hidden" name="user_star[]" class="star" readonly>
-                                                <input type="hidden" name="user_id[]" value=` + user.account.user_id + ` readonly>
+                                                <input type="hidden" name="users_star[]" class="star" readonly>
+                                                <input type="hidden" name="users_id[]" value=` + user.account.user_id + ` readonly>
                                             </div>
                                         </div>
                                     </div>`;
