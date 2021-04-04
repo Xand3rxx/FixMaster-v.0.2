@@ -339,7 +339,7 @@ Route::prefix('/cse')->group(function () {
 
         Route::post('assign-technician', [AssignTechnicianController::class, '__invoke'])->name('assign.technician');
         Route::post('project-progress', [ProjectProgressController::class, '__invoke'])->name('project.progress.update');
-
+        
         // Route::view('/requests',            'cse.requests')->name('requests');
 
         Route::view(
