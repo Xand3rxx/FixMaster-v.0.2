@@ -333,7 +333,7 @@
                             <th class="py-3">Amount</th>
                             <th class="py-3">Status</th>
                             <th class="py-3">Transacation Date</th>
-                            <!-- <th class="py-3">Action</th> -->
+                            <th class="py-3">Action</th> 
 
                             {{-- <th class="py-3">Balance</th> --}}
                         </tr>
@@ -360,7 +360,7 @@
 
                             <td>{{date("Y/m/d h:i:A", strtotime($val->created_at))}}</td>
                             <!-- <td>{{ Carbon\Carbon::parse('', 'UTC')->isoFormat('MMMM Do YYYY, h:mm:ssa') }}</td> -->
-                            <!-- <td><a href="#transactionDetails" data-toggle="modal" class="btn btn-primary btn-sm ">Details</a></td> -->
+                            <td><a href="#transactionDetails" data-toggle="modal" class="btn btn-primary btn-sm ">Details</a></td> 
                         </tr>
                         @endforeach
                     </tbody>

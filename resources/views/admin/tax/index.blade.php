@@ -13,7 +13,7 @@
             <li class="breadcrumb-item"><a href="{{ route('admin.index', app()->getLocale()) }}">Dashboard</a></li>
               <li class="breadcrumb-item active" aria-current="page">Tax List</li>
             </ol>
-          </nav>
+          </nav> 
           <h4 class="mg-b-0 tx-spacing--1">Tax List</h4>
         </div>
       </div>
@@ -59,6 +59,7 @@
           <h5 class="mg-b-2"><strong>Create New Tax</strong></h5>
           <div class="form-row mt-4">
             <div class="form-group col-md-12">
+            
               <div class="form-row mt-4">
                 <div class="form-group col-md-4">
                     <label for="name">Name</label>

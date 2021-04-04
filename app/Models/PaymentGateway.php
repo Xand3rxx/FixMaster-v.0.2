@@ -12,7 +12,7 @@ class PaymentGateway extends Model
 
     protected $fillable = ['name', 'information', 'keyword', 'status'];
 
-    /**
+    /** 
      * The "booted" method of the model.
      *
      * @return void

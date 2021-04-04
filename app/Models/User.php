@@ -52,7 +52,7 @@ class User extends Authenticatable implements MustVerifyEmail
         static::creating(function ($user) {
             $user->uuid = (string) Str::uuid(); // Create uuid when a new user is to be created
         });
-    }
+    } 
 
     /**
      * Get the Type associated with the user.
@@ -196,7 +196,7 @@ class User extends Authenticatable implements MustVerifyEmail
     {
         return $this->hasMany(ServiceRequestAssigned::class, 'user_id');
     }
-
+    
     public function clientRequest()
     {
         return $this->hasOne(ServiceRequest::class, 'client_id');
@@ -223,6 +223,6 @@ class User extends Authenticatable implements MustVerifyEmail
 
     public function cse_jobs()
     {
-        return $this->hasOne(ServiceRequest::class, 'uuid', 'uuid');
+        return $this->hasMany(ServiceRequestAssigned::class, 'user_id');
     }
 }

@@ -8,7 +8,7 @@ use Auth;
 
 class ClientDiscount extends Model
 {
-    use HasFactory;
+    use HasFactory; 
     
     protected $fillable = [
          'discount_id', 'client_id', 'estate_id', 'service_id', 'availability'
@@ -36,5 +36,12 @@ class ClientDiscount extends Model
         ->where('availability', '=', 'unused')
         ->orderBy('id', 'ASC');
     }
+
+    public function clientDiscount(){
+        return $this->hasOne(Service::class, 'user_id', 'client_id');
+     }
+     public function clientDiscounts(){
+             return $this->hasMany(Service::class, 'user_id', 'client_id');
+     }
 }
 

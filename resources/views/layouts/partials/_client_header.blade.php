@@ -96,7 +96,7 @@
 
                         <li class="{{ Route::currentRouteNamed('client.wallet') ? 'active' : '' }}"><a href="{{ route('client.wallet', app()->getLocale()) }}">E-Wallet</a></li>
 
-                        <li class="{{ Route::currentRouteNamed('') ? 'active' : '' }}"><a href="#">Requests</a></li>
+                        <li class="{{ Route::currentRouteNamed('') ? 'active' : '' }}"><a href="{{route('client.service.all', app()->getLocale()) }}">Requests</a></li>
 
                         <li class="{{ Route::currentRouteNamed('') ? 'active' : '' }}"><a href="#">Payments</a></li>
 
@@ -128,7 +128,7 @@
     <section class="bg-profile d-table w-100  bg-primar" style="background-color: #ff9800 !important;" >
     <div class="container">
         <div class="row">
-            <div class="col-lg-12">
+            <div class="col-lg-12"> 
                 <div class="card public-profile border-0 rounded shadow" style="z-index: 1;">
                     <div class="card-body">
                         <div class="row align-items-center">

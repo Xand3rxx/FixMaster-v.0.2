@@ -20,10 +20,10 @@ class Client extends Model
 
     /**
      * The "booted" method of the model.
-     *
+     * 
      * @return void
      */
-    protected static function booted()
+    protected static function booted() 
     {
         static::creating(function ($client) {
             $client->unique_id = static::generate('clients', 'WAL-'); // Create a Unique Client id
@@ -38,8 +38,6 @@ class Client extends Model
         return $this->belongsTo(User::class)->with(['account', 'contact']);
     }
 
-
-
     public function account()
     {
         return $this->belongsTo(Account::class);
@@ -50,8 +48,15 @@ class Client extends Model
      */
     public function service_request()
     {
-        return $this->hasMany(ServiceRequest::class, 'client_id', 'user_id');
+        return $this->hasMany(ServiceRequest::class, 'client_id', 'user_id')->with('service');
     }
+
+    /**
+     * Get the contact added
+     */
+    // public function contact(){
+    //     return $this->hasMany(Contact::class, 'user_id', 'user_id');
+    // }
     
 }
 

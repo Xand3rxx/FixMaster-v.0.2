@@ -41,6 +41,11 @@ class EssentialsController extends Controller
         return $serviceRequests;
     }
 
+    public function Edit($id){
+        $data = ServiceRequestSettingController::find($id);
+        return $data;
+    }
+
     public function getAvailableToolQuantity(Request $request){
         if($request->ajax()){
             $toolId = $request->get('tool_id');
@@ -52,4 +57,5 @@ class EssentialsController extends Controller
             return $availableQuantity;
         }
     }
+    
 }
