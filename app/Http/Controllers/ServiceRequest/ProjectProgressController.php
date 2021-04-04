@@ -25,9 +25,8 @@ class ProjectProgressController extends Controller
             'sub_status_uuid'         =>   'bail|required|string|uuid',
             'service_request_uuid'  => 'required|uuid|exists:service_requests,uuid'
         ]);
-        return $this->updateProjectProgress($valid, $request->user()) == true
-            ? back()->with('success', 'Project Progress successfully!!')
-            : back()->with('error', 'Error occured while updating project progress');
+
+        return $this->updateProjectProgress($valid, $request->user());
     }
 
     /**
@@ -92,6 +91,8 @@ class ProjectProgressController extends Controller
             // update registered to be true
             $registred = true;
         });
-        return $registred;
+        return $registred == true
+            ? back()->with('success', 'Project Progress successfully!!')
+            : back()->with('error', 'Error occured while updating project progress');
     }
 }
