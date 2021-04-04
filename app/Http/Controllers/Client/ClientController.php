@@ -254,13 +254,8 @@ class ClientController extends Controller
         return view('client.wallet', compact('myWallet')+$data);
     }
 
-
-
-
-
     public function walletSubmit(Request $request)
     {
-
         $myWallet    = WalletTransaction::where('user_id', auth()->user()->id)->orderBy('id', 'DESC')->get();
         // validate Request
         $valid = $this->validate($request, [
@@ -502,10 +497,37 @@ class ClientController extends Controller
         // ]
         // dd($data['balance']->closing_balance );
         // dd($data['discounts'] );
+        $data['states'] = State::select('id', 'name')->orderBy('name', 'ASC')->get();
+
+        // $data['lgas'] = Lga::select('id', 'name')->orderBy('name', 'ASC')->get();
+
         //Return Service details     
         $data['myContacts'] = Contact::where('user_id', auth()->user()->id)->get();   
         // dd($data['myContacts']);
         return view('client.services.quote', $data);
+    }
+
+    function ajax_contactForm(Request $request){
+        // $clientAccount = new Account; 
+
+        $clientContact = new Contact; 
+        $clientContact->user_id   = auth()->user()->id;
+        $clientContact->name      = $request->firstName.''.$request->lastName;
+        $clientContact->state_id  = $request->state;
+        $clientContact->lga_id    = $request->lga;
+        $clientContact->town_id    = $request->town;
+        $client  = Client::where('user_id',auth()->user()->id)->orderBy('id','DESC')->firstOrFail();
+        $clientContact->account_id  = $client->account_id;
+        $clientContact->country_id    = '156';
+        $clientContact->is_default        = '1';
+        $clientContact->phone_number       = $request->phoneNumber;
+        $clientContact->address            = $request->streetAddress;
+        $clientContact->address_longitude  = $request->addressLat;
+        $clientContact->address_latitude   = $request->addressLng;
+
+        $clientContact->save();
+        return back()->with('success', 'New contact saved');
+
     }
 
     // $serviceRequests = ServiceRequestAssigned::where('user_id', Auth::id())->with('service_request')->get();

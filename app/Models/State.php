@@ -10,7 +10,7 @@ class State extends Model
     use HasFactory;
 
     protected $fillable = [
-      'code', 'name'
+      'code', 'name' 
     ];
 
     public function lgas()

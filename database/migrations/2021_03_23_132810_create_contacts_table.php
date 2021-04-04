@@ -19,10 +19,18 @@ class CreateContactsTable extends Migration
             $table->collation = 'utf8mb4_unicode_ci';
             $table->id();
 
-            $table->foreignId('user_id')->index();
+            /*the following adjustment is because of the fault in the contact table*/
+            //nullable because my contact book dont have user_id
+            $table->foreignId('user_id')->index()->nullable();
+            $table->string('name')->nullable();
+            // newly added
+            $table->unsignedInteger('state_id')->nullable();
+            $table->unsignedInteger('lga_id')->nullable();
+            $table->unsignedInteger('town_id')->nullable();
+
             $table->foreignId('account_id')->index();
             $table->foreignId('country_id')->index();
-
+            $table->tinyInteger('is_default')->nullable();
             $table->string('phone_number', 30)->unique();
             $table->longText('address');
             $table->double('address_longitude');

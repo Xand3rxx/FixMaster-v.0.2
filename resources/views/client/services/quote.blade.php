@@ -103,27 +103,6 @@ p{margin-bottom:.3em;}
 
                 <div class="d-flex border-bottom bg-light p-3">
 
-    <!-- <div class="row delivery-address">
-                                        <span class="form-group edit-delete">
-                                            <button
-                                                class="btn editAddress"
-                                                data-data='{"id":"1331","user_id":"477","type":"Home","name":"fsdfsdfsd","country_code":"","mobile":"8254644644","alternate_mobile":"456454464545","address":"5","landmark":"55","area_id":"228","city_id":"119","pincode":"56446","state":"fsfsd","country":"sdfsfsd","latitude":"0","longitude":"0","is_default":"0","date_created":"2021-03-25 17:43:34","city_name":"Bhuj","area_name":"Jubulee Circle","minimum_free_delivery_order_amount":"500","delivery_charges":"10"}'
-                                            >
-                                                <em class="fa fa-pencil-alt"></em>
-                                            </button>
-                                            <a href="https://webekart.wrteam.in/address/remove/1331" class="btn"> <em class="fas fa-times text-danger"></em></a>
-                                        </span>
-                                        <span class="form-group ml-2">
-                                            <input type="radio" name="id" value="1331" />
-                                            <label>
-                                                <strong>fsdfsdfsd</strong><br />
-                                                <label class="badge badge-primary">Home</label>
-                                                5, Jubulee Circle<br />
-                                                Bhuj - 56446<br />
-                                                Mobile: 8254644644
-                                            </label>
-                                        </span>
-                                    </div> -->
 
     </div> 
 
@@ -139,8 +118,8 @@ p{margin-bottom:.3em;}
 
 <div class="row">
 <!-- first div -->
-<div class="col-lg-12 col-md-12" id="address">
-    <div class="table-responsive bg-white shadow rounded mt-4" >
+<div class="col-lg-12 col-md-12 mt-4" id="address">
+    <div class="table-responsive bg-white shadow rounded " >
         <table class="table mb-0 table-center">
             <thead class="bg-light">
                 <tr>
@@ -149,7 +128,6 @@ p{margin-bottom:.3em;}
             </thead>
             <tbody>
             
-            <?php echo $myContacts?>
             @if($myContacts)
             @foreach($myContacts as $k=>$myContact)
                 <tr>
@@ -157,14 +135,14 @@ p{margin-bottom:.3em;}
                         <div class="media">
                             <div class="custom-control custom-radio custom-control-inline">
                                             <div class="form-group mb-0">
-                                                <input type="radio" id="chaquepayment" name="customRadio" class="custom-control-input">
-                                                <label class="custom-control-label" for="chaquepayment">Landrick</label>
+                                                <input type="radio" id="{{$myContact->id}}" name="customRadio" class="custom-control-input">
+                                                <label class="custom-control-label" for="{{$myContact->id}}">{{$myContact->name ?? ''}}</label>
                                             </div>
                                         </div>
 
                                 <div class="content ml-3">
-                                <a href="f" class="forum-title text-primary font-weight-bold">Introductions: Landrick</a>
-                                <p class="text-muted small mb-0 mt-2">Start working with Landrick that can provide everything you need to generate awareness, drive traffic, connect.</p>
+                                <a href="f" class="forum-title text-primary font-weight-bold">{{$myContact->phone_number}}</a>
+                                <p class="text-muted small mb-0 mt-2">{{$myContact->address}}</p>
                             </div>
 
                         </div>
@@ -178,7 +156,7 @@ p{margin-bottom:.3em;}
         </table>
 
         <div class="d-flex align-items-center justify-content-between mt-4 col-lg-12">                                
-         <a onclick="address()" href="javascript:void(0)" class="btn btn-success btn-lg btn-block">Add New Address</a>
+         <a onClick="address()" href="javascript:void(0)" class="btn btn-success btn-lg btn-block">Add New Address</a>
          <!-- <a href="javascript:void(0)" class="btn btn-primary" id="edit">Confirm</a> -->
        </div>
        
@@ -187,74 +165,106 @@ p{margin-bottom:.3em;}
 </div>
     <!-- second div -->
     <!-- new one starts2 -->
-    <div class="row">
-        <div class="col-lg-12 col-md-12" id="editAddress">
+    <!-- <div class="row "> -->
+        <div class="col-lg-12 col-md-12 mt-4" id="editAddress">
             <div class="rounded shadow-lg p-4">
                 <h5 class="mb-0">Enter new Details :</h5>
 
-                <form class="mt-4">
+              
+             
                     <div class="row">
                         <div class="col-6">
                             <div class="form-group position-relative">
                                 <label>Your Name <span class="text-danger">*</span></label>
-                                <input name="name" id="firstname" type="text" class="form-control" placeholder="First Name :">
+                                <input name="name" id="first-name" type="text" class="form-control" placeholder="First Name :">
                             </div>
                         </div><!--end col-->
                         <div class="col-6">
                             <div class="form-group position-relative">
                                 <label>Last Name <span class="text-danger">*</span></label>
-                                <input name="name" id="lastname" type="text" class="form-control" placeholder="Last Name :">
+                                <input name="name" id="last-name" type="text" class="form-control" placeholder="Last Name :">
                             </div>
                         </div><!--end col-->
                         <div class="col-12">
                             <div class="form-group position-relative">
                                 <label>Street address <span class="text-danger">*</span></label>
-                                <input type="text" name="address1" id="address1" class="form-control" placeholder="House number and street name :">
+                                <input type="text" name="address1" id="street-address" class="form-control user_address" placeholder="House number and street name :">
                             </div>
                         </div><!--end col-->
+                        
+                        <!-- hidden fields -->
+                        <input type="hidden" value="" name="user_latitude" id="user_latitude">
+                        <input type="hidden" value="" name="user_longitude" id="user_longitude">
+
                         <div class="col-12">
                             <div class="form-group position-relative">
                                 <label>Phone Number <span class="text-danger">*</span></label>
-                                <input type="text" name="address1" id="address1" class="form-control" placeholder="09094927392">
+                                <input type="text" name="address1" id="phone-number" class="form-control" >
                             </div>
                         </div><!--end col-->
 
-                        <div class="col-md-6">
+                        <div class="col-md-4">
                             <div class="form-group position-relative">
                                 <label>State <span class="text-danger">*</span></label>
-                                <select class="form-control custom-select">
-                                    <option selected="">India</option>
-                                    <option value="AF">Afghanistan</option>
+                                <select class="form-control pl-5 @error('state_id') is-invalid @enderror" name="state_id" id="state_id">
+                                    <option selected value="">Select...</option>
+                                    @foreach($states as $state)
+                                    <option value="{{ $state->id }}">{{ $state->name }}</option>
+                                    @endforeach
                                 </select>
+                                @error('state_id')
+                                <span class="invalid-feedback" role="alert">
+                                    <strong>{{ $message }}</strong>
+                                </span>
+                                @enderror
                             </div>
                         </div><!--end col-->
 
-                        <div class="col-md-6">
+                        <div class="col-md-4">
                             <div class="form-group position-relative">
                                 <label>LGA <span class="text-danger">*</span></label>
-                                <input type="text" name="state" id="state" class="form-control" placeholder="State Name :">
+                                <select class="form-control pl-5 @error('lga_id') is-invalid @enderror" name="lga_id" id="lga_id">
+                                        <option selected value="">Select...</option>
+                                </select>
+                                @error('lga_id')
+                                <span class="invalid-feedback" role="alert">
+                                    <strong>{{ $message }}</strong>
+                                </span>
+                                @enderror
                             </div>
                         </div><!--end col-->
 
-                        <div class="col-md-6">
+                        <div class="col-md-4"> 
                             <div class="form-group position-relative">
                                 <label>Town/City <span class="text-danger">*</span></label>
-                                <input type="text" name="state" id="state" class="form-control" placeholder="State Name :">
+
+                                <select class="form-control pl-5 @error('town_id') is-invalid @enderror" name="town_id" id="town_id">
+                                        <option selected value="">Select...</option>
+                                </select>
+                                @error('town_id')
+                                <span class="invalid-feedback" role="alert">
+                                    <strong>{{ $message }}</strong>
+                                </span>
+                                @enderror
+
+                                <!-- <input type="text" name="state" id="state" class="form-control" placeholder="State Name :"> -->
                             </div>
                         </div> <!--end col-->
                         
                     </div><!--end row-->
                     <div class="d-flex align-items-center justify-content-between mt-4 col-lg-12">                                
                         <!-- <a onclick="address()" href="javascript:void(0)" class="btn btn-primary">Add New Address</a> -->
-                        <a href="javascript:void(0)" class="btn btn-success btn-lg btn-block" id="edit">Confirm</a>
+                        <!-- <a href="javascript:void(0)" class="btn btn-success btn-lg btn-block" id="confirm">Confirm</a> -->
+                        <button type="button" id="confirm" class="btn btn-success btn-lg btn-block">Confirm</button>
                     </div>
-                </form><!--end form-->
+               
+                <!--end form-->
             </div>
 
         </div><!--end col-->
 
 
-    </div>
+    <!-- </div> -->
     <!-- new one ends2 -->
 
 
@@ -297,55 +307,6 @@ p{margin-bottom:.3em;}
                             <small style="font-size: 10px;" class="text-muted">File must not be more than 2MB</small>
                         </div>                                                                               
                     </div><!--end col-->            
-
-                    <div class="col-md-6 form-group mt-2">
-                        <label>Contact Number:<span class="text-danger">*</span></label>
-
-                        <div class="custom-control custom-checkbox form-group position-relative">
-                            <input type="radio" id="customRadio1" name="use_my_phone_number" value="yes" class="custom-control-input">
-                            <label class="custom-control-label" for="customRadio1">Use my saved Phone Number</label>
-                        </div>
-                    
-                        <div class="custom-control custom-checkbox form-group position-relative">
-                            <input type="radio" id="customRadio2" name="phone_number" value="no" class="custom-control-input">
-                            <label class="custom-control-label" for="customRadio2">No, I have another contact number</label>
-                        </div>
-                        <div class="form-group position-relative d-none display-phone">
-                            <label>Your Phone no. :<span class="text-danger">*</span></label>
-                            <i data-feather="phone" class="fea icon-sm icons"></i>
-                            <input name="alternate_phone_number" id="alternate_phone_number" type="tel" class="form-control pl-5 @error('alternate_phone_number') is-invalid @enderror" placeholder="Your Phone No. :" maxlength="11" value="{{ old('alternate_phone_number') }}" autocomplete="off">
-                            @error('alternate_phone_number')
-                                <span class="invalid-feedback" role="alert">
-                                    <strong>{{ $message }}</strong>
-                                </span>
-                            @enderror
-                        </div> 
-                    </div><!--end col-->
-                        
-                    <div class="col-md-6 form-group">
-                        <label>Address:<span class="text-danger">*</span></label>
-
-                        <div class="custom-control custom-checkbox form-group position-relative">
-                            <input type="radio" id="customRadio3" name="use_my_address" class="custom-control-input" value="yes">
-                            <label class="custom-control-label" for="customRadio3">Use my saved Address</label>
-                        </div>
-                    
-                        <div class="custom-control custom-checkbox form-group position-relative">
-                            <input type="radio" id="customRadio4" name="address" class="custom-control-input" value="no">
-                            <label class="custom-control-label" for="customRadio4">No, I have another Address</label>
-                        </div>
-
-                        <div class="form-group position-relative d-none display-address">
-                            <label>Address</label>
-                            <i data-feather="map-pin" class="fea icon-sm icons"></i>
-                            <textarea name="alternate_address" id="alternate_address" rows="4" class="form-control pl-5 user_address @error('alternate_address') is-invalid @enderror" placeholder="Address of where the service is required">{{ old('alternate_address') }}</textarea>
-                            @error('alternate_address')
-                                <span class="invalid-feedback" role="alert">
-                                    <strong>{{ $message }}</strong>
-                                </span>
-                            @enderror
-                        </div>
-                    </div><!--end col--> 
                     
                     @if($discounts->count() > 0)
                     <div class="col-md-12 form-group">
@@ -388,36 +349,6 @@ p{margin-bottom:.3em;}
                         </div>
                     </div>
                     <input type="hidden" value="{{!empty($balance->closing_balance) ? $balance->closing_balance : '0'}}" name="balance">
-                    <!-- <div class="row d-none payment-options">
-                        <div class="col-md-6">
-                            <div class="media key-feature align-items-center p-3 rounded shadow mt-4">
-                                <a href="#" data-toggle="modal" data-target="#modal-form">
-                                    <img src="{{ asset('assets/images/flutter.png')}}" class="avatar avatar-ex-smm" alt="">
-                                </a>
-                                <a href="javascript:void(0)" class="text-primary">
-                                    <div class="media-body content ml-2">
-                                        <a href="#" data-toggle="modal" data-target="#modal-form" >
-                                            <h4 class="title mb-0">Flutter</h4>
-                                        </a>
-                                    </div>
-                                </a>
-                            </div>
-                        </div>
-                            <div class="col-md-6">
-                                <div class="media key-feature align-items-center p-3 rounded shadow mt-4">
-                                    <a href="#" data-toggle="modal" data-target="#modal-form">
-                                        <img src="{{ asset('assets/images/paystack.png')}}" class="avatar avatar-ex-smm" alt="">
-                                    </a>
-                                    <a href="javascript:void(0)" class="text-primary">
-                                        <div class="media-body content ml-2">
-                                            <a href="#" data-toggle="modal" data-target="#modal-form" >
-                                                <h4 class="title mb-0">Paystack</h4>
-                                            </a>
-                                        </div>
-                                    </a>
-                                </div>
-                            </div>
-                        </div> -->
 
 
          @foreach($gateways as $val) 
@@ -440,18 +371,10 @@ p{margin-bottom:.3em;}
         @endforeach
 
 
-    <!-- <div class="col-md-6 cc-selector d-none payment-options">
-        @foreach($gateways as $val) 
-          <input id="{{$val->name}}" type="radio" name="credit-card" value="{{$val->name}}" />
-          <label class="drinkcard-cc {{$val->name}}" for="{{$val->name}}"></label>
-        @endforeach
-    </div> -->
-
-
-                    </div>
-                        {{-- </div>
-                    </div><!--end col--> --}}
-                </div><!--end row-->
+        </div>
+            {{-- </div>
+        </div><!--end col--> --}}
+    </div><!--end row-->
 
                 
 
@@ -508,22 +431,131 @@ p{margin-bottom:.3em;}
 </div><!-- modal -->
 
 @push('scripts')
-    <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDeDLVAiaU13p2O0d3jfcPjscsbVsCQUzc&v=3.exp&libraries=places"></script>
-
+    
     <script>
-        $(document).ready(function (){
-            let autocomplete;
-            initialize();
 
-            function initialize() {
-                // Create the autocomplete object, restricting the search to geographical location types.
-                autocomplete = new google.maps.places.Autocomplete((document.querySelector('.user_address')), {
-                    types: ['geocode']
-                });
-               
-                // Chain request to html element on the page
-                google.maps.event.addDomListener(document.querySelector('.user_address'), 'focus');
-            }
+$(document).ready(function() {
+        //Get list of L.G.A's in a particular state.
+        $('#state_id').on('change', function() {
+            let stateId = $('#state_id').find('option:selected').val();
+            let stateName = $('#state_id').find('option:selected').text();
+            let wardId = $('#ward_id').find('option:selected').val();
+
+            // $.ajaxSetup({
+            //         headers: {
+            //             'X-CSRF_TOKEN':$('meta[name="csrf-token"]').attr('content')
+            //         }
+            //     });
+            $.ajax({
+                url: "{{ route('lga_list', app()->getLocale()) }}",
+                method: "POST",
+                dataType: "JSON",
+                data: {
+                    "_token": "{{ csrf_token() }}",
+                    "state_id": stateId
+                },
+                success: function(data) {
+                    if (data) {
+                        $('#lga_id').html(data.lgaList);
+                    } else {
+                        var message = 'Error occured while trying to get L.G.A`s in ' + stateName + ' state';
+                        var type = 'error';
+                        displayMessage(message, type);
+                    }
+                },
+            })
+        });
+
+
+
+        $('#lga_id').on('change', function() {
+            let stateId = $('#state_id').find('option:selected').val();
+            let stateName = $('#state_id').find('option:selected').text();
+            
+            let lgaId = $('#lga_id').find('option:selected').val();
+            let lgaName = $('#lga_id').find('option:selected').text();
+
+            $.ajax({
+                url: "{{ route('ward_list', app()->getLocale()) }}",
+                method: "POST",
+                dataType: "JSON",
+                data: {
+                    "_token": "{{ csrf_token() }}",
+                    "state_id": stateId,
+                    "lga_id": lgaId
+                },
+                success: function(data) {
+                    if (data) {
+                        $('#town_id').html(data.townList);
+                    } else {
+                        var message = 'Error occured while trying to get wards in ' + lgaName + ' local government';
+                        var type = 'error';
+                        displayMessage(message, type);
+                    }
+                },
+            })
+
+        });
+
+
+
+
+        // $("#confirm").on("submit", function (e) {
+        // e.preventDefault();
+        $("#confirm").on('click', function (e) { 
+            // console.log('hello');
+            // function submitContact(){
+                e.preventDefault(); 
+            let firstName = $('#first-name').val();
+            let lastName = $('#last-name').val();
+            let streetAddress = $('#street-address').val();
+            let phoneNumber = $('#phone-number').val();
+            let state = $('#state_id').val();
+            let lga = $('#lga_id').val();
+            let town = $('#town_id').val();
+            let addressLat = $('#user_latitude').val();
+            let addressLng = $('#user_longitude').val();
+
+            // console.log(firstName);
+            // console.log(addressLat);
+            // console.log(addressLng);
+            // console.log(town);
+            // console.log(lga);
+            // console.log(state);
+            // console.log(phoneNumber);
+            // console.log(streetAddress);
+            // console.log(lastName);
+
+            $.ajax({
+                url: "{{ route('client.ajax_contactForm', app()->getLocale()) }}",
+                method: "POST",
+                dataType: "JSON",
+                data: {
+                    "_token": "{{ csrf_token() }}",
+                    "firstName": firstName,
+                    "lastName": lastName,
+                    "streetAddress": streetAddress,
+                    "phoneNumber": phoneNumber,
+                    "state": state,
+                    "lga": lga,
+                    "town": town,
+                    "addressLat": user_latitude,
+                    "addressLng": user_longitude,
+                },
+                success: function(data) {
+                },
+            })
+
+        // }
+        });
+
+
+
+    });
+
+
+        $(document).ready(function (){
+ 
 
             $(document).on('click', '.nav-item', function(){
                 $(this).find('.booking-fee').prop('checked', true);
@@ -547,18 +579,12 @@ p{margin-bottom:.3em;}
         $("#editAddress").addClass("address-hide"); 
 
         function address() {
-            // if ($("#address").hasClass('address-show')) {
-            //     $("#editAddress").removeClass("address-hide");
-            //     $("#editAddress").addClass("address-show");
-            //     $("#address").removeClass("address-show");
-            //     $("#address").addClass("address-hide");
-            // } else {
                 $("#address").addClass("address-hide");
                 $("#editAddress").removeClass("address-hide");
             }
 
-
     </script>
+             
 @endpush
 
 @endsection

@@ -129,12 +129,13 @@ Route::prefix('admin')->group(function () {
         Route::get('/services/delete/{service}',            [ServiceController::class, 'destroy'])->name('services.delete');
         Route::resource('services',                         ServiceController::class);
 
-
-
-        //  location request
+        //  location request ajax_contactForm
         Route::get('/location-request',                     [AdminLocationRequestController::class, 'index'])->name('location_request');
+
         // Route::post('/get-names',                           [AdminLocationRequestController::class, 'getNames'])->name('get_names');
         // Route::post('/request-location',                    [AdminLocationRequestController::class, 'requestLocation'])->name('request_location');
+
+        // Route::post('/ajax_contactForm', 'HomeController@ajax_contactForm')->name('ajax_contactForm');
 
         // Route::post("/getUsersAssigned",                    [AdminLocationRequestController::class, 'getUsersAssigned'])->name("getUsersAssigned");
         // Route::post("/getServiceDetails",                    [AdminLocationRequestController::class, 'getServiceDetails'])->name("getServiceDetails");
@@ -281,6 +282,9 @@ Route::prefix('/client')->group(function () {
             Route::get('services/custom/',              [ClientController::class, 'customService'])->name('services.custom');
 
             Route::post('servicesRequest',              [ClientController::class, 'serviceRequest'])->name('services.serviceRequest');
+            // post my contact to DB
+            Route::post('/ajax_contactForm',            [ClientController::class, 'ajax_contactForm'])->name('ajax_contactForm');
+            
             // view all my service request
             Route::get('myServicesRequest',              [ClientController::class, 'myServiceRequest'])->name('service.all');
             

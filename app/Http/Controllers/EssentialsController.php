@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\State;
+use App\Models\LGA;
 use App\Models\ServiceRequest;
 use App\Models\ServiceRequestAssigned; 
 use Illuminate\Http\Request;  
@@ -35,6 +36,34 @@ class EssentialsController extends Controller
 
     }
 
+
+    public function wardsList(Request $request){
+        if($request->ajax()){
+
+            $lgaId = $request->get('lga_id');
+
+            $stateExists = LGA::findOrFail($lgaId);
+
+            $towns =  $stateExists->towns;
+
+            $optionValue = '';
+            $optionValue .= "<option value='' selected>Select towns</option>";
+            foreach ($towns as $town ){
+
+                $optionValue .= "<option value='$town->id' {{ old('town_id') == $town->id ? 'selected' : ''}}>$town->name</option>";
+            }
+
+            $data = array(
+                'townList' => $optionValue
+            );
+
+        }
+
+        return response()->json($data);
+
+    }
+
+    
     public function getServiceDetails(Request $request){
         // $serviceRequests = ServiceRequestAssigned::where('user_id', 1)->with('service_request')->get();
         $serviceRequests = ServiceRequest::with('serviceRequestAssigned')->get();

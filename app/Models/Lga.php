@@ -18,6 +18,11 @@ class Lga extends Model
         return $this->belongsTo(State::class);
     }
 
+    public function towns()
+    {
+        return $this->hasMany(Town::class, 'lga_id');
+    }
+
     public function client()
     {
         return $this->hasOne(Client::class, 'state_id');
