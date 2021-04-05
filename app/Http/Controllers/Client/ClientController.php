@@ -18,10 +18,6 @@ use App\Models\Account;
 use App\Models\Phone;
 use App\Models\Address;
 use App\Models\ClientDiscount;
-use App\Models\Account; 
-use App\Models\Phone; 
-use App\Models\Address; 
-use App\Models\Contact;
 use App\Models\Cse;
 use App\Models\ServiceRequestSetting;
 use DB;
@@ -40,7 +36,6 @@ use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\SMTP;
 use PHPMailer\PHPMailer\Exception;
 
-use Session; 
 
 
 class ClientController extends Controller
@@ -429,7 +424,7 @@ class ClientController extends Controller
             //     $walTrans->update(); 
             // }
 
-        }
+        
 
         /** Finally return the callback view for the end user */
         return redirect()->route('client.wallet', app()->getLocale())->with('success', 'Fund successfully added!');
@@ -690,7 +685,7 @@ class ClientController extends Controller
                 // // ->select(DB::raw('contacts.*,1.609344 * 3956 * 2 * ASIN(SQRT( POWER(SIN((" . $latitude . " - abs(address_latitude)) *  pi()/180 / 2), 2) + COS(" . $latitude . " * pi()/180) * COS(abs(address_latitude) * pi()/180) * POWER(SIN((" . $longitude . " - address_longitude) * pi()/180 / 2), 2)  )) AS calculatedDistance'))
                 ->select(DB::raw('cses.*, contacts.address, accounts.first_name, users.email,  6353 * 2 * ASIN(SQRT( POWER(SIN(('.$latitude.' - abs(address_latitude)) * pi()/180 / 2),2) + COS('.$latitude.' * pi()/180 ) * COS(abs(address_latitude) *  pi()/180) * POWER(SIN(('.$longitude.' - address_longitude) *  pi()/180 / 2), 2) )) as distance'))
                 ->having('distance', '<=', $radius)
-                ->having('town', '=', '')
+                // ->having('town', '=', '')
                 ->orderBy('distance', 'DESC')
                 ->get();
                
