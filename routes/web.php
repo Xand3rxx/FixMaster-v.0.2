@@ -97,6 +97,7 @@ Route::prefix('admin')->group(function () {
         Route::post('/warranty/add',                    [WarrantyController::class, 'storeWarranty'])->name('save_warranty');
         Route::get('/warranty/edit/{details:uuid}',  [WarrantyController::class, 'edit'])->name('edit_warranty');
         Route::put('/warranty/update/{details:uuid}',  [WarrantyController::class, 'update'])->name('update_warranty');
+        Route::get('/warranty/delete/{details:uuid}',  [WarrantyController::class, 'deleteWarranty'])->name('delete_warranty');
         Route::get('/warranty/transactions/sort',      [WarrantyController::class, 'warrantyTransactionSort'])->name('warranty_transaction_sort');
         Route::get('/warranty/transactions',      [WarrantyController::class, 'warrantyTransaction'])->name('warranty_transaction');
 

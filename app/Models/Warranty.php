@@ -14,7 +14,7 @@ class Warranty extends Model
     use HasFactory;
 
     protected $fillable = [
-        'name', 'unique_id', 'percentage', 'warranty_type', 'description'
+        'user_id','name', 'unique_id', 'percentage', 'warranty_type', 'duration', 'description'
     ];
 
     /**

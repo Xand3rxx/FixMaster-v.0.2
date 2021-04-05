@@ -66,9 +66,8 @@
             <div class="dropdown-file">
               <a href="" class="dropdown-link" data-toggle="dropdown"><i data-feather="more-vertical"></i></a>
               <div class="dropdown-menu dropdown-menu-right">
-              <a href="{{-- route('admin.warranty_summary', ['details'=>$warranty->uuid, 'locale'=>app()->getLocale()]) --}}" class="dropdown-item details text-primary"><i class="far fa-clipboard"></i> Initiate Warranty</a>
-              <a href="{{-- route('admin.edit_warranty', ['details'=>$warranty->uuid, 'locale'=>app()->getLocale()]) --}}" class="dropdown-item details text-info"><i class="far fa-edit"></i> Edit</a>
-              <a href="{{-- route('admin.edit_warranty', ['details'=>$warranty->uuid, 'locale'=>app()->getLocale()]) --}}" class="dropdown-item details text-danger"><i class="fas fa-trash"></i> Delete</a>
+              <a href="{{-- route('admin.warranty_summary', ['details'=>$warranty->uuid, 'locale'=>app()->getLocale()]) --}}" class="dropdown-item details text-primary"><i class="far fa-clipboard"></i> Details</a>
+             
   
 
 

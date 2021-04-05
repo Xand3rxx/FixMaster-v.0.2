@@ -42,6 +42,8 @@ class WarrantyController extends Controller
         return view('admin.warranty.index', $data)->with('i');
     }
 
+   
+
     public function storeWarranty($language, Request $request)
     {
         
@@ -57,7 +59,7 @@ class WarrantyController extends Controller
 
             
             $createWarranty = Warranty::create([
-                'user_id'        =>  Auth::user()->id,
+                'user_id'        =>  Auth::id(),
                 'name'           => $request->name,
                 'percentage'     =>   $request->percentage,
                 'warranty_type'  =>   $request->warranty_type,
@@ -176,6 +178,31 @@ class WarrantyController extends Controller
 
         return back()->withInput();
     }
+
+    //This method delete already created warranty
+    public function deleteWarranty($language, $details)
+    {
+        $warrantyExist = Warranty::where('uuid', $details)->first();
+
+        $softDeleteWarranty = $warrantyExist->delete();
+        if ($softDeleteWarranty){
+            $type = 'Request';
+            $severity = 'Informational';
+            $actionUrl = Route::currentRouteAction();
+            $message = Auth::user()->email.' deleted '.$warrantyExist->name;
+            $this->log($type, $severity, $actionUrl, $message);
+            return redirect()->route('admin.warranty_list', app()->getLocale())->with('success', 'Warranty has been deleted successfully');
+        }
+        else {
+            $type = 'Errors';
+            $severity = 'Error';
+            $actionUrl = Route::currentRouteAction();
+            $message = 'An Error Occured while '. Auth::user()->email. ' was trying to delete '.$details->name;
+            $this->log($type, $severity, $actionUrl, $message);
+            return back()->with('error', 'An error occurred');
+        }
+    }
+
 
     public function warrantyTransactionSort(Request $request)
     {
