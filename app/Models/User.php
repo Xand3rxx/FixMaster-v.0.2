@@ -100,7 +100,7 @@ class User extends Authenticatable implements MustVerifyEmail
     public function account()
     {
         return $this->hasOne(Account::class);
-    }
+    } 
 
     /**
      * Get the Account associated with the user.
