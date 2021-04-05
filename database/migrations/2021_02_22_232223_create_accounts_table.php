@@ -25,7 +25,11 @@ class CreateAccountsTable extends Migration
                 ->onUpdate('cascade')
                 ->onDelete('cascade');
 
-            $table->foreignId('contact_id')->index();
+            $table->foreignId('state_id')->nullable();
+
+            $table->string('first_name');
+            $table->string('middle_name')->nullable();
+            $table->string('last_name')->nullable();
 
             $table->enum('gender', ['male', 'female', 'others']);
 
