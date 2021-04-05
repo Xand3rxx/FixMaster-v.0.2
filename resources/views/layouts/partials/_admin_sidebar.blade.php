@@ -195,11 +195,11 @@
 
         <li class="nav-item {{ Route::currentRouteNamed('admin.taxes.index') ? 'active' : '' }}"><a href="{{ route('admin.taxes.index', app()->getLocale()) }}" class="nav-link"><i data-feather="percent"></i> <span>Tax Management</span></a></li>
 
-        <li class="nav-item with-sub {{ Route::currentRouteNamed('admin.tools.index') ? 'active show' : '' }}">
+        <li class="nav-item with-sub {{ Route::currentRouteNamed('admin.tools.index', 'admin.tools_request') ? 'active show' : '' }}">
           <a href="" class="nav-link"><i data-feather="box"></i> <span>Tools</span></a>
           <ul>
           <li class="{{ Route::currentRouteNamed('admin.tools.index') ? 'active' : '' }}"><a href="{{ route('admin.tools.index', app()->getLocale()) }}">Inventory</a></li>
-            <li class=""><a href="#">Requests</a></li>
+          <li class="{{ Route::currentRouteNamed('admin.tools_request') ? 'active' : '' }}"><a href="{{ route('admin.tools_request', app()->getLocale()) }}">Requests</a></li>
           </ul>
         </li>
 

@@ -35,6 +35,7 @@ use App\Http\Controllers\QualityAssurance\QualityAssuranceProfileController;
 use App\Http\Controllers\CSE\CustomerServiceExecutiveController as CseController;
 use App\Http\Controllers\CSE\RequestController;
 use App\Http\Controllers\Admin\ServiceRequestSettingController;
+use App\Http\Controllers\Admin\ToolsRequestController;
 
 /*
 |--------------------------------------------------------------------------
@@ -239,6 +240,15 @@ Route::prefix('admin')->group(function () {
 
     Route::get('/serviceCriteria/delete/{criteria}',              [ServiceRequestSettingController::class, 'destroy'])->name('serviceReq.delete');
     Route::resource('serviceCriteria',                            ServiceRequestSettingController::class);
+
+     //Tool Request Management
+     Route::get('/tools-request',                        [ToolsRequestController::class, 'index'])->name('tools_request');
+     Route::get('/tools-request/details/{tool_request:uuid}',           [ToolsRequestController::class, 'toolRequestDetails'])->name('tool_request_details');
+     Route::get('/tools-request/approve/{tool_request:uuid}',           [ToolsRequestController::class, 'approveRequest'])->name('approve_tool_request');
+     Route::get('/tools-request/decline/{tool_request:uuid}',           [ToolsRequestController::class, 'declineRequest'])->name('decline_tool_request');
+     Route::get('/tools-request/return/{tool_request:uuid}',            [ToolsRequestController::class, 'returnToolsRequested'])->name('return_tools_requested');
+
+
     });
 });
 
