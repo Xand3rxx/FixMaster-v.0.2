@@ -18,6 +18,7 @@ FixMaster is your best trusted one-call solution for a wide range of home mainte
 8. Run php artisan serve command
 9. Define your routes based on the User Role in web.php
 10. to run a single migration php artisan migrate --path=/database/migrations/my_migration.php
+11. to run single seeder php artisan db:seed --class=ServiceRequestSettingsSeeder
 
 ## Fix Master Permission Procedures
 Step-by-step instruction on how to create permissions for various actions in a feature will appear here. Thanks.
