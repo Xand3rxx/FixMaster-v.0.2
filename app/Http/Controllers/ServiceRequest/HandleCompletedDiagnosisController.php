@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\ServiceRequest;
 
 use App\Models\Income;
+use App\Models\SubService;
 use App\Models\Tax;
 use App\Traits\Invoices;
 use Illuminate\Http\Request;
@@ -21,8 +22,8 @@ class HandleCompletedDiagnosisController extends Controller
      * @param  \App\Models\ServiceRequest   $serviceRequest
      * @param  \App\Models\SubStatus        $substatus
      *
+     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View|\Illuminate\Http\RedirectResponse
      * @throws \Illuminate\Validation\ValidationException
-     * @return \Illuminate\Http\RedirectResponse
      */
     public function generateDiagnosisInvoice(Request $request, \App\Models\ServiceRequest $serviceRequest, \App\Models\SubStatus $substatus)
     {
@@ -47,9 +48,10 @@ class HandleCompletedDiagnosisController extends Controller
 
         ]);
 
+
         if ($request['intiate_rfq'] == 'yes') {
             // save to 1. rfqs 2. rfq_batches
-            \Illuminate\Support\Facades\DB::transaction(function () use ($valid, $serviceRequest) {
+            \Illuminate\Support\Facades\DB::transaction(function () use ($valid, $serviceRequest, &$rfq) {
                 // save on rfqs table
                 $rfq = \App\Models\Rfq::create([
                     'issued_by' => auth()->user()->id,
@@ -91,6 +93,7 @@ class HandleCompletedDiagnosisController extends Controller
             });
         }
 
+
         // Check if New Technician is assigned
         // store in the service_request_progresses
         // \App\Models\ServiceRequestProgress::storeProgress($user->id, $serviceRequest->id, $substatus->status_id, $substatus->id);
@@ -98,10 +101,11 @@ class HandleCompletedDiagnosisController extends Controller
         // $this->log('request', 'Informational', Route::currentRouteAction(), $user->account->last_name . ' ' . $user->account->first_name . ' ' . $substatus->name . ' for (' . $serviceRequest->unique_id . ') Job.');
         // $serviceRequest_id = $serviceRequest->id;
         // $invoice = $this->diagnosticInvoice($serviceRequest_id);
+        $subServiceId = SubService::select('id')->where('uuid', $request->sub_service_uuid)->first();
 
+        $rfq = $request['intiate_rfq'] == 'yes' ? $rfq->id : null;
 
-
-        $invoice = $this->diagnosticInvoice($serviceRequest->id);
+        $invoice = $this->diagnosisInvoice($serviceRequest->id, $rfq, $subServiceId->id, $request->estimated_work_hours);
 
         $get_fixMaster_royalty = Income::select('amount', 'percentage')->where('income_name', 'FixMaster Royalty')->first();
         $get_logistics = Income::select('amount', 'percentage')->where('income_name', 'Logistics Cost')->first();
@@ -127,9 +131,11 @@ class HandleCompletedDiagnosisController extends Controller
 
         // store in the activity log
 
-        // dd($invoice, $request, $serviceRequest, $substatus);
         return view('frontend.invoices.invoice')->with([
             'invoice' => $invoice,
+            'rfqExists' => $invoice->rfq_id,
+            'serviceRequestID' => $serviceRequest->id,
+            'serviceRequestUUID' => $serviceRequest->uuid,
             'fixmaster_royalty' => $fixMasterRoyalty,
             'get_fixMaster_royalty' => $get_fixMaster_royalty,
             'taxes' => $tax_cost,
