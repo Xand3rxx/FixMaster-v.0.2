@@ -211,7 +211,7 @@ class ClientController extends Controller
         $clientEmail = $requestExists->client->email;
         $reason = $request->reason;
         $jobReference = $requestExists->unique_id;
-        $supervisorId = 'woorad7@gmail.com';
+        $supervisorId = 'dev@fix-master.com';
 
      
 

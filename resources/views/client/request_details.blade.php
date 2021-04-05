@@ -48,7 +48,7 @@
                         {{-- <img src="{{ asset('assets/images/default-male-avatar.png') }}" class="img-fluid" alt="" /> --}}
                          @if(!empty($requestDetail->cses[0]->avatar) &&
                         file_exists(public_path().'/assets/cse-technician-images/'.$requestDetail->cses[0]->account->avatar))
-                        <img src="{{ asset('assets/cse-technician-images/'.$requestDetail->cses[0]->avatar) }}" class="img-fluid" alt="" />
+                        <img src="{{ asset('assets/images/'.$requestDetail->cses[0]->avatar) }}" class="img-fluid" alt="" />
                         @else @if($requestDetail->cses[0]->account->gender == 'Male')
                         <img src="{{ asset('assets/images/default-male-avatar.png') }}" alt="Default male profile avatar" class="img-fluid" />
                         @else
@@ -294,7 +294,7 @@
                                 <div class="row align-items-center no-gutters">
                                     <div class="col-md-5">
                                         @if(!empty($requestDetail->cses[0]->account->avatar) && file_exists(public_path().'/assets/cse-technician-images/'.$requestDetail->cses[0]->account->avatar))
-                                        <img src="{{ asset('assets/cse-technician-images/'.$requestDetail->cses[0]->account->avatar) }}" class="img-fluid" alt="" />
+                                        <img src="{{ asset('assets/images/'.$requestDetail->cses[0]->account->avatar) }}" class="img-fluid" alt="" />
                                         @else @if($requestDetail->cses[0]->account->gender == 'Male')
                                         <img src="{{ asset('assets/images/default-male-avatar.png') }}" alt="Default male profile avatar" class="img-fluid" />
                                         @else
@@ -337,7 +337,7 @@
                                 <div class="row align-items-center no-gutters">
                                     <div class="col-md-5">
                                         @if(!empty($technician->account->avatar) && file_exists(public_path().'/assets/cse-technician-images/'.$requestDetail->cses[0]->account->avatar))
-                                        <img src="{{ asset('assets/cse-technician-images/'.$technician->account->avatar) }}" class="img-fluid" alt="" />
+                                        <img src="{{ asset('assets/images/'.$technician->account->avatar) }}" class="img-fluid" alt="" />
                                         @else @if($technician->account->gender == 'Male')
                                         <img src="{{ asset('assets/images/default-male-avatar.png') }}" alt="Default male profile avatar" class="img-fluid" />
                                         @else
