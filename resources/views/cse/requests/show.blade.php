@@ -250,8 +250,8 @@
                                             <section>
                                                 <div class="form-group col-md-12">
                                                     <label for="name">Assign Technician</label>
-                                                    <select required class="form-control custom-select @error('technician_user_uuid') is-invalid @enderror" name="technician_user_uuid">
-                                                        <option selected disabled value="0" selected>Select...</option>
+                                                    <select class="form-control custom-select @error('technician_user_uuid') is-invalid @enderror" name="technician_user_uuid">
+                                                        <option selected value="0" selected>Select...</option>
                                                         @foreach ($technicains as $technicain)
                                                         <option value="{{$technicain['user']['uuid']}}">{{$technicain['user']['account']['last_name'] .' '. $technicain['user']['account']['first_name']}}</option>
                                                         @endforeach
@@ -564,7 +564,7 @@
           $('.add-trf-row').append(html);
         }
 
-        //Add and Remove Request for 
+        //Add and Remove Request for
         $(document).on('click', '.add-rfq', function() {
             count++;
             addRFQ(count);

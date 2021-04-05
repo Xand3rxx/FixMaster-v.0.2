@@ -26,6 +26,7 @@ class HandleCompletedDiagnosisController extends Controller
      */
     public function generateDiagnosisInvoice(Request $request, \App\Models\ServiceRequest $serviceRequest, \App\Models\SubStatus $substatus)
     {
+        $serviceRequest_id = $serviceRequest->id;
         $invoice = $this->diagnosticInvoice($serviceRequest_id);
         $get_fixMaster_royalty = Income::select('amount', 'percentage')->where('income_name', 'FixMaster Royalty')->first();
         $get_logistics = Income::select('amount', 'percentage')->where('income_name', 'Logistics Cost')->first();
@@ -118,7 +119,7 @@ class HandleCompletedDiagnosisController extends Controller
         // Saving completed Diagnosis
         \App\Models\ServiceRequestProgress::storeProgress(auth()->user()->id, $serviceRequest->id, 2, $substatus->id);
 
-        // Activity Log 
+        // Activity Log
 
         // 1. Service progressess
         $this->log('request', 'Informational', Route::currentRouteAction(), auth()->user()->account->last_name . ' ' . auth()->user()->account->first_name . ' ' . $substatus->name . ' for (' . $serviceRequest->unique_id . ') Job.');
