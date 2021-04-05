@@ -70,6 +70,12 @@
     <script src="{{asset('assets/frontend/js/bootstrap.bundle.min.js')}}"></script>
     <script src="{{asset('assets/frontend/js/jquery.easing.min.js')}}"></script>
     <script src="{{asset('assets/frontend/js/scrollspy.min.js')}}"></script>
+
+          <!-- geolocation asset starts here -->
+    <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDeDLVAiaU13p2O0d3jfcPjscsbVsCQUzc&v=3.exp&libraries=places"></script>
+    <script src="{{asset('assets/js/geolocation.js')}}"></script>
+    <!-- geolocation asset starts here -->
+
     <!-- SLIDER -->
     <script src="{{asset('assets/frontend/js/owl.carousel.min.js')}}"></script>
     <script src="{{asset('assets/frontend/js/owl.init.js')}}"></script>
@@ -94,11 +100,7 @@
     <script src="{{ asset('assets/client/js/sweetalert2.min.js') }}"></script>
 
     <script src="{{ asset('assets/dashboard/assets/js/jquery.tinymce.min.js') }}"></script>
-    
-    <!-- geolocation asset starts here -->
-    <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDeDLVAiaU13p2O0d3jfcPjscsbVsCQUzc&v=3.exp&libraries=places"></script>
-    <script src="{{asset('assets/frontend/js/geolocation.js')}}"></script>
-    <!-- geolocation asset starts here -->
+  
 
     <script>
       tinymce.init({

@@ -55,6 +55,10 @@ trait RegisterTechnicianArtisan
             ]);
             // Register TechnicianArtisan Contact Details
             \App\Models\Contact::attemptToStore($user->id, $account->id, 156, $valid['phone_number'], $valid['full_address'], $valid['address_longitude'], $valid['address_latitude']);
+            // Store each Service in a loop
+            foreach ($valid['technician_category'] as $serviceID) {
+                \App\Models\UserService::storeUserService($user->id, $serviceID, $role->id);
+            }
             // update registered to be true
             $registred = true;
         });

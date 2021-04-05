@@ -92,6 +92,24 @@
                             @enderror
                         </div>
                         <div class="form-group col-md-4">
+                            <label>Service Category</label>
+                            <select class="form-control selectpicker @error('supplier_category') is-invalid @enderror" id="supplier_category" name="supplier_category[]" multiple="multiple" data-live-search="true">
+                                @foreach ($services as $service)
+                                <optgroup label="{{ $service->name }}">
+                                    @foreach($service->services as $item)
+                                    <option value="{{ $item->id }}">{{ $item->name }}</option>
+                                    @endforeach
+                                </optgroup>
+                                @endforeach
+                            </select>
+                            @error('supplier_category')
+                            <x-alert :message="$message" />
+                            @enderror
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group col-md-12">
                             <label for="supplier_description">Business Description</label>
                             <textarea required id="supplier_description" class="form-control @error('supplier_description') is-invalid @enderror" rows="1" name="supplier_description" placeholder="Brief description of the Supplier business">{{ old('supplier_description') }}</textarea>
                             @error('supplier_description')
@@ -214,13 +232,14 @@
     </div>
 </div>
 @push('scripts')
+<script src="{{ asset('assets/dashboard/assets/js/bootstrap-multiselect.js') }}"></script>
 <script src="{{ asset('assets/js/password-generator.js') }}"></script>
 <script src="{{ asset('assets/js/geolocation.js') }}"></script>
 
 <script>
     $(document).ready(function() {
         "use strict";
-
+        $('.selectpicker').selectpicker();
         //Append the image name from file options to post cover field
         $('input[type="file"]').change(function(e) {
             let fileName = e.target.files[0].name;

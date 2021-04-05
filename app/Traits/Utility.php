@@ -48,17 +48,11 @@ trait Utility
 
   public function updateVerifiedUsers($user, $user_type = '')
   {
-    // $data = (object)[
-    //   'firstname' => 'door',
-    //   'code' => '4444',
-    //   'email' => 'woorad7@gmail.com',
-    //   'type' => 'cse'
-    // ];
-    // $mail = $this->sendRefferalMail($data, 'cse', 'door');
+  
+    if ($user->email_verified_at == NULL) {
+       return false;
+    }
 
-    //  Mail::to($user->email)->send(new MailNotify($user));
-
-    //  dd('emd');
     $type = $user_type != '' ? $user_type : $user
       ->type->url;
     $created_by = $user_type != '' ? Auth::user()->email : $user->email;
@@ -224,7 +218,7 @@ trait Utility
   public function sendRefferalMail($user, $user_type, $type)
   {
     $name = ucfirst($user->firstname);
-    // Mail::to($user->email)->send(new MailNotify($user));
+    Mail::to($user->email)->send(new MailNotify($user));
     if ($user_type == '' && $type == 'client') {
       Session::flash('success', "Welcome $name, your refferal link has been sent to your mail");
     }

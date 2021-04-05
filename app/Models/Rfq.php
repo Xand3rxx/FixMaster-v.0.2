@@ -2,16 +2,31 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Support\Str;
 use Illuminate\Database\Eloquent\Model;
+use App\Traits\GenerateUniqueIdentity as Generator;
 
 class Rfq extends Model
 {
-    use HasFactory;
+    use Generator;
 
     protected $fillable = [
-        'issued_by', 'client_id', 'invoice_id', 'service_request_id', 'batch_number', 'invoice_number', 'status', 'accepted', 'total_amount', 'created_at', 'updated_at'
+        'uuid', 'unique_id', 'issued_by', 'client_id', 'invoice_id', 'service_request_id', 'invoice_number', 'status', 'accepted', 'total_amount', 'created_at', 'updated_at'
     ];
+
+    /**
+     * The "booted" method of the model.
+     *
+     * @return void
+     */
+    protected static function booted()
+    {
+        // Create a uuid when a new Serivce Request is to be created
+        static::creating(function ($rfq) {
+            $rfq->uuid = (string) Str::uuid();
+            $rfq->unique_id = static::generate('service_requests', 'RFQ-');
+        });
+    }
 
     public function invoice()
     {
