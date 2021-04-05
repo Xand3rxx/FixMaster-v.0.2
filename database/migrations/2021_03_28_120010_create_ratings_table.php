@@ -15,10 +15,8 @@ class CreateRatingsTable extends Migration
     {
         Schema::create('ratings', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id')->comment('User doing the rating');
+            $table->foreignId('rater_id')->comment('User doing the rating');
             $table->foreignId('ratee_id')->comment('User being rated')->nullable();
-            $table->string('role_name')->nullable();
-            $table->foreignId('service_id')->nullable();
             $table->foreignId('service_request_id')->nullable();
             $table->integer('star');
             $table->integer('service_diagnosis_by')->comment('CSE that performed the diagnosis')->nullable();

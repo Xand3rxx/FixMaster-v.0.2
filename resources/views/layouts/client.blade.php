@@ -22,8 +22,14 @@
     <link href="{{ asset('assets/client/css/bootstrap.min.css') }}" rel="stylesheet" type="text/css" />
     <!-- Icons -->
     <link href="{{ asset('assets/client/css/materialdesignicons.min.css') }}" rel="stylesheet" type="text/css" />
+
+    <!-- DashForge CSS -->
+    <link rel="stylesheet" href="{{ asset('assets/dashboard/assets/css/dashforge.css') }}">
+
     <!-- Slider -->
     <link rel="stylesheet" href="{{ asset('assets/client/css/owl.carousel.min.css') }}" />
+    <link href="{{ asset('assets/dashboard/lib/fontawesome/fontawesome-free/css/all.min.css') }}" rel="stylesheet">
+    <link href="{{ asset('assets/dashboard/lib/ionicons/css/ionicons.min.css') }}" rel="stylesheet">
     {{-- <link rel="stylesheet" href="{{ asset('assets/client/css/owl.theme.default.min.css') }}" /> --}}
     <!-- Main Css -->
     <link href="{{ asset('assets/client/css/style.css') }}" rel="stylesheet" type="text/css" id="theme-opt" />
@@ -34,7 +40,7 @@
     <link rel="stylesheet" href="{{ asset('assets/client/datatables/dataTables.bs4-custom.css') }}" />
     <link href="{{ asset('assets/client/css/magnific-popup.css') }}" rel="stylesheet" type="text/css" />
     <link href="{{ asset('assets/client/css/sweetalert2.min.css') }}" rel="stylesheet" type="text/css" />
-    <link rel="stylesheet" href="https://unicons.iconscout.com/release/v2.1.9/css/unicons.css">
+    {{-- <link rel="stylesheet" href="https://unicons.iconscout.com/release/v2.1.9/css/unicons.css"> --}}
 
     <style>
       .card {
@@ -55,8 +61,8 @@
     @include('layouts.partials._client_sidebar')
     @include('layouts.partials._client_footer')
 
-    <script src="{{asset('assets/frontend/js/jquery-3.5.1.min.js')}}"></script>
-    {{-- <script src="{{asset('assets/client/js/jquery.min.js')}}"></script> --}}
+    {{-- <script src="{{asset('assets/frontend/js/jquery-3.5.1.min.js')}}"></script> --}}
+    <script src="{{asset('assets/client/js/jquery.min.js')}}"></script>
     <script src="{{asset('assets/frontend/js/bootstrap.bundle.min.js')}}"></script>
     <script src="{{asset('assets/frontend/js/jquery.easing.min.js')}}"></script>
     <script src="{{asset('assets/frontend/js/scrollspy.min.js')}}"></script>
@@ -95,7 +101,7 @@
     {{-- <button type="button" class="btn btn-success btn-lg" data-toggle="modal" data-target="#modalDetails">Open
         Modal</button> --}}
 
-    <div class="modal fade" id="modalDetails" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal fade" id="modalDetails" tabindex="-1" role="dialog" aria-hidden="true" data-backdrop="static">
         <div class="modal-dialog modal-dialog-centered modal-lg wd-sm-650" role="document">
             <div class="modal-content">
                 <div class="modal-body pd-x-25 pd-sm-x-30 pd-t-40 pd-sm-t-20 pd-b-15 pd-sm-b-20">
@@ -105,46 +111,11 @@
                     </a>
 
     <h6 class="text-center">Kindly rate and review to get a 10% loyalty reward</h6>
-        <form action="" method="POST" id="cse_form">
-            @csrf
+    <form action="{{ route('client.handle.ratings', app()->getLocale()) }}" method="POST">
+        @csrf
             <div class="row">
         <div class="col-md-12 col-lg-12 col-12">
-            <div class="row">
-                 <div class="col-md-4 col-lg-4 col-4">
-               <p id="cse" style="margin-top:20px;"></p>
-                 </div>
-
-                 <div class="col-md-8 col-lg-8 col-8">
-                    <div class="tx-40 text-center" id="rate">
-                        <i class="icon ion-md-star rat lh-0 tx-gray-300" data-number="1"></i>
-                        {{-- <i class="icon ion-md-star lh-0 tx-orange"></i> --}}
-                        <i class="icon ion-md-star rat lh-0 tx-gray-300" data-number="2"></i>
-                        <i class="icon ion-md-star rat lh-0 tx-gray-300" data-number="3"></i>
-                        <i class="icon ion-md-star rat lh-0 tx-gray-300" data-number="4"></i>
-                        <i class="icon ion-md-star rat lh-0 tx-gray-300" data-number="5"></i>
-                        <input type="hidden" name="star" id="star" readonly>
-                        <input type="hidden" name="cse_id" id="cse_id" readonly>
-                    </div>
-                 </div>
-            </div>
-
-
-            <div class="row">
-                <div class="col-md-4 col-lg-4 col-4">
-              <p style="margin-top:20px;">CSE Job Diagnosis</p>
-                </div>
-
-                <div class="col-md-8 col-lg-8 col-8 pull-left">
-                   <div class="tx-40 text-center" id="rates">
-                       <i class="icon ion-md-star rats lh-0 tx-gray-300" data-int="1"></i>
-                       <i class="icon ion-md-star rats lh-0 tx-gray-300" data-int="2"></i>
-                       <i class="icon ion-md-star rats lh-0 tx-gray-300" data-int="3"></i>
-                       <i class="icon ion-md-star rats lh-0 tx-gray-300" data-int="4"></i>
-                       <i class="icon ion-md-star rats lh-0 tx-gray-300" data-int="5"></i>
-                       <input type="hidden" name="star1" id="star1" readonly>
-                   </div>
-                </div>
-           </div>
+            <div id="ratings_cse"></div>
                 </div>
 
                     <div class="form-group col-md-12 col-lg-12">
@@ -152,11 +123,10 @@
                         <textarea name="review" class="form-control" rows="4"
                             placeholder=""></textarea>
                     </div>
+
                 <div class="col-sm-12">
                     <button type="submit" class="btn btn-primary">Submit</button>
-                    <button type="button" class="btn btn-danger" data-dismiss="modal" aria-label="Close">
-                        Skip
-                        </button>
+                    <button type="button" class="btn btn-danger" aria-label="Close"> Skip </button>
                 </div>
 
             </div>
@@ -169,10 +139,104 @@
     @yield('scripts')
     @stack('scripts')
 
-    @if (\Request::filled('results'))
+    @if (\Request::filled('users') && \Request::filled('role') && \Request::filled('serviceRequestId'))
     <script>
-      alert('{{ \Request::get('results') }}');
-        //$("#modalDetails").modal({show: true});
+      //console.log('{{ \Request::get('results') }}');
+      const users = @json(\Request::get('users'));
+      const service_request_id = @json(\Request::get('serviceRequestId'));
+      //console.log(service_request_id);
+      const role = @json(\Request::get('role'));
+      let ratings_row = `<div class="row">
+                                        <div class="col-md-4 col-lg-4 col-4">
+                                            <p id="user0" style="margin-top:20px;"> Rate CSE Job Diagnosis </p>
+                                        </div>
+                                        <div class="col-md-8 col-lg-8 col-8">
+                                            <div class="tx-40 text-center rate">
+                                                <i class="icon ion-md-star rates lh-0 tx-gray-300" data-number="1"></i>
+                                                <i class="icon ion-md-star rates lh-0 tx-gray-300" data-number="2"></i>
+                                                <i class="icon ion-md-star rates lh-0 tx-gray-300" data-number="3"></i>
+                                                <i class="icon ion-md-star rates lh-0 tx-gray-300" data-number="4"></i>
+                                                <i class="icon ion-md-star rates lh-0 tx-gray-300" data-number="5"></i>
+                                                <input type="hidden" name="diagnosis_star" class="star" readonly>
+                                            </div>
+                                        </div>
+                                    </div>`;
+                $('#ratings_cse').append(ratings_row);
+
+
+      $.each(users, function(key, user) {
+        if(user.roles[0].name == "Customer Service Executive"){
+           //console.log(user.roles[0].name);
+           let ratings_row = `<div class="row">
+                                        <div class="col-md-4 col-lg-4 col-4">
+                                            <p id="user0" style="margin-top:20px;">` + user.account.first_name + " " + user.account.last_name + " " + "(" + user.roles[0].name + ")" + `</p>
+                                        </div>
+                                        <div class="col-md-8 col-lg-8 col-8">
+                                            <div class="tx-40 text-center rate">
+                                                <i class="icon ion-md-star rates lh-0 tx-gray-300" data-number="1"></i>
+                                                <i class="icon ion-md-star rates lh-0 tx-gray-300" data-number="2"></i>
+                                                <i class="icon ion-md-star rates lh-0 tx-gray-300" data-number="3"></i>
+                                                <i class="icon ion-md-star rates lh-0 tx-gray-300" data-number="4"></i>
+                                                <i class="icon ion-md-star rates lh-0 tx-gray-300" data-number="5"></i>
+                                                <input type="hidden" name="users_star[]" class="star" readonly>
+                                                <input type="hidden" name="users_id[]" value=` + user.account.user_id + ` readonly>
+                                            </div>
+                                        </div>
+                                    </div>`;
+                $('#ratings_cse').append(ratings_row);
+        }
+      });
+        $("#modalDetails").modal({show: true});
+
+
+        // Users Star Rating Count Integration
+        $('.rates').on('click', function() {
+            let ratedNumber = $(this).data('number');
+            $(this).parent().children('.star').val(ratedNumber);
+            $(this).parent().children().removeClass('tx-orange').addClass('tx-gray-300');
+            $(this).prevUntil(".rate").removeClass('tx-gray-300').addClass('tx-orange');
+            $(this).removeClass('tx-gray-300').addClass('tx-orange');
+        });
+
+        $(".btn-danger").on('click', function() {
+            Swal.fire({
+                title: 'Are you sure you want to skip this rating?',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    Swal.fire(
+                        'Rating Skipped'
+                    )
+
+                    $.ajaxSetup({
+                        headers: {
+                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                        }
+                    });
+                    $.ajax({
+                        url: "{{ route('client.update_service_request', app()->getLocale()) }}",
+                        method: 'POST',
+                        data: {
+                            "id": service_request_id
+                        },
+                        // return the result
+                        success: function(data) {
+                            // if (data) {
+                            //     alert(data)
+                            // } else {
+                            //     alert('No It is not working');
+                            // }
+                        }
+
+                    });
+                    $("#modalDetails").modal('hide');
+                }
+            });
+        });
 
     </script>
    @endif

@@ -32,7 +32,8 @@ use App\Http\Controllers\Admin\ReportController;
 use App\Http\Controllers\QualityAssurance\ServiceRequestController;
 use App\Http\Controllers\QualityAssurance\QualityAssuranceProfileController;
 use App\Http\Controllers\RatingController;
-
+use App\Http\Controllers\Admin\AdminRatingController;
+use App\Http\Controllers\Admin\AdminReviewController;
 use App\Http\Controllers\CSE\CustomerServiceExecutiveController as CseController;
 use App\Http\Controllers\CSE\RequestController;
 
@@ -62,9 +63,17 @@ Route::prefix('admin')->group(function () {
     Route::name('admin.')->group(function () {
         Route::view('/', 'admin.index')->name('index'); //Take me to Admin Dashboard
 
-        Route::view('/ratings/cse-diagnosis', 'admin.ratings.cse_diagnosis_rating')->name('category');
+        // Route::view('/ratings/cse-diagnosis', 'admin.ratings.cse_diagnosis_rating')->name('category');
         // Route::view('/ratings/services',      'admin.ratings.service_rating')->name('job');
-        Route::view('/ratings/service-reviews',      'admin.ratings.service_reviews')->name('category_reviews');
+        Route::get('/ratings/cse-diagnosis', [AdminRatingController::class, 'cseDiagnosis'])->name('category');
+        //Route::view('/ratings/service-reviews',      'admin.ratings.service_reviews')->name('category_reviews');
+        Route::get('/ratings/services',      [AdminRatingController::class, 'getServiceRatings'])->name('job');
+        Route::get('/ratings/service_reviews',      [AdminReviewController::class, 'getServiceReviews'])->name('category_reviews');
+        Route::put('/activate/{id}',      [AdminReviewController::class, 'activate'])->name('activate_review');
+        Route::put('/deactivate/{id}',      [AdminReviewController::class, 'deactivate'])->name('deactivate_review');
+        Route::delete('/delete/{id}',      [AdminReviewController::class, 'delete'])->name('delete_review');
+
+
 
         Route::prefix('users')->name('users.')->group(function () {
             Route::resource('administrator', AdministratorController::class);
@@ -89,7 +98,6 @@ Route::prefix('admin')->group(function () {
         Route::get('/estate/approve/{estate:uuid}',      [EstateController::class, 'approve'])->name('approve_estate');
         Route::get('/estate/decline/{estate:uuid}',      [EstateController::class, 'decline'])->name('decline_estate');
         Route::get('/estate/delete/{estate:uuid}',      [EstateController::class, 'delete'])->name('delete_estate');
-        Route::get('/ratings/services',      [RatingController::class, 'getServiceRatings'])->name('job');
 
         //Routes for Invoice Management
         Route::get('/invoices',      [InvoiceController::class, 'index'])->name('invoices');
@@ -288,8 +296,8 @@ Route::prefix('/client')->middleware('monitor.clientservice.request.changes')->g
             Route::post('/request/paystack/submit',                 [ClientController::class, 'storePaystackServiceRequest'])->name('paystack.submit');
             Route::get('/request/paystack/{orderId}/apiRequest',    [ClientController::class, 'apiRequestPaystackServiceRequest'])->name('paystack.apiRequest');
             Route::get('/request/paystack/notify',                  [ClientController::class, 'notifyPaystackServiceRequest'])->name('paystack.notify');
-
-
+            Route::post('/update_service_request',  [ClientController::class, 'update_client_service_rating'])->name('update_service_request');
+            Route::post('/submit_ratings',  [ClientController::class, 'client_rating'])->name('handle.ratings');
             // Route::post('servicesRequest',              [ClientController::class, 'serviceRequest'])->name('paystack.submit');
             // Route::post('servicesRequest',              [ClientController::class, 'serviceRequest'])->name('flutter.submit');
 

@@ -9,7 +9,15 @@ class Review extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['user_id', 'service_id','reviews', 'status','cse_id'];
+    protected $fillable = ['client_id', 'service_request_id','reviews', 'status'];
+
+    public function service_request(){
+        return $this->hasOne(ServiceRequest::class, 'id', 'service_request_id');
+    }
+
+    public function clientAccount(){
+        return $this->hasOne(Account::class, 'user_id', 'client_id');
+    }
 
 }
 

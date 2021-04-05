@@ -165,10 +165,6 @@
         const data = @json(\Request::get('users'));
         const client = @json(\Request::get('client'));
         var serviceRequestId = @json(\Request::get('serviceRequestId'));
-        //console.log(serviceRequestId);
-        // $("#serviceClient").html(client.first_name + " " + client.last_name + " (Client)");
-        // $("#service_request_id").val(serviceRequestId);
-        // $("#client_id").val(client.id);
         // client div to page
         let ratings_row = `<div class="row">
                                 <div class="col-md-4 col-lg-4 col-4">
@@ -181,8 +177,8 @@
                                         <i class="icon ion-md-star rates lh-0 tx-gray-300" data-number="3"></i>
                                         <i class="icon ion-md-star rates lh-0 tx-gray-300" data-number="4"></i>
                                         <i class="icon ion-md-star rates lh-0 tx-gray-300" data-number="5"></i>
-                                        <input type="hidden" name="client_star" class="star" readonly>
-                                        <input type="hidden" name="client_id" value=` + client.id + ` readonly>
+                                        <input type="" name="client_star" class="star" readonly>
+                                        <input type="" name="client_id" value=` + client.id + ` readonly>
                                     </div>
                                 </div>
                             </div>`;
@@ -202,8 +198,8 @@
                                                 <i class="icon ion-md-star rates lh-0 tx-gray-300" data-number="3"></i>
                                                 <i class="icon ion-md-star rates lh-0 tx-gray-300" data-number="4"></i>
                                                 <i class="icon ion-md-star rates lh-0 tx-gray-300" data-number="5"></i>
-                                                <input type="hidden" name="users_star[]" class="star" readonly>
-                                                <input type="hidden" name="users_id[]" value=` + user.account.user_id + ` readonly>
+                                                <input type="" name="users_star[]" class="star" readonly>
+                                                <input type="" name="users_id[]" value=` + user.account.user_id + ` readonly>
                                             </div>
                                         </div>
                                     </div>`;
@@ -251,11 +247,11 @@
                         },
                         // return the result
                         success: function(data) {
-                            if (data) {
-                                alert(data)
-                            } else {
-                                alert('No It is not working');
-                            }
+                            // if (data) {
+                            //     alert(data)
+                            // } else {
+                            //     alert('No It is not working');
+                            // }
                         }
 
                     });

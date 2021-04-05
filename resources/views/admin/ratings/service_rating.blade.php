@@ -42,10 +42,11 @@
                     </tr>
                   </thead>
                   <tbody>
+                    @php $sn = 1; @endphp
                 @foreach($resviceRatings as $rating)
                     <tr>
-                      <td class="tx-color-03 tx-center">1</td>
-                      <td class="tx-medium">{{$rating->service->name}}</td>
+                      <td class="tx-color-03 tx-center">{{$sn++}}</td>
+                      <td class="tx-medium">{{$rating->service_request->service->name}}</td>
                       <td class="tx-medium text-center">{{$rating->star}}</td>
                       <td class="text-medium text-center">5.0</td>
                       <td class=" text-center">

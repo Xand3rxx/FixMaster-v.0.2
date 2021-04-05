@@ -98,23 +98,7 @@ class CustomerServiceExecutiveController extends Controller
 
     public function update_cse_service_rating($language, Request $request, RatingController $updateRatings)
     {
-        //return $request->serviceRequestId;
-
         return $updateRatings->handleServiceRatings($request);
     }
 
-
-    // public function update_rating(Request $request, RatingController $ratings)
-    // {
-    //     return $ratings->handleRatings($request);
-    // }
-
-    // public function update_cse_rating(Request $request, $serviceRequestId){
-
-    //     ServiceRequest::where('id', $serviceRequestId)->first()->update(['has_cse_rated' => 'Skipped']);
-    //         //return back()->withSuccess('Thank you for rating the request');
-
-    //         return "Yea, It is updated";
-
-    // }
 }

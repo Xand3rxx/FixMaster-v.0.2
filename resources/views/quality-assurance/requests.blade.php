@@ -135,13 +135,7 @@
                                                 </div>
                                             </td>
                                         </tr>
-       {{-- @if($serviceRequest->service_request->status_id == 4)
-  @section('scripts')
-<script defer async>
-  $("#modalDetails").modal({show:true});
-</script>
-@endsection
-       @endif --}}
+
                                     @endforeach
 
                                 </tbody>
@@ -151,27 +145,7 @@
 
                 </div><!-- col -->
             </div><!-- row -->
-
-            <button type="button" class="btn btn-success btn-lg" data-toggle="modal" data-target="#modalDetails">Open
-                Modal</button>
-
         </div><!-- container -->
     </div>
-    @section('scripts')
-    <script>
-
-        // $(document).ready(function(){
-        //     // $(document).on('click', '.rat', function (){
-        //         $('.rat').on('click', function(){
-        //         console.log($(this).data('number'));
-        //         $(this).parent().children().removeClass('tx-orange').addClass('tx-gray-300');
-        //         $(this).prevUntil("#rate").removeClass('tx-gray-300').addClass('tx-orange');
-        //         $(this).removeClass('tx-gray-300').addClass('tx-orange');
-
-        //     });
-        // });
-
-    </script>
-@endsection
 @endsection
 
