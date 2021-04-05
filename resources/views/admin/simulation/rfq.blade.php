@@ -16,9 +16,8 @@
                     <h4 class="mg-b-0 tx-spacing--1">Invoices</h4>
                 </div>
                 <div class="d-md-block">
-                    <a href="" class="btn btn-primary"><i class="fas fa-plus"></i> Create New Invoice</a>
-                    <a href="{{ route('admin.diagnostic', app()->getLocale()) }}" class="btn btn-primary"><i class="fas fa-plus"></i> Diagnostic Invoice</a>
-                    <a href="{{ route('admin.rfq', app()->getLocale()) }}" class="btn btn-primary"><i class="fas fa-plus"></i> RFQ Issuance</a>
+                    <a href="{{ route('admin.invoices', app()->getLocale()) }}" class="btn btn-primary">Invoices</a>
+                    <a href="{{ route('admin.rfq', app()->getLocale()) }}" class="btn btn-primary">Simulations</a>
                 </div>
             </div>
 
@@ -41,8 +40,6 @@
                                     <th class="text-center">#</th>
                                     <th>Job Ref.</th>
                                     <th>Client</th>
-                                    <th>Supervised By</th>
-                                    <th>Assigned Technician</th>
                                     <th>Amount</th>
                                     <th>Status</th>
                                     <th>Schedule Date</th>
@@ -55,8 +52,6 @@
                                         <td class="tx-color-03 tx-center">{{ $loop->iteration }}</td>
                                         <td class="tx-medium">{{ $request['unique_id'] }}</td>
                                         <td class="tx-medium">{{ $request['client']->account->first_name }} {{ $request['client']->account->last_name }}</td>
-                                        <td class="tx-medium">{{ $request['cse_id'] }}</td>
-                                        <td class="text-medium">{{ $request['cse_id'] }}</td>
                                         <td class="text-medium">{{ $request['total_amount'] }}</td>
                                         <td class="text-medium text-danger">Unpaid</td>
                                         <td class="text-medium">{{ Carbon\Carbon::parse($request['created_at'], 'UTC')->isoFormat('MMMM Do YYYY, h:mm:ssa') }}</td>
@@ -67,11 +62,9 @@
                                                     <a href="{{ route('admin.end_service', ['locale' => app()->getLocale(), 'service_request' => $request['uuid']]) }}" class="dropdown-item details text-primary"><i class="far fa-user"></i> End Service </a>
                                                     <a href="{{ route('admin.complete_service', ['locale' => app()->getLocale(), 'service_request' => $request['uuid']]) }}" class="dropdown-item details text-danger"><i class="fas fa-trash"></i> Complete Service </a>
                                                     <a href="{{ route('admin.rfq_details', ['locale' => app()->getLocale(), 'serviceRequest' => $request['id']]) }}" class="dropdown-item details text-primary"><i class="far fa-user"></i> Service Details </a>
-                                                    @if($request['id'] === 1)
-                                                        @foreach($invoices as $invoice)
-                                                            <a href="{{ route('admin.invoice', ['locale' => app()->getLocale(), 'invoice' => $invoice['id']]) }}" class="dropdown-item details text-danger"><i class="fas fa-trash"></i> {{ $invoice['invoice_type'] }} </a>
+                                                        @foreach(\App\Models\Invoice::where('service_request_id', $request['id'])->get() as $invoice)
+                                                            <a href="{{ route('admin.invoice', ['locale' => app()->getLocale(), 'invoice' => $invoice['uuid']]) }}" class="dropdown-item details text-danger"><i class="fas fa-trash"></i> {{ $invoice['invoice_type'] }} </a>
                                                         @endforeach
-                                                    @endif
                                                 </div>
                                             </div>
                                         </td>

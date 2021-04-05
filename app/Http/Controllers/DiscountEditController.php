@@ -18,6 +18,7 @@ use App\Models\Estate;
 use App\Models\DiscountHistory;
 use App\Traits\Utility;
 use App\Traits\Loggable;
+use App\Models\EstateDiscountHistory;
 
 class DiscountEditController extends Controller
 {
@@ -636,6 +637,8 @@ class DiscountEditController extends Controller
         $discount = Discount::select('id')->where('uuid', $request->discount_id)->first();
         ClientDiscount::where(['discount_id'=>$discount->id])->delete();
         DiscountHistory::where(['discount_id'=>$discount->id])->delete();
+        EstateDiscountHistory::where(['discount_id'=>$discount->id])->delete();
+
 
         $estates = Estate::select('id')->where('estate_name', $request->estate_name)
         ->first();
@@ -645,7 +648,7 @@ class DiscountEditController extends Controller
         foreach ($request->users as $user)
         {           
          ClientDiscount::create([
-            'discount_id' => $discounts->id,
+            'discount_id' => $discount->id,
             'client_id' => $user,
             'estate_id' =>  $estates->id,
                 ]);
@@ -653,13 +656,19 @@ class DiscountEditController extends Controller
         }
         foreach ($accounts as $user)
         {           
-          DiscountHistory::create([
-            'discount_id' => $discounts->id,
+            $discountHistory = DiscountHistory::create([
+            'discount_id' => $discount->id,
             'estate_id' =>  $estates->id,
             'client_name' => $user->first_name.' '.$user->last_name,
             'client_id' => $user->user_id,
             'estate_name'=> $request->estate_name
            
+                ]);
+
+                EstateDiscountHistory::create([
+                    'discount_id' => $discount->id,
+                    'discount_history_id' => $discountHistory->id,
+                    'estate_id' =>  $estates->id,
                 ]);
         }
          

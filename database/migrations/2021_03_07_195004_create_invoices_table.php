@@ -16,11 +16,16 @@ class CreateInvoicesTable extends Migration
         Schema::create('invoices', function (Blueprint $table) {
             $table->id();
             $table->uuid('uuid');
-            $table->foreignId('user_id');
+            $table->foreignId('client_id');
             $table->foreignId('service_request_id');
             $table->foreignId('rfq_id')->nullable();
+            $table->foreignId('warranty_id')->nullable();
+            $table->foreignId('sub_service_id')->nullable();
             $table->string('invoice_number');
             $table->string('invoice_type');
+            $table->float('labour_cost')->nullable();
+            $table->float('materials_cost')->nullable();
+            $table->integer('hours_spent')->nullable();
             $table->float('total_amount')->nullable();
             $table->float('amount_due')->nullable();
             $table->float('amount_paid')->nullable();

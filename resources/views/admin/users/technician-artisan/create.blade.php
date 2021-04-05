@@ -77,8 +77,8 @@
                         </div>
                     </div>
                     <div class="form-row">
-                       
-                    <div class="form-group col-md-4">
+
+                        <div class="form-group col-md-4">
                             <label>Bank Name</label>
                             <select required id="bank_id" name="bank_id" class="custom-select bank_id @error('bank_id') is-invalid @enderror">
                                 <option selected value="">Select...</option>
@@ -94,6 +94,21 @@
                             <label for="account_number">Account Number</label>
                             <input type="tel" required class="form-control @error('account_number') is-invalid @enderror" id="account_number" name="account_number" value="{{ old('account_number') }}" placeholder="Account Number" maxlength="10" autocomplete="off">
                             @error('account_number')
+                            <x-alert :message="$message" />
+                            @enderror
+                        </div>
+                        <div class="form-group col-md-4">
+                            <label>Service Category</label>
+                            <select class="form-control selectpicker @error('technician_category') is-invalid @enderror" id="technician_category" name="technician_category[]" multiple="multiple" data-live-search="true">
+                                @foreach ($services as $service)
+                                <optgroup label="{{ $service->name }}">
+                                    @foreach($service->services as $item)
+                                    <option value="{{ $item->id }}">{{ $item->name }}</option>
+                                    @endforeach
+                                </optgroup>
+                                @endforeach
+                            </select>
+                            @error('technician_category')
                             <x-alert :message="$message" />
                             @enderror
                         </div>
@@ -181,13 +196,14 @@
 </div>
 
 @push('scripts')
+<script src="{{ asset('assets/dashboard/assets/js/bootstrap-multiselect.js') }}"></script>
 <script src="{{ asset('assets/js/password-generator.js') }}"></script>
 <script src="{{ asset('assets/js/geolocation.js') }}"></script>
 
 <script>
     $(document).ready(function() {
         "use strict";
-
+        $('.selectpicker').selectpicker();
         //Append the image name from file options to post cover field
         $('input[type="file"]').change(function(e) {
             let fileName = e.target.files[0].name;

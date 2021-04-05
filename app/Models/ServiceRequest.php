@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Str;
@@ -10,7 +9,7 @@ use App\Traits\GenerateUniqueIdentity as Generator;
 
 class ServiceRequest extends Model
 {
-    use HasFactory, SoftDeletes, Generator;
+    use SoftDeletes, Generator;
 
     // column name of key
     // protected $primaryKey = 'uuid';
@@ -24,6 +23,9 @@ class ServiceRequest extends Model
     protected $fillable = [
         'client_id', 'service_id', 'unique_id', 'state_id', 'lga_id', 'town_id', 'price_id', 'phone_id', 'address_id', 'client_discount_id', 'client_security_code', 'status_id', 'description', 'total_amount', 'preferred_time'
     ];
+    /**
+     * @var mixed
+     */
 
     /**
      * The attributes that should be hidden for arrays.
@@ -51,9 +53,7 @@ class ServiceRequest extends Model
 
             // Create a Unique Service Request Client Security Code id
             $serviceRequest->client_security_code = static::generate('service_requests', 'SEC-');
-
         });
-
     }
 
     public function user()
@@ -61,11 +61,13 @@ class ServiceRequest extends Model
         return $this->belongsTo(User::class)->with('account', 'roles');
     }
 
-    public function state(){
+    public function state()
+    {
         return $this->belongsTo(State::class);
     }
 
-    public function lga(){
+    public function lga()
+    {
         return $this->belongsTo(Lga::class);
     }
 
@@ -83,6 +85,25 @@ class ServiceRequest extends Model
     {
         return $this->belongsToMany(User::class, 'service_request_assigned');
     }
+
+    /**
+     * Get the price of the current service
+     */
+    public function price()
+    {
+        return $this->belongsTo(Price::class, 'price_id', 'id');
+    }
+
+    /**
+     * Get the service and sub service of the current service request
+     */
+    public function service()
+    {
+        return $this->hasOne(Service::class, 'id', 'service_id');
+    }
+
+
+
     public function cse()
     {
         return $this->belongsTo(Account::class);
@@ -100,9 +121,9 @@ class ServiceRequest extends Model
     {
         return $this->hasMany(Invoice::class);
     }
-    public function service(){
-       return $this->hasOne(Service::class, 'id', 'service_id')->with('user');
-    }
+    // public function service(){
+    //    return $this->hasOne(Service::class, 'id', 'service_id')->with('user');
+    // }
     public function services(){
             return $this->hasMany(Service::class, 'id', 'service_id');
     }
@@ -114,15 +135,18 @@ class ServiceRequest extends Model
     {
         return $this->hasMany(Rfq::class, 'service_request_id');
     }
-    public function payment_disbursed(){
+    public function payment_disbursed()
+    {
         return $this->belongsTo(PaymentDisbursed::class);
     }
 
-    public function status(){
+    public function status()
+    {
         return $this->hasOne(Status::class, 'id', 'status_id');
     }
 
-    public function service_request(){
+    public function service_request()
+    {
         return $this->hasOne(ServiceRequest::class, 'uuid', 'service_request_id');
     }
 
@@ -130,27 +154,8 @@ class ServiceRequest extends Model
     {
         return $this->hasOne(Account::class, 'user_id', 'client_id');
     }
-
-    public function price()
-    {
-        return $this->hasOne(Price::class, 'price_id');
-    }
-
+   
     public function address(){
         return $this->belongsTo(Contact::class, 'contact_id');
-    }
-
-    public function phone()
-    {
-        return $this->belongsTo(Contact::class);
-    }
-
-    public function payment_status()
-    {
-        return $this->belongsTo(Payment::class, 'id', 'user_id');
-    }
-
-    public function cse_service_request(){
-        return $this->belongsTo(ServiceRequestAssigned::class, 'service_request_id')->with('users', 'client');
     }
 }

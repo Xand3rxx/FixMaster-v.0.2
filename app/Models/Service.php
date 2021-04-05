@@ -2,23 +2,20 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Str;
 
 class Service extends Model
 {
-    use HasFactory, SoftDeletes;
 
     // column name of key
     // protected $primaryKey = 'uuid';
 
     // type of key
-    protected $keyType = 'string';
+    // protected $keyType = 'string';
 
     // whether the key is automatically incremented or not
-    public $incrementing = false;
+    // public $incrementing = false;
 
     protected $fillable = [
         'user_id', 'category_id', 'name', 'service_charge', 'description', 'status', 'image'
@@ -30,7 +27,7 @@ class Service extends Model
      * @var array
      */
     protected $hidden = [
-        'id'
+        // 'id'
     ];
 
     /**
@@ -46,16 +43,17 @@ class Service extends Model
         });
     }
 
-     /** 
+    /** 
      * Scope a query to only include active banches
-     * 
+     *
      * @param \Illuminate\Database\Eloquent\Builder $query
      * @return \Illuminate\Database\Eloquent\Builder
-     */    
+     */
     //Scope to return all services  
-    public function scopeServicies($query){
+    public function scopeServicies($query)
+    {
         return $query->select('*')
-        ->orderBy('name', 'ASC');
+            ->orderBy('name', 'ASC');
         // ->withTrashed();
     }
 
@@ -64,13 +62,14 @@ class Service extends Model
      * 
      * @param \Illuminate\Database\Eloquent\Builder $query
      * @return \Illuminate\Database\Eloquent\Builder
-     */    
+     */
     //Scope to return all active services  
-    public function scopeActiveServicies($query){
+    public function scopeActiveServicies($query)
+    {
         return $query->select('*')
-        ->where('status', '=', 1)
-        // ->whereNull('deleted_at')
-        ->orderBy('name', 'ASC');
+            ->where('status', '=', 1)
+            // ->whereNull('deleted_at')
+            ->orderBy('name', 'ASC');
     }
 
     public function user()
@@ -82,7 +81,12 @@ class Service extends Model
     {
         return $this->hasMany(User::class, 'user_id')->withDefault();
     }
-    
+
+    public function sub_service()
+    {
+        return $this->hasMany(SubService::class);
+    }
+
     /**
      * Get the Account associated with the user.
      */
@@ -90,7 +94,7 @@ class Service extends Model
     {
         return $this->hasOne(Account::class, 'user_id', 'user_id');
     }
-    
+
     public function category()
     {
         return $this->hasOne(Category::class, 'id', 'category_id');
@@ -114,10 +118,5 @@ class Service extends Model
     public function clientDiscounts()
     {
         return $this->hasMany(ClientDiscount::class, 'client_id');
-    }
-
-    public function subServices()
-    {
-        return $this->hasMany(SubService::class);
     }
 }

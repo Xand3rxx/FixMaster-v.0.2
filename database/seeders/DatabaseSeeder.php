@@ -16,7 +16,7 @@ class DatabaseSeeder extends Seeder
         $this->call([
             RoleSeeder::class,
             PermissionSeeder::class,
-            // TownSeeder::class,
+            TownSeeder::class,
             UserSeeder::class,
             CSESeeder::class,
             ClientSeeder::class,
@@ -48,6 +48,8 @@ class DatabaseSeeder extends Seeder
             WalletTransactionSeeder::class,
             WarrantySeeder::class,
             ServiceRequestPaymentSeeder::class,
+            AdminRatingSeeder::class,
+            AdminReviewSeeder::class,
         ]);
     }
 }

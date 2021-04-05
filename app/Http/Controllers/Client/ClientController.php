@@ -11,9 +11,12 @@ use App\Models\PaymentGateway;
 use App\Models\Payment;
 use App\Models\WalletTransaction;
 use App\Models\User;
-use App\Models\Client; 
+use App\Models\Client;
 use App\Models\State;
 use App\Models\Lga;
+use App\Models\Account;
+use App\Models\Phone;
+use App\Models\Address;
 use App\Models\ClientDiscount;
 use App\Models\Account; 
 use App\Models\Phone; 
@@ -31,12 +34,14 @@ use App\Traits\PasswordUpdator;
 use Auth;
 use App\Models\LoyaltyManagement;
 use App\Models\ClientLoyaltyWithdrawal;
+use Session;
 
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\SMTP;
 use PHPMailer\PHPMailer\Exception;
 
 use Session; 
+
 
 class ClientController extends Controller
 {
@@ -148,12 +153,12 @@ class ClientController extends Controller
         // return view('client.profile', $data);
         // $data['client'] = Client::where('user_id',auth()->user()->id)->first();
         $data['client'] = Client::where('user_id', $request->user()->id)->with('user')->firstOrFail();
-       
+
         // $data['user'] =  User::where('id', auth()->user()->id)->first();
         $data['states'] = State::select('id', 'name')->orderBy('name', 'ASC')->get();
 
         $data['lgas'] = Lga::select('id', 'name')->orderBy('name', 'ASC')->get();
-        // dd($data['lga'] );       
+        // dd($data['lga'] );
         // echo "<pre>";
         // print_r($data['client']->user->phones[0]->number);
         // echo "<pre>";
@@ -166,13 +171,13 @@ class ClientController extends Controller
         $img = $request->file('profile_avater');
         $allowedExts = array('jpg', 'png', 'jpeg');
 
-        $validatedData = $request->validate([            
+        $validatedData = $request->validate([
             'first_name'  => 'required|max:255',
             'middle_name' => 'required|max:255',
             'last_name'   => 'required|max:255',
             'gender'   => 'required',
             'phone_number'   => 'required|max:255',
-            'email'       => 'required|email|max:255', 
+            'email'       => 'required|email|max:255',
         'profile_avater' => [
             function ($attribute, $value, $fail) use ($request, $img, $allowedExts) {
                 if ($request->hasFile('profile_avater')) {
@@ -185,58 +190,58 @@ class ClientController extends Controller
         ],
             'state_id'   => 'required|max:255',
             'lga_id'   => 'required|max:255',
-            'full_address'   => 'required|max:255',           
+            'full_address'   => 'required|max:255',
           ]);
 
          //user table
         $user_data = User::find(auth()->user()->id);
-        $user_data['email'] = $request->email; 
-        $user_data->update(); 
-        // dd($validatedData);        
+        $user_data['email'] = $request->email;
+        $user_data->update();
+        // dd($validatedData);
 
         // update phones
-        $phones = Phone::where('user_id', auth()->user()->id)->orderBy('id','DESC')->first();         
+        $phones = Phone::where('user_id', auth()->user()->id)->orderBy('id','DESC')->first();
         $phones->number = $request->phone_number;
         $phones->update();
         // update address
-        $addresses = Address::where('user_id', auth()->user()->id)->orderBy('id','DESC')->first();         
+        $addresses = Address::where('user_id', auth()->user()->id)->orderBy('id','DESC')->first();
         $addresses->address = $request->full_address;
         $addresses->update();
-        
 
-            //  $client_data = Account::find(auth()->user()->id); 
+
+            //  $client_data = Account::find(auth()->user()->id);
              $client_data = Account::where('user_id', auth()->user()->id)->orderBy('id','DESC')->first();
-            // if ($client_data->user_id) {                
-                //account table                         
+            // if ($client_data->user_id) {
+                //account table
                 $client_data->first_name = $request->first_name;
                 $client_data->middle_name = $request->middle_name;
-                $client_data->last_name = $request->last_name;     
-                $client_data->gender = $request->gender;      
-                
+                $client_data->last_name = $request->last_name;
+                $client_data->gender = $request->gender;
+
                 if($request->hasFile('profile_avater')){
                     $image = $request->file('profile_avater');
                     $imageName = sha1(time()) .'.'.$image->getClientOriginalExtension();
-                    $imagePath = public_path('assets/user-avatars').'/'.$imageName;        
+                    $imagePath = public_path('assets/user-avatars').'/'.$imageName;
                     //Delete old image
                     if(\File::exists(public_path('assets/user-avatars/'.$request->input('old_avatar')))){
                         $done = \File::delete(public_path('assets/user-avatars/'.$request->input('old_avatar')));
                         if($done){
                             // echo 'File has been deleted';
                         }
-                    }        
+                    }
                     //Move new image to `client-avatars` folder
                     Image::make($image->getRealPath())->resize(220, 220)->save($imagePath);
-                    $client_data->avatar = $imageName; 
+                    $client_data->avatar = $imageName;
                 }else{
                     // $imageName = $request->input('old_avatar'); profile_avater
-                    $client_data->avatar = $request->input('old_avatar');                    
+                    $client_data->avatar = $request->input('old_avatar');
                 }
-                    
-                $client_data->state_id = $request->state_id;                      
-                $client_data->lga_id = $request->lga_id;  
+
+                $client_data->state_id = $request->state_id;
+                $client_data->lga_id = $request->lga_id;
                 $client_data->save();
                 // dd($client_data);
-            // } 
+            // }
 
 
         // if($user_data){
@@ -258,24 +263,24 @@ class ClientController extends Controller
         $myWallet    = WalletTransaction::where('user_id', auth()->user()->id)->orderBy('id', 'DESC')->get();
         // validate Request
         $valid = $this->validate($request, [
-            // List of things needed from the request like 
+            // List of things needed from the request like
             // Amount, Payment Channel, Payment for, Reference Id
             'amount'           => 'required',
             'payment_channel'  => 'required',
             'payment_for'      => 'required',
         ]);
-       
+
         // fetch the Client Table Record
         $client = \App\Models\Client::where('user_id', $request->user()->id)->with('user')->firstOrFail();
         // save the reference_id as track in session 
 
-        $generatedVal = $this->generateReference();        
+        $generatedVal = $this->generateReference();
         // call the payment Trait and submit record on the
         $payment = $this->payment($valid['amount'], $valid['payment_channel'], $valid['payment_for'], $client['unique_id'], 'pending', $generatedVal);
         Session::put('Track', $generatedVal);
-        // $client->user()->email(); 
-        if ($payment) {            
-                //   new starts here 
+        // $client->user()->email();
+        if ($payment) {
+                //   new starts here
                 $user_id = auth()->user()->id;
                 $track = Session::get('Track');
                 $pay =  Payment::where('reference_id', $track)->orderBy('id', 'DESC')->first();
@@ -288,8 +293,8 @@ class ClientController extends Controller
                 }
                 $gatewayData = PaymentGateway::where('keyword', $pay->payment_channel)->first();
 
-                // dd($gatewayData); 
-                if ($pay->payment_channel == 'paystack') { 
+                // dd($gatewayData);
+                if ($pay->payment_channel == 'paystack') {
                     $paystack['amount'] = $pay->amount;
                     $paystack['track'] = $track;
                     $title = $gatewayData->name;
@@ -411,6 +416,12 @@ class ClientController extends Controller
                 $walTrans['opening_balance'] = '0';
                 $walTrans['closing_balance'] = $data->amount;
                 $walTrans->save();
+            }else{
+                $walTrans = WalletTransaction::where('user_id', auth()->user()->id)->orderBy('id', 'DESC')->first();
+                $walTrans['opening_balance'] = $walTrans->closing_balance;
+                $walTrans['closing_balance'] = $walTrans->opening_balance + $data->amount;
+                $walTrans->update();
+            }
             // }else{
             //     $walTrans = WalletTransaction::where('user_id', auth()->user()->id)->orderBy('id', 'DESC')->first();
             //     $walTrans['opening_balance'] = $walTrans->closing_balance;
@@ -420,9 +431,9 @@ class ClientController extends Controller
 
         }
 
-        /** Finally return the callback view for the end user */ 
+        /** Finally return the callback view for the end user */
         return redirect()->route('client.wallet', app()->getLocale())->with('success', 'Fund successfully added!');
-    } 
+    }
 
 
     public function flutterIPN(Request $request)
@@ -433,7 +444,7 @@ class ClientController extends Controller
             $data['status'] = 'success';
             $data->update();
         }
-        
+
         // $track = Session::get('Track');
         $client = \App\Models\Client::where('user_id', $request->user()->id)->with('user')->firstOrFail();
         if (!WalletTransaction::where('unique_id', '=', $client['unique_id'])->exists()) {
@@ -451,7 +462,7 @@ class ClientController extends Controller
             $walTrans = WalletTransaction::where('user_id', auth()->user()->id)->orderBy('id', 'DESC')->first();
             $walTrans['opening_balance'] = $walTrans->closing_balance;
             $walTrans['closing_balance'] = $walTrans->opening_balance + $data->amount;
-            $walTrans->update(); 
+            $walTrans->update();
         }
         // dd()
         return redirect()->route('client.wallet', app()->getLocale())->with('success', 'Fund successfully added!');
@@ -545,6 +556,18 @@ class ClientController extends Controller
     // return $serviceRequests;
 
     public function serviceRequest(Request $request){
+        // $validatedData = $request->validate([
+        //     'service_fee'               =>   'required',
+        //     'description'               =>   'required',
+        //     'timestamp'                 =>   'required',
+        //     'phone_number'              =>   'required',
+        //     'address'                   =>   'required',
+        //     'payment_method'            =>   'required',
+        //   ]);
+
+            $all = $request->all();
+            dd($all);
+
         $validatedData = $request->validate([            
             'balance'                   =>   'required',
             'booking_fee'               =>   'required',
@@ -558,6 +581,10 @@ class ClientController extends Controller
 
             // if payment method is wallet
             if($request->payment_method == 'Wallet'){
+                if($request->balance<$request->booking_fee){
+
+                    $service_request                        = new Servicerequest;
+                    $service_request->cliend_id             = auth()->user()->id;
                 // if wallet balance is less than the service fee
                 if($request->balance > $request->booking_fee){
                     $service_request                        = new Servicerequest;  
@@ -626,6 +653,12 @@ class ClientController extends Controller
 
                     
                 }else{
+                        Session::flash('alert', 'sorry!, service amount is less than wallet balance');
+                    }
+                }
+                if ($request->payment_method == 'Offline') {
+                    // $this->requestForService();
+                    echo 'denk';
                      return back()->with('error', 'Sorry!, your current wallet balance is less than the booking fee. Please use other payment methods.');
                     }           
             } 
@@ -745,9 +778,9 @@ class ClientController extends Controller
     }
     /**
      * Search and return a list of FixMaster services.
-     * This is an ajax call to sort all FixMaster services 
+     * This is an ajax call to sort all FixMaster services
      * present on change of Category select dropdown
-     * 
+     *
      * @return \Illuminate\Http\Response
      */
     public function search($language, Request $request){
@@ -762,7 +795,7 @@ class ClientController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function customService(){
-        
+
     }
 
     /**
@@ -789,12 +822,12 @@ class ClientController extends Controller
         $data['title']     = 'Fund your Loyalty wallet';
         $data['loyalty']   = ClientLoyaltyWithdrawal::select('wallet', 'withdrawal')->where('client_id', auth()->user()->id)->first();
         $total_loyalty    = LoyaltyManagement::selectRaw('SUM(amount) as amounts, SUM(points) as total_points, COUNT(amount) as total_no_amount')->where('client_id', auth()->user()->id)->get();
-      
+
         $data['total_loyalty'] = ($total_loyalty[0]->total_points *  $total_loyalty[0]->amounts ) / ($total_loyalty[0]->total_no_amount * 100);
 
         $json = $data['loyalty']->withdrawal != NULL? json_decode($data['loyalty']->withdrawal): [];
-      
-       
+
+
         $ifwithdraw = isset($json->withdraw)? $json->withdraw: '';
         $ifwithdraw_date = isset($json->date)? $json->date: '';
         $data['withdraws']=  empty($json) ? [] : (is_array($ifwithdraw) ? $ifwithdraw : [ 0 => $ifwithdraw]);
@@ -804,17 +837,18 @@ class ClientController extends Controller
 
 
         $data['mytransactions']    = Payment::where('user_id', auth()->user()->id)->orderBy('id', 'DESC')->get();
-        $data['ewallet'] = !isset($json->withdraw)? '10000.00': (is_array($json->withdraw) ?  (float)'10000.00' + (float)array_sum($json->withdraw): (float)'10000.00' + (float)$json->withdraw) ;
+        $walTrans = WalletTransaction::where('user_id', auth()->user()->id)->orderBy('id', 'DESC')->first();
+        //  $data['ewallet'] = !isset($json->withdraw)? $walTrans->closing_balance: (is_array($json->withdraw) ?  (float)$walTrans->closing_balance + (float)array_sum($json->withdraw): (float)'1000.000' + (float)$json->withdraw) ;
+
+        $data['ewallet'] =  $walTrans->closing_balance;
         $myWallet    = WalletTransaction::where('user_id', auth()->user()->id)->orderBy('id', 'DESC')->get();
         return view('client.loyalty', compact('myWallet')+$data);
     }
 
-  
+
     public function loyaltySubmit(Request $request)
-    { 
-        // dd($request);
-    
- 
+    {
+
        $wallet  = ClientLoyaltyWithdrawal::select('wallet', 'withdrawal')->where('client_id', auth()->user()->id)->first();
        if($wallet->withdrawal != NULL){
         $other_withdrawals = json_decode($wallet->withdrawal, true);
@@ -829,6 +863,22 @@ class ClientController extends Controller
        }
 
        if((float)$wallet->wallet > (float)$request->amount){
+        $client = Client::where('user_id', auth()->user()->id)->first();
+        $generatedVal = $this->generateReference();
+        $payment = $this->payment($request->amount, 'loyalty', 'e-wallet', $client->unique_id, 'success', $generatedVal);
+        if($payment){
+
+            $walTrans = new WalletTransaction;
+            $walTrans->user_id = auth()->user()->id;
+            $walTrans->payment_id = $payment->id;
+            $walTrans->amount =  $payment->amount;
+            $walTrans->payment_type = 'funding';
+            $walTrans->unique_id = $payment->unique_id;
+            $walTrans->transaction_type = 'credit';
+            $walTrans->opening_balance = $request->opening_balance;
+            $walTrans->closing_balance = (float)$payment->amount + (float)$request->opening_balance;
+            $walTrans->save();
+
         $update_wallet = (float)$wallet->wallet - (float)$request->amount;
         ClientLoyaltyWithdrawal::where(['client_id'=> auth()->user()->id])->update([
             'withdrawal'=> json_encode($withdrawal),
@@ -839,12 +889,22 @@ class ClientController extends Controller
              ->with('success', 'Funds transfered  successfully ');
 
        }else{
+
         return redirect()->route('client.loyalty', app()->getLocale())
-        ->with('error', 'Insufficient Wallet Balance');
+        ->with('error', 'Insufficient Loyalty Wallet Balance');
 
        }
-   
-        
+
+    }
+
+
+    }
+
+    public function payments()
+    {
+        return view('client.payment.list')->with([
+            'payments' => \App\Models\Payment::where('user_id', auth()->user()->id)->orderBy('id', 'DESC')->get(),
+        ]);
     }
 
 }

@@ -54,7 +54,9 @@
                                             <td class="tx-medium">{{ $estate['estate_name'] }}</td>
                                             <td class="tx-medium">{{ $estate['first_name'] .' '.$estate['last_name'] }}</td>
                                             <td class="tx-medium">{{ $estate['phone_number'] }}</td>
-                                            <td class="text-medium">5</td>
+                                            <td class="text-medium">
+                                                {{ \App\Models\Client::where('estate_id', $estate['id'])->count() }}
+                                            </td>
                                             @if($estate['approved_by'] == null)
                                                 <td class="text-medium text-danger">Pending</td>
                                             @else
@@ -75,20 +77,19 @@
                                                     <a href="" class="dropdown-link" data-toggle="dropdown"><i data-feather="more-vertical"></i></a>
                                                     <div class="dropdown-menu dropdown-menu-right">
                                                         <a href="{{ route('admin.estate_summary', [ 'estate'=>$estate['uuid'], 'locale'=>app()->getLocale() ]) }}" class="dropdown-item details text-primary"><i class="far fa-user"></i> Summary</a>
+                                                        @if($estate['is_active'] == 'reinstated' || $estate['is_active'] == 'deactivated')
                                                         <a href="{{ route('admin.edit_estate', [ 'estate'=>$estate['uuid'], 'locale'=>app()->getLocale() ]) }}" class="dropdown-item details text-info"><i class="far fa-edit"></i> Edit</a>
-                                                        <a href="" class="dropdown-item details text-secondary"><i class="fa fa-percent"></i> Discount </a>
-
-
+                                                        @endif
                                                         @if($estate['approved_by'] == null || $estate['is_active'] == 'declined' || $estate['is_active'] == 'pending')
                                                         @if($estate['approved_by'] != null || $estate['is_active'] == 'declined' || $estate['is_active'] == 'pending')
                                                             <a href="{{ route('admin.approve_estate', ['estate'=>$estate->uuid, 'locale'=>app()->getLocale()]) }}" class="dropdown-item details text-success"><i class="fas fa-ban"></i> Approve</a>
                                                             <a href="{{ route('admin.decline_estate', ['estate'=>$estate->uuid, 'locale'=>app()->getLocale()]) }}" class="dropdown-item details text-warning"><i class="fas fa-ban"></i> Decline</a>
                                                         @endif
 
-                                                        @elseif($estate['is_active'] == 'approved' || $estate['is_active'] == 'reinstated' || $estate['is_active'] == 'deactived')
+                                                        @elseif($estate['is_active'] == 'reinstated' || $estate['is_active'] == 'deactivated')
                                                         @if($estate['is_active'] == 'reinstated' )
                                                             <a href="{{ route('admin.deactivate_estate', ['estate'=>$estate->uuid, 'locale'=>app()->getLocale()]) }}" class="dropdown-item details text-warning"><i class="fas fa-ban"></i> Deactivate</a>
-                                                        @else
+                                                        @elseif($estate['is_active'] == 'deactivated' )
                                                             <a href="{{ route('admin.reinstate_estate', ['estate'=>$estate->uuid, 'locale'=>app()->getLocale()]) }}" class="dropdown-item details text-success"><i class="fas fa-undo"></i> Reinstate</a>
                                                         @endif
                                                         @endif

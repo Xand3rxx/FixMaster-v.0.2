@@ -43,6 +43,8 @@ class EarningController extends Controller
             return redirect()->route('admin.edit_earnings', ['locale' => app()->getLocale(), 'earning' => $earning['uuid']])->with('error', 'Earnings must be greater than 0');
         }
 
+//        dd($request->input('earnings')/100);
+
         $updateEarnings = $earning->update([
             'earnings' => $request->input('earnings')/100
         ]);

@@ -19,7 +19,7 @@ class CreateIncomesTable extends Migration
             $table->string('income_name');
             $table->string('income_type')->default('none');
             $table->float('amount')->nullable();
-            $table->float('percentage')->nullable();
+            $table->float('percentage', 8,3)->nullable();
             $table->timestamps();
             $table->softDeletes();
         });
