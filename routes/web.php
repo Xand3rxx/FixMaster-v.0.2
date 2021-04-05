@@ -300,7 +300,7 @@ Route::prefix('/client')->group(function () {
         // Route::get('requests',                      [ClientController::class, 'myServiceRequest'])->name('service.all');
 
         // // view all my service request
-        Route::get('requests',                 [ClientController::class, 'myServiceRequest'])->name('service.all');
+        Route::get('requests',                     [ClientController::class, 'myServiceRequest'])->name('service.all');
         Route::get('/requests/details/{ref}',      [ClientController::class, 'requestDetails'])->name('client.request_details');
         Route::get('/requests/edit/{id}',          [ClientController::class, 'edit'])->name('client.edit_request');
         Route::put('/requests/update/{id}',        [ClientController::class, 'update'])->name('client.update_request');

@@ -787,22 +787,37 @@ class ClientController extends Controller
     //     return $myContacts;
     // }
 
-    public function myServiceRequest(){
-        $myRequest = Client::where('user_id', auth()->user()->id)->with('service_request')->firstOrFail();
-        $data['myServiceRequests'] = $myRequest->service_request;
-        // return $data['myServiceRequests'];
-        return view('client.services.list', $data);
+    // public function index(){
 
-    }
+    //     $userServiceRequests = Auth::user()->requests()->orderBy('created_at', 'DESC')->get();
 
-    public function requestDetails($ref){
-        $requestDetail = ServiceRequest::findOrFail($ref);
-        // return $requestDetail->cse;
-        $data = [
-            'requestDetail'   =>  $requestDetail,
-        ];
-        return view('client.request_details', $data);
-    }
+    //     $createdBy = Name::get();
+
+    //     $data = [
+    //         'userServiceRequests'   =>  $userServiceRequests,
+    //         'createdBy'             =>  $createdBy,
+    //     ];
+
+    //     return view('client.requests', $data)->with('i');
+    // }
+
+
+    // public function myServiceRequest(){
+    //     $myRequest = Client::where('user_id', auth()->user()->id)->with('service_request')->firstOrFail();
+    //     $data['myServiceRequests'] = $myRequest->service_request;
+    //     // return $data['myServiceRequests'];
+    //     return view('client.services.list', $data);
+
+    // }
+
+    // public function requestDetails($ref){
+    //     $requestDetail = ServiceRequest::findOrFail($ref);
+    //     // return $requestDetail->cse;
+    //     $data = [
+    //         'requestDetail'   =>  $requestDetail,
+    //     ];
+    //     return view('client.request_details', $data);
+    // }
 
     public function loyalty()
     {
