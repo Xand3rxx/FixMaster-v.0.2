@@ -51,7 +51,7 @@ class Cse extends Model
      */
     public function user()
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(User::class)->with(['account', 'contact']);
     }
 
     /**
@@ -61,11 +61,6 @@ class Cse extends Model
     {
         return $this->hasMany(ServiceRequestAssigned::class, 'user_id', 'user_id');
     }
-
-    // public function serviceRequest()
-    // {
-    //     return $this->hasOne(ServiceRequest::class);
-    // }
 
     public function serviceRequests()
     {

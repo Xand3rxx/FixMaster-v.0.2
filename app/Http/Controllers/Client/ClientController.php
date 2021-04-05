@@ -29,14 +29,13 @@ use App\Traits\RegisterPaymentTransaction;
 use App\Traits\Services;
 use App\Traits\PasswordUpdator;
 use Auth;
+use App\Models\LoyaltyManagement;
+use App\Models\ClientLoyaltyWithdrawal;
 
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\SMTP;
 use PHPMailer\PHPMailer\Exception;
 
- 
-use App\Models\LoyaltyManagement;
-use App\Models\ClientLoyaltyWithdrawal;
 use Session; 
 
 class ClientController extends Controller

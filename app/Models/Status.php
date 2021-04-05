@@ -9,15 +9,6 @@ use Illuminate\Support\Str;
 class Status extends Model
 {
 
-    // column name of key
-    protected $primaryKey = 'uuid';
-
-    // type of key
-    protected $keyType = 'string';
-
-    // whether the key is automatically incremented or not
-    public $incrementing = false;
-
     protected $fillable = [
         'user_id', 'name', 'sub_status', 'ranking',
     ];

@@ -41,7 +41,6 @@ class Account extends Model
         return $this->belongsTo(Bank::class);
     }
 
-
     public function payment()
     {
         return $this->hasMany(PaymentDisbursed::class, 'user_id', 'user_id');

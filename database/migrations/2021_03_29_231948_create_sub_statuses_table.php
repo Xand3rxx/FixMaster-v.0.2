@@ -19,6 +19,7 @@ class CreateSubStatusesTable extends Migration
             $table->collation = 'utf8mb4_unicode_ci';
 
             $table->id();
+            $table->uuid('uuid')->unique();
             $table->foreignId('user_id');
             $table->foreignId('status_id');
             $table->text('name');

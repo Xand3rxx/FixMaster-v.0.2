@@ -69,10 +69,6 @@ class ServiceRequest extends Model
         return $this->belongsTo(Lga::class);
     }
 
-    // public function price(){
-    //     return $this->belongsTo(Price::class, 'id');
-    // }
-
     public function client()
     {
         return $this->belongsTo(User::class, 'client_id');
@@ -95,6 +91,7 @@ class ServiceRequest extends Model
     {
         return $this->belongsToMany(User::class, 'service_request_assigned')->with('account', 'roles');
     }
+    
     public function invoice()
     {
         return $this->hasOne(Invoice::class);
@@ -134,26 +131,9 @@ class ServiceRequest extends Model
         return $this->hasOne(Account::class, 'user_id', 'client_id');
     }
 
-    public function technicianAccount()
-    {
-        
-            return $this->hasOne(Account::class, 'user_id', 'service_id');
-    }
-
-    
-    // public function price()
-    // {
-        
-    //         return $this->hasOne(Price::class, 'user_id', 'client_id')->withDefault();
-
-    //         return $this->hasOne(Account::class, 'user_id', 'service_id');
-    // }
-
-
     public function price()
     {
-        
-            return $this->hasOne(Price::class, 'user_id', 'service_id')->withDefault();
+        return $this->hasOne(Price::class, 'price_id');
     }
 
     public function address(){
