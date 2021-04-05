@@ -127,54 +127,46 @@ class ToolsRequestController extends Controller
         }
     }
 
-    // public function returnToolRequested($id){
+    public function returnToolsRequested($language, $uuid){
 
-    //     $batchNumberExists = ToolRequest::findOrFail($id);
+        $batchNumberExists = ToolRequest::where('uuid', $uuid)->firstOrFail();
 
-    //     $batchNumber = $batchNumberExists->unique_id;
+        $batchNumber = $batchNumberExists->unique_id;
 
-    //     $tools = $batchNumberExists->toolRequestBatches;
+        $tools = $batchNumberExists->toolRequestBatches;
 
-    //     $markedRequest = ToolRequest::where('id', $id)->update([
-    //         'is_returned'   =>  '1',
-    //     ]);
+        $markedRequest = ToolRequest::where('uuid', $uuid)->update([
+            'is_returned'   =>  '1',
+        ]);
 
-    //     if($markedRequest){
+        if($markedRequest){
 
-    //         //Create entries on `tool_request_batches` table for a single Tools request Batch record
-    //         foreach ($tools as $item => $value){
+            //Create entries on `tool_request_batches` table for a single Tools request Batch record
+            foreach ($tools as $item => $value){
 
-    //             //Reduce available quantity for a particulat tool on `tool_inventories`  table
-    //             ToolsInventory::where('id', $value->tool_id)->increment('available', $value->quantity);
-    //         }
+                //Reduce available quantity for a particulat tool on `tool_inventories`  table
+                ToolInventory::where('id', $value->tool_id)->increment('available', $value->quantity);
+            }
 
-    //         //Record crurrenlty logged in user activity
-    //         $this->addRecord = new RecordActivityLogController();
-    //         $id = Auth::id();
-    //         $type = 'Request';
-    //         $severity = 'Informational';
-    //         $actionUrl = Route::currentRouteAction();
-    //         $controllerActionPath = URL::full();
-    //         $message = Auth::user()->fullName->name.' marked Tools request with Bacth number: '.$batchNumberExists->unique_id.' as returned.';
+            //Record crurrenlty logged in user activity
+            $type = 'Request';
+            $severity = 'Informational';
+            $actionUrl = Route::currentRouteAction();
+            $message = Auth::user()->email.' marked Tools request with Bacth number: '.$batchNumberExists->unique_id.' as returned.';
+            $this->log($type, $severity, $actionUrl, $message);
 
-    //         $this->addRecord->createMessage($id, $type, $severity, $actionUrl, $controllerActionPath, $message);
+            return redirect()->route('admin.tools_request', app()->getLocale())->with('success', $batchNumberExists->unique_id.' Tools request was marked as returned.');
 
-    //         return redirect()->route('admin.tools_request')->with('success', $batchNumberExists->unique_id.' Tools request was marked as returned.');
+        }else{
 
-    //     }else{
+            //Record Unauthorized user activity
+            $type = 'Errors';
+            $severity = 'Error';
+            $actionUrl = Route::currentRouteAction();
+            $message = 'An error occurred while '.Auth::user()->email.' was trying to mark Tools request with Bacth number: '.$batchNumberExists->unique_id.' as returned.';
+            $this->log($type, $severity, $actionUrl, $message);
 
-    //         //Record Unauthorized user activity
-    //         $this->addRecord = new RecordActivityLogController();
-    //         $id = Auth::id();
-    //         $type = 'Errors';
-    //         $severity = 'Error';
-    //         $actionUrl = Route::currentRouteAction();
-    //         $controllerActionPath = URL::full();
-    //         $message = 'An error occurred while '.Auth::user()->fullName->name.' was trying to mark Tools request with Bacth number: '.$batchNumberExists->unique_id.' as returned.';
-
-    //         $this->addRecord->createMessage($id, $type, $severity, $actionUrl, $controllerActionPath, $message);
-
-    //         return back()->with('error', 'An error occurred while trying to mark '.$batchNumberExists->unique_id.' Tool request as returned.');
-    //     }
-    // }
+            return back()->with('error', 'An error occurred while trying to mark '.$batchNumberExists->unique_id.' Tool request as returned.');
+        }
+    }
 }

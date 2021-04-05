@@ -42,7 +42,7 @@ trait Services
     public function service($uuid){
 
         return Service::where('uuid', $uuid)->select('id', 'uuid', 'name', 'image', 'description')
-        ->findOrFail();
+        ->firstOrFail();
     }
 
     /**
