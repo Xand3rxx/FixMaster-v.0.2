@@ -36,6 +36,8 @@ use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\SMTP;
 use PHPMailer\PHPMailer\Exception;
 
+use App\Http\Controllers\Messaging\MessageController;
+
 
 
 class ClientController extends Controller
@@ -668,97 +670,78 @@ class ClientController extends Controller
             }
             
             public function getDistanceDifference(Request $request){
-
+                $the_message = new MessageController;
+                        $type = 'email';
+                        $subject = 'new job notice';
+                        $from = 'client@fix-master.com';
+                        $to = 'cse@fix-master.com';
+                        $mail_data = ["firstname"=>"Olaoluwa", "url"=>"www.google.com"];
+                        $feature = 'NEW_JOB_NOTIFICATION';
+                // $the_message->sendMessage( $type, $subject, $from, $to, $mail_data, $feature);
+                $the_message->sendNewMessage( $type, $subject, $from, $to, $mail_data, $feature);
                 $client = Client::where('user_id', $request->user()->id)->with('user')->orderBy('id','DESC')->firstOrFail();
 
-                // $latitude  = '3.921007';
-                $latitude  = $client->user->contact->address_latitude;
-                // $longitude = '1.8386';
-                $longitude = $client->user->contact->address_longitude;
-                // $radius    = 325;
-                $radius        = ServiceRequestSetting::find(1)->radius;   
+                // // $latitude  = '3.921007';
+                // $latitude  = $client->user->contact->address_latitude;
+                // // $longitude = '1.8386';
+                // $longitude = $client->user->contact->address_longitude;
+                // // $radius    = 325;
+                // $radius        = ServiceRequestSetting::find(1)->radius;   
 
-                $cse = DB::table('cses')
-                ->join('contacts', 'cses.user_id','=','contacts.user_id')
-                ->join('users', 'cses.user_id', '=', 'users.id')              
-                ->join('accounts', 'cses.user_id', '=', 'accounts.user_id')              
-                // // ->select(DB::raw('contacts.*,1.609344 * 3956 * 2 * ASIN(SQRT( POWER(SIN((" . $latitude . " - abs(address_latitude)) *  pi()/180 / 2), 2) + COS(" . $latitude . " * pi()/180) * COS(abs(address_latitude) * pi()/180) * POWER(SIN((" . $longitude . " - address_longitude) * pi()/180 / 2), 2)  )) AS calculatedDistance'))
-                ->select(DB::raw('cses.*, contacts.address, accounts.first_name, users.email,  6353 * 2 * ASIN(SQRT( POWER(SIN(('.$latitude.' - abs(address_latitude)) * pi()/180 / 2),2) + COS('.$latitude.' * pi()/180 ) * COS(abs(address_latitude) *  pi()/180) * POWER(SIN(('.$longitude.' - address_longitude) *  pi()/180 / 2), 2) )) as distance'))
-                ->having('distance', '<=', $radius)
-                // ->having('town', '=', '')
-                ->orderBy('distance', 'DESC')
-                ->get();
+                // $cse = DB::table('cses')
+                // ->join('contacts', 'cses.user_id','=','contacts.user_id')
+                // ->join('users', 'cses.user_id', '=', 'users.id')              
+                // ->join('accounts', 'cses.user_id', '=', 'accounts.user_id')              
+                // // // ->select(DB::raw('contacts.*,1.609344 * 3956 * 2 * ASIN(SQRT( POWER(SIN((" . $latitude . " - abs(address_latitude)) *  pi()/180 / 2), 2) + COS(" . $latitude . " * pi()/180) * COS(abs(address_latitude) * pi()/180) * POWER(SIN((" . $longitude . " - address_longitude) * pi()/180 / 2), 2)  )) AS calculatedDistance'))
+                // ->select(DB::raw('cses.*, contacts.address, accounts.first_name, users.email,  6353 * 2 * ASIN(SQRT( POWER(SIN(('.$latitude.' - abs(address_latitude)) * pi()/180 / 2),2) + COS('.$latitude.' * pi()/180 ) * COS(abs(address_latitude) *  pi()/180) * POWER(SIN(('.$longitude.' - address_longitude) *  pi()/180 / 2), 2) )) as distance'))
+                // ->having('distance', '<=', $radius)
+                // // ->having('town', '=', '')
+                // ->orderBy('distance', 'DESC')
+                // ->get();
                
-                // if ( count($cse) > 0) {
-                    // dd($cse);
-                    foreach ($cse as $key => $cses){
-                        // dd($cses['email']);
-                        dd($cses);
-                        // echo $cse[$key]->email;
+                // // if ( count($cse) > 0) {
+                //     // dd($cse);
+                //     foreach ($cse as $key => $cses){
+                //         // dd($cses['email']);
+                //         dd($cses);
+                // }
 
-                        // $mail = new PHPMailer;
-                        // $mail->isSMTP();                            // Set mailer to use SMTP
-                        // $mail->Host = 'smtp.gmail.com';              // Specify main and backup SMTP servers
-                        // $mail->SMTPAuth = true;                     // Enable SMTP authentication
-                        // $mail->Username = 'denkogy@gmail.com'; // your email id
-                        // $mail->Password = 'Chemistry!1'; // your password
-                        // $mail->SMTPSecure = 'tls';                  
-                        // $mail->Port = 587;     //587 is used for Outgoing Mail (SMTP) Server.
-                        // $mail->setFrom('denkogy@gmail.com', 'Name');
-                        // $mail->addAddress('denkogee@yahoo.com');   // Add a recipient
-                        // $mail->isHTML(true);  // Set email format to HTML
-        
-                        // $bodyContent = '<h1>HeY!,</h1>';
-                        // $bodyContent .= '<p>This is a email that Radhika send you From LocalHost using PHPMailer</p>';
-                        // $mail->Subject = 'Email from Localhost by Radhika';
-                        // $mail->Body    = $bodyContent;
-                        // if(!$mail->send()) {
-                        // echo 'Message was not sent.';
-                        // echo 'Mailer error: ' . $mail->ErrorInfo;
-                        // } else {
-                        // echo 'Message has been sent.';
-                        // }
-                }
             }
             // }
 
 
             public function sendMailToAdmin(Request $request){
                 $mail = new PHPMailer(true);
-                $user = Auth::user();
     
                 // dd($setting);
                 // if ($setting->is_smtp == 1) {    
-                //     try {
-                //         //Server settings
-                //         $mail->SMTPDebug = SMTP::DEBUG_SERVER;                      //Enable verbose debug output
-                //         $mail->isSMTP();                                            //Send using SMTP
-                //         $mail->Host       = 'smtp.gmail.com';                     //Set the SMTP server to send through
-                //         $mail->SMTPAuth   = true;                                   //Enable SMTP authentication
-                //         $mail->Username   = 'denkogy@gmail.com';                     //SMTP username
-                //         $mail->Password   = 'Chemistry!1';                               //SMTP password
-                //         $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;         //Enable TLS encryption; `PHPMailer::ENCRYPTION_SMTPS` encouraged
-                //         $mail->Port       = 587;                                    //TCP port to connect to, use 465 for `PHPMailer::ENCRYPTION_SMTPS` above
+                    try {
+                        //Server settings
+                        $mail->SMTPDebug = SMTP::DEBUG_SERVER;                      //Enable verbose debug output
+                        $mail->isSMTP();                                            //Send using SMTP
+                        $mail->Host       = 'smtp.gmail.com';                     //Set the SMTP server to send through
+                        $mail->SMTPAuth   = true;                                   //Enable SMTP authentication
+                        $mail->Username   = 'denkogy@gmail.com';                     //SMTP username
+                        $mail->Password   = 'Chemistry!1';                               //SMTP password
+                        $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;         //Enable TLS encryption; `PHPMailer::ENCRYPTION_SMTPS` encouraged
+                        $mail->Port       = 587;                                    //TCP port to connect to, use 465 for `PHPMailer::ENCRYPTION_SMTPS` above
                     
-                //         //Recipients
-                //         $mail->setFrom('denkogy@gmail.com', 'New Order Placed!!!');
-                //         $mail->addAddress($request->email, $request->FirstName);
+                        //Recipients
+                        $mail->setFrom('denkogy@gmail.com', 'New Order Placed!!!');
+                        $mail->addAddress($request->email, $request->FirstName);
                     
-                //         //Content
-                //         $mail->isHTML(true);        
-                //         $mail->Subject = 'Request Successful!';
-                //          $mail->Body  = 'First Name: <strong>' .$request['f_name']. 
-                //                           '<br/>
-                //                           Last Name: <strong>' .$request->LastName.  
-                //                           '<br/>';
-                //                 $mail->send();
-                //                     if ( $mail->send() ) { 
-                //                     return back()->with('success', 'Your Request has been sent Successful');
-                //                     }
-                //                 echo 'Message has been sent';
-                //             } catch (Exception $e) {
-                //                 echo "Message could not be sent. Mailer Error: {$mail->ErrorInfo}";
-                //             }    
+                        //Content
+                        $mail->isHTML(true);        
+                        $mail->Subject = 'Request Successful!';
+                         $mail->Body  = 'First Name:';
+                                $mail->send();
+                                    if ( $mail->send() ) { 
+                                    return back()->with('success', 'Your Request has been sent Successful');
+                                    }
+                                echo 'Message has been sent';
+                            } catch (Exception $e) {
+                                echo "Message could not be sent. Mailer Error: {$mail->ErrorInfo}";
+                            }    
                 // }
             }
 
@@ -810,6 +793,15 @@ class ClientController extends Controller
         // return $data['myServiceRequests'];
         return view('client.services.list', $data);
 
+    }
+
+    public function requestDetails($ref){
+        $requestDetail = ServiceRequest::findOrFail($ref);
+        // return $requestDetail->cse;
+        $data = [
+            'requestDetail'   =>  $requestDetail,
+        ];
+        return view('client.request_details', $data);
     }
 
     public function loyalty()

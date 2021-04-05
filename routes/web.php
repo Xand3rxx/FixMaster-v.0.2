@@ -296,14 +296,20 @@ Route::prefix('/client')->group(function () {
 
         Route::post('servicesRequest',              [ClientController::class, 'serviceRequest'])->name('services.serviceRequest');
         // view all my service request
-        Route::get('myServicesRequest',              [ClientController::class, 'myServiceRequest'])->name('service.all');
+        // Route::get('requests',                      [ClientController::class, 'myServiceRequest'])->name('service.all');
 
-            Route::post('servicesRequest',              [ClientController::class, 'serviceRequest'])->name('services.serviceRequest');
-            // post my contact to DB
-            Route::post('/ajax_contactForm',            [ClientController::class, 'ajax_contactForm'])->name('ajax_contactForm');
-            
-            // view all my service request
-            Route::get('myServicesRequest',              [ClientController::class, 'myServiceRequest'])->name('service.all');
+        // // view all my service request
+        Route::get('requests',                 [ClientController::class, 'myServiceRequest'])->name('service.all');
+        Route::get('/requests/details/{ref}',      [ClientController::class, 'requestDetails'])->name('client.request_details');
+        Route::get('/requests/edit/{id}',          [ClientController::class, 'edit'])->name('client.edit_request');
+        Route::put('/requests/update/{id}',        [ClientController::class, 'update'])->name('client.update_request');
+
+                
+        Route::post('servicesRequest',              [ClientController::class, 'serviceRequest'])->name('services.serviceRequest');
+        // post my contact to DB
+        Route::post('/ajax_contactForm',            [ClientController::class, 'ajax_contactForm'])->name('ajax_contactForm');
+        
+
             
             Route::get('myContactList',                  [ClientController::class, 'myContactList'])->name('service.myContacts');
 
