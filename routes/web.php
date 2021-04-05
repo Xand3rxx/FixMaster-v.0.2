@@ -168,7 +168,7 @@ Route::prefix('admin')->group(function () {
         Route::get('/discount/list',                       [App\Http\Controllers\DiscountController::class, 'index'])->name('discount_list');
         Route::post('/discount/add',                    [App\Http\Controllers\DiscountController::class, 'store'])->name('store_discount');
         Route::post('/LGA',                             [App\Http\Controllers\DiscountController::class, 'getLGA'])->name('getLGA');
-        Route::post('/estates',                             [App\Http\Controllers\DiscountController::class, 'estates'])->name('all_estates');
+        Route::post('/discount/estates',                             [App\Http\Controllers\DiscountController::class, 'estates'])->name('all_estates');
         Route::post('/categories-list',                             [App\Http\Controllers\DiscountController::class, 'category'])->name('categories');
         Route::post('/category-services',                             [App\Http\Controllers\DiscountController::class, 'categoryServices'])->name('category_services');
         Route::post('/discount-users',                    [App\Http\Controllers\DiscountController::class, 'discountUsers'])->name('discount_users');
@@ -266,9 +266,22 @@ Route::prefix('/client')->group(function () {
         // Route::get('/profile/view',             [ClientController::class, 'view_profile'])->name('client.view_profile');
         // Route::get('/profile/edit',             [ClientController::class, 'edit_profile'])->name('client.edit_profile');
         Route::post('/profile/update',              [ClientController::class, 'update_profile'])->name('updateProfile');
-        Route::post('/updatePassword',      [ClientController::class, 'updatePassword'])->name('updatePassword');
+        Route::post('/updatePassword',                 [ClientController::class, 'updatePassword'])->name('updatePassword');
 
-        // Route::get('/requests',                    [ClientRequestController::class, 'index'])->name('client.requests');
+        Route::get('/requests',                              [ClientController::class, 'index'])->name('requests');
+        Route::get('/requests/details/{request:id}',          [ClientController::class, 'clientRequestDetails'])->name('request_details');
+        Route::get('/requests/edit/{request:id}',          [ClientController::class, 'editRequest'])->name('edit_request');
+        Route::get('/requests/cancel/{request:id}',          [ClientController::class, 'cancelRequest'])->name('cancel_request');
+        Route::get('/requests/send-messages',          [ClientController::class, 'sendMessages'])->name('send_messages');
+        Route::post('/requests/update-request/{request:id}',          [ClientController::class, 'updateRequest'])->name('update_request');
+        Route::post('/requests/technician_profile',          [ClientController::class, 'technicianProfile'])->name('technician_profile');
+
+       
+
+       
+     
+
+
 
         // E-wallet Routes for clients
         //Profile and password update
@@ -287,6 +300,7 @@ Route::prefix('/client')->group(function () {
             Route::get('/apiRequest',           [ClientController::class, 'apiRequest'])->name('ipn.paystackApiRequest');
 
             Route::get('/ipnflutter',           [ClientController::class, 'flutterIPN'])->name('ipn.flutter');
+          
 
             // Service request SECTION
             Route::get('/services',                     [ClientController::class, 'services'])->name('services.list');
@@ -385,7 +399,7 @@ Route::prefix('/technician')->group(function () {
     });
 });
 
-Route::prefix('/quality-assurance')->group(function () {
+Route::prefix('/quality-assurance')->middleware('monitor.service.request.changes')->group(function () {
     Route::name('quality-assurance.')->group(function () {
         //All routes regarding quality_assurance should be in here
         //Route::view('/', 'quality-assurance.index')->name('index'); //Take me to quality_assurance Dashboard

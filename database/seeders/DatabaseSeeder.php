@@ -48,6 +48,8 @@ class DatabaseSeeder extends Seeder
             WalletTransactionSeeder::class,
             WarrantySeeder::class,
             ServiceRequestPaymentSeeder::class,
+            AdminRatingSeeder::class,
+            AdminReviewSeeder::class,
         ]);
     }
 }

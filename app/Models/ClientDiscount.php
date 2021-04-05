@@ -43,5 +43,10 @@ class ClientDiscount extends Model
      public function clientDiscounts(){
              return $this->hasMany(Service::class, 'user_id', 'client_id');
      }
+
+     public function serviceRequests()
+     {
+         return $this->hasMany(ServiceRequest::class, 'client_id', 'client_id');
+     }
 }
 

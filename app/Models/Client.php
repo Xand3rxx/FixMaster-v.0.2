@@ -51,6 +51,11 @@ class Client extends Model
         return $this->hasMany(ServiceRequest::class, 'client_id', 'user_id')->with('service');
     }
 
+    public function service_requests()
+    {
+        return $this->hasMany(ServiceRequest::class, 'client_id', 'user_id')->with('service');
+    }
+
     /**
      * Get the contact added
      */
