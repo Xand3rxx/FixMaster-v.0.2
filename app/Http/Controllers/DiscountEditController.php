@@ -32,12 +32,12 @@ class DiscountEditController extends Controller
         $status = Discount::select('*')->where('uuid', $discount)->first();
         $data = ['status' => $status];
         $data['apply_discounts'] = ['Total bill', 'Materials', 'Labour cost', 'FixMaster royalty', 'Logistics'];
-        $json = json_decode($status->parameter);
-        $data['field']= $json->field;
-        $data['users']= json_encode($json->users);
-        $data['estate']= json_encode($json->estate);
-        $data['category']= json_encode($json->category);
-        $data['services']= json_encode($json->services);
+        $json = !empty($status->parameter) ? json_decode($status->parameter): [];
+        $data['field']= $json ?? $json->field;
+        $data['users']= $json ? json_encode($json->users):'';
+        $data['estate']= $json ? json_encode($json->estate): '';
+        $data['category']= $json ? json_encode($json->category):'';
+        $data['services']= $json ? json_encode($json->services): '';
         $data['entities'] = $this->entityArray();
         $data['states'] = State::select('id', 'name')->orderBy('name', 'ASC')->get();
         $data['request_lga']= isset($data['field']->specified_request_lga)? Lga::select('*')->where('id',  $data['field']->specified_request_lga)->first(): '';

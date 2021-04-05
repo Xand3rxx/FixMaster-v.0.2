@@ -40,10 +40,10 @@
                         <div class="form-group col-md-12">
                             <label for="entity">Select Entity</label>
                             <select id="entity_id" name="entity" class="custom-select cs-select">
-                               
+                               <?php $statuses = !empty($status->entity) ? $status->entity : 'select'?>
                                 @foreach($entities as $key => $value)
                                 <option value="{{ strtolower($value->name) }}"
-                                    {{ $status->entity ==  strtolower($value->name) ? 'selected' : ''}}>
+                                    {{ $statuses ==  strtolower($value->name) ? 'selected' : ''}}>
                                     {{ $value->name }}</option>
                                 @endforeach
                             </select>
@@ -53,7 +53,8 @@
                             </span>
                             @enderror
                             <span class="invalid-feedback-err"></span>
-                            <input type="hidden" name="discount_id" value="{{$status->uuid}}" />
+                            <?php $uuid = !empty($status->uuid) ? $status->uuid : 'select'?>
+                            <input type="hidden" name="discount_id" value="{{$uuid}}" />
                         </div>
                         <div class="form-group col-md-12 show-estate">
                             <label>Select Estate</label>
@@ -299,8 +300,9 @@
 
                         <div class="form-group col-md-4">
                             <label for="discount_name">Name of discount</label>
+                            <?php $name = !empty($status->name) ? $status->name : 'select'?>
                             <input type="text" class="form-control custom-input-1" id="discount_name"
-                                name="discount_name" value="{{ $status->name }}" autocomplete="off">
+                                name="discount_name" value="{{ $name }}" autocomplete="off">
                             @error('discount_name')
                             <span class="invalid-feedback-err">
                                 <strong>{{ $message }}</strong>
@@ -314,8 +316,9 @@
                         <div class="form-group col-md-4">
                             <label for="rate">Rate</label>
                             <div class="input-group">
+                            <?php $rate = !empty($status->rate) ? $status->rate : 'select'?>
                                 <input type="number" min="0.1" step="any" id="rate" class="form-control" name="rate"
-                                    aria-label="Dollar amount" value="{{ $status->rate }}">
+                                    aria-label="Dollar amount" value="{{ $rate }}">
                                 <div class="input-group-append">
                                     <span id="percentage" class="input-group-text">0.00</span>
                                     <span class="input-group-text">%</span>
@@ -331,11 +334,12 @@
 
                         <div class="form-group col-md-4">
                                     <label for="entity">Apply Discount To</label>
+                                    <?php $apply_discount = !empty($status->apply_discount) ? $status->apply_discount : 'select'?>
                                     <select id="apply_id" name="apply_discount" class="custom-select cs-select">
                                         <option selected value="">Select...</option>
                                         @foreach($apply_discounts as $apply)
                                             <option value="{{ $apply}}"
-                                        {{ $status->apply_discount ==  $apply ? 'selected' : ''}}>
+                                        {{ $apply_discount ==  $apply ? 'selected' : ''}}>
                                         {{ $apply }}
                                     </option>
                                         @endforeach
@@ -350,9 +354,10 @@
 
                         <div class="form-group col-md-6">
                             <label for="start_date">Duaration(Start)</label>
+                            <?php $duration_start = !empty($status->duration_start) ? $status->duration_start : date('y-m-d')?>
                             <input type="date" class="form-control custom-input-1" id="start_date"
                                 min=<?= date('Y-m-d'); ?> name="start_date"
-                                value="{{ Carbon\Carbon::parse($status->duration_start, 'UTC')->isoFormat("Y-MM-DD") }}"
+                                value="{{ Carbon\Carbon::parse($duration_start, 'UTC')->isoFormat("Y-MM-DD") }}"
                                 autocomplete="off">
                             @error('from_date')
                             <span class="invalid-feedback-err">
@@ -362,9 +367,10 @@
                         </div>
                         <div class="form-group col-md-6">
                             <label for="end_date">Duration(End)</label>
+                            <?php $duration_end = !empty($status->duration_end) ? $status->duration_end : date('y-m-d')?>
                             <input type="date" class="form-control custom-input-1" id="end_date"
                                 min=<?= date('Y-m-d');?> name="end_date"
-                                value="{{ Carbon\Carbon::parse($status->duration_end, 'UTC')->isoFormat("Y-MM-DD") }}"
+                                value="{{ Carbon\Carbon::parse($duration_end, 'UTC')->isoFormat("Y-MM-DD") }}"
                                 autocomplete="off">
                             @error('discount_name')
                             <span class="invalid-feedback-err">
@@ -374,27 +380,29 @@
                         </div>
 
                         <div class="form-group col-md-12">
+                        <?php $description = !empty($status->description) ? $status->description : 'select'?>
                             <label for="description">Description</label>
                             <textarea rows="3" class="form-control" id="description-1" rows="5" maxlength="250"
-                                name="description">{{ $status->description }}</textarea>
+                                name="description">{{ $description }}</textarea>
                         </div>
                     </div>
 
 
 
                     <div class="col-md-12">
+                    <?php $notify = !empty($status->notify) ? $status->notify : 'select'?>
                         <label> Notify Users</label>
                         <div class="flex-this">
                             <span class="f" style="display:flex">
                                 <div class="custom-control custom-radio">
                                     <input type="radio" id="customRadio1" name="notify" class="custom-control-input"
-                                        {{ $status->notify == '1' ? 'checked' : ""}} value="1" name="notify">
+                                        {{ $notify == '1' ? 'checked' : ""}} value="1" name="notify">
                                     <label class="custom-control-label" for="customRadio1">Yes</label>
                                 </div>
 
                                 <div class="custom-control custom-radio" style="padding-left: 50px">
                                     <input type="radio" id="customRadio2" name="notify" class="custom-control-input"
-                                        {{ $status->notify == 0 ? 'checked' : ''}} value="0">
+                                        {{ $notify == 0 ? 'checked' : ''}} value="0">
                                     <label class="custom-control-label" for="customRadio2">No</label>
                                 </div>
                             </span>
