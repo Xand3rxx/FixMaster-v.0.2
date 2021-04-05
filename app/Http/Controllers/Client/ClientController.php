@@ -657,6 +657,7 @@ class ClientController extends Controller
                 // // ->select(DB::raw('contacts.*,1.609344 * 3956 * 2 * ASIN(SQRT( POWER(SIN((" . $latitude . " - abs(address_latitude)) *  pi()/180 / 2), 2) + COS(" . $latitude . " * pi()/180) * COS(abs(address_latitude) * pi()/180) * POWER(SIN((" . $longitude . " - address_longitude) * pi()/180 / 2), 2)  )) AS calculatedDistance'))
                 ->select(DB::raw('cses.*, contacts.address, accounts.first_name, users.email,  6353 * 2 * ASIN(SQRT( POWER(SIN(('.$latitude.' - abs(address_latitude)) * pi()/180 / 2),2) + COS('.$latitude.' * pi()/180 ) * COS(abs(address_latitude) *  pi()/180) * POWER(SIN(('.$longitude.' - address_longitude) *  pi()/180 / 2), 2) )) as distance'))
                 ->having('distance', '<=', $radius)
+                ->having('town', '=', '')
                 ->orderBy('distance', 'DESC')
                 ->get();
                
@@ -664,67 +665,31 @@ class ClientController extends Controller
                     // dd($cse);
                     foreach ($cse as $key => $cses){
                         // dd($cses['email']);
+                        dd($cses);
                         // echo $cse[$key]->email;
-                    
 
-                        $mail = new PHPMailer;
-                        $mail->isSMTP();                            // Set mailer to use SMTP
-                        $mail->Host = 'smtp.gmail.com';              // Specify main and backup SMTP servers
-                        $mail->SMTPAuth = true;                     // Enable SMTP authentication
-                        $mail->Username = 'denkogy@gmail.com'; // your email id
-                        $mail->Password = 'Chemistry!1'; // your password
-                        $mail->SMTPSecure = 'tls';                  
-                        $mail->Port = 587;     //587 is used for Outgoing Mail (SMTP) Server.
-                        $mail->setFrom('denkogy@gmail.com', 'Name');
-                        $mail->addAddress('denkogee@yahoo.com');   // Add a recipient
-                        $mail->isHTML(true);  // Set email format to HTML
+                        // $mail = new PHPMailer;
+                        // $mail->isSMTP();                            // Set mailer to use SMTP
+                        // $mail->Host = 'smtp.gmail.com';              // Specify main and backup SMTP servers
+                        // $mail->SMTPAuth = true;                     // Enable SMTP authentication
+                        // $mail->Username = 'denkogy@gmail.com'; // your email id
+                        // $mail->Password = 'Chemistry!1'; // your password
+                        // $mail->SMTPSecure = 'tls';                  
+                        // $mail->Port = 587;     //587 is used for Outgoing Mail (SMTP) Server.
+                        // $mail->setFrom('denkogy@gmail.com', 'Name');
+                        // $mail->addAddress('denkogee@yahoo.com');   // Add a recipient
+                        // $mail->isHTML(true);  // Set email format to HTML
         
-                        $bodyContent = '<h1>HeY!,</h1>';
-                        $bodyContent .= '<p>This is a email that Radhika send you From LocalHost using PHPMailer</p>';
-                        $mail->Subject = 'Email from Localhost by Radhika';
-                        $mail->Body    = $bodyContent;
-                        if(!$mail->send()) {
-                        echo 'Message was not sent.';
-                        echo 'Mailer error: ' . $mail->ErrorInfo;
-                        } else {
-                        echo 'Message has been sent.';
-                        }
-
-                    // $mail = new PHPMailer(true);
-
-                    // try {
-                    //     //Server settings
-                    //     $mail->SMTPDebug = SMTP::DEBUG_SERVER;                      //Enable verbose debug output
-                    //     $mail->isSMTP();                                            //Send using SMTP
-                    //     $mail->Host       = 'smtp.gmail.com';                     //Set the SMTP server to send through
-                    //     $mail->SMTPAuth   = true;                                   //Enable SMTP authentication
-                    //     $mail->Username   = 'denkogy@gmail.com';                     //SMTP username
-                    //     $mail->Password   = 'Chemistry!1';                               //SMTP password
-                    //     $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;         //Enable TLS encryption; `PHPMailer::ENCRYPTION_SMTPS` encouraged
-                    //     $mail->Port       = 587;                                    //TCP port to connect to, use 465 for `PHPMailer::ENCRYPTION_SMTPS` above
-                    
-                    //     //Recipients
-                    //     $mail->setFrom('denkogy@gmail.com', 'New Request!');
-
-                    //     // for ($i=0; $i < count($cse); $i++) { 
-                    //         // echo json_encode($cse[$i]["email"]);
-                    //         // echo $cse[$i]->email;
-                    //         $mail->addAddress($cse[$key]->email);
-                    //     // }                       
-                    // $denko = 'Denkogee';
-                    //     //Content
-                    //     $mail->isHTML(true);        
-                    //     $mail->Subject = 'Request Successful!';
-                    //      $mail->Body  = 'First Name: <strong>' .$denko. 
-                    //                       '<br/>';
-                    //             $mail->send();
-                    //                 if ( $mail->send() ) { 
-                    //                 return back()->with('success', 'Your Request has been sent Successful');
-                    //                 }
-                    //             echo 'Message has been sent';
-                    //         } catch (Exception $e) {
-                    //             echo "Message could not be sent. Mailer Error: {$mail->ErrorInfo}";
-                    //         }
+                        // $bodyContent = '<h1>HeY!,</h1>';
+                        // $bodyContent .= '<p>This is a email that Radhika send you From LocalHost using PHPMailer</p>';
+                        // $mail->Subject = 'Email from Localhost by Radhika';
+                        // $mail->Body    = $bodyContent;
+                        // if(!$mail->send()) {
+                        // echo 'Message was not sent.';
+                        // echo 'Mailer error: ' . $mail->ErrorInfo;
+                        // } else {
+                        // echo 'Message has been sent.';
+                        // }
                 }
             }
             // }
