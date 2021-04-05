@@ -91,12 +91,13 @@ Route::prefix('admin')->group(function () {
         Route::get('/estate/decline/{estate:uuid}',      [EstateController::class, 'decline'])->name('decline_estate');
         Route::get('/estate/delete/{estate:uuid}',      [EstateController::class, 'delete'])->name('delete_estate');
 
-        //Routes for Invoice Management
+        //Routes for Warranty Management
         Route::get('/warranty',      [WarrantyController::class, 'index'])->name('warranty_list');
         Route::get('/warranty/summary/{details:uuid}',  [WarrantyController::class, 'show'])->name('warranty_summary');
-        Route::post('/warranty/add',                    [WarrantyController::class, 'store'])->name('store_warranty');
+        Route::post('/warranty/add',                    [WarrantyController::class, 'storeWarranty'])->name('save_warranty');
         Route::get('/warranty/edit/{details:uuid}',  [WarrantyController::class, 'edit'])->name('edit_warranty');
         Route::put('/warranty/update/{details:uuid}',  [WarrantyController::class, 'update'])->name('update_warranty');
+        Route::get('/warranty/transactions/sort',      [WarrantyController::class, 'warrantyTransactionSort'])->name('warranty_transaction_sort');
         Route::get('/warranty/transactions',      [WarrantyController::class, 'warrantyTransaction'])->name('warranty_transaction');
 
         //Routes for Simulation

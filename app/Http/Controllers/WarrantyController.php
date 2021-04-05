@@ -5,10 +5,13 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 
 use App\Http\Controllers\Controller;
-
+use App\Traits\Utility;
 use App\Models\Warranty;
+use App\Models\ServiceRequestWarranty;
 use Illuminate\Support\Facades\URL;
 use App\Traits\Loggable;
+use App\Models\PaymentDisbursed;
+
 use Auth;
 use Route;
 use DB;
@@ -16,7 +19,7 @@ use DB;
 class WarrantyController extends Controller
 {
     use Loggable;
-    
+    use Utility;
     /**
      * This method will redirect users back to the login page if not properly authenticated
      * @return void
@@ -30,8 +33,7 @@ class WarrantyController extends Controller
     {
         //Return all warranty
         $warranty = Warranty::get();
-        //dd ($warranty);
-
+        
         //Append collections to $data array
         $data = [
             'warranties' =>  $warranty
@@ -40,49 +42,54 @@ class WarrantyController extends Controller
         return view('admin.warranty.index', $data)->with('i');
     }
 
-    public function store($language, Request $request)
+    public function storeWarranty($language, Request $request)
     {
-        try{
+        
 
-            //Validate user input fields
-            $this->validateRequest();
+              //Validate user input fields
+            $request->validate([
+                'name'          =>   'required',
+                'percentage'    =>   'required',
+                'warranty_type'    =>   'required',
+                'duration'    =>   'required',
+                'description'   =>   'required', 
+            ]);
 
             
             $createWarranty = Warranty::create([
-                'user_id'        =>  Auth::id(),
-                'name'      => $request->warranty_name,
-                'amount'    =>   $request->amount,
-                'warranty_type'    =>   $request->warranty_type,
-                //'duration'    =>   $request->duration, 
-                'description'   =>   $request->description,
+                'user_id'        =>  Auth::user()->id,
+                'name'           => $request->name,
+                'percentage'     =>   $request->percentage,
+                'warranty_type'  =>   $request->warranty_type,
+                'duration'       =>   $request->duration, 
+                'description'    =>   $request->description,
             ]);
 
-         
 
             if($createWarranty){
 
-              
+               
                 $type = 'Others';
                 $severity = 'Informational';
                 $actionUrl = Route::currentRouteAction();
-                $message = Auth::user()->email.' created '.ucwords($request->input('name')).' warranty.';
+                $message = Auth::user()->email.' saved '.ucwords($request->input('name')).' warranty';
                 $this->log($type, $severity, $actionUrl, $message);
     
-                return redirect()->route('admin.warranty.index', app()->getLocale())->with('success', ucwords($request->name).' warranty was successfully created.');
+                return redirect()->route('admin.warranty_list', app()->getLocale())->with('success', ucwords($request->input('name')).' warranty was successfully updated.');
+    
+            }else{
+                
+                $type = 'Errors';
+                $severity = 'Error';
+                $actionUrl = Route::currentRouteAction();
+                $message = 'An error occurred while '.Auth::user()->email.' was trying to create warranty.';
+                $this->log($type, $severity, $actionUrl, $message);
+    
+                return back()->with('error', 'An error occurred while trying to create '.ucwords($request->input('name')).' Warranty.');
             }
- 
-        }catch(exception $e){
- 
-           
-            $type = 'Errors';
-            $severity = 'Error';
-            $actionUrl = Route::currentRouteAction();
-            $message = 'An error occurred while '.Auth::user()->email.' was trying to create a new warranty.';
-            $this->log($type, $severity, $actionUrl, $message);
- 
-            return back()->with('error', 'An error occurred while trying to create a new warranty.');
-        }
- 
+    
+            return back()->withInput();
+               
     }
 
     /**
@@ -90,9 +97,9 @@ class WarrantyController extends Controller
      */
     private function validateRequest(){
         return request()->validate([
-            'warranty_name'          =>   'required|unique:warranty,name',
-            'amount'    =>   'required|numeric',
-            'warranty_type'    =>   'required', 
+            'warranty_name' =>   'required|unique:warranty,name',
+            'percentage'    =>   'required|numeric',
+            'warranty_type' =>   'required', 
             'description'   =>   'required', 
         ]);
     }
@@ -131,16 +138,17 @@ class WarrantyController extends Controller
         $request->validate([
             'name'          =>   'required',
             'percentage'    =>   'required',
-            
-            'description'   =>   '', 
+            'warranty_type' =>   'required',
+            'duration'      =>   'required',
+            'description'   =>   'required', 
         ]);
 
 
         //Update Warranty
         $updateWarranty= Warranty::where('uuid', $details)->update([
             'name'          =>   ucwords($request->name),
-            'amount'    =>   $request->percentage,
-            
+            'percentage'    =>   $request->percentage,
+            'warranty_type'    =>   $request->warranty_type,
             'description'   =>   $request->description,
         ]);
         
@@ -169,10 +177,29 @@ class WarrantyController extends Controller
         return back()->withInput();
     }
 
+    public function warrantyTransactionSort(Request $request)
+    {
+       
+
+            // $user = Auth::user();
+            // $payments = $user->payments();
+            $years =  $this->getDistinctYears($tableName = 'warranty_payments'); 
+    
+            //$payments = WarrantyPayment::where('recipient_id',Auth::id())
+            //->orderBy('created_at', 'DESC')->get();
+            $warranties = ServiceRequestWarranty::with('user', 'user.account')->get();
+
+            return view('admin.warranty.warranty_sort', compact('years', 'warranties',));
+    }
+
     public function warrantyTransaction()
     {
-        $warranty = Warranty::get();
-        //dd ($warranty);
+
+        //return view('admin.users.cse.index')->with([
+          //  'users' => \App\Models\Cse::with('user', 'user.account', 'user.contact', 'user.roles')->withCount('service_request_assgined')->get(),
+        //]);
+        $warranty = ServiceRequestWarranty::with('user', 'user.account')->get();
+        
 
         //Append collections to $data array
         $data = [

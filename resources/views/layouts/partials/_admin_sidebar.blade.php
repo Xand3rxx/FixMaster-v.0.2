@@ -216,7 +216,7 @@
           <ul>
             <li class=""><a href="{{route('admin.warranty_list', app()->getLocale())}}">Add</a></li>
             <li class=""><a href="{{route('admin.warranty_list', app()->getLocale())}}">List</a></li>
-            <li class=""><a href="{{route('admin.warranty_transaction', app()->getLocale())}}">Transactions</a></li>
+            <li class=""><a href="{{route('admin.warranty_transaction_sort', app()->getLocale())}}">Transactions</a></li>
           </ul>
         </li>
 

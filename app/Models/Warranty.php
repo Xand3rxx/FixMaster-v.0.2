@@ -10,7 +10,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Warranty extends Model
 {
-    //use SoftDeletes, Generator;
+    use SoftDeletes, Generator;
     use HasFactory;
 
     protected $fillable = [

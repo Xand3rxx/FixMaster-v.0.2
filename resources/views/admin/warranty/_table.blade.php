@@ -5,7 +5,8 @@
         <th>Warranty ID</th>
         <th>Warranty Name</th>
         <th>Warranty Type</th>
-        <th>Percentage (%)</th>   
+        <th>Percentage (%)</th>  
+        <th>Duration</th>  
         <th>Date Created</th>
         <th class="text-center">Action</th>
       </tr>
@@ -17,16 +18,17 @@
           <td class="tx-medium">{{ $warranty->unique_id }}</td>
           <td class="tx-medium">{{ $warranty->name }}</td>
           <td class="tx-medium">{{ $warranty->warranty_type }}</td>
-          @if($warranty->amount == null )
+          @if($warranty->percentage == null )
                   
           <td>Not Avalaible</td>
           
           @else
             
             
-            <td>{{ $warranty->amount}}</td>
+            <td>{{ $warranty->percentage}}</td>
           
         @endif
+        <td>{{ $warranty->duration}}</td>
           <td>{{ Carbon\Carbon::parse($warranty->created_at, 'UTC')->isoFormat('MMMM Do YYYY, h:mm:ssa') }}</td>
           <td class=" text-center">
             <div class="dropdown-file">

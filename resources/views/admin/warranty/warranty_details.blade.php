@@ -37,11 +37,12 @@
             </tr>
             <tr>
               <td class="tx-medium">Warranty Percentage</td>
-              <td class="tx-color-03">{{$warranty->amount ?? ''}}</td>
+              <td class="tx-color-03">{{$warranty->percentage ?? ''}}</td>
             </tr>
+            
             <tr>
-              <td class="tx-medium">User Count</td>
-              <td class="tx-color-03">{{$warranty->amount ?? ''}}</td>
+              <td class="tx-medium">Duration</td>
+              <td class="tx-color-03">{{$warranty->duration ?? ''}}</td>
             </tr>
             <tr>
               <td class="tx-medium">Description</td>

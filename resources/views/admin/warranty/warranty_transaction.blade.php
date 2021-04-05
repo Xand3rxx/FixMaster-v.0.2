@@ -11,131 +11,75 @@
           <nav aria-label="breadcrumb">
             <ol class="breadcrumb breadcrumb-style1 mg-b-10">
             <li class="breadcrumb-item"><a href="{{ route('admin.index', app()->getLocale()) }}">Dashboard</a></li>
-              <li class="breadcrumb-item active" aria-current="page">Warranty List</li>
+              <li class="breadcrumb-item active" aria-current="page">Warranty Transaction</li>
             </ol>
           </nav>
-          <h4 class="mg-b-0 tx-spacing--1">Warranty List</h4>
+          <h4 class="mg-b-0 tx-spacing--1">Warranty Transaction</h4>
         </div>
       </div>
 
-      <div class="row row-xs">
-        <div class="col-12 justify-content-center text-center align-items-center">
-          <a href="#addWarranty" class="btn btn-primary float-right" data-toggle="modal"><i class="fas fa-plus"></i> Create Warranty</a>
-        </div>
-
+      
+       
         <div class="col-lg-12 col-xl-12 mg-t-10">
             <div class="card mg-b-10">
               <div class="card-header pd-t-20 d-sm-flex align-items-start justify-content-between bd-b-0 pd-b-0">
                 <div>
-                  <h6 class="mg-b-5">Warranty as of {{ date('M, d Y') }}</h6>
-                  <p class="tx-13 tx-color-03 mg-b-0">This table displays a list of all FixMaster Warranty.</p>
+                  <h6 class="mg-b-5">Warranty Transaction as of {{ date('M, d Y') }}</h6>
+                  <p class="tx-13 tx-color-03 mg-b-0">This table displays a list of all FixMaster Warranty Transaction.</p>
                 </div>
                 
               </div><!-- card-header -->
              
-              <div class="table-responsive">
-                <div id="sort_table">
-                  @include('admin.warranty._table')
-                </div>
-              </div><!-- table-responsive -->
-            </div><!-- card -->
-    
-          </div><!-- col -->
-
-      </div>
-
-    </div>
-</div>
-
-<div class="modal fade" id="addWarranty" tabindex="-1" role="dialog" aria-hidden="true" data-keyboard="false" data-backdrop="static">
-  <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
-    <div class="modal-content">
-      <div class="modal-body pd-x-25 pd-sm-x-30 pd-t-40 pd-sm-t-20 pd-b-15 pd-sm-b-20">
-        <a href="" role="button" class="close pos-absolute t-15 r-15" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </a>
-        <form method="POST" action="{{ route('admin.store_warranty', app()->getLocale()) }}">
-          @csrf
-          <h5 class="mg-b-2"><strong>Create New Warranty</strong></h5>
-          <div class="form-row mt-4">
-            <div class="form-group col-md-12">
-              <div class="form-row mt-4">
-                <div class="form-group col-md-4">
-                <label>Waranty Name</label>
-                  <select class="custom-select @error('applicable') is-invalid @enderror" name="warranty_name" required>
-                    <option selected value="">Select...</option>
-                    <option value="Free Warranty">Free Warranty</option>
-                    <option value="Bronze Warranty">Bronze Warranty</option>
-                    <option value="Silver Warranty">Silver Warranty</option>
-                    <option value="Gold Warranty">Gold Warranty</option>
-                  </select>
+              <table class="table table-hover mg-b-0" id="basicExample">
+    <thead class="thead-primary">
+      <tr>
+        <th class="text-center">#</th>
+        <th>Client Name</th>
+        <th>Warranty Name</th>
+        
+        <th>Job Reference</th>  
+        <th>Amount</th>  
+        <th>Status</th>
+        <th class="text-center">Action</th>
+      </tr>
+    </thead>
+    <tbody>
+      @foreach ($warranties as $warranty)
+        <tr>
+          <td class="tx-color-03 tx-center">{{ $loop->iteration ?? ''}}</td>
+          <td class="tx-medium">{{ $warranty->name->first_name. ' '.$warranty->name->last_name ?? '' }}</td>
+          <td class="tx-medium">{{ $warranty->warranty_name->name ?? ''}}</td>
+          <td class="tx-medium">{{ $warranty->payment->unique_id ?? ''}}</td>
+         
+          @if($warranty->amount == null )
                   
-                  @error('applicable')
-                    <span class="invalid-feedback" role="alert">
-                        <strong>{{ $message }}</strong>
-                    </span>
-                  @enderror
-                </div>
-               
-                <div class="form-group col-md-4">
-                <label>Waranty Type</label>
-                  <select class="custom-select @error('applicable') is-invalid @enderror" name="warranty_type" required>
-                    <option selected value="">Select...</option>
-                    <option value="Free">Free (0%)</option>
-                    <option value="Extended">Extended</option>
-                  </select>
-                  
-                  @error('type')
-                    <span class="invalid-feedback" role="alert">
-                        <strong>{{ $message }}</strong>
-                    </span>
-                  @enderror
-                </div>
-                </div>
-                <div class="form-row">
+          <td>Not Avalaible</td>
+          
+          @else
+            
+            
+            <td>{{ $warranty->amount}}</td>
+          
+        @endif
+          <td>{{ $warranty->status ?? '' }}</td>
+          <td class=" text-center">
+            <div class="dropdown-file">
+              <a href="" class="dropdown-link" data-toggle="dropdown"><i data-feather="more-vertical"></i></a>
+              <div class="dropdown-menu dropdown-menu-right">
+              <a href="{{-- route('admin.warranty_summary', ['details'=>$warranty->uuid, 'locale'=>app()->getLocale()]) --}}" class="dropdown-item details text-primary"><i class="far fa-clipboard"></i> Initiate Warranty</a>
+              <a href="{{-- route('admin.edit_warranty', ['details'=>$warranty->uuid, 'locale'=>app()->getLocale()]) --}}" class="dropdown-item details text-info"><i class="far fa-edit"></i> Edit</a>
+              <a href="{{-- route('admin.edit_warranty', ['details'=>$warranty->uuid, 'locale'=>app()->getLocale()]) --}}" class="dropdown-item details text-danger"><i class="fas fa-trash"></i> Delete</a>
+  
+
+
                 
-                <div class="form-group col-md-4">
-                    <label for="percentage">Warranty Percentage(%)</label>
-                    <input type="money" class="form-control @error('percentage') is-invalid @enderror" name="percentage" id="percentage" placeholder="Warranty Percentage (%)" value="{{ old('percentage') }}" autocomplete="off" required>
-                    @error('percentage')
-                      <span class="invalid-feedback" role="alert">
-                          <strong>{{ $message }}</strong>
-                      </span>
-                    @enderror
-                </div>
-               
-            
-            
-            
-            <div class="form-group col-md-4">
-                    <label for="percentage">Max. Duration (Days)</label>
-                    <input type="number" class="form-control @error('percentage') is-invalid @enderror" name="duration" min="1" max="365" maxlength="5" id="duration" placeholder="Maximum Duration in Days" value="{{ old('percentage') }}" autocomplete="off">
-                    @error('percentage')
-                      <span class="invalid-feedback" role="alert">
-                          <strong>{{ $message }}</strong>
-                      </span>
-                    @enderror
-                </div>
-              </div>
-              <div class="form-row">
-              <div class="form-group col-md-12">
-                <label for="inputEmail4">Warranty Description</label>
-                <textarea rows="3" class="form-control @error('description') is-invalid @enderror" name="description" id="description" required>{{ old('description') }}</textarea>
-                @error('description')
-                  <span class="invalid-feedback" role="alert">
-                      <strong>{{ $message }}</strong>
-                  </span>
-                @enderror
               </div>
             </div>
-            </div>
-            <button type="submit" class="btn btn-primary">Create Warranty</button>
-          </div>
-        </form>
-      </div><!-- modal-body -->
-    </div><!-- modal-content -->
-  </div><!-- modal-dialog -->
-</div><!-- modal -->
+          </td>
+        </tr>
+      @endforeach
+    </tbody>
+  </table>
 
 
 

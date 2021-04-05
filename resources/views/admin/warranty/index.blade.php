@@ -54,21 +54,15 @@
         <a href="" role="button" class="close pos-absolute t-15 r-15" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </a>
-        <form method="POST" action="{{ route('admin.store_warranty', app()->getLocale()) }}">
-          @csrf
+        <form method="POST" action="{{ route('admin.save_warranty', app()->getLocale()) }}">
+        @csrf @method('POST')
           <h5 class="mg-b-2"><strong>Create New Warranty</strong></h5>
           <div class="form-row mt-4">
             <div class="form-group col-md-12">
               <div class="form-row mt-4">
                 <div class="form-group col-md-4">
                 <label>Waranty Name</label>
-                  <select class="custom-select @error('applicable') is-invalid @enderror" name="warranty_name" required>
-                    <option selected value="">Select...</option>
-                    <option value="Free Warranty">Free Warranty</option>
-                    <option value="Bronze Warranty">Bronze Warranty</option>
-                    <option value="Silver Warranty">Silver Warranty</option>
-                    <option value="Gold Warranty">Gold Warranty</option>
-                  </select>
+                <input type="text" class="form-control @error('warranty_name') is-invalid @enderror" name="name" id="warranty_name" placeholder="Warranty Name. E.g Platinum" value="{{ old('percentage') }}" autocomplete="off" required>
                   
                   @error('applicable')
                     <span class="invalid-feedback" role="alert">
@@ -96,7 +90,7 @@
                 
                 <div class="form-group col-md-4">
                     <label for="percentage">Warranty Percentage(%)</label>
-                    <input type="money" class="form-control @error('percentage') is-invalid @enderror" name="percentage" id="percentage" placeholder="Warranty Percentage (%)" value="{{ old('percentage') }}" autocomplete="off" required>
+                    <input type="number" class="form-control @error('percentage') is-invalid @enderror" name="percentage" id="percentage" placeholder="Warranty Percentage (%)" value="{{ old('percentage') }}" autocomplete="off" required>
                     @error('percentage')
                       <span class="invalid-feedback" role="alert">
                           <strong>{{ $message }}</strong>

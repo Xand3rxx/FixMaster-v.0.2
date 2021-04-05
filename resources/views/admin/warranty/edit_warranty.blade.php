@@ -33,6 +33,21 @@
                       </span>
                     @enderror
                 </div>
+               
+                <div class="form-group col-md-4">
+                <label>Waranty Type</label>
+                <select class="custom-select @error('applicable') is-invalid @enderror" name="warranty_type" required>
+                    <option selected value="">Select...</option>
+                    <option value="Free">Free (0%)</option>
+                    <option value="Extended">Extended</option>
+                  </select>
+                  
+                  @error('applicable')
+                    <span class="invalid-feedback" role="alert">
+                        <strong>{{ $message }}</strong>
+                    </span>
+                  @enderror
+                </div>
               </div>
 
         <div class="form-row mt-4">
