@@ -59,13 +59,9 @@ class RequestController extends Controller
             $query->where('user_id', auth()->user()->id)->Where('status_id', 2);
         })->get();
 
-        // Find servie of the current Service Request
-        $service = \App\Models\Service::where('id', $service_request->service_id)->with('sub_service')->first();
-        // dd($service);
         // find the technician role
-        // $technicainsRole = \App\Models\Role::where('slug', 'technician-artisans')->first();
+        $technicainsRole = \App\Models\Role::where('slug', 'technician-artisans')->first();
         // List of technicians in this service request
-        // $technicains = \App\Models\UserService::where('service_id', $service_request->service_id)->where('role_id', $technicainsRole->id)->with('user')->get();
 
         // dd($service_request, $technicains);
         return view('cse.requests.show', [
@@ -73,9 +69,10 @@ class RequestController extends Controller
             'ongoingSubStatuses' => \App\Models\SubStatus::where('status_id', 2)->whereBetween('phase', [4, 8])->get(['id', 'uuid', 'name']),
             'warranties' => \App\Models\Warranty::all(),
             'service_request' => $service_request,
-            'service'   => $service
-            // 'technicains' => $technicains,
+            'technicains' => \App\Models\UserService::where('service_id', $service_request->service_id)->where('role_id', $technicainsRole->id)->with('user')->get()
             // 'statuses' => \App\Models\Status::where('name','Ongoing')->select('sub_status')->first()
+            // 'service'   => \App\Models\Service::where('id', $service_request->service_id)->with('sub_service')->first(),
+
         ]);
     }
 

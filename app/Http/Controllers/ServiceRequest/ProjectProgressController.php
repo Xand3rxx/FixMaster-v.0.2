@@ -23,9 +23,15 @@ class ProjectProgressController extends Controller
     {
         // validate Request
         $this->validate($request, [
-            'sub_status_uuid'       =>   'bail|required|string|uuid',
-            'service_request_uuid'  => 'required|uuid|exists:service_requests,uuid'
+            'sub_status_uuid'       =>  'bail|required|string|uuid',
+            'service_request_uuid'  =>  'required|string|uuid|exists:service_requests,uuid',
+            'technician_user_uuid'  =>  'sometimes|string|uuid|exists:users,uuid',
         ]);
+
+        $request->whenFilled('technician_user_uuid', function () use ($request) {
+            $assignTechnician =  new AssignTechnicianController();
+            $assignTechnician->handleAdditionalTechnician($request);
+        });
 
         return $this->updateProjectProgress($request);
     }

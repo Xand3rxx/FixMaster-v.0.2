@@ -111,10 +111,10 @@
                                                     </div>
 
                                                     <div class="form-group col-md-6">
-                                                        <label for="estimated_hours">{{$service['name']}}</label>
+                                                        <label for="estimated_hours">{{$service_request['service']['name']}}</label>
                                                         <select class="form-control custom-select @error('sub_service_uuid') is-invalid @enderror" name="sub_service_uuid">
                                                             <option selected disabled value="0" selected>Select a sub service</option>
-                                                            @foreach($service['sub_service'] as $key => $sub_service)
+                                                            @foreach($service_request['service']['sub_service'] as $key => $sub_service)
                                                             <option value="{{$sub_service['uuid']}}">{{$sub_service['name']}} </option>
                                                             @endforeach
                                                         </select>
@@ -250,13 +250,13 @@
                                             <section>
                                                 <div class="form-group col-md-12">
                                                     <label for="name">Assign Technician</label>
-                                                    <select class="form-control custom-select @error('user_id') is-invalid @enderror" name="user_id">
-                                                        <option value="" selected>Select...</option>
-                                                        <option value="">Jamal Diwa</option>
-                                                        <option value="">Andrew Nwankwo</option>
-                                                        <option value="">Taofeek Adedokun</option>
+                                                    <select required class="form-control custom-select @error('technician_user_uuid') is-invalid @enderror" name="technician_user_uuid">
+                                                        <option selected disabled value="0" selected>Select...</option>
+                                                        @foreach ($technicains as $technicain)
+                                                        <option value="{{$technicain['user']['uuid']}}">{{$technicain['user']['account']['last_name'] .' '. $technicain['user']['account']['first_name']}}</option>
+                                                        @endforeach
                                                     </select>
-                                                    @error('user_id')
+                                                    @error('technician_user_uuid')
                                                     <span class="invalid-feedback" role="alert">
                                                         <strong>{{ $message }}</strong>
                                                     </span>
