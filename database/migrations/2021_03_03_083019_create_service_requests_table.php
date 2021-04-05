@@ -19,13 +19,13 @@ class CreateServiceRequestsTable extends Migration
             $table->charset = 'utf8mb4';
             $table->collation = 'utf8mb4_unicode_ci';
 
-            $table->id();
+            $table->id(); 
             $table->uuid('uuid')->unique();
 		    $table->foreignId('client_id');
             $table->foreignId('service_id');
             $table->string('unique_id')->unique();
-            $table->foreignId('state_id');
-            $table->foreignId('lga_id');
+            $table->foreignId('state_id')->nullable();
+            $table->foreignId('lga_id')->nullable();
             $table->foreignId('town_id')->nullable();
             $table->foreignId('price_id');
             $table->foreignId('contact_id');

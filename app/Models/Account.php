@@ -10,7 +10,7 @@ class Account extends Model
     /**
      * The attributes that are mass assignable.
      *
-     * @var array
+     * @var array 
      */
     protected $fillable = ['user_id', 'state_id',  'lga_id', 'town_id', 'first_name', 'middle_name', 'last_name', 'gender', 'account_number', 'bank_id', 'avatar'];
 
@@ -67,5 +67,14 @@ class Account extends Model
     {
         return $this->hasMany(ServiceRequest::class, 'user_id', 'client_id');
     }
+
+    /**
+     * Get the Account associated with the contact.
+     */
+    public function usercontact()
+    {
+        return $this->hasOne(Contact::class, 'user_id');
+    }
+
 }
 

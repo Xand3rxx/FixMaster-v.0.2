@@ -9,6 +9,10 @@
 </style>
 
 <style>
+.pac-container {
+    z-index: 100000;
+}
+
 .cc-selector input{
     margin:0;padding:0;
     -webkit-appearance:none;
@@ -103,145 +107,59 @@ p{margin-bottom:.3em;}
                     <!-- first div -->
                     <div class="col-lg-12 col-md-12 mt-4" id="address">
                         <div class="table-responsive bg-white shadow rounded">
-                            <table class="table mb-0 table-center">
+                            <table class="table mb-0 table-center" id="contacts_table">
                                 <thead class="bg-light">
                                     <tr>
                                         <th scope="col">Contact</th>
                                     </tr>
                                 </thead>
-                                <tbody>
-                                    @if($myContacts) @foreach($myContacts as $k=>$myContact)
-                                    <tr>
-                                        <td>
-                                            <div class="media">
-                                                <div class="custom-control custom-radio custom-control-inline">
-                                                    <div class="form-group mb-0">
-                                                        <input type="radio" id="{{$myContact->id}}" name="customRadio" class="custom-control-input" />
-                                                        <label class="custom-control-label" for="{{$myContact->id}}">{{$myContact->name ?? ''}}</label>
-                                                    </div>
-                                                </div>
+                            <tbody>
 
-                                                <div class="content ml-3">
-                                                    <a href="f" class="forum-title text-primary font-weight-bold">{{$myContact->phone_number}}</a>
-                                                    <p class="text-muted small mb-0 mt-2">{{$myContact->address}}</p>
+                            @if($myContacts) 
+                                @foreach($myContacts as $k=>$myContact)
+                                    @if($k > 0)
+                                        <tr>
+                                            <td>
+                                                <div class="media">
+                                                
+                                                    <div class="custom-control custom-radio custom-control-inline">
+                                                        <div class="form-group mb-0">
+                                                            <input type="radio" id="{{$myContact->id}}" value="{{ $myContact->id }}" name="myContact_id" class="custom-control-input"  />
+                                                            <!-- <input type="radio" id="{{$myContact->id}}" name="id" value="{{ $myContact->id }}" {{ ( (isset($myContact->is_default) && intval($myContact->is_default)) ? 'checked=checked' : '') }}> -->
+                                                            <input type="hidden" name="state_id" value="{{ $myContact->state_id }}">
+                                                            <input type="hidden" name="lga_id" value="{{ $myContact->lga_id }}">
+                                                            <input type="hidden" name="town_id" value="{{ $myContact->town_id }}">
+                                                            <label class="custom-control-label" for="{{$myContact->id}}">{{$myContact->name ?? ''}}</label>
+                                                        </div>
+                                                    </div>
+                                                    
+                                                    <div class="content ml-3">
+                                                        <a href="f" class="forum-title text-primary font-weight-bold">{{$myContact->phone_number}}</a>
+                                                        <p class="text-muted small mb-0 mt-2">{{$myContact->address}}</p>
+                                                    </div>
+
                                                 </div>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                    @endforeach @endif
+                                            </td>
+                                        </tr>
+                                    @endif
+                                @endforeach 
+                            @endif
                                 </tbody>
                             </table>
 
-                            <div class="d-flex align-items-center justify-content-between mt-4 col-lg-12">
+                            <!-- <div class="d-flex align-items-center justify-content-between mt-4 col-lg-12">
                                 <a onClick="address()" href="javascript:void(0)" class="btn btn-success btn-lg btn-block">Add New Address</a>
-                                <!-- <a href="javascript:void(0)" class="btn btn-primary" id="edit">Confirm</a> -->
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-lg-12 col-md-12 mt-4" id="editAddress">
-                        <div class="rounded shadow-lg p-4">
-                            <h5 class="mb-0">Enter new Details :</h5>
-                            <div class="row">
-                                <div class="col-6">
-                                    <div class="form-group position-relative">
-                                        <label>Your Name <span class="text-danger">*</span></label>
-                                        <input name="name" id="first-name" type="text" class="form-control" placeholder="First Name :" />
-                                    </div>
-                                </div>
-                                <!--end col-->
-                                <div class="col-6">
-                                    <div class="form-group position-relative">
-                                        <label>Last Name <span class="text-danger">*</span></label>
-                                        <input name="name" id="last-name" type="text" class="form-control" placeholder="Last Name :" />
-                                    </div>
-                                </div>
-                                <!--end col-->
-                                <div class="col-12">
-                                    <div class="form-group position-relative">
-                                        <label>Street address <span class="text-danger">*</span></label>
-                                        <input type="text" name="address1" id="street-address" class="form-control user_address" placeholder="House number and street name :" />
-                                    </div>
-                                </div>
-                                <!--end col-->
-
-                                <!-- hidden fields -->
-                                <input type="hidden" value="" name="user_latitude" id="user_latitude" />
-                                <input type="hidden" value="" name="user_longitude" id="user_longitude" />
-
-                                <div class="col-12">
-                                    <div class="form-group position-relative">
-                                        <label>Phone Number <span class="text-danger">*</span></label>
-                                        <input type="text" name="address1" id="phone-number" class="form-control" />
-                                    </div>
-                                </div>
-                                <!--end col-->
-
-                                <div class="col-md-4">
-                                    <div class="form-group position-relative">
-                                        <label>State <span class="text-danger">*</span></label>
-                                        <select class="form-control pl-5 @error('state_id') is-invalid @enderror" name="state_id" id="state_id">
-                                            <option selected value="">Select...</option>
-                                            @foreach($states as $state)
-                                            <option value="{{ $state->id }}">{{ $state->name }}</option>
-                                            @endforeach
-                                        </select>
-                                        @error('state_id')
-                                        <span class="invalid-feedback" role="alert">
-                                            <strong>{{ $message }}</strong>
-                                        </span>
-                                        @enderror
-                                    </div>
-                                </div>
-                                <!--end col-->
-
-                                <div class="col-md-4">
-                                    <div class="form-group position-relative">
-                                        <label>LGA <span class="text-danger">*</span></label>
-                                        <select class="form-control pl-5 @error('lga_id') is-invalid @enderror" name="lga_id" id="lga_id">
-                                            <option selected value="">Select...</option>
-                                        </select>
-                                        @error('lga_id')
-                                        <span class="invalid-feedback" role="alert">
-                                            <strong>{{ $message }}</strong>
-                                        </span>
-                                        @enderror
-                                    </div>
-                                </div>
-                                <!--end col-->
-
-                                <div class="col-md-4">
-                                    <div class="form-group position-relative">
-                                        <label>Town/City <span class="text-danger">*</span></label>
-
-                                        <select class="form-control pl-5 @error('town_id') is-invalid @enderror" name="town_id" id="town_id">
-                                            <option selected value="">Select...</option>
-                                        </select>
-                                        @error('town_id')
-                                        <span class="invalid-feedback" role="alert">
-                                            <strong>{{ $message }}</strong>
-                                        </span>
-                                        @enderror
-
-                                        <!-- <input type="text" name="state" id="state" class="form-control" placeholder="State Name :"> -->
-                                    </div>
-                                </div>
-                                <!--end col-->
-                            </div>
-                            <!--end row-->
-                            <div class="d-flex align-items-center justify-content-between mt-4 col-lg-12">
-                                <!-- <a onclick="address()" href="javascript:void(0)" class="btn btn-primary">Add New Address</a> -->
-                                <!-- <a href="javascript:void(0)" class="btn btn-success btn-lg btn-block" id="confirm">Confirm</a> -->
-                                <button type="button" id="confirm" class="btn btn-success btn-lg btn-block">Confirm</button>
-                            </div>
-                            <!-- </form> -->
-                            <!--end form-->
+                                <a href="javascript:void(0)" class="btn btn-primary" id="edit">Confirm</a>
+                            </div> -->
                         </div>
                     </div>
                     <!--end col-->
                 </div>
 
 
-
+                <div class="d-flex align-items-center justify-content-between mt-4 col-lg-12">  
+                    <button type="button" name="add" id="add_new_contact" data-toggle="modal" data-target="#add_data_Modal" class="btn btn-success btn-lg btn-block">Add New Contact</button>  
+                </div> 
 
 
 <div class="row mt-4">
@@ -308,26 +226,21 @@ p{margin-bottom:.3em;}
         <h5><span class="font-weight-bold">Payment Options</span></h5>
     </div>
 
-    <div class="col-md-4 form-group">
+    <div class="col-md-6 form-group">
         <div class="custom-control custom-radio form-group position-relative">
             <input type="radio" id="customRadio5" name="payment_method" class="custom-control-input" value="Wallet" />
             <label class="custom-control-label" for="customRadio5">E-Wallet</label>
         </div>
     </div>
 
-    <div class="col-md-4 form-group">
+    <div class="col-md-6 form-group">
         <div class="custom-control custom-radio form-group position-relative">
             <input type="radio" id="payment_gateway_option" name="payment_method" class="custom-control-input" onclick="displayPaymentGateways()" value="Online" />
             <label class="custom-control-label" for="payment_gateway_option">Pay Online</label>
         </div>
     </div>
 
-    <div class="col-md-4 form-group">
-        <div class="custom-control custom-radio form-group position-relative">
-            <input type="radio" id="pay_offline" name="payment_method" class="custom-control-input" data-toggle="modal" href="#payOffline" value="Offline" />
-            <label class="custom-control-label" for="pay_offline">Pay Offline</label>
-        </div>
-    </div>
+ 
     <input type="hidden" value="{{!empty($balance->closing_balance) ? $balance->closing_balance : '0'}}" name="balance" />
 
     @foreach($gateways as $val)
@@ -429,7 +342,7 @@ p{margin-bottom:.3em;}
     </div>
 
 
-
+   
 
 @push('scripts')
 
@@ -494,39 +407,13 @@ p{margin-bottom:.3em;}
             });
         });
 
-        // $("#confirm").on("submit", function (e) {
-        // e.preventDefault();
-        $("#confirm").on("click", function (e) {
-            // console.log('hello');
-            // function submitContact(){
-            // submitForm =
-            e.preventDefault();
-            // $('#lga_id').on('change', function() {
-            // let firstName = $("#first-name").val();
-            // let lastName = $("#last-name").val();
-            // let streetAddress = $("#street-address").val();
-            // let phoneNumber = $("#phone-number").val();
-            // let state = $("#state_id").val();
-            // let lga = $("#lga_id").val();
-            // let town = $("#town_id").val();
-            // let addressLat = $("#user_latitude").val();
-            // let addressLng = $("#user_longitude").val();
 
-            // console.log(firstName);
-            // console.log(addressLat);
-            // console.log(addressLng);
-            // console.log(town);
-            // console.log(lga);
-            // console.log(state);
-            // console.log(phoneNumber);
-            // console.log(streetAddress);
-            // console.log(lastName);
-
-            $.ajax({
-                url: "{{ route('client.ajax_contactForm', app()->getLocale()) }}",
-                method: "POST",
-                dataType: "JSON",
-                data: {
+        $('#insert_form').on("submit", function(event){  
+           event.preventDefault();  
+                $.ajax({  
+                     url:"{{ route('client.ajax_contactForm', app()->getLocale()) }}",  
+                     method:"POST",  
+                     data: {
                     _token: "{{ csrf_token() }}",
                     firstName: $("#first-name").val(),
                     lastName: $("#last-name").val(),
@@ -537,12 +424,69 @@ p{margin-bottom:.3em;}
                     town: $("#town_id").val(),
                     addressLat: $("#user_latitude").val(),
                     addressLng: $("#user_longitude").val(),
-                },
-                success: function (data) {},
-            });
+                },  
+                     beforeSend:function(){  
+                          $('#insert').val("Inserting");  
+                     },  
+                     success:function(data){ 
+                        var html = '';
+                        if(data.success)
+                            { 
+                                html = '<div class="alert alert-success">' + data.success + '</div>';
+                          $('#insert_form')[0].reset(); 
+                          $('#add_data_Modal').modal('hide');
+                        //    $('#contact_table').html(data); 
+                             }
+                             $('#contact_table').html(data);
+                            // if(data.success)
+                            // {
+                            // html = '<div class="alert alert-success">' + data.success + '</div>';
+                            // $('#insert_form')[0].reset();
+                            // $('#contacts_table').data.reload();
+                            
+                            // $('#add_data_Modal').modal('hide');
+                            
+                            // // $('#contacts_table').reload();
+                            // }
+                            // $('#form_result').html(data);
 
-            // }
-        });
+                     }  
+                }); 
+        }); 
+
+
+
+        $('#submit').click(function(){
+           
+                $.ajax({  
+                    url: "{{ route('client.ajax_contactForm', app()->getLocale()) }}",  
+                     method:"POST",  
+                     data: {
+                    _token: "{{ csrf_token() }}",
+                    firstName: $("#first-name").val(),
+                    lastName: $("#last-name").val(),
+                    streetAddress: $("#street-address").val(),
+                    phoneNumber: $("#phone-number").val(),
+                    state: $("#state_id").val(),
+                    lga: $("#lga_id").val(),
+                    town: $("#town_id").val(),
+                    addressLat: $("#user_latitude").val(),
+                    addressLng: $("#user_longitude").val(),
+                },  
+                     success:function(data){  
+                          $("form").trigger("reset");  
+                          $('#success_message').fadeIn().html(data);  
+                          setTimeout(function(){  
+                               $('#success_message').fadeOut("Slow");  
+                          }, 2000);  
+                     }  
+                });  
+           
+      });
+
+
+
+
     });
 
     $(document).ready(function () {
@@ -579,3 +523,5 @@ p{margin-bottom:.3em;}
 </script>
 
 @endpush @endsection
+
+@include('client.services._newAddress')
