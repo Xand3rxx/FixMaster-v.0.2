@@ -26,7 +26,6 @@ class HandleCompletedDiagnosisController extends Controller
      */
     public function generateDiagnosisInvoice(Request $request, \App\Models\ServiceRequest $serviceRequest, \App\Models\SubStatus $substatus)
     {
-
         // validate Request
         (array) $valid = $this->validate($request, [
             'estimated_work_hours'      => 'bail|required|numeric',
@@ -99,7 +98,7 @@ class HandleCompletedDiagnosisController extends Controller
         // $this->log('request', 'Informational', Route::currentRouteAction(), $user->account->last_name . ' ' . $user->account->first_name . ' ' . $substatus->name . ' for (' . $serviceRequest->unique_id . ') Job.');
         // $serviceRequest_id = $serviceRequest->id;
         // $invoice = $this->diagnosticInvoice($serviceRequest_id);
-        
+
 
 
         $invoice = $this->diagnosticInvoice($serviceRequest->id);
@@ -109,14 +108,14 @@ class HandleCompletedDiagnosisController extends Controller
         $get_taxes = Tax::select('percentage')->where('name', 'VAT')->first();
         $serviceCharge = $invoice->serviceRequest->service->service_charge;
 
-        $tax = $get_taxes->percentage/100;
+        $tax = $get_taxes->percentage / 100;
         $fixMaster_royalty_value = $get_fixMaster_royalty->percentage;
         $logistics_cost = $get_logistics->amount;
 
-        $fixMasterRoyalty = $fixMaster_royalty_value * ( $serviceCharge );
-        $tax_cost = $tax * ( $serviceCharge + $logistics_cost + $fixMasterRoyalty );
+        $fixMasterRoyalty = $fixMaster_royalty_value * ($serviceCharge);
+        $tax_cost = $tax * ($serviceCharge + $logistics_cost + $fixMasterRoyalty);
         $total_cost = $serviceCharge + $fixMasterRoyalty + $tax_cost + $logistics_cost;
-        
+
 
         // Saving completed Diagnosis
         \App\Models\ServiceRequestProgress::storeProgress(auth()->user()->id, $serviceRequest->id, 2, $substatus->id);

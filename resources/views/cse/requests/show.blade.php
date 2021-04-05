@@ -251,7 +251,7 @@
                                                 <div class="form-group col-md-12">
                                                     <label for="name">Assign Technician</label>
                                                     <select class="form-control custom-select @error('technician_user_uuid') is-invalid @enderror" name="technician_user_uuid">
-                                                        <option selected value="0" selected>Select...</option>
+                                                        <option selected value="">Select...</option>
                                                         @foreach ($technicains as $technicain)
                                                         <option value="{{$technicain['user']['uuid']}}">{{$technicain['user']['account']['last_name'] .' '. $technicain['user']['account']['first_name']}}</option>
                                                         @endforeach
