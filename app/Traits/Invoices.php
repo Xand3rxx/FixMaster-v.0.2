@@ -30,7 +30,7 @@ trait Invoices
      * @param  string  $status
      * @param  float  $discount_fee
      *
-     * @return boolean
+     * @return \App\Models\Invoice|Null
      */
 
     public static function diagnosticInvoice(int $service_request_id)
