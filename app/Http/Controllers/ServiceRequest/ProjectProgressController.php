@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\Route;
 class ProjectProgressController extends Controller
 {
     use findRecordWithUUID, Loggable;
+
     /**
      * Handle the incoming request.
      *
@@ -21,49 +22,54 @@ class ProjectProgressController extends Controller
     public function __invoke(Request $request)
     {
         // validate Request
-        (array) $valid = $this->validate($request, [
-            'sub_status_uuid'         =>   'bail|required|string|uuid',
-            'service_request_uuid'  => 'required|uuid|exists:service_requests,uuid'
+        $this->validate($request, [
+            'sub_status_uuid'       =>  'bail|required|string|uuid',
+            'service_request_uuid'  =>  'required|string|uuid|exists:service_requests,uuid',
+            'technician_user_uuid'  =>  'sometimes|string|uuid|exists:users,uuid',
         ]);
 
-        return $this->updateProjectProgress($valid, $request->user());
+        $request->whenFilled('technician_user_uuid', function () use ($request) {
+            $assignTechnician =  new AssignTechnicianController();
+            $assignTechnician->handleAdditionalTechnician($request);
+        });
+
+        return $this->updateProjectProgress($request);
     }
 
     /**
      * Update the Project progress 
      *
-     * @param  array  $valid
-     * @param  \App\Models\User $user
-     * 
+     * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    protected function updateProjectProgress(array $valid, \App\Models\User $user)
+    protected function updateProjectProgress(Request $request)
     {
         // 1. Find the Service Request ID from the UUID
         // $serviceRequest = $this->findUsingUUID('service_requests', $valid['service_request_uuid']);
-        $serviceRequest = \App\Models\ServiceRequest::where('uuid', $valid['service_request_uuid'])->firstOrFail();
+        $serviceRequest = \App\Models\ServiceRequest::where('uuid', $request['service_request_uuid'])->firstOrFail();
         //  2. Find the Substatus selected 
-        $substatus = \App\Models\SubStatus::where('uuid', $valid['sub_status_uuid'])->firstOrFail();
+        $substatus = \App\Models\SubStatus::where('uuid', $request['sub_status_uuid'])->firstOrFail();
         // Check if Completed diagnosis, then transfer to Isaac Controller
         if ($substatus->phase === 8) {
-            return $this->handleCompletedDiagnosis($serviceRequest->id, $substatus->id);
+            return $this->handleCompletedDiagnosis($request, $serviceRequest, $substatus);
         }
-        return $this->updateDatabase($user, $serviceRequest, $substatus);
+        return $this->updateDatabase($request->user(), $serviceRequest, $substatus);
     }
 
     /**
      * Handle Completed Diagnosis
      *
-     * @param  int  $serviceRequestID
-     * @param  int  $substatusID
+     * @param  \Illuminate\Http\Request     $request
+     * @param  \App\Models\ServiceRequest   $serviceRequest
+     * @param  \App\Models\SubStatus        $substatus
      * 
      * 
      * @return \Illuminate\Http\Response
      */
-    protected function handleCompletedDiagnosis(int $serviceRequestID, int $substatusID)
+    protected function handleCompletedDiagnosis(Request  $request, \App\Models\ServiceRequest $serviceRequest, \App\Models\SubStatus $substatus)
     {
         $completedDiagnosis =  new HandleCompletedDiagnosisController();
-        return $completedDiagnosis->generateDiagnosisInvoice($serviceRequestID, $substatusID);
+        return $completedDiagnosis->generateDiagnosisInvoice($request, $serviceRequest, $substatus);
     }
 
     /**
