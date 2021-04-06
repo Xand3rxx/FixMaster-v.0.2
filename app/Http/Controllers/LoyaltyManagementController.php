@@ -125,6 +125,7 @@ class LoyaltyManagementController extends Controller
            ->where(['total_amount'=> $amount, 'status_id'=> '4'])
            ->leftJoin('accounts', 'accounts.user_id', '=', 'service_requests.client_id')
            ->leftJoin('ratings','ratings.user_id', '=', 'service_requests.client_id')
+           ->groupBy('client_id')
                 ->get();
 
             $optionValue .= "<option value='' class='select-all'>All Users </option>";
@@ -324,7 +325,7 @@ class LoyaltyManagementController extends Controller
             $dataArry = ServiceRequest::select('client_id','first_name', 'last_name')
             ->join('accounts', 'accounts.user_id', '=', 'service_requests.client_id')
             ->join('ratings','ratings.user_id', '=', 'service_requests.client_id')
-            ->where(['total_amount'=> $amount, 'status_id'=> '4'])
+            ->where(['total_amount'=> $edit_amount, 'status_id'=> '4'])
             ->groupBy('client_id')
                  ->get();
  

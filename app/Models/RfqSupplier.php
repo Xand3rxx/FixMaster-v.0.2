@@ -31,4 +31,9 @@ class RfqSupplier extends Model
     {
         return $this->hasMany(Rfq::class, 'rfq_id');
     }
+
+    public function supplier()
+    {
+        return $this->belongsTo(User::class, 'supplier_id')->with('account');
+    }
 }
