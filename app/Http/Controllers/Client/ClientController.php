@@ -802,13 +802,13 @@ class ClientController extends Controller
     // }
 
 
-    // public function myServiceRequest(){
-    //     $myRequest = Client::where('user_id', auth()->user()->id)->with('service_request')->firstOrFail();
-    //     $data['myServiceRequests'] = $myRequest->service_request;
-    //     // return $data['myServiceRequests'];
-    //     return view('client.services.list', $data);
+    public function myServiceRequest(){
+        $myRequest = Client::where('user_id', auth()->user()->id)->with('service_request')->firstOrFail();
+        $data['myServiceRequests'] = $myRequest->service_request;
+        // return $data['myServiceRequests'];
+        return view('client.services.list', $data);
 
-    // }
+    }
 
     // public function requestDetails($ref){
     //     $requestDetail = ServiceRequest::findOrFail($ref);
