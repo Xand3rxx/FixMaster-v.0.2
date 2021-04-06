@@ -22,7 +22,7 @@ use App\Models\ClientDiscount;
 use App\Models\Cse;
 use App\Models\ServiceRequestSetting;
 use DB;
-use App\Models\Servicerequest;
+use App\Models\ServiceRequest;
 use App\Helpers\CustomHelpers;
 use App\Traits\GenerateUniqueIdentity as Generator;
 use App\Traits\RegisterPaymentTransaction;
