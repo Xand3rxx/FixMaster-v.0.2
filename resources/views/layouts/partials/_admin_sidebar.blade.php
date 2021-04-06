@@ -183,7 +183,13 @@
           </ul>
         </li>
 
-        <li class="nav-item"><a href="#" class="nav-link"><i data-feather="file-text"></i> <span>RFQ's</span></a></li>
+        <li class="nav-item with-sub {{ Route::currentRouteNamed('admin.rfq') ? 'active show' : '' }}">
+          <a href="" class="nav-link"><i data-feather="file-text"></i> <span>RFQ's</span></a>
+          <ul>
+            <li class="{{ Route::currentRouteNamed('admin.rfq') ? 'active' : '' }}"><a href="{{ route('admin.rfq', app()->getLocale()) }}">Requests</a></li>
+            <li class=""><a href="#">Supplier's invoices</a></li>
+          </ul>
+        </li>
 
         <li class="nav-item with-sub">
           <a href="" class="nav-link"><i data-feather="git-pull-request"></i> <span>Special Project</span></a>

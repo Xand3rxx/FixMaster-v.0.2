@@ -19,11 +19,11 @@ class RfqBatch extends Model
 
     public function rfq()
     {
-        return $this->belongsTo(RFQ::class, 'id', 'rfq_id');
+        return $this->belongsTo(Rfq::class, 'id', 'rfq_id');
     }
 
     public function rfqs()
     {
-        return $this->hasMany(RFQ::class, 'id', 'rfq_id');
+        return $this->hasMany(Rfq::class, 'id', 'rfq_id');
     }
 }

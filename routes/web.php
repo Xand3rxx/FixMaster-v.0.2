@@ -36,6 +36,8 @@ use App\Http\Controllers\CSE\CustomerServiceExecutiveController as CseController
 use App\Http\Controllers\CSE\RequestController;
 use App\Http\Controllers\Admin\ServiceRequestSettingController;
 use App\Http\Controllers\Admin\ToolsRequestController;
+use App\Http\Controllers\Admin\RfqController;
+use App\Http\Controllers\Supplier\RfqController as SupplierRfqController;
 
 /*
 |--------------------------------------------------------------------------
@@ -248,6 +250,8 @@ Route::prefix('admin')->group(function () {
      Route::get('/tools-request/decline/{tool_request:uuid}',           [ToolsRequestController::class, 'declineRequest'])->name('decline_tool_request');
      Route::get('/tools-request/return/{tool_request:uuid}',            [ToolsRequestController::class, 'returnToolsRequested'])->name('return_tools_requested');
 
+     Route::get('/rfqs',                               [RfqController::class, 'index'])->name('rfq');
+     Route::get('/rfqs/details/{rfq:uuid}',                  [RfqController::class, 'rfqDetails'])->name('rfq_details');
 
     });
 });
@@ -334,15 +338,7 @@ Route::prefix('/client')->group(function () {
     });
 });
 
-// Route::resource('cse', CseController::class);
 
-// Route::prefix('/cse')->group(function () {
-//     Route::name('cse.')->group(function () {
-//         //All routes regarding CSE's should be in here
-//         Route::view('/',                   'cse.index')->name('index'); //Take me to CSE Dashboard
-
-//     });
-// });
 Route::prefix('/cse')->group(function () {
     Route::name('cse.')->group(function () {
         //All routes regarding CSE's should be in here
@@ -374,7 +370,16 @@ Route::prefix('/cse')->group(function () {
 Route::prefix('/supplier')->group(function () {
     Route::name('supplier.')->group(function () {
         //All routes regarding suppliers should be in here
-        Route::view('/',                   'supplier.index')->name('index'); //Take me to Supplier Dashboard
+        Route::view('/',                    'supplier.index')->name('index'); //Take me to Supplier Dashboard
+        Route::view('/messages/inbox',      'supplier.messages.inbox')->name('messages.inbox');
+        Route::view('/messages/sent',       'supplier.messages.sent')->name('messages.sent');
+        Route::view('/payments',            'supplier.payments')->name('payments');
+        Route::view('/requests',            'supplier.requests')->name('requests');
+        Route::view('/requests/details',    'franchisee.request_details')->name('request_details');
+        Route::view('/profile',             'supplier.view_profile')->name('view_profile');
+        Route::view('/profile/edit',        'supplier.edit_profile')->name('edit_profile');
+        Route::get('/rfqs',                               [SupplierRfqController::class, 'index'])->name('rfq');
+        Route::get('/rfqs/details/{rfq:uuid}',            [SupplierRfqController::class, 'rfqDetails'])->name('rfq_details');
 
     });
 });

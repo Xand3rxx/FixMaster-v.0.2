@@ -50,7 +50,6 @@ class DatabaseSeeder extends Seeder
             ServiceRequestPaymentSeeder::class,
             AdminRatingSeeder::class,
             AdminReviewSeeder::class,
-            FastestFingerSeeder::class,
         ]);
     }
 }
