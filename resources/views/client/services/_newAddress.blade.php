@@ -8,7 +8,7 @@
                 </button>
             </div>
 
-            <div class="modal-body">  
+            <div class="modal-body">   
             <span id="form_result"></span>
                     <form method="post" id="insert_form">  
                     <div class="row">
