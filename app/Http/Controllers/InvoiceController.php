@@ -59,8 +59,13 @@ class InvoiceController extends Controller
 
         return view('frontend.invoices.invoice')->with([
             'invoice' => $invoice,
+            'rfqExists' => $invoice->rfq_id,
+            'serviceRequestID' => $invoice->serviceRequest->id,
+            'serviceRequestUUID' => $invoice->serviceRequest->uuid,
             'fixmaster_royalty' => $fixMasterRoyalty,
+            'fixmaster_royalty_value' => $fixMaster_royalty_value,
             'get_fixMaster_royalty' => $get_fixMaster_royalty,
+            'tax' => $tax,
             'taxes' => $tax_cost,
             'logistics' => $logistics_cost,
             'warranty' => $warrantyCost,
