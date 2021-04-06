@@ -37,8 +37,8 @@
                                     <!-- <th>Phone Number</th>
                                     <th>Clients</th> -->
                                     <th>Status</th>
-                                    <th>Created By</th>
-                                    <th>Updated By</th>
+                                    <th>Created </th>
+                                    <th>Updated </th>
                                     <th class="text-center">Action</th> 
                                 </tr>
                                 </thead>
@@ -62,8 +62,8 @@
                                 <span class="badge badge-danger rounded">Completed</span>
                                 @endif
                                 </td>
-                                <td class="tx-medium">{{date("Y/m/d h:i:A", strtotime($myServiceRequest->service->created_at))}} </td>
-                                <td class="tx-medium">{{date("Y/m/d h:i:A", strtotime($myServiceRequest->service->updated_at))}} </td>
+                                <td class="tx-medium">{{date("Y/m/d h:i:A", strtotime($myServiceRequest->created_at))}} </td>
+                                <td class="tx-medium">{{date("Y/m/d h:i:A", strtotime($myServiceRequest->updated_at))}} </td>
                                 <td class=" text-center">
                                     <div class="dropdown-file">
                                     <a href="" class="dropdown-link" data-toggle="dropdown"><i data-feather="more-vertical"></i></a>

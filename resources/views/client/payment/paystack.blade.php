@@ -4,7 +4,7 @@
 @include('layouts.partials._messages')
 
 <style>
-    [type=radio] { 
+    [type=radio] {  
         position: absolute;
         opacity: 0;
         width: 0;

@@ -315,6 +315,9 @@ Route::prefix('/client')->group(function () {
         Route::post('/ipnpaystack',         [ClientController::class, 'paystackIPN'])->name('ipn.paystack');
         Route::get('/apiRequest',           [ClientController::class, 'apiRequest'])->name('ipn.paystackApiRequest');
 
+        // Route::post('/ipnpaystack',         [ClientController::class, 'paystackIPN'])->name('ipn.paystack');
+        // Route::get('/apiRequest',           [ClientController::class, 'apiRequest'])->name('serviceRequest.paystackApiRequest');
+
         Route::get('/ipnflutter',           [ClientController::class, 'flutterIPN'])->name('ipn.flutter');
 
         // Service request SECTION
