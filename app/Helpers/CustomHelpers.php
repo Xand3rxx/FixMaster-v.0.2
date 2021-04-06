@@ -12,6 +12,13 @@ class CustomHelpers
         return $diff;
     }
 
+    static function discountCalculation($discount, $amount){
+        $amt = (float)$discount/100 * $amount;
+        $value = floor((float)$amount - (float)$amt);  
+        return  $value ;
+    }
+   
+
     
     function generateRandomNumber() {
         // $number = mt_rand(1000000000, 9999999999); // better than rand()

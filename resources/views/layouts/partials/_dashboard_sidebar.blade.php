@@ -30,3 +30,9 @@
 @endif
 <!-- END FRANCHISEE SIDEBAR MENU -->
 
+<!-- START FRANCHISEE SIDEBAR MENU -->
+@if(Auth::user()->type->role->name === 'Suppliers')
+  @include('layouts.partials._supplier_sidebar')
+@endif
+<!-- END FRANCHISEE SIDEBAR MENU -->
+

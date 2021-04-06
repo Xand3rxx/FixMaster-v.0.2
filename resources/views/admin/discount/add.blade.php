@@ -18,6 +18,7 @@
                 </nav>
                 <h4 class="mg-b-0 tx-spacing--1">Create New Discount</h4>
             </div>
+          
         </div>
 
 
@@ -45,106 +46,17 @@
                             @enderror
                             <span class="invalid-feedback-err"></span>
                         </div>
-
-
-                        <div class="form-group col-md-10 parameter add-users" >
-                            <label class='add-page'>Add Users</label>
-                            <select class="selectpicker show-tick select-user" id="users" name="users[]"
-                                title="select..." multiple="multiple" data-selected-text-format="count>3"
-                                data-live-search="true">
-                                <option value="">Select...</option>
-                            </select>
-                            @error('users')
-                            <span class="invalid-feedback-err">
-                                <strong>{{ $message }}</strong>
-                            </span>
-                            @enderror
-                        </div>
-
-                        <div class="form-group col-md-2 parameter add-users">
-                            <label class='add-page'>Users' Count</label>
-                            <input type="number" disabled class="form-control user-count"/>
-                        
-                        </div>
-
-
-
-                        <div class="form-group col-md-5 show-estate">
+                        <div class="form-group col-md-12 show-estate d-none">
                             <label>Select Estate</label>
                             <select class="custom-select cs-select" name="estate_name" id="estate_id">
                                 <option selected value="">Select...</option>
                             </select>
                         </div>
 
-                        <div class="form-group col-md-5 parameter show-estate" id="estate-users">
-                            <label class='add-page not-users'>Add Estate Users</label>
-                            <select class="selectpicker show-tick select-user" id="estate-user" name="users[]"
-                                title="select..." multiple="multiple" data-selected-text-format="count>3"
-                                data-live-search="true">
-                                <option value="">Select...</option>
-                            </select>
-                            @error('users')
-                            <span class="invalid-feedback-err">
-                                <strong>{{ $message }}</strong>
-                            </span>
-                            @enderror
-                        </div>
-
-                        <div class="form-group col-md-2 parameter show-estate" >
-                            <label class='add-page not-users'>Users' Count</label>
-                            <input type="number" disabled class="form-control user-count-estate" />
-                        
-                        </div>
-
-
-                        <div class="form-group col-md-6 show-service">
-                            <label class='add-page'>Select Service Category</label>
-                            <select class="selectpicker show-tick select-all-service" id="category_id" name="category[]"
-                                title="select..." multiple="multiple" data-selected-text-format="count>3"
-                                data-live-search="true">
-                                <option value="">Select...</option>
-                            </select>
-                            @error('category')
-                            <span class="invalid-feedback-err">
-                                <strong>{{ $message }}</strong>
-                            </span>
-                            @enderror
-                        </div>
-
-
-                        <div class="form-group col-md-6 show-service">
-                            <label class='add-page'>Select Services</label>
-                            <select class="selectpicker show-tick select-services" id="service_id" name="services[]"
-                                title="select..." multiple="multiple" data-selected-text-format="count>3"
-                                data-live-search="true">
-                                <option value="">Select...</option>
-                            </select>
-                        </div>
-
-                        <div class="form-group col-md-10 show-service" id="add-users">
-                            <label class='add-page service'>Add Users</label>
-                            <select class="selectpicker show-tick select-user" id="service-users" name="users[]"
-                                title="select..." multiple="multiple" data-selected-text-format="count>3"
-                                data-live-search="true">
-                                <option value="">Select...</option>
-                            </select>
-                            @error('users')
-                            <span class="invalid-feedback-err">
-                                <strong>{{ $message }}</strong>
-                            </span>
-                            @enderror
-                        </div>
-                        <div class="form-group col-md-2 show-service">
-                            <label class='add-page'>Users' Count</label>
-                            <input type="number" disabled class="form-control user-count"/>
-                        
-                        </div>
-
                         <div class="form-group col-md-12">
                             <hr />
                         </div>
-
-                        <fieldset class="form-fieldset col-md-12 parameter">
+                        <fieldset class="form-fieldset col-md-12 parameter d-none" style="margin-bottom:30px">
                             <legend>Filter By Additional Fields</legend>
 
                             <div class="form-row">
@@ -198,16 +110,16 @@
                                 </div>
 
                                 <div class="form-group col-md-3">
-                                    <label for="sspecified_request_start_date">Date Range(from)</label>
-                                    <input type="date" class="form-control custom-input-1"
+                                    <label for="specified_request_start_date">Date Range(from)</label>
+                                    <input type="date" class="form-control custom-input-1 get_users" 
                                         id="specified_request_start_date" name="specified_request_start_date"
                                         value="{{ old('specified_request_start_date') }}" autocomplete="off">
                                 </div>
 
 
                                 <div class="form-group col-md-3">
-                                    <label for="sspecified_request_end_date">Date Range(to)</label>
-                                    <input type="date" class="form-control custom-input-1"
+                                    <label for="specified_request_end_date">Date Range(to)</label>
+                                    <input type="date" class="form-control custom-input-1 get_users"
                                         id="specified_request_end_date" name="specified_request_end_date"
                                         value="{{ old('specified_request_end_date') }}" autocomplete="off">
                                 </div>
@@ -215,7 +127,7 @@
 
                                 <div class="form-group col-md-3">
                                     <label for="entity">States</label>
-                                    <select id="state_id" name="specified_request_state" class="custom-select cs-select">
+                                    <select id="state_id" name="specified_request_state" class="custom-select cs-select get_users">
                                         <option selected value="">Select...</option>
                                         @foreach($states as $state)
                                         <option value="{{ $state->id }}"
@@ -227,13 +139,122 @@
                                 </div>
                                 <div class="form-group col-md-3">
                                     <label>LGAs</label>
-                                    <select class="custom-select cs-select" name="specified_request_lga" id="lga_id">
+                                    <select class="custom-select cs-select get_users" name="specified_request_lga" id="lga_id">
                                         <option selected value="">Select...</option>
                                     </select>
                                 </div>
                             </div>
+                            
                         </fieldset>
+                   
                      
+                        
+
+
+
+                        <div class="form-group col-md-10 parameter d-none add-users" >
+                        <div class="spinner1 d-none">
+                        <div class="spinner-border spinner-border-sm text-primary" role="status">...</div>
+                        </div>
+                          
+                            <label class='add-page'>Add Users</label>
+                        
+                            <select class="selectpicker show-tick select-user" id="users" name="users[]"
+                                title="select..." multiple="multiple" data-selected-text-format="count>3"
+                                data-live-search="true">
+                                <option value="">Select...</option>
+                            </select>
+                            @error('users')
+                            <span class="invalid-feedback-err">
+                                <strong>{{ $message }}</strong>
+                            </span>
+                            @enderror
+                        </div>
+
+                        <div class="form-group col-md-2 parameter d-none add-users">
+                            <label class='add-page'>Users' Count</label>
+                            <input type="text" disabled class="form-control user-count"/>
+                        
+                        </div>
+
+
+
+                     
+
+                        <div class="form-group col-md-10 d-none show-estate" id="estate-users">
+                        <div class="spinner1 d-none">
+                        <div class="spinner-border spinner-border-sm text-primary" role="status">...</div>
+                        </div>
+                            <label class='add-page not-users'>Add Estate Users</label>
+                            <select class="selectpicker show-tick select-user" id="estate-user" name="users[]"
+                                title="select..." multiple="multiple" data-selected-text-format="count>3"
+                                data-live-search="true">
+                                <option value="">Select...</option>
+                            </select>
+                            @error('users')
+                            <span class="invalid-feedback-err">
+                                <strong>{{ $message }}</strong>
+                            </span>
+                            @enderror
+                        </div>
+
+                        <div class="form-group col-md-2 show-estate d-none" >
+                            <label class='add-page not-users'>Users' Count</label>
+                            <input type="text" disabled class="form-control user-count-estate" />
+                        
+                        </div>
+
+
+                        <div class="form-group col-md-6 show-service d-none">
+                            <label class='add-page'>Select Service Category</label>
+                            <select class="selectpicker show-tick select-all-service" id="category_id" name="category[]"
+                                title="select..." multiple="multiple" data-selected-text-format="count>3"
+                                data-live-search="true">
+                                <option value="">Select...</option>
+                            </select>
+                            @error('category')
+                            <span class="invalid-feedback-err">
+                                <strong>{{ $message }}</strong>
+                            </span>
+                            @enderror
+                        </div>
+
+
+                        <div class="form-group col-md-6 show-service d-none">
+                        <div class="spinner1 d-none">
+                        <div class="spinner-border spinner-border-sm text-primary" role="status">...</div>
+                        </div>
+                            <label class='add-page'>Select Services</label>
+                            <select class="selectpicker show-tick select-services" id="service_id" name="services[]"
+                                title="select..." multiple="multiple" data-selected-text-format="count>3"
+                                data-live-search="true">
+                                <option value="">Select...</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group col-md-10 show-service d-none" id="add-users">
+                            <label class='add-page service'>Add Users</label>
+                            <select class="selectpicker show-tick select-user" id="service-users" name="users[]"
+                                title="select..." multiple="multiple" data-selected-text-format="count>3"
+                                data-live-search="true">
+                                <option value="">Select...</option>
+                            </select>
+                            @error('users')
+                            <span class="invalid-feedback-err">
+                                <strong>{{ $message }}</strong>
+                            </span>
+                            @enderror
+                        </div>
+                        <div class="form-group col-md-2 show-service d-none">
+                            <label class='add-page'>Users' Count</label>
+                            <input type="text" disabled class="form-control user-count"/>
+                        
+                        </div>
+             
+                        <div class="form-group col-md-12">
+                            <hr />
+                        </div>
+                 
 
                      
                         <div class="form-group col-md-12"> </div>
@@ -342,469 +363,19 @@
               
             </div>
         </form>
+<input type="hidden"  data-estate="{{ route('admin.all_estates',app()->getLocale()) }}" id="get_estate_url" />
+<input type="hidden"  data-client="{{ route('admin.discount_users',app()->getLocale()) }}" id="get_client_users_url" />
+<input type="hidden"  data-state="{{ route('admin.all_estates',app()->getLocale()) }}" id="get_state_url" />
+<input type="hidden"  data-lga="{{ route('admin.getLGA',app()->getLocale()) }}" id="get_lga_url" />
+<input type="hidden"  data-category="{{ route('admin.categories',app()->getLocale()) }}" id="get_category_url" />
+<input type="hidden"  data-services="{{ route('admin.category_services',app()->getLocale()) }}" id="get_services_url" />
 
     </div>
 </div>
 @push('scripts')
 
 <script src="{{ asset('assets/dashboard/assets/js/bootstrap-multiselect.js') }}"></script>
-
-<script>
-$('.selectpicker').selectpicker();
-
-$('.show-estate').hide();
-$('.show-service').hide();
-$('.parameter').hide();
-$('.add-users').hide();
-$('.add-page').hide();
-
-$(document).ready(function() {
-    $('.custom-select.cs-select').change(function() {
-        $('.custom-select.cs-select').each(function(index, item) {
-            if ($(this).children("option:selected").val()) {
-                $(this).next('.invalid-feedback-err').hide();
-            }
-
-        });
-    });
-
-    $('.custom-input-1').on('blur', function() {
-        $('.custom-input-1').each(function(index, item) {
-            if ($(this).val() !== '') {
-                $(this).next('.invalid-feedback-err').hide();
-            }
-
-        });
-    });
-
-
-    $('#rate').keyup(function() {
-        let rate = $(this).val();
-        let newrate = parseFloat(rate) / 100;
-        if (rate) {
-        let newrate = parseFloat(rate) / 100;
-        $('#percentage').text(newrate);
-    }else{
-        $('#percentage').text('0'); 
-    }
-    });
-
-
-    let rate = $('#rate').val();
-    if (rate) {
-        let newrate = parseFloat(rate) / 100;
-        $('#percentage').text(newrate);
-    }else{
-        $('#percentage').text('0'); 
-    }
-
-});
-</script>
-<script>
-$(document).ready(function() {
-
-    $('.selectpicker.select-user').on('change', function() {
-        var selectPicker = $(this);
-        var selectAllOption = selectPicker.find('option.select-all');
-        var checkedAll = selectAllOption.prop('selected');
-        var optionValues = selectPicker.find('option[value!="[all]"][data-divider!="true"]');
-
-        if (checkedAll) {
-            // Process 'all/none' checking
-            var allChecked = selectAllOption.data("all") || false;
-
-            if (!allChecked) {
-                optionValues.prop('selected', true).parent().selectpicker('refresh');
-                selectAllOption.data("all", true);
-            } else {
-                optionValues.prop('selected', false).parent().selectpicker('refresh');
-                selectAllOption.data("all", false);
-            }
-
-            selectAllOption.prop('selected', false).parent().selectpicker('refresh');
-        } else {
-            // Clicked another item, determine if all selected
-            var allSelected = optionValues.filter(":selected").length == optionValues.length;
-            selectAllOption.data("all", allSelected);
-        }
-    }).trigger('change');
-
-
-    $('.selectpicker.select-all-service').on('change', function() {
-        var selectPicker = $(this);
-        var selectAllOption = selectPicker.find('option.select-all');
-        var checkedAll = selectAllOption.prop('selected');
-        var optionValues = selectPicker.find('option[value!="all"][data-divider!="true"]');
-
-        if (checkedAll) {
-            // Process 'all/none' checking
-            var allChecked = selectAllOption.data("all") || false;
-
-            if (!allChecked) {
-                optionValues.prop('selected', true).parent().selectpicker('refresh');
-                selectAllOption.data("all", true);
-            } else {
-                optionValues.prop('selected', false).parent().selectpicker('refresh');
-                selectAllOption.data("all", false);
-            }
-
-            selectAllOption.prop('selected', false).parent().selectpicker('refresh');
-        } else {
-            // Clicked another item, determine if all selected
-            var allSelected = optionValues.filter(":selected").length == optionValues.length;
-            selectAllOption.data("all", allSelected);
-        }
-    }).trigger('change');
-
-
-
-    $('.selectpicker.select-services').on('change', function() {
-        var selectPicker = $(this);
-        var selectAllOption = selectPicker.find('option.select-all');
-        var checkedAll = selectAllOption.prop('selected');
-        var optionValues = selectPicker.find('option[value!="all-services"][data-divider!="true"]');
-
-
-        if (checkedAll) {
-            // Process 'all/none' checking
-            var allChecked = selectAllOption.data("all") || false;
-
-            if (!allChecked) {
-                optionValues.prop('selected', true).parent().selectpicker('refresh');
-                selectAllOption.data("all", true);
-            } else {
-                optionValues.prop('selected', false).parent().selectpicker('refresh');
-                selectAllOption.data("all", false);
-            }
-
-            selectAllOption.prop('selected', false).parent().selectpicker('refresh');
-        } else {
-            // Clicked another item, determine if all selected
-            var allSelected = optionValues.filter(":selected").length == optionValues.length;
-            selectAllOption.data("all", allSelected);
-        }
-    }).trigger('change');
-});
-</script>
-
-<script>
-$(document).ready(function() {
-    var state, entity_user_type = '';
-    $('#state_id').change(function() {
-        state = $(this).children("option:selected").val();
-        $.ajax({
-            url: "{{ route('admin.getLGA',app()->getLocale()) }}",
-            method: "POST",
-            dataType: "JSON",
-            data: {
-                "_token": "{{ csrf_token() }}",
-                "state_id": state
-            },
-            success: function(data) {
-                if (data) {
-                    $('#lga_id').html(data.lgas);
-                } else {
-                    var message =
-                        'Error occured while trying to get Enity Parameter List`s in ';
-                    var type = 'error';
-                    displayMessage(message, type);
-                }
-            },
-        })
-    });
-    $('.get_users').on("change", function() {
-        var entity = $('#entity_id').children("option:selected").val();
-        if (entity != '') {
-            $.ajax({
-                url: "{{ route('admin.discount_users',app()->getLocale()) }}",
-                method: "POST",
-                dataType: "JSON",
-                data: {
-                    "_token": "{{ csrf_token() }}",
-                    data: $('#discountForm').serialize()
-                },
-                success: function(data) {
-                    if (data) {
-                        $("#users").html(data.options).selectpicker('refresh');
-                        $("#service-users").html(data.options).selectpicker('refresh');
-                        $('.user-count').val(data.count).selectpicker('refresh');
-                    } else {
-                        var message =
-                            'Error occured while trying to get Enity Parameter List`s in ';
-                        var type = 'error';
-                        displayMessage(message, type);
-                        ory
-                    }
-                },
-            })
-        } else {
-            $('#entity_id ~.invalid-feedback-err').html('Please select an Entity');
-        }
-
-    });
-
-
-
-    $('#estate_id').on("change", function() {
-        $.ajax({
-            url: "{{ route('admin.discount_users',app()->getLocale()) }}",
-            method: "POST",
-            dataType: "JSON",
-            data: {
-                "_token": "{{ csrf_token() }}",
-                data: $('#discountForm').serialize()
-            },
-            success: function(data) {
-                if (data) {
-                    $("#estate-user").html(data.options).selectpicker('refresh');
-                    $('.user-count-estate').val(data.count).selectpicker('refresh');
-                } else {
-                    var message =
-                        'Error occured while trying to get Enity Parameter List`s in ';
-                    var type = 'error';
-                    displayMessage(message, type);
-                    ory
-                }
-            },
-        });
-
-    });
-
-
-    $('.selectpicker.select-all-service').on('changed.bs.select', function(e, clickedIndex, isSelected,
-        previousValue) {
-        var categoryid = $(this).val();
-        $.ajax({
-            url: "{{ route('admin.category_services',app()->getLocale()) }}",
-            method: "POST",
-            dataType: "JSON",
-            data: {
-                "_token": "{{ csrf_token() }}",
-                data: categoryid.length > 0 ? categoryid : '1'
-            },
-            beforeSend: function() {
-                $("#service_id").html();
-            },
-            success: function(data) {
-                if (data) {
-                    $("#service_id").html(data.service).selectpicker('refresh');
-                } else {
-                    var message =
-                        'Error occured while trying to get Category List`s in ';
-                    var type = 'error';
-                    displayMessage(message, type);
-                }
-            },
-        })
-
-
-    });
-
-
-});
-</script>
-
-
-<script>
-//when pages loads
-$(document).ready(function() {
-    var entity = $('#entity_id').children("option:selected").val();
-    if (entity === 'client') {
-        $('.show-service').hide();
-        $('.parameter').show();
-        $('.add-users').show();
-        $('.add-page').show();
-    }
-    if (entity === 'estate') {
-        $('.show-estate').show();
-        $('.show-service').hide();
-        $('.parameter').show();
-        $('.add-users').hide();
-        $('.not-users').show();
-
-        $.ajax({
-            url: "{{ route('admin.all_estates',app()->getLocale()) }}",
-            method: "POST",
-            dataType: "JSON",
-            data: {
-                "_token": "{{ csrf_token() }}",
-            },
-            success: function(data) {
-                if (data) {
-                    $('#estate_id').html(data.estates);
-                } else {
-                    var message =
-                        'Error occured while trying to get Enity Estate List`s in ';
-                    var type = 'error';
-                    displayMessage(message, type);
-                }
-            },
-        });
-
-    } else {
-        $('.show-estate').hide();
-    }
-
-
-
-    if (entity === 'service') {
-        $('.show-estate').hide();
-        $('.show-service').show();
-        $('.parameter').hide();
-        $('.add-page').show();
-
-        $.ajax({
-            url: "{{ route('admin.categories',app()->getLocale()) }}",
-            method: "POST",
-            dataType: "JSON",
-            data: {
-                "_token": "{{ csrf_token() }}",
-            },
-            success: function(data) {
-                if (data) {
-                    $('#category_id').html(data.category).selectpicker('refresh');
-
-                } else {
-                    var message =
-                        'Error occured while trying to get Enity Estate List`s in ';
-                    var type = 'error';
-                    displayMessage(message, type);
-                }
-            },
-        })
-    }
-
-
-
-    if (entity) {
-        $.ajax({
-            url: "{{ route('admin.discount_users',app()->getLocale()) }}",
-            method: "POST",
-            dataType: "JSON",
-            data: {
-                "_token": "{{ csrf_token() }}",
-                data: $('#discountForm').serialize()
-            },
-            success: function(data) {
-                if (data) {
-                    $("#users").html(data.options).selectpicker('refresh');
-                    $("#service-users").html(data.options).selectpicker('refresh');
-                    $('.user-count').val(data.count).selectpicker('refresh');
-                    $('.user-count-estate').val(data.count).selectpicker('refresh');
-                   
-                } else {
-                    var message =
-                        'Error occured while trying to get Enity Parameter List`s in ';
-                    var type = 'error';
-                    displayMessage(message, type);
-                }
-            },
-        })
-    }
-
-})
-</script>
-
-
-<script>
-//when there is onchange event
-$(document).ready(function() {
-    $('#entity_id').on("change", function() {
-        var entity = $(this).children("option:selected").val();
-        if (entity === 'client') {
-            $('.show-service').hide();
-            $('.parameter').show();
-            $('.add-users').show();
-            $('.add-page').show();
-        }
-        if (entity === 'estate') {
-            $('.show-estate').show();
-            $('.show-service').hide();
-            $('.parameter').show();
-            $('.add-users').hide();
-            $('.not-users').show();
-
-            $.ajax({
-                url: "{{ route('admin.all_estates',app()->getLocale()) }}",
-                method: "POST",
-                dataType: "JSON",
-                data: {
-                    "_token": "{{ csrf_token() }}",
-
-                },
-                success: function(data) {
-                    if (data) {
-                        $('#estate_id').html(data.estates);
-                    } else {
-                        var message =
-                            'Error occured while trying to get Enity Estate List`s in ';
-                        var type = 'error';
-                        displayMessage(message, type);
-                    }
-                },
-            })
-        } else {
-            $('.show-estate').hide();
-        }
-
-        if (entity === 'service') {
-            $('.show-service').show();
-            $('.show-estate').hide();
-            $('.parameter').hide();
-            $.ajax({
-                url: "{{ route('admin.categories',app()->getLocale()) }}",
-                method: "POST",
-                dataType: "JSON",
-                data: {
-                    "_token": "{{ csrf_token() }}",
-                },
-                success: function(data) {
-                    if (data) {
-                        $('#category_id').html(data.category).selectpicker('refresh');
-
-                    } else {
-                        var message =
-                            'Error occured while trying to get Enity Estate List`s in ';
-                        var type = 'error';
-                        displayMessage(message, type);
-                    }
-                },
-            })
-
-        } else {
-            $('.show-services').hide();
-        }
-
-
-        if (entity) {
-            $.ajax({
-                url: "{{ route('admin.discount_users',app()->getLocale()) }}",
-                method: "POST",
-                dataType: "JSON",
-                data: {
-                    "_token": "{{ csrf_token() }}",
-                    data: $('#discountForm').serialize()
-                },
-                success: function(data) {
-                    if (data) {
-                        $("#users").html(data.options).selectpicker('refresh');
-                        $("#service-users").html(data.options).selectpicker('refresh');
-                        $('.user-count').val(data.count).selectpicker('refresh');
-                    } else {
-                        var message =
-                            'Error occured while trying to get Enity Users List`s in ';
-                        var type = 'error';
-                        displayMessage(message, type);
-                    }
-                }
-            });
-        }
-
-    });
-
-});
-</script>
-
+<script src="{{ asset('assets/dashboard/assets/js/admin/discount/4c676ab8-78c9-4a00-8466-a10220785894.js') }}"></script>
 
 @endpush
 @endsection

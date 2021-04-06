@@ -173,21 +173,61 @@
                         </div>
 
                         <div class="invoice-table pb-4">
-                            @if($invoice->invoice_type === 'Diagnostic Invoice')
+                            @if($invoice->invoice_type === 'Diagnosis Invoice')
                                 <div class="table-responsive bg-white shadow rounded">
                                     <table class="table mb-0 table-center invoice-tb">
                                         <thead class="bg-light">
                                         <tr>
-                                            <th scope="col" class="text-left">Service Type</th>
-                                            <th scope="col" class="text-left">Amount</th>
-                                            <th scope="col">Total</th>
+                                            <th scope="col" class="text-left">#</th>
+                                            <th scope="col" class="text-left">Name</th>
+                                            <th scope="col" class="text-left">Model Number</th>
+                                            <th scope="col" class="text-left">Quantity</th>
+                                            <th scope="col" class="text-left">Unit Price</th>
+                                            <th scope="col">Total Amount</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+
+                                        <tr>
+                                            <td class="text-left">0</td>
+                                            <td class="text-left">Service Charge</td>
+                                            <td class="text-left">{{ $rfqExists }}</td>
+                                            <td class="text-left">1</td>
+                                            <td class="text-left">₦ {{ number_format($invoice['serviceRequest']['service']['service_charge']) }}</td>
+                                            <td class="text-left">₦ {{ number_format($invoice['serviceRequest']['service']['service_charge']) }}</td>
+                                        </tr>
+                                        @if($rfqExists)
+                                        @foreach($invoice->rfqs->rfqBatches as $item)
+                                        <tr>
+                                            <td class="text-left">{{ $loop->iteration }}</td>
+                                            <td class="text-left">{{ $item->component_name }}</td>
+                                            <td class="text-left">{{ $item->model_number }}</td>
+                                            <td class="text-left">{{ $item->quantity }}</td>
+                                            <td class="text-left">-</td>
+                                            <td class="text-left">-</td>
+                                        </tr>
+                                        @endforeach
+                                        @endif
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <div class="table-responsive bg-white shadow rounded mt-3">
+                                    <table class="table mb-0 table-center invoice-tb">
+                                        <thead class="bg-light">
+                                        <tr>
+                                            <th scope="col" class="text-left" colspan="2">Labour Cost</th>
                                         </tr>
                                         </thead>
                                         <tbody>
                                         <tr>
-                                            <td class="text-left">Diagnostics Completion</td>
-                                            <td class="text-left">₦ {{ number_format($invoice['serviceRequest']['service']['service_charge']) }}</td>
-                                            <td class="text-left">₦ {{ number_format($invoice['serviceRequest']['service']['service_charge']) }}</td>
+                                            <td class="text-left">Hours worked</td>
+                                            <td class="text-left">{{$invoice['hours_spent']}} {{ $invoice['hours_spent']>1 ? 'hrs' : 'hr' }} </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="text-left">Labor</td>
+                                            <td class="text-left">
+                                                ₦ {{ number_format($invoice['labour_cost']) }}
+                                            </td>
                                         </tr>
                                         </tbody>
                                     </table>
@@ -207,8 +247,13 @@
                                     <div class="col-lg-8 col-md-12 mt-4 pt-2 text-center">
                                         <div><h3>Proceed with Service</h3></div>
                                         <div>
-                                            <div class="btn btn-outline-primary">Client Accept</div>
-                                            <div class="btn btn-outline-primary">Client Decline</div>
+                                            <form method="POST" action="{{ route('cse.client.decision', app()->getLocale()) }}">
+                                                @csrf
+                                                <input type="hidden" name="request_id" value="{{ $serviceRequestID }}">
+                                                <input type="hidden" name="request_uuid" value="{{ $serviceRequestUUID }}">
+                                                <button class="btn btn-outline-primary" name="client_choice" value="accepted">Client Accept</button>
+                                                <button class="btn btn-outline-primary" name="client_choice" value="declined">Client Decline</button>
+                                            </form>
                                         </div>
                                     </div>
                                 </div>

@@ -68,7 +68,10 @@
                         </div>
                       
                         <div class="form-group col-md-6" >
-                            <label class='add-page service'>Select Client</label>
+                        <div class="spinner1 d-none">
+                        <div class="spinner-border spinner-border-sm text-primary" role="status">...</div>
+                        </div>
+                            <label class='add-page service'>Select Client Who have Rated</label>
                             <select class="selectpicker show-tick select-user" id="users" name="users[]"
                                 title="select..." multiple="multiple" data-selected-text-format="count>3"
                                 data-live-search="true">
@@ -97,144 +100,13 @@
                 </div>
             </div>
         </form>
-
+<input type="hidden"  data-users="{{ route('admin.loyalty_users',app()->getLocale()) }}" id="get_users_url" />
+<input type="hidden"  data-token="{{ csrf_token() }}" class="get_token" /> 
     </div>
 </div>
 @push('scripts')
 
 <script src="{{ asset('assets/dashboard/assets/js/bootstrap-multiselect.js') }}"></script>
-
-<script>
-$('.selectpicker').selectpicker();
-
-
-$(document).ready(function() {
-
-    $('.selectpicker.select-user').on('change', function() {
-        var selectPicker = $(this);
-        var selectAllOption = selectPicker.find('option.select-all');
-        var checkedAll = selectAllOption.prop('selected');
-        var optionValues = selectPicker.find('option[value!="[all]"][data-divider!="true"]');
-
-        if (checkedAll) {
-            // Process 'all/none' checking
-            var allChecked = selectAllOption.data("all") || false;
-
-            if (!allChecked) {
-                optionValues.prop('selected', true).parent().selectpicker('refresh');
-                selectAllOption.data("all", true);
-            } else {
-                optionValues.prop('selected', false).parent().selectpicker('refresh');
-                selectAllOption.data("all", false);
-            }
-
-            selectAllOption.prop('selected', false).parent().selectpicker('refresh');
-        } else {
-            // Clicked another item, determine if all selected
-            var allSelected = optionValues.filter(":selected").length == optionValues.length;
-            selectAllOption.data("all", allSelected);
-        }
-    }).trigger('change');
-
-
- var amount;
-    $('#sum').change(function() {
-        amount = $(this).val();
-        $.ajax({
-            url: "{{ route('admin.loyalty_users',app()->getLocale()) }}",
-            method: "POST",
-            dataType: "JSON",
-            data: {
-                "_token": "{{ csrf_token() }}",
-                "amount": amount
-            },
-            success: function(data) {
-                if (data) {
-                    $("#users").html(data.options).selectpicker('refresh');
-                    $('.user-count').val(data.count).selectpicker('refresh');
-                } else {
-                    var message =
-                        'Error occured while trying to get Enity Parameter List`s in ';
-                    var type = 'error';
-                    displayMessage(message, type);
-                }
-            },
-        })
-    });
-
-    $.ajax({
-            url: "{{ route('admin.loyalty_users',app()->getLocale()) }}",
-            method: "POST",
-            dataType: "JSON",
-            data: {
-                "_token": "{{ csrf_token() }}",
-               
-            },
-            success: function(data) {
-                if (data) {
-                    $("#users").html(data.options).selectpicker('refresh');
-                    $('.user-count').val(data.count).selectpicker('refresh');
-                } else {
-                    var message =
-                        'Error occured while trying to get Enity Parameter List`s in ';
-                    var type = 'error';
-                    displayMessage(message, type);
-                }
-            },
-        })
-
-
-//get points percentage
-let sum, point;
-   if(!sum){
-        $('#points').attr('disabled', 'true')  
-    }
-
-        $('#sum').keyup(function() {
-        sum = $(this).val();
-        if(!sum)
-         $('#points').attr('disabled', 'true');
-
-        if(sum)
-        $('#points').removeAttr('disabled')   
-        
-        if (point && sum) {
-        let newpoint = parseFloat(point) / 100 * parseInt(sum);
-        $('#percentage').text(Math.round(newpoint));
-        }else{
-        $('#percentage').text('0.00'); 
-        }
-    });
-
- 
-    $('#points').keyup(function() {
-         point = $(this).val();
-        if (point && sum) {
-        let newpoint = parseFloat(point) / 100 * parseInt(sum);
-        $('#percentage').text(Math.round(newpoint));
-        }else{
-            $('#percentage').text('0.00'); 
-        }
-    });
-
-
-        point = $('#points').val();
-        sum = $('#sum').val();
-        if(sum){
-            $('#points').removeAttr('disabled')  
-        }
-            
-    
-        if (point != '' && sum != '') {
-        let newpoint = parseFloat(point) / 100 * parseInt(sum);
-        $('#percentage').text(Math.round(newpoint));
-        }else{
-        $('#percentage').text('0.00'); 
-        }
-
-  
-    });
-</script>
-
+<script src="{{ asset('assets/dashboard/assets/js/admin/loyalty/2d5e497c-d12d-43ec-ac7a-a14f825ffaed.js') }}"></script>
 @endpush
 @endsection

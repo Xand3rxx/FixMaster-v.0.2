@@ -119,4 +119,12 @@ class Service extends Model
     {
         return $this->hasMany(ClientDiscount::class, 'client_id');
     }
+
+    public function subServices()
+    {
+        return $this->hasMany(SubService::class);
+    }
+
+ 
+
 }

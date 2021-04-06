@@ -3,6 +3,7 @@
 namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
+use DB;
 
 class ClientSeeder extends Seeder
 {
@@ -220,5 +221,54 @@ class ClientSeeder extends Seeder
             'service_id'        =>  NULL, 
             'availability'      =>  'unused', 
         ]);
+
+        //3 more contacts for client@fix-master.com
+        DB::table('contacts')->delete();
+
+        $contacts = array(
+
+            array(
+                'user_id'           =>  $client->id,
+                'account_id'        =>  $clientAccount->id,
+                'country_id'        =>  156,
+                'state_id'          =>  24,
+                'lga_id'            =>  505,
+                'town_id'           =>  80,
+                'name'              =>  'Yinka Odumosu',
+                'phone_number'      =>  '08086717489',
+                'address'           => 'C99 Rd 27, Victoria Garden City, Lekki',
+                'address_longitude' =>  '3.5375363',
+                'address_latitude'  =>  '6.4658893',
+            ),
+            array(
+                'user_id'           =>  $client->id,
+                'account_id'        =>  $clientAccount->id,
+                'country_id'        =>  156,
+                'state_id'          =>  24,
+                'lga_id'            =>  505,
+                'town_id'           =>  94,
+                'name'              =>  'Adewale Daniel',
+                'phone_number'      =>  '08085517815',
+                'address'           => 'Holly Ave, Eti-Osa, Lekki',
+                'address_longitude' =>  '3.6066907',
+                'address_latitude'  =>  '6.4941095',
+            ),
+            array(
+                'user_id'           =>  $client->id,
+                'account_id'        =>  $clientAccount->id,
+                'country_id'        =>  156,
+                'state_id'          =>  24,
+                'lga_id'            =>  508,
+                'town_id'           =>  116,
+                'name'              =>  'Folarin Funsho',
+                'phone_number'      =>  '08035957862',
+                'address'           => '7 Unity Road, Omole Phase 1, Ikeja, Lagos',
+                'address_longitude' =>  '3.3582073',
+                'address_latitude'  =>  '6.4941095',
+            )
+           
+        );
+
+        DB::table('contacts')->insert($contacts);
     }
 }

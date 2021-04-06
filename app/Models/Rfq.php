@@ -67,4 +67,26 @@ class Rfq extends Model
     {
         return $this->hasMany(RfqSupplier::class, 'rfq_id');
     }
+
+    public function issuer()
+    {
+        return $this->belongsTo(User::class, 'issued_by')->with('account');
+    }
+
+    public function issuers()
+    {
+        return $this->hasMany(User::class, 'issued_by')->with('account');
+    }
+
+    public function client()
+    {
+        return $this->belongsTo(User::class, 'client_id')->with('account');
+    }
+
+    public function clients()
+    {
+        return $this->hasMany(User::class, 'client_id')->with('account');
+    }
+
+    
 }

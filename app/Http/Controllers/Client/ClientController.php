@@ -32,6 +32,8 @@ use Auth;
 use App\Models\LoyaltyManagement;
 use App\Models\ClientLoyaltyWithdrawal;
 use App\Models\ServiceRequestPayment;
+use App\Models\ServiceRequestProgress;
+use App\Models\ServiceRequestCancellation;
 use Session;
 
 use PHPMailer\PHPMailer\PHPMailer;
@@ -53,6 +55,10 @@ class ClientController extends Controller
      */
     public function index()
     {
+
+        $myRequest = Client::where('user_id', auth()->user()->id)->with('service_requests')->firstOrFail();
+        $myServiceRequests = $myRequest->service_request;
+   
         //Get total available serviecs
         $totalServices = Service::count();
 
@@ -73,13 +79,170 @@ class ClientController extends Controller
             'client' => [
                 'phone_number' => '0909078888'
             ],
-            'popularRequests'   =>  $popularRequests ,
-            // 'myWallet'          =>  $myWallet,
-            // JoeBoy Fill this data
-            // 1. 'userServiceRequests'
-            // 2. 'popularRequests'
-            // 3. 'cseName'
+            'popularRequests'  =>  $popularRequests,
+            'userServiceRequests' =>  $myServiceRequests, 
+         
         ]);
+    }
+
+    public function clientRequestDetails($language, $request){
+        $requestDetail = ServiceRequest::where('uuid', $request)->first();
+        foreach ($requestDetail->technicians as $value) {
+            if( $value->roles[0]->slug == 'technician-artisans'){
+              $technician = $value;
+            }
+        }
+      
+        $data = [
+            'requestDetail'   =>  $requestDetail,
+            'technician'      =>    $technician
+        ];
+        return view('client.request_details', $data);
+    }
+
+
+    public function editRequest($language, $request){
+
+        $userServiceRequest = ServiceRequest::where('uuid', $request)->first();
+        $data = [
+            'userServiceRequest'    =>  $userServiceRequest,
+        ];
+
+        return view('client._request_edit', $data);
+    }
+
+    public function updateRequest(Request $request, $language, $id){
+
+        $requestExist = ServiceRequest::where('uuid', $id)->first();
+
+        $request->validate([
+            'timestamp'             =>   'required',
+            'phone_number'          =>   'required',
+            'address'               =>   'required',
+            'description'           =>   'required',
+        ]);
+
+
+        $timestamp = \Carbon\Carbon::parse($request->input('timestamp'), 'UTC')->isoFormat('MMMM Do YYYY, h:mm:ssa');
+
+        $updateServiceRequest = ServiceRequest::where('uuid', $id)->update([
+            'preferred_time'             =>   $request->input('timestamp'),
+            'description'           =>   $request->description,
+        ]);
+
+        $updateContactRequest = Contact::where('user_id', auth()->user()->id)->update([
+            'phone_number'          =>   $request->phone_number,
+            'address'               =>   $request->address,
+        ]);
+
+        if($updateServiceRequest){
+          //acitvity log
+            return redirect()->route('client.requests', app()->getLocale())->with('success', $requestExist->unique_id.' was successfully updated.');
+
+        }else{
+
+     //acitvity log
+            return back()->with('error', 'An error occurred while trying to update a '.$requestExist->unique_id.' service request.');
+        }
+       
+        return back()->withInput();
+    }
+
+
+    public function cancelRequest(Request $request, $language, $id){
+
+        $requestExists = ServiceRequest::where('uuid', $id)->first();
+       
+
+        if($requestExists->status_id == '3'){
+            return back()->with('error', 'Sorry! This service request('.$requestExists->unique_id.') has already been completed.');
+        }
+
+        //Validate user input fields
+        $request->validate([
+            'reason'       =>   'required',
+        ]);
+
+        if(!empty($requestExists->clientDiscounts)){
+            $rate = $requestExists->clientDiscounts[0]->discount->rate;
+            $refundAmount = floor( (float)$requestExists->total_amount -((float)$rate * (float)$requestExists->total_amount / 100) );
+        }else{
+            $refundAmount = $requestExists->total_amount;
+        }
+
+
+        $walTrans = WalletTransaction::where('user_id', auth()->user()->id)->orderBy('id', 'DESC')->first();
+        $closingBalance =  $walTrans->closing_balance;
+        $NewWalletbalance = floor((float)$refundAmount + (float)$closingBalance);
+
+        //service_request_status_id = Pending(1), Ongoing(4), Completed(3), Cancelled(2) 
+        $cancelRequest = ServiceRequest::where('uuid', $id)->update([
+            'status_id' =>  '2',
+        ]);
+
+        $jobReference = $requestExists->unique_id;
+
+        //Create record in `service_request_progress` table
+        $recordServiceProgress = ServiceRequestProgress::create([
+            'user_id'                       =>  Auth::id(), 
+            'service_request_id'            =>  $requestExists->id, 
+            'status_id'                     => '2',
+            'sub_status_id'                 => '1'
+        ]);
+
+        $recordCancellation = ServiceRequestCancellation::create([
+            'user_id'                       =>  Auth::id(), 
+            'service_request_id'            =>  $requestExists->id, 
+            'reason'                        =>  $request->reason,
+        ]);
+  
+      
+        $walTrans = new WalletTransaction;
+        $walTrans->user_id = auth()->user()->id;
+        $walTrans->payment_id = '12';
+        $walTrans->amount =  $requestExists->total_amount;
+        $walTrans->payment_type = 'refund';
+        $walTrans->unique_id = $requestExists->unique_id;
+        $walTrans->transaction_type = 'credit';
+        $walTrans->opening_balance =  $closingBalance;
+        $walTrans->closing_balance = $NewWalletbalance;
+        $walTrans->save();
+
+
+        $clientId = $requestExists->client->id;
+        $clientName = $requestExists->client->account->first_name. ' '.$requestExists->client->account->last_name;
+        $clientEmail = $requestExists->client->email;
+        $reason = $request->reason;
+        $jobReference = $requestExists->unique_id;
+        $supervisorId = 'woorad7@gmail.com';
+
+     
+
+        if($cancelRequest AND $recordServiceProgress AND $recordCancellation){
+
+            /*
+            * Code to send email goes here...
+            */
+
+            //Notify CSE and Technician with messages
+            // $this->cancellationMessage = new EssentialsController();
+            // $this->cancellationMessage->clientServiceRequestCancellationMessage($clientName, $clientId, $jobReference, $reason);
+            // $this->cancellationMessage->adminServiceRequestCancellationMessage($clientName, $clientId, $jobReference, $reason, $supervisorId);
+
+            // MailController::clientServiceRequestCancellationEmailNotification($clientEmail, $clientName,$jobReference, $reason);
+            // MailController::adminServiceRequestCancellationEmailNotification('info@fixmaster.com.ng', $clientName,$jobReference, $reason);
+
+            //Record crurrenlty logged in user activity
+            //activity log
+            return redirect()->route('client.requests', app()->getLocale())->with('success', $requestExists->unique_id.' was successfully updated.');
+
+        }else{
+            //Record Unauthorized user activity
+         //activity log
+            return back()->with('error', 'An error occurred while trying to cancel '.$jobReference.' service request.');
+        }
+
+        return back()->withInput();
     }
 
     /**
