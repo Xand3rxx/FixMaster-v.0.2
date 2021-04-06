@@ -17,6 +17,7 @@ use App\Models\Lga;
 use App\Models\Account;
 use App\Models\Phone;
 use App\Models\Address;
+use App\Models\Contact;
 use App\Models\ClientDiscount;
 use App\Models\Cse;
 use App\Models\ServiceRequestSetting;
