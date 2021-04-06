@@ -28,9 +28,10 @@ use App\Traits\GenerateUniqueIdentity as Generator;
 use App\Traits\RegisterPaymentTransaction;
 use App\Traits\Services;
 use App\Traits\PasswordUpdator;
-use Auth;
+use Auth; 
 use App\Models\LoyaltyManagement;
 use App\Models\ClientLoyaltyWithdrawal;
+use App\Models\ServiceRequestPayment;
 use Session;
 
 use PHPMailer\PHPMailer\PHPMailer;
@@ -594,9 +595,9 @@ class ClientController extends Controller
                     $service_request->client_id             = auth()->user()->id;
                     $service_request->service_id            = $request->service_id;
                     $service_request->unique_id             = 'REF-'.$this->generateReference();
-                    $service_request->state_id              = $request->state_id;
-                    $service_request->lga_id                = $request->lga_id;
-                    $service_request->town_id               = $request->town_id;
+                    // $service_request->state_id              = $request->state_id;
+                    // $service_request->lga_id                = $request->lga_id;
+                    // $service_request->town_id               = $request->town_id;
                     $service_request->price_id              = $request->price_id;
                     $service_request->contact_id              = $request->myContact_id;
                     $service_request->client_discount_id    = $request->client_discount_id;
@@ -642,7 +643,7 @@ class ClientController extends Controller
                                 $service_reqPayment = new ServiceRequestPayment;
                                 $service_reqPayment->user_id = auth()->user()->id;
                                 $service_reqPayment->payment_id = $pay->id;  
-                                $service_reqPayment->service_request_id = $pay->id;  
+                                $service_reqPayment->service_request_id = $service_request->id;  
                                 $service_reqPayment->amount = $pay->amount;  
                                 $service_reqPayment->unique_id = $pay->unique_id;  
                                 $service_reqPayment->payment_type = $pay->payment_for;  

@@ -537,6 +537,8 @@ $(window).resize(function() {
     }
 </script>
 
+@include('client.services._newAddress')
+
 @endpush @endsection
 
-@include('client.services._newAddress')
+
