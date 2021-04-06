@@ -504,7 +504,7 @@ class ClientController extends Controller
         //     'discounts'     =>  $this->clientDiscounts(),
         // ]
         // dd($data['balance']->closing_balance );
-        // dd($data['discounts'] );
+        // dd($data['discounts'] ); 
         $data['states'] = State::select('id', 'name')->orderBy('name', 'ASC')->get();
 
         // $data['lgas'] = Lga::select('id', 'name')->orderBy('name', 'ASC')->get();
@@ -540,7 +540,13 @@ class ClientController extends Controller
         $clientContact->address_latitude   = $request->addressLng;
         if ($clientContact->save()) {
             // return back()->with('success', 'New contact saved');
-            return response()->json(['success' => 'Data Added successfully.']);
+            // return response()->json(['success' => 'Data Added successfully.']);
+
+            return view('client.services._contactList', [
+                'myContacts'    => Contact::where('user_id', auth()->user()->id)->get(),
+                // 'success' => 'Data Added successfully.'
+            ]);
+
         } else{
             return back()->with('error', 'sorry!, an error occured please try again');
         } 

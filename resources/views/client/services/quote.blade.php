@@ -55,6 +55,41 @@ p{margin-bottom:.3em;}
 .address-hide{
     display:none;
 }
+
+table.scroll {
+    /* width: 100%; */ /* Optional */
+    /* border-collapse: collapse; */
+    border-spacing: 0;
+    /* border: 2px solid black; */
+}
+
+table.scroll tbody,
+table.scroll thead { display: block; }
+
+thead tr th { 
+    height: 30px;
+    line-height: 30px;
+    /* text-align: left; */
+}
+
+table.scroll tbody {
+    height: 10em;
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+
+tbody { border-top: 2px solid black; }
+
+tbody td, thead th {
+    /* width: 20%; */ /* Optional */
+    border-right: 1px solid black;
+    /* white-space: nowrap; */
+}
+
+tbody td:last-child, thead th:last-child {
+    border-right: none;
+}
+
 </style>
 <div class="col-lg-8 col-12">
     <div class="card custom-form border-0">
@@ -106,52 +141,9 @@ p{margin-bottom:.3em;}
                 <div class="row">
                     <!-- first div -->
                     <div class="col-lg-12 col-md-12 mt-4" id="address">
-                        <div class="table-responsive bg-white shadow rounded">
-                            <table class="table mb-0 table-center" id="contacts_table">
-                                <thead class="bg-light">
-                                    <tr>
-                                        <th scope="col">Contact</th>
-                                    </tr>
-                                </thead>
-                            <tbody>
-
-                            @if($myContacts) 
-                                @foreach($myContacts as $k=>$myContact)
-                                    @if($k > 0)
-                                        <tr>
-                                            <td>
-                                                <div class="media">
-                                                
-                                                    <div class="custom-control custom-radio custom-control-inline">
-                                                        <div class="form-group mb-0">
-                                                            <input type="radio" id="{{$myContact->id}}" value="{{ $myContact->id }}" name="myContact_id" class="custom-control-input"  />
-                                                            <!-- <input type="radio" id="{{$myContact->id}}" name="id" value="{{ $myContact->id }}" {{ ( (isset($myContact->is_default) && intval($myContact->is_default)) ? 'checked=checked' : '') }}> -->
-                                                            <input type="hidden" name="state_id" value="{{ $myContact->state_id }}">
-                                                            <input type="hidden" name="lga_id" value="{{ $myContact->lga_id }}">
-                                                            <input type="hidden" name="town_id" value="{{ $myContact->town_id }}">
-                                                            <label class="custom-control-label" for="{{$myContact->id}}">{{$myContact->name ?? ''}}</label>
-                                                        </div>
-                                                    </div>
-                                                    
-                                                    <div class="content ml-3">
-                                                        <a href="f" class="forum-title text-primary font-weight-bold">{{$myContact->phone_number}}</a>
-                                                        <p class="text-muted small mb-0 mt-2">{{$myContact->address}}</p>
-                                                    </div>
-
-                                                </div>
-                                            </td>
-                                        </tr>
-                                    @endif
-                                @endforeach 
-                            @endif
-                                </tbody>
-                            </table>
-
-                            <!-- <div class="d-flex align-items-center justify-content-between mt-4 col-lg-12">
-                                <a onClick="address()" href="javascript:void(0)" class="btn btn-success btn-lg btn-block">Add New Address</a>
-                                <a href="javascript:void(0)" class="btn btn-primary" id="edit">Confirm</a>
-                            </div> -->
-                        </div>
+                        <div class="contact-list">
+                        @include('client.services._contactList')
+            </div>                        
                     </div>
                     <!--end col-->
                 </div>
@@ -347,6 +339,28 @@ p{margin-bottom:.3em;}
 @push('scripts')
 
 <script>
+
+    // Change the selector if needed
+var $table = $('table.scroll'),
+    $bodyCells = $table.find('tbody tr:first').children(),
+    colWidth;
+
+// Adjust the width of thead cells when window resizes
+$(window).resize(function() {
+    // Get the tbody columns width array
+    colWidth = $bodyCells.map(function() {
+        return $(this).width();
+    }).get();
+    
+    // Set the width of thead columns
+    $table.find('thead tr').children().each(function(i, v) {
+        $(v).width(colWidth[i]);
+    });    
+}).resize(); // Trigger resize handler
+
+
+
+
     $(document).ready(function () {
         //Get list of L.G.A's in a particular state.
         $("#state_id").on("change", function () {
@@ -426,31 +440,32 @@ p{margin-bottom:.3em;}
                     addressLng: $("#user_longitude").val(),
                 },  
                      beforeSend:function(){  
-                          $('#insert').val("Inserting");  
+                        //   $('.contact-list').val("Creating New Contact...");
+                        $(".contact-list").html('<div class="d-flex justify-content-center mt-4 mb-4"><span class="loadingspinner"></span></div>');  
                      },  
                      success:function(data){ 
-                        var html = '';
-                        if(data.success)
-                            { 
-                                html = '<div class="alert alert-success">' + data.success + '</div>';
-                          $('#insert_form')[0].reset(); 
-                          $('#add_data_Modal').modal('hide');
-                        //    $('#contact_table').html(data); 
-                             }
-                             $('#contact_table').html(data);
-                            // if(data.success)
-                            // {
-                            // html = '<div class="alert alert-success">' + data.success + '</div>';
-                            // $('#insert_form')[0].reset();
-                            // $('#contacts_table').data.reload();
-                            
-                            // $('#add_data_Modal').modal('hide');
-                            
-                            // // $('#contacts_table').reload();
-                            // }
-                            // $('#form_result').html(data);
+                        
+                        $('#insert_form')[0].reset(); 
+                        $('#add_data_Modal').modal('hide');
+                        $('.contact-list').html('');
+                        $('.contact-list').html(data);
 
-                     }  
+                     },
+                     complete: function(data) {
+                        // $(".contact-list").hide();
+                        var message = ' New contact saved.';
+                        var type = 'success';
+                        displayMessage(message, type);
+                        // $(".contact-list").html('<div class="d-flex justify-content-center mt-4 mb-4"><span class="loadingspinner"></span></div>');  
+                       
+                    },
+                    error: function(jqXHR, testStatus, error) {
+                        var message = error+ ' An error occured while trying to save the new contact information.';
+                        var type = 'error';
+                        displayMessage(message, type);
+                        $(".contact-list").html('Failed to save new contact.');
+                    },
+                    timeout: 8000  
                 }); 
         }); 
 
