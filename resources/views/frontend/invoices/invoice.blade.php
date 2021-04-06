@@ -556,15 +556,15 @@
                                                     <span> ₦ {{ number_format( $fixmaster_royalty_value * (($invoice['materials_cost'] + $invoice['labour_cost'])) ) }}</span>
                                                 @endif
                                             </li>
-                                            <li class="text-muted d-flex justify-content-between">Warranty Cost :<span> ₦ {{ number_format($warranty) }}</span></li>
+                                            <li class="text-muted d-flex justify-content-between">Warranty Cost :<span> ₦ {{ number_format($warranty * ($invoice['materials_cost'] + $invoice['labour_cost'])) }}</span></li>
                                             <li class="text-muted d-flex justify-content-between">Logistics :<span> ₦ {{ number_format($logistics) }}</span></li>
                                             <li class="d-flex justify-content-between text-danger">Booking :<span> - ₦ {{ number_format($invoice->serviceRequest->price->amount) }}</span></li>
                                             <li class="d-flex justify-content-between text-danger">Discount :<span> - ₦ {{ number_format( 0.5 * $logistics ) }}</span></li>
-                                            <li class="text-muted d-flex justify-content-between">Taxes :<span> ₦ {{ number_format($tax * (($invoice['materials_cost'] + $invoice['labour_cost']) + $fixmaster_royalty_value * (($invoice['materials_cost'] + $invoice['labour_cost'])) + $warranty + $logistics )) }}</span></li>
+                                            <li class="text-muted d-flex justify-content-between">Taxes :<span> ₦ {{ number_format($tax * (($invoice['materials_cost'] + $invoice['labour_cost']) + $fixmaster_royalty_value * (($invoice['materials_cost'] + $invoice['labour_cost'])) + ($warranty * ($invoice['materials_cost'] + $invoice['labour_cost'])) + $logistics )) }}</span></li>
                                             <li class="d-flex justify-content-between">Total :<span>₦ {{ number_format(
     ($invoice['materials_cost'] + $invoice['labour_cost']) + ( $fixmaster_royalty_value * (($invoice['materials_cost'] + $invoice['labour_cost'])) ) +
     ($warranty) + ($logistics) - ($invoice->serviceRequest->price->amount) - ( 0.5 * $logistics ) +
-    ($tax * (($invoice['materials_cost'] + $invoice['labour_cost']) + $fixmaster_royalty_value * (($invoice['materials_cost'] + $invoice['labour_cost'])) + $warranty + $logistics ))
+    ($tax * (($invoice['materials_cost'] + $invoice['labour_cost']) + $fixmaster_royalty_value * (($invoice['materials_cost'] + $invoice['labour_cost'])) + ($warranty * ($invoice['materials_cost'] + $invoice['labour_cost'])) + $logistics ))
  ) }}</span></li>
                                         </ul>
                                     </div><!--end col-->
@@ -626,6 +626,7 @@
             <form method="POST" action="{{ route('cse.client.decision', app()->getLocale()) }}">
                 @csrf
                 <input type="hidden" name="request_id" value="{{ $serviceRequestID }}">
+                <input type="hidden" name="invoice_id" value="{{ $invoice['id'] }}">
                 <input type="hidden" name="request_uuid" value="{{ $serviceRequestUUID }}">
                 <button class="btn btn-outline-primary" name="client_choice" value="accepted">Client Accept</button>
                 <button class="btn btn-outline-primary" name="client_choice" value="declined">Client Decline</button>
