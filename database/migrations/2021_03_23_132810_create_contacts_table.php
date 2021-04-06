@@ -23,14 +23,12 @@ class CreateContactsTable extends Migration
             //nullable because my contact book dont have user_id
             $table->foreignId('user_id')->index()->nullable();
             // $table->string('name')->nullable();
-            $table->string('first_name');
-            $table->string('middle_name')->nullable();
-            $table->string('last_name')->nullable();
+            $table->string('name');
             // newly added
             $table->foreignId('state_id')->nullable();
             $table->foreignId('lga_id')->nullable();
             $table->foreignId('town_id')->nullable();
-
+            // 
             $table->foreignId('account_id')->index();
             $table->foreignId('country_id')->index();
             $table->tinyInteger('is_default')->nullable();
