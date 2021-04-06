@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\EarningHistory;
 use App\Models\IncomeHistory;
 use Route;
 use Auth;
@@ -107,5 +108,13 @@ class IncomeController extends Controller
             $this->log($type, $severity, $actionUrl, $message);
             return back()->with('error', 'An error occurred');
         }
+    }
+
+    public function history()
+    {
+        return view('admin.income.histories')->with([
+            'earnings' => EarningHistory::latest('updated_at')->get(),
+            'incomes' => IncomeHistory::latest('updated_at')->get()
+        ]);
     }
 }

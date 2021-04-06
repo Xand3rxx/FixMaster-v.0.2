@@ -81,11 +81,12 @@
           </ul>
         </li>
 
-          <li class="nav-item with-sub {{ Route::currentRouteNamed('admin.earnings', 'admin.income') ? 'active show' : '' }}">
+          <li class="nav-item with-sub {{ Route::currentRouteNamed('admin.earnings', 'admin.income', 'admin.income_history') ? 'active show' : '' }}">
               <a href="" class="nav-link"><i data-feather="home"></i> <span>Income/Commission</span></a>
               <ul>
                   <li class="{{ Route::currentRouteNamed('admin.earnings') ? 'active' : '' }}"><a href="{{ route('admin.earnings', app()->getLocale()) }}">Earnings</a></li>
                   <li class="{{ Route::currentRouteNamed('admin.income') ? 'active' : '' }}"><a href="{{ route('admin.income', app()->getLocale()) }}">Income</a></li>
+                  <li class="{{ Route::currentRouteNamed('admin.income_history') ? 'active' : '' }}"><a href="{{ route('admin.income_history', app()->getLocale()) }}">Histories</a></li>
               </ul>
           </li>
 

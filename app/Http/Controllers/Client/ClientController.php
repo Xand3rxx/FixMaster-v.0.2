@@ -11,14 +11,14 @@ use App\Models\PaymentGateway;
 use App\Models\Payment;
 use App\Models\WalletTransaction;
 use App\Models\User;
-use App\Models\Client; 
+use App\Models\Client;
 use App\Models\State;
 use App\Models\Lga;
-use App\Models\ClientDiscount;
-use App\Models\Account; 
-use App\Models\Phone; 
-use App\Models\Address; 
+use App\Models\Account;
+// use App\Models\Phone;
+// use App\Models\Address;
 use App\Models\Contact;
+use App\Models\ClientDiscount;
 use App\Models\Cse;
 use App\Models\ServiceRequestSetting;
 use DB;
@@ -33,12 +33,14 @@ use App\Models\LoyaltyManagement;
 use App\Models\ClientLoyaltyWithdrawal;
 use App\Models\ServiceRequestProgress;
 use App\Models\ServiceRequestCancellation;
+use Session;
 
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\SMTP;
 use PHPMailer\PHPMailer\Exception;
 
-use Session; 
+use App\Http\Controllers\Messaging\MessageController;
+
 
 
 class ClientController extends Controller
@@ -312,12 +314,12 @@ class ClientController extends Controller
         // return view('client.profile', $data);
         // $data['client'] = Client::where('user_id',auth()->user()->id)->first();
         $data['client'] = Client::where('user_id', $request->user()->id)->with('user')->firstOrFail();
-       
+
         // $data['user'] =  User::where('id', auth()->user()->id)->first();
         $data['states'] = State::select('id', 'name')->orderBy('name', 'ASC')->get();
 
         $data['lgas'] = Lga::select('id', 'name')->orderBy('name', 'ASC')->get();
-        // dd($data['lga'] );       
+        // dd($data['lga'] );
         // echo "<pre>";
         // print_r($data['client']->user->phones[0]->number);
         // echo "<pre>";
@@ -330,13 +332,13 @@ class ClientController extends Controller
         $img = $request->file('profile_avater');
         $allowedExts = array('jpg', 'png', 'jpeg');
 
-        $validatedData = $request->validate([            
+        $validatedData = $request->validate([
             'first_name'  => 'required|max:255',
             'middle_name' => 'required|max:255',
             'last_name'   => 'required|max:255',
             'gender'   => 'required',
             'phone_number'   => 'required|max:255',
-            'email'       => 'required|email|max:255', 
+            'email'       => 'required|email|max:255',
         'profile_avater' => [
             function ($attribute, $value, $fail) use ($request, $img, $allowedExts) {
                 if ($request->hasFile('profile_avater')) {
@@ -349,58 +351,58 @@ class ClientController extends Controller
         ],
             'state_id'   => 'required|max:255',
             'lga_id'   => 'required|max:255',
-            'full_address'   => 'required|max:255',           
+            'full_address'   => 'required|max:255',
           ]);
 
          //user table
         $user_data = User::find(auth()->user()->id);
-        $user_data['email'] = $request->email; 
-        $user_data->update(); 
-        // dd($validatedData);        
+        $user_data['email'] = $request->email;
+        $user_data->update();
+        // dd($validatedData);
 
         // update phones
-        $phones = Phone::where('user_id', auth()->user()->id)->orderBy('id','DESC')->first();         
+        $phones = Phone::where('user_id', auth()->user()->id)->orderBy('id','DESC')->first();
         $phones->number = $request->phone_number;
         $phones->update();
         // update address
-        $addresses = Address::where('user_id', auth()->user()->id)->orderBy('id','DESC')->first();         
+        $addresses = Address::where('user_id', auth()->user()->id)->orderBy('id','DESC')->first();
         $addresses->address = $request->full_address;
         $addresses->update();
-        
 
-            //  $client_data = Account::find(auth()->user()->id); 
+
+            //  $client_data = Account::find(auth()->user()->id);
              $client_data = Account::where('user_id', auth()->user()->id)->orderBy('id','DESC')->first();
-            // if ($client_data->user_id) {                
-                //account table                         
+            // if ($client_data->user_id) {
+                //account table
                 $client_data->first_name = $request->first_name;
                 $client_data->middle_name = $request->middle_name;
-                $client_data->last_name = $request->last_name;     
-                $client_data->gender = $request->gender;      
-                
+                $client_data->last_name = $request->last_name;
+                $client_data->gender = $request->gender;
+
                 if($request->hasFile('profile_avater')){
                     $image = $request->file('profile_avater');
                     $imageName = sha1(time()) .'.'.$image->getClientOriginalExtension();
-                    $imagePath = public_path('assets/user-avatars').'/'.$imageName;        
+                    $imagePath = public_path('assets/user-avatars').'/'.$imageName;
                     //Delete old image
                     if(\File::exists(public_path('assets/user-avatars/'.$request->input('old_avatar')))){
                         $done = \File::delete(public_path('assets/user-avatars/'.$request->input('old_avatar')));
                         if($done){
                             // echo 'File has been deleted';
                         }
-                    }        
+                    }
                     //Move new image to `client-avatars` folder
                     Image::make($image->getRealPath())->resize(220, 220)->save($imagePath);
-                    $client_data->avatar = $imageName; 
+                    $client_data->avatar = $imageName;
                 }else{
                     // $imageName = $request->input('old_avatar'); profile_avater
-                    $client_data->avatar = $request->input('old_avatar');                    
+                    $client_data->avatar = $request->input('old_avatar');
                 }
-                    
-                $client_data->state_id = $request->state_id;                      
-                $client_data->lga_id = $request->lga_id;  
+
+                $client_data->state_id = $request->state_id;
+                $client_data->lga_id = $request->lga_id;
                 $client_data->save();
                 // dd($client_data);
-            // } 
+            // }
 
 
         // if($user_data){
@@ -417,34 +419,29 @@ class ClientController extends Controller
         return view('client.wallet', compact('myWallet')+$data);
     }
 
-
-
-
-
     public function walletSubmit(Request $request)
     {
-
         $myWallet    = WalletTransaction::where('user_id', auth()->user()->id)->orderBy('id', 'DESC')->get();
         // validate Request
         $valid = $this->validate($request, [
-            // List of things needed from the request like 
+            // List of things needed from the request like
             // Amount, Payment Channel, Payment for, Reference Id
             'amount'           => 'required',
             'payment_channel'  => 'required',
             'payment_for'      => 'required',
         ]);
-       
+
         // fetch the Client Table Record
         $client = \App\Models\Client::where('user_id', $request->user()->id)->with('user')->firstOrFail();
         // save the reference_id as track in session 
 
-        $generatedVal = $this->generateReference();        
+        $generatedVal = $this->generateReference();
         // call the payment Trait and submit record on the
         $payment = $this->payment($valid['amount'], $valid['payment_channel'], $valid['payment_for'], $client['unique_id'], 'pending', $generatedVal);
         Session::put('Track', $generatedVal);
-        // $client->user()->email(); 
-        if ($payment) {            
-                //   new starts here 
+        // $client->user()->email();
+        if ($payment) {
+                //   new starts here
                 $user_id = auth()->user()->id;
                 $track = Session::get('Track');
                 $pay =  Payment::where('reference_id', $track)->orderBy('id', 'DESC')->first();
@@ -457,8 +454,8 @@ class ClientController extends Controller
                 }
                 $gatewayData = PaymentGateway::where('keyword', $pay->payment_channel)->first();
 
-                // dd($gatewayData); 
-                if ($pay->payment_channel == 'paystack') { 
+                // dd($gatewayData);
+                if ($pay->payment_channel == 'paystack') {
                     $paystack['amount'] = $pay->amount;
                     $paystack['track'] = $track;
                     $title = $gatewayData->name;
@@ -580,6 +577,12 @@ class ClientController extends Controller
                 $walTrans['opening_balance'] = '0';
                 $walTrans['closing_balance'] = $data->amount;
                 $walTrans->save();
+            }else{
+                $walTrans = WalletTransaction::where('user_id', auth()->user()->id)->orderBy('id', 'DESC')->first();
+                $walTrans['opening_balance'] = $walTrans->closing_balance;
+                $walTrans['closing_balance'] = $walTrans->opening_balance + $data->amount;
+                $walTrans->update();
+            }
             // }else{
             //     $walTrans = WalletTransaction::where('user_id', auth()->user()->id)->orderBy('id', 'DESC')->first();
             //     $walTrans['opening_balance'] = $walTrans->closing_balance;
@@ -587,11 +590,11 @@ class ClientController extends Controller
             //     $walTrans->update(); 
             // }
 
-        }
+        
 
-        /** Finally return the callback view for the end user */ 
+        /** Finally return the callback view for the end user */
         return redirect()->route('client.wallet', app()->getLocale())->with('success', 'Fund successfully added!');
-    } 
+    }
 
 
     public function flutterIPN(Request $request)
@@ -602,7 +605,7 @@ class ClientController extends Controller
             $data['status'] = 'success';
             $data->update();
         }
-        
+
         // $track = Session::get('Track');
         $client = \App\Models\Client::where('user_id', $request->user()->id)->with('user')->firstOrFail();
         if (!WalletTransaction::where('unique_id', '=', $client['unique_id'])->exists()) {
@@ -620,7 +623,7 @@ class ClientController extends Controller
             $walTrans = WalletTransaction::where('user_id', auth()->user()->id)->orderBy('id', 'DESC')->first();
             $walTrans['opening_balance'] = $walTrans->closing_balance;
             $walTrans['closing_balance'] = $walTrans->opening_balance + $data->amount;
-            $walTrans->update(); 
+            $walTrans->update();
         }
         // dd()
         return redirect()->route('client.wallet', app()->getLocale())->with('success', 'Fund successfully added!');
@@ -665,10 +668,48 @@ class ClientController extends Controller
         // ]
         // dd($data['balance']->closing_balance );
         // dd($data['discounts'] );
+        $data['states'] = State::select('id', 'name')->orderBy('name', 'ASC')->get();
+
+        // $data['lgas'] = Lga::select('id', 'name')->orderBy('name', 'ASC')->get();
+
         //Return Service details     
         $data['myContacts'] = Contact::where('user_id', auth()->user()->id)->get();   
         // dd($data['myContacts']);
+
+        $data['registeredAccount'] = Account::where('user_id', auth()->user()->id)
+                                    ->with('usercontact')
+                                    ->orderBy('id','DESC')
+                                    ->firstOrFail();  
+                                    // dd($data['registeredAccount']);
         return view('client.services.quote', $data);
+    }
+
+    function ajax_contactForm(Request $request){
+        // $clientAccount = new Account; 
+
+        $clientContact = new Contact; 
+        $clientContact->user_id   = auth()->user()->id;
+        $clientContact->name      = $request->firstName.' '.$request->lastName;
+        $clientContact->state_id  = $request->state;
+        $clientContact->lga_id    = $request->lga;
+        $clientContact->town_id    = $request->town;
+        $client  = Client::where('user_id',auth()->user()->id)->orderBy('id','DESC')->firstOrFail();
+        $clientContact->account_id  = $client->account_id;
+        $clientContact->country_id    = '156';
+        $clientContact->is_default        = '1';
+        $clientContact->phone_number       = $request->phoneNumber;
+        $clientContact->address            = $request->streetAddress;
+        $clientContact->address_longitude  = $request->addressLat;
+        $clientContact->address_latitude   = $request->addressLng;
+        if ($clientContact->save()) {
+            // return back()->with('success', 'New contact saved');
+            return response()->json(['success' => 'Data Added successfully.']);
+        } else{
+            return back()->with('error', 'sorry!, an error occured please try again');
+        } 
+        
+       
+
     }
 
     // $serviceRequests = ServiceRequestAssigned::where('user_id', Auth::id())->with('service_request')->get();
@@ -676,18 +717,35 @@ class ClientController extends Controller
     // return $serviceRequests;
 
     public function serviceRequest(Request $request){
+        // $validatedData = $request->validate([
+        //     'service_fee'               =>   'required',
+        //     'description'               =>   'required',
+        //     'timestamp'                 =>   'required',
+        //     'phone_number'              =>   'required',
+        //     'address'                   =>   'required',
+        //     'payment_method'            =>   'required',
+        //   ]);
+
+            $all = $request->all();
+            dd($all);
+
         $validatedData = $request->validate([            
             'balance'                   =>   'required',
-            // 'booking_fee'               =>   'required',
-            'timestamp'                 =>   'required',
+            'booking_fee'               =>   'required',
+            // 'timestamp'                 =>   'required',
             'payment_method'            =>   'required',          
+            'myContact_id'            =>   'required',          
           ]);
         
-            $all = $request->all();
+            $all = $request->all(); 
             // dd($all);
 
             // if payment method is wallet
             if($request->payment_method == 'Wallet'){
+                if($request->balance<$request->booking_fee){
+
+                    $service_request                        = new Servicerequest;
+                    $service_request->cliend_id             = auth()->user()->id;
                 // if wallet balance is less than the service fee
                 if($request->balance > $request->booking_fee){
                     $service_request                        = new Servicerequest;  
@@ -695,55 +753,22 @@ class ClientController extends Controller
                     $service_request->client_id             = auth()->user()->id;
                     $service_request->service_id            = $request->service_id;
                     $service_request->unique_id             = 'REF-'.$this->generateReference();
+                    $service_request->state_id              = $request->state_id;
+                    $service_request->lga_id                = $request->lga_id;
+                    $service_request->town_id               = $request->town_id;
                     $service_request->price_id              = $request->price_id;
-                    $service_request->phone_id              = $request->phone_number;
-                    $service_request->address_id            = $request->address;
+                    $service_request->contact_id              = $request->myContact_id;
                     $service_request->client_discount_id    = $request->client_discount_id;
                     $service_request->client_security_code  = 'SEC-'.strtoupper(substr(md5(time()), 0, 8));
                     $service_request->status_id             = '1';
                     $service_request->description           = $request->description;
+                    $service_request->total_amount          = $request->booking_fee;
+                    $service_request->preferred_time        = date("Y-m-d"); //fix this later before pushing
+                    $service_request->has_client_rated      = 'No';
+                    $service_request->has_cse_rated         = 'No';
+                    // dd($service_request);
+                    if ($service_request->save()) {
 
-                    $theDiscount = ClientDiscount::with('discount')->orderBy('id','DESC')->firstOrFail();
-                    if ($service_request->client_discount_id == '1') {                
-                        $service_request->total_amount          = $request->booking_fee;
-                        // $service_request->total_amount          = (100 - $theDiscount->discount->rate ) / 100 * $request->booking_fee  ;
-                    
-                        // $user_data = ClientDiscount::find(auth()->user()->id);
-                        // $client_discount = ClientDiscount::where('client_id', auth()->user()->id)->orderBy('id','DESC')->firstOrFail();
-                        // $client_discount['availability'] = 'used'; 
-                        // $client_discount->update();
-                        
-                    }else {
-                        $service_request->total_amount          = $request->booking_fee;
-                    }                   
-                    // $var = $request->timestamp;
-                    // $formattedDate = str_replace('/', '-', $var); 
-
-                    $service_request->preferred_time        = date("Y-m-d");
-
-                    $client = \App\Models\Client::where('user_id', $request->user()->id)->with('user')->orderBy('id','DESC')->firstOrFail();
-                    // dd($client->user->account->state_id);
-
-                    if ($request->use_my_address === 'yes') {
-                        // dd($client->user->contact->state_id);
-                        $service_request->state_id        = $client->user->account->state_id;
-                        $service_request->lga_id          = $client->user->account->lga_id;
-                        
-                    // }elseif ($service_request->use_my_address == null) {
-                        # else...
-                        // $service_request->state_id        = $request->alternate_address;
-                        // $service_request->lga_id          = $request->alternate_address;
-                    }
-                    if ($request->use_my_phone_number == 'yes') { 
-                        $service_request->phone_id        = $client->user->contact->id;
-                        $service_request->address_id      = $client->user->contact->id;
-                    // }elseif ($service_request->use_my_phone_number == null) {
-                        # else...
-                        // $service_request->state_id        = $request->alternate_phone_number;
-                    }
-                    // $service_request->town_id         = '';
-                    $service_request->save();
-                   
                     // fetch the Client Table Record
                     $client = \App\Models\Client::where('user_id', $request->user()->id)->with('user')->firstOrFail();
                     // generate reference string for this transaction            
@@ -753,175 +778,134 @@ class ClientController extends Controller
                     // save the reference_id as track in session 
                     Session::put('Track', $generatedVal);
 
-                    if ($payment) {            
-                        //   new starts here 
-                        $user_id = auth()->user()->id;
-                        $track = Session::get('Track');
-                        $pay =  Payment::where('reference_id', $track)->orderBy('id', 'DESC')->first();
-                        //save to the wallet transaction table
-                        if ($pay) {
-                            $wallet_transaction = new WalletTransaction;
-                            $wallet_transaction->user_id = auth()->user()->id; 
-                            $wallet_transaction->payment_id = $pay->id; 
-                            $wallet_transaction->amount = $pay->amount; 
-                            $wallet_transaction->payment_type = $pay->payment_for; 
-                            $wallet_transaction->unique_id = $pay->unique_id; 
-                            $wallet_transaction->transaction_type = 'credit'; 
-                            $wallet_transaction->opening_balance = $request->balance; 
-                            $wallet_transaction->closing_balance = $request->balance - $pay->amount; 
-                            $wallet_transaction->status = 'success';
-                            $wallet_transaction->save();
+                        if ($payment) {            
+                            //   new starts here 
+                            $user_id = auth()->user()->id;
+                            $track = Session::get('Track');
+                            $pay =  Payment::where('reference_id', $track)->orderBy('id', 'DESC')->first();
+                            //save to the wallet transaction table
+                            if ($pay) {
+                                $wallet_transaction = new WalletTransaction;
+                                $wallet_transaction->user_id = auth()->user()->id; 
+                                $wallet_transaction->payment_id = $pay->id; 
+                                $wallet_transaction->amount = $pay->amount; 
+                                $wallet_transaction->payment_type = $pay->payment_for; 
+                                $wallet_transaction->unique_id = $pay->unique_id; 
+                                $wallet_transaction->transaction_type = 'credit'; 
+                                $wallet_transaction->opening_balance = $request->balance; 
+                                $wallet_transaction->closing_balance = $request->balance - $pay->amount; 
+                                $wallet_transaction->status = 'success';
+                                $wallet_transaction->save();
+    
+                                // $this->getDistanceDifference();
+    
+                                // return back()->with('success', 'Success! Transaction was successful and your request has been placed.');
+                            }                        
+                        }
+                        return back()->with('success', 'Service Request Successful');
+                        // return response()->json(['success' => 'Service Request Successful.']);
+                   
+                   
+                    } else{
+                        return back()->with('error', 'sorry!, an error occured please try again');
+                    } 
 
-                            // $this->getDistanceDifference();
 
-                            return back()->with('success', 'Success! Transaction was successful and your request has been placed.');
-                        }                        
-                    }
+
                     
                 }else{
+                        Session::flash('alert', 'sorry!, service amount is less than wallet balance');
+                    }
+                }
+                if ($request->payment_method == 'Offline') {
+                    // $this->requestForService();
+                    echo 'denk';
                      return back()->with('error', 'Sorry!, your current wallet balance is less than the booking fee. Please use other payment methods.');
                     }           
-                } 
-                if ($request->payment_method == 'Online') {
-                    return back()->with('error', 'online payment coming soon');
-                } else{
-                    return back()->with('error', 'sorry!, an error occured please try again');
-                  } 
+            } 
 
-                if ($request->payment_method == 'Offline') {
-                    return back()->with('error', 'please send us a ticket with your payment reference, we would contact you');
-                } else{
-                    return back()->with('error', 'sorry!, an error occured please try again');                    
-                }
+
+            if ($request->payment_method == 'Online') {
+                return back()->with('error', 'online payment coming soon');
+            } else{
+                return back()->with('error', 'sorry!, an error occured please try again');
+                } 
+
             }
             
             public function getDistanceDifference(Request $request){
-
+                $the_message = new MessageController;
+                        $type = 'email';
+                        $subject = 'new job notice';
+                        $from = 'client@fix-master.com';
+                        $to = 'cse@fix-master.com';
+                        $mail_data = ["firstname"=>"Olaoluwa", "url"=>"www.google.com"];
+                        $feature = 'NEW_JOB_NOTIFICATION';
+                // $the_message->sendMessage( $type, $subject, $from, $to, $mail_data, $feature);
+                $the_message->sendNewMessage( $type, $subject, $from, $to, $mail_data, $feature);
                 $client = Client::where('user_id', $request->user()->id)->with('user')->orderBy('id','DESC')->firstOrFail();
 
-                // $latitude  = '3.921007';
-                $latitude  = $client->user->contact->address_latitude;
-                // $longitude = '1.8386';
-                $longitude = $client->user->contact->address_longitude;
-                // $radius    = 325;
-                $radius        = ServiceRequestSetting::find(1)->radius;   
+                // // $latitude  = '3.921007';
+                // $latitude  = $client->user->contact->address_latitude;
+                // // $longitude = '1.8386';
+                // $longitude = $client->user->contact->address_longitude;
+                // // $radius    = 325;
+                // $radius        = ServiceRequestSetting::find(1)->radius;   
 
-                $cse = DB::table('cses')
-                ->join('contacts', 'cses.user_id','=','contacts.user_id')
-                ->join('users', 'cses.user_id', '=', 'users.id')              
-                ->join('accounts', 'cses.user_id', '=', 'accounts.user_id')              
-                // // ->select(DB::raw('contacts.*,1.609344 * 3956 * 2 * ASIN(SQRT( POWER(SIN((" . $latitude . " - abs(address_latitude)) *  pi()/180 / 2), 2) + COS(" . $latitude . " * pi()/180) * COS(abs(address_latitude) * pi()/180) * POWER(SIN((" . $longitude . " - address_longitude) * pi()/180 / 2), 2)  )) AS calculatedDistance'))
-                ->select(DB::raw('cses.*, contacts.address, accounts.first_name, users.email,  6353 * 2 * ASIN(SQRT( POWER(SIN(('.$latitude.' - abs(address_latitude)) * pi()/180 / 2),2) + COS('.$latitude.' * pi()/180 ) * COS(abs(address_latitude) *  pi()/180) * POWER(SIN(('.$longitude.' - address_longitude) *  pi()/180 / 2), 2) )) as distance'))
-                ->having('distance', '<=', $radius)
-                ->orderBy('distance', 'DESC')
-                ->get();
+                // $cse = DB::table('cses')
+                // ->join('contacts', 'cses.user_id','=','contacts.user_id')
+                // ->join('users', 'cses.user_id', '=', 'users.id')              
+                // ->join('accounts', 'cses.user_id', '=', 'accounts.user_id')              
+                // // // ->select(DB::raw('contacts.*,1.609344 * 3956 * 2 * ASIN(SQRT( POWER(SIN((" . $latitude . " - abs(address_latitude)) *  pi()/180 / 2), 2) + COS(" . $latitude . " * pi()/180) * COS(abs(address_latitude) * pi()/180) * POWER(SIN((" . $longitude . " - address_longitude) * pi()/180 / 2), 2)  )) AS calculatedDistance'))
+                // ->select(DB::raw('cses.*, contacts.address, accounts.first_name, users.email,  6353 * 2 * ASIN(SQRT( POWER(SIN(('.$latitude.' - abs(address_latitude)) * pi()/180 / 2),2) + COS('.$latitude.' * pi()/180 ) * COS(abs(address_latitude) *  pi()/180) * POWER(SIN(('.$longitude.' - address_longitude) *  pi()/180 / 2), 2) )) as distance'))
+                // ->having('distance', '<=', $radius)
+                // // ->having('town', '=', '')
+                // ->orderBy('distance', 'DESC')
+                // ->get();
                
-                // if ( count($cse) > 0) {
-                    // dd($cse);
-                    foreach ($cse as $key => $cses){
-                        // dd($cses['email']);
-                        // echo $cse[$key]->email;
-                    
+                // // if ( count($cse) > 0) {
+                //     // dd($cse);
+                //     foreach ($cse as $key => $cses){
+                //         // dd($cses['email']);
+                //         dd($cses);
+                // }
 
-                        $mail = new PHPMailer;
-                        $mail->isSMTP();                            // Set mailer to use SMTP
-                        $mail->Host = 'smtp.gmail.com';              // Specify main and backup SMTP servers
-                        $mail->SMTPAuth = true;                     // Enable SMTP authentication
-                        $mail->Username = 'denkogy@gmail.com'; // your email id
-                        $mail->Password = 'Chemistry!1'; // your password
-                        $mail->SMTPSecure = 'tls';                  
-                        $mail->Port = 587;     //587 is used for Outgoing Mail (SMTP) Server.
-                        $mail->setFrom('denkogy@gmail.com', 'Name');
-                        $mail->addAddress('denkogee@yahoo.com');   // Add a recipient
-                        $mail->isHTML(true);  // Set email format to HTML
-        
-                        $bodyContent = '<h1>HeY!,</h1>';
-                        $bodyContent .= '<p>This is a email that Radhika send you From LocalHost using PHPMailer</p>';
-                        $mail->Subject = 'Email from Localhost by Radhika';
-                        $mail->Body    = $bodyContent;
-                        if(!$mail->send()) {
-                        echo 'Message was not sent.';
-                        echo 'Mailer error: ' . $mail->ErrorInfo;
-                        } else {
-                        echo 'Message has been sent.';
-                        }
-
-                    // $mail = new PHPMailer(true);
-
-                    // try {
-                    //     //Server settings
-                    //     $mail->SMTPDebug = SMTP::DEBUG_SERVER;                      //Enable verbose debug output
-                    //     $mail->isSMTP();                                            //Send using SMTP
-                    //     $mail->Host       = 'smtp.gmail.com';                     //Set the SMTP server to send through
-                    //     $mail->SMTPAuth   = true;                                   //Enable SMTP authentication
-                    //     $mail->Username   = 'denkogy@gmail.com';                     //SMTP username
-                    //     $mail->Password   = 'Chemistry!1';                               //SMTP password
-                    //     $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;         //Enable TLS encryption; `PHPMailer::ENCRYPTION_SMTPS` encouraged
-                    //     $mail->Port       = 587;                                    //TCP port to connect to, use 465 for `PHPMailer::ENCRYPTION_SMTPS` above
-                    
-                    //     //Recipients
-                    //     $mail->setFrom('denkogy@gmail.com', 'New Request!');
-
-                    //     // for ($i=0; $i < count($cse); $i++) { 
-                    //         // echo json_encode($cse[$i]["email"]);
-                    //         // echo $cse[$i]->email;
-                    //         $mail->addAddress($cse[$key]->email);
-                    //     // }                       
-                    // $denko = 'Denkogee';
-                    //     //Content
-                    //     $mail->isHTML(true);        
-                    //     $mail->Subject = 'Request Successful!';
-                    //      $mail->Body  = 'First Name: <strong>' .$denko. 
-                    //                       '<br/>';
-                    //             $mail->send();
-                    //                 if ( $mail->send() ) { 
-                    //                 return back()->with('success', 'Your Request has been sent Successful');
-                    //                 }
-                    //             echo 'Message has been sent';
-                    //         } catch (Exception $e) {
-                    //             echo "Message could not be sent. Mailer Error: {$mail->ErrorInfo}";
-                    //         }
-                }
             }
             // }
 
 
             public function sendMailToAdmin(Request $request){
                 $mail = new PHPMailer(true);
-                $user = Auth::user();
     
                 // dd($setting);
                 // if ($setting->is_smtp == 1) {    
-                //     try {
-                //         //Server settings
-                //         $mail->SMTPDebug = SMTP::DEBUG_SERVER;                      //Enable verbose debug output
-                //         $mail->isSMTP();                                            //Send using SMTP
-                //         $mail->Host       = 'smtp.gmail.com';                     //Set the SMTP server to send through
-                //         $mail->SMTPAuth   = true;                                   //Enable SMTP authentication
-                //         $mail->Username   = 'denkogy@gmail.com';                     //SMTP username
-                //         $mail->Password   = 'Chemistry!1';                               //SMTP password
-                //         $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;         //Enable TLS encryption; `PHPMailer::ENCRYPTION_SMTPS` encouraged
-                //         $mail->Port       = 587;                                    //TCP port to connect to, use 465 for `PHPMailer::ENCRYPTION_SMTPS` above
+                    try {
+                        //Server settings
+                        $mail->SMTPDebug = SMTP::DEBUG_SERVER;                      //Enable verbose debug output
+                        $mail->isSMTP();                                            //Send using SMTP
+                        $mail->Host       = 'smtp.gmail.com';                     //Set the SMTP server to send through
+                        $mail->SMTPAuth   = true;                                   //Enable SMTP authentication
+                        $mail->Username   = 'denkogy@gmail.com';                     //SMTP username
+                        $mail->Password   = 'Chemistry!1';                               //SMTP password
+                        $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;         //Enable TLS encryption; `PHPMailer::ENCRYPTION_SMTPS` encouraged
+                        $mail->Port       = 587;                                    //TCP port to connect to, use 465 for `PHPMailer::ENCRYPTION_SMTPS` above
                     
-                //         //Recipients
-                //         $mail->setFrom('denkogy@gmail.com', 'New Order Placed!!!');
-                //         $mail->addAddress($request->email, $request->FirstName);
+                        //Recipients
+                        $mail->setFrom('denkogy@gmail.com', 'New Order Placed!!!');
+                        $mail->addAddress($request->email, $request->FirstName);
                     
-                //         //Content
-                //         $mail->isHTML(true);        
-                //         $mail->Subject = 'Request Successful!';
-                //          $mail->Body  = 'First Name: <strong>' .$request['f_name']. 
-                //                           '<br/>
-                //                           Last Name: <strong>' .$request->LastName.  
-                //                           '<br/>';
-                //                 $mail->send();
-                //                     if ( $mail->send() ) { 
-                //                     return back()->with('success', 'Your Request has been sent Successful');
-                //                     }
-                //                 echo 'Message has been sent';
-                //             } catch (Exception $e) {
-                //                 echo "Message could not be sent. Mailer Error: {$mail->ErrorInfo}";
-                //             }    
+                        //Content
+                        $mail->isHTML(true);        
+                        $mail->Subject = 'Request Successful!';
+                         $mail->Body  = 'First Name:';
+                                $mail->send();
+                                    if ( $mail->send() ) { 
+                                    return back()->with('success', 'Your Request has been sent Successful');
+                                    }
+                                echo 'Message has been sent';
+                            } catch (Exception $e) {
+                                echo "Message could not be sent. Mailer Error: {$mail->ErrorInfo}";
+                            }    
                 // }
             }
 
@@ -936,9 +920,9 @@ class ClientController extends Controller
     }
     /**
      * Search and return a list of FixMaster services.
-     * This is an ajax call to sort all FixMaster services 
+     * This is an ajax call to sort all FixMaster services
      * present on change of Category select dropdown
-     * 
+     *
      * @return \Illuminate\Http\Response
      */
     public function search($language, Request $request){
@@ -953,7 +937,7 @@ class ClientController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function customService(){
-        
+
     }
 
     /**
@@ -967,25 +951,48 @@ class ClientController extends Controller
     //     return $myContacts;
     // }
 
+    // public function index(){
+
+    //     $userServiceRequests = Auth::user()->requests()->orderBy('created_at', 'DESC')->get();
+
+    //     $createdBy = Name::get();
+
+    //     $data = [
+    //         'userServiceRequests'   =>  $userServiceRequests,
+    //         'createdBy'             =>  $createdBy,
+    //     ];
+
+    //     return view('client.requests', $data)->with('i');
+    // }
+
+
     public function myServiceRequest(){
         $myRequest = Client::where('user_id', auth()->user()->id)->with('service_request')->firstOrFail();
         $data['myServiceRequests'] = $myRequest->service_request;
         // return $data['myServiceRequests'];
         return view('client.services.list', $data);
-
     }
+
+    // public function requestDetails($ref){
+    //     $requestDetail = ServiceRequest::findOrFail($ref);
+    //     // return $requestDetail->cse;
+    //     $data = [
+    //         'requestDetail'   =>  $requestDetail,
+    //     ];
+    //     return view('client.request_details', $data);
+    // }
 
     public function loyalty()
     {
         $data['title']     = 'Fund your Loyalty wallet';
         $data['loyalty']   = ClientLoyaltyWithdrawal::select('wallet', 'withdrawal')->where('client_id', auth()->user()->id)->first();
         $total_loyalty    = LoyaltyManagement::selectRaw('SUM(amount) as amounts, SUM(points) as total_points, COUNT(amount) as total_no_amount')->where('client_id', auth()->user()->id)->get();
-      
+
         $data['total_loyalty'] = ($total_loyalty[0]->total_points *  $total_loyalty[0]->amounts ) / ($total_loyalty[0]->total_no_amount * 100);
 
         $json = $data['loyalty']->withdrawal != NULL? json_decode($data['loyalty']->withdrawal): [];
-      
-       
+
+
         $ifwithdraw = isset($json->withdraw)? $json->withdraw: '';
         $ifwithdraw_date = isset($json->date)? $json->date: '';
         $data['withdraws']=  empty($json) ? [] : (is_array($ifwithdraw) ? $ifwithdraw : [ 0 => $ifwithdraw]);
@@ -1003,16 +1010,16 @@ class ClientController extends Controller
         return view('client.loyalty', compact('myWallet')+$data);
     }
 
-  
+
     public function loyaltySubmit(Request $request)
-    { 
-    
+    {
+
        $wallet  = ClientLoyaltyWithdrawal::select('wallet', 'withdrawal')->where('client_id', auth()->user()->id)->first();
        if($wallet->withdrawal != NULL){
         $other_withdrawals = json_decode($wallet->withdrawal, true);
         $withdrawal = array_merge_recursive($other_withdrawals,  ['withdraw' => $request->amount, 'date'=> date('Y-m-d h:m:s')]);
        }
- 
+
        if($wallet->withdrawal == NULL){
         $withdrawal = [
             'withdraw' => $request->amount,
@@ -1022,7 +1029,7 @@ class ClientController extends Controller
 
        if((float)$wallet->wallet > (float)$request->amount){
         $client = Client::where('user_id', auth()->user()->id)->first();
-        $generatedVal = $this->generateReference();        
+        $generatedVal = $this->generateReference();
         $payment = $this->payment($request->amount, 'loyalty', 'e-wallet', $client->unique_id, 'success', $generatedVal);
         if($payment){
 
@@ -1042,21 +1049,27 @@ class ClientController extends Controller
             'withdrawal'=> json_encode($withdrawal),
             'wallet'=>  $update_wallet
              ]);
-            
+
              return redirect()->route('client.loyalty', app()->getLocale())
              ->with('success', 'Funds transfered  successfully ');
 
        }else{
-   
+
         return redirect()->route('client.loyalty', app()->getLocale())
         ->with('error', 'Insufficient Loyalty Wallet Balance');
 
        }
 
     }
-   
-        
+
+
     }
 
+    public function payments()
+    {
+        return view('client.payment.list')->with([
+            'payments' => \App\Models\Payment::where('user_id', auth()->user()->id)->orderBy('id', 'DESC')->get(),
+        ]);
+    }
 
 }
