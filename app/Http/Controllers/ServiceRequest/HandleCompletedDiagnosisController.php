@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\ServiceRequest;
 
+use App\Http\Controllers\Messaging\MessageController;
 use App\Models\Income;
 use App\Models\SubService;
 use App\Models\Tax;
@@ -22,7 +23,7 @@ class HandleCompletedDiagnosisController extends Controller
      * @param  \App\Models\ServiceRequest   $serviceRequest
      * @param  \App\Models\SubStatus        $substatus
      *
-     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View|\Illuminate\Http\RedirectResponse
+     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View|\Illuminate\Http\JsonResponse
      * @throws \Illuminate\Validation\ValidationException
      */
     public function generateDiagnosisInvoice(Request $request, \App\Models\ServiceRequest $serviceRequest, \App\Models\SubStatus $substatus)
@@ -68,6 +69,7 @@ class HandleCompletedDiagnosisController extends Controller
                         'amount'            => 0.00
                     ]);
                 }
+                $this->rfqInvoice($serviceRequest->id, $rfq->id);
                 $this->log('request', 'Informational', Route::currentRouteAction(), auth()->user()->account->last_name . ' ' . auth()->user()->account->first_name  . ') Job.');
             });
         }
@@ -103,10 +105,13 @@ class HandleCompletedDiagnosisController extends Controller
         // $invoice = $this->diagnosticInvoice($serviceRequest_id);
         $subServiceId = SubService::select('id')->where('uuid', $request->sub_service_uuid)->first();
 
+        // Check if an rfq id exists
         $rfq = $request['intiate_rfq'] == 'yes' ? $rfq->id : null;
 
+        // Generate the diagnosis invoice
         $invoice = $this->diagnosisInvoice($serviceRequest->id, $rfq, $subServiceId->id, $request->estimated_work_hours);
 
+        // Get the values that will be poulated in the invoice
         $get_fixMaster_royalty = Income::select('amount', 'percentage')->where('income_name', 'FixMaster Royalty')->first();
         $get_logistics = Income::select('amount', 'percentage')->where('income_name', 'Logistics Cost')->first();
         $get_taxes = Tax::select('percentage')->where('name', 'VAT')->first();
@@ -119,6 +124,7 @@ class HandleCompletedDiagnosisController extends Controller
         $fixMasterRoyalty = $fixMaster_royalty_value * ($serviceCharge);
         $tax_cost = $tax * ($serviceCharge + $logistics_cost + $fixMasterRoyalty);
         $total_cost = $serviceCharge + $fixMasterRoyalty + $tax_cost + $logistics_cost;
+        //End here
 
 
         // Saving completed Diagnosis
@@ -129,6 +135,17 @@ class HandleCompletedDiagnosisController extends Controller
         // 1. Service progressess
         $this->log('request', 'Informational', Route::currentRouteAction(), auth()->user()->account->last_name . ' ' . auth()->user()->account->first_name . ' ' . $substatus->name . ' for (' . $serviceRequest->unique_id . ') Job.');
 
+        //Send mail notification to client to preview the invoice
+        if($invoice)
+        {
+           $type = 'email';
+           $subject = 'Diagnosis Email Confirmation';
+           $from = auth()->user()->email;
+           $to = $invoice->serviceRequest->client->email;
+           $mail_data = '<div><span>Kindly check your dashboard for your diagnosis completion invoice. Thank you.</span></div>';
+//           return $this->sendNewEMail($type, $subject, $from, $to, $mail_data,$feature="");
+        }
+
         // store in the activity log
 
         return view('frontend.invoices.invoice')->with([
@@ -137,10 +154,19 @@ class HandleCompletedDiagnosisController extends Controller
             'serviceRequestID' => $serviceRequest->id,
             'serviceRequestUUID' => $serviceRequest->uuid,
             'fixmaster_royalty' => $fixMasterRoyalty,
+            'fixmaster_royalty_value' => $fixMaster_royalty_value,
+            'warranty' => 0,
             'get_fixMaster_royalty' => $get_fixMaster_royalty,
             'taxes' => $tax_cost,
+            'tax' => $tax,
             'logistics' => $logistics_cost,
             'total_cost' => $total_cost
         ]);
+    }
+
+    protected function sendNewEmail($type, $subject, $from, $to, $mail_data, $feature)
+    {
+        $sendMail = new MessageController();
+        return $sendMail->sendNewMessage($type, $subject, $from, $to, $mail_data, $feature);
     }
 }
