@@ -69,7 +69,7 @@
                                     <a href="" class="dropdown-link" data-toggle="dropdown"><i data-feather="more-vertical"></i></a>
                                     <div class="dropdown-menu dropdown-menu-right">
                                        <a href="javascript:void(0)" data-target="#view{{$myServiceRequest->service->id }}" data-toggle="modal" class="dropdown-item details text-primary" title="View {{ $myServiceRequest->service->name}} details"><i class="far fa-clipboard"></i> Details</a>
-                                        @if(\App\Models\Invoice::where('service_request_id', $myServiceRequest->service->id)->count() > 0)
+                                        @if(\App\Models\Invoice::where('service_request_id', $myServiceRequest->service->id)->where('phase', '1')->count() > 0 || \App\Models\Invoice::where('service_request_id', $myServiceRequest->service->id)->where('phase', '2')->count() > 0)
                                         <hr>
                                         @foreach(\App\Models\Invoice::where('service_request_id', $myServiceRequest->service->id)->where('phase', '1')->where('invoice_type', 'Diagnosis Invoice')->orWhere('invoice_type', 'Completion Invoice')->get() as $invoice)
                                             <a href="{{ route('invoice', ['locale' => app()->getLocale(), 'invoice' => $invoice['uuid']]) }}" class="dropdown-item details text-info"><i data-feather="file-text" class="fea icon-sm"></i> View {{ $invoice['invoice_type'] }}</a>

@@ -26,15 +26,32 @@ class ClientDecisionController extends Controller
             $invoice->update([
                 'phase' => '0'
             ]);
-            return redirect()->route('cse.requests.show', [app()->getLocale(), $request->request_uuid]);
+
+            if(auth()->user()->type->role->url == 'client')
+            {
+                return redirect()->route('client.service.all', app()->getLocale())->with('success', 'Diagnosis Invoice Accepted');
+            }
+            else
+            {
+                return redirect()->route('cse.requests.show', [app()->getLocale(), $request->request_uuid])->with('success', 'Diagnosis Invoice Accepted');
+            }
+
         }
         else if($request['client_choice'] == 'declined')
         {
             \App\Models\ServiceRequestProgress::storeProgress(auth()->user()->id, $request->request_id, 2, $clientDeclinedId->id);
             $invoice->update([
-                'phase' => '1'
+                'phase' => '2'
             ]);
-            return redirect()->route('cse.requests.show', [app()->getLocale(), $request->request_uuid]);
+
+            if(auth()->user()->type->role->url == 'client')
+            {
+                return redirect()->route('client.service.all', app()->getLocale())->with('success', 'Diagnosis Invoice Accepted');
+            }
+            else
+            {
+                return redirect()->route('cse.requests.show', [app()->getLocale(), $request->request_uuid])->with('success', 'Diagnosis Invoice Accepted');
+            }
         }
     }
 }

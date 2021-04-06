@@ -305,13 +305,13 @@ Route::prefix('/client')->group(function () {
         Route::get('/requests/edit/{id}',          [ClientController::class, 'edit'])->name('client.edit_request');
         Route::put('/requests/update/{id}',        [ClientController::class, 'update'])->name('client.update_request');
 
-                
+
         Route::post('servicesRequest',              [ClientController::class, 'serviceRequest'])->name('services.serviceRequest');
         // post my contact to DB
         Route::post('/ajax_contactForm',            [ClientController::class, 'ajax_contactForm'])->name('ajax_contactForm');
-        
 
-            
+
+
             Route::get('myContactList',                  [ClientController::class, 'myContactList'])->name('service.myContacts');
 
         //Flutterwave Routes
@@ -356,8 +356,6 @@ Route::prefix('/cse')->group(function () {
         Route::post('project-progress', [ProjectProgressController::class, '__invoke'])->name('project.progress.update');
 
         // Route::view('/requests',            'cse.requests')->name('requests');
-
-        Route::post('client-decision', [ClientDecisionController::class, '__invoke'])->name('client.decision');
 
         Route::view(
             '/request/details',
