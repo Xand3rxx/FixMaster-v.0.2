@@ -178,7 +178,7 @@ tbody td:last-child, thead th:last-child {
     <!--end col-->
     <div class="col-md-6">
         <div class="form-group position-relative">
-            <label>Date & Time :<span class="text-danger">*</span></label>
+            <label>Date & Time :</label>
             <i data-feather="calendar" class="fea icon-sm icons"></i>
             <input name="timestamp" type="text" class="form-control pl-5 @error('timestamp') is-invalid @enderror" placeholder="Click to select :" id="service-date-time" readonly value="{{ old('timestamp') }}" />
             @error('timestamp')
@@ -438,7 +438,7 @@ $(window).resize(function() {
                     town: $("#town_id").val(),
                     addressLat: $("#user_latitude").val(),
                     addressLng: $("#user_longitude").val(),
-                },  
+                    },  
                      beforeSend:function(){  
                         //   $('.contact-list').val("Creating New Contact...");
                         $(".contact-list").html('<div class="d-flex justify-content-center mt-4 mb-4"><span class="loadingspinner"></span></div>');  

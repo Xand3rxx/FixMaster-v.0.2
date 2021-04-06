@@ -609,7 +609,7 @@ class ClientController extends Controller
                     $service_request->preferred_time        = date("Y-m-d"); //fix this later before pushing
                     $service_request->has_client_rated      = 'No';
                     $service_request->has_cse_rated         = 'No';
-                    // dd($service_request);
+                    dd($service_request);
                     if ($service_request->save()) {
 
                     // fetch the Client Table Record
@@ -653,9 +653,6 @@ class ClientController extends Controller
                         return back()->with('error', 'sorry!, an error occured please try again');
                     } 
 
-
-
-                    
                 }else{
                         Session::flash('alert', 'sorry!, service amount is less than wallet balance');
                     }
