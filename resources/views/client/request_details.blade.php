@@ -5,7 +5,7 @@
 
 <div class="col-lg-8 col-12">
     <div class="float-right mt-4">
-        <a href="{{ route('client.requests', app()->getLocale()) }}" class="btn btn-sm btn-primary">Back </a>
+        <a href="{{ route('client.service.all', app()->getLocale()) }}" class="btn btn-sm btn-primary">Back </a>
         @if($requestDetail->status_id == '1')
         <a href="#editRequest" id="edit-request" data-toggle="modal" data-url="{{ route('client.edit_request', [ 'request'=>$requestDetail->uuid, 'locale'=>app()->getLocale() ])}}" data-job-reference="{{ $requestDetail->unique_id  }}" class="btn btn-sm btn-warning">Edit Request </a>
 
