@@ -393,7 +393,7 @@ class ClientController extends Controller
             die('Api returned Error ' . $trans->message);
         }
 
-        /** If the transaction stats are successful snd to DB */
+        /** If the transaction status are successful send to DB */
         if ($data->status == 'pending') {
             $data['status'] = 'success';
             $data['transaction_id'] = rawurlencode($reference);
@@ -411,21 +411,19 @@ class ClientController extends Controller
                 $walTrans['payment_type'] = 'funding';
                 $walTrans['unique_id'] = $data->unique_id;
                 $walTrans['transaction_type'] = 'debit';
+                // if the user has not used this wallet for any transaction
+                if (!WalletTransaction::where('unique_id', '=', $client['unique_id'])->exists()) {
                 $walTrans['opening_balance'] = '0';
                 $walTrans['closing_balance'] = $data->amount;
+                }else{
+                    $previousWallet = WalletTransaction::where('user_id', auth()->user()->id)->orderBy('id', 'DESC')->first();
+                    $walTrans['opening_balance'] = $previousWallet->closing_balance;
+                    $walTrans['closing_balance'] = $previousWallet->closing_balance + $data->amount;
+                }
+                // dd($walTrans);
                 $walTrans->save();
-            }else{
-                $walTrans = WalletTransaction::where('user_id', auth()->user()->id)->orderBy('id', 'DESC')->first();
-                $walTrans['opening_balance'] = $walTrans->closing_balance;
-                $walTrans['closing_balance'] = $walTrans->opening_balance + $data->amount;
-                $walTrans->update();
-            }
-            // }else{
-            //     $walTrans = WalletTransaction::where('user_id', auth()->user()->id)->orderBy('id', 'DESC')->first();
-            //     $walTrans['opening_balance'] = $walTrans->closing_balance;
-            //     $walTrans['closing_balance'] = $walTrans->opening_balance + $data->amount;
-            //     $walTrans->update(); 
-            // }
+
+        }
 
         
 
@@ -569,8 +567,8 @@ class ClientController extends Controller
         //     'payment_method'            =>   'required',
         //   ]);
 
-            $all = $request->all();
-            dd($all);
+            // $all = $request->all();
+            // dd($all);
 
         $validatedData = $request->validate([            
             'balance'                   =>   'required',
@@ -580,15 +578,15 @@ class ClientController extends Controller
             'myContact_id'            =>   'required',          
           ]);
         
-            $all = $request->all(); 
+            // $all = $request->all(); 
             // dd($all);
 
             // if payment method is wallet
             if($request->payment_method == 'Wallet'){
-                if($request->balance<$request->booking_fee){
+                // if($request->balance<$request->booking_fee){
 
-                    $service_request                        = new Servicerequest;
-                    $service_request->cliend_id             = auth()->user()->id;
+                    // $service_request                        = new Servicerequest;
+                    // $service_request->cliend_id             = auth()->user()->id;
                 // if wallet balance is less than the service fee
                 if($request->balance > $request->booking_fee){
                     $service_request                        = new Servicerequest;  
@@ -609,9 +607,8 @@ class ClientController extends Controller
                     $service_request->preferred_time        = date("Y-m-d"); //fix this later before pushing
                     $service_request->has_client_rated      = 'No';
                     $service_request->has_cse_rated         = 'No';
-                    dd($service_request);
+                    // dd($service_request);
                     if ($service_request->save()) {
-
                     // fetch the Client Table Record
                     $client = \App\Models\Client::where('user_id', $request->user()->id)->with('user')->firstOrFail();
                     // generate reference string for this transaction            
@@ -620,7 +617,6 @@ class ClientController extends Controller
                     $payment = $this->payment($service_request->total_amount, 'wallet', 'service-request', $client['unique_id'], 'success', $generatedVal);
                     // save the reference_id as track in session 
                     Session::put('Track', $generatedVal);
-
                         if ($payment) {            
                             //   new starts here 
                             $user_id = auth()->user()->id;
@@ -638,33 +634,33 @@ class ClientController extends Controller
                                 $wallet_transaction->opening_balance = $request->balance; 
                                 $wallet_transaction->closing_balance = $request->balance - $pay->amount; 
                                 $wallet_transaction->status = 'success';
-                                $wallet_transaction->save();
-    
-                                // $this->getDistanceDifference();
-    
+                                $wallet_transaction->save();    
+                                // $this->getDistanceDifference();    
                                 // return back()->with('success', 'Success! Transaction was successful and your request has been placed.');
+                            
+                                // save to ServiceRequestPayment table
+                                $service_reqPayment = new ServiceRequestPayment;
+                                $service_reqPayment->user_id = auth()->user()->id;
+                                $service_reqPayment->payment_id = $pay->id;  
+                                $service_reqPayment->service_request_id = $pay->id;  
+                                $service_reqPayment->amount = $pay->amount;  
+                                $service_reqPayment->unique_id = $pay->unique_id;  
+                                $service_reqPayment->payment_type = $pay->payment_for;  
+                                $service_reqPayment->status = 'success';  
                             }                        
                         }
                         return back()->with('success', 'Service Request Successful');
                         // return response()->json(['success' => 'Service Request Successful.']);
-                   
-                   
                     } else{
-                        return back()->with('error', 'sorry!, an error occured please try again');
+                        return back()->with('error', 'sorry!, your service request is not successful');
                     } 
 
                 }else{
-                        Session::flash('alert', 'sorry!, service amount is less than wallet balance');
+                    return back()->with('alert', 'sorry!, booking fee is greater than wallet balance');
                     }
                 }
-                if ($request->payment_method == 'Offline') {
-                    // $this->requestForService();
-                    echo 'denk';
-                     return back()->with('error', 'Sorry!, your current wallet balance is less than the booking fee. Please use other payment methods.');
-                    }           
-            } 
 
-
+            // online method
             if ($request->payment_method == 'Online') {
                 return back()->with('error', 'online payment coming soon');
             } else{
