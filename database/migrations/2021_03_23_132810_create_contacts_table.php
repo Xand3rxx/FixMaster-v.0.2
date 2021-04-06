@@ -17,17 +17,19 @@ class CreateContactsTable extends Migration
             $table->engine = 'InnoDB';
             $table->charset = 'utf8mb4';
             $table->collation = 'utf8mb4_unicode_ci';
-            $table->id();
 
+            $table->id();
             $table->foreignId('user_id')->index();
             $table->foreignId('account_id')->index();
             $table->foreignId('country_id')->index();
-
+            $table->foreignId('state_id')->nullable();
+            $table->foreignId('lga_id')->nullable();
+            $table->foreignId('town_id')->nullable();
+            $table->string('name')->nullable();
             $table->string('phone_number', 30)->unique();
             $table->longText('address');
             $table->double('address_longitude');
             $table->double('address_latitude');
-
             $table->timestamps();
         });
     }
