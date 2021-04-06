@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\ServiceRequest\ClientDecisionController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\EstateController;
 use App\Http\Controllers\IncomeController;
@@ -392,6 +393,8 @@ Route::prefix('/cse')->group(function () {
         Route::post('project-progress', [ProjectProgressController::class, '__invoke'])->name('project.progress.update');
 
         // Route::view('/requests',            'cse.requests')->name('requests');
+
+        Route::post('client-decision', [ClientDecisionController::class, '__invoke'])->name('client.decision');
 
         Route::view(
             '/request/details',

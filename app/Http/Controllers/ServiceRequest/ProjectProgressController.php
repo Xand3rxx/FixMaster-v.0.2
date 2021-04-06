@@ -25,7 +25,7 @@ class ProjectProgressController extends Controller
         $this->validate($request, [
             'sub_status_uuid'       =>  'bail|required|string|uuid',
             'service_request_uuid'  =>  'required|string|uuid|exists:service_requests,uuid',
-            'technician_user_uuid'  =>  'sometimes|string|uuid|exists:users,uuid',
+            'technician_user_uuid'  =>  'sometimes|nullable|uuid|exists:users,uuid',
         ]);
 
         $request->whenFilled('technician_user_uuid', function () use ($request) {
