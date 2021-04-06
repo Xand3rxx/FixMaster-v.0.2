@@ -807,7 +807,6 @@ class ClientController extends Controller
         $data['myServiceRequests'] = $myRequest->service_request;
         // return $data['myServiceRequests'];
         return view('client.services.list', $data);
-
     }
 
     // public function requestDetails($ref){
