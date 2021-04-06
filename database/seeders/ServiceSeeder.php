@@ -43,7 +43,7 @@ class ServiceSeeder extends Seeder
         $service2->description = 'With FixMaster you don\'t have to run to the repair shop every time your Television ends up with a fault, we have a host of tech support we provide.';
         $service2->image = 'bd5dd85c-0d5c-4563-8e4d-246af964888d.jpg';
         $service2->save();
-
+        
 
         //ELECTRONICS CATEGORY
         $service5 = new Service();
@@ -100,7 +100,7 @@ class ServiceSeeder extends Seeder
         $service5->image = 'fd7a398a-4d73-4c80-a9be-6d4d84f6543d.jpg';
         $service5->save();
 
-
+        
         //REFRIGERATION CATEGORY
         $service6 = new Service();
         $service6->user_id = '1';
@@ -130,7 +130,7 @@ class ServiceSeeder extends Seeder
         $service6->save();
 
 
-        //HOUSEHOLD APPLIANCES
+        //HOUSEHOLD APPLIANCES 
         $service3 = new Service();
         $service3->user_id = '1';
         $service3->category_id = '5';
@@ -214,7 +214,7 @@ class ServiceSeeder extends Seeder
         $service8->description = 'Be rest assured your interior painting and design project will be done right the first time by our experienced Technicians & Artisans.';
         $service8->image = 'cd152b83-0aaf-4038-be49-bc602bfdbe73.jpg';
         $service8->save();
-
+        
 
         //MECHANICAL CATEGORY
         $service9 = new Service();
@@ -225,7 +225,7 @@ class ServiceSeeder extends Seeder
         $service9->description = 'Our Technicians can help identify your issues and repair them as needed.';
         $service9->image = 'dd8a9ad9-dc12-411d-b148-ab33ff1f5127.jpg';
         $service9->save();
-
+        
         $service9 = new Service();
         $service9->user_id = '1';
         $service9->category_id = '10';

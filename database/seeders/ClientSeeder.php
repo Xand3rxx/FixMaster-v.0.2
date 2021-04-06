@@ -88,47 +88,47 @@ class ClientSeeder extends Seeder
         // Client Account
         $clientAccount = \App\Models\Account::create([
             'user_id'       =>  $client->id,
-            // 'state_id'         =>  24,
-            // 'lga_id'           =>  505,
-            // 'first_name'    => "Kelvin",
-            // 'middle_name'   => "Israel",
-            // 'last_name'     => "Adesanya",
+            'state_id'         =>  24,
+            'lga_id'           =>  505,
+            'first_name'    => "Kelvin",
+            'middle_name'   => "Israel",
+            'last_name'     => "Adesanya",
             'gender'        => 'male',
             'avatar'        => '0c9ac4cada39ba68e97fc6c0a0807458d1385048.jpg'
         ]);
 
         $clientAccount1 = \App\Models\Account::create([
             'user_id'       =>  $client1->id,
-            // 'first_name'    => "Wisdom",
-            // 'middle_name'   => "Basil",
-            // 'last_name'     => "Amana",
+            'first_name'    => "Wisdom",
+            'middle_name'   => "Basil",
+            'last_name'     => "Amana",
             'gender'        => 'male',
             'avatar'        => 'default-male-avatar.png'
         ]);
 
         $clientAccount2 = \App\Models\Account::create([
             'user_id'       =>  $client2->id,
-            // 'first_name'    => "Adebola",
-            // 'middle_name'   => "Julius",
-            // 'last_name'     => "Williams",
+            'first_name'    => "Adebola",
+            'middle_name'   => "Julius",
+            'last_name'     => "Williams",
             'gender'        => 'male',
             'avatar'        => 'default-male-avatar.png'
         ]);
 
         $clientAccount3 = \App\Models\Account::create([
             'user_id'       =>  $client3->id,
-            // 'first_name'    => "Jennifer",
-            // 'middle_name'   => "Ifeyinwa",
-            // 'last_name'     => "Isaac",
+            'first_name'    => "Jennifer",
+            'middle_name'   => "Ifeyinwa",
+            'last_name'     => "Isaac",
             'gender'        => 'male',
             'avatar'        => 'default-female-avatar.png'
         ]);
 
         $clientAccount4 = \App\Models\Account::create([
             'user_id'       =>  $client4->id,
-            // 'first_name'    => "Favour",
-            // 'middle_name'   => "Chidera",
-            // 'last_name'     => "Onuoha",
+            'first_name'    => "Favour",
+            'middle_name'   => "Chidera",
+            'last_name'     => "Onuoha",
             'gender'        => 'male',
             'avatar'        => 'default-female-avatar.png'
         ]);

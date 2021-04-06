@@ -23,16 +23,14 @@ class CreateCsesTable extends Migration
             $table->string('unique_id')->unique();
 
             $table->foreignId('user_id')->index();
-            $table->foreignId('account_id')->index();
+            $table->foreignId('account_id')->index();            
             $table->foreignId('referral_id')->index();
-
+            
             $table->foreignId('franchisee_id')->nullable();
             $table->integer('firsttime')->default(0);
 
-            $table->enum('job_availability', ['yes', 'no'])->default('yes');
-
             $table->timestamps();
-
+            
             $table->softDeletes();
         });
     }
