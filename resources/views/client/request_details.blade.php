@@ -39,20 +39,21 @@
             </div>
         </div>
 
-        @if($requestDetail->service_request_assignee->status == 'Active' && $requestDetail->status_id > '1')
+   
+        @if($requestDetail->service_request_assignee->status == 'Active' && $requestDetail->status_id >= '3')
         <h5 class="mt-4">CSE Assigned</h5>
         <div class="col-lg-12 col-12 mt-4">
             <div class="card rounded bg-light overflow-hidden border-0 m-2">
                 <div class="row align-items-center no-gutters">
                     <div class="col-md-5">
-                        {{-- <img src="{{ asset('assets/user_avatars/default-male-avatar.png') }}" class="img-fluid" alt="" /> --}}
+                        {{-- <img src="{{ asset('assets/user-avatars/default-male-avatar.png') }}" class="img-fluid" alt="" /> --}}
                          @if(!empty($requestDetail->cses[0]->avatar) &&
                         file_exists(public_path().'/assets/cse-technician-images/'.$requestDetail->cses[0]->account->avatar))
-                        <img src="{{ asset('assets/user_avatars/'.$requestDetail->cses[0]->avatar) }}" class="img-fluid" alt="" />
+                        <img src="{{ asset('assets/user-avatars/'.$requestDetail->cses[0]->avatar) }}" class="img-fluid" alt="" />
                         @else @if($requestDetail->cses[0]->account->gender == 'Male')
-                        <img src="{{ asset('assets/user_avatars/default-male-avatar.png') }}" alt="Default male profile avatar" class="img-fluid" />
+                        <img src="{{ asset('assets/user-avatars/default-male-avatar.png') }}" alt="Default male profile avatar" class="img-fluid" />
                         @else
-                        <img src="{{ asset('assets/user_avatars/default-female-avatar.png') }}" alt="Default female profile avatar" class="img-fluid" />
+                        <img src="{{ asset('assets/user-avatars/default-female-avatar.png') }}" alt="Default female profile avatar" class="img-fluid" />
                         @endif @endif
                     </div>
                     <!--end col-->
@@ -85,6 +86,7 @@
             </div>
         </div>
         @endif
+       
 
         <h5 class="mt-4">Location & Time</h5>
         <p style="font-size: 10px;" class="text-muted">Location and appointemnt time as specified by you.</p>
@@ -246,7 +248,7 @@
     </div><!-- modal-dialog -->
 </div><!-- modal -->
 
-@if($requestDetail->service_request_assignee->status == 'Active' && $requestDetail->status_id > '1')
+@if($requestDetail->service_request_assignee->status == 'Active' && $requestDetail->status_id >= '3')
 
 <div class="modal fade" id="cseTechnicianModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
@@ -293,12 +295,13 @@
                             <div class="card rounded bg-light overflow-hidden border-0 m-2">
                                 <div class="row align-items-center no-gutters">
                                     <div class="col-md-5">
-                                        @if(!empty($requestDetail->cses[0]->account->avatar) && file_exists(public_path().'/assets/cse-technician-images/'.$requestDetail->cses[0]->account->avatar))
-                                        <img src="{{ asset('assets/user_avatars/'.$requestDetail->cses[0]->account->avatar) }}" class="img-fluid" alt="" />
+                                    
+                                        @if(!empty($requestDetail->cses[0]->account->avatar) && file_exists(public_path().'/assets/user-avatars/'.$requestDetail->cses[0]->account->avatar))
+                                        <img src="{{ asset('assets/user-avatars/'.$requestDetail->cses[0]->account->avatar) }}" class="img-fluid" alt="" />
                                         @else @if($requestDetail->cses[0]->account->gender == 'Male')
-                                        <img src="{{ asset('assets/user_avatars/default-male-avatar.png') }}" alt="Default male profile avatar" class="img-fluid" />
+                                        <img src="{{ asset('assets/user-avatars/default-male-avatar.png') }}" alt="Default male profile avatar" class="img-fluid" />
                                         @else
-                                        <img src="{{ asset('assets/user_avatars/default-female-avatar.png') }}" alt="Default female profile avatar" class="img-fluid" />
+                                        <img src="{{ asset('assets/user-avatars/default-female-avatar.png') }}" alt="Default female profile avatar" class="img-fluid" />
                                         @endif @endif
                                     </div>
 
@@ -337,11 +340,11 @@
                                 <div class="row align-items-center no-gutters">
                                     <div class="col-md-5">
                                         @if(!empty($technician->account->avatar) && file_exists(public_path().'/assets/cse-technician-images/'.$requestDetail->cses[0]->account->avatar))
-                                        <img src="{{ asset('assets/user_avatars/'.$technician->account->avatar) }}" class="img-fluid" alt="" />
+                                        <img src="{{ asset('assets/user-avatars/'.$technician->account->avatar) }}" class="img-fluid" alt="" />
                                         @else @if($technician->account->gender == 'Male')
-                                        <img src="{{ asset('assets/user_avatars/default-male-avatar.png') }}" alt="Default male profile avatar" class="img-fluid" />
+                                        <img src="{{ asset('assets/user-avatars/default-male-avatar.png') }}" alt="Default male profile avatar" class="img-fluid" />
                                         @else
-                                        <img src="{{ asset('assets/user_avatars/default-female-avatar.png') }}" alt="Default female profile avatar" class="img-fluid" />
+                                        <img src="{{ asset('assets/user-avatars/default-female-avatar.png') }}" alt="Default female profile avatar" class="img-fluid" />
                                         @endif @endif
                                     </div>
 

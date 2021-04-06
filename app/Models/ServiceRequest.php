@@ -159,6 +159,58 @@ class ServiceRequest extends Model
         return $this->belongsTo(Contact::class, 'contact_id');
     }
 
+
+    public function technician()
+    {
+        return $this->belongsTo(Account::class);
+    }
+    
+
+    public function technicians()
+    {
+        return $this->belongsToMany(User::class, 'service_request_assigned')->with('account', 'roles', 'contact');
+    }
+
+
+    public function service_request_assignee(){
+        return $this->belongsTo(ServiceRequestAssigned::class, 'id' ,'service_request_id');
+    }
      
   
+    public function clientDiscount()
+    {
+        return $this->belongsTo(ClientDiscount::class, 'client_id');
+    }
+
+    public function clientDiscounts()
+    {
+        return $this->hasMany(ClientDiscount::class, 'client_id', 'client_id');
+    }
+
+    public function payment_status()
+    {
+        return $this->belongsTo(Payment::class, 'id', 'user_id');
+    }
+
+
+    public function cse_service_request(){
+        return $this->belongsTo(ServiceRequestAssigned::class, 'service_request_id')->with('users', 'client');
+    }
+
+  
+    public function payment_statuses()
+    {
+        return $this->belongsTo(Payment::class, 'unique_id', 'unique_id');
+    }
+
+
+    public function addressee()
+    {
+        return $this->belongsTo(Contact::class,  'contact_id', 'user_id');
+    }
+
+    public function service_request_cancellation()
+    {
+        return $this->belongsTo(ServiceRequestCancellation::class, 'id' ,'service_request_id');
+    }
 }

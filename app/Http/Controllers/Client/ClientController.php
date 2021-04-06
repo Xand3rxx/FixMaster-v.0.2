@@ -160,9 +160,10 @@ class ClientController extends Controller
             'reason'       =>   'required',
         ]);
 
+    
         if(!empty($requestExists->clientDiscounts)){
             $rate = $requestExists->clientDiscounts[0]->discount->rate;
-            $refundAmount = floor( (float)$requestExists->total_amount -((float)$rate * (float)$requestExists->total_amount / 100) );
+            $refundAmount = floor( (float)$rate * (float)$requestExists->total_amount / 100 );
         }else{
             $refundAmount = $requestExists->total_amount;
         }
@@ -949,6 +950,21 @@ class ClientController extends Controller
     //     return $myContacts;
     // }
 
+    // public function index(){
+
+    //     $userServiceRequests = Auth::user()->requests()->orderBy('created_at', 'DESC')->get();
+
+    //     $createdBy = Name::get();
+
+    //     $data = [
+    //         'userServiceRequests'   =>  $userServiceRequests,
+    //         'createdBy'             =>  $createdBy,
+    //     ];
+
+    //     return view('client.requests', $data)->with('i');
+    // }
+
+
     public function myServiceRequest(){
         $myRequest = Client::where('user_id', auth()->user()->id)->with('service_request')->firstOrFail();
         $data['myServiceRequests'] = $myRequest->service_request;
@@ -957,14 +973,14 @@ class ClientController extends Controller
 
     }
 
-    public function requestDetails($ref){
-        $requestDetail = ServiceRequest::findOrFail($ref);
-        // return $requestDetail->cse;
-        $data = [
-            'requestDetail'   =>  $requestDetail,
-        ];
-        return view('client.request_details', $data);
-    }
+    // public function requestDetails($ref){
+    //     $requestDetail = ServiceRequest::findOrFail($ref);
+    //     // return $requestDetail->cse;
+    //     $data = [
+    //         'requestDetail'   =>  $requestDetail,
+    //     ];
+    //     return view('client.request_details', $data);
+    // }
 
     public function loyalty()
     {
