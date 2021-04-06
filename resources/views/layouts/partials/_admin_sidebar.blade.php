@@ -1,6 +1,6 @@
 <aside class="aside aside-fixed" id="sidebarMenu">
     <div class="aside-header">
-      <a href="{{ route('admin.index', app()->getLocale()) }}" class="aside-logo"></a>
+      <a href="#" class="aside-logo"></a>
       <a href="" class="aside-menu-link">
         <i data-feather="menu"></i>
         <i data-feather="x"></i>
@@ -184,7 +184,13 @@
           </ul>
         </li>
 
-        <li class="nav-item"><a href="#" class="nav-link"><i data-feather="file-text"></i> <span>RFQ's</span></a></li>
+        <li class="nav-item with-sub {{ Route::currentRouteNamed('admin.rfq') ? 'active show' : '' }}">
+          <a href="" class="nav-link"><i data-feather="file-text"></i> <span>RFQ's</span></a>
+          <ul>
+            <li class="{{ Route::currentRouteNamed('admin.rfq') ? 'active' : '' }}"><a href="{{ route('admin.rfq', app()->getLocale()) }}">Requests</a></li>
+            <li class=""><a href="#">Supplier's invoices</a></li>
+          </ul>
+        </li>
 
         <li class="nav-item with-sub">
           <a href="" class="nav-link"><i data-feather="git-pull-request"></i> <span>Special Project</span></a>
@@ -196,11 +202,11 @@
 
         <li class="nav-item {{ Route::currentRouteNamed('admin.taxes.index') ? 'active' : '' }}"><a href="{{ route('admin.taxes.index', app()->getLocale()) }}" class="nav-link"><i data-feather="percent"></i> <span>Tax Management</span></a></li>
 
-        <li class="nav-item with-sub {{ Route::currentRouteNamed('admin.tools.index') ? 'active show' : '' }}">
+        <li class="nav-item with-sub {{ Route::currentRouteNamed('admin.tools.index', 'admin.tools_request') ? 'active show' : '' }}">
           <a href="" class="nav-link"><i data-feather="box"></i> <span>Tools</span></a>
           <ul>
           <li class="{{ Route::currentRouteNamed('admin.tools.index') ? 'active' : '' }}"><a href="{{ route('admin.tools.index', app()->getLocale()) }}">Inventory</a></li>
-            <li class=""><a href="#">Requests</a></li>
+          <li class="{{ Route::currentRouteNamed('admin.tools_request') ? 'active' : '' }}"><a href="{{ route('admin.tools_request', app()->getLocale()) }}">Requests</a></li>
           </ul>
         </li>
 

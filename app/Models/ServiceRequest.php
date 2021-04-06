@@ -154,7 +154,6 @@ class ServiceRequest extends Model
     {
         return $this->hasOne(Account::class, 'user_id', 'client_id');
     }
-   
     public function address(){
         return $this->belongsTo(Contact::class, 'contact_id');
     }

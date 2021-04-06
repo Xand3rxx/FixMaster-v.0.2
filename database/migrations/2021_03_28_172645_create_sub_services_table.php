@@ -25,8 +25,8 @@ class CreateSubServicesTable extends Migration
             $table->string('name')->unique();
             $table->unsignedInteger('first_hour_charge');
             $table->unsignedInteger('subsequent_hour_charge');
-            $table->timestamps();
             $table->softDeletes();
+            $table->timestamps();
         });
     }
 

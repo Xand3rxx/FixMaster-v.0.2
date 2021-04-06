@@ -2,6 +2,10 @@
 
 namespace App\Http\Controllers\ServiceRequest;
 
+use App\Http\Controllers\Messaging\MessageController;
+use App\Models\Income;
+use App\Models\SubService;
+use App\Models\Tax;
 use App\Traits\Invoices;
 use Illuminate\Http\Request;
 
@@ -19,8 +23,8 @@ class HandleCompletedDiagnosisController extends Controller
      * @param  \App\Models\ServiceRequest   $serviceRequest
      * @param  \App\Models\SubStatus        $substatus
      *
+     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View|\Illuminate\Http\JsonResponse
      * @throws \Illuminate\Validation\ValidationException
-     * @return \Illuminate\Http\RedirectResponse
      */
     public function generateDiagnosisInvoice(Request $request, \App\Models\ServiceRequest $serviceRequest, \App\Models\SubStatus $substatus)
     {
@@ -45,9 +49,10 @@ class HandleCompletedDiagnosisController extends Controller
 
         ]);
 
+
         if ($request['intiate_rfq'] == 'yes') {
             // save to 1. rfqs 2. rfq_batches
-            \Illuminate\Support\Facades\DB::transaction(function () use ($valid, $serviceRequest) {
+            \Illuminate\Support\Facades\DB::transaction(function () use ($valid, $serviceRequest, &$rfq) {
                 // save on rfqs table
                 $rfq = \App\Models\Rfq::create([
                     'issued_by' => auth()->user()->id,
@@ -64,6 +69,7 @@ class HandleCompletedDiagnosisController extends Controller
                         'amount'            => 0.00
                     ]);
                 }
+                $this->rfqInvoice($serviceRequest->id, $rfq->id);
                 $this->log('request', 'Informational', Route::currentRouteAction(), auth()->user()->account->last_name . ' ' . auth()->user()->account->first_name  . ') Job.');
             });
         }
@@ -89,27 +95,78 @@ class HandleCompletedDiagnosisController extends Controller
             });
         }
 
+
         // Check if New Technician is assigned
         // store in the service_request_progresses
         // \App\Models\ServiceRequestProgress::storeProgress($user->id, $serviceRequest->id, $substatus->status_id, $substatus->id);
         // store in the activity log
         // $this->log('request', 'Informational', Route::currentRouteAction(), $user->account->last_name . ' ' . $user->account->first_name . ' ' . $substatus->name . ' for (' . $serviceRequest->unique_id . ') Job.');
+        // $serviceRequest_id = $serviceRequest->id;
+        // $invoice = $this->diagnosticInvoice($serviceRequest_id);
+        $subServiceId = SubService::select('id')->where('uuid', $request->sub_service_uuid)->first();
 
-        $invoice = $this->diagnosticInvoice($serviceRequest->id);
+        // Check if an rfq id exists
+        $rfq = $request['intiate_rfq'] == 'yes' ? $rfq->id : null;
+
+        // Generate the diagnosis invoice
+        $invoice = $this->diagnosisInvoice($serviceRequest->id, $rfq, $subServiceId->id, $request->estimated_work_hours);
+
+        // Get the values that will be poulated in the invoice
+        $get_fixMaster_royalty = Income::select('amount', 'percentage')->where('income_name', 'FixMaster Royalty')->first();
+        $get_logistics = Income::select('amount', 'percentage')->where('income_name', 'Logistics Cost')->first();
+        $get_taxes = Tax::select('percentage')->where('name', 'VAT')->first();
+        $serviceCharge = $invoice->serviceRequest->service->service_charge;
+
+        $tax = $get_taxes->percentage / 100;
+        $fixMaster_royalty_value = $get_fixMaster_royalty->percentage;
+        $logistics_cost = $get_logistics->amount;
+
+        $fixMasterRoyalty = $fixMaster_royalty_value * ($serviceCharge);
+        $tax_cost = $tax * ($serviceCharge + $logistics_cost + $fixMasterRoyalty);
+        $total_cost = $serviceCharge + $fixMasterRoyalty + $tax_cost + $logistics_cost;
+        //End here
+
 
         // Saving completed Diagnosis
         \App\Models\ServiceRequestProgress::storeProgress(auth()->user()->id, $serviceRequest->id, 2, $substatus->id);
 
-        // Activity Log 
+        // Activity Log
 
         // 1. Service progressess
         $this->log('request', 'Informational', Route::currentRouteAction(), auth()->user()->account->last_name . ' ' . auth()->user()->account->first_name . ' ' . $substatus->name . ' for (' . $serviceRequest->unique_id . ') Job.');
 
+        //Send mail notification to client to preview the invoice
+        if($invoice)
+        {
+           $type = 'email';
+           $subject = 'Diagnosis Email Confirmation';
+           $from = auth()->user()->email;
+           $to = $invoice->serviceRequest->client->email;
+           $mail_data = '<div><span>Kindly check your dashboard for your diagnosis completion invoice. Thank you.</span></div>';
+//           return $this->sendNewEMail($type, $subject, $from, $to, $mail_data,$feature="");
+        }
+
         // store in the activity log
 
-        // dd($invoice, $request, $serviceRequest, $substatus);
         return view('frontend.invoices.invoice')->with([
-            'invoice' => $invoice
+            'invoice' => $invoice,
+            'rfqExists' => $invoice->rfq_id,
+            'serviceRequestID' => $serviceRequest->id,
+            'serviceRequestUUID' => $serviceRequest->uuid,
+            'fixmaster_royalty' => $fixMasterRoyalty,
+            'fixmaster_royalty_value' => $fixMaster_royalty_value,
+            'warranty' => 0,
+            'get_fixMaster_royalty' => $get_fixMaster_royalty,
+            'taxes' => $tax_cost,
+            'tax' => $tax,
+            'logistics' => $logistics_cost,
+            'total_cost' => $total_cost
         ]);
+    }
+
+    protected function sendNewEmail($type, $subject, $from, $to, $mail_data, $feature)
+    {
+        $sendMail = new MessageController();
+        return $sendMail->sendNewMessage($type, $subject, $from, $to, $mail_data, $feature);
     }
 }

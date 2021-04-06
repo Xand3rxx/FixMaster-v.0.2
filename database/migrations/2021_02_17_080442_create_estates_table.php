@@ -37,7 +37,7 @@ class CreateEstatesTable extends Migration
             $table->string('estate_name')->unique();
             $table->string('town');
             $table->string('landmark');
-            $table->enum('is_active', ['declined', 'pending', 'deactivated', 'reinstated'])->default('pending');
+            $table->enum('is_active', ['approved', 'declined', 'pending', 'deactivated', 'reinstated'])->default('pending');
             $table->string('slug');
             $table->json('discounted')->nullable();
             $table->timestamps();
