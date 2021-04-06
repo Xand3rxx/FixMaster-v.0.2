@@ -1,6 +1,6 @@
 <aside class="aside aside-fixed" id="sidebarMenu">
   <div class="aside-header">
-    <a href="{{ route('technician.index', app()->getLocale()) }}" class="aside-logo"></a>
+    <a href="#" class="aside-logo"></a>
     <a href="" class="aside-menu-link">
       <i data-feather="menu"></i>
       <i data-feather="x"></i>

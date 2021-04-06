@@ -62,7 +62,12 @@
                     <div class="dropdown-file">
                       <a href="" class="dropdown-link" data-toggle="dropdown"><i data-feather="more-vertical"></i></a>
                       <div class="dropdown-menu dropdown-menu-right">
+                        @if($rfq->status == 'Pending')
+
+                        <a href="#rfqDetails" data-toggle="modal" class="dropdown-item details text-primary" title="View {{ $rfq->unique_id}} details" data-batch-number="{{ $rfq->unique_id}}" data-url="{{ route('supplier.rfq_send_supplier_invoice', ['rfq'=>$rfq->uuid, 'locale'=>app()->getLocale()]) }}" id="rfq-details"><i class="far fa-clipboard"></i> Send Invoice</a>
+                        @else
                         <a href="#rfqDetails" data-toggle="modal" class="dropdown-item details text-primary" title="View {{ $rfq->unique_id}} details" data-batch-number="{{ $rfq->unique_id}}" data-url="{{ route('supplier.rfq_details', ['rfq'=>$rfq->uuid, 'locale'=>app()->getLocale()]) }}" id="rfq-details"><i class="far fa-clipboard"></i> Details</a>
+                        @endif
                       </div>
                     </div>
                   </td>
@@ -79,10 +84,10 @@
   </div><!-- container -->
 
   <div class="modal fade" id="rfqDetails" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel2" aria-hidden="true" data-keyboard="false" data-backdrop="static">
-    <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+    <div class="modal-dialog modal-dialog-centered modal-xl" role="document">
       <div class="modal-content tx-14">
         <div class="modal-header">
-          <h6 class="modal-title" id="exampleModalLabel2">RFQ Details</h6>
+          <h6 class="modal-title" id="exampleModalLabel2">Request For Qoute Details</h6>
           <button type="button" class="close" data-dismiss="modal" aria-label="Close">
             <span aria-hidden="true">&times;</span>
           </button>
@@ -134,7 +139,43 @@
       $(".modal-backdrop").remove();
     });
 
+
   });
+
+
+  function individualAmount(count)
+  {
+    var unitPrice = parseFloat(($('#unit-price-'+count).val().replace(/,/g , '')));
+    var quantity  = parseInt($('.quantity-'+count).text());
+    var totalAmount = (unitPrice * quantity);
+    $('.amount-'+count).text(numberWithCommas(totalAmount.toFixed(2)));
+    totalAmount();
+  }
+
+  
+
+  function totalAmount()
+  {
+    var totalEachAmount = 0;
+    var totalAmount = 0;
+    var deliveryFee = parseInt($('#delivery_fee').val());
+
+    $('.each-amount').each(function (){
+
+        var total  = parseFloat($(this).text());
+
+        if(isNaN(total) == false){
+          totalEachAmount += total;
+          totalAmount = totalAmount + deliveryFee;
+          $('.total-amount').text('₦'+numberWithCommas(totalAmount.toFixed(2)));
+        }
+
+    });
+  }
+
+  function numberWithCommas(x) {
+    return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+  }
 </script>
 @endpush
 

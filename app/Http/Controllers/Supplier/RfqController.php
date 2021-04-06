@@ -44,4 +44,13 @@ class RfqController extends Controller
         ])->with('i');
     }
 
+    public function sendInvoice($language, $uuid){
+
+        $rfqDetails = Rfq::where('uuid', $uuid)->firstOrFail();
+
+        return view('supplier.rfq._send_supplier_invoice', [
+            'rfqDetails'    =>  $rfqDetails,
+        ])->with('i');
+    }
+
 }
