@@ -201,54 +201,9 @@
             </div>
 
 
-
-     <!-- 
-      <div class="modal fade" id="modal-form{{$val->id}}" tabindex="-1" role="dialog" aria-labelledby="modal-form" aria-hidden="true">
-        <div class="modal-dialog modal- modal-dialog-centered modal-sm" role="document">
-          <div class="modal-content">
-            <div class="modal-body p-0">
-              <div class="card bg-secondary border-0 mb-0">
-                <div class="card-header bg-transparent pb-5">
-                  <div class="text-muted text-center mt-2 mb-3"><small>Deposit via</small></div>
-                  <div class="btn-wrapper text-center">
-                    <a href="javascript:void;" class="btn btn-neutral btn-icon">
-                      <span class="btn-inner--icon"><img src="http://localhost/smartBlueMoney/asset/payment_gateways/flutterwave.png"></span>
-                    </a>
-                  </div>
-                </div>
-                <div class="card-body px-lg-5 py-lg-5">
-                  <form role="form" action="http://localhost/smartBlueMoney/user/fund" method="post">
-                  <input type="hidden" name="_token" value="zw4RXmcyfmrUnbvk3qgR6Tl79IpUvAy2L3G3FHOP">                    <div class="form-group mb-3">
-                      <div class="input-group input-group-merge input-group-alternative">
-                        <div class="input-group-prepend">
-                          <span class="input-group-text">NGN</span>
-                        </div>
-                        <input type="number" step="any" class="form-control" placeholder="" name="amount" required>
-                        <input type="hidden" name="gateway" value="108">  
-                      </div>
-                    </div>
-                    <div class="text-center">
-                      <button type="submit" class="btn btn-primary my-4">Preview</button>
-                    </div>
-                  </form>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>  
-      -->
-
-
       <div class="modal fade" id="modal-form{{$val->id}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel2" aria-hidden="true">
       <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content tx-14">
-          <!-- <div class="modal-header">
-            <h6 class="modal-title" id="exampleModalLabel2">Modal Title</h6>
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-              <span aria-hidden="true">&times;</span>
-            </button>
-          </div> -->
           <div class="card-header bg-transparent pb-5">
           <div class="text-muted text-center mt-2 mb-3"><small>Deposit via</small></div>
                 <div class="btn-wrapper text-center">
@@ -257,8 +212,7 @@
                 <!-- </a> -->
                 </div>
             </div>
-
-
+            
           <div class="modal-body">
         <div>
         <form role="form" action="{{ route('client.wallet.submit', app()->getLocale()) }}" method="post">
@@ -281,51 +235,11 @@
         </div>
       </div>
 
-          <!-- <div class="modal-footer">
-            <button type="button" class="btn btn-secondary tx-13" data-dismiss="modal">Close</button>
-            <button type="button" class="btn btn-primary tx-13">Save changes</button>
-          </div> -->
         </div>
       </div>
     </div>
 
-
-      <!-- <div class="modal fade" id="modal-form{{$val->id}}" tabindex="-1" role="dialog" aria-labelledby="modal-form" aria-hidden="true">
-     
-  <div class="modal-dialog modal-lg" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabel">Message Template</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="modal-body">
-        <div>
-        <form role="form" action="http://localhost/smartBlueMoney/user/fund" method="post">
-                  <input type="hidden" name="_token" value="zw4RXmcyfmrUnbvk3qgR6Tl79IpUvAy2L3G3FHOP">                    <div class="form-group mb-3">
-                      <div class="input-group input-group-merge input-group-alternative">
-                        <div class="input-group-prepend">
-                          <span class="input-group-text">NGN</span>
-                        </div>
-                        <input type="number" step="any" class="form-control" placeholder="" name="amount" required>
-                        <input type="hidden" name="gateway" value="108">  
-                      </div>
-                    </div>
-                    <div class="text-center">
-                      <button type="submit" class="btn btn-primary my-4">Preview</button>
-                    </div>
-                  </form>
-        </div>
-      </div>
-
-    </div>
-  </div>
-</div> -->
-
-
-
-        @endforeach
+   @endforeach
 
 
 </div> 
@@ -419,7 +333,7 @@
                             <th class="py-3">Amount</th>
                             <th class="py-3">Status</th>
                             <th class="py-3">Transacation Date</th>
-                            <!-- <th class="py-3">Action</th> -->
+                            <th class="py-3">Action</th> 
 
                             {{-- <th class="py-3">Balance</th> --}}
                         </tr>
@@ -446,7 +360,7 @@
 
                             <td>{{date("Y/m/d h:i:A", strtotime($val->created_at))}}</td>
                             <!-- <td>{{ Carbon\Carbon::parse('', 'UTC')->isoFormat('MMMM Do YYYY, h:mm:ssa') }}</td> -->
-                            <!-- <td><a href="#transactionDetails" data-toggle="modal" class="btn btn-primary btn-sm ">Details</a></td> -->
+                            <td><a href="#transactionDetails" data-toggle="modal" class="btn btn-primary btn-sm ">Details</a></td> 
                         </tr>
                         @endforeach
                     </tbody>

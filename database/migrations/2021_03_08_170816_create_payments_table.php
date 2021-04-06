@@ -21,9 +21,9 @@ class CreatePaymentsTable extends Migration
             $table->id();
             $table->foreignId('user_id');
             $table->integer('amount')->unsigned();
-            $table->enum('payment_channel', ['paystack','flutterwave','offline','wallet']);
-            $table->enum('payment_for', ['e-wallet','service-request']);
-            $table->string('unique_id')->comment('e.g. REF-330CB862 or WAL-23782382');
+            $table->enum('payment_channel', ['paystack','flutterwave','offline','wallet', 'loyalty']);
+            $table->enum('payment_for', ['e-wallet','service-request','warranty']);
+            $table->string('unique_id')->comment('e.g. REF-330CB862, WAL-23782382, WAR-09328932');
             $table->string('reference_id', 191)->unique();
             $table->string('transaction_id', 191)->nullable();
 

@@ -14,15 +14,22 @@ class CreateRfqsTable extends Migration
     public function up()
     {
         Schema::create('rfqs', function (Blueprint $table) {
+            $table->engine = 'InnoDB';
+            $table->charset = 'utf8mb4';
+            $table->collation = 'utf8mb4_unicode_ci';
+
             $table->id();
-            $table->foreignId('issued_by')->index();
-            $table->foreignId('client_id')->index();
-            $table->foreignId('service_request_id')->index();
-            $table->string('batch_number')->unique();
-            $table->enum('status', ['0', '1', '2'])->default('0');
-            $table->enum('accepted', ['Yes', 'No'])->nullable();
-            $table->unsignedInteger('total_amount');
+            $table->uuid('uuid');
+            $table->string('unique_id')->unique()->comment('e.g RFQ-C85BEA04');
+            $table->foreignId('issued_by');
+            $table->foreignId('client_id');
+            $table->foreignId('service_request_id');
+            $table->enum('status', ['Pending', 'Awaiting', 'Delivered'])->default('Pending');
+            $table->enum('accepted', ['Yes', 'No'])->default('No');
+            $table->unsignedInteger('total_amount')->nullable()->default(0);
+            $table->softDeletes();
             $table->timestamps();
+            
         });
     }
 

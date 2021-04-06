@@ -6,6 +6,8 @@
           <th class="text-center">#</th>
           <th>Name</th>
           <th>Category</th>
+          <th class="text-center">Service Charge</th>
+          <th class="text-center">Sub Services</th>
           <th class="text-center">Requests</th>
           <th>Status</th>
           <th>Date Created</th>
@@ -16,16 +18,20 @@
         @foreach($services as $service)
         <tr>
           <td class="tx-color-03 tx-center">{{ ++$i }}</td>
-          <td class="tx-medium">{{ $service->name }}</td>
-          <td class="tx-medium">{{ $service->category->name }}</td>
-          <td class="tx-medium text-center">0</td>
-          @if($service->status == 1) 
+          <td class="tx-medium">{{ !empty($service->name) ? $service->name : 'UNAVAILABLE' }}</td>
+          <td class="tx-medium">{{ !empty($service->category->name) ? $service->category->name : 'UNAVAILABLE' }}</td>
+          <td class="tx-medium text-center">{{ !empty($service->service_charge) ? $service->service_charge : 'UNAVAILABLE' }}</td>
+          <td class="tx-medium text-center">{{ $service->subServices->count() ?? '0' }}</td>
+          <td class="tx-medium text-center">{{ $service->serviceRequests->count() ?? '0' }}</td>
+        
+          @if(!empty($service->status) == 1) 
             <td class="text-success">Active</td>
           @else 
             <td class="text-danger">Inactive</td>
           @endif
-          <td>{{ Carbon\Carbon::parse($service->created_at, 'UTC')->isoFormat('MMMM Do YYYY, h:mm:ssa') }}</td>
+          <td>{{ Carbon\Carbon::parse($service->created_at, 'UTC')->isoFormat('MMMM Do YYYY, h:mm:ssa') ??  Carbon\Carbon::nouw('UTC')->isoFormat('MMMM Do YYYY, h:mm:ssa') }}</td>
           <td class=" text-center">
+            @if(!empty($service->name))
             <div class="dropdown-file">
               <a href="" class="dropdown-link" data-toggle="dropdown"><i data-feather="more-vertical"></i></a>
               <div class="dropdown-menu dropdown-menu-right">
@@ -41,6 +47,7 @@
               <a data-url="{{ route('admin.services.delete', ['service'=>$service->uuid, 'locale'=>app()->getLocale()]) }}" class="dropdown-item details text-danger delete-entity" title="Delete {{ $service->name}}" style="cursor: pointer;"><i class="fas fa-trash"></i> Delete</a>
               </div>
             </div>
+            @endif
           </td>
         </tr>
         @endforeach

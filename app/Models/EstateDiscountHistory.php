@@ -13,7 +13,7 @@ class EstateDiscountHistory extends Model
 
     
     protected $fillable = [
-        'name',  'discount_id', 'estate_name', 'rate', 'notify', 'duration_start', 'duration_end','users','created_by'
+         'discount_id', 'estate_id', 'discount_history_id'
     ];
 
     protected $softDelete = false;

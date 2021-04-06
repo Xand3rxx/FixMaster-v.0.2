@@ -2,6 +2,7 @@
 @section('title', 'Home')
 @section('content')
 @include('layouts.partials._messages')
+{{-- {{ dd($user->state) }} --}}
 
 <div class="col-lg-8 col-12">
     <div class="border-bottom pb-4 row">
@@ -51,7 +52,7 @@
                         <i data-feather="mail" class="fea icon-ex-md text-muted mr-3"></i>
                         <div class="media-body">
                             <h6 class="text-primary mb-0">Email :</h6>
-                        <a href="javascript:void(0)" class="text-muted">{{ $user->email }}</a>
+                        <a href="javascript:void(0)" class="text-muted">{{ $user->user->email }}</a>
                         </div>
                     </div>
                     <div class="media align-items-center mt-3">
@@ -65,22 +66,23 @@
                         <i data-feather="bookmark" class="fea icon-ex-md text-muted mr-3"></i>
                         <div class="media-body">
                             <h6 class="text-primary mb-0">Occupation :</h6>
-                        <a href="javascript:void(0)" class="text-muted">{{ $client->profession->name ?? 'Not Selected' }}</a>
+                        <a href="javascript:void(0)" class="text-muted">{{ $user->profession->name ?? 'Not Selected' }}</a>
                         </div>
                     </div>
                     <div class="media align-items-center mt-3">
                         <i data-feather="map" class="fea icon-ex-md text-muted mr-3"></i>
                         <div class="media-body">
                             <h6 class="text-primary mb-0">State :</h6>
-                        <p class="text-muted mb-0">{{ $client->state->name ?? 'Lagos State' }}</p>
+                        <p class="text-muted mb-0">{{ $user->state->name ?? 'Lagos State' }}</p>
                         </div>
                     </div>
+
 
                     <div class="media align-items-center mt-3">
                         <i data-feather="map-pin" class="fea icon-ex-md text-muted mr-3"></i>
                         <div class="media-body">
                             <h6 class="text-primary mb-0">L.G.A :</h6>
-                        <p class="text-muted mb-0">{{ $client->lga->name ?? "Ikeja" }}</p>
+                        <p class="text-muted mb-0">{{ $user->lga->name ?? "Ikeja" }}</p>
                         </div>
                     </div>
 
@@ -103,66 +105,45 @@
 
             <div class="col-md-6 mt-4 pt-2 pt-sm-0">
                 <h5>Recent Requests :</h5>
-                    <div class="media key-feature align-items-center p-3 rounded shadow mt-4">
-                        <img src="images/job/Circleci.svg" class="avatar avatar-ex-sm" alt="">
-                        <div class="media-body content ml-3">
-                            <h4 class="title mb-0">Electronics(Computer & Laptops)</h4>
-                            <p class="text-muted mb-0"><span>Amount:</span>₦{{ number_format(5000) }}</p>
-                            <p class="mb-0"><a href="#" style="color: #161c2d" title="View Service request details">CSE: <span class="text-muted">Andrew Nkwankwo</span></a></p>    
-                            <p class="mb-0">Status: <span class="text-warning">Pending</span></p>    
-                        </div>
-                    </div>
-
-                    <div class="media key-feature align-items-center p-3 rounded shadow mt-4">
-                        <img src="images/job/Circleci.svg" class="avatar avatar-ex-sm" alt="">
-                        <div class="media-body content ml-3">
-                            <h4 class="title mb-0">Plumbing(Bath-Tubs, Pipes, Kitchen Sink)</h4>
-                            <p class="text-muted mb-0"><span>Amount:</span>₦{{ number_format(3500) }}</p>
-                            <p class="mb-0"><a href="#" style="color: #161c2d" title="View Service request details">CSE: <span class="text-muted">Jubril Diwa</span></a></p>    
-                            <p class="mb-0">Status: <span class="text-info">Ongoing</span></p>    
-                        </div>
-                    </div>
-
-                    <div class="media key-feature align-items-center p-3 rounded shadow mt-4">
-                        <img src="images/job/Circleci.svg" class="avatar avatar-ex-sm" alt="">
-                        <div class="media-body content ml-3">
-                            <h4 class="title mb-0">Plumbing(Drainage, Shower, Soak-Away)</h4>
-                            <p class="text-muted mb-0"><span>Amount:</span>₦{{ number_format(7500) }}</p>
-                            <p class="mb-0"><a href="#" style="color: #161c2d" title="View Service request details">CSE: <span class="text-muted">Mayowa Benedict</span></a></p>    
-                            <p class="mb-0">Status: <span class="text-success">Completed</span></p>    
-                        </div>
-                    </div>
-                {{-- @foreach ($userServiceRequests as $userServiceRequest)
+              
+                @foreach ($userServiceRequests as $userServiceRequest)
                 <div class="media key-feature align-items-center p-3 rounded shadow mt-4">
                     <img src="images/job/Circleci.svg" class="avatar avatar-ex-sm" alt="">
                     <div class="media-body content ml-3">
-                        <h4 class="title mb-0">{{ $userServiceRequest->service->name }}({{ $userServiceRequest->category->name }})</h4>
+                        <h4 class="title mb-0">{{ $userServiceRequest->service->name }}({{ $userServiceRequest->service->category->name }})</h4>
+                     
+                        @if(!empty($userServiceRequest->clientDiscounts[0]->discount->rate) && ($userServiceRequest->clientDiscounts[0]->availability == 'unused') )
                         <p class="text-muted mb-0"><span>Amount:</span> 
-                            @if(!empty($userServiceRequest->serviceRequestDetail->discount_service_fee))
-                                ₦{{ number_format($userServiceRequest->serviceRequestDetail->discount_service_fee) }}
-                                <sup style="font-size: 10px;" class="text-success">Discount</sup>
-                            @else
-                                ₦{{ number_format($userServiceRequest->serviceRequestDetail->initial_service_fee) }}
-                            @endif 
-                            ({{ $userServiceRequest->serviceRequestDetail->service_fee_name }})
+                         <del>₦ {{ $userServiceRequest->price->amount}}</del>
                         </p>
-                        <p class="mb-0"><a href="{{ route('client.request_details', $userServiceRequest->id) }}" style="color: #161c2d" title="View Service request details">CSE: <span class="text-muted">
-                            @if(!empty($userServiceRequest->cse_id)) {{ $userServiceRequest->cse->first_name.' '.$userServiceRequest->cse->last_name }} @else Not Assigned @endif
-                        </span></a></p>    
+                        <p class="text-muted mb-0"><span>Discount:</span> 
+                                ₦{{ number_format(CustomHelpers::discountCalculation($userServiceRequest->clientDiscounts[0]->discount->rate,$userServiceRequest->price->amount )) }}
+                                <sup style="font-size: 10px;" class="text-success">Discount</sup>
+                                </p>
+                            @else
+
+                                <p class="text-muted mb-0"><span>Amount:</span> 
+                         ₦ {{ $userServiceRequest->price->amount}}
+                        </p>
+                        @endif 
+                      
+                        <p class="mb-0"><a href="{{ route('client.request_details', [ 'request'=>$userServiceRequest->uuid, 'locale'=>app()->getLocale() ]) }}" style="color: #161c2d" title="View Service request details">CSE: <span class="text-muted">
+                            @if($userServiceRequest->status_id >= '3' && $userServiceRequest->service_request_assignee->status == 'Active') {{ $userServiceRequest->cses[0]->account->first_name.' '.$userServiceRequest->cses[0]->account->last_name }} @else Not Assigned @endif
+                        </span></a></p> 
                         <p class="mb-0">Status: 
-                            @if($userServiceRequest->service_request_status_id == '1')
+                            @if($userServiceRequest->status_id == '1')
                                 <span class="text-warning">Pending</span>
-                            @elseif($userServiceRequest->service_request_status_id > '3')
+                            @elseif($userServiceRequest->status_id > '3')
                                 <span class="text-info">Ongoing</span>
-                            @elseif($userServiceRequest->service_request_status_id == '3')
+                            @elseif($userServiceRequest->status_id == '3')
                                 <span class="text-success">Completed</span>
-                            @elseif($userServiceRequest->service_request_status_id == '2')
+                            @elseif($userServiceRequest->status_id == '2')
                                 <span class="text-danger">Cancelled</span>
                             @endif
-                        </p>    
+                        </p>  
                     </div>
                 </div>
-                @endforeach --}}
+                @endforeach 
             </div><!--end col-->
         </div><!--end row-->
     </div>
@@ -186,9 +167,9 @@
                 <div class="overlay rounded-top bg-dark"></div>
                 </div>
                 <div class="card-body content">
-                <h5><a href="javascript:void(0)" class="card-title title text-dark">{{ $popularRequest->name }}</a> <a href="#" title="View {{ $popularRequest->name }} service details"> <i data-feather="info" class="text-primary"></i></a></h5>
+                <h5><a href="javascript:void(0)" class="card-title title text-dark">{{ !empty($popularRequest->name) ? $popularRequest->name : 'UNAVAILABLE' }}</a> <a href="#" title="View {{ $popularRequest->name }} service details"> <i data-feather="info" class="text-primary"></i></a></h5>
                     <div class="post-meta d-flex justify-content-between mt-3">
-                        <a href="#" class="text-muted readmore">Request Service <i class="mdi mdi-chevron-right"></i></a>
+                        <a href="{{ route('client.services.quote', ['service'=>$popularRequest->uuid, 'locale'=>app()->getLocale()]) }}" class="text-muted readmore">Request Service <i class="mdi mdi-chevron-right"></i></a>
                     </div>
                 </div>
                 <div class="author">

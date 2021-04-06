@@ -3,6 +3,7 @@
 namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
+use DB;
 
 class SupplierSeeder extends Seeder
 {
@@ -95,58 +96,94 @@ class SupplierSeeder extends Seeder
 
         // Supplier details Table
         $supplierTable = new \App\Models\Supplier();
-        $supplierTable->unique_id = 'SUP-F1A4E0D2'; 
+        $supplierTable->unique_id = 'SUP-F1A4E0D2';
         $supplierTable->user_id = $supplier->id;
         $supplierTable->account_id = $supplierAccount->id;
         $supplierTable->business_name = 'Search & Be Found';
-        $supplierTable->years_of_business = '14';
+        $supplierTable->established_on = '2021-01-02';
         $supplierTable->education_level = 'university';
-        $supplierTable->registered_identification_number = 'RN92BAD2A8'; 
-        $supplierTable->business_description = 'Every company in the digital age wants one thing: to be found when their customer or prospect searches for them. They\'ve stated the benefit of using their agency in the title of their business. Work with Search & Be Found and ... be found by more customers.'; 
+        $supplierTable->cac_number = 'RN92BAD2A8';
+        $supplierTable->business_description = 'Every company in the digital age wants one thing: to be found when their customer or prospect searches for them. They\'ve stated the benefit of using their agency in the title of their business. Work with Search & Be Found and ... be found by more customers.';
         $supplierTable->save();
 
         $supplierTable = new \App\Models\Supplier();
-        $supplierTable->unique_id = 'SUP-1CBDD295'; 
+        $supplierTable->unique_id = 'SUP-1CBDD295';
         $supplierTable->user_id = $supplier1->id;
         $supplierTable->account_id = $supplierAccount1->id;
         $supplierTable->business_name = 'IMPACT';
-        $supplierTable->years_of_business = '10';
+        $supplierTable->established_on = '2021-01-02';
         $supplierTable->education_level = 'polytechnic';
-        $supplierTable->registered_identification_number = 'BNA9B41982';
-        $supplierTable->business_description = 'IMPACT is an award-winning agency helping marketers and salespeople achieve their goals "and look like a rockstar in the process." Their business name reflects that mission and clearly states they exist to make you look good at work.'; 
+        $supplierTable->cac_number = 'BNA9B41982';
+        $supplierTable->business_description = 'IMPACT is an award-winning agency helping marketers and salespeople achieve their goals "and look like a rockstar in the process." Their business name reflects that mission and clearly states they exist to make you look good at work.';
         $supplierTable->save();
 
         $supplierTable = new \App\Models\Supplier();
-        $supplierTable->unique_id = 'SUP-84E2F131'; 
+        $supplierTable->unique_id = 'SUP-84E2F131';
         $supplierTable->user_id = $supplier2->id;
         $supplierTable->account_id = $supplierAccount2->id;
         $supplierTable->business_name = 'Delivius';
-        $supplierTable->years_of_business = '5';
+        $supplierTable->established_on = '2021-01-02';
         $supplierTable->education_level = 'polytechnic';
-        $supplierTable->registered_identification_number = 'BNE2E4B0E4'; 
-        $supplierTable->business_description = 'Take a risk and keep testing, because what works today won\'t work tomorrow, but what worked yesterday may work again'; 
+        $supplierTable->cac_number = 'BNE2E4B0E4';
+        $supplierTable->business_description = 'Take a risk and keep testing, because what works today won\'t work tomorrow, but what worked yesterday may work again';
         $supplierTable->save();
 
-        // supplier Phone record Account
-        $supplierPhone = \App\Models\Phone::create([
-            'user_id' =>  $supplier->id,
-            'account_id'  => $supplierAccount->id,
-            'country_id'  => 156, //Nigeria
-            'number'   => "08168900129"
-        ]);
+       
+        // Sample Implementation for storing Contact Details of a user
+        \App\Models\Contact::attemptToStore($supplier->id, $supplierAccount->id, 156, '08165551727', "3-28 Segun Adesanya St, Ejigbo, Lagos", "3.2875562", "6.5604542");
+        \App\Models\Contact::attemptToStore($supplier1->id, $supplierAccount1->id, 156, '08039473705', "9 Gregal Mission St, Iju, Lagos", "3.3386946", "6.6654238");
+        \App\Models\Contact::attemptToStore($supplier2->id, $supplierAccount2->id, 156, '08145318883', "Suite 8a Tafawa Balewa Square Onikan, 101231, Lagos", "3.3992997", "6.4486122");
 
-        $supplierPhone = \App\Models\Phone::create([
-            'user_id' =>  $supplier1->id,
-            'account_id'  => $supplierAccount1->id,
-            'country_id'  => 156, //Nigeria
-            'number'   => "08134362177"
-        ]);
+        // DB::table('users_services')->delete();
 
-        $supplierPhone = \App\Models\Phone::create([
-            'user_id' =>  $supplier2->id,
-            'account_id'  => $supplierAccount2->id,
-            'country_id'  => 156, //Nigeria
-            'number'   => "08016706323"
-        ]);
+        $supplierServices = array(
+            array(
+                'user_id'       =>  10,
+                'service_id'    =>  1,
+                'role_id'       =>  6,
+            ),
+            array(
+                'user_id'       =>  10,
+                'service_id'    =>  22,
+                'role_id'       =>  6,
+            ),
+            array(
+                'user_id'       =>  10,
+                'service_id'    =>  24,
+                'role_id'       =>  6,
+            ),
+            array(
+                'user_id'       =>  11,
+                'service_id'    =>  1,
+                'role_id'       =>  6,
+            ),
+            array(
+                'user_id'       =>  11,
+                'service_id'    =>  6,
+                'role_id'       =>  6,
+            ),
+            array(
+                'user_id'       =>  11,
+                'service_id'    =>  11,
+                'role_id'       =>  6,
+            ),
+            array(
+                'user_id'       =>  12,
+                'service_id'    =>  1,
+                'role_id'       =>  6,
+            ),
+            array(
+                'user_id'       =>  12,
+                'service_id'    =>  10,
+                'role_id'       =>  6,
+            ),
+            array(
+                'user_id'       =>  12,
+                'service_id'    =>  2,
+                'role_id'       =>  6,
+            ),
+        );
+
+        DB::table('users_services')->insert($supplierServices);
     }
 }

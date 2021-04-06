@@ -14,9 +14,13 @@ class CreateRfqSuppliersTable extends Migration
     public function up()
     {
         Schema::create('rfq_suppliers', function (Blueprint $table) {
+            $table->engine = 'InnoDB';
+            $table->charset = 'utf8mb4';
+            $table->collation = 'utf8mb4_unicode_ci';
+
             $table->id();
-            $table->foreignId('rfq_id')->index();
-            $table->string('name');
+            $table->foreignId('rfq_id');
+            $table->foreignId('supplier_id');
             $table->unsignedInteger('devlivery_fee');
             $table->string('delivery_time');
         });

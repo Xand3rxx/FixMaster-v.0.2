@@ -54,7 +54,6 @@ class ReferralController extends Controller
     if($user){
        $ifreferral = $this->updateVerifiedUsers($user, $request->entity);
      
-   
        if($ifreferral){
             $msg = $request->entity == 'client'? 'Referral Link created successfully': 'Referral Code created successfully';
             $type = 'Request';

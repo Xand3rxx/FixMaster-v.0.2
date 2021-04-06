@@ -10,9 +10,9 @@ class Account extends Model
     /**
      * The attributes that are mass assignable.
      *
-     * @var array
+     * @var array 
      */
-    protected $fillable = ['user_id', 'state_id',  'lga_id', 'town_id', 'first_name', 'middle_name', 'last_name', 'gender', 'account_number', 'avatar'];
+    protected $fillable = ['user_id', 'state_id',  'lga_id', 'town_id', 'first_name', 'middle_name', 'last_name', 'gender', 'account_number', 'bank_id', 'avatar'];
 
     /**
      * The relationships that should always be loaded.
@@ -36,16 +36,44 @@ class Account extends Model
         return $this->belongsTo(User::class);
     }
 
-    /**
-     * Get the phone associated with the user.
-     */
-    public function phone()
+    public function bank()
     {
-        return $this->hasMany(Phone::class, 'user_id', 'user_id');
+        return $this->belongsTo(Bank::class);
     }
 
     public function payment()
     {
         return $this->hasMany(PaymentDisbursed::class, 'user_id', 'user_id');
     }
+    public function state()
+    {
+        return $this->belongsTo(State::class, 'id');
+    }
+    public function lga()
+    {
+        return $this->belongsTo(Lga::class, 'id');
+    }
+    public function profession()
+    {
+        return $this->belongsTo(Profession::class, 'id');
+    }
+
+    public function client()
+    {
+        return $this->hasOne(client::class);
+    }
+    public function service_request()
+    {
+        return $this->hasMany(ServiceRequest::class, 'user_id', 'client_id');
+    }
+
+    /**
+     * Get the Account associated with the contact.
+     */
+    public function usercontact()
+    {
+        return $this->hasOne(Contact::class, 'user_id');
+    }
+
 }
+

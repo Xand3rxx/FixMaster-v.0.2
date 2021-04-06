@@ -80,6 +80,7 @@ class ServiceController extends Controller
            'user_id'        =>  Auth::id(),
            'category_id'    =>  $request->category_id,
            'name'           =>  ucwords($request->name),
+           'service_charge' =>  $request->service_charge,
            'description'    =>  $request->description,
            'image'          =>  $imageName,
            'updated_at'     =>  null,
@@ -123,6 +124,7 @@ class ServiceController extends Controller
         return request()->validate([
             'name'              =>   'required|unique:services,name',
             'category_id'       =>   'required',
+            'service_charge'    =>   'required|numeric',
             'image'             =>   'required|mimes:jpg,png,jpeg,gif,svg|max:1014',
             'description'       =>   'required', 
         ]);
@@ -136,7 +138,7 @@ class ServiceController extends Controller
      */
     public function show($language, $uuid)
     {
-        $service = Service::findOrFail($uuid);
+        $service = Service::where('uuid', $uuid)->firstOrFail();
 
         $data = [
             'category'    =>  $service,
@@ -153,7 +155,8 @@ class ServiceController extends Controller
      */
     public function edit($language, $uuid)
     {
-        $service = Service::findOrFail($uuid);
+        // $service = Service::findOrFail($uuid);
+        $service = Service::where('uuid', $uuid)->firstOrFail();
 
         $categories = Category::ActiveCategories()->get();
 
@@ -178,6 +181,7 @@ class ServiceController extends Controller
         $request->validate([
             'name'              =>   'required',
             'category_id'       =>   'required',
+            'service_charge'    =>   'required|numeric',
             'description'       =>   'required', 
         ]);
 
@@ -207,6 +211,7 @@ class ServiceController extends Controller
          $updateCategory = Service::where('uuid', $uuid)->update([
             'category_id'   =>  $request->input('category_id'),
             'name'          =>  ucwords($request->input('name')),
+           'service_charge' =>  $request->service_charge,
             'description'   =>  $request->input('description'),
             'image'         =>  $imageName,
         ]);
@@ -245,7 +250,7 @@ class ServiceController extends Controller
     public function destroy($language, $uuid)
     {
         //Verify if uuid exists
-        $service = Service::findOrFail($uuid);
+        $service = Service::where('uuid', $uuid)->firstOrFail();
 
         $deleteService = $service->delete();
 
@@ -274,7 +279,7 @@ class ServiceController extends Controller
     public function deactivate($language, $uuid)
     {
         //Get service record
-        $service = Service::findOrFail($uuid);
+        $service = Service::where('uuid', $uuid)->firstOrFail();
 
         //Update service status to 0, indicating inactive
         $deactivateService = Service::where('uuid', $uuid)->update([
@@ -307,7 +312,7 @@ class ServiceController extends Controller
     public function reinstate($language, $uuid)
     {
         //Get service record
-        $service = Service::findOrFail($uuid);
+        $service = Service::where('uuid', $uuid)->firstOrFail();
 
         //Update service status to 1, indicating active
         $reinstateService = Service::where('uuid', $uuid)->update([

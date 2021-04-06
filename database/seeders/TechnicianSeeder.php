@@ -3,6 +3,7 @@
 namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
+use DB;
 
 class TechnicianSeeder extends Seeder
 {
@@ -66,6 +67,8 @@ class TechnicianSeeder extends Seeder
             'middle_name'   => "Sule",
             'last_name'     => "Diwa",
             'gender'        => 'male',
+            'bank_id'           =>  6,
+            'account_number'    =>  '8197952999',
             'avatar'        => 'default-male-avatar.png',
         ]);
 
@@ -75,6 +78,8 @@ class TechnicianSeeder extends Seeder
             'middle_name'   => "Nkem",
             'last_name'     => "Nwankwo",
             'gender'        => 'male',
+            'bank_id'           =>  14,
+            'account_number'    =>  '803541339',
             'avatar'        => 'default-male-avatar.png',
         ]);
 
@@ -84,6 +89,8 @@ class TechnicianSeeder extends Seeder
             'middle_name'   => "Idris",
             'last_name'     => "Adedokun",
             'gender'        => 'male',
+            'bank_id'           =>  11,
+            'account_number'    =>  '7052222678',
             'avatar'        => 'default-male-avatar.png',
         ]);
 
@@ -91,41 +98,75 @@ class TechnicianSeeder extends Seeder
         $technicianTable = new \App\Models\Technician();
         $technicianTable->user_id = $technician->id;
         $technicianTable->account_id = $technicianAccount->id;
-        $technicianTable->bank_id = 5;
         $technicianTable->save();
 
         $technicianTable = new \App\Models\Technician();
         $technicianTable->user_id = $technician1->id;
         $technicianTable->account_id = $technicianAccount1->id;
-        $technicianTable->bank_id = 15;
         $technicianTable->save();
 
         $technicianTable = new \App\Models\Technician();
         $technicianTable->user_id = $technician2->id;
         $technicianTable->account_id = $technicianAccount2->id;
-        $technicianTable->bank_id = 23;
         $technicianTable->save();
 
-        // Technician Phone record Account
-        $technicianPhone = \App\Models\Phone::create([
-            'user_id' =>  $technician->id,
-            'account_id'  => $technicianAccount->id,
-            'country_id'  => 156, //Nigeria
-            'number'   => "08132667823"
-        ]);
+        // Sample Implementation for storing Contact Details of a user
+        \App\Models\Contact::attemptToStore($technician->id, $technicianAccount->id, 156, '08175122879', "21 Olugborogan Olusesi Rd, Eti-Osa 100242, Lagos", "3.5372016", "6.4416878");
+        \App\Models\Contact::attemptToStore($technician1->id, $technicianAccount1->id, 156, '07052222678', "2 Bello St, Volkswagen, Lagos", "3.2198137", "6.4563318");
+        \App\Models\Contact::attemptToStore($technician2->id, $technicianAccount2->id, 156, '08035413397', "21-13 Ayo Adeife St, Idimu, Lagos", "3.286114654549155", "6.59493974136504");
 
-        $technicianPhone = \App\Models\Phone::create([
-            'user_id' =>  $technician1->id,
-            'account_id'  => $technicianAccount1->id,
-            'country_id'  => 156, //Nigeria
-            'number'   => "08124363864"
-        ]);
+        // DB::table('users_services')->delete();
 
-        $technicianPhone = \App\Models\Phone::create([
-            'user_id' =>  $technician2->id,
-            'account_id'  => $technicianAccount2->id,
-            'country_id'  => 156, //Nigeria
-            'number'   => "07004728329"
-        ]);
+        $technicianServices = array(
+            array(
+                'user_id'       =>  13,
+                'service_id'    =>  1,
+                'role_id'       =>  5,
+            ),
+            array(
+                'user_id'       =>  13,
+                'service_id'    =>  22,
+                'role_id'       =>  5,
+            ),
+            array(
+                'user_id'       =>  13,
+                'service_id'    =>  24,
+                'role_id'       =>  5,
+            ),
+            array(
+                'user_id'       =>  14,
+                'service_id'    =>  1,
+                'role_id'       =>  5,
+            ),
+            array(
+                'user_id'       =>  14,
+                'service_id'    =>  6,
+                'role_id'       =>  5,
+            ),
+            array(
+                'user_id'       =>  14,
+                'service_id'    =>  11,
+                'role_id'       =>  5,
+            ),
+            array(
+                'user_id'       =>  15,
+                'service_id'    =>  1,
+                'role_id'       =>  5,
+            ),
+            array(
+                'user_id'       =>  15,
+                'service_id'    =>  10,
+                'role_id'       =>  5,
+            ),
+            array(
+                'user_id'       =>  15,
+                'service_id'    =>  2,
+                'role_id'       =>  5,
+            ),
+            
+        );
+
+        DB::table('users_services')->insert($technicianServices);
     }
 }
+

@@ -7,8 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Role extends Model
 {
-    use HasFactory;
-
+const ROLE_SLUG_ADMIN = 'admin-user';
      /**
      * The permissions that belong to the role.
      */

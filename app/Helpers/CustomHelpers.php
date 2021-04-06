@@ -1,6 +1,7 @@
 <?php
 namespace App\Helpers;
 use Carbon\Carbon;
+use App\Models\LoyaltyManagement;
 
 class CustomHelpers
 {
@@ -10,6 +11,13 @@ class CustomHelpers
         $diff = $date->diffForHumans($end, true);
         return $diff;
     }
+
+    static function discountCalculation($discount, $amount){
+        $amt = (float)$discount/100 * $amount;
+        $value = floor((float)$amount - (float)$amt);  
+        return  $value ;
+    }
+   
 
     
     function generateRandomNumber() {
@@ -39,6 +47,19 @@ class CustomHelpers
     // function checkIfStringExists($randomString) {
     //     return User::whereRandomNumber($number)->exists();
     // }
+
+
+    static function ifLoyaltyExist($user)
+    {
+        $loyaltyExist = LoyaltyManagement::select('client_id')->where('client_id', $user)->get();
+        if(count($loyaltyExist) > 0){
+            return 1;
+        }else{
+            return 0;
+        }
+       
+    }
+
 
     
 }

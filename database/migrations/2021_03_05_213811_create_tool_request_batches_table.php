@@ -19,6 +19,7 @@ class CreateToolRequestBatchesTable extends Migration
             $table->collation = 'utf8mb4_unicode_ci';
             
             $table->id();
+            $table->foreignId('tool_request_id');
             $table->foreignId('tool_id');
             $table->unsignedInteger('quantity');
         });

@@ -43,6 +43,7 @@
                                     <th>Entity</th>
                                     <th>Created By</th>
                                     <th class="text-center">Rate</th>
+                                    <th class="text-center">Applied To</th>
                                     <th class="text-center">Duration</th>
                                     <th class="text-center">Description</th>
                                     <th>Notification Status</th>
@@ -58,8 +59,9 @@
                                     <td class="tx-color-03 tx-center">{{ $loop->iteration }}</td>
                                     <td class="tx-medium">{{ucfirst($discount->name) }}</td>
                                     <td class="tx-medium">{{ ucfirst($discount->entity)}}</td>
-                                    <td class="tx-medium text-center">{{ucfirst('super admin')}}</td>
+                                    <td class="tx-medium text-center">{{$discount->created_by}}</td>
                                     <td class="tx-medium text-center">{{$discount->rate.'%'}}</td>
+                                    <td class="tx-medium text-center">{{$discount->apply_discount}}</td>
                                <td class="tx-medium text-center">{{CustomHelpers::displayTime($discount->duration_start, $discount->duration_end) }}</td>
                                     <td class="tx-medium">{{$discount->description}}</td>
                                     <td class="tx-medium text-center">{{$discount->notify == 1 ? ' Sent': 'Not Sent'}}
@@ -125,45 +127,7 @@
 
 @section('scripts')
 @push('scripts')
-<script>
-$(document).ready(function() {
-
-    $(document).on('click', '#delete', function(event) {
-        event.preventDefault();
-        let route = $(this).attr('data-url');
-        let url = "<a href='" + route + "'  class='confirm-link'>Yes Delete</a>";
-        displayAlert(url, 'Would you like to detele this Discount?')
-    });
-
-    $(document).on('click', '#deactivate', function(event) {
-        event.preventDefault();
-        let route = $(this).attr('data-url');
-        let url = "<a href='" + route + "'  class='confirm-link'>Yes Deactivate</a>";
-        displayAlert(url, 'Would you like to deactivate this Discount?')
-    })
-
-    $(document).on('click', '#activate', function(event) {
-        event.preventDefault();
-        let route = $(this).attr('data-url');
-        let url = "<a href='" + route + "'  class='confirm-link'>Yes Reinstate</a>"
-        displayAlert(url, 'Would you like to reinstate this Discount?')
-    });
-
-
-    function displayAlert(url, message) {
-        Swal.fire({
-            title: 'Are you sure?',
-            text: message,
-            showCancelButton: true,
-            confirmButtonColor: '#E97D1F',
-            cancelButtonColor: '#8392a5',
-            confirmButtonText: url
-        })
-
-    }
-
-});
-</script>
+<script src="{{ asset('assets/dashboard/assets/js/admin/discount/4c676ab8-78c9-4a00-8466-a10220785897.js') }}"></script>
 @endpush
 @endsection
 @endsection

@@ -6,6 +6,7 @@ namespace App\Http\Controllers\Messaging;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Message;
+use App\Models\MessageTemplate;
 use App\Models\User;
 use App\Models\UserType;
 use App\Models\Role;
@@ -15,6 +16,8 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 use Illuminate\Support\Carbon;
 use App\Traits\Loggable;
+use App\Jobs\PushEmails;
+use App\Jobs\PushSMS;
 use Mail;
 use Route;
 use Auth;
@@ -75,6 +78,26 @@ class MessageController extends Controller
      
     }
 
+    public function getRecipients(Request $request)
+    {
+        $searchVal = $request->input('search_val');
+        $recipients = DB::table('users')
+            ->join('accounts', 'users.id', '=', 'accounts.user_id')
+            ->where('users.email','LIKE', "%{$searchVal}%")
+            ->orWhere('accounts.first_name', 'LIKE', "%{$searchVal}%")
+            ->orWhere('accounts.middle_name', 'LIKE', "%{$searchVal}%")
+            ->orWhere('accounts.last_name', 'LIKE', "%{$searchVal}%")
+            ->select('accounts.first_name',  'accounts.last_name', 'accounts.middle_name', 'users.email')
+            ->get();
+        Log::debug($recipients);
+       
+            if(!empty($recipients)){
+                return response()->json(["data" => $recipients], 200);
+             }
+             return response()->json(["message" => "data not found!"], 404);
+     
+    }
+
     public function saveEmail(Request $request)
     {
         $subject = $request->input('subject');
@@ -84,52 +107,101 @@ class MessageController extends Controller
         $mail_objects = [];
         $userIds = [];
         $receivers = [];
+        $receiverDetails = [];
+
+        $senderDetails = $this->getUser($sender);
 
         foreach($recipients as $recipient){
             array_push($receivers, $recipient['value']);
         }
 
-        $ids = DB::table('user_types')
+        $users = DB::table('user_types')
+        ->join('accounts', 'user_types.user_id', '=', 'accounts.user_id')
+        ->join('users', 'users.id', '=', 'user_types.user_id')
         ->whereIn('role_id', $receivers )
-        ->select('user_id')
+        ->select('user_types.user_id','users.email', 'accounts.first_name',  'accounts.last_name', 'accounts.middle_name')
         ->get();
-       
-        foreach($ids as $id){
-            array_push($userIds, $id);
-        }
-       
+         
 
       
-        foreach($userIds as $id){
+        foreach($users as $user){
             $mail_objects[] = [
                 'title'=>$subject, 
                 'content'=>$mail_content, 
-                'recipient'=>$id->user_id, 
+                'recipient'=>$user->user_id, 
                 'sender'=>$sender,
                 'uuid'=>Str::uuid()->toString(),
                 'created_at'        => Carbon::now(),
                 'updated_at'        => Carbon::now(),
             ];
+            $this->sendNewMessage("mail",$subject, $senderDetails->email, $user->email, $mail_content, "");
         }
-        Message::insert($mail_objects);
+        //Message::insert($mail_objects);
         return response()->json([
             "message" => "Messages sent successfully!"], 201);
     }
 
-    public function sendEmail(Request $request)
+    public function sendMessage(Request $request)
     {
         
         $subject = $request->input('subject');
         $to = $request->input('recipient');
         $mail_data = $request->input('mail_data');
+        $from = $request->input('sender');
+        $feature = $request->input('feature');
+        $type = $request->input('type');
 
-        $message = $this->replacePlaceHolders($mail_data, $template->content);
-        Mail::send('emails.message', ['mail_message' => $message], function ($m) use ($to, $subject) {
-            $m->from('admin@fixmaster.com', $subject);
-
-            $m->to($to, $to)->subject($subject);
-        });
+        $this->sendNewMessage( $type, $subject, $from, $to, $mail_data, $feature);
     }
+
+    
+
+    public function sendNewMessage( $type, $subject, $from, $to, $mail_data,$feature=""){
+       $message = $mail_data;
+       $message_array = [];
+        if(!empty($feature)){
+            $template = MessageTemplate::select('content')
+            ->where('feature', $feature)
+            ->where('type', $type)
+            ->first();
+            
+            if(empty($template)){
+            return response()->json(["message" => "Message Template not found!"], 404);
+    
+            }
+            $message = $this->replacePlaceHolders($mail_data, $template->content);
+        }
+
+        $recipient = DB::table('users')
+        ->where('users.email', $to )
+        ->first();
+
+        $sender = DB::table('users')
+        ->where('users.email', $from )
+        ->first();
+      
+            $mail_objects[] = [
+                'title'=>$subject, 
+                'content'=>$message, 
+                'recipient'=>$recipient->id, 
+                'sender'=>$sender->id,
+                'uuid'=>Str::uuid()->toString(),
+                'created_at'        => Carbon::now(),
+                'updated_at'        => Carbon::now(),
+            ];
+        
+        Message::insert($mail_objects);
+
+        $message_array = ['to'=>$to, 'from'=>$from, 'subject'=>$subject, 'content'=>$message];
+        if($type=='mail')
+            $this->dispatch(new PushEmails($message_array));
+        elseif($type=='sms')
+           $this->dispatch(new PushSMS($message_array));
+        
+
+    }
+
+    
 
     private function replacePlaceHolders($variables, $messageTemp){
         foreach($variables as $key => $value){
@@ -137,6 +209,16 @@ class MessageController extends Controller
         }
 
         return $messageTemp;
+    }
+
+    private function getUser($userId){
+        $user = DB::table('users')
+        ->join('accounts', 'users.id', '=', 'accounts.user_id')
+        ->where('users.id', $userId)
+        ->select('users.id','users.email', 'accounts.first_name',  'accounts.last_name', 'accounts.middle_name')
+        ->first();
+
+        return $user;
     }
 
     public function userRoles(){

@@ -22,6 +22,7 @@
                     <form class="login-form mt-4" method="POST" action="{{route('frontend.registration.client.store', app()->getLocale())}}">
                         @csrf
                         <div class="row">
+
                             <div class="col-md-3">
                                 <div class="form-group position-relative">
                                     <label>First name <span class="text-danger">*</span></label>
@@ -191,7 +192,7 @@
                                     @enderror
                                 </div>
                             </div>
-                            <input type="hidden" name="ref" value="{{$ref}}">
+                           
 
                             <div class="col-md-12">
                                 <div class="form-group position-relative">
@@ -207,6 +208,8 @@
                                     @enderror
                                 </div>
                             </div>
+
+                            
                             <!-- hidden input field for long, and lat -->
                             <input type="hidden" class="form-control" value="" name="user_address" id="user_address" placeholder="Your Location">
                             <input type="hidden" value="" name="user_latitude" id="user_latitude">
@@ -221,7 +224,7 @@
                             </div> -->
 
                             <div class="mx-auto">
-                                <a class="current-loc-icon current_location" data-id="1" class="text-dark font-weight-bold">myLocation</a>                           
+                                {{-- <a class="current-loc-icon current_location" data-id="1" class="text-dark font-weight-bold">myLocation</a>                            --}}
                             </div>
 
                             <div class="col-md-12">

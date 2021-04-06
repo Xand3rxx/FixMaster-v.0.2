@@ -33,13 +33,13 @@
                 <div class="col-lg-12 col-xl-12">
                     <form method="POST" action="{{ route('admin.rfq_update', app()->getLocale()) }}">
                         @csrf
-                        <input type="hidden" value="{{ $serviceRequests['user_id'] }}" name="client_id" required>
+                        <input type="hidden" value="{{ $serviceRequests['client_id'] }}" name="client_id" required>
                         <input type="hidden" value="{{ $serviceRequests['id'] }}" name="service_request_id" required>
 
                         <div class="form-row mt-4">
                             <div class="tx-13 mg-b-25">
 
-                                @if($requestDetail->rfq()->where('status', '0')->count() > 0)
+                                @if($requestDetail->rfq()->where('status', 'Pending')->count() > 0)
 
                                     <h3>Price Tagging</h3>
                                     <section>
@@ -97,7 +97,7 @@
                                                         <input type="number" class="form-control" id="quantity" name="quantity[]" value="{{ old('quantity') ?? $batch->quantity }}" min="{{ $batch->quantity }}" max="{{ $batch->quantity }}" readonly>
                                                     </div>
                                                     <div class="form-group col-md-3">
-                                                        <label for="amount">Amount</label>
+                                                        <label for="amount">Total Amount</label>
                                                         <input type="tel" class="form-control amount" id="amount" placeholder="" value="{{ old('amount') }}" name="amount[]" autocomplete="off">
                                                     </div>
                                                 </div>

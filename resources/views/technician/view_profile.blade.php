@@ -43,32 +43,19 @@
               <div class="row row-sm">
                 <div class="col-6 col-sm-4">
                   <label class="tx-10 tx-medium tx-spacing-1 tx-color-03 tx-uppercase tx-sans mg-b-10">Email Address</label>
-                  <p class="tx-primary mg-b-0">{{$user->email}}</p>
+                  <p class="tx-primary mg-b-0">{{$user->email ?? ''}}</p>
                 </div>
                 <div class="col-6 col-sm-4">
                   <label class="tx-10 tx-medium tx-spacing-1 tx-color-03 tx-uppercase tx-sans mg-b-10">Mobile Phone</label>
-                  <p class="tx-primary tx-rubik mg-b-0">{{$user->phone->number}}</p>
+                  <p class="tx-primary tx-rubik mg-b-0">{{$user->contact->phone_number ?? ''}}</p>
                 </div>
-                <div class="col-6 col-sm-4 mg-t-20 mg-sm-t-0">
-                  <label class="tx-10 tx-medium tx-spacing-1 tx-color-03 tx-uppercase tx-sans mg-b-10">Work Phone</label>
-                  {{-- <p class="tx-primary tx-rubik mg-b-0">{{$otherPhoneNumber?$otherPhoneNumber:'+234097865410'}}</p> --}}
-                  <p class="tx-primary tx-rubik mg-b-0">{{$user->phone->number}}</p>
-                </div>
-                <div class="col-sm-4 mg-t-20 mg-sm-t-30">
-                  <label class="tx-10 tx-medium tx-spacing-1 tx-color-03 tx-uppercase tx-sans mg-b-10">Company</label>
-                  <p class="mg-b-0">Fix-Master</p>
-                </div>
-                <div class="col-sm-4 mg-t-20 mg-sm-t-30">
-                  <label class="tx-10 tx-medium tx-spacing-1 tx-color-03 tx-uppercase tx-sans mg-b-10">Job Position</label>
-                  <p class="mg-b-0">Technician</p>
+                <div class="col-6 col-sm-4">
+                  <label class="tx-10 tx-medium tx-spacing-1 tx-color-03 tx-uppercase tx-sans mg-b-10">Date Created</label>
+                  <p class="tx-primary tx-rubik mg-b-0">{{ Carbon\Carbon::parse($user->contact->created_at ?? '', 'UTC')->isoFormat('MMMM Do YYYY, h:mm:ssa') }}</p></p>
                 </div>
                 <div class="col-sm-6 mg-t-20 mg-sm-t-30">
                   <label class="tx-10 tx-medium tx-spacing-1 tx-color-03 tx-uppercase tx-sans mg-b-10">Home Address</label>
-                  <p class="mg-b-0">8284 Ajose Adeogun Street, Victoria Island, Lagos, Nigeria</p>
-                </div>
-                <div class="col-sm-6 mg-t-20 mg-sm-t-30">
-                  <label class="tx-10 tx-medium tx-spacing-1 tx-color-03 tx-uppercase tx-sans mg-b-10">Work Address</label>
-                  <p class="mg-b-0">8284 Ajose Adeogun Street, Victoria Island, Lagos, Nigeria</p>
+                  <p class="mg-b-0">{{$user->contact->address ?? ''}}</p></p>
                 </div>
                 <div class="col-sm-6 mg-t-20 mg-sm-t-30">
                     <label class="tx-10 tx-medium tx-spacing-1 tx-color-03 tx-uppercase tx-sans mg-b-10">Rating</label>
@@ -85,6 +72,20 @@
                       </div>
                     </p>
                 </div>
+
+              </div><!-- row -->
+
+              <h5 class="mg-b-20">Bank Details</h5>
+              <div class="row row-sm">
+                <div class="col-6 col-sm-6">
+                  <label class="tx-10 tx-medium tx-spacing-1 tx-color-03 tx-uppercase tx-sans mg-b-10">Bank</label>
+                  <p class="tx-rubik mg-b-0">{{$user->bank->name ?? ''}}</p>
+                </div>
+                <div class="col-sm-6">
+                  <label class="tx-10 tx-medium tx-spacing-1 tx-color-03 tx-uppercase tx-sans mg-b-10">Account Number</label>
+                  <p class="tx-primary mg-b-0">{{$user->account->account_number ?? ''}}</p>
+                </div>
+                
 
               </div><!-- row -->
             </div>

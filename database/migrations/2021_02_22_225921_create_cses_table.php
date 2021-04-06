@@ -25,7 +25,6 @@ class CreateCsesTable extends Migration
             $table->foreignId('user_id')->index();
             $table->foreignId('account_id')->index();            
             $table->foreignId('referral_id')->index();
-            $table->foreignId('bank_id')->index();
             
             $table->foreignId('franchisee_id')->nullable();
             $table->integer('firsttime')->default(0);

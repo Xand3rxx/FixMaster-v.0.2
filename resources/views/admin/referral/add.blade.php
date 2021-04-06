@@ -51,7 +51,7 @@
                             <span class="invalid-feedback-err"></span>
                         </div>
 
-                        <div class="form-group col-md-6" id="cses">
+                        <div class="form-group col-md-6 d-none cses">
                             <label class='add-page'>Select Cses</label>
                             <select class="selectpicker show-tick select-user" id="users" name="cses"
                                 title="select..." 
@@ -69,7 +69,7 @@
                             @enderror
                         </div>
 
-                        <div class="form-group col-md-6" id="clients">
+                        <div class="form-group col-md-6 d-none clients">
                         <label class='add-page'>Select Client</label>
                             <select class="selectpicker show-tick select-user" id="users" name="users"
                                 title="select..."
@@ -101,43 +101,7 @@
 @push('scripts')
 
 <script src="{{ asset('assets/dashboard/assets/js/bootstrap-multiselect.js') }}"></script>
-
-<script>
-$('.selectpicker').selectpicker();
-$('#cses').hide();
-$('#clients').hide();
-$('.add-page').hide();
-
-$(document).ready(function() {
-    var entity ='';
-    $('#entity_id').on("change", function() {
-         entity = $(this).children("option:selected").val();
-        if (entity === 'client') {
-            $('#clients').show();
-            $('.add-page').show();
-            $('#cses').hide();
-        }
-        if (entity === 'cse') {
-            $('#clients').hide();
-            $('.add-page').show();
-            $('#cses').show();
-        }
-    });
-
-    entity = $('#entity_id').children("option:selected").val();
-        if (entity === 'client') {
-            $('#clients').show();
-            $('.add-page').show();
-            $('#cses').hide();
-        }
-        if (entity === 'cse') {
-            $('#clients').hide();
-            $('.add-page').show();
-            $('#cses').show();
-        }
-
-    });
-</script>
+<script src="{{ asset('assets/dashboard/assets/js/admin/referral/b09fced7-c17b-4b2e-b716-96323e4ab730.js') }}"></script>
 
 @endpush
 @endsection

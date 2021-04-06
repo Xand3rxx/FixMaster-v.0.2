@@ -34,6 +34,17 @@ class Technician extends Model
      */
     public function user()
     {
-        return $this->belongsTo(User::class)->with(['account', 'phones', 'roles']);
+        return $this->belongsTo(User::class)->with(['account', 'contact', 'roles']);
     }
+
+    public function service_request_assgined()
+    {
+        return $this->hasMany(ServiceRequestAssigned::class, 'user_id', 'user_id');
+    }
+
+    public function serviceRequests()
+    {
+        return $this->hasMany(ServiceRequest::class);
+    }
+
 }

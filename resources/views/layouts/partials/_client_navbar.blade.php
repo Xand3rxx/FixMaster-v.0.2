@@ -126,12 +126,12 @@
                 
                 <li><a class="{{ Route::currentRouteNamed('frontend.contact') ? 'selected' : '' }}" href="{{ route('frontend.contact', app()->getLocale()) }}">Contact</a></li>
 
-                <li class="has-submenu {{ Route::currentRouteNamed('') ? 'active' : '' }}">
+                <li class="has-submenu {{ Route::currentRouteNamed('client.index', 'client.services.list', 'client.services.details', 'client.services.quote') ? 'active' : '' }}">
                     <a href="javascript:void(0)" class="l-dark l-light">Profile</a><span class="menu-arrow"></span>
                     <ul class="submenu">
                         <li class="{{ Route::currentRouteNamed('client.index', app()->getLocale()) ? 'active' : '' }}"><a href="{{ route('client.index') }}">Dashboard</a></li>
 
-                        <li class="{{ Route::currentRouteNamed('') ? 'active' : '' }}"><a href="{{ route('') }}">Book a Service</a></li>
+                        <li class="{{ Route::currentRouteNamed('client.services.list', 'client.services.list', 'client.services.details', 'client.services.quote') ? 'active' : '' }}"><a href="{{ route('client.services.list') }}">Book a Service</a></li>
 
                         <li class="{{ Route::currentRouteNamed('') ? 'active' : '' }}"><a href="#">E-Wallet</a></li>
 
@@ -141,7 +141,7 @@
 
                         <li class="{{ Route::currentRouteNamed('client.messages') ? 'active' : '' }}"><a href="#">Messages</a></li>
 
-                        <li class="{{ Route::currentRouteNamed('client.settings') ? 'active' : '' }}"><a href="#">Settings</a></li>
+                        <li class="{{ Route::currentRouteNamed('client.settings') ? 'active' : '' }}"><a href="#">Settings</a></li> 
 
                         {{-- <li><a href="{{ route('login') }}">Logout</a></li> --}}
                     </ul>

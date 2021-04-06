@@ -2,26 +2,26 @@
 
 namespace App\Traits;
 
-use App\Models\User;
 use App\Models\Referral;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Hash;
 
 trait RegisterClient
 {
+    use RegisterUser;
     /**
-     * Handle registration of an Administartor request for the application.
+     * Handle registration of a Client request for the application.
      *
      * @param  array $valid
      * @return bool 
      */
-    public function register(array $valid, bool $registred = false)
+    public function register(array $valid)
     {
+        (bool) $registred = false;
+        
         DB::transaction(function () use ($valid, &$registred) {
             // store in users Table
             $user = $this->createUser($valid);
-          
 
             // find client role using slug of client-user
             $role = \App\Models\Role::where('slug', 'client-user')->first();
@@ -35,8 +35,8 @@ trait RegisterClient
             // store in accounts table
             $account = $user->account()->create([
                 'state_id'          =>  $valid['state_id'],
-                'lga_id'          =>  $valid['lga_id'],
-                'town_id'          =>  $valid['town_id'] ?? '0',
+                'lga_id'            =>  $valid['lga_id'],
+                'town_id'           =>  $valid['town_id'] ?? '0',
                 'first_name'        => $valid['first_name'],
                 'middle_name'       => $valid['middle_name'] ?: "",
                 'last_name'         => $valid['last_name'],
@@ -51,37 +51,21 @@ trait RegisterClient
                 'profession_id' => $valid['profession_id'] ?? "0",
             ]);
 
-              // Store in referrals table
-             $code = $valid['ref'];
-             if($code){
-                Referral::where('referral_code', $code )->increment('referral_count' , 1);
-                Referral::create(['user_id'=> $user->id, 'referral'=> $code, 'referral_count'=> 0]);  
-             }
-        
-          
-
+             // Store in referrals table
+             if(isset($valid['ref'])){
+                $code = $valid['ref'];
+                if($code){
+                   Referral::where('referral_code', $code )->increment('referral_count' , 1);
+                   Referral::create(['user_id'=> $user->id, 'referral'=> $code, 'referral_count'=> 0]);  
+                }
+               }
+           
             // update registered to be true
             $registred = true;
             $this->guard()->login($user);
         });
 
         return $registred;
-    }
-
-    /**
-     * Create a new user instance after a valid registration.
-     *
-     * @param  array  $data
-     * @return \App\Models\User
-     */
-    protected function createUser(array $data)
-    {
-        return User::create([
-            'email' => $data['email'],
-            'password' => Hash::make($data['password']),
-          
-           
-        ]);
     }
 
     /**
@@ -93,6 +77,4 @@ trait RegisterClient
     {
         return Auth::guard();
     }
-
-    
 }

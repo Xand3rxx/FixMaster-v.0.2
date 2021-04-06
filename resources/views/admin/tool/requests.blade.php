@@ -48,11 +48,11 @@
                 @foreach ($toolRequests as $toolRequest)
                   <tr>
                     <td class="tx-color-03 tx-center">{{ ++$i }}</td>
-                    <td class="tx-medium">{{ $toolRequest->serviceRequest->job_reference }}</td>
-                    <td class="tx-medium">{{ $toolRequest->batch_number }}</td>
-                    <td class="tx-medium">{{ $toolRequest->serviceRequest->user->fullName->name }}</td>
-                    <td class="tx-medium">{{ $toolRequest->approver->fullName->name ?? 'Null' }}</td>
-                    <td class="tx-medium">{{ $toolRequest->requester->fullName->name }}</td>
+                    <td class="tx-medium">{{ $toolRequest->serviceRequest->unique_id }}</td>
+                    <td class="tx-medium">{{ $toolRequest->unique_id }}</td>
+                    <td class="tx-medium">{{ Str::title($toolRequest['serviceRequest']['clientAccount']['first_name'] ." ". $toolRequest['serviceRequest']['clientAccount']['last_name']) }}</td>
+                    <td class="tx-medium">{{ Str::title($toolRequest['approver']['account']['first_name'] ." ". $toolRequest['approver']['account']['last_name']) }}</td>
+                    <td class="tx-medium">{{ Str::title($toolRequest['requester']['account']['first_name'] ." ". $toolRequest['requester']['account']['last_name']) }}</td>
                     @if($toolRequest->status == 'Pending')
                       <td class="text-medium text-warning">Pending</td>
                     @elseif($toolRequest->status == 'Approved')
@@ -65,13 +65,13 @@
                       <div class="dropdown-file">
                         <a href="" class="dropdown-link" data-toggle="dropdown"><i data-feather="more-vertical"></i></a>
                         <div class="dropdown-menu dropdown-menu-right">
-                        <a href="#toolsRequestDetails" data-toggle="modal" class="dropdown-item details text-primary" title="View {{ $toolRequest->batch_number}} details" data-batch-number="{{ $toolRequest->batch_number}}" data-url="{{ route('admin.tool_request_details', $toolRequest->id) }}" id="tool-request-details"><i class="far fa-clipboard"></i> Details</a>
+                        <a href="#toolsRequestDetails" data-toggle="modal" class="dropdown-item details text-primary" title="View {{ $toolRequest->unique_id}} details" data-batch-number="{{ $toolRequest->batch_number}}" data-url="{{ route('admin.tool_request_details', ['tool_request'=>$toolRequest->uuid, 'locale'=>app()->getLocale()]) }}" id="tool-request-details"><i class="far fa-clipboard"></i> Details</a>
                         @if($toolRequest->status == 'Pending')
-                          <a href="{{ route('admin.approve_tool_request', $toolRequest->id) }}" class="dropdown-item details text-success"><i class="fas fa-check"></i> Approve</a>
-                          <a href="{{ route('admin.decline_tool_request', $toolRequest->id) }}" class="dropdown-item details text-danger"><i class="fas fa-ban"></i> Decline</a>
+                          <a href="{{ route('admin.approve_tool_request', ['tool_request'=>$toolRequest->uuid, 'locale'=>app()->getLocale()]) }}" class="dropdown-item details text-success"><i class="fas fa-check"></i> Approve</a>
+                          <a href="{{ route('admin.decline_tool_request', ['tool_request'=>$toolRequest->uuid, 'locale'=>app()->getLocale()]) }}" class="dropdown-item details text-danger"><i class="fas fa-ban"></i> Decline</a>
                         @endif
                         @if($toolRequest->status == 'Approved' && $toolRequest->is_returned == '0')
-                          <a href="{{ route('admin.return_tools_requested', $toolRequest->id) }}" class="dropdown-item details text-success"><i class="fas fa-undo"></i> Mark as Returned</a>
+                          <a href="{{ route('admin.return_tools_requested', ['tool_request'=>$toolRequest->uuid, 'locale'=>app()->getLocale()]) }}" class="dropdown-item details text-success"><i class="fas fa-undo"></i> Mark as Returned</a>
                         @endif
                         </div>
                       </div>
@@ -119,7 +119,7 @@
       $.ajax({
           url: route,
           beforeSend: function() {
-            $("#spinner-icon").html('<div class="d-flex justify-content-center mt-4 mb-4"><span class="loadingspinner"></span></div>');
+            $("#modal-body").html('<div class="d-flex justify-content-center mt-4 mb-4"><span class="loadingspinner"></span></div>');
           },
           // return the result
           success: function(result) {

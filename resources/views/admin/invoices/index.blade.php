@@ -16,11 +16,8 @@
                     <h4 class="mg-b-0 tx-spacing--1">Invoices</h4>
                 </div>
                 <div class="d-md-block">
-                    <a href="" class="btn btn-primary"><i class="fas fa-plus"></i> Create New Invoice</a>
-                    <a href="{{ route('admin.diagnostic', app()->getLocale()) }}" class="btn btn-primary"><i class="fas fa-plus"></i> Diagnostic Invoice</a>
-                    <a href="{{ route('admin.rfq', app()->getLocale()) }}" class="btn btn-primary"><i class="fas fa-plus"></i> RFQ Issuance</a>
-                    <a href="" class="btn btn-primary"><i class="fas fa-plus"></i> Supplier Return</a>
-                    <a href="" class="btn btn-primary"><i class="fas fa-plus"></i> Service Completion</a>
+                    <a href="" class="btn btn-primary">Invoices</a>
+                    <a href="{{ route('admin.rfq', app()->getLocale()) }}" class="btn btn-primary"><i class="fas fa-plus"></i> Simulation</a>
                 </div>
             </div>
 
@@ -42,6 +39,7 @@
                                 <tr>
                                     <th class="text-center">#</th>
                                     <th>Invoice Number</th>
+                                    <th>Invoice Type</th>
                                     <th>Customer</th>
                                     <th>Date</th>
                                     <th>Total</th>
@@ -51,26 +49,26 @@
                                 </tr>
                                 </thead>
                                 <tbody>
+                                @foreach($invoices as $invoice)
                                     <tr>
-                                        <td class="tx-color-03 tx-center">1</td>
-                                        <td class="tx-medium">INV-2021-05</td>
-                                        <td class="tx-medium">Francis Maja</td>
-                                        <td class="tx-medium">12 Feb 2021</td>
-                                        <td class="text-medium">#6000.00</td>
-                                        <td class="text-medium">#6000.00</td>
-                                        <td class="text-medium text-danger">Unpaid</td>
+                                        <td class="tx-color-03 tx-center">{{ $loop->iteration }}</td>
+                                        <td class="tx-medium">{{ $invoice['invoice_number'] }}</td>
+                                        <td class="tx-medium">{{ $invoice['invoice_type'] }}</td>
+                                        <td class="tx-medium">{{ Str::title($invoice['client']['account']['first_name']. ' '.$invoice['client']['account']['last_name']) }}</td>
+                                        <td class="tx-medium">{{ Carbon\Carbon::parse($invoice->created_at, 'UTC')->isoFormat('MMMM Do YYYY, h:mm:ssa') }}</td>
+                                        <td class="text-medium">₦ {{ number_format($invoice['total_amount'] ?? '0') }}</td>
+                                        <td class="text-medium">₦ {{ number_format($invoice['amount_due'] ?? '0') }}</td>
+                                        <td class="text-medium">{!! $invoice['invoice_type'] == 'RFQ Invoice' ? ' - ' : ($invoice['status'] == 1 ? '<span class="text-danger">Unpaid</span>' : '<span class="text-success">Paid</span>') !!}</td>
                                         <td class=" text-center">
                                             <div class="dropdown-file">
                                                 <a href="" class="dropdown-link" data-toggle="dropdown"><i data-feather="more-vertical"></i></a>
                                                 <div class="dropdown-menu dropdown-menu-right">
-                                                    <a href="" class="dropdown-item details text-primary"><i class="far fa-user"></i> Summary</a>
-                                                    <a href="" class="dropdown-item details text-info"><i class="far fa-edit"></i> Edit</a>
-                                                    <a href="" class="dropdown-item details text-secondary"><i class="fa fa-percent"></i> Discount </a>
-                                                    <a href="" class="dropdown-item details text-danger"><i class="fas fa-trash"></i> Delete</a>
+                                                    <a href="{{ route('invoice', ['locale' => app()->getLocale(), 'invoice' => $invoice['uuid']]) }}" class="dropdown-item details text-info"><i data-feather="file-text" class="fea icon-sm"></i> View Invoice</a>
                                                 </div>
                                             </div>
                                         </td>
                                     </tr>
+                                @endforeach
                                 </tbody>
                             </table>
                         </div><!-- table-responsive -->

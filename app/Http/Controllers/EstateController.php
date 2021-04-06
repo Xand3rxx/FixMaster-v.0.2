@@ -2,6 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Client;
+use App\Models\DiscountHistory;
+use App\Models\EstateDiscountHistory;
 use Route;
 use Auth;
 use Illuminate\Support\Facades\URL;
@@ -32,8 +35,8 @@ class EstateController extends Controller
         $getAdminId = Estate::select('approved_by')->pluck('approved_by');
         $approvedBy = User::find($getAdminId);
 
-        $userRole = Auth::user()->type->role->url;
-        // dd($userRole);
+//        $clientEstateCount = Client::where('estate_id', 1)->count();
+//         dd($clientEstateCount);
 
         return view('admin.estate.list', compact('estates', 'approvedBy'));
     }
@@ -125,7 +128,7 @@ class EstateController extends Controller
             }
             return back()->with('success', 'Estate has been added successfully');
         } else {
-            $type = 'Erroros';
+            $type = 'Errors';
             $severity = 'Error';
             $actionUrl = Route::currentRouteAction();
             $message = 'An Error Occured while '. Auth::user()->email. ' was trying to create '.$request->input('estate_name');
@@ -138,11 +141,13 @@ class EstateController extends Controller
      * Display the specified resource.
      *
      * @param  \App\Models\Estate  $estate
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View|\Illuminate\Http\Response
      */
     public function estateSummary($language, Estate $estate)
     {
-        return view('admin.estate.summary', compact('estate'));
+        $registeredClients = Client::where('estate_id', $estate->id)->get();
+        $estateDiscounts = EstateDiscountHistory::where('estate_id', $estate->id)->get();
+        return view('admin.estate.summary', compact('estate', 'registeredClients', 'estateDiscounts'));
     }
 
     /**
@@ -211,14 +216,16 @@ class EstateController extends Controller
      * @param  \App\Models\Estate  $estate
      * @return \Illuminate\Http\Response
      */
-    public function delete($language, Estate $estate)
+    public function delete($language, $estate)
     {
-        $deleteEstate = $estate->delete();
-        if ($deleteEstate){
+        $estateExists = Estate::where('uuid', $estate)->first();
+
+        $softDeleteEstate = $estateExists->delete();
+        if ($softDeleteEstate){
             $type = 'Request';
             $severity = 'Informational';
             $actionUrl = Route::currentRouteAction();
-            $message = Auth::user()->email.' deleted '.$estate->estate_name;
+            $message = Auth::user()->email.' deleted '.$estateExists->estate_name;
             $this->log($type, $severity, $actionUrl, $message);
             return redirect()->route('admin.list_estate', app()->getLocale())->with('success', 'Estate has been deleted');
         }

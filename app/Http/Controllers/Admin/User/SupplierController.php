@@ -2,11 +2,15 @@
 
 namespace App\Http\Controllers\Admin\User;
 
-use App\Http\Controllers\Controller;
+use App\Models\Supplier;
+use App\Traits\Services;
 use Illuminate\Http\Request;
+use App\Traits\RegisterSupplier;
+use App\Http\Controllers\Controller;
 
 class SupplierController extends Controller
 {
+    use RegisterSupplier, Services;
     /**
      * Display a listing of the resource.
      *
@@ -14,7 +18,9 @@ class SupplierController extends Controller
      */
     public function index()
     {
-        //
+        return view('admin.users.supplier.index', [
+            'users' => Supplier::with('user')->get(),
+        ]);
     }
 
     /**
@@ -24,7 +30,13 @@ class SupplierController extends Controller
      */
     public function create()
     {
-        //
+        $service = $this->categoryAndServices();
+        return view('admin.users.supplier.create', [
+            'states' => \App\Models\State::select('id', 'name')->orderBy('name', 'ASC')->get(),
+            'banks' => \App\Models\Bank::select('id', 'name')->orderBy('name', 'ASC')->get(),
+            'education_levels' => Supplier::EDUCATIONLEVEL,
+            'services' => $service['services']
+        ]);
     }
 
     /**
@@ -35,7 +47,13 @@ class SupplierController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        // Validate Request
+        (array) $valid = $this->validateCreateSupplier($request);
+        // Register a Supplier
+        (bool) $registered = $this->register($valid);
+        return ($registered == true)
+            ? redirect()->route('admin.users.supplier.index', app()->getLocale())->with('success', "A Supplier Created Successfully!!")
+            : back()->with('error', "An error occurred while creating User");
     }
 
     /**
@@ -81,5 +99,42 @@ class SupplierController extends Controller
     public function destroy($id)
     {
         //
+    }
+
+    /**
+     * Validate the create supplier user request.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return array
+     *
+     * @throws \Illuminate\Validation\ValidationException
+     */
+    protected function validateCreateSupplier(Request $request)
+    {
+        return $request->validate([
+            'first_name'                =>   'required|string|max:180',
+            'middle_name'               =>   'sometimes|max:180',
+            'last_name'                 =>   'sometimes|string|max:180',
+            'email'                     =>   'required|email|unique:users,email|bail',
+            'phone_number'              =>   'required|numeric|unique:contacts,phone_number|bail',
+            'supplier_name'             =>   'required|string|max:180|unique:suppliers,business_name|bail',
+            'cac_number'                =>   'required|string|max:14|unique:suppliers,cac_number|bail',
+            'established_on'            =>   'required|string|date',
+            'supplier_description'      =>   'required|string',
+            'education_level'           =>   ['required', \Illuminate\Validation\Rule::in(Supplier::EDUCATIONLEVEL)],
+            'bank_id'                   =>   'required|numeric',
+            'account_number'            =>   'required|numeric',
+            'password'                  =>   'required|min:8',
+            'confirm_password'          =>   'required|same:password',
+            'state_id'                  =>   'required|numeric',
+            'lga_id'                    =>   'required|numeric',
+            'town'                      =>   'required|string|max:180',
+            'full_address'              =>   'required|string',
+            'address_latitude'          =>   'required|string',
+            'address_longitude'         =>   'required|string',
+            'avatar'                    =>   'sometimes|image',
+            'supplier_category'         =>   'required|array',
+            'supplier_category.*'       =>   'required|string',
+        ]);
     }
 }

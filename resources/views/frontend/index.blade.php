@@ -108,7 +108,7 @@
                 </a>
             </div>
             <div class="buy-button">
-                <a href="{{ route('frontend.index', app()->getLocale()) }}" target="_blank">
+                <a href="{{ route('services.list', app()->getLocale()) }}" target="_blank">
                     <div class="btn btn-primary login-btn-primary">Book a Service</div>
                     <div class="btn btn-light login-btn-light buy-btn-two">Book a Service</div>
                 </a>
@@ -198,10 +198,10 @@
                                     <div class="title-heading text-center">
                                         <h1 class="heading mb-3" style="color: #ffffff;">Get A <span class="type"></span> <br> <span class="texty"> Client Service
                                                 Executive</span> </h1>
-                                        <p class="para-desc mx-auto text-muted1">We assign a dedicated Client Service Executive to you who ensures your job is completed promptly and professionally</p>
+                                        <p class="para-desc mx-auto text-muted1">We assign a dedicated Customer Service Executive to you who ensures your job is completed promptly and professionally</p>
                                         <p class="texty2">WE REPAIR while YOU RELAX!!!</p>
                                         <div class="mt-4">
-                                            <a href="{{ route('frontend.services', app()->getLocale()) }}" class="btn btn-prim mt-2 mr-2 js-scroll-trigger">Book a Service</a>
+                                            <a href="{{ route('services.list', app()->getLocale()) }}" class="btn btn-prim mt-2 mr-2 js-scroll-trigger">Book a Service</a>
                                         </div>
                                     </div>
                                 </div>
@@ -226,7 +226,7 @@
                                         <p class="texty2">WE REPAIR while YOU RELAX!!!</p>
 
                                         <div class="mt-4">
-                                            <a href="{{ route('frontend.services', app()->getLocale()) }}" class="btn btn-prim mt-2 mr-2 js-scroll-trigger">Book a Service</a>
+                                            <a href="{{ route('services.list', app()->getLocale()) }}" class="btn btn-prim mt-2 mr-2 js-scroll-trigger">Book a Service</a>
                                         </div>
                                     </div>
                                 </div>
@@ -280,7 +280,7 @@
                             <div class="post-meta d-flex justify-content-between mt-2">
                                 <p class="serv__3 text-muted">We offer services for Generator repairs of all kinds.</p>
                             </div>
-                            <a href="{{ route('frontend.services', app()->getLocale()) }}" class="btn btn-outline-fix btn-block">Request Service</a>
+                            <a href="{{ route('services.list', app()->getLocale()) }}" class="btn btn-outline-fix btn-block">Request Service</a>
                         </div>
                     </div>
                 </div>
@@ -299,7 +299,7 @@
                                 <p class="serv__3 text-muted">We provide you quality services include AC maintenance, Ac Repairing, Air conditioner Installation and AC service.</p>
 
                             </div>
-                            <a href="{{ route('frontend.services', app()->getLocale()) }}" class="btn btn-outline-fix btn-block">Request Service</a>
+                            <a href="{{ route('services.list', app()->getLocale()) }}" class="btn btn-outline-fix btn-block">Request Service</a>
                         </div>
                     </div>
                 </div>
@@ -316,7 +316,7 @@
                                 <p class="serv__3 text-muted">We repair all kinds electrical appliances such as Televisons, DvDs, Sound Systems etc.</p>
 
                             </div>
-                            <a href="{{ route('frontend.services', app()->getLocale()) }}" class="btn btn-outline-fix btn-block">Request Service</a>
+                            <a href="{{ route('services.list', app()->getLocale()) }}" class="btn btn-outline-fix btn-block">Request Service</a>
                         </div>
                     </div>
                 </div>
@@ -336,7 +336,7 @@
                             <div class="post-meta d-flex justify-content-between mt-2">
                                 <p class="serv__3 text-muted">We can fix all plumbing job types. Fix it right with an expert plumber. You Can Count On! All works are carried out promptly.</p>
                             </div>
-                            <a href="{{ route('frontend.services', app()->getLocale()) }}" class="btn btn-outline-fix btn-block">Request Service</a>
+                            <a href="{{ route('services.list', app()->getLocale()) }}" class="btn btn-outline-fix btn-block">Request Service</a>
                         </div>
                     </div>
                 </div>
@@ -355,7 +355,7 @@
                                 <p class="serv__3 text-muted">If you've got a leaky fridge, a rattling dryer, a barely cooling HVAC, a stove that no longer sizzles or a clogged dishwasher, we've got you covered.</p>
 
                             </div>
-                            <a href="{{ route('frontend.services', app()->getLocale()) }}" class="btn btn-outline-fix btn-block">Request Service</a>
+                            <a href="{{ route('services.list', app()->getLocale()) }}" class="btn btn-outline-fix btn-block">Request Service</a>
                         </div>
                     </div>
                 </div>
@@ -372,13 +372,13 @@
                                 <p class="serv__3 text-muted">We repair and fix all kinds of phones,IPhone,Android and Windows Phone etc.</p>
 
                             </div>
-                            <a href="{{ route('frontend.services', app()->getLocale()) }}" class="btn btn-outline-fix btn-block">Request Service</a>
+                            <a href="{{ route('services.list', app()->getLocale()) }}" class="btn btn-outline-fix btn-block">Request Service</a>
                         </div>
                     </div>
                 </div>
                 <!--end col-->
             </div>
-            <p class="text-center mt-4"><a href="{{ route('frontend.services', app()->getLocale()) }}" class="browse">Browse more services &rarr;</a></p>
+            <p class="text-center mt-4"><a href="{{ route('services.list', app()->getLocale()) }}" class="browse">Browse more services &rarr;</a></p>
         </div>
     </section>
 

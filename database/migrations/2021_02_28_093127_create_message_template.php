@@ -20,8 +20,12 @@ class CreateMessageTemplate extends Migration
 
             $table->id();
             $table->uuid('uuid')->unique();
+            $table->integer('sender');
             $table->string('title');
+            $table->integer('recipient');
+
             $table->text('content');
+            $table->enum('mail_status',['pending', 'sent', 'read'])->default('pending');
             $table->enum('type', ['sms', 'email']);
             $table->enum('feature', ['CUSTOMER_REGISTRATION','PAYMENT_CONFIRMATION',
             'TECHNICIAN_ASSIGNED','DIAGNOSIS_VISIT','DIAGNOSIS_VISIT_RESCHEDULED',

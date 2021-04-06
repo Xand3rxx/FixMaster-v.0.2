@@ -5,9 +5,10 @@ namespace App\Models;
 use Illuminate\Support\Str;
 use App\Traits\RolesAndPermissions;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 
-class User extends Authenticatable
+class User extends Authenticatable implements MustVerifyEmail
 {
     use Notifiable, RolesAndPermissions;
 
@@ -51,7 +52,7 @@ class User extends Authenticatable
         static::creating(function ($user) {
             $user->uuid = (string) Str::uuid(); // Create uuid when a new user is to be created
         });
-    }
+    } 
 
     /**
      * Get the Type associated with the user.
@@ -99,6 +100,14 @@ class User extends Authenticatable
     public function account()
     {
         return $this->hasOne(Account::class);
+    } 
+
+    /**
+     * Get the Account associated with the user.
+     */
+    public function contact()
+    {
+        return $this->hasOne(Contact::class, 'user_id');
     }
 
     /**
@@ -110,11 +119,35 @@ class User extends Authenticatable
     }
 
     /**
-     * Get the Administrator associated with the user.
+     * Get the CSE associated with the user.
      */
     public function cse()
     {
         return $this->hasOne(Cse::class);
+    }
+
+    /**
+     * Get the Franchisee associated with the user.
+     */
+    public function franchisee()
+    {
+        return $this->hasOne(Franchisee::class);
+    }
+
+    /**
+     * Get the Supplier associated with the user.
+     */
+    public function supplier()
+    {
+        return $this->hasOne(Supplier::class);
+    }
+
+    /**
+     * Get the Technician & Artisan associated with the user.
+     */
+    public function technician()
+    {
+        return $this->hasOne(Technician::class);
     }
 
     /**
@@ -125,28 +158,9 @@ class User extends Authenticatable
         return $this->hasMany(ActivityLog::class);
     }
 
-    /**
-     * Get the phone associated with the user.
-     */
-    public function phone()
+    public function address()
     {
-        return $this->hasOne(Phone::class);
-    }
-
-    /**
-     * Get the phone associated with the user.
-     */
-    public function phones()
-    {
-        return $this->hasMany(Phone::class);
-    }
-
-    /**
-     * Get the phone associated with the user.
-     */
-    public function addresses()
-    {
-        return $this->hasMany(Address::class);
+        return $this->hasOne(Contact::class, 'user_id');
     }
 
     public function estate()
@@ -180,6 +194,40 @@ class User extends Authenticatable
 
     public function serviceRequests()
     {
-        return $this->hasMany(ServiceRequest::class);
+        return $this->hasMany(ServiceRequestAssigned::class, 'user_id');
+    }
+    
+    public function clientRequest()
+    {
+        return $this->hasOne(ServiceRequest::class, 'client_id');
+    }
+    public function clientRequests()
+    {
+        return $this->hasMany(ServiceRequest::class, 'client_id');
+    }
+
+    public function bank()
+    {
+        return $this->hasOne(Bank::class, 'id');
+    }
+
+    public function serviceCompleted()
+    {
+        return $this->hasMany(Status::class, 'user_id')->where('name','=', 'Completed');
+    }
+
+    public function serviceCancelled()
+    {
+        return $this->hasMany(Status::class, 'user_id')->where('name','=', 'Cancelled');
+    }
+
+    public function cse_jobs()
+    {
+        return $this->hasMany(ServiceRequestAssigned::class, 'user_id');
+    }
+
+    public function requests()
+    {
+        return $this->hasMany(ServiceRequest::class, 'client_id');
     }
 }

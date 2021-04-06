@@ -1,266 +1,209 @@
-@extends('layouts.dashboard')
-@section('title', 'Edit Profile')
-@include('layouts.partials._messages')
+@extends('layouts.client')
+@section('title', 'Profile Setting')
 @section('content')
-<div class="content-body">
-    <div class="container pd-x-0">
-      <div class="d-sm-flex align-items-center justify-content-between mg-b-20 mg-lg-b-25 mg-xl-b-30">
-        <div>
-          <nav aria-label="breadcrumb">
-            <ol class="breadcrumb breadcrumb-style1 mg-b-10">
-            <li class="breadcrumb-item"><a href="{{ route('cse.home') }}">Dashboard</a></li>
-              <li class="breadcrumb-item active" aria-current="page">Edit Profile</li>
-            </ol>
-          </nav>
-          <h4 class="mg-b-0 tx-spacing--1">Account Settings</h4>
-        </div>
-      </div>
+@include('layouts.partials._messages')
 
-      <div class="row row-xs">
-        <div class="col-lg-12 col-xl-12">
-          <div class="card">
-            <ul class="nav nav-tabs nav-justified" id="myTab3" role="tablist">
-                <li class="nav-item">
-                  <a class="nav-link active" id="description-tab3" data-toggle="tab" href="#description3" role="tab" aria-controls="description" aria-selected="true">Update Profile</a>
-                </li>
-                <li class="nav-item">
-                  <a class="nav-link" id="rfq-tab3" data-toggle="tab" href="#rfq3" role="tab" aria-controls="rfq" aria-selected="false">Change Password</a>
-                </li>
-              </ul>
-              <div class="tab-content bd bd-gray-300 bd-t-0 pd-20" id="myTabContent3">
-                <div class="tab-pane fade show active" id="description3" role="tabpanel" aria-labelledby="description-tab3">
-                  <h6>UPDATE PROFILE</h6>
-                  <div class="card-body pd-20 pd-lg-25">
-                    <form action="{{route('cse.updateProfile')}}" method="post" role="form" enctype="multipart/form-data">
-                    {{ csrf_field() }}
-                        <div class="d-sm-flex float-left">
-                            <div class="mg-sm-r-30">
-                                <div class="pos-relative d-inline-block mg-b-20">
-                                    <a href="#">
-                                    <div class="avatar avatar-xxl">
-                                      <div class="user-img">
-                                        <img class="rounded-circle wh-150p img-fluid image profile_image_preview" src="{{!empty($avatar) ? asset('assets/cse-technician-images/'.$avatar) : asset('assets/admin/img/noimage.jpg')}}" alt="user-image">
-                                      </div>
-                                      
-                                      </div></a>
-                                    {{-- <a href="" class="contact-edit-photo"><i data-feather="edit-2"></i></a> --}}
-                                </div>
-                            </div><!-- col -->
-                        </div>
-                        <!-- First Name -->
-                        <div class="form-row">
+      <div class="col-lg-8 col-12">
+          <div class="card border-0 rounded shadow">
+              <div class="card-body mt-">
+                  <h5 class="text-md-left text-center">Personal Detail :</h5>
+  
+                  <div class="mt-3 text-md-left text-center d-sm-flex">
+                
+                  @if(!empty($client->user->account->avatar)) 
+                    <img src="{{ asset('assets/user-avatars/'.$client->user->account->avatar) }}" id="avatar" class="d-none profile_image_preview avatar float-md-left avatar-medium rounded-circle shadow mr-md-4" alt="{{ $client->user->account->first_name }}" />
+                  @endif
 
-                            <div class="form-group col-md-4">
-                                <label for="inputEmail4">First Name</label>
-                                <input type="text" class="form-control @error('first_name') is-invalid @enderror" name="first_name" id="first_name" value="{{ $firstName }}">
-                                @error('first_name')
-                                <span class="invalid-feedback" role="alert">
-                                    <strong>{{ $message }}</strong>
-                                </span>
-                              @enderror
-                            </div>
-                            <!-- Middle Name -->
-                            <div class="form-group col-md-4">
-                                <label for="inputEmail4">Middle Name</label>
-                                <input type="text" class="form-control" id="middle_name" name="middle_name" value="{{ $middleName }}">
-                                @error('first_name')
-                                <span class="invalid-feedback" role="alert">
-                                    <strong>{{ $message }}</strong>
-                                </span>
-                              @enderror
-                            </div>
-                            <!-- Last Name -->
-                            <div class="form-group col-md-4">
-                                <label for="inputEmail4">Last Name</label>
-                                <input type="text" class="form-control @error('last_name') is-invalid @enderror" id="last_name" name="last_name" value="{{ $lastName }}">
-                                @error('last_name')
-                                <span class="invalid-feedback" role="alert">
-                                    <strong>{{ $message }}</strong>
-                                </span>
-                              @enderror
-                            </div>
-                            <!-- Email -->
-                            <div class="form-group col-md-4">
-                                <label for="inputEmail4">Email</label>
-                                <input type="email" class="form-control @error('email') is-invalid @enderror" id="email" name="email" value="{{ $email }}">
-                                @error('email')
-                                <span class="invalid-feedback" role="alert">
-                                    <strong>{{ $message }}</strong>
-                                </span>
-                              @enderror
-                            </div>
-                            <!-- Phone Number -->
-                            <div class="form-group col-md-4">
-                              <label for="inputEmail4">Phone Number</label>
-                              <input type="tel" class="form-control @error('phone_number') is-invalid @enderror" id="phone_number" name="phone_number" maxlength="11" value="{{ old('phone_number')?? $phoneNumber }}">
-                              @error('phone_number')
-                                <span class="invalid-feedback" role="alert">
-                                    <strong>{{ $message }}</strong>
-                                </span>
-                              @enderror
-                            </div>
-                            <!-- Other Phone Number -->
-                            <div class="form-group col-md-4">
-                              <label for="inputEmail4">Other Phone Number</label>
-                              <input type="tel" class="form-control" id="other_phone_number" maxlength="11" maxlength="11" value="{{ old('other_phone_number')?? $otherPhoneNumber }}">
-                            </div>
-                            <!-- Profile Avatar -->
-                            <div class="form-group col-md-4">
+                  <img src="{{ asset('assets/user-avatars/'.$client->user->account->avatar) }}" id="avatar" class="d-none profile_image_preview avatar float-md-left avatar-medium rounded-circle shadow mr-md-4" alt="{{ $client->user->account->first_name }}" />
+                  </div>
+
+                  <form method="POST" action="{{ route('client.updateProfile', app()->getLocale()) }}" enctype="multipart/form-data">
+                   {{ csrf_field() }}
+                      <div class="row mt-4">
+                      <!-- first name -->
+                          <div class="col-md-4">
+                              <div class="form-group position-relative">
+                                  <label>First Name</label>
+                                  <i data-feather="user" class="fea icon-sm icons"></i>
+                                  <input name="first_name" id="first_name" type="text" class="form-control pl-5" value="{{$client->user->account->first_name}}" placeholder="First Name :" />
+                              </div>
+                          </div>
+                          <!--end col-->
+                        <!-- middle name -->
+                          <div class="col-md-4">
+                              <div class="form-group position-relative">
+                                  <label>Middle Name</label>
+                                  <i data-feather="user" class="fea icon-sm icons"></i>
+                                  <input name="middle_name" id="middle_name" type="text" class="form-control pl-5" value="{{$client->user->account->middle_name}}" placeholder="Middle Name :" />
+                              </div>
+                          </div>
+                          <!--end col-->
+                          <!-- Last Name -->
+                          <div class="col-md-4">
+                              <div class="form-group position-relative">
+                                  <label>Last Name</label>
+                                  <i data-feather="user" class="fea icon-sm icons"></i>
+                                  <input name="last_name" id="last_name" type="text" class="form-control pl-5" value="{{$client->user->account->last_name}}" placeholder="Last Name :" />
+                              </div>
+                          </div>
+                          <!--end col-->
+                          <!-- Email -->
+                          <div class="col-md-4">
+                              <div class="form-group position-relative">
+                                  <label>Your Email</label>
+                                  <i data-feather="mail" class="fea icon-sm icons"></i>
+                                  <input name="email" id="email" type="email" class="form-control pl-5" value="{{$client->user->email}}" placeholder="Your E-Mail :" />
+                              </div>
+                          </div>
+                          <!--end col-->
+                          <!-- Phone No -->
+                          <div class="col-md-4">
+                              <div class="form-group position-relative">
+                                  <label>Phone No. :</label>
+                                  <i data-feather="phone" class="fea icon-sm icons"></i>
+                                  <input name="phone_number" id="phone_number" type="tel" maxlength="11" class="form-control pl-5" value="{{$client->user->phones[0]->number}}" placeholder="Phone :" />
+                              </div>
+                          </div>
+                          <!--end col-->
+                          <!-- Profile Avatar -->
+                          <div class="form-group col-md-4">
                               <label>Profile Avatar</label>
-                              <div class="custom-file">
-                                <input type="file" accept="image/*" class="custom-file-input @error('image') is-invalid @enderror" name="profile_avater" id="profile_image">
+                              <div class="custom-file change-picture">
+                                <input type="file" accept="image/*" class="custom-file-input @error('image') is-invalid @enderror" name="profile_avater" id="profile_image" value="{{$client->user->account->avatar}}">
                                 <label class="custom-file-label" id="imagelabel" for="profile_image">Upload Profile Avatar</label>
                                
-                                @error('image')
-                                <span class="invalid-feedback" role="alert">
-                                    <strong>{{ $message }}</strong>
-                                </span>
-                              @enderror
                               </div>
-
                             </div>
-                            <!-- Bank Name -->
-                            <div class="form-group col-md-4">
-                              <label>Bank Name</label>
-                              <select id="bankSelect" name="bank_id" class="custom-select bank_id @error('bank_id') is-invalid @enderror">
-                                  
-                              <option data-display="Select Bank *" value="">Bank *</option>
-                                @foreach($allBanks as $allBank)
-                                    <option value="{{$allBank->id}}" {{$allBank->id == $bank_selected->id ? 'selected':'' }}>{{$allBank->name}} </option>
-                                @endforeach
-                              </select>
-
-                              @error('bank_id')
-                              <span class="invalid-feedback" role="alert">
-                                  <strong>{{ $message }}</strong>
-                              </span>
-                            @enderror
-
-                            </div>
-                            <!-- Account Number -->
-                            <div class="form-group col-md-4">
-                                <label for="account_number">Account Number</label>
-                                <input type="text" class="form-control @error('account_number') is-invalid @enderror" id="account_number" name="account_number" placeholder="Account Number" value="{{ old('account_number')?? $accountNumber }}" maxlength="10"  autocomplete="off">
-                                @error('account_number')
-                                <span class="invalid-feedback" role="alert">
-                                    <strong>{{ $message }}</strong>
-                                </span>
-                              @enderror
-                            </div>
-                            <!-- State -->
-                            <div class="form-group col-md-3">
-                              <label>State</label>
-                              <select class="form-control @error('state_id') is-invalid @enderror" name="state_id" id="state_id">
-                                <!-- <option selected value="">Select...</option> -->
-                                
-                                <option data-display="Select State *" value="">State *</option>
-                                @foreach($allStates as $allState)
-                                    <option value="{{$allState->id}}" {{$allState->id == $state_selected->id ? 'selected':'' }}>{{$allState->name}} </option>
-                                @endforeach
-
-                              </select>
-
-                              @error('state_id')
-                                <span class="invalid-feedback" role="alert">
-                                    <strong>{{ $message }}</strong>
-                                </span>
-                              @enderror
-                            </div>
-                            <!-- L.G.A -->
-                            <div class="form-group col-md-3">
-                              <label>L.G.A</label>
-                              <select class="form-control @error('lga_id') is-invalid @enderror" name="lga_id" id="lga_id">
-                              <option data-display="Select LGA *" value="">LGA *</option>
-                                @foreach($allLgas as $allLga)
-                                    <option value="{{$allLga->id}}" {{$allLga->id == $Lga_selected->id ? 'selected':'' }}>{{$allLga->name}} </option>
-                                @endforeach
-                              </select>
-                              @error('lga_id')
-                                <span class="invalid-feedback" role="alert">
-                                    <strong>{{ $message }}</strong>
-                                </span>
-                              @enderror
-                            </div>
-                            <!-- Town/City -->
-                            <div class="form-group col-md-3">
-                              <label>Town/City</label>
-                              <input type="text" class="form-control @error('town') is-invalid @enderror" placeholder="e.g. CMS, Ikoyi, Egbeda" name="town" id="town" value="{{ old('town')?? $town }}" required>
-                              
-                            </div>
-                            {{-- gender --}}
-                            <div class="form-group col-md-3">
-                              <label>Gender</label>
-                              <select name="gender" id="gender" class="form-control @error('gender') is-invalid @enderror" required>
-                                <option value="">Choose....</option>
-                                <option value="Male" {{ $gender == 'Male' ? 'selected' : ''}}>Male</option>
-                                <option value="Female" {{ $gender == 'Female' ? 'selected' : ''}}>Female</option>                                                         
-                             </select> 
-                            </div>
-                          
-                            <!-- Full Address -->
-                          <div class="form-group col-md-12">
-                            <label for="inputAddress2">Full Address</label> 
-                            <textarea rows="3" class="form-control" id="inputAddress2" name="full_address">{{ old('full_address')?? $fullAddress }}</textarea>
+                        <!--end col-->
+                        <!-- gender -->
+                        <div class="col-md-4">
+                            <label>Gender</label>
+                            <select name="gender" id="gender" class="form-control @error('gender') is-invalid @enderror" required>
+                            <option value="">Choose....</option>
+                            <option value="Male" {{ $client->user->account->gender == 'male' ? 'selected' : ''}}>Male</option>
+                            <option value="Female" {{ $client->user->account->gender == 'female' ? 'selected' : ''}}>Female</option>                                                         
+                            </select> 
+                        </div>
+                          <!-- State -->
+                          <div class="col-md-4">
+                              <div class="form-group position-relative">
+                                  <label>State <span class="text-danger">*</span></label>
+                                  <i data-feather="map-pin" class="fea icon-sm icons"></i>
+                                  <select class="form-control pl-5  @error('state_id') is-invalid @enderror" name="state_id" id="state_id">
+                                    <option selected value="">Select...</option>
+                                    @foreach($states as $state)
+                                      <option value="{{$state->id}}" {{old('state_id') == $state->id ? 'selected' : ''}} @if($client->user->account->state_id == $state->id) selected @endif>{{ $state->name }}</option>
+                                    @endforeach
+                                  </select>
+                                  @error('state_id')
+                                    <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $message }}</strong>
+                                    </span>
+                                 @enderror
+                              </div>
                           </div>
-
-                        </div>
-
-                        <button type="submit" class="btn btn-primary">Update Profile</button>
-                    </form>
-                  </div>
-                </div>
-
-                <div class="tab-pane fade" id="rfq3" role="tabpanel" aria-labelledby="rfq-tab3">
-                  <h6>CHANGE PASSWORD</h6>
-                  <p class="mg-b-0 text-danger">In order to change your password, you need to provide the current password.</p>
-                  <div class="card-body pd-20 pd-lg-25">
-                  <form action="{{route('cse.updatePassword')}}" method="post">
-                    {{ csrf_field() }}
-                        <div class="form-row">
-                            <div class="form-group col-md-4">
-                              <label for="current_password">Current Password</label>
-                              <input type="password" class="form-control @error('current_password') is-invalid @enderror" id="current_password" name="current_password">
-                              @error('current_password')
+                          <!--End row-->
+                          <!-- Town/City -->
+                          <div class="col-md-4">
+                             <div class="form-group position-relative">
+                                <label>L.G.A <span class="text-danger">*</span></label>
+                                <i data-feather="map" class="fea icon-sm icons"></i>
+                                <select class="form-control pl-5 @error('lga_id') is-invalid @enderror" name="lga_id" id="lga_id">
+                                    <!-- <option selected value="">Select...</option> -->
+                                    @foreach($lgas as $lga)
+                                    <option value="{{ $client->user->account->lga_id }}" {{old('lga_id') == $lga->id ? 'selected' : ''}} @if($client->user->account->lga_id == $lga->id) selected @endif>{{ $lga->name }}</option>
+                                    @endforeach
+                         </select>
+                                @error('lga_id')
                                 <span class="invalid-feedback" role="alert">
                                     <strong>{{ $message }}</strong>
                                 </span>
-                              @enderror
+                                @enderror
+                            </div>
+                        </div>
+                          <!--End row-->
+                          <!-- Residential Address -->
+                          <div class="col-lg-12">
+                              <div class="form-group position-relative">
+                                  <label>Residential Address</label>
+                                  <i data-feather="map-pin" class="fea icon-sm icons"></i>
+                                  <!-- <input type="text" class="form-control pl-5 user_address @error('full_address') is-invalid @enderror" placeholder="e.g. 284B, Ajose Adeogun Street, Victoria Island, Lagos, Nigeria." name="full_address" id="full_address" value="{{ old('full_address') }}" required> -->
+                                  <!-- <textarea name="full_address" id="full_address" class="form-control pl-5 user_address" placeholder="Residential address :"></textarea> -->
+
+                                  <input type="text" class="form-control pl-5 user_address @error('full_address') is-invalid @enderror" name="full_address" id="full_address" value="{{$client->user->address->address}}" required>
+
                               </div>
-                            <div class="form-group col-md-4">
-                              <label for="new_password">New Password</label>
-                              <input type="password" class="form-control @error('new_password') is-invalid @enderror" id="new_password" name="new_password">
-                              @error('new_password')
-                                <span class="invalid-feedback" role="alert">
-                                    <strong>{{ $message }}</strong>
-                                </span>
-                              @enderror
-                            </div>
-                            <div class="form-group col-md-4">
-                              <label for="new_confirm_password">Confirm Password</label>
-                              <input type="password" class="form-control @error('confirm_password') is-invalid @enderror" id="new_confirm_password" name="new_confirm_password">
-                              @error('new_confirm_password')
-                                <span class="invalid-feedback" role="alert">
-                                    <strong>{{ $message }}</strong>
-                                </span>
-                              @enderror
-                            </div>
-                        </div>
+                          </div>
+                      </div>
+                     
+                      <!--end row-->
+                      <div class="row">
+                          <div class="col-sm-12">
+                              <input type="submit" id="submit" class="btn btn-primary btn-sm user_address" value="Update Profile" />
+                          </div>
+                          <!--end col-->
+                      </div>
+                      <!--end row-->
+                  </form>
+                  <!--end form-->
 
-                        <button type="submit" class="btn btn-primary">Update Password</button>
-                    </form>
+                  <div class="row">
+                      <div class="col-md-12 mt-4 pt-2">
+                          <h5>Change password :</h5>
+                          <small class="text-danger">In order to change your password, you need to provide the current password.</small>
+
+                          <form method="post" action="{{route('client.updatePassword', app()->getLocale()) }}" >
+                              {{ csrf_field() }}
+                              <div class="row mt-4">
+                                  <div class="col-lg-4">
+                                      <div class="form-group position-relative">
+                                          <label>Current Password :</label>
+                                          <i data-feather="key" class="fea icon-sm icons"></i>
+                                          <input type="password" class="form-control pl-5" placeholder="Current Password" id="current_password" name="current_password" />
+                                      </div>
+                                  </div>
+                                  <!--end col-->
+
+                                  <div class="col-lg-4">
+                                      <div class="form-group position-relative">
+                                          <label>New password :</label>
+                                          <i data-feather="key" class="fea icon-sm icons"></i>
+                                          <input type="password" class="form-control pl-5" placeholder="New password" id="new_password" name="new_password" />
+                                          <small style="font-size: 10px;" class="text-muted">Password must be at least 8 characters</small>
+                                      </div>
+                                  </div>
+                                  <!--end col-->
+
+                                  <div class="col-lg-4">
+                                      <div class="form-group position-relative">
+                                          <label>Re-type New password :</label>
+                                          <i data-feather="key" class="fea icon-sm icons"></i>
+                                          <input type="password" class="form-control pl-5" placeholder="Re-type New password" id="new_confirm_password" name="new_confirm_password" />
+                                      </div>
+                                  </div>
+                                  <!--end col-->
+
+                                  <div class="col-lg-12 mt-2 mb-0">
+                                      <button type="submit" class="btn btn-primary btn-sm">Change password</button>
+                                  </div>
+                                  <!--end col-->
+                              </div>
+                              <!--end row-->
+                          </form>
+                      </div>
+                      <!--end col-->
                   </div>
-                </div>
-
+                  <!--end row-->
+              </div>
           </div>
-        </div>
       </div>
-    </div>
-</div>
-@endsection
+      <!--end col-->
 
-@section('scripts')
-<script>
-  (function($){
+      @push('scripts')
+ 
+  <script>
+//function to pick profile pix starts
+(function($){
     "use scrict";
     $(document).ready(function(){
     
@@ -310,40 +253,47 @@
     })
 
  })(jQuery);
+//function to pick profile pix ends
+</script>
 
-// change lga on state change
- $(document).ready(function (){
-        $('#state_id').on('change',function () {
+<script>
+$(document).ready(function() {
+        //Get list of L.G.A's in a particular state.
+        $('#state_id').on('change', function() {
             let stateId = $('#state_id').find('option:selected').val();
             let stateName = $('#state_id').find('option:selected').text();
-            
-            // console.log(stateId, stateName); return;
-            $.ajaxSetup({
-                headers: {
-                    'X-CSRF_TOKEN':$('meta[name="csrf-token"]').attr('content')
-                }
-            });
 
+            // $.ajaxSetup({
+            //         headers: {
+            //             'X-CSRF_TOKEN':$('meta[name="csrf-token"]').attr('content')
+            //         }
+            //     });
             $.ajax({
-                url: "{{ route('lga_list') }}",
+                url: "{{ route('lga_list', app()->getLocale()) }}",
                 method: "POST",
                 dataType: "JSON",
-                data: {state_id:stateId},
-                success: function(data){
-                    if(data){
-
+                data: {
+                    "_token": "{{ csrf_token() }}",
+                    "state_id": stateId
+                },
+                success: function(data) {
+                    if (data) {
                         $('#lga_id').html(data.lgaList);
-                    }else{
-                        var message = 'Error occured while trying to get L.G.A`s in '+ categoryName +' category to '+ serviceName + ' service';
+                    } else {
+                        var message = 'Error occured while trying to get L.G.A`s in ' + stateName + ' state';
                         var type = 'error';
                         displayMessage(message, type);
-
                     }
                 },
-            })  
+            })
         });
-
     });
 
+    $(document).on('click', '.change-picture', function (){
+            $('#avatar').removeClass('d-none');
+        });
 </script>
+
+@endpush
+
 @endsection

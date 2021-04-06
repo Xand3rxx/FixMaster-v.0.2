@@ -10,10 +10,11 @@ class Client extends Model
     use Generator;
 
     /**
+     *
      * The attributes that aren't mass assignable.
      *
      * @var array
-     * 
+     *
      */
     protected $guarded = ['created_at', 'updated_at', 'firsttime','unique_id'];
 
@@ -34,6 +35,38 @@ class Client extends Model
      */
     public function user()
     {
-        return $this->belongsTo(User::class)->with(['account', 'phones']);
+        return $this->belongsTo(User::class)->with(['account', 'contact']);
     }
+
+    public function account()
+    {
+        return $this->belongsTo(Account::class);
+    }
+
+    /**
+     * Get the service request of the Client
+     */
+    public function service_request()
+    {
+        return $this->hasMany(ServiceRequest::class, 'client_id', 'user_id')->with('service');
+    }
+
+    public function service_requests()
+    {
+        return $this->hasMany(ServiceRequest::class, 'client_id', 'user_id')->with('service');
+    }
+    
+    public function invoice()
+    {
+        return $this->hasMany(Invoice::class, 'client_id', 'user_id');
+    }
+
+    /**
+     * Get the contact added
+     */
+    // public function contact(){
+    //     return $this->hasMany(Contact::class, 'user_id', 'user_id');
+    // }
+
 }
+

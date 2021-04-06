@@ -1,8 +1,11 @@
 <?php
 
+use App\Http\Controllers\Frontend\ApplicantsForm\CSEFormController;
+use App\Http\Controllers\InvoiceController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Frontend\Registration\ClientRegistrationController;
+use App\Http\Controllers\PageController;
 
 /*
 |--------------------------------------------------------------------------
@@ -39,17 +42,20 @@ Route::post('/estate/add',                  [\App\Http\Controllers\EstateControl
 Route::view('/faq',                         'frontend.faq')->name('frontend.faq');
 Route::view('/register',                    'auth.register')->name('frontend.register');
 
+Route::post('customer-service-executive', [CSEFormController::class, '__invoke'])->name('frontend.customer-service-executive.store');
 
+Route::get('/invoice/{invoice:uuid}', [InvoiceController::class, 'invoice'])->name('invoice');
 
-Route::view('/service-details',             'frontend.service_details')->name('frontend.services_details');
-Route::get('/services',                     [App\Http\Controllers\PageController::class, 'services'])->name('frontend.services');
-Route::get('/services/details/{url}',       [App\Http\Controllers\PageController::class, 'serviceDetails'])->name('frontend.services_details');
-Route::post('/services/search',              [App\Http\Controllers\PageController::class, 'searchCategories'])->name('frontend.services_search');
 Route::get('/contact-us',                   [App\Http\Controllers\PageController::class, 'contactUs'])->name('frontend.contact');
 Route::post('/contact-us',                  [App\Http\Controllers\PageController::class, 'sendContactMail'])->name('frontend.send_contact_mail');
 
 // //Essential Routes
 Route::post('/lga-list',                    [App\Http\Controllers\EssentialsController::class, 'lgasList'])->name('lga_list');
+Route::post('/ward-list',                    [App\Http\Controllers\EssentialsController::class, 'wardsList'])->name('ward_list');
+Route::get("/getServiceDetails",            [App\Http\Controllers\EssentialsController::class, 'getServiceDetails'])->name("getServiceDetails");
+Route::post('/avalaible-tool-quantity',     [App\Http\Controllers\EssentialsController::class, 'getAvailableToolQuantity'])->name('available_quantity');
+Route::get("/getServiceDetails",            [App\Http\Controllers\EssentialsController::class, 'editCriteria'])->name("getServiceDetails");
+Route::get("/editCriteria",   [App\Http\Controllers\EssentialsController::class, 'Edit'])->name("editServiceRequestCriteria");
 // Route::post('/avalaible-tool-quantity',     [App\Http\Controllers\EssentialsController::class, 'getAvailableToolQuantity'])->name('available_quantity');
 // Route::get('/administrators-list',          [App\Http\Controllers\EssentialsController::class, 'getAdministratorsList'])->name('administrators_list');
 // Route::get('/clients-list',                 [App\Http\Controllers\EssentialsController::class, 'getClientsList'])->name('clients_list');
@@ -60,3 +66,14 @@ Route::post('/lga-list',                    [App\Http\Controllers\EssentialsCont
 
 // Route::get('/tools-request/details/{id}',           [App\Http\Controllers\ToolsRequestController::class, 'toolRequestDetails'])->name('tool_request_details');
 // Route::get('/rfq/details/{id}',                     [App\Http\Controllers\RFQController::class, 'rfqDetails'])->name('rfq_details');
+
+
+//All frontend routes for Services
+Route::prefix('/services')->group(function () {
+    Route::name('services.')->group(function () {
+        Route::get('/',                     [PageController::class, 'services'])->name('list');
+        // Route::view('/details',             'frontend.services.show')->name('details');
+        Route::get('/details/{service}',    [PageController::class, 'serviceDetails'])->name('details');
+        Route::post('/search',              [PageController::class, 'search'])->name('search');
+    });
+});
