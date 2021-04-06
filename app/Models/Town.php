@@ -24,4 +24,9 @@ class Town extends Model
     {
         return Town::firstOrCreate(['name' => $name]);
     }
+
+    public function lga()
+    {
+        return $this->belongsTo(LGA::class);
+    }
 }

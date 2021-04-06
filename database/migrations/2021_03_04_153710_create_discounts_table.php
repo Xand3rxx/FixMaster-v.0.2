@@ -23,7 +23,7 @@ class CreateDiscountsTable extends Migration
             $table->string('name', 250)->unique();
             $table->string('entity', 250);
             $table->string('created_by', 250);
-            $table->string('apply_discount', 100)->nullable();
+            $table->string('apply_discount', 100);
             $table->float('rate');
             $table->enum('notify', [0, 1])->default(0);
             $table->dateTime('duration_start');
@@ -33,7 +33,7 @@ class CreateDiscountsTable extends Migration
             $table->enum('status', ['activate', 'deactivate'])->default('activate');
             $table->timestamps();
             $table->softDeletes();
-
+            
         });
     }
 

@@ -6,6 +6,7 @@ namespace App\Http\Controllers\Messaging;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Message;
+use App\Models\MessageTemplate;
 use App\Models\User;
 use App\Models\UserType;
 use App\Models\Role;

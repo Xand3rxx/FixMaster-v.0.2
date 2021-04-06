@@ -17,7 +17,7 @@ class CreateEarningHistoriesTable extends Migration
             $table->id();
             $table->uuid('uuid');
             $table->string('role_name');
-            $table->float('earnings', 8, 3)->default(0);
+            $table->float('earnings')->default(0);
             $table->timestamps();
             $table->softDeletes();
         });

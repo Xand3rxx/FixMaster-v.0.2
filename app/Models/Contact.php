@@ -88,4 +88,13 @@ class Contact extends Model
             'address_latitude'      => $address_latitude,
         ]);
     }
+
+    /**
+     * Get the user that owns the Account.
+     */
+    public function useraccount()
+    {
+        return $this->belongsTo(Account::class);
+    }
+
 }

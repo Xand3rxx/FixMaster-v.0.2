@@ -133,12 +133,13 @@ Route::prefix('admin')->group(function () {
         Route::get('/services/delete/{service:uuid}',            [ServiceController::class, 'destroy'])->name('services.delete');
         Route::resource('services',                         ServiceController::class);
 
-
-
-        //  location request
+        //  location request ajax_contactForm
         Route::get('/location-request',                     [AdminLocationRequestController::class, 'index'])->name('location_request');
+
         // Route::post('/get-names',                           [AdminLocationRequestController::class, 'getNames'])->name('get_names');
         // Route::post('/request-location',                    [AdminLocationRequestController::class, 'requestLocation'])->name('request_location');
+
+        // Route::post('/ajax_contactForm', 'HomeController@ajax_contactForm')->name('ajax_contactForm');
 
         // Route::post("/getUsersAssigned",                    [AdminLocationRequestController::class, 'getUsersAssigned'])->name("getUsersAssigned");
         // Route::post("/getServiceDetails",                    [AdminLocationRequestController::class, 'getServiceDetails'])->name("getServiceDetails");
@@ -296,9 +297,22 @@ Route::prefix('/client')->group(function () {
 
         Route::post('servicesRequest',              [ClientController::class, 'serviceRequest'])->name('services.serviceRequest');
         // view all my service request
-        Route::get('myServicesRequest',              [ClientController::class, 'myServiceRequest'])->name('service.all');
+        // Route::get('requests',                      [ClientController::class, 'myServiceRequest'])->name('service.all');
 
-        Route::get('myContactList',                  [ClientController::class, 'myContactList'])->name('service.myContacts');
+        // // view all my service request
+        Route::get('requests',                     [ClientController::class, 'myServiceRequest'])->name('service.all');
+        Route::get('/requests/details/{ref}',      [ClientController::class, 'requestDetails'])->name('client.request_details');
+        Route::get('/requests/edit/{id}',          [ClientController::class, 'edit'])->name('client.edit_request');
+        Route::put('/requests/update/{id}',        [ClientController::class, 'update'])->name('client.update_request');
+
+                
+        Route::post('servicesRequest',              [ClientController::class, 'serviceRequest'])->name('services.serviceRequest');
+        // post my contact to DB
+        Route::post('/ajax_contactForm',            [ClientController::class, 'ajax_contactForm'])->name('ajax_contactForm');
+        
+
+            
+            Route::get('myContactList',                  [ClientController::class, 'myContactList'])->name('service.myContacts');
 
         //Flutterwave Routes
         Route::post('/request/flutterwave/submit',              [ClientController::class, 'storeFlutterServiceRequest'])->name('flutterwave.submit');
