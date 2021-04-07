@@ -19,6 +19,7 @@ class CreateRfqSupplierInvoicesTable extends Migration
             $table->collation = 'utf8mb4_unicode_ci';
 
             $table->id();
+            $table->uuid('uuid');
             $table->foreignId('rfq_id');
             $table->foreignId('supplier_id');
             $table->unsignedInteger('delivery_fee');

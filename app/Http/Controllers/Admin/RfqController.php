@@ -51,36 +51,43 @@ class RfqController extends Controller
         ])->with('i');
     }
 
-    public function supplierInvoiceDetails($language, $id){
+    public function supplierInvoiceDetails($language, $uuid){
         
-        $supplierInvoice = RfqSupplierInvoice::where('id', $id)->firstOrFail();
-
-
-        // $supplierInvoiceBatches = RfqSupplierInvoiceBatch::where('id', $supplierInvoice->id)->get();
-
-        // return $supplierInvoiceBatches;
+        $supplierInvoice = RfqSupplierInvoice::where('uuid', $uuid)->firstOrFail();
 
         return view('admin.rfq._supplier_invoice_details', [
-
             'supplierInvoice'   =>  $supplierInvoice,
             'supplierInvoiceBatches'    =>  RfqSupplierInvoiceBatch::where('rfq_supplier_invoice_id', $supplierInvoice->id)->get(),
 
         ])->with('i');
     }
 
-    public function acceptSupplierInvoice($language, $id){
+    public function acceptSupplierInvoice($language, $uuid){
+        
+        //Get supplier object with uuid
+        $supplier = RfqSupplierInvoice::where('uuid', $uuid)->firstOrFail();
 
-        $supplier = RfqSupplierInvoice::where('id', $id)->firstOrFail();
-
+        //Assign selected supplier ID to `supplierId`
         $supplierId = $supplier->supplier_id;
 
+        //Assign selected supplier rfq ID to `supplierRfqId`
         $supplierRfqId = $supplier->rfq_id;
 
+        //Check if the selcted supplier has already been chosen
+        $supplierAcceptanceExists = RfqSupplier::where('rfq_id', $supplierRfqId)->where('supplier_id', Auth::id())->count();
+
+        if($supplierAcceptanceExists > 0){
+            return back()->with('error', 'Sorry, you already accepted '.$supplier['supplier']['account']['first_name'] ." ". $supplier['supplier']['account']['last_name'].' invoice for this '.$supplier->rfq->unique_id);
+        }
+
+        //Get selected supplier rfq batches
         $supplierInvoiceBatches =  RfqSupplierInvoiceBatch::where('rfq_supplier_invoice_id', $supplierRfqId)->get();
+
+        (bool) $supplierUpdate = false;
+        (bool) $rfqBatchUpdate = false;
 
         DB::transaction(function () use ($supplier, $supplierId, $supplierInvoiceBatches, $supplierRfqId,  &$supplierUpdate, &$rfqBatchUpdate) {
 
-            // $rfq = Rfq::where('id', $id)->firstOrFail();
             $supplierUpdate = RfqSupplier::create([
                 'rfq_id'        =>  $supplierRfqId,
                 'supplier_id'   =>  $supplierId,
@@ -89,7 +96,7 @@ class RfqController extends Controller
             ]);
 
             // foreach ($supplierInvoiceBatches as $item => $value){
-
+            //     $rfqBatchUpdate = 
             // }
 
             $supplierUpdate = true;
@@ -99,9 +106,6 @@ class RfqController extends Controller
         if($supplierUpdate){
             return back()->with('success', 'Supplier has beeen selected.');
         }
-
-        // return $supplierInvoiceBatches;
-
 
     }
 }

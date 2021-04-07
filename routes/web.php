@@ -301,8 +301,8 @@ Route::prefix('admin')->group(function () {
         Route::resource('serviceCriteria',                            ServiceRequestSettingController::class);
 
     Route::get('/supplier-invoices',                               [RfqController::class, 'supplierInvoices'])->name('supplier_invoices');
-    Route::get('/supplier-invoices/details/{rfq:id}',              [RfqController::class, 'supplierInvoiceDetails'])->name('supplier_invoices_details');
-    Route::get('/supplier-invoices/accept/{rfq:id}',              [RfqController::class, 'acceptSupplierInvoice'])->name('supplier_invoices_acceptance');
+    Route::get('/supplier-invoices/details/{rfq:uuid}',              [RfqController::class, 'supplierInvoiceDetails'])->name('supplier_invoices_details');
+    Route::get('/supplier-invoices/accept/{rfq:uuid}',              [RfqController::class, 'acceptSupplierInvoice'])->name('supplier_invoices_acceptance');
      
     });
 });

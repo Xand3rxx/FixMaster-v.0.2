@@ -69,6 +69,9 @@ class RfqController extends Controller
 
         $rfqUniqueId = Rfq::where('id', $request->rfq_id)->firstOrFail()->unique_id;
 
+        (bool) $supplierinvoice = false;
+        (bool) $supplierInvoiceBatch = false;
+
         DB::transaction(function () use ($request, &$supplierinvoice, &$supplierInvoiceBatch) {
 
             $supplierInvoice = $newRecord = RfqSupplierInvoice::create([

@@ -62,10 +62,10 @@
                       <a href="" class="dropdown-link" data-toggle="dropdown"><i data-feather="more-vertical"></i></a>
                       <div class="dropdown-menu dropdown-menu-right">
 
-                        <a href="#rfqDetails" data-toggle="modal" class="dropdown-item details text-primary" title="View {{ $rfq->rfq->unique_id}} details" data-batch-number="{{ $rfq->rfq->unique_id}}" data-url="{{ route('admin.supplier_invoices_details', ['rfq'=>$rfq->id, 'locale'=>app()->getLocale()]) }}" id="rfq-details"><i class="far fa-clipboard"></i> Details</a>
+                        <a href="#rfqDetails" data-toggle="modal" class="dropdown-item details text-primary" title="View {{ $rfq->rfq->unique_id}} details" data-batch-number="{{ $rfq->rfq->unique_id}}" data-url="{{ route('admin.supplier_invoices_details', ['rfq'=>$rfq->uuid, 'locale'=>app()->getLocale()]) }}" id="rfq-details"><i class="far fa-clipboard"></i> Details</a>
                        
                         @if($rfq->rfq->status == 'Pending')
-                      <a href="{{ route('admin.supplier_invoices_acceptance', ['rfq'=>$rfq->id, 'locale'=>app()->getLocale()]) }}" class="dropdown-item details text-success" title="Accept {{ $rfq->rfq->unique_id}} invoice"><i class="fas fa-check"></i> Accept</a>
+                      <a href="{{ route('admin.supplier_invoices_acceptance', ['rfq'=>$rfq->uuid, 'locale'=>app()->getLocale()]) }}" class="dropdown-item details text-success" title="Accept {{ $rfq->rfq->unique_id}} invoice"><i class="fas fa-check"></i> Accept</a>
                         @endif
                       </div>
                     </div>
