@@ -203,11 +203,6 @@ class ServiceRequest extends Model
     }
 
 
-    public function addressee()
-    {
-        return $this->belongsTo(Contact::class,  'contact_id', 'user_id');
-    }
-
     public function service_request_cancellation()
     {
         return $this->belongsTo(ServiceRequestCancellation::class, 'id' ,'service_request_id');

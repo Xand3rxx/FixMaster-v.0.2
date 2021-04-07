@@ -27,10 +27,6 @@ class CreateContactsTable extends Migration
             $table->foreignId('town_id')->nullable();
             $table->foreignId('account_id')->index();
             $table->foreignId('country_id')->index();
-            $table->foreignId('state_id')->nullable();
-            $table->foreignId('lga_id')->nullable();
-            $table->foreignId('town_id')->nullable();
-            $table->string('name')->nullable();
             $table->string('phone_number', 30)->unique();
             $table->longText('address');
             $table->double('address_longitude');
