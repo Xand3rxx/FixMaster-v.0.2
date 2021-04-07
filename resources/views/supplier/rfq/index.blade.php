@@ -52,7 +52,7 @@
                   <td class="tx-medium">{{ $rfq->unique_id }}</td>
                   <td class="tx-medium">{{ Str::title($rfq['issuer']['account']['first_name'] ." ". $rfq['issuer']['account']['last_name']) }}</td>
                   @if($rfq->status == 'Pending')
-                    <td class="text-medium text-success">Opened</td>
+                    <td class="text-medium text-success">Open</td>
                   @else
                     <td class="text-medium text-danger">Closed</td>
                   @endif

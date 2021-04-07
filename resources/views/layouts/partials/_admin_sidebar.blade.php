@@ -184,11 +184,11 @@
           </ul>
         </li>
 
-        <li class="nav-item with-sub {{ Route::currentRouteNamed('admin.rfq') ? 'active show' : '' }}">
+        <li class="nav-item with-sub {{ Route::currentRouteNamed('admin.rfq', 'admin.supplier_invoices') ? 'active show' : '' }}">
           <a href="" class="nav-link"><i data-feather="file-text"></i> <span>RFQ's</span></a>
           <ul>
             <li class="{{ Route::currentRouteNamed('admin.rfq') ? 'active' : '' }}"><a href="{{ route('admin.rfq', app()->getLocale()) }}">Requests</a></li>
-            <li class=""><a href="#">Supplier's invoices</a></li>
+          <li class="{{ Route::currentRouteNamed('admin.supplier_invoices') ? 'active' : '' }}"><a href="{{ route('admin.supplier_invoices', app()->getLocale()) }}">Supplier's invoices</a></li>
           </ul>
         </li>
 

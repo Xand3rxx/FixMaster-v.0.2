@@ -107,7 +107,7 @@ class RfqController extends Controller
             $message = Auth::user()->email.' sent an invoice for '.$rfqUniqueId.' RFQ';
             $this->log($type, $severity, $actionUrl, $message);
 
-            return redirect()->route('supplier.rfq', app()->getLocale())->with('success', 'Your invoice for '.$rfqUniqueId.' RFQ has been sent.');
+            return redirect()->route('supplier.rfq_sent_invoices', app()->getLocale())->with('success', 'Your invoice for '.$rfqUniqueId.' RFQ has been sent.');
 
         }else{
 

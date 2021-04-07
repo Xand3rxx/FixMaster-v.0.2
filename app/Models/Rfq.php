@@ -88,5 +88,7 @@ class Rfq extends Model
         return $this->hasMany(User::class, 'client_id')->with('account');
     }
 
+
+    
     
 }
