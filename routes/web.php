@@ -348,7 +348,10 @@ Route::prefix('/client')->group(function () {
 
         Route::post('/ipnpaystack',         [ClientController::class, 'paystackIPN'])->name('ipn.paystack');
         Route::get('/apiRequest',           [ClientController::class, 'apiRequest'])->name('ipn.paystackApiRequest');
-
+        // for payment
+        Route::any('/serviceRequestpaystack',         [ClientController::class, 'initiatePayment'])->name('serviceRequest.initiatePayment');
+        Route::get('/serviceRequestVerify',                     [ClientController::class, 'verifyPayment'])->name('serviceRequest.verifyPayment');
+        
         // Route::post('/ipnpaystack',         [ClientController::class, 'paystackIPN'])->name('ipn.paystack');
         // Route::get('/apiRequest',           [ClientController::class, 'apiRequest'])->name('serviceRequest.paystackApiRequest');
 
