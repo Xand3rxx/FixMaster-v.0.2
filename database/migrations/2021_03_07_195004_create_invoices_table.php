@@ -21,7 +21,7 @@ class CreateInvoicesTable extends Migration
             $table->foreignId('rfq_id')->nullable();
             $table->foreignId('warranty_id')->nullable();
             $table->foreignId('sub_service_id')->nullable();
-            $table->string('invoice_number');
+            $table->string('unique_id');
             $table->string('invoice_type');
             $table->decimal('labour_cost', 8,3)->nullable();
             $table->decimal('materials_cost', 8,3)->nullable();

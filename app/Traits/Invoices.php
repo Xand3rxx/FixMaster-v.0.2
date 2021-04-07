@@ -14,9 +14,11 @@ use App\Models\Tax;
 use App\Models\Warranty;
 use Illuminate\Support\Str;
 use phpDocumentor\Reflection\Types\Integer;
+use App\Traits\GenerateUniqueIdentity as Generator;
 
 trait Invoices
 {
+    use Generator;
     /**
      * Create a Diagnostic Invoice
      *
@@ -86,7 +88,7 @@ trait Invoices
             'rfq_id'                => $rfq_id,
             'warranty_id'           => $warranty_id,
             'sub_service_id'        => $sub_service_id,
-            'invoice_number'        => 'INV-'.strtoupper(substr(md5(time()), 0, 8)),
+            'unique_id'             => static::generate('invoices', 'INV-'),
             'invoice_type'          => $invoice_type,
             'labour_cost'           => $labour_cost,
             'hours_spent'           => $hours_spent,
@@ -129,7 +131,7 @@ trait Invoices
             'client_id'             => $client_id,
             'service_request_id'    => $service_request_id,
             'rfq_id'                => $rfq_id,
-            'invoice_number'        => 'INV-'.strtoupper(substr(md5(time()), 0, 8)),
+            'unique_id'             => static::generate('invoices', 'INV-'),
             'invoice_type'          => $invoice_type,
             'status'                => $status
         ]);
@@ -156,7 +158,7 @@ trait Invoices
             'client_id'             => $client_id,
             'service_request_id'    => $service_request_id,
             'rfq_id'                => $rfq_id,
-            'invoice_number'        => 'INV-'.strtoupper(substr(md5(time()), 0, 8)),
+            'unique_id'             => static::generate('invoices', 'INV-'),
             'invoice_type'          => $invoice_type,
             'total_amount'          => $total_amount,
             'amount_due'            => $total_amount,
@@ -212,7 +214,7 @@ trait Invoices
             'rfq_id'                => $rfq_id,
             'warranty_id'           => $warranty_id,
             'sub_service_id'        => $sub_service_id,
-            'invoice_number'        => 'INV-'.strtoupper(substr(md5(time()), 0, 8)),
+            'unique_id'             => static::generate('invoices', 'INV-'),
             'invoice_type'          => $invoice_type,
             'labour_cost'           => $labour_cost,
             'materials_cost'        => $materials_cost,

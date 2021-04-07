@@ -144,7 +144,7 @@
                                 <div class="col-md-8 order-2 order-md-1">
                                     <dl class="row">
                                         <dt class="col-md-3 col-5 font-weight-normal">Invoice No. :</dt>
-                                        <dd class="col-md-9 col-7 text-muted">{{ $invoice['invoice_number'] }}</dd>
+                                        <dd class="col-md-9 col-7 text-muted">{{ $invoice['unique_id'] }}</dd>
 
                                         <dt class="col-md-3 col-5 font-weight-normal">Name :</dt>
                                         <dd class="col-md-9 col-7 text-muted">{{ $invoice['client']->account->first_name }} {{ $invoice['client']->account->last_name }}</dd>
@@ -471,7 +471,7 @@
                                 <div class="col-md-8 order-2 order-md-1">
                                     <dl class="row">
                                         <dt class="col-md-3 col-5 font-weight-normal">Invoice No. :</dt>
-                                        <dd class="col-md-9 col-7 text-muted">{{ $invoice['invoice_number'] }}</dd>
+                                        <dd class="col-md-9 col-7 text-muted">{{ $invoice['unique_id'] }}</dd>
 
                                         <dt class="col-md-3 col-5 font-weight-normal">Name :</dt>
                                         <dd class="col-md-9 col-7 text-muted">{{ $invoice['client']->account->first_name }} {{ $invoice['client']->account->last_name }}</dd>
