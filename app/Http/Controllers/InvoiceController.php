@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Income;
 use App\Models\Invoice;
 use App\Models\Tax;
+use App\Models\Warranty;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 
@@ -41,6 +42,7 @@ class InvoiceController extends Controller
         $bookingCost = '';
         $tax_cost = '';
         $total_cost = '';
+        $warranty = Warranty::where('name', 'Free Warranty')->first();
 
         if($invoice->invoice_type == 'Diagnostic Invoice')
         {
@@ -68,7 +70,7 @@ class InvoiceController extends Controller
             'tax' => $tax,
             'taxes' => $tax_cost,
             'logistics' => $logistics_cost,
-            'warranty' => $warrantyCost,
+            'warranty' => $warranty->percentage,
             'total_cost' => $total_cost
         ]);
     }

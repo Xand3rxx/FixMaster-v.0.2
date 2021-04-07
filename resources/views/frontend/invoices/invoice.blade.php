@@ -144,7 +144,7 @@
                                 <div class="col-md-8 order-2 order-md-1">
                                     <dl class="row">
                                         <dt class="col-md-3 col-5 font-weight-normal">Invoice No. :</dt>
-                                        <dd class="col-md-9 col-7 text-muted">{{ $invoice['invoice_number'] }}</dd>
+                                        <dd class="col-md-9 col-7 text-muted">{{ $invoice['unique_id'] }}</dd>
 
                                         <dt class="col-md-3 col-5 font-weight-normal">Name :</dt>
                                         <dd class="col-md-9 col-7 text-muted">{{ $invoice['client']->account->first_name }} {{ $invoice['client']->account->last_name }}</dd>
@@ -414,6 +414,7 @@
         </div><!--end row-->
     </div><!--end container-->
 </section>
+@if($invoice->invoice_type === 'Diagnosis Invoice' && $invoice['phase'] == '1')
 <section class="bg-invoice">
     <div class="container">
         <div class="row mt-5 pt-4 pt-sm-0 justify-content-center">
@@ -470,7 +471,7 @@
                                 <div class="col-md-8 order-2 order-md-1">
                                     <dl class="row">
                                         <dt class="col-md-3 col-5 font-weight-normal">Invoice No. :</dt>
-                                        <dd class="col-md-9 col-7 text-muted">{{ $invoice['invoice_number'] }}</dd>
+                                        <dd class="col-md-9 col-7 text-muted">{{ $invoice['unique_id'] }}</dd>
 
                                         <dt class="col-md-3 col-5 font-weight-normal">Name :</dt>
                                         <dd class="col-md-9 col-7 text-muted">{{ $invoice['client']->account->first_name }} {{ $invoice['client']->account->last_name }}</dd>
@@ -499,7 +500,6 @@
                         </div>
 
                         <div class="invoice-table pb-4">
-                            @if($invoice->invoice_type === 'Diagnosis Invoice')
                                 @if($rfqExists)
                                 <div class="table-responsive bg-white shadow rounded">
                                     <table class="table mb-0 table-center invoice-tb">
@@ -549,28 +549,26 @@
                                 <div class="row pb-4">
                                     <div class="col-lg-4 col-md-5 ml-auto">
                                         <ul class="list-unstyled h5 font-weight-normal mt-4 mb-0">
-                                            <li class="test-muted d-flex justify-content-between">Subtotal :<span>₦ {{ number_format($invoice['materials_cost'] + $invoice['labour_cost']) }}</span></li>
+                                            <li class="test-muted d-flex justify-content-between">Subtotal :<span>₦ {{ number_format($invoice['materials_cost'] + $invoice['labour_cost'] ,2) }}</span></li>
                                             <li class="text-muted d-flex justify-content-between">
                                                 FixMaster Royalty :
                                                 @if($get_fixMaster_royalty['amount'] == null)
-                                                    <span> ₦ {{ number_format( $fixmaster_royalty_value * (($invoice['materials_cost'] + $invoice['labour_cost'])) ) }}</span>
+                                                    <span> ₦ {{ number_format( $fixmaster_royalty_value * (($invoice['materials_cost'] + $invoice['labour_cost'])) ,2) }}</span>
                                                 @endif
                                             </li>
-                                            <li class="text-muted d-flex justify-content-between">Warranty Cost :<span> ₦ {{ number_format($warranty) }}</span></li>
-                                            <li class="text-muted d-flex justify-content-between">Logistics :<span> ₦ {{ number_format($logistics) }}</span></li>
-                                            <li class="d-flex justify-content-between text-danger">Booking :<span> - ₦ {{ number_format($invoice->serviceRequest->price->amount) }}</span></li>
-                                            <li class="d-flex justify-content-between text-danger">Discount :<span> - ₦ {{ number_format( 0.5 * $logistics ) }}</span></li>
-                                            <li class="text-muted d-flex justify-content-between">Taxes :<span> ₦ {{ number_format($tax * (($invoice['materials_cost'] + $invoice['labour_cost']) + $fixmaster_royalty_value * (($invoice['materials_cost'] + $invoice['labour_cost'])) + $warranty + $logistics )) }}</span></li>
+                                            <li class="text-muted d-flex justify-content-between">Warranty Cost :<span> ₦ {{ number_format($warranty * ($invoice['materials_cost'] + $invoice['labour_cost']) ,2) }}</span></li>
+                                            <li class="text-muted d-flex justify-content-between">Logistics :<span> ₦ {{ number_format($logistics ,2) }}</span></li>
+                                            <li class="text-muted d-flex justify-content-between">Taxes :<span> ₦ {{ number_format($tax * (($invoice['materials_cost'] + $invoice['labour_cost']) + $fixmaster_royalty_value * (($invoice['materials_cost'] + $invoice['labour_cost'])) + ($warranty * ($invoice['materials_cost'] + $invoice['labour_cost'])) + $logistics ) ,2) }}</span></li>
+                                            <li class="d-flex justify-content-between text-danger">Booking :<span> - ₦ {{ number_format($invoice->serviceRequest->price->amount,2) }}</span></li>
+                                            <li class="d-flex justify-content-between text-danger">Discount :<span> - ₦ {{ number_format( 0.5 * $logistics ,2) }}</span></li>
                                             <li class="d-flex justify-content-between">Total :<span>₦ {{ number_format(
     ($invoice['materials_cost'] + $invoice['labour_cost']) + ( $fixmaster_royalty_value * (($invoice['materials_cost'] + $invoice['labour_cost'])) ) +
     ($warranty) + ($logistics) - ($invoice->serviceRequest->price->amount) - ( 0.5 * $logistics ) +
-    ($tax * (($invoice['materials_cost'] + $invoice['labour_cost']) + $fixmaster_royalty_value * (($invoice['materials_cost'] + $invoice['labour_cost'])) + $warranty + $logistics ))
- ) }}</span></li>
+    ($tax * (($invoice['materials_cost'] + $invoice['labour_cost']) + $fixmaster_royalty_value * (($invoice['materials_cost'] + $invoice['labour_cost'])) + ($warranty * ($invoice['materials_cost'] + $invoice['labour_cost'])) + $logistics ))
+ ,2) }}</span></li>
                                         </ul>
                                     </div><!--end col-->
                                 </div>
-                            @endif
-
                         </div>
 
                         <form method="POST" action="">
@@ -619,13 +617,15 @@
         </div><!--end row-->
     </div><!--end container-->
 </section>
+@if(auth()->user()->type->role->url == 'client')
 <div class="row justify-content-center border-top">
     <div class="col-lg-8 col-md-12 mt-4 mb-4 pt-2 text-center">
         <div><h3>Proceed with Service</h3></div>
         <div>
-            <form method="POST" action="{{ route('cse.client.decision', app()->getLocale()) }}">
+            <form method="POST" action="{{ route('client.decision', app()->getLocale()) }}">
                 @csrf
                 <input type="hidden" name="request_id" value="{{ $serviceRequestID }}">
+                <input type="hidden" name="invoice_id" value="{{ $invoice['id'] }}">
                 <input type="hidden" name="request_uuid" value="{{ $serviceRequestUUID }}">
                 <button class="btn btn-outline-primary" name="client_choice" value="accepted">Client Accept</button>
                 <button class="btn btn-outline-primary" name="client_choice" value="declined">Client Decline</button>
@@ -633,6 +633,16 @@
         </div>
     </div>
 </div>
+@else
+    <div class="row justify-content-center border-top">
+        <div class="col-lg-8 col-md-12 mt-4 mb-4 pt-2 text-center">
+            <div>
+                <a href="{{ route('cse.requests.show', [app()->getLocale(), $serviceRequestUUID]) }}" class="btn btn-outline-primary">Go Back</a>
+            </div>
+        </div>
+    </div>
+@endif
+@endif
 </body>
 
 
