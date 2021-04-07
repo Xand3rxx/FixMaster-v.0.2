@@ -299,7 +299,7 @@ Route::prefix('admin')->group(function () {
 // Route::resource('client', ClientController::class);
 
 //All routes regarding clients should be in here
-Route::prefix('/client')->middleware('verified')->group(function () {
+Route::prefix('/client')->group(function () {
     Route::name('client.')->group(function () {
         //All routes regarding clients should be in here
         Route::get('/',                   [ClientController::class, 'index'])->name('index'); //Take me to Supplier Dashboard
@@ -416,9 +416,9 @@ Route::prefix('/cse')->group(function () {
             '/request/details',
             'cse.request_details',
             [
-                'tools' => \App\Models\ToolInventory::all(),
-                'ongoingSubStatuses' => \App\Models\SubStatus::where('status_id', 2)->get(['id', 'name']),
-                'warranties' => \App\Models\Warranty::all(),
+                // 'tools' => \App\Models\ToolInventory::all(),
+                // 'ongoingSubStatuses' => \App\Models\SubStatus::where('status_id', 2)->get(['id', 'name']),
+                // 'warranties' => \App\Models\Warranty::all(),
             ]
         )->name('request_details');
         Route::view('/profile',             'cse.view_profile')->name('view_profile');
