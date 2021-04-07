@@ -2,6 +2,9 @@
 @section('title', 'Service Quote')
 @section('content')
 @include('layouts.partials._messages')
+
+
+<!-- <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" rel="stylesheet" type="text/css" /> -->
 <style>
     .blog .author { opacity: 1 !important; }
     .blog .overlay { opacity: 0.6 !important; }
@@ -9,9 +12,6 @@
 </style>
 
 <style>
-.pac-container {
-    z-index: 100000;
-}
 
 .cc-selector input{
     margin:0;padding:0;
@@ -90,7 +90,86 @@ tbody td:last-child, thead th:last-child {
     border-right: none;
 }
 
+
+
+
+.payment-container {
+  display: flex;
+  flex-flow: row wrap;
+}
+.payment-container > .payment-radio-container {
+  flex: 1;
+  padding: 0.5rem;
+}
+input[type="radio"] {
+  display: none;
+}
+input[type="radio"]:not(:disabled) ~ .pplogo-container {
+  cursor: pointer;
+  
+}
+input[type="radio"]:disabled ~ .pplogo-container {
+  color: #2251fc;
+  border-color: #2251fc;
+  box-shadow: none;
+  cursor: not-allowed;
+}
+.pplogo-container {
+  height: 150px;
+  display: flex;
+  justify-content:canter;
+  align-items:center;
+  width:200px;
+  background: white;
+  border: 2px solid #2251fc;
+  border-radius: 20px;
+  padding: 1rem;
+  //margin-bottom: 1rem;
+  box-shadow: 0px 3px 10px -2px rgba(34, 81, 252, 0.5);
+  position: relative;
+}
+input[type="radio"]:checked + .pplogo-container {
+  //background: #2251fc;
+  color: white;
+  box-shadow: 0px 0px 20px rgba(34, 81, 252, 0.75);
+}
+input[type="radio"]:checked + .pplogo-container::after {
+  content: "\f058";
+ font-family: "Font Awesome 5 Free";
+  color: #2251fc;  
+  border: 1px solid #2251fc;
+  font-size: 2.5rem;
+  font-weight:100;
+  position: absolute;
+  top: -25px;
+  left: 50%;
+  transform: translateX(-50%);
+  height: 50px;
+  width: 50px;
+  line-height: 49px;
+  text-align: center;
+  border-radius: 50%;
+  background: white;
+  box-shadow: 0px 2px 5px -2px rgba(0, 0, 0, 0.25);
+}
+p {
+  font-weight: 900;
+}
+@media only screen and (max-width: 700px) {
+  section {
+    flex-direction: column;
+  }
+}
+
+
 </style>
+
+<style> 
+.pac-container {
+    z-index: 100000;
+}
+</style>
+
 <div class="col-lg-8 col-12">
     <div class="card custom-form border-0">
         <div class="card-body mt-4">
@@ -218,16 +297,19 @@ tbody td:last-child, thead th:last-child {
         <h5><span class="font-weight-bold">Payment Options</span></h5>
     </div>
 
+
+
+
     <div class="col-md-6 form-group">
         <div class="custom-control custom-radio form-group position-relative">
-            <input type="radio" id="customRadio5" name="payment_method" class="custom-control-input" value="Wallet" />
-            <label class="custom-control-label" for="customRadio5">E-Wallet</label>
+            <input type="radio" id="wallet_payment_option" name="payment_method" class="custom-control-input" onclick="displayPaymentGateways('1')" value="Wallet" />
+            <label class="custom-control-label" for="wallet_payment_option">E-Wallet</label>
         </div>
     </div>
 
     <div class="col-md-6 form-group">
         <div class="custom-control custom-radio form-group position-relative">
-            <input type="radio" id="payment_gateway_option" name="payment_method" class="custom-control-input" onclick="displayPaymentGateways()" value="Online" />
+            <input type="radio" id="payment_gateway_option" name="payment_method" class="custom-control-input" onclick="displayPaymentGateways('2')" value="Online" />
             <label class="custom-control-label" for="payment_gateway_option">Pay Online</label>
         </div>
     </div>
@@ -235,10 +317,29 @@ tbody td:last-child, thead th:last-child {
  
     <input type="hidden" value="{{!empty($balance->closing_balance) ? $balance->closing_balance : '0'}}" name="balance" />
 
-    @foreach($gateways as $val)
+
+<!-- payment starts here -->
+    <!-- <div class="col-md-6 mx-auto p-4 payment-container d-none payment-options"> -->
+    <div class="row mx-auto p-4 cc-selector d-none payment-options">   
+        <div class="col-md-6 payment-radio-container">
+        <!-- <div class="col-md-6 payment-radio-container media key-feature align-items-center p-3 rounded shadow mt-4"> -->
+            <input type="radio" id="flutter" name="payment_channel" value="flutter" checked>
+            <label for="flutter" class="pplogo-container">
+            <img class="img-fluid" alt="flutter"src="{{ asset('assets/images') }}/flutter.png">              
+            </label>
+        </div>
+        
+        <div class="col-md-6 payment-radio-container">
+            <input type="radio" id="paystack" name="payment_channel" value="paystack">
+            <label for="paystack" class="pplogo-container">
+            <img class="img-fluid" alt="paystack"src="{{ asset('assets/images') }}/paystack.png">             
+            </label>
+        </div>
+    </div>
+<!-- payment ends -->
+
+    <!-- @foreach($gateways as $val)
     <div class="col-md-6 cc-selector d-none payment-options">
-        <!-- <input id="{{$val->name}}" type="radio" name="credit-card" value="{{$val->name}}" />
-        <label class="drinkcard-cc {{$val->name}}" for="{{$val->name}}"></label> -->
         <div class="media key-feature align-items-center p-3 rounded shadow mt-4">
             <a href="#" data-toggle="modal" data-target="#modal-form{{$val->id}}">
                 <img src="{{ asset('assets/images') }}/{{$val->name}}.png" class="avatar avatar-ex-smm" alt="" />
@@ -252,14 +353,15 @@ tbody td:last-child, thead th:last-child {
             </a>
         </div>
     </div>
-    @endforeach
+    @endforeach -->
 </div>
 
 
 
 <div class="row ml-4 mb-4">
     <div class="col-sm-12">
-    <button type="submit" class="submitBnt btn btn-primary">Submit</button>
+    <button type="submit" class="btn btn-success btn-lg btn-block">Submit</button>
+    <!-- <button type="submit" class="submitBnt btn btn-primary">Submit</button> -->
     </div><!--end col-->
 </div><!--end row-->
 
@@ -339,27 +441,6 @@ tbody td:last-child, thead th:last-child {
 @push('scripts')
 
 <script>
-
-    // Change the selector if needed
-var $table = $('table.scroll'),
-    $bodyCells = $table.find('tbody tr:first').children(),
-    colWidth;
-
-// Adjust the width of thead cells when window resizes
-$(window).resize(function() {
-    // Get the tbody columns width array
-    colWidth = $bodyCells.map(function() {
-        return $(this).width();
-    }).get();
-    
-    // Set the width of thead columns
-    $table.find('thead tr').children().each(function(i, v) {
-        $(v).width(colWidth[i]);
-    });    
-}).resize(); // Trigger resize handler
-
-
-
 
     $(document).ready(function () {
         //Get list of L.G.A's in a particular state.
@@ -441,20 +522,21 @@ $(window).resize(function() {
                     },  
                      beforeSend:function(){  
                         //   $('.contact-list').val("Creating New Contact...");
-                        $(".contact-list").html('<div class="d-flex justify-content-center mt-4 mb-4"><span class="loadingspinner"></span></div>');  
+                        $("#contacts_table").html('<div class="d-flex justify-content-center mt-4 mb-4"><span class="loadingspinner"></span></div>');  
                      },  
                      success:function(data){ 
                         
                         $('#insert_form')[0].reset(); 
                         $('#add_data_Modal').modal('hide');
-                        $('.contact-list').html('');
-                        $('.contact-list').html(data);
+                        // $('.contact-list').html('');
+                        $('#contacts_table').html(data);
 
                      },
                      complete: function(data) {
                         // $(".contact-list").hide();
                         var message = ' New contact saved.';
                         var type = 'success';
+                        $('#add_data_Modal').modal('hide');
                         displayMessage(message, type);
                         // $(".contact-list").html('<div class="d-flex justify-content-center mt-4 mb-4"><span class="loadingspinner"></span></div>');  
                        
@@ -519,8 +601,14 @@ $(window).resize(function() {
         });
     });
 
-    function displayPaymentGateways() {
-        $(".payment-options").removeClass("d-none");
+    function displayPaymentGateways(val) {
+        console.log(val);
+        if(val == 2){
+            $(".payment-options").removeClass("d-none");
+        }else{
+            $(".payment-options").addClass("d-none");
+        }
+        
     }
 
     $("#editAddress").addClass("address-hide");
@@ -537,8 +625,10 @@ $(window).resize(function() {
     }
 </script>
 
-@include('client.services._newAddress')
+
 
 @endpush @endsection
+
+@include('client.services._newAddress')
 
 

@@ -190,19 +190,8 @@ class ServiceRequestSeeder extends Seeder
                 'status'                =>  'Active',
                 'created_at'            => '2020-12-14 13:43:14',
             ),
-            array(
-                'user_id'               => '10', 
-                'service_request_id'    => '1',
-                'job_accepted'          =>  NULL, 
-                'job_acceptance_time'   => NULL,
-                'job_diagnostic_date'   =>  NULL,
-                'job_declined_time'     =>  NULL,
-                'job_completed_date'    =>  NULL,
-                'status'                =>  NULL,
-                'created_at'            => NULL, 
-            ),
             // array(
-            //     'user_id'               => '13', 
+            //     'user_id'               => '10', 
             //     'service_request_id'    => '1',
             //     'job_accepted'          =>  NULL, 
             //     'job_acceptance_time'   => NULL,
@@ -212,6 +201,17 @@ class ServiceRequestSeeder extends Seeder
             //     'status'                =>  NULL,
             //     'created_at'            => NULL, 
             // ),
+            array(
+                'user_id'               => '13', 
+                'service_request_id'    => '1',
+                'job_accepted'          =>  NULL, 
+                'job_acceptance_time'   => NULL,
+                'job_diagnostic_date'   =>  NULL,
+                'job_declined_time'     =>  NULL,
+                'job_completed_date'    =>  NULL,
+                'status'                =>  NULL,
+                'created_at'            => NULL, 
+            ),
 
             array(
                 'user_id'               => '22', 
