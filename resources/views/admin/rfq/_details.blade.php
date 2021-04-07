@@ -4,7 +4,7 @@
                 <tbody>
                   <tr>
                     <td class="tx-medium">Supplier's Name</td>
-                    <td class="tx-color-03">{{ Str::title($rfqDetails['rfqSupplier']['supplier']['account']['first_name'] ." ". $rfqDetails['rfqSupplier']['supplier']['account']['last_name']) }}</td>
+                    <td class="tx-color-03">{{ Str::title($rfqDetails['rfqSupplier']['supplier']['account']['first_name'] ." ". $rfqDetails['rfqSupplier']['supplier']['account']['last_name']) }}({{ $rfqDetails['supplier']['supplier']['business_name'] }})</td>
                   </tr>
                   <tr>
                     <td class="tx-medium">Delivery Fee</td>
@@ -30,14 +30,14 @@
                     @elseif($rfqDetails->accepted == 'No')
                       <td class="tx-color-03">No, all ordered components were not delivered</td>
                     @else
-                      <td class="tx-color-03">Pending payment</td>
+                      <td class="tx-color-03">Pending Delivery</td>
                     @endif
                     <td class="tx-color-03"></td>
                   </tr>
                   
                   <tr>
                     <td class="tx-medium">Grand Total</td>
-                    <td class="tx-color-03">₦{{ number_format($rfqDetails->total_amount + (!empty($rfqDetails->rfqSupplier->devlivery_fee) ? $rfqDetails->rfqSupplier->devlivery_fee : 0)) ?? 0 }}</td>
+                    <td class="tx-color-03">₦{{ number_format($rfqDetails->total_amount) }}</td>
                   </tr>
 
                 </tbody>

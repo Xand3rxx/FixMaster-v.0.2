@@ -28,11 +28,12 @@
           <td>{{ Carbon\Carbon::parse($subStatus->created_at, 'UTC')->isoFormat('MMMM Do YYYY, h:mm:ssa') ?? Carbon\Carbon::now('UTC')->isoFormat('MMMM Do YYYY, h:mm:ssa') }}</td>
           <td class=" text-center">
             @if(!empty($subStatus->name))
+            {{-- {{ dd($subStatus->uuid) }} --}}
               <div class="dropdown-file">
                 <a href="" class="dropdown-link" data-toggle="dropdown"><i data-feather="more-vertical"></i></a>
                 <div class="dropdown-menu dropdown-menu-right">
               
-                  <a href="#editService" data-toggle="modal" id="service-edit" title="Edit {{ $subStatus->name }}" data-url="{{ route('admin.statuses.edit', ['status'=>$subStatus ->uuid, 'locale'=>app()->getLocale()]) }}" data-service-name="{{ $subStatus->name }}" data-id="{{ $subStatus->uuid }}" class="dropdown-item details text-info"><i class="far fa-edit"></i> Edit</a>
+                  <a href="#editService" data-toggle="modal" id="service-edit" title="Edit {{ $subStatus->name }}" data-url="{{ route('admin.statuses.edit', ['status'=>$subStatus->uuid, 'locale'=>app()->getLocale()]) }}" data-service-name="{{ $subStatus->name }}" data-id="{{ $subStatus->uuid }}" class="dropdown-item details text-info"><i class="far fa-edit"></i> Edit</a>
 
                   @if($subStatus->status == 'active' ) 
                     <a data-url="{{ route('admin.statuses.deactivate', ['status'=>$subStatus->uuid, 'locale'=>app()->getLocale()]) }}" class="dropdown-item details text-warning deactivate-entity" title="Deactivate {{ $subStatus->name}}" style="cursor: pointer;"><i class="fas fa-ban"></i> Deactivate</a>

@@ -14,9 +14,12 @@ use App\Models\RfqSupplier;
 use App\Models\RfqSupplierInvoice;
 use App\Models\RfqSupplierInvoiceBatch;
 use DB;
+use App\Traits\Invoices;
 
 class RfqController extends Controller
 {
+    use Invoices;
+
     /**
      * This method will redirect users back to the login page if not properly authenticated
      * @return void
@@ -85,8 +88,9 @@ class RfqController extends Controller
 
         (bool) $supplierUpdate = false;
         (bool) $rfqBatchUpdate = false;
+        $totalAmount = 0;
 
-        DB::transaction(function () use ($supplier, $supplierId, $supplierInvoiceBatches, $supplierRfqId,  &$supplierUpdate, &$rfqBatchUpdate) {
+        DB::transaction(function () use ($supplier, $supplierId, $supplierInvoiceBatches, $supplierRfqId, $totalAmount, &$supplierUpdate, &$rfqBatchUpdate) {
 
             $supplierUpdate = RfqSupplier::create([
                 'rfq_id'        =>  $supplierRfqId,
@@ -95,16 +99,28 @@ class RfqController extends Controller
                 'delivery_time' =>  $supplier->delivery_time,
             ]);
 
-            // foreach ($supplierInvoiceBatches as $item => $value){
-            //     $rfqBatchUpdate = 
-            // }
+            foreach ($supplierInvoiceBatches as $item => $value){
+
+                $rfqBatchUpdate = RfqBatch::where('id', $value->rfq_batch_id)->update([
+                    'amount'    => $value->unit_price,
+                ]);
+
+                $totalAmount += ($value->total_amount);
+            }
+
+            Rfq::where('id', $supplier->rfq_id)->update([
+                'status'        =>   'Awaiting',
+                'accepted'      =>   'No',
+                'total_amount'  =>   $totalAmount
+            ]);
 
             $supplierUpdate = true;
 
         });
 
         if($supplierUpdate){
-            return back()->with('success', 'Supplier has beeen selected.');
+            $this->supplierInvoice($supplier->rfq_id, $supplier->rfq->service_request_id);
+            return back()->with('success', $supplier['supplier']['account']['first_name'] ." ". $supplier['supplier']['account']['last_name'].' invoice has been selected for '.$supplier->rfq->unique_id.' RFQ');
         }
 
     }

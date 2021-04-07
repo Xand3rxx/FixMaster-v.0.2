@@ -274,9 +274,9 @@ Route::prefix('admin')->group(function () {
         Route::resource('booking-fees',                     PriceController::class);
 
         //Routes for Status Management
-        Route::get('/statuses/deactivate/{status}',         [StatusController::class, 'deactivate'])->name('statuses.deactivate');
-        Route::get('/statuses/reinstate/{status}',          [StatusController::class, 'reinstate'])->name('statuses.reinstate');
-        Route::get('/statuses/delete/{status}',             [StatusController::class, 'destroy'])->name('statuses.delete');
+        Route::get('/statuses/deactivate/{status:uuid}',         [StatusController::class, 'deactivate'])->name('statuses.deactivate');
+        Route::get('/statuses/reinstate/{status:uuid}',          [StatusController::class, 'reinstate'])->name('statuses.reinstate');
+        Route::get('/statuses/delete/{status:uuid}',             [StatusController::class, 'destroy'])->name('statuses.delete');
         Route::resource('statuses',                         StatusController::class);
 
         //Setting controller
@@ -310,7 +310,7 @@ Route::prefix('admin')->group(function () {
 // Route::resource('client', ClientController::class);
 
 //All routes regarding clients should be in here
-Route::prefix('/client')->middleware('verified')->group(function () {
+Route::prefix('/client')->group(function () {
     Route::name('client.')->group(function () {
         //All routes regarding clients should be in here
         Route::get('/',                   [ClientController::class, 'index'])->name('index'); //Take me to Supplier Dashboard
@@ -359,6 +359,9 @@ Route::prefix('/client')->middleware('verified')->group(function () {
 
         Route::post('/ipnpaystack',         [ClientController::class, 'paystackIPN'])->name('ipn.paystack');
         Route::get('/apiRequest',           [ClientController::class, 'apiRequest'])->name('ipn.paystackApiRequest');
+
+        // Route::post('/ipnpaystack',         [ClientController::class, 'paystackIPN'])->name('ipn.paystack');
+        // Route::get('/apiRequest',           [ClientController::class, 'apiRequest'])->name('serviceRequest.paystackApiRequest');
 
         Route::get('/ipnflutter',           [ClientController::class, 'flutterIPN'])->name('ipn.flutter');
 
@@ -433,9 +436,9 @@ Route::prefix('/cse')->middleware('monitor.cseservice.request.changes')->group(f
             '/request/details',
             'cse.request_details',
             [
-                'tools' => \App\Models\ToolInventory::all(),
-                'ongoingSubStatuses' => \App\Models\SubStatus::where('status_id', 2)->get(['id', 'name']),
-                'warranties' => \App\Models\Warranty::all(),
+                // 'tools' => \App\Models\ToolInventory::all(),
+                // 'ongoingSubStatuses' => \App\Models\SubStatus::where('status_id', 2)->get(['id', 'name']),
+                // 'warranties' => \App\Models\Warranty::all(),
             ]
         )->name('request_details');
         Route::view('/profile',             'cse.view_profile')->name('view_profile');

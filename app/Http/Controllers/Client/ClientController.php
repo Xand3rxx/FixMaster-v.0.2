@@ -39,6 +39,8 @@ use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\SMTP;
 use PHPMailer\PHPMailer\Exception;
 
+use Carbon\Carbon;
+
 use App\Http\Controllers\Messaging\MessageController;
 
 
@@ -453,7 +455,7 @@ class ClientController extends Controller
                     return redirect()->route('client.wallet', app()->getLocale())->with('alert', 'Invalid Deposit Request');
                 }
                 $gatewayData = PaymentGateway::where('keyword', $pay->payment_channel)->first();
-
+                
                 // dd($gatewayData);
                 if ($pay->payment_channel == 'paystack') {
                     $paystack['amount'] = $pay->amount;
@@ -698,11 +700,12 @@ class ClientController extends Controller
         $client  = Client::where('user_id',auth()->user()->id)->orderBy('id','DESC')->firstOrFail();
         $clientContact->account_id  = $client->account_id;
         $clientContact->country_id    = '156';
-        $clientContact->is_default        = '1';
+        // $clientContact->is_default        = '1';
         $clientContact->phone_number       = $request->phoneNumber;
         $clientContact->address            = $request->streetAddress;
         $clientContact->address_longitude  = $request->addressLat;
         $clientContact->address_latitude   = $request->addressLng;
+
         if ($clientContact->save()) {
             // return back()->with('success', 'New contact saved');
             // return response()->json(['success' => 'Data Added successfully.']);
@@ -737,6 +740,18 @@ class ClientController extends Controller
             $all = $request->all();
             dd($all);
 
+        
+            // $validatedData = $request->validate([            
+        //     'balance'                   =>   'required',
+        //     'booking_fee'               =>   'required',
+        //     // 'timestamp'                 =>   'required',
+        //     'payment_method'            =>   'required',          
+        //     'myContact_id'            =>   'required',          
+        //   ]);
+        
+           
+        // $all = $request->all(); 
+            // dd($all);
 
             // if payment method is wallet
             if($request->payment_method == 'Wallet'){
@@ -757,10 +772,55 @@ class ClientController extends Controller
                     $service_request->description           = $request->description;
                     $service_request->total_amount          = $request->booking_fee;
                     $service_request->preferred_time        = date("Y-m-d"); //fix this later before pushing
-                    $service_request->has_client_rated      = 'No';
+                    $service_request->has_client_rated      = 'No'; 
                     $service_request->has_cse_rated         = 'No';
+                    $service_request->created_at         = Carbon::now()->toDateTimeString();
+                    $service_request->updated_at         = Carbon::now()->toDateTimeString();
+
                     // dd($service_request);
                     if ($service_request->save()) {
+
+                    $theDiscount = ClientDiscount::with('discount')->orderBy('id','DESC')->firstOrFail();
+                    if ($service_request->client_discount_id == '1') {
+                        $service_request->total_amount          = $request->booking_fee;
+                        // $service_request->total_amount          = (100 - $theDiscount->discount->rate ) / 100 * $request->booking_fee  ;
+
+                        // $user_data = ClientDiscount::find(auth()->user()->id);
+                        // $client_discount = ClientDiscount::where('client_id', auth()->user()->id)->orderBy('id','DESC')->firstOrFail();
+                        // $client_discount['availability'] = 'used';
+                        // $client_discount->update();
+
+                    }else {
+                        $service_request->total_amount          = $request->booking_fee;
+                    }
+                    // $var = $request->timestamp;
+                    // $formattedDate = str_replace('/', '-', $var);
+
+                    $service_request->preferred_time        = date("Y-m-d");
+
+                    $client = \App\Models\Client::where('user_id', $request->user()->id)->with('user')->orderBy('id','DESC')->firstOrFail();
+                    // dd($client->user->account->state_id);
+
+                    if ($request->use_my_address === 'yes') {
+                        // dd($client->user->contact->state_id);
+                        $service_request->state_id        = $client->user->account->state_id;
+                        $service_request->lga_id          = $client->user->account->lga_id;
+
+                    // }elseif ($service_request->use_my_address == null) {
+                        # else...
+                        // $service_request->state_id        = $request->alternate_address;
+                        // $service_request->lga_id          = $request->alternate_address;
+                    }
+                    if ($request->use_my_phone_number == 'yes') {
+                        $service_request->phone_id        = $client->user->contact->id;
+                        $service_request->address_id      = $client->user->contact->id;
+                    // }elseif ($service_request->use_my_phone_number == null) {
+                        # else...
+                        // $service_request->state_id        = $request->alternate_phone_number;
+                    }
+                    // $service_request->town_id         = '';
+                    $service_request->save();
+
                     // fetch the Client Table Record
                     $client = \App\Models\Client::where('user_id', $request->user()->id)->with('user')->firstOrFail();
                     // generate reference string for this transaction
@@ -808,60 +868,191 @@ class ClientController extends Controller
                     } 
 
                 }else{
-                        Session::flash('alert', 'sorry!, service amount is less than wallet balance');
+                    return back()->with('error', 'sorry!, booking fee is greater than wallet balance');
                     }
                 }
-                if ($request->payment_method == 'Offline') {
-                    // $this->requestForService();
-                    echo 'denk';
-                } else{
-                    echo 'tony';
-                    // $discountServiceFee = 0.95 * $serviceFee;
-                    // $amount = $discountServiceFee;
-                    // $this->requestForService();
+
+
+
+            // online method
+            if ($request->payment_method == 'Online') {
+                //  $all = $request->all(); 
+                // dd($all);
+                $valid = $this->validate($request, [
+                    // List of things needed from the request like
+                    'booking_fee'           => 'required',
+                    'payment_channel'  => 'required',
+                ]);
+                // fetch the Client Table Record
+                $client = Client::where('user_id', $request->user()->id)->with('user')->firstOrFail();
+                // save the reference_id as track in session
+                $generatedVal = $this->generateReference();
+
+            $payment = $this->payment($valid['booking_fee'], $valid['payment_channel'], 'service-request', $client['unique_id'], 'pending', $generatedVal);
+                // Session::put('Track', $generatedVal);
+            if ($payment) {
+                // paystack
+                if($request->payment_channel == 'paystack'){                
+                    // if($this->initiatePayment()){
+                        $this->initiatePayment(); 
+                    // }
+                 // flutter
+                }elseif ($request->payment_channel == 'flutter') {
+                    # flutter...
+                    // if($this->initiatePayment()){
+                        $this->initiatePayment(); 
+                    // }
+                }
+            }
+            // return back()->with('error', 'online payment coming soon');
+            } else{
+                return back()->with('error', 'sorry!, an error occured please try again');
                 }
 
             }
+            
+            public function initiatePayment(){
+                $track  = Session::get('Track');
+                $data = Payment::where('reference_id', $track)->orderBy('id', 'DESC')->first();
+                $user = User::find($data->user_id);
+        
+                $curl = curl_init();
+        
+                curl_setopt_array($curl, array(
+                    CURLOPT_URL => "https://api.paystack.co/transaction/initialize",
+                    CURLOPT_RETURNTRANSFER => true,
+                    CURLOPT_CUSTOMREQUEST => "POST",
+                    CURLOPT_POSTFIELDS => json_encode([
+                        'amount' => $data->amount * 100,
+                        'email' => $user->email,
+                        'callback_url' => route('client.ipn.paystackApiRequest', app()->getLocale())
+                    ]),
+                    CURLOPT_HTTPHEADER => [
+                        "authorization: Bearer sk_test_b612f25bd992c4d84760e312175c7515336b77fc",
+                        "content-type: application/json",
+                        "cache-control: no-cache"
+                    ],
+                ));
+        
+                $response = curl_exec($curl);
+                $err = curl_error($curl);
+                if ($err) {
+                    return back()->with('error', $err);
+                }
+        
+                $tranx = json_decode($response, true);
+        
+                if (!$tranx['status']) {
+                    return back()->with('error', $tranx['message']);
+                }
+                return redirect($tranx['data']['authorization_url']);
+            }
+
+
+
+
+            public function verifyPayment()
+            {
+                $track  = Session::get('Track');
+                $data = Payment::where('reference_id', $track)->orderBy('id', 'DESC')->first();
+        
+                $curl = curl_init();
+        
+                /** Check for a reference and return else make empty */
+                $reference = isset($_GET['reference']) ? $_GET['reference'] : '';
+                if (!$reference) {
+                    die('No reference supplied');
+                }
+        
+                /** Set the client for url's array values for the Curl's */
+                curl_setopt_array($curl, array(
+                    CURLOPT_URL => "https://api.paystack.co/transaction/verify/" . rawurlencode($reference),
+                    CURLOPT_RETURNTRANSFER => true,
+        
+                    /** Set the client for url header values passed */
+                    CURLOPT_HTTPHEADER => [
+                        "accept: application/json",
+                        "authorization: Bearer sk_test_b612f25bd992c4d84760e312175c7515336b77fc",
+                        "cache-control: no-cache"
+                    ],
+                ));
+        
+                /** The response should be executed if successful */
+                $response = curl_exec($curl);
+        
+                /** If there's an error return the error message */
+                $err = curl_error($curl);
+        
+                if ($err) {
+                    print_r('Api returned error ' . $err);
+                }
+        
+                /** The transaction details and stats would be returned */
+                $trans = json_decode($response);
+                if (!$trans->status) {
+                    die('Api returned Error ' . $trans->message);
+                }
+        
+                /** If the transaction status are successful send to DB */
+                if ($data->status == 'pending') {
+                    $data['status'] = 'success';
+                    $data['transaction_id'] = rawurlencode($reference);
+                    $data->update();
+                    $track = Session::get('Track');
+                    $data  = Payment::where('reference_id', $track)->orderBy('id', 'DESC')->first();
+        
+                    $client = \App\Models\Client::where('user_id', auth()->user()->id)->with('user')->firstOrFail();
+        
+                }
+        
+                /** Finally return the callback view for the end user */
+                return redirect()->route('client.wallet', app()->getLocale())->with('success', 'Fund successfully added!');
+            }
+
+
+
+
 
             public function getDistanceDifference(Request $request){
-                $the_message = new MessageController;
-                        $type = 'email';
-                        $subject = 'new job notice';
-                        $from = 'client@fix-master.com';
-                        $to = 'cse@fix-master.com';
-                        $mail_data = ["firstname"=>"Olaoluwa", "url"=>"www.google.com"];
-                        $feature = 'NEW_JOB_NOTIFICATION';
-                // $the_message->sendMessage( $type, $subject, $from, $to, $mail_data, $feature);
-                $the_message->sendNewMessage( $type, $subject, $from, $to, $mail_data, $feature);
+                // $the_message = new MessageController;
+                //         $type = 'email';
+                //         $subject = 'new job notice';
+                //         $from = 'client@fix-master.com';
+                //         $to = 'cse@fix-master.com';
+                //         $mail_data = ["firstname"=>"Olaoluwa", "url"=>"www.google.com"];
+                //         $feature = 'NEW_JOB_NOTIFICATION';
+                // // $the_message->sendMessage( $type, $subject, $from, $to, $mail_data, $feature);
+                // $the_message->sendNewMessage( $type, $subject, $from, $to, $mail_data, $feature);
                 $client = Client::where('user_id', $request->user()->id)->with('user')->orderBy('id','DESC')->firstOrFail();
 
-                // // $latitude  = '3.921007';
-                // $latitude  = $client->user->contact->address_latitude;
-                // // $longitude = '1.8386';
-                // $longitude = $client->user->contact->address_longitude;
-                // // $radius    = 325;
-                // $radius        = ServiceRequestSetting::find(1)->radius;
+                // $latitude  = '3.921007';
+                $latitude  = $client->user->contact->address_latitude;
+                // $longitude = '1.8386';
+                $longitude = $client->user->contact->address_longitude;
+                // $radius    = 325;
+                $radius        = ServiceRequestSetting::find(1)->radius;   
 
-                // $cse = DB::table('cses')
-                // ->join('contacts', 'cses.user_id','=','contacts.user_id')
-                // ->join('users', 'cses.user_id', '=', 'users.id')
-                // ->join('accounts', 'cses.user_id', '=', 'accounts.user_id')
+                $cse = DB::table('cses')
+                ->join('contacts', 'cses.user_id','=','contacts.user_id')
+                ->join('users', 'cses.user_id', '=', 'users.id')              
+                ->join('accounts', 'cses.user_id', '=', 'accounts.user_id')              
                 // // // ->select(DB::raw('contacts.*,1.609344 * 3956 * 2 * ASIN(SQRT( POWER(SIN((" . $latitude . " - abs(address_latitude)) *  pi()/180 / 2), 2) + COS(" . $latitude . " * pi()/180) * COS(abs(address_latitude) * pi()/180) * POWER(SIN((" . $longitude . " - address_longitude) * pi()/180 / 2), 2)  )) AS calculatedDistance'))
-                // ->select(DB::raw('cses.*, contacts.address, accounts.first_name, users.email,  6353 * 2 * ASIN(SQRT( POWER(SIN(('.$latitude.' - abs(address_latitude)) * pi()/180 / 2),2) + COS('.$latitude.' * pi()/180 ) * COS(abs(address_latitude) *  pi()/180) * POWER(SIN(('.$longitude.' - address_longitude) *  pi()/180 / 2), 2) )) as distance'))
-                // ->having('distance', '<=', $radius)
+                ->select(DB::raw('cses.*, contacts.address, accounts.first_name, users.email,  6353 * 2 * ASIN(SQRT( POWER(SIN(('.$latitude.' - abs(address_latitude)) * pi()/180 / 2),2) + COS('.$latitude.' * pi()/180 ) * COS(abs(address_latitude) *  pi()/180) * POWER(SIN(('.$longitude.' - address_longitude) *  pi()/180 / 2), 2) )) as distance'))
+                ->having('distance', '<=', $radius)
                 // // ->having('town', '=', '')
-                // ->orderBy('distance', 'DESC')
-                // ->get();
-
-                // // if ( count($cse) > 0) {
-                //     // dd($cse);
-                //     foreach ($cse as $key => $cses){
-                //         // dd($cses['email']);
-                //         dd($cses);
-                // }
+                ->orderBy('distance', 'DESC')
+                ->get();
+               
+                if ( count($cse) > 0) {
+                    // dd($cse);
+                    foreach ($cse as $key => $cses){
+                        dd($cse);
+                        // dd($cses->email);
+                        // dd($cses->distance);
+                }
 
             }
-            // }
+            }
 
 
             public function sendMailToAdmin(Request $request){

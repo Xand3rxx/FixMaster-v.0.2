@@ -33,5 +33,5 @@ class TownSeeder extends Seeder
         // Town::create(['name' => Str::random(10)]);
         // Using Fluent Query Builder this doesn't update created_at and updated_at
         // DB::table('towns')->insert(['name' => Str::random(10)]);
-    } 
+    }
 }
