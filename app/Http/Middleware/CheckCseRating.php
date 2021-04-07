@@ -23,6 +23,7 @@ class CheckCseRating
 
            foreach ($output as $out) {
                $res = $out->service_request->status->name;
+               $uniqueId = $out->service_request->unique_id;
                $dat = $out->service_request->users;
                $serviceRequestClient = $out->service_request->clientAccount;
                $serviceRequestId = $out->service_request->id;
@@ -34,11 +35,11 @@ class CheckCseRating
                     }
                 }
                        if ($res == 'Completed' && $out->service_request->has_cse_rated == "No") {
-                           $request->merge(['results' => $res, 'users' => $dat, 'client' => $serviceRequestClient, 'serviceRequestId' => $serviceRequestId]);
+                           $request->merge(['results' => $res, 'users' => $dat, 'client' => $serviceRequestClient, 'serviceRequestId' => $serviceRequestId, 'uniqueId'=> $uniqueId]);
                        }
 
                        if ($res == 'Completed' && $out->service_request->has_cse_rated == "Skipped" && $out->service_request->updated_at < Carbon::now()->subMinutes(1)) {
-                        $request->merge(['results' => $res, 'users' => $dat, 'client' => $serviceRequestClient, 'serviceRequestId' => $serviceRequestId]);
+                        $request->merge(['results' => $res, 'users' => $dat, 'client' => $serviceRequestClient, 'serviceRequestId' => $serviceRequestId, 'uniqueId'=> $uniqueId]);
                     }
 
                    }

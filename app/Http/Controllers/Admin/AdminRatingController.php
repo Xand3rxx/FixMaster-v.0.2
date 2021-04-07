@@ -2,9 +2,10 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
 use App\Models\Rating;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use App\Http\Controllers\Controller;
 
 class AdminRatingController extends Controller
 {
@@ -16,9 +17,17 @@ class AdminRatingController extends Controller
 
     public function getServiceRatings(Request $request)
     {
-        $resviceRatings = Rating::where('service_request_id', '!=', null)
+
+            $cards = Rating::select([
+                'service_id',
+                \DB::raw('COUNT(id) as id'),
+                \DB::raw('AVG(star) as starAvg')
+            ])
+            ->where('service_request_id', null)
             ->where('service_diagnosis_by', null)
-            ->where('ratee_id', null)->get();
-        return view('admin.ratings.service_rating', compact('resviceRatings'));
+            ->where('ratee_id', '!=', null)
+                ->groupBy('service_id')->get();
+
+        return view('admin.ratings.service_rating', compact('cards'));
     }
 }

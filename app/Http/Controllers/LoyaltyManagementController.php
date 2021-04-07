@@ -49,21 +49,21 @@ class LoyaltyManagementController extends Controller
 
         $loyalty = LoyaltyManagement::create([
             'client_id' => $value ,
-             'points' => $request->input('points'), 
+             'points' => $request->input('points'),
              'type' => 'credited',
              'amount'=> $request->input('specified_request_amount')
-             
+
             ]);
 
             $loyalty_history = LoyaltyManagementHistory::create([
                 'loyalty_mgt_id'=> $loyalty->id,
                 'client_id' => $value ,
-                'points' => $request->input('points'), 
+                'points' => $request->input('points'),
                 'type' => 'credited',
                 'amount'=> $request->input('specified_request_amount')
-                
+
                ]);
-            
+
                //if clientloyalty wallet exist
            $ifClientLoyalty =  ClientLoyaltyWithdrawal::where('client_id', $value)->first();
            if($ifClientLoyalty){
@@ -75,16 +75,14 @@ class LoyaltyManagementController extends Controller
                 'client_id' => $value,
                 'wallet' => $wallet_value
             ]);
-         
+
            }
-           
-     
+
+
         }
 
-
-
             if( $loyalty_history  &&   $loyalty ){
-            
+
                 $type = 'Request';
                 $severity = 'Informational';
                 $actionUrl = Route::currentRouteAction();
@@ -101,16 +99,12 @@ class LoyaltyManagementController extends Controller
                 $actionUrl = Route::currentRouteAction();
                 $message = 'An Error Occured while ' . Auth::user()->email . ' was trying to create ' . json_encode($request->input('users'));
                 $this->log($type, $severity, $actionUrl, $message);
-                return redirect()->route('admin.add_loyalty', app()
-                    ->getLocale())
+                return redirect()->route('admin.add_loyalty', app()->getLocale())
                     ->with('error', 'An error occurred');
-    
+
             }
 
     }
-
-
-
 
     public function loyaltyUsers(Request $request)
     {
@@ -137,7 +131,7 @@ class LoyaltyManagementController extends Controller
             ->where(['status_id'=> '4'])
             ->groupBy('client_id')
                  ->get();
- 
+
              $optionValue .= "<option value='' class='select-all'>All Users </option>";
              foreach ($dataArry as $row)
              {
@@ -155,7 +149,7 @@ class LoyaltyManagementController extends Controller
         }
 
         return response()->json($data);
-    
+
     }
 
 
@@ -163,7 +157,7 @@ class LoyaltyManagementController extends Controller
 
     public function show($language, $loyalty)
     {
-       
+
             $status =  LoyaltyManagement::select('accounts.first_name', 'accounts.last_name', 'accounts.user_id','loyalty_managements.*', 'client_loyalty_withdrawals.wallet as wallets')
             ->orderBy('accounts.user_id', 'DESC')
             ->where('loyalty_managements.uuid', $loyalty)
@@ -172,19 +166,19 @@ class LoyaltyManagementController extends Controller
             ->first();
             $data = ['loyalty' => $status ];
             $data['client-loyalty']   = ClientLoyaltyWithdrawal::select('wallet', 'withdrawal')->where('client_id', $status->client_id)->first();
-            
+
             $json = $data['client-loyalty']->withdrawal != NULL? json_decode($data['client-loyalty']->withdrawal): [];
             $ifwithdraw = isset($json->withdraw)? $json->withdraw: '';
             $ifwithdraw_date = isset($json->date)? $json->date: '';
             $data['withdraws']=  empty($json) ? [] : (is_array($ifwithdraw) ? $ifwithdraw : [ 0 => $ifwithdraw]);
             $data['withdraw_date']= empty($json)? [] : ( is_array( $ifwithdraw_date) ?  $ifwithdraw_date: [ 0 =>  $ifwithdraw_date]);
-          
+
             return response()->view('admin.loyalty.summary', $data);
     }
- 
-  
-       
- 
+
+
+
+
     public function edit($language, $loyalty)
     {
         $status = LoyaltyManagement::select('*')->where('uuid', $loyalty)->first();
@@ -193,7 +187,7 @@ class LoyaltyManagementController extends Controller
         return response()->view('admin.loyalty.edit', $data);
     }
 
-   
+
 
     public function store_edit(Request $request)
     {
@@ -206,21 +200,21 @@ class LoyaltyManagementController extends Controller
 
 
     foreach ($request->input('users') as $value) {
-   
+
         $loyalty = LoyaltyManagement::create([
             'client_id' => $value ,
-             'points' => $request->input('points'), 
+             'points' => $request->input('points'),
              'type' => 'credited',
              'amount'=> $request->input('specified_request_amount')
-             
+
             ]);
 
             $loyalty_history = LoyaltyManagementHistory::create([
             'client_id' => $value ,
-             'points' => $request->input('points'), 
+             'points' => $request->input('points'),
              'type' => 'credited',
              'amount'=> $request->input('specified_request_amount')
-                 
+
                 ]);
 
                        //if clientloyalty wallet exist
@@ -243,17 +237,17 @@ class LoyaltyManagementController extends Controller
                     'client_id' => $value,
                     'wallet' => $wallet_value
                 ]);
-             
-               }
-         
 
-     
-        }       
+               }
+
+
+
+        }
 
             if( $loyalty_history  && $loyalty){
                 LoyaltyManagement::where(['uuid'=>$request->loyalty_uuid, 'client_id' => $request->edit_client])->delete();
                 LoyaltyManagementHistory::where(['loyalty_mgt_id'=>$request->loyalty_id,'client_id' => $request->edit_client])->delete();
-            
+
                 $type = 'Request';
                 $severity = 'Informational';
                 $actionUrl = Route::currentRouteAction();
@@ -273,7 +267,7 @@ class LoyaltyManagementController extends Controller
                 return redirect()->route('admin.add_loyalty', app()
                     ->getLocale())
                     ->with('error', 'An error occurred');
-    
+
             }
     }
 
@@ -282,19 +276,19 @@ class LoyaltyManagementController extends Controller
     private function validateRequest($request)
     {
          return request()->validate([
-            'users' => 'required|array|min:1', 
+            'users' => 'required|array|min:1',
              'points' => 'required',
              'specified_request_amount'=> 'required'
               ]);
-        
-       
+
+
     }
 
     public function loyaltyUsersEdit(Request $request)
     {
         if ($request->ajax())
         {
-         
+
             parse_str($request->data, $fields);
             $name = $optionValue = '';
            $amount = $request->amount;
@@ -320,7 +314,7 @@ class LoyaltyManagementController extends Controller
             ->where(['total_amount'=> $amount, 'status_id'=> '4'])
             ->groupBy('client_id')
                  ->get();
- 
+
              $optionValue .= "<option value='' class='select-all'>All Users </option>";
              foreach ($dataArry as $row)
              {
@@ -339,19 +333,19 @@ class LoyaltyManagementController extends Controller
         }
 
         return response()->json($data);
-    
+
     }
-   
+
 
     public function delete($language, $loyalty, $client)
     {
 
-     
+
        $loyaltyExists =  LoyaltyManagement::where(['uuid'=>$loyalty, 'client_id'=> $client])->first();
        $old_amount =  (float)$loyaltyExists->points/100 * (float) $loyaltyExists->amount;
-    
+
        $oldLoyalty = ClientLoyaltyWithdrawal::where(['client_id' => $client])->first();
- 
+
        if((float) $oldLoyalty->wallet > (float)$old_amount){
        $wallet_new_client = ((float) $oldLoyalty->wallet - (float)$old_amount);
        ClientLoyaltyWithdrawal::where(['client_id'=> $client])->update(['wallet'=>  $wallet_new_client ]);

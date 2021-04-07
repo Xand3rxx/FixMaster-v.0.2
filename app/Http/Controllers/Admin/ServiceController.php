@@ -18,11 +18,11 @@ use App\Models\Service;
 class ServiceController extends Controller
 {
     use Loggable, ImageUpload;
-    
+
     /**
      * This method will redirect users back to the login page if not properly authenticated
      * @return void
-     */  
+     */
     public function __construct() {
         $this->middleware('auth:web');
     }
@@ -72,7 +72,7 @@ class ServiceController extends Controller
         //Image storage directory
         $imageDirectory = public_path('assets/service-images').'/';
 
-        //Validate if an image file was selected 
+        //Validate if an image file was selected
         $imageName = $this->verifyAndStoreImage($request, $imageDirectory, $width = 350, $height = 259);
 
         //Create record for a new service
@@ -126,7 +126,7 @@ class ServiceController extends Controller
             'category_id'       =>   'required',
             'service_charge'    =>   'required|numeric',
             'image'             =>   'required|mimes:jpg,png,jpeg,gif,svg|max:1014',
-            'description'       =>   'required', 
+            'description'       =>   'required',
         ]);
     }
 
@@ -181,7 +181,7 @@ class ServiceController extends Controller
             'name'              =>   'required',
             'category_id'       =>   'required',
             'service_charge'    =>   'required|numeric',
-            'description'       =>   'required', 
+            'description'       =>   'required',
         ]);
 
         //Image storage directory
@@ -190,7 +190,7 @@ class ServiceController extends Controller
         //Get old service image name
         $oldImageName = $request->old_post_image;
 
-         //Validate if an image file was selected 
+         //Validate if an image file was selected
          if($request->hasFile('image')){
             //Validate and update image with ImageUpload Trait
             $imageName = $this->verifyAndStoreImage($request, $imageDirectory, $width = 350, $height = 259);
@@ -202,7 +202,7 @@ class ServiceController extends Controller
                     \File::delete($imageDirectory.$oldImageName);
                 }
             }
-            
+
         }else{
             $imageName = $oldImageName;
         }
@@ -262,7 +262,7 @@ class ServiceController extends Controller
             $this->log($type, $severity, $actionUrl, $message);
 
             return back()->with('success', $service->name. ' service has been deleted.');
-            
+
         }else{
             //Record crurrenlty logged in user activity
             $type = 'Errors';
@@ -272,7 +272,7 @@ class ServiceController extends Controller
             $this->log($type, $severity, $actionUrl, $message);
 
             return back()->with('error', 'An error occurred while trying to delete '.$service->name);
-        } 
+        }
     }
 
     public function deactivate($language, $uuid)
@@ -294,7 +294,7 @@ class ServiceController extends Controller
             $this->log($type, $severity, $actionUrl, $message);
 
             return redirect()->route('admin.services.index', app()->getLocale())->with('success', $service->name.' service has been deactivated.');
-            
+
         }else{
             //Record crurrenlty logged in user activity
             $type = 'Errors';
@@ -304,8 +304,8 @@ class ServiceController extends Controller
             $this->log($type, $severity, $actionUrl, $message);
 
             return back()->with('error', 'An error occurred while trying to deactivate service.');
-        } 
-        
+        }
+
     }
 
     public function reinstate($language, $uuid)
@@ -327,7 +327,7 @@ class ServiceController extends Controller
             $this->log($type, $severity, $actionUrl, $message);
 
             return redirect()->route('admin.services.index', app()->getLocale())->with('success', $service->name.' service has been reinstated.');
-            
+
         }else{
             //Record crurrenlty logged in user activity
             $type = 'Errors';
@@ -337,6 +337,6 @@ class ServiceController extends Controller
             $this->log($type, $severity, $actionUrl, $message);
 
             return back()->with('error', 'An error occurred while trying to reinstate service.');
-        } 
+        }
     }
 }

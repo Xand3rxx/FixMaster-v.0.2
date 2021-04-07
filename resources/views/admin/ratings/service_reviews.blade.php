@@ -49,9 +49,9 @@
                     @foreach($serviceReviews as $review)
                     <tr>
                       <td class="tx-color-03 tx-center">{{$sn++}}</td>
-                      <td>{{$review->service_request->service->name}}</td>
+                      <td>{{$review->service->name}}</td>
                       <td>{{$review->clientAccount->first_name}} {{$review->clientAccount->last_name}}</td>
-                      <td class="tx-medium">{{$review->service_request->unique_id}}</td>
+                      <td class="tx-medium">{{$review->service->serviceRequest->unique_id}}</td>
                       <td>{{$review->reviews}}</td>
                       @if($review->status == 1)
                       <td class="text-medium text-success">Active</td>
@@ -66,11 +66,11 @@
                           <a href="" class="dropdown-link" data-toggle="dropdown"><i data-feather="more-vertical"></i></a>
                           <div class="dropdown-menu dropdown-menu-right">
                             @if($review->status == 1)
-                            <a href="{{route('admin.deactivate_review', [$review->id, 'locale'=>app()->getLocale()])}}" class="dropdown-item details text-danger"><i class="fas fa-times"></i> Mark as Inactive</a>
+                            <a href="{{route('admin.deactivate_review', [$review->uuid, 'locale'=>app()->getLocale()])}}" class="dropdown-item details text-danger"><i class="fas fa-times"></i> Mark as Inactive</a>
                             @else
-                            <a href="{{route('admin.activate_review', [$review->id, 'locale'=>app()->getLocale()])}}" class="dropdown-item details text-success"><i class="fas fa-times"></i> Mark as Active</a>
+                            <a href="{{route('admin.activate_review', [$review->uuid, 'locale'=>app()->getLocale()])}}" class="dropdown-item details text-success"><i class="fas fa-times"></i> Mark as Active</a>
                             @endif
-                            <a href="{{route('admin.delete_review', [$review->id, 'locale'=>app()->getLocale()])}}" class="dropdown-item details text-danger"><i class="fas fa-trash"></i> Delete</a>
+                            <a href="{{route('admin.delete_review', [$review->uuid, 'locale'=>app()->getLocale()])}}" class="dropdown-item details text-danger"><i class="fas fa-trash"></i> Delete</a>
                           </div>
                         </div>
                       </td>

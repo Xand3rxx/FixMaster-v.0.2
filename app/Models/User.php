@@ -62,6 +62,12 @@ class User extends Authenticatable implements MustVerifyEmail
         return $this->hasOne(UserType::class);
     }
 
+            public function ratings(){
+
+            return $this->hasMany(Rating::class,'ratee_id');
+
+            }
+
     /**
      * Get the Category associated with the user who created it.
      */
@@ -224,5 +230,9 @@ class User extends Authenticatable implements MustVerifyEmail
     public function cse_jobs()
     {
         return $this->hasMany(ServiceRequestAssigned::class, 'user_id');
+    }
+
+    public function userAverageRating(){
+        return round($this->ratings->avg('star'));
     }
 }

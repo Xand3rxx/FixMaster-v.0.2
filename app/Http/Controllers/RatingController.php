@@ -1,15 +1,21 @@
 <?php
-
 namespace App\Http\Controllers;
 
+use Auth;
+use Route;
 use App\Models\Rating;
 use App\Models\Review;
 use Illuminate\Http\Request;
 use App\Models\ServiceRequest;
+use App\Traits\Loggable;
+use App\Models\LoyaltyManagement;
 use Illuminate\Support\Facades\DB;
+use App\Models\ClientLoyaltyWithdrawal;
+use App\Models\LoyaltyManagementHistory;
 
 class RatingController extends Controller
 {
+    use Loggable;
     /**
      * Handle Ratings
      *
@@ -33,8 +39,8 @@ class RatingController extends Controller
         //dd($request->all());
         (array) $valid = $this->validateClientRatingsRequest($request);
         return self::storeClientRating($valid, $request->user()->id) == true
-            ? back()->withSuccess('Thank you for rating the request')
-            : back()->with('error', 'Error occured while recording rating the request');
+            ? back()->withSuccess('Thank you for rating the service, you have qualified for a loyalty reward')
+            : back()->withError('Error occured while recording rating the request');
     }
 
     public function handleServiceRatings(Request $request)
@@ -98,6 +104,7 @@ class RatingController extends Controller
                     'rater_id' => $user_id,
                     'ratee_id' => $user,
                     'service_request_id' => $valid['serviceRequestId'],
+                    'service_id' => $valid['serviceId'],
                     'star' => $valid['users_star'][$key],
                 ]);
             }
@@ -109,15 +116,68 @@ class RatingController extends Controller
                 'service_diagnosis_by' => $user,
             ]);
 
-            //Record Review for Service Request
+            //Record Review for Service
             Review::create([
                 'client_id' => $user_id,
-                'service_request_id' => $valid['serviceRequestId'],
+                //'service_request_id' => $valid['serviceRequestId'],
+                'service_id' => $valid['serviceId'],
                 'reviews' => $valid['review'],
             ]);
 
             // Update the service request to indicate rated
             ServiceRequest::where('id', $valid['serviceRequestId'])->first()->update(['has_client_rated' => 'Yes']);
+
+            //Record Loyalty Reward for client
+            $point = 10;
+            $wallet_value = (float)$point/100 * (float)$valid['totalAmount'];
+            $loyalty = LoyaltyManagement::create([
+                'client_id' => $user_id,
+                 'points' => $point,
+                 'type' => 'credited',
+                 'amount'=> $valid['totalAmount']
+
+                ]);
+
+                $loyalty_history = LoyaltyManagementHistory::create([
+                    'loyalty_mgt_id'=> $loyalty->id,
+                    'client_id' => $user_id ,
+                    'points' => $point,
+                    'type' => 'credited',
+                    'amount'=> $valid['totalAmount']
+
+                   ]);
+
+                   //if clientloyalty wallet exist
+               $ifClientLoyalty =  ClientLoyaltyWithdrawal::where('client_id', $user_id)->first();
+               if($ifClientLoyalty){
+                ClientLoyaltyWithdrawal::where(['client_id'=> $user_id])->increment(
+                    'wallet',(float) $wallet_value);
+               }else{
+                ClientLoyaltyWithdrawal::create([
+                    'loyalty_mgt_id'=> $loyalty->id,
+                    'client_id' => $user_id,
+                    'wallet' => $wallet_value
+                ]);
+               }
+
+               if( $loyalty_history  &&   $loyalty ){
+                //LoyaltyManagement::where(['uuid'=>$request->loyalty_uuid, 'client_id' => $request->edit_client])->delete();
+                //LoyaltyManagementHistory::where(['loyalty_mgt_id'=>$request->loyalty_id,'client_id' => $request->edit_client])->delete();
+
+                $type = 'Request';
+                $severity = 'Informational';
+                $actionUrl = Route::currentRouteAction();
+                $message = Auth::user()->email . ' Qualified for loyalty';
+                self::log($type, $severity, $actionUrl, $message);
+            }
+            else
+            {
+                $type = 'Errors';
+                $severity = 'Error';
+                $actionUrl = Route::currentRouteAction();
+                $message = 'An Error Occured while ' . Auth::user()->email. 'was about rating';
+                self::log($type, $severity, $actionUrl, $message);
+            }
             // update registered to be true
             $registred = true;
         });
@@ -155,7 +215,9 @@ class RatingController extends Controller
             'users_id.*' => 'required|numeric',
             'users_star' => 'required|array',
             'users_star.*' => 'required|numeric|between:1,5',
-            'serviceRequestId' => 'required|numeric'
+            'serviceRequestId' => 'required|numeric',
+            'serviceId' => 'required',
+            'totalAmount' => 'required'
         ]);
     }
 }

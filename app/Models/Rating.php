@@ -4,13 +4,21 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Str;
 
 class Rating extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['rater_id', 'ratee_id', 'service_request_id','star', 'updated_at', 'service_diagnosis_by'];
+    protected $fillable = ['rater_id', 'ratee_id', 'service_request_id', 'service_id', 'star', 'updated_at', 'service_diagnosis_by'];
 
+    protected static function boot()
+    {
+        parent::boot();
+        self::creating(function ($model) {
+            $model->uuid = Str::uuid()->toString();
+        });
+    }
 
     public function services(){
         return $this->hasMany(Service::class, 'id', 'service_id');

@@ -96,7 +96,7 @@
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
-
+                        <h4 class="text-center unique"></h4><hr>
                         <form action="{{ route('cse.handle.ratings', app()->getLocale()) }}" method="POST">
                             @csrf
                             <div class="row">
@@ -160,9 +160,10 @@
     @yield('scripts')
     @stack('scripts')
 
-    @if (\Request::filled('results') && \Request::filled('users') && \Request::filled('client') && \Request::filled('serviceRequestId'))
+    @if (\Request::filled('results') && \Request::filled('users') && \Request::filled('client') && \Request::filled('serviceRequestId') && \Request::filled('uniqueId'))
     <script>
         const data = @json(\Request::get('users'));
+        const uniqueId = @json(\Request::get('uniqueId'));
         const client = @json(\Request::get('client'));
         var serviceRequestId = @json(\Request::get('serviceRequestId'));
         // client div to page
@@ -177,12 +178,13 @@
                                         <i class="icon ion-md-star rates lh-0 tx-gray-300" data-number="3"></i>
                                         <i class="icon ion-md-star rates lh-0 tx-gray-300" data-number="4"></i>
                                         <i class="icon ion-md-star rates lh-0 tx-gray-300" data-number="5"></i>
-                                        <input type="" name="client_star" class="star" readonly>
-                                        <input type="" name="client_id" value=` + client.id + ` readonly>
+                                        <input type="hidden" name="client_star" class="star" readonly>
+                                        <input type="hidden" name="client_id" value=` + client.id + ` readonly>
                                     </div>
                                 </div>
                             </div>`;
         $('#ratings_users').append(ratings_row);
+        $('.unique').append('SERVICE REQUEST UNIQUEID - ' +uniqueId);
         // end of client
         $.each(data, function(key, user) {
             //console.log(key);
@@ -198,8 +200,8 @@
                                                 <i class="icon ion-md-star rates lh-0 tx-gray-300" data-number="3"></i>
                                                 <i class="icon ion-md-star rates lh-0 tx-gray-300" data-number="4"></i>
                                                 <i class="icon ion-md-star rates lh-0 tx-gray-300" data-number="5"></i>
-                                                <input type="" name="users_star[]" class="star" readonly>
-                                                <input type="" name="users_id[]" value=` + user.account.user_id + ` readonly>
+                                                <input type="hidden" name="users_star[]" class="star" readonly>
+                                                <input type="hidden" name="users_id[]" value=` + user.account.user_id + ` readonly>
                                             </div>
                                         </div>
                                     </div>`;

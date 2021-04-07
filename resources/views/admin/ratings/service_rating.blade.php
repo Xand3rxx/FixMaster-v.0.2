@@ -43,12 +43,13 @@
                   </thead>
                   <tbody>
                     @php $sn = 1; @endphp
-                @foreach($resviceRatings as $rating)
+                @foreach($cards as $rating)
                     <tr>
-                      <td class="tx-color-03 tx-center">{{$sn++}}</td>
-                      <td class="tx-medium">{{$rating->service_request->service->name}}</td>
-                      <td class="tx-medium text-center">{{$rating->star}}</td>
-                      <td class="text-medium text-center">5.0</td>
+
+                    <td class="tx-color-03 tx-center">{{$sn++}}</td>
+                    <td class="tx-medium">{{$rating->service->name ?? ''}}</td>
+                      <td class="tx-medium text-center">{{$rating->id}}</td>
+                      <td class="text-medium text-center">{{round($rating->starAvg)}}</td>
                       <td class=" text-center">
                         <div class="dropdown-file">
                             <a href="" class="dropdown-link" data-toggle="dropdown"><i data-feather="more-vertical"></i></a>
@@ -57,8 +58,9 @@
                             </div>
                         </div>
                       </td>
+
                     </tr>
- @endforeach
+                  @endforeach
 
 
                   </tbody>

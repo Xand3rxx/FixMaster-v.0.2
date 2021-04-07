@@ -29,10 +29,10 @@
                             <img src="{{ asset('assets/images/no-image-available.png') }}" alt="Image not available" class="card-img-top rounded-top">
                             @endif
                         @endif
-                        
+
                     <div class="overlay rounded-top bg-dark"></div>
                     </div>
-                    
+
                     <div class="author">
                     <h4 class="text-light user d-block"><i class="mdi mdi-home"></i> {{ $service->name }}</h4>
                         <small class="text-light date"><i class="mdi mdi-bookmark"></i> {{ $service->serviceRequests()->count() }} Requests</small>
@@ -49,33 +49,60 @@
                         <div class="star-main-rating">
                             <div class="inner_game">
                                 <div class="rating_game mt-3 text-center">
-                                    <span class="rating-num">4.5</span>
+                                    <span class="rating-num">{{round($rating->avg('star'))}}</span>
                                     <div class="rating-stars">
-                                        {{-- <span><i class="active icon-star text-warning"></i></span>
-                                        <span><i class="active icon-star text-warning"></i></span>
-                                        <span><i class="active icon-star text-warning"></i></span>
-                                        <span><i class="active icon-star text-warning"></i></span>
-                                        <span><i class="active icon-star-half-empty text-warning"></i></span> --}}
                                         <ul class="list-unstyled mb-0">
+                                            @if(round($rating->avg('star'))==1)
+                                            <li class="list-inline-item"><i class="mdi mdi-star text-warning"></i></li>
+                                            <li class="list-inline-item"><i class="mdi mdi-star text-gray"></i></li>
+                                            <li class="list-inline-item"><i class="mdi mdi-star text-gray"></i></li>
+                                            <li class="list-inline-item"><i class="mdi mdi-star text-gray"></i></li>
+                                            <li class="list-inline-item"><i class="mdi mdi-star text-gray"></i></li>
+                                            @elseif(round($rating->avg('star'))==2)
+                                            <li class="list-inline-item"><i class="mdi mdi-star text-warning"></i></li>
+                                            <li class="list-inline-item"><i class="mdi mdi-star text-warning"></i></li>
+                                            <li class="list-inline-item"><i class="mdi mdi-star text-gray"></i></li>
+                                            <li class="list-inline-item"><i class="mdi mdi-star text-gray"></i></li>
+                                            <li class="list-inline-item"><i class="mdi mdi-star text-gray"></i></li>
+                                            @elseif(round($rating->avg('star'))==3)
+                                            <li class="list-inline-item"><i class="mdi mdi-star text-warning"></i></li>
+                                            <li class="list-inline-item"><i class="mdi mdi-star text-warning"></i></li>
+                                            <li class="list-inline-item"><i class="mdi mdi-star text-warning"></i></li>
+                                            <li class="list-inline-item"><i class="mdi mdi-star text-gray"></i></li>
+                                            <li class="list-inline-item"><i class="mdi mdi-star text-gray"></i></li>
+                                            @elseif(round($rating->avg('star'))==4)
+                                            <li class="list-inline-item"><i class="mdi mdi-star text-warning"></i></li>
+                                            <li class="list-inline-item"><i class="mdi mdi-star text-warning"></i></li>
+                                            <li class="list-inline-item"><i class="mdi mdi-star text-warning"></i></li>
+                                            <li class="list-inline-item"><i class="mdi mdi-star text-warning"></i></li>
+                                            <li class="list-inline-item"><i class="mdi mdi-star text-gray"></i></li>
+                                            @elseif(round($rating->avg('star'))==5)
                                             <li class="list-inline-item"><i class="mdi mdi-star text-warning"></i></li>
                                             <li class="list-inline-item"><i class="mdi mdi-star text-warning"></i></li>
                                             <li class="list-inline-item"><i class="mdi mdi-star text-warning"></i></li>
                                             <li class="list-inline-item"><i class="mdi mdi-star text-warning"></i></li>
                                             <li class="list-inline-item"><i class="mdi mdi-star text-warning"></i></li>
+                                            @else
+                                            <li class="list-inline-item"><i class="mdi mdi-star text-gray"></i></li>
+                                            <li class="list-inline-item"><i class="mdi mdi-star text-gray"></i></li>
+                                            <li class="list-inline-item"><i class="mdi mdi-star text-gray"></i></li>
+                                            <li class="list-inline-item"><i class="mdi mdi-star text-gray"></i></li>
+                                            <li class="list-inline-item"><i class="mdi mdi-star text-gray"></i></li>
+                                            @endif
                                         </ul>
                                     </div>
-                                    <div class="rating-users text-center"> 1295 total</div>
+                                    <div class="rating-users text-center"> {{$rating->count()}} total</div>
                                 </div>
                             </div>
                         </div>
-                    
-                    
+
+
                     <div class="star-width rating-bars">
                         <div class="rating-holder">
                             <ul>
                                 <li class="">
                                     <div class="rating-category">
-                                        {{-- <span class="rating-digit-holder">5</span> --}}
+
                                         <span class="rating-star-holder text-warning">★★★★★</span>
                                     </div>
                                     <div class="col rating-bars ml-5">
@@ -137,76 +164,75 @@
                         </div>
                     </div>
                 </div>
-                    
+
                     <br>
                     <h5 class="mt-4 py-2">Description :</h5>
                     <p class="text-muted">{{ $service->description }}</p>
-                
+
                 </div>
             </div><!--end col-->
         </div><!--end row-->
 
         <div class="row mt-4">
             <div id="customer-testi" class="owl-carousel owl-theme">
-                <div class="media customer-testi m-2">
-                    <img src="{{ asset('assets/images/taju.jpg') }}" class="avatar avatar-small mr-3 rounded shadow" alt="Tajudeen Tijani">
+                @foreach ($rating as $rate)
+              @foreach($reviews as $review)
+             <div class="media customer-testi m-2">
+                    <img src="{{ asset('assets/user-avatars/'.$review->clientAccount->avatar) }}" class="avatar avatar-small mr-3 rounded shadow" alt="Ifeoluwa Ajenifuja">
                     <div class="media-body content p-3 shadow rounded bg-white position-relative">
+                        <div class="rating-stars">
                         <ul class="list-unstyled mb-0">
-                            <li class="list-inline-item"><i class="mdi mdi-star text-warning"></i></li>
-                            <li class="list-inline-item"><i class="mdi mdi-star text-warning"></i></li>
-                            <li class="list-inline-item"><i class="mdi mdi-star text-warning"></i></li>
-                            <li class="list-inline-item"><i class="mdi mdi-star text-warning"></i></li>
-                            <li class="list-inline-item"><i class="mdi mdi-star text-warning"></i></li>
-                        </ul>
-                        <p class="text-muted mt-2">Hi, i am Tajudeen from Aba. My employers used FixMaster for the company”s outdoor advertising project based on my recommendation and they more than delivered. They handled the metal fabrication, hoisting and went on to offer a discount on the banner itself. Now that is what i call service delivery. I wouldn”t hesitate to recommend FixMaster.</p>
-                        <h6 class="text-primary">- Tajudeen Tijani <small class="text-muted">C.E.O</small></h6>
-                    </div>
-                </div>
 
-                <div class="media customer-testi m-2">
-                    <img src="{{ asset('assets/images/ifee.jpg') }}" class="avatar avatar-small mr-3 rounded shadow" alt="Ifeoluwa Ajenifuja">
-                    <div class="media-body content p-3 shadow rounded bg-white position-relative">
-                        <ul class="list-unstyled mb-0">
-                            <li class="list-inline-item"><i class="mdi mdi-star text-warning"></i></li>
-                            <li class="list-inline-item"><i class="mdi mdi-star text-warning"></i></li>
-                            <li class="list-inline-item"><i class="mdi mdi-star text-warning"></i></li>
-                            <li class="list-inline-item"><i class="mdi mdi-star text-warning"></i></li>
-                            <li class="list-inline-item"><i class="mdi mdi-star-half text-warning"></i></li>
-                        </ul>
-                        <p class="text-muted mt-2">The service is top class. I recommend them if you want to beef up your home, office or company security with top class surveillance systems, electric gates etc. They are the solution to your security problems.</p>
-                        <h6 class="text-primary">- Ifeoluwa Ajenifuja <small class="text-muted">M.D</small></h6>
-                    </div>
-                </div>
+                            @if($rate->rater_id === $review->client_id)
 
-                <div class="media customer-testi m-2">
-                    <img src="{{ asset('assets/images/comp.jpg') }}" class="avatar avatar-small mr-3 rounded shadow" alt="Ifeoluwa Ajenifuja">
-                    <div class="media-body content p-3 shadow rounded bg-white position-relative">
-                        <ul class="list-unstyled mb-0">
-                            <li class="list-inline-item"><i class="mdi mdi-star text-warning"></i></li>
-                            <li class="list-inline-item"><i class="mdi mdi-star text-warning"></i></li>
-                            <li class="list-inline-item"><i class="mdi mdi-star text-warning"></i></li>
-                            <li class="list-inline-item"><i class="mdi mdi-star text-warning"></i></li>
-                            <li class="list-inline-item"><i class="mdi mdi-star-half text-warning"></i></li>
-                        </ul>
-                        <p class="text-muted mt-2">The service is top class. I recommend them if you want to beef up your home, office or company security with top class surveillance systems, electric gates etc. They are the solution to your security problems.</p>
-                        <h6 class="text-primary">- Ifeoluwa Ajenifuja <small class="text-muted">M.D</small></h6>
-                    </div>
-                </div>
+                                             @if($rate->star == 1)
+                                            <li class="list-inline-item"><i class="mdi mdi-star text-warning"></i></li>
+                                            <li class="list-inline-item"><i class="mdi mdi-star text-grey"></i></li>
+                                            <li class="list-inline-item"><i class="mdi mdi-star text-gray"></i></li>
+                                            <li class="list-inline-item"><i class="mdi mdi-star text-gray"></i></li>
+                                            <li class="list-inline-item"><i class="mdi mdi-star text-gray"></i></li>
+                                            @elseif($rate->star == 2)
+                                            <li class="list-inline-item"><i class="mdi mdi-star text-warning"></i></li>
+                                            <li class="list-inline-item"><i class="mdi mdi-star text-warning"></i></li>
+                                            <li class="list-inline-item"><i class="mdi mdi-star text-gray"></i></li>
+                                            <li class="list-inline-item"><i class="mdi mdi-star text-gray"></i></li>
+                                            <li class="list-inline-item"><i class="mdi mdi-star text-gray"></i></li>
+                                            @elseif($rate->star == 3)
+                                            <li class="list-inline-item"><i class="mdi mdi-star text-warning"></i></li>
+                                            <li class="list-inline-item"><i class="mdi mdi-star text-warning"></i></li>
+                                            <li class="list-inline-item"><i class="mdi mdi-star text-warning"></i></li>
+                                            <li class="list-inline-item"><i class="mdi mdi-star text-gray"></i></li>
+                                            <li class="list-inline-item"><i class="mdi mdi-star text-gray"></i></li>
+                                            @elseif($rate->star == 4)
+                                            <li class="list-inline-item"><i class="mdi mdi-star text-warning"></i></li>
+                                            <li class="list-inline-item"><i class="mdi mdi-star text-warning"></i></li>
+                                            <li class="list-inline-item"><i class="mdi mdi-star text-warning"></i></li>
+                                            <li class="list-inline-item"><i class="mdi mdi-star text-warning"></i></li>
+                                            <li class="list-inline-item"><i class="mdi mdi-star text-gray"></i></li>
+                                            @elseif($rate->star == 5)
+                                            <li class="list-inline-item"><i class="mdi mdi-star text-warning"></i></li>
+                                            <li class="list-inline-item"><i class="mdi mdi-star text-warning"></i></li>
+                                            <li class="list-inline-item"><i class="mdi mdi-star text-warning"></i></li>
+                                            <li class="list-inline-item"><i class="mdi mdi-star text-warning"></i></li>
+                                            <li class="list-inline-item"><i class="mdi mdi-star text-warning"></i></li>
+                                            @else
+                                            <li class="list-inline-item"><i class="mdi mdi-star text-gray"></i></li>
+                                            <li class="list-inline-item"><i class="mdi mdi-star text-gray"></i></li>
+                                            <li class="list-inline-item"><i class="mdi mdi-star text-gray"></i></li>
+                                            <li class="list-inline-item"><i class="mdi mdi-star text-gray"></i></li>
+                                            <li class="list-inline-item"><i class="mdi mdi-star text-gray"></i></li>
+                                        @endif
 
-                <div class="media customer-testi m-2">
-                    <img src="{{ asset('assets/images/soundsys.jpg') }}" class="avatar avatar-small mr-3 rounded shadow" alt="Ifeoluwa Ajenifuja">
-                    <div class="media-body content p-3 shadow rounded bg-white position-relative">
-                        <ul class="list-unstyled mb-0">
-                            <li class="list-inline-item"><i class="mdi mdi-star text-warning"></i></li>
-                            <li class="list-inline-item"><i class="mdi mdi-star text-warning"></i></li>
-                            <li class="list-inline-item"><i class="mdi mdi-star text-warning"></i></li>
-                            <li class="list-inline-item"><i class="mdi mdi-star text-warning"></i></li>
-                            <li class="list-inline-item"><i class="mdi mdi-star-half text-warning"></i></li>
+                                        @endif
+
                         </ul>
-                        <p class="text-muted mt-2">The service is top class. I recommend them if you want to beef up your home, office or company security with top class surveillance systems, electric gates etc. They are the solution to your security problems.</p>
-                        <h6 class="text-primary">- Ifeoluwa Ajenifuja <small class="text-muted">M.D</small></h6>
+                        <p class="text-muted mt-2">{{$review->reviews}}</p>
+                        <h6 class="text-primary">- {{$review->clientAccount->first_name}} {{$review->clientAccount->last_name}}<small class="text-muted"> </small></h6>
                     </div>
+             </div>
                 </div>
+             @endforeach
+             @endforeach
             </div>
         </div>
     </div>
@@ -229,13 +255,13 @@
             width: '30%'}, 1000);
         $('#bar-one').animate({
             width: '19%'}, 1000);
-        
+
         setTimeout(function() {
             $('.bar span').fadeIn('slow');
         }, 1000);
 
     });
-   
+
 </script>
 @endsection
 

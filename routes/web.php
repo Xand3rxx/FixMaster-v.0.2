@@ -69,9 +69,9 @@ Route::prefix('admin')->group(function () {
         //Route::view('/ratings/service-reviews',      'admin.ratings.service_reviews')->name('category_reviews');
         Route::get('/ratings/services',      [AdminRatingController::class, 'getServiceRatings'])->name('job');
         Route::get('/ratings/service_reviews',      [AdminReviewController::class, 'getServiceReviews'])->name('category_reviews');
-        Route::put('/activate/{id}',      [AdminReviewController::class, 'activate'])->name('activate_review');
-        Route::put('/deactivate/{id}',      [AdminReviewController::class, 'deactivate'])->name('deactivate_review');
-        Route::delete('/delete/{id}',      [AdminReviewController::class, 'delete'])->name('delete_review');
+        Route::get('/activate/{uuid}',      [AdminReviewController::class, 'activate'])->name('activate_review');
+        Route::get('/deactivate/{uuid}',      [AdminReviewController::class, 'deactivate'])->name('deactivate_review');
+        Route::get('/delete/{uuid}',      [AdminReviewController::class, 'delete'])->name('delete_review');
 
 
 

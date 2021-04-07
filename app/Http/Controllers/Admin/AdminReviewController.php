@@ -16,18 +16,18 @@ class AdminReviewController extends Controller
         return view('admin.ratings.service_reviews', compact('serviceReviews'));
     }
 
-    public function activate($language, Request $request, $id){
-        Review::find($id)->update(['status' => 1]);
+    public function activate($language, Request $request, $uuid){
+        Review::where('uuid', $uuid)->update(['status' => 1]);
         return back()->withSuccess('Review marked as active');
     }
 
-    public function deactivate($language, Request $request, $id){
-        Review::find($id)->update(['status' => 0]);
+    public function deactivate($language, Request $request, $uuid){
+        Review::where('uuid', $uuid)->update(['status' => 0]);
         return back()->withSuccess('Review marked as Inactive');
     }
 
-    public function delete($language, Request $request, $id){
-        Review::find($id)->delete();
-        return back();
+    public function delete($language, Request $request, $uuid){
+        Review::where('uuid', $uuid)->delete();
+        return back()->withSuccess('Review Deleted');
     }
 }

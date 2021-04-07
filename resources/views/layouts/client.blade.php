@@ -109,8 +109,8 @@
                         aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </a>
-
-    <h6 class="text-center">Kindly rate and review to get a 10% loyalty reward</h6>
+       <h4 class="text-center unique"></h4><hr>
+    <h6 class="text-center">Kindly rate the service and give a review to qualify for loyalty reward</h6>
     <form action="{{ route('client.handle.ratings', app()->getLocale()) }}" method="POST">
         @csrf
             <div class="row">
@@ -139,12 +139,15 @@
     @yield('scripts')
     @stack('scripts')
 
-    @if (\Request::filled('users') && \Request::filled('role') && \Request::filled('serviceRequestId'))
+    @if (\Request::filled('users') && \Request::filled('role') && \Request::filled('serviceRequestId') && \Request::filled('totalAmount') && \Request::filled('serviceId') && \Request::filled('unique_id'))
     <script>
       //console.log('{{ \Request::get('results') }}');
       const users = @json(\Request::get('users'));
+      const serviceId = @json(\Request::get('serviceId'));
+      const totalAmount = @json(\Request::get('totalAmount'));
       const service_request_id = @json(\Request::get('serviceRequestId'));
-      //console.log(service_request_id);
+      const unique_id = @json(\Request::get('unique_id'));
+      //console.log(totalAmount);
       const role = @json(\Request::get('role'));
       let ratings_row = `<div class="row">
                                         <div class="col-md-4 col-lg-4 col-4">
@@ -162,6 +165,7 @@
                                         </div>
                                     </div>`;
                 $('#ratings_cse').append(ratings_row);
+                $('.unique').append('SERVICE REQUEST UNIQUEID - ' +unique_id);
 
 
       $.each(users, function(key, user) {
