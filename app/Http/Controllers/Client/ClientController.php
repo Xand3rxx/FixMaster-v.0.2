@@ -729,18 +729,6 @@ class ClientController extends Controller
     // return $serviceRequests;
 
     public function serviceRequest(Request $request){
-        // $validatedData = $request->validate([
-        //     'service_fee'               =>   'required',
-        //     'description'               =>   'required',
-        //     'timestamp'                 =>   'required',
-        //     'phone_number'              =>   'required',
-        //     'address'                   =>   'required',
-        //     'payment_method'            =>   'required',
-        //   ]);
-
-            // $all = $request->all();
-            // dd($all);
-
         
             $validatedData = $request->validate([            
             'balance'                   =>   'required',
