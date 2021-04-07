@@ -737,17 +737,9 @@ class ClientController extends Controller
             'payment_method'            =>   'required',          
             'myContact_id'            =>   'required',          
           ]);
-        
-           
-        // $all = $request->all(); 
-            // dd($all);
 
             // if payment method is wallet
             if($request->payment_method == 'Wallet'){
-                // if($request->balance<$request->booking_fee){
-
-                    // $service_request                        = new Servicerequest;
-                    // $service_request->cliend_id             = auth()->user()->id;
                 // if wallet balance is less than the service fee
                 if($request->balance > $request->booking_fee){
                     $SavedRequest = $this->saveRequest($request);
