@@ -3,6 +3,8 @@
   Service: {{ $rfqDetails->serviceRequest->service->name }}
 </h5>
             <div class="table-responsive mt-4">
+              <form method="POST" action="{{ route('supplier.rfq_store_supplier_invoice', app()->getLocale()) }}">
+                @csrf
                 <table class="table table-hover mg-b-0" id="basicExample">
                   <thead class="thead-primary">
                     <tr>
@@ -15,21 +17,26 @@
                     </tr>
                   </thead>
                   <tbody>
-                    <form>
+                    <input value="{{ $rfqDetails->id }}" type="hidden" name="rfq_id" class="d-none">
+                    <input value="{{ old('total_amount') }}" type="hidden" name="total_amount"  id="total_amount" class="d-none"> 
+
                       @foreach ($rfqDetails->rfqBatches as $item)
 
                       <input value="{{ $item->id }}" type="hidden" name="rfq_batch_id[]" class="d-none">
-                      <input value="{{ $item->id }}" type="hidden" name="quantity[]" 
-                      class="d-none">
+                      <input value="{{ $item->id }}" type="hidden" name="quantity[]"> 
                         <tr>
                             <td class="tx-color-03 tx-center">{{ ++$i }}</td>
                             <td class="tx-medium">{{ $item->component_name }}</td>
                             <td>{{ $item->model_number }}</td>
                             <td class="tx-medium text-center quantity-{{$item->id}}">{{ $item->quantity }}</td>
                             <td class="tx-medium text-center">
-                            <input type="number" maxlength="7" min="1" name="unit_price[]" class="form-control" id="unit-price-{{$item->id}}" value="{{ old('unit_price[]') }}" onkeyup="individualAmount({{ $item->id }})" autocomplete="off">
+                            <input type="number" maxlength="7" min="1" name="unit_price[]" class="form-control @error('unit_price') is-invalid @enderror" id="unit-price-{{$item->id}}" value="{{ old('unit_price[]') }}" onkeyup="individualAmount({{ $item->id }})" autocomplete="off">
+                            @error('unit_price')
+                              <x-alert :message="$message" />
+                            @enderror
+                            <input type="hidden" class="each-amount" id="unit-amount-{{$item->id}}">
                             </td>
-                          <td class="tx-medium text-center each-amount amount-{{$item->id}}">0</td>
+                            <td class="tx-medium text-center amount-{{$item->id}}">0</td>
                         </tr>
                       @endforeach
                       <thead class="thead-primary">
@@ -42,16 +49,29 @@
                       </thead>
                       <tr>
                         <td colspan="2">1</td>
-                      <td><input class="form-control" name="devlivery_fee" id="devlivery_fee" type="number" maxlength="7" min="1" value="{{ old('devlivery_fee') }}" autocomplete="off"></td>
-                        <td><input class="form-control" name="delivery_time" id="delivery_time" type="datetime-local" value="{{ old('delivery_time') }}"></td>
-                        <td colspan="2"></td>
+                        <td>
+                          <input class="form-control @error('delivery_fee') is-invalid @enderror each-amount" name="delivery_fee" id="delivery_fee" type="number" maxlength="7" min="1" value="{{ old('delivery_fee')}}" autocomplete="off" onkeyup="deliveryFee()">
+                          @error('delivery_fee')
+                            <x-alert :message="$message" />
+                          @enderror
+                        </td>
+                        <td>
+                          <input class="form-control @error('delivery_time') is-invalid @enderror" name="delivery_time" id="delivery_time" type="datetime-local" value="{{ old('delivery_time') }}">
+                          @error('delivery_time')
+                            <x-alert :message="$message" />
+                          @enderror
+                        </td>
+                        <td colspan="1"></td>
+                        <td class="tx-medium delivery-fee">0</td>
                       </tr>
                       <tr>
-                        <td colspan="4"></td>
+                        <td colspan="4">
+                            <button type="submit" class="btn btn-primary">Send Invoice</button>
+                        </td>
                         <td class="tx-medium text-center">Total</td>
                         <td class="tx-medium text-center total-amount">₦0</td>
                       </tr>
-                    </form>
                   </tbody>
                 </table>
+              </form>
             </div><!-- table-responsive -->

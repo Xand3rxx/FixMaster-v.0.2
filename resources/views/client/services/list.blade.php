@@ -9,10 +9,10 @@
         <div class="container pd-x-0">
             <div class="d-sm-flex align-items-center justify-content-between mg-b-20 mg-lg-b-25 mg-xl-b-30">
                 <div>
-                   
+
                     <h4 class="mg-b-0 tx-spacing--1">My Service Request List</h4>
                 </div>
-                
+
             </div>
 
             <div class="row row-xs">
@@ -67,8 +67,14 @@
                                 <td class=" text-center">
                                     <div class="dropdown-file">
                                     <a href="" class="dropdown-link" data-toggle="dropdown"><i data-feather="more-vertical"></i></a>
-                                    <div class="dropdown-menu dropdown-menu-right">                                    
+                                    <div class="dropdown-menu dropdown-menu-right">
                                        <a href="javascript:void(0)" data-target="#view{{$myServiceRequest->service->id }}" data-toggle="modal" class="dropdown-item details text-primary" title="View {{ $myServiceRequest->service->name}} details"><i class="far fa-clipboard"></i> Details</a>
+                                        <hr>
+                                        @foreach(\App\Models\Invoice::where('service_request_id', $myServiceRequest->service->id)->where('is_accepted', 'accepted')->get() as $invoice)
+                                            <a href="{{ route('invoice', ['locale' => app()->getLocale(), 'invoice' => $invoice['uuid']]) }}" class="dropdown-item details text-info"><i data-feather="file-text" class="fea icon-sm"></i> View {{ $invoice['invoice_type'] }}</a>
+                                        @endforeach
+                                        <hr>
+                                        <a href="javascript:void(0)" data-target="#view{{$myServiceRequest->service->id }}" data-toggle="modal" class="dropdown-item details text-primary" title="View {{ $myServiceRequest->service->name}} details"><i class="far fa-clipboard"></i> Initiate Warranty</a>
                                          </div>
                                     </div>
                                 </td>
@@ -98,20 +104,20 @@
                                 <div class="form-group col-md-12">
                                     <label for="percentage">Service Request Address</label>
                                     <input type="text" class="form-control" value="{{$myServiceRequest->service->client_security_code }}" autocomplete="off">
-                                    
+
                                 </div>
 
                                 <div class="form-group col-md-12">
                                     <label for="percentage">Assigned To</label>
                                     <input type="text" class="form-control" value="{{$myServiceRequest->service->client_security_code }}" autocomplete="off">
-                                    
+
                                 </div>
-                            
+
 
                             </div>
                             <!-- <button type="submit" class="btn btn-primary">Create Tax</button> -->
                         </div>
-                    
+
                     </div><!-- modal-body -->
 
                     <div class="modal-footer">
@@ -138,7 +144,7 @@
 
 <!-- @section('scripts')
     <script>
-      
+
 
     </script>
 @endsection -->
