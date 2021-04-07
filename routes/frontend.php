@@ -25,13 +25,19 @@ Auth::routes([
     'logout'   => true,
     'reset'    => false,   // for resetting passwords
     'confirm'  => false,  // for additional password confirmations
-    'verify'   => false,  // for email verification
+    'verify'   => true,  // for email verification
 ]);
+
+Route::post('/email/verification-notification', function (\Illuminate\Http\Request $request) {
+    $request->user()->sendEmailVerificationNotification();
+
+    return back()->with('status', 'verification-link-sent');
+})->middleware(['auth', 'throttle:6,1'])->name('verification.send');
 
 Route::view('/', 'frontend.index')->name('frontend.index');
 
 Route::prefix('registration')->name('frontend.registration.')->group(function () {
-    Route::resource('client', ClientRegistrationController::class);
+    Route::resource('client', ClientRegistrationController::class)->middleware('guest');
 });
 
 Route::view('/about',                       'frontend.about')->name('frontend.about');
@@ -50,6 +56,7 @@ Route::get('/contact-us',                   [App\Http\Controllers\PageController
 Route::post('/contact-us',                  [App\Http\Controllers\PageController::class, 'sendContactMail'])->name('frontend.send_contact_mail');
 
 // //Essential Routes
+Route::post('towns-list',                    [App\Http\Controllers\EssentialsController::class, 'getTowns'])->name('towns.show');
 Route::post('/lga-list',                    [App\Http\Controllers\EssentialsController::class, 'lgasList'])->name('lga_list');
 Route::post('/ward-list',                    [App\Http\Controllers\EssentialsController::class, 'wardsList'])->name('ward_list');
 Route::get("/getServiceDetails",            [App\Http\Controllers\EssentialsController::class, 'getServiceDetails'])->name("getServiceDetails");

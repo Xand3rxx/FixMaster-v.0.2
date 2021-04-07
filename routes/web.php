@@ -244,18 +244,18 @@ Route::prefix('admin')->group(function () {
         // Route::get('service/request/criteria/{id}',      [ServiceRequestSettingController::class, 'Edit'])->name('editCriteria');
         // Route::post('service/request/criteriaUpdate',    [ServiceRequestSettingController::class, 'update'])->name('serviceReq.update');
 
-    Route::get('/serviceCriteria/delete/{criteria}',              [ServiceRequestSettingController::class, 'destroy'])->name('serviceReq.delete');
-    Route::resource('serviceCriteria',                            ServiceRequestSettingController::class);
+        Route::get('/serviceCriteria/delete/{criteria}',              [ServiceRequestSettingController::class, 'destroy'])->name('serviceReq.delete');
+        Route::resource('serviceCriteria',                            ServiceRequestSettingController::class);
 
-     //Tool Request Management
-     Route::get('/tools-request',                        [ToolsRequestController::class, 'index'])->name('tools_request');
-     Route::get('/tools-request/details/{tool_request:uuid}',           [ToolsRequestController::class, 'toolRequestDetails'])->name('tool_request_details');
-     Route::get('/tools-request/approve/{tool_request:uuid}',           [ToolsRequestController::class, 'approveRequest'])->name('approve_tool_request');
-     Route::get('/tools-request/decline/{tool_request:uuid}',           [ToolsRequestController::class, 'declineRequest'])->name('decline_tool_request');
-     Route::get('/tools-request/return/{tool_request:uuid}',            [ToolsRequestController::class, 'returnToolsRequested'])->name('return_tools_requested');
+        //Tool Request Management
+        Route::get('/tools-request',                        [ToolsRequestController::class, 'index'])->name('tools_request');
+        Route::get('/tools-request/details/{tool_request:uuid}',           [ToolsRequestController::class, 'toolRequestDetails'])->name('tool_request_details');
+        Route::get('/tools-request/approve/{tool_request:uuid}',           [ToolsRequestController::class, 'approveRequest'])->name('approve_tool_request');
+        Route::get('/tools-request/decline/{tool_request:uuid}',           [ToolsRequestController::class, 'declineRequest'])->name('decline_tool_request');
+        Route::get('/tools-request/return/{tool_request:uuid}',            [ToolsRequestController::class, 'returnToolsRequested'])->name('return_tools_requested');
 
-     Route::get('/rfqs',                               [RfqController::class, 'index'])->name('rfq');
-     Route::get('/rfqs/details/{rfq:uuid}',                  [RfqController::class, 'rfqDetails'])->name('rfq_details');
+        Route::get('/rfqs',                               [RfqController::class, 'index'])->name('rfq');
+        Route::get('/rfqs/details/{rfq:uuid}',                  [RfqController::class, 'rfqDetails'])->name('rfq_details');
 
         Route::get('/serviceCriteria/delete/{criteria}',              [ServiceRequestSettingController::class, 'destroy'])->name('serviceReq.delete');
         Route::resource('serviceCriteria',                            ServiceRequestSettingController::class);
@@ -265,7 +265,7 @@ Route::prefix('admin')->group(function () {
 // Route::resource('client', ClientController::class);
 
 //All routes regarding clients should be in here
-Route::prefix('/client')->group(function () {
+Route::prefix('/client')->middleware('verified')->group(function () {
     Route::name('client.')->group(function () {
         //All routes regarding clients should be in here
         Route::get('/',                   [ClientController::class, 'index'])->name('index'); //Take me to Supplier Dashboard
@@ -286,10 +286,10 @@ Route::prefix('/client')->group(function () {
         Route::post('/requests/update-request/{request:id}',          [ClientController::class, 'updateRequest'])->name('update_request');
         Route::post('/requests/technician_profile',          [ClientController::class, 'technicianProfile'])->name('technician_profile');
 
-       
 
-       
-     
+
+
+
 
 
 
@@ -300,12 +300,12 @@ Route::prefix('/client')->group(function () {
         Route::any('/getDistanceDifference',    [ClientController::class, 'getDistanceDifference'])->name('getDistanceDifference');
 
         // Route::get('/wallet',                [ClientController::class, 'wallet'])->name('wallet'); //Take me to Supplier Dashboard
-            // Route::get('/requests',          [ClientRequestController::class, 'index'])->name('client.requests');
-            Route::get('wallet',                [ClientController::class, 'wallet'])->name('wallet');
-            Route::any('fund',                  [ClientController::class, 'walletSubmit'])->name('wallet.submit');
-            Route::get('loyalty',                [ClientController::class, 'loyalty'])->name('loyalty');
-            Route::any('loyalty/submit',                 [ClientController::class, 'loyaltySubmit'])->name('loyalty.submit');
-            Route::get('payments',          [ClientController::class, 'payments'])->name('payments');
+        // Route::get('/requests',          [ClientRequestController::class, 'index'])->name('client.requests');
+        Route::get('wallet',                [ClientController::class, 'wallet'])->name('wallet');
+        Route::any('fund',                  [ClientController::class, 'walletSubmit'])->name('wallet.submit');
+        Route::get('loyalty',                [ClientController::class, 'loyalty'])->name('loyalty');
+        Route::any('loyalty/submit',                 [ClientController::class, 'loyaltySubmit'])->name('loyalty.submit');
+        Route::get('payments',          [ClientController::class, 'payments'])->name('payments');
         // Route::get('/requests',          [ClientRequestController::class, 'index'])->name('client.requests');
         Route::get('wallet',                [ClientController::class, 'wallet'])->name('wallet');
         Route::any('fund',                  [ClientController::class, 'walletSubmit'])->name('wallet.submit');
@@ -334,30 +334,30 @@ Route::prefix('/client')->group(function () {
         Route::get('/requests/edit/{id}',          [ClientController::class, 'edit'])->name('client.edit_request');
         Route::put('/requests/update/{id}',        [ClientController::class, 'update'])->name('client.update_request');
 
-                
+
         Route::post('servicesRequest',              [ClientController::class, 'serviceRequest'])->name('services.serviceRequest');
         // post my contact to DB
         Route::post('/ajax_contactForm',            [ClientController::class, 'ajax_contactForm'])->name('ajax_contactForm');
-        
 
-            Route::post('/ipnpaystack',         [ClientController::class, 'paystackIPN'])->name('ipn.paystack');
-            Route::get('/apiRequest',           [ClientController::class, 'apiRequest'])->name('ipn.paystackApiRequest');
 
-            Route::get('/ipnflutter',           [ClientController::class, 'flutterIPN'])->name('ipn.flutter');
-          
+        Route::post('/ipnpaystack',         [ClientController::class, 'paystackIPN'])->name('ipn.paystack');
+        Route::get('/apiRequest',           [ClientController::class, 'apiRequest'])->name('ipn.paystackApiRequest');
 
-            // Service request SECTION
-            Route::get('/services',                     [ClientController::class, 'services'])->name('services.list');
-            Route::get('services/quote/{service}',      [ClientController::class, 'serviceQuote'])->name('services.quote');
-            Route::get('services/details/{service}',    [ClientController::class, 'serviceDetails'])->name('services.details');
-            Route::post('services/search',              [ClientController::class, 'search'])->name('services.search');
-            Route::get('services/custom/',              [ClientController::class, 'customService'])->name('services.custom');
+        Route::get('/ipnflutter',           [ClientController::class, 'flutterIPN'])->name('ipn.flutter');
 
-            Route::post('servicesRequest',              [ClientController::class, 'serviceRequest'])->name('services.serviceRequest');
-            // view all my service request
-            Route::get('myServicesRequest',              [ClientController::class, 'myServiceRequest'])->name('service.all');
-            
-            Route::get('myContactList',                  [ClientController::class, 'myContactList'])->name('service.myContacts');
+
+        // Service request SECTION
+        Route::get('/services',                     [ClientController::class, 'services'])->name('services.list');
+        Route::get('services/quote/{service}',      [ClientController::class, 'serviceQuote'])->name('services.quote');
+        Route::get('services/details/{service}',    [ClientController::class, 'serviceDetails'])->name('services.details');
+        Route::post('services/search',              [ClientController::class, 'search'])->name('services.search');
+        Route::get('services/custom/',              [ClientController::class, 'customService'])->name('services.custom');
+
+        Route::post('servicesRequest',              [ClientController::class, 'serviceRequest'])->name('services.serviceRequest');
+        // view all my service request
+        Route::get('myServicesRequest',              [ClientController::class, 'myServiceRequest'])->name('service.all');
+
+        Route::get('myContactList',                  [ClientController::class, 'myContactList'])->name('service.myContacts');
 
         //Flutterwave Routes
         Route::post('/request/flutterwave/submit',              [ClientController::class, 'storeFlutterServiceRequest'])->name('flutterwave.submit');
@@ -427,7 +427,6 @@ Route::prefix('/supplier')->group(function () {
         Route::view('/profile/edit',        'supplier.edit_profile')->name('edit_profile');
         Route::get('/rfqs',                               [SupplierRfqController::class, 'index'])->name('rfq');
         Route::get('/rfqs/details/{rfq:uuid}',            [SupplierRfqController::class, 'rfqDetails'])->name('rfq_details');
-
     });
 });
 
