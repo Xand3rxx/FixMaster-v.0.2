@@ -1,6 +1,6 @@
 <aside class="aside aside-fixed" id="sidebarMenu">
     <div class="aside-header">
-      <a href="{{ route('supplier.index', app()->getLocale()) }}" class="aside-logo"></a>
+      <a href="#" class="aside-logo"></a>
       <a href="" class="aside-menu-link">
         <i data-feather="menu"></i>
         <i data-feather="x"></i>
@@ -50,6 +50,8 @@
         </li>
 
         <li class="nav-item {{ Route::currentRouteNamed('supplier.payments') ? 'active show' : '' }}"><a href="{{ route('supplier.payments', app()->getLocale()) }}" class="nav-link"><i data-feather="credit-card"></i> <span>Payments</span></a></li>
+
+        <li class="nav-item {{ Route::currentRouteNamed('supplier.rfq_sent_invoices') ? 'active show' : '' }}"><a href="{{ route('supplier.rfq_sent_invoices', app()->getLocale()) }}" class="nav-link"><i data-feather="file-text"></i> <span>Sent Invoices</span></a></li>
 
       </ul>
     </div>

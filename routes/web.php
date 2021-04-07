@@ -19,6 +19,7 @@ use App\Http\Controllers\Client\ClientController;
 use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\ActivityLogController;
 use App\Http\Controllers\Admin\ToolInventoryController;
+use App\Http\Controllers\WarrantyController;
 use App\Http\Controllers\Admin\User\SupplierController;
 use App\Http\Controllers\AdminLocationRequestController;
 
@@ -96,7 +97,24 @@ Route::prefix('admin')->group(function () {
         Route::get('/estate/decline/{estate:uuid}',      [EstateController::class, 'decline'])->name('decline_estate');
         Route::get('/estate/delete/{estate:uuid}',      [EstateController::class, 'delete'])->name('delete_estate');
 
-        //Routes for Invoice Management
+        //Routes for Warranty Management
+        Route::get('/warranty',      [WarrantyController::class, 'index'])->name('warranty_list');
+        Route::get('/warranty/summary/{details:uuid}',  [WarrantyController::class, 'show'])->name('warranty_summary');
+        Route::post('/warranty/add',                    [WarrantyController::class, 'storeWarranty'])->name('save_warranty');
+        Route::get('/warranty/edit/{details:uuid}',  [WarrantyController::class, 'edit'])->name('edit_warranty');
+        Route::put('/warranty/update/{details:uuid}',  [WarrantyController::class, 'update'])->name('update_warranty');
+        Route::get('/warranty/delete/{details:uuid}',  [WarrantyController::class, 'deleteWarranty'])->name('delete_warranty');
+        Route::get('/warranty/transactions/sort',      [WarrantyController::class, 'warrantyTransactionSort'])->name('warranty_transaction_sort');
+        Route::get('/warranty/transactions',      [WarrantyController::class, 'warrantyTransaction'])->name('warranty_transaction');
+
+        //Routes for Simulation
+        Route::get('/diagnostic', [SimulationController::class, 'diagnosticSimulation'])->name('diagnostic');
+        Route::get('/end-service/{service_request:uuid}', [SimulationController::class, 'endService'])->name('end_service');
+        Route::get('/complete-service/{service_request:uuid}', [SimulationController::class, 'completeService'])->name('complete_service');
+        Route::get('/invoice/{invoice:id}', [SimulationController::class, 'invoice'])->name('invoice');
+
+
+ //Routes for Invoice Management
         Route::get('/invoices',      [InvoiceController::class, 'index'])->name('invoices');
         Route::get('/invoice/{invoice:uuid}', [InvoiceController::class, 'invoice'])->name('invoice');
 
@@ -104,6 +122,17 @@ Route::prefix('admin')->group(function () {
         Route::get('/diagnostic', [SimulationController::class, 'diagnosticSimulation'])->name('diagnostic');
         Route::get('/end-service/{service_request:uuid}', [SimulationController::class, 'endService'])->name('end_service');
         Route::get('/complete-service/{service_request:uuid}', [SimulationController::class, 'completeService'])->name('complete_service');
+
+
+         //Routes for Invoice Management
+         Route::get('/invoices',      [InvoiceController::class, 'index'])->name('invoices');
+
+         //Routes for Simulation
+         Route::get('/diagnostic', [SimulationController::class, 'diagnosticSimulation'])->name('diagnostic');
+         Route::get('/end-service/{service_request:uuid}', [SimulationController::class, 'endService'])->name('end_service');
+         Route::get('/complete-service/{service_request:uuid}', [SimulationController::class, 'completeService'])->name('complete_service');
+         Route::get('/invoice/{invoice:id}', [SimulationController::class, 'invoice'])->name('invoice');
+
 
         Route::get('/rfq',                                  [SimulationController::class, 'rfqSimulation'])->name('rfq');
         Route::get('/rfq/details/{serviceRequest:id}',    [SimulationController::class, 'rfqDetailsSimulation'])->name('rfq_details');
@@ -259,6 +288,11 @@ Route::prefix('admin')->group(function () {
 
         Route::get('/serviceCriteria/delete/{criteria}',              [ServiceRequestSettingController::class, 'destroy'])->name('serviceReq.delete');
         Route::resource('serviceCriteria',                            ServiceRequestSettingController::class);
+
+    Route::get('/supplier-invoices',                               [RfqController::class, 'supplierInvoices'])->name('supplier_invoices');
+    Route::get('/supplier-invoices/details/{rfq:id}',              [RfqController::class, 'supplierInvoiceDetails'])->name('supplier_invoices_details');
+    Route::get('/supplier-invoices/accept/{rfq:id}',              [RfqController::class, 'acceptSupplierInvoice'])->name('supplier_invoices_acceptance');
+     
     });
 });
 
@@ -382,9 +416,9 @@ Route::prefix('/cse')->group(function () {
             '/request/details',
             'cse.request_details',
             [
-                'tools' => \App\Models\ToolInventory::all(),
-                'ongoingSubStatuses' => \App\Models\SubStatus::where('status_id', 2)->get(['id', 'name']),
-                'warranties' => \App\Models\Warranty::all(),
+                // 'tools' => \App\Models\ToolInventory::all(),
+                // 'ongoingSubStatuses' => \App\Models\SubStatus::where('status_id', 2)->get(['id', 'name']),
+                // 'warranties' => \App\Models\Warranty::all(),
             ]
         )->name('request_details');
         Route::view('/profile',             'cse.view_profile')->name('view_profile');
@@ -409,6 +443,10 @@ Route::prefix('/supplier')->group(function () {
         Route::view('/profile/edit',        'supplier.edit_profile')->name('edit_profile');
         Route::get('/rfqs',                               [SupplierRfqController::class, 'index'])->name('rfq');
         Route::get('/rfqs/details/{rfq:uuid}',            [SupplierRfqController::class, 'rfqDetails'])->name('rfq_details');
+        Route::get('/rfqs/details/{rfq:uuid}',            [SupplierRfqController::class, 'sendInvoice'])->name('rfq_send_supplier_invoice');
+        Route::post('/rfqs/store/',                       [SupplierRfqController::class, 'store'])->name('rfq_store_supplier_invoice');
+        Route::get('/sent-invoices',                               [SupplierRfqController::class, 'sentInvoices'])->name('rfq_sent_invoices');
+        Route::get('/sent-invoices/details/{rfq:id}',            [SupplierRfqController::class, 'sentInvoiceDetails'])->name('rfq_details');
     });
 });
 
