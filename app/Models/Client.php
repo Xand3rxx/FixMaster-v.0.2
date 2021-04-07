@@ -46,7 +46,7 @@ class Client extends Model
     /**
      * Get the service request of the Client
      */
-    public function service_request()
+    public function service_requests()
     {
         return $this->hasMany(ServiceRequest::class, 'client_id', 'user_id')->with('service');
     }

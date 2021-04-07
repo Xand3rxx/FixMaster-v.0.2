@@ -55,7 +55,7 @@ class ClientController extends Controller
     {
 
         $myRequest = Client::where('user_id', auth()->user()->id)->with('service_requests')->firstOrFail();
-        $myServiceRequests = $myRequest->service_request;
+        $myServiceRequests = $myRequest->service_requests;
    
         //Get total available serviecs
         $totalServices = Service::count();
