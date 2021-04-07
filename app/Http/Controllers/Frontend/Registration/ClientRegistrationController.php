@@ -140,7 +140,7 @@ class ClientRegistrationController extends Controller
             'middle_name'               =>   'sometimes|nullable',
             'last_name'                 =>   'required',
             'email'                     =>   'required|email|unique:users,email',
-            'phone_number'              =>   'required|Numeric|unique:phones,number',
+            'phone_number'              =>   'required|Numeric',
             'gender'                    =>   'required|in:Male,Female',
             'town'                      =>   'required|string|max:190',
             'password'                  =>   'required|min:8',

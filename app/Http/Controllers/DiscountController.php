@@ -601,9 +601,9 @@ class DiscountController extends Controller
     {
         if ($request->ajax())
         {
-        
-            // $estates = [];
-            $estates = Estate::select('id', 'estate_name')->orderBy('estate_name', 'ASC')
+
+            $estates = [];
+            $estates = Estate::select('id', 'estate_name')->where('is_active', 'reinstated')->orderBy('estate_name', 'ASC')
                 ->get();
             $estate_id = $request->estate_name_edit ? str_replace('"', "", $request->estate_name_edit ): $request->estate_name ;
         
@@ -746,8 +746,6 @@ class DiscountController extends Controller
                     'discount_history_id' => $discountHistory->id,
                     'estate_id' =>  $request->estate_name
                 ]);
-               
-                 
         }
 
 

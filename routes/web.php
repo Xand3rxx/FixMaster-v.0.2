@@ -319,10 +319,8 @@ Route::prefix('/client')->group(function () {
         Route::get('/requests/send-messages',          [ClientController::class, 'sendMessages'])->name('send_messages');
         Route::post('/requests/update-request/{request:id}',          [ClientController::class, 'updateRequest'])->name('update_request');
         Route::post('/requests/technician_profile',          [ClientController::class, 'technicianProfile'])->name('technician_profile');
-
-       
-
-       
+        Route::get('requests/all',                 [ClientController::class, 'myServiceRequest'])->name('service.all');
+   
      
 
 
@@ -341,16 +339,13 @@ Route::prefix('/client')->group(function () {
             Route::any('loyalty/submit',                 [ClientController::class, 'loyaltySubmit'])->name('loyalty.submit');
             Route::get('payments',          [ClientController::class, 'payments'])->name('payments');
         // Route::get('/requests',          [ClientRequestController::class, 'index'])->name('client.requests');
-        Route::get('wallet',                [ClientController::class, 'wallet'])->name('wallet');
-        Route::any('fund',                  [ClientController::class, 'walletSubmit'])->name('wallet.submit');
-        Route::get('loyalty',                [ClientController::class, 'loyalty'])->name('loyalty');
-        Route::any('loyalty/submit',                 [ClientController::class, 'loyaltySubmit'])->name('loyalty.submit');
 
-        Route::post('/ipnpaystack',         [ClientController::class, 'paystackIPN'])->name('ipn.paystack');
-        Route::get('/apiRequest',           [ClientController::class, 'apiRequest'])->name('ipn.paystackApiRequest');
-
-        Route::get('/ipnflutter',           [ClientController::class, 'flutterIPN'])->name('ipn.flutter');
-
+   
+                
+        Route::post('servicesRequest',              [ClientController::class, 'serviceRequest'])->name('services.serviceRequest');
+        // post my contact to DB
+        Route::post('/ajax_contactForm',            [ClientController::class, 'ajax_contactForm'])->name('ajax_contactForm');
+    
         // Service request SECTION
         Route::get('/services',                     [ClientController::class, 'services'])->name('services.list');
         Route::get('services/quote/{service}',      [ClientController::class, 'serviceQuote'])->name('services.quote');
@@ -362,11 +357,6 @@ Route::prefix('/client')->group(function () {
         // view all my service request
         // Route::get('requests',                      [ClientController::class, 'myServiceRequest'])->name('service.all');
 
-        // // view all my service request
-        Route::get('requests',                     [ClientController::class, 'myServiceRequest'])->name('service.all');
-        Route::get('/requests/details/{ref}',      [ClientController::class, 'requestDetails'])->name('client.request_details');
-        Route::get('/requests/edit/{id}',          [ClientController::class, 'edit'])->name('client.edit_request');
-        Route::put('/requests/update/{id}',        [ClientController::class, 'update'])->name('client.update_request');
 
                 
         Route::post('servicesRequest',              [ClientController::class, 'serviceRequest'])->name('services.serviceRequest');
@@ -376,7 +366,6 @@ Route::prefix('/client')->group(function () {
 
             Route::post('/ipnpaystack',         [ClientController::class, 'paystackIPN'])->name('ipn.paystack');
             Route::get('/apiRequest',           [ClientController::class, 'apiRequest'])->name('ipn.paystackApiRequest');
-
             Route::get('/ipnflutter',           [ClientController::class, 'flutterIPN'])->name('ipn.flutter');
           
 

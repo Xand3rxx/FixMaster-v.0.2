@@ -133,6 +133,7 @@
                     <div class="card-body">
                         <div class="row align-items-center">
                             <div class="col-lg-2 col-md-3 text-md-left text-center">
+                       
                                 {{-- <img src="{{ asset('assets/images/default-male-avatar.png') }}" class="avatar avatar-large rounded-circle shadow d-block mx-auto" alt=""> --}}
                                 @if(!empty($profile->avatar) && file_exists(public_path().'/assets/user-avatars/'.$profile->avatar))
                                     <img src="{{ asset('assets/user-avatars/'.$profile->avatar) }}" class="avatar avatar-large rounded-circle shadow d-block mx-auto" alt="Client avatar" />

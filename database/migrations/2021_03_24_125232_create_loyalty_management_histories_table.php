@@ -25,7 +25,6 @@ class CreateLoyaltyManagementHistoriesTable extends Migration
             $table->float('points');
             $table->float('amount');
             $table->enum('type', ['none','debited', 'credited'])->default('none');
-            $table->float('wallet');
             $table->timestamps();
         });
     }

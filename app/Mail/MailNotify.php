@@ -30,6 +30,6 @@ class MailNotify extends Mailable
      */
     public function build()
     {
-       return  $this->subject('Referral Details')->view('emails.notify');
+       return  $this->subject('Referral Details')->from('test@ninthbinary.com')->view('emails.notify');
     }
 }

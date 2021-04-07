@@ -32,6 +32,6 @@ class TownSeeder extends Seeder
         // Using Eloquent ORM, this updates created at and updated at
         // Town::create(['name' => Str::random(10)]);
         // Using Fluent Query Builder this doesn't update created_at and updated_at
-        // DB::table('towns')->insert(['name' => Str::random(10)]);
-    }
+        DB::table('towns')->insert(['name' => Str::random(10)]);
+    } 
 }

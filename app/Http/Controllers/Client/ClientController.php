@@ -30,9 +30,10 @@ use App\Traits\GenerateUniqueIdentity as Generator;
 use App\Traits\RegisterPaymentTransaction;
 use App\Traits\Services;
 use App\Traits\PasswordUpdator;
-use Auth;
+use Auth; 
 use App\Models\LoyaltyManagement;
 use App\Models\ClientLoyaltyWithdrawal;
+use App\Models\ServiceRequestPayment;
 use App\Models\ServiceRequestProgress;
 use App\Models\ServiceRequestCancellation;
 use Session;
@@ -164,9 +165,10 @@ class ClientController extends Controller
             'reason'       =>   'required',
         ]);
 
+    
         if(!empty($requestExists->clientDiscounts)){
             $rate = $requestExists->clientDiscounts[0]->discount->rate;
-            $refundAmount = floor( (float)$requestExists->total_amount -((float)$rate * (float)$requestExists->total_amount / 100) );
+            $refundAmount = floor( (float)$rate * (float)$requestExists->total_amount / 100 );
         }else{
             $refundAmount = $requestExists->total_amount;
         }
@@ -215,7 +217,7 @@ class ClientController extends Controller
         $clientEmail = $requestExists->client->email;
         $reason = $request->reason;
         $jobReference = $requestExists->unique_id;
-        $supervisorId = 'woorad7@gmail.com';
+        $supervisorId = 'dev@fix-master.com';
 
      
 
@@ -558,7 +560,7 @@ class ClientController extends Controller
             die('Api returned Error ' . $trans->message);
         }
 
-        /** If the transaction stats are successful snd to DB */
+        /** If the transaction status are successful send to DB */
         if ($data->status == 'pending') {
             $data['status'] = 'success';
             $data['transaction_id'] = rawurlencode($reference);
@@ -576,21 +578,19 @@ class ClientController extends Controller
                 $walTrans['payment_type'] = 'funding';
                 $walTrans['unique_id'] = $data->unique_id;
                 $walTrans['transaction_type'] = 'debit';
+                // if the user has not used this wallet for any transaction
+                if (!WalletTransaction::where('unique_id', '=', $client['unique_id'])->exists()) {
                 $walTrans['opening_balance'] = '0';
                 $walTrans['closing_balance'] = $data->amount;
+                }else{
+                    $previousWallet = WalletTransaction::where('user_id', auth()->user()->id)->orderBy('id', 'DESC')->first();
+                    $walTrans['opening_balance'] = $previousWallet->closing_balance;
+                    $walTrans['closing_balance'] = $previousWallet->closing_balance + $data->amount;
+                }
+                // dd($walTrans);
                 $walTrans->save();
-            }else{
-                $walTrans = WalletTransaction::where('user_id', auth()->user()->id)->orderBy('id', 'DESC')->first();
-                $walTrans['opening_balance'] = $walTrans->closing_balance;
-                $walTrans['closing_balance'] = $walTrans->opening_balance + $data->amount;
-                $walTrans->update();
-            }
-            // }else{
-            //     $walTrans = WalletTransaction::where('user_id', auth()->user()->id)->orderBy('id', 'DESC')->first();
-            //     $walTrans['opening_balance'] = $walTrans->closing_balance;
-            //     $walTrans['closing_balance'] = $walTrans->opening_balance + $data->amount;
-            //     $walTrans->update();
-            // }
+
+        }
 
 
 
@@ -669,7 +669,7 @@ class ClientController extends Controller
         //     'discounts'     =>  $this->clientDiscounts(),
         // ]
         // dd($data['balance']->closing_balance );
-        // dd($data['discounts'] );
+        // dd($data['discounts'] ); 
         $data['states'] = State::select('id', 'name')->orderBy('name', 'ASC')->get();
 
         // $data['lgas'] = Lga::select('id', 'name')->orderBy('name', 'ASC')->get();
@@ -707,7 +707,13 @@ class ClientController extends Controller
         $clientContact->address_latitude   = $request->addressLng;
         if ($clientContact->save()) {
             // return back()->with('success', 'New contact saved');
-            return response()->json(['success' => 'Data Added successfully.']);
+            // return response()->json(['success' => 'Data Added successfully.']);
+
+            return view('client.services._contactList', [
+                'myContacts'    => Contact::where('user_id', auth()->user()->id)->get(),
+                // 'success' => 'Data Added successfully.'
+            ]);
+
         } else{
             return back()->with('error', 'sorry!, an error occured please try again');
         }
@@ -730,8 +736,8 @@ class ClientController extends Controller
         //     'payment_method'            =>   'required',
         //   ]);
 
-            $all = $request->all();
-            dd($all);
+            // $all = $request->all();
+            // dd($all);
 
         $validatedData = $request->validate([
             'balance'                   =>   'required',
@@ -740,16 +746,16 @@ class ClientController extends Controller
             'payment_method'            =>   'required',
             'myContact_id'            =>   'required',
           ]);
-
-            $all = $request->all();
+        
+            // $all = $request->all(); 
             // dd($all);
 
             // if payment method is wallet
             if($request->payment_method == 'Wallet'){
-                if($request->balance<$request->booking_fee){
+                // if($request->balance<$request->booking_fee){
 
-                    $service_request                        = new Servicerequest;
-                    $service_request->cliend_id             = auth()->user()->id;
+                    // $service_request                        = new Servicerequest;
+                    // $service_request->cliend_id             = auth()->user()->id;
                 // if wallet balance is less than the service fee
                 if($request->balance > $request->booking_fee){
                     $service_request                        = new Servicerequest;
@@ -757,9 +763,9 @@ class ClientController extends Controller
                     $service_request->client_id             = auth()->user()->id;
                     $service_request->service_id            = $request->service_id;
                     $service_request->unique_id             = 'REF-'.$this->generateReference();
-                    $service_request->state_id              = $request->state_id;
-                    $service_request->lga_id                = $request->lga_id;
-                    $service_request->town_id               = $request->town_id;
+                    // $service_request->state_id              = $request->state_id;
+                    // $service_request->lga_id                = $request->lga_id;
+                    // $service_request->town_id               = $request->town_id;
                     $service_request->price_id              = $request->price_id;
                     $service_request->contact_id              = $request->myContact_id;
                     $service_request->client_discount_id    = $request->client_discount_id;
@@ -772,48 +778,6 @@ class ClientController extends Controller
                     $service_request->has_cse_rated         = 'No';
                     // dd($service_request);
                     if ($service_request->save()) {
-
-                    $theDiscount = ClientDiscount::with('discount')->orderBy('id','DESC')->firstOrFail();
-                    if ($service_request->client_discount_id == '1') {
-                        $service_request->total_amount          = $request->booking_fee;
-                        // $service_request->total_amount          = (100 - $theDiscount->discount->rate ) / 100 * $request->booking_fee  ;
-
-                        // $user_data = ClientDiscount::find(auth()->user()->id);
-                        // $client_discount = ClientDiscount::where('client_id', auth()->user()->id)->orderBy('id','DESC')->firstOrFail();
-                        // $client_discount['availability'] = 'used';
-                        // $client_discount->update();
-
-                    }else {
-                        $service_request->total_amount          = $request->booking_fee;
-                    }
-                    // $var = $request->timestamp;
-                    // $formattedDate = str_replace('/', '-', $var);
-
-                    $service_request->preferred_time        = date("Y-m-d");
-
-                    $client = \App\Models\Client::where('user_id', $request->user()->id)->with('user')->orderBy('id','DESC')->firstOrFail();
-                    // dd($client->user->account->state_id);
-
-                    if ($request->use_my_address === 'yes') {
-                        // dd($client->user->contact->state_id);
-                        $service_request->state_id        = $client->user->account->state_id;
-                        $service_request->lga_id          = $client->user->account->lga_id;
-
-                    // }elseif ($service_request->use_my_address == null) {
-                        # else...
-                        // $service_request->state_id        = $request->alternate_address;
-                        // $service_request->lga_id          = $request->alternate_address;
-                    }
-                    if ($request->use_my_phone_number == 'yes') {
-                        $service_request->phone_id        = $client->user->contact->id;
-                        $service_request->address_id      = $client->user->contact->id;
-                    // }elseif ($service_request->use_my_phone_number == null) {
-                        # else...
-                        // $service_request->state_id        = $request->alternate_phone_number;
-                    }
-                    // $service_request->town_id         = '';
-                    $service_request->save();
-
                     // fetch the Client Table Record
                     $client = \App\Models\Client::where('user_id', $request->user()->id)->with('user')->firstOrFail();
                     // generate reference string for this transaction
@@ -822,9 +786,8 @@ class ClientController extends Controller
                     $payment = $this->payment($service_request->total_amount, 'wallet', 'service-request', $client['unique_id'], 'success', $generatedVal);
                     // save the reference_id as track in session
                     Session::put('Track', $generatedVal);
-
-                        if ($payment) {
-                            //   new starts here
+                        if ($payment) {            
+                            //   new starts here 
                             $user_id = auth()->user()->id;
                             $track = Session::get('Track');
                             $pay =  Payment::where('reference_id', $track)->orderBy('id', 'DESC')->first();
@@ -840,36 +803,33 @@ class ClientController extends Controller
                                 $wallet_transaction->opening_balance = $request->balance;
                                 $wallet_transaction->closing_balance = $request->balance - $pay->amount;
                                 $wallet_transaction->status = 'success';
-                                $wallet_transaction->save();
-
-                                // $this->getDistanceDifference();
-
+                                $wallet_transaction->save();    
+                                // $this->getDistanceDifference();    
                                 // return back()->with('success', 'Success! Transaction was successful and your request has been placed.');
-                            }
+                            
+                                // save to ServiceRequestPayment table
+                                $service_reqPayment = new ServiceRequestPayment;
+                                $service_reqPayment->user_id = auth()->user()->id;
+                                $service_reqPayment->payment_id = $pay->id;  
+                                $service_reqPayment->service_request_id = $service_request->id;  
+                                $service_reqPayment->amount = $pay->amount;  
+                                $service_reqPayment->unique_id = $pay->unique_id;  
+                                $service_reqPayment->payment_type = $pay->payment_for;  
+                                $service_reqPayment->status = 'success';  
+                            }                        
                         }
                         return back()->with('success', 'Service Request Successful');
                         // return response()->json(['success' => 'Service Request Successful.']);
-
-
                     } else{
-                        return back()->with('error', 'sorry!, an error occured please try again');
-                    }
-
-
-
+                        return back()->with('error', 'sorry!, your service request is not successful');
+                    } 
 
                 }else{
-                        Session::flash('alert', 'sorry!, service amount is less than wallet balance');
+                    return back()->with('alert', 'sorry!, booking fee is greater than wallet balance');
                     }
                 }
-                if ($request->payment_method == 'Offline') {
-                    // $this->requestForService();
-                    echo 'denk';
-                     return back()->with('error', 'Sorry!, your current wallet balance is less than the booking fee. Please use other payment methods.');
-                    }
-            }
 
-
+            // online method
             if ($request->payment_method == 'Online') {
                 return back()->with('error', 'online payment coming soon');
             } else{
