@@ -340,24 +340,8 @@ Route::prefix('/client')->middleware('verified')->group(function () {
         Route::post('/ajax_contactForm',            [ClientController::class, 'ajax_contactForm'])->name('ajax_contactForm');
 
 
-        Route::post('/ipnpaystack',         [ClientController::class, 'paystackIPN'])->name('ipn.paystack');
-        Route::get('/apiRequest',           [ClientController::class, 'apiRequest'])->name('ipn.paystackApiRequest');
 
-        Route::get('/ipnflutter',           [ClientController::class, 'flutterIPN'])->name('ipn.flutter');
-
-
-        // Service request SECTION
-        Route::get('/services',                     [ClientController::class, 'services'])->name('services.list');
-        Route::get('services/quote/{service}',      [ClientController::class, 'serviceQuote'])->name('services.quote');
-        Route::get('services/details/{service}',    [ClientController::class, 'serviceDetails'])->name('services.details');
-        Route::post('services/search',              [ClientController::class, 'search'])->name('services.search');
-        Route::get('services/custom/',              [ClientController::class, 'customService'])->name('services.custom');
-
-        Route::post('servicesRequest',              [ClientController::class, 'serviceRequest'])->name('services.serviceRequest');
-        // view all my service request
-        Route::get('myServicesRequest',              [ClientController::class, 'myServiceRequest'])->name('service.all');
-
-        Route::get('myContactList',                  [ClientController::class, 'myContactList'])->name('service.myContacts');
+            Route::get('myContactList',                  [ClientController::class, 'myContactList'])->name('service.myContacts');
 
         //Flutterwave Routes
         Route::post('/request/flutterwave/submit',              [ClientController::class, 'storeFlutterServiceRequest'])->name('flutterwave.submit');
@@ -393,8 +377,6 @@ Route::prefix('/cse')->group(function () {
         Route::post('project-progress', [ProjectProgressController::class, '__invoke'])->name('project.progress.update');
 
         // Route::view('/requests',            'cse.requests')->name('requests');
-
-        Route::post('client-decision', [ClientDecisionController::class, '__invoke'])->name('client.decision');
 
         Route::view(
             '/request/details',

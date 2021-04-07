@@ -16,15 +16,21 @@ class CreateInvoicesTable extends Migration
         Schema::create('invoices', function (Blueprint $table) {
             $table->id();
             $table->uuid('uuid');
-            $table->foreignId('user_id');
+            $table->foreignId('client_id');
             $table->foreignId('service_request_id');
             $table->foreignId('rfq_id')->nullable();
+            $table->foreignId('warranty_id')->nullable();
+            $table->foreignId('sub_service_id')->nullable();
             $table->string('invoice_number');
             $table->string('invoice_type');
-            $table->float('total_amount')->nullable();
-            $table->float('amount_due')->nullable();
-            $table->float('amount_paid')->nullable();
+            $table->decimal('labour_cost', 8,3)->nullable();
+            $table->decimal('materials_cost', 8,3)->nullable();
+            $table->integer('hours_spent')->nullable();
+            $table->float('total_amount', 8,3)->nullable();
+            $table->float('amount_due', 8,3)->nullable();
+            $table->float('amount_paid', 8,3)->nullable();
             $table->enum('status', ['0' ,'1' ,'2'])->default('0');
+            $table->enum('phase', ['0' ,'1', '2'])->default('0');
             $table->timestamps();
         });
     }
