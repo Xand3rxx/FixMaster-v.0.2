@@ -29,6 +29,55 @@
                 </section>
 
                 @if($latest_service_request_progress->sub_status_id > 9)
+                @if($latest_service_request_progress->sub_status_id < 11)
+                <h3>Project Cost Estimate</h3>
+                <section>
+                    <small class="text-danger">This portion will be displayed only if the CSE selects "Completed Diganosis" and the Client chooses to continue with the Service Request</small>
+                    <div class="mt-4 form-row">
+                        <div class="form-group col-md-6">
+                            <label for="estimated_hours">Estimated Work Hours</label>
+                            <select class="form-control custom-select @error('estimated_work_hours') is-invalid @enderror" name="estimated_work_hours">
+                                <option value="" selected>Select...</option>
+                                <option value="1">1</option>
+                                <option value="2">2</option>
+                                <option value="3">3</option>
+                                <option value="4">4</option>
+                                <option value="5">5</option>
+                                <option value="6">6</option>
+                                <option value="7">7</option>
+                                <option value="8">8</option>
+                                <option value="9">9</option>
+                                <option value="10">10</option>
+                                <option value="11">11</option>
+                                <option value="12">12</option>
+                            </select>
+                            @error('estimated_hours')
+                            <span class="invalid-feedback" role="alert">
+                                <strong>{{ $message }}</strong>
+                            </span>
+                            @enderror
+                        </div>
+
+                        <div class="form-group col-md-6">
+                            <label for="estimated_hours">{{$service_request['service']['name']}}</label>
+                            <select class="form-control custom-select @error('sub_service_uuid') is-invalid @enderror" name="sub_service_uuid">
+                                <option selected disabled value="0" selected>Select a sub service</option>
+                                @foreach($service_request['service']['sub_service'] as $key => $sub_service)
+                                <option value="{{$sub_service['uuid']}}">{{$sub_service['name']}} </option>
+                                @endforeach
+                            </select>
+                            @error('sub_service_uuid')
+                            <span class="invalid-feedback" role="alert">
+                                <strong>{{ $message }}</strong>
+                            </span>
+                            @enderror
+                        </div>
+                    </div>
+
+                </section>
+                @endif
+
+
                 <h3>New RFQ</h3>
                 <section>
                     <p class="mg-b-0">A request for quotation is a business process in which a company or public entity requests a quote from a supplier for the purchase of specific products or services.</p>

@@ -66,8 +66,8 @@ class RequestController extends Controller
                 'tools' => \App\Models\ToolInventory::all(),
                 'latest_service_request_progress' => $service_request_progresses,
                 'ongoingSubStatuses' => \App\Models\SubStatus::where('status_id', 2)
-                    ->when($service_request_progresses->sub_status_id <= 11, function ($query, $sub_status) {
-                        return $query->whereBetween('phase', [4, 8]);
+                    ->when($service_request_progresses->sub_status_id <= 10, function ($query, $sub_status) {
+                        return $query->whereBetween('phase', [2, 6]);
                     }, function ($query) {
                         return $query->where('recurrence', 'yes')->whereBetween('phase', [1, 20]);
                     })->get(['id', 'uuid', 'name']),
