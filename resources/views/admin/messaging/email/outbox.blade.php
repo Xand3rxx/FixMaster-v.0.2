@@ -26,6 +26,8 @@
             <span class="tx-color-03">Sort:</span> <a href="" class="dropdown-link link-02">Date</a>
           </div><!-- dropdown -->
         </div>
+    
+        
       </div><!-- mail-group-body -->
   </div><!-- mail-group -->
 
