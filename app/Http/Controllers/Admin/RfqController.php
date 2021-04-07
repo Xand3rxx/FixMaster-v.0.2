@@ -78,21 +78,27 @@ class RfqController extends Controller
 
         $supplierInvoiceBatches =  RfqSupplierInvoiceBatch::where('rfq_supplier_invoice_id', $supplierRfqId)->get();
 
-        DB::transaction(function () use ($supplierInvoiceBatches, $supplierRfqId,  &$supplierUpdate, &$rfqBatchUpdate) {
+        DB::transaction(function () use ($supplier, $supplierId, $supplierInvoiceBatches, $supplierRfqId,  &$supplierUpdate, &$rfqBatchUpdate) {
 
             // $rfq = Rfq::where('id', $id)->firstOrFail();
-            // $supplierUpdate = RfqSupplier::where()->update([
-            //     'rfq_id'        =>  ,
-            //     'supplier_id'   =>  ,
-            //     'devlivery_fee' =>  ,
-            //     'delivery_time' =>  ,
-            // ]);
+            $supplierUpdate = RfqSupplier::create([
+                'rfq_id'        =>  $supplierRfqId,
+                'supplier_id'   =>  $supplierId,
+                'devlivery_fee' =>  $supplier->devlivery_fee,
+                'delivery_time' =>  $supplier->delivery_time,
+            ]);
 
-            foreach ($supplierInvoiceBatches as $item => $value){
+            // foreach ($supplierInvoiceBatches as $item => $value){
 
-            }
+            // }
+
+            $supplierUpdate = true;
+
         }
 
+        // if($supplierUpdate){
+        //     return back()->with('success', 'Supplier has beeen selected.');
+        // }
 
         // return $supplierInvoiceBatches;
 

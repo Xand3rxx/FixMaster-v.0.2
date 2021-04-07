@@ -12,12 +12,10 @@
 .history/
 .idea/*
 .env.production
-composer.json
 composer.lock
 docker-compose.override.yml
 Dockerfile
 docker-compose.yml
-Homestead.json
 Homestead.yaml
 htaccess.prod
 npm-debug.log

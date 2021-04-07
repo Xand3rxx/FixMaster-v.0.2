@@ -144,7 +144,7 @@
                                 <div class="col-md-8 order-2 order-md-1">
                                     <dl class="row">
                                         <dt class="col-md-3 col-5 font-weight-normal">Invoice No. :</dt>
-                                        <dd class="col-md-9 col-7 text-muted">{{ $invoice['invoice_number'] }}</dd>
+                                        <dd class="col-md-9 col-7 text-muted">{{ $invoice['unique_id'] }}</dd>
 
                                         <dt class="col-md-3 col-5 font-weight-normal">Name :</dt>
                                         <dd class="col-md-9 col-7 text-muted">{{ $invoice['client']->account->first_name }} {{ $invoice['client']->account->last_name }}</dd>
@@ -471,7 +471,7 @@
                                 <div class="col-md-8 order-2 order-md-1">
                                     <dl class="row">
                                         <dt class="col-md-3 col-5 font-weight-normal">Invoice No. :</dt>
-                                        <dd class="col-md-9 col-7 text-muted">{{ $invoice['invoice_number'] }}</dd>
+                                        <dd class="col-md-9 col-7 text-muted">{{ $invoice['unique_id'] }}</dd>
 
                                         <dt class="col-md-3 col-5 font-weight-normal">Name :</dt>
                                         <dd class="col-md-9 col-7 text-muted">{{ $invoice['client']->account->first_name }} {{ $invoice['client']->account->last_name }}</dd>
@@ -617,6 +617,7 @@
         </div><!--end row-->
     </div><!--end container-->
 </section>
+@if(auth()->user()->type->role->url == 'client')
 <div class="row justify-content-center border-top">
     <div class="col-lg-8 col-md-12 mt-4 mb-4 pt-2 text-center">
         <div><h3>Proceed with Service</h3></div>
@@ -632,6 +633,15 @@
         </div>
     </div>
 </div>
+@else
+    <div class="row justify-content-center border-top">
+        <div class="col-lg-8 col-md-12 mt-4 mb-4 pt-2 text-center">
+            <div>
+                <a href="{{ route('cse.requests.show', [app()->getLocale(), $serviceRequestUUID]) }}" class="btn btn-outline-primary">Go Back</a>
+            </div>
+        </div>
+    </div>
+@endif
 @endif
 </body>
 
