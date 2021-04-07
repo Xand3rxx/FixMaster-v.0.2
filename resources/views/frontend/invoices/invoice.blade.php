@@ -617,6 +617,7 @@
         </div><!--end row-->
     </div><!--end container-->
 </section>
+@if(auth()->user()->type->role->url == 'client')
 <div class="row justify-content-center border-top">
     <div class="col-lg-8 col-md-12 mt-4 mb-4 pt-2 text-center">
         <div><h3>Proceed with Service</h3></div>
@@ -632,6 +633,15 @@
         </div>
     </div>
 </div>
+@else
+    <div class="row justify-content-center border-top">
+        <div class="col-lg-8 col-md-12 mt-4 mb-4 pt-2 text-center">
+            <div>
+                <a href="{{ route('cse.requests.show', [app()->getLocale(), $serviceRequestUUID]) }}" class="btn btn-outline-primary">Go Back</a>
+            </div>
+        </div>
+    </div>
+@endif
 @endif
 </body>
 
