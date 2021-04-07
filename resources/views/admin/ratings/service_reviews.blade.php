@@ -18,7 +18,7 @@
       </div>
 
       <div class="row row-xs">
-       
+
         <div class="col-lg-12 col-xl-12 mg-t-10">
             <div class="card mg-b-10">
               <div class="card-header pd-t-20 d-sm-flex align-items-start justify-content-between bd-b-0 pd-b-0">
@@ -26,11 +26,11 @@
                   <h6 class="mg-b-5">Service Reviews as of {{ date('M, d Y') }}</h6>
                   <p class="tx-13 tx-color-03 mg-b-0">This table displays a list of all FixMaster Service Reviews made by Clients.</p>
                 </div>
-                
+
               </div><!-- card-header -->
-             
+
               <div class="table-responsive">
-                
+
                 <table class="table table-hover mg-b-0" id="basicExample">
                   <thead class="thead-primary">
                     <tr>
@@ -45,26 +45,38 @@
                     </tr>
                   </thead>
                   <tbody>
+                    @php $sn = 1; @endphp
+                    @foreach($serviceReviews as $review)
                     <tr>
-                      <td class="tx-color-03 tx-center">1</td>
-                      <td>Mobile Phone</td>
-                      <td>Femi Joseph</td>
-                      <td class="tx-medium">REF-234094623496</td>
-                      <td>The service is top class. I recommend them if you want to beef up your home, office or company security with top class surveillance systems, electric gates etc. They are the solution to your security problems.</td>
+                      <td class="tx-color-03 tx-center">{{$sn++}}</td>
+                      <td>{{$review->service->name}}</td>
+                      <td>{{$review->clientAccount->first_name}} {{$review->clientAccount->last_name}}</td>
+                      <td class="tx-medium">{{$review->service->serviceRequest->unique_id}}</td>
+                      <td>{{$review->reviews}}</td>
+                      @if($review->status == 1)
                       <td class="text-medium text-success">Active</td>
-                      <td class="text-medium">May 15th 2020</td>
+                      @else
+                      <td class="text-medium text-danger">Inactive</td>
+                      @endif
+                      <td class="text-medium">
+                        {{ Carbon\Carbon::parse($review->created_at, 'UTC')->isoFormat('MMMM Do YYYY') }}
+                      </td>
                       <td class=" text-center">
                         <div class="dropdown-file">
                           <a href="" class="dropdown-link" data-toggle="dropdown"><i data-feather="more-vertical"></i></a>
                           <div class="dropdown-menu dropdown-menu-right">
-                            <a href="#" class="dropdown-item details text-danger"><i class="fas fa-times"></i> Mark as Inactive</a>
-                            <a href="" class="dropdown-item details text-danger"><i class="fas fa-trash"></i> Delete</a>
+                            @if($review->status == 1)
+                            <a href="{{route('admin.deactivate_review', [$review->uuid, 'locale'=>app()->getLocale()])}}" class="dropdown-item details text-danger"><i class="fas fa-times"></i> Mark as Inactive</a>
+                            @else
+                            <a href="{{route('admin.activate_review', [$review->uuid, 'locale'=>app()->getLocale()])}}" class="dropdown-item details text-success"><i class="fas fa-times"></i> Mark as Active</a>
+                            @endif
+                            <a href="{{route('admin.delete_review', [$review->uuid, 'locale'=>app()->getLocale()])}}" class="dropdown-item details text-danger"><i class="fas fa-trash"></i> Delete</a>
                           </div>
                         </div>
                       </td>
                     </tr>
-
-                    <tr>
+                  @endforeach
+                    {{-- <tr>
                       <td class="tx-color-03 tx-center">2</td>
                       <td>Doors</td>
                       <td>Derrick Nnamdi</td>
@@ -81,13 +93,13 @@
                           </div>
                         </div>
                       </td>
-                    </tr>
+                    </tr> --}}
 
                   </tbody>
                 </table>
               </div><!-- table-responsive -->
             </div><!-- card -->
-    
+
           </div><!-- col -->
 
       </div>
@@ -158,7 +170,7 @@
 <script>
     $(document).ready(function() {
 
-        $('#request-sorting').on('change', function (){        
+        $('#request-sorting').on('change', function (){
                 let option = $("#request-sorting").find("option:selected").val();
 
                 if(option === 'None'){
@@ -181,7 +193,7 @@
                 }
         });
     });
-   
+
 </script>
 @endsection
 

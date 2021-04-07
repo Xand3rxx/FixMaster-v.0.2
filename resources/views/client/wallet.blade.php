@@ -4,7 +4,7 @@
 @include('layouts.partials._messages')
 
 <style>
-    [type=radio] { 
+    [type=radio] {
         position: absolute;
         opacity: 0;
         width: 0;
@@ -23,7 +23,7 @@
     }
 
     .vodiapicker{
-        display: none; 
+        display: none;
     }
 
     #a{
@@ -152,7 +152,7 @@
                 </div>
             </div>
         </div>
-    </div> 
+    </div>
 
     <div class="row justify-content-center">
         <div class="col-lg-8 col-md-12 mt-4 pt-2 text-center">
@@ -164,7 +164,7 @@
                         </div>
                     </a><!--end nav link-->
                 </li><!--end nav item-->
-                
+
                 <li class="nav-item">
                     <a class="nav-link rounded" id="transactions-tab" data-toggle="pill" href="#transactions" role="tab" aria-controls="transactions" aria-selected="false">
                         <div class="text-center pt-1 pb-1">
@@ -179,9 +179,9 @@
     <div class="tab-content" id="pills-tabContent">
         <div class="tab-pane fade show active" id="fund-account" role="tabpanel" aria-labelledby="fund-account-tab">
           <!-- payment options starts here -->
-        <div class="border-bottom pb-4 row">      
+        <div class="border-bottom pb-4 row">
 
-        @foreach($gateways as $val) 
+        @foreach($gateways as $val)
             <div class="col-md-6 mt-4">
                 <div class="media key-feature align-items-center p-3 rounded shadow mt-4">
                 <a href="#" data-toggle="modal" data-target="#modal-form{{$val->id}}" >
@@ -194,7 +194,7 @@
                         <!-- <p class="text-muted mb-0">₦30,000.00</p> -->
                         <!-- <p class="text-muted mb-0"> @London, UK</p>  -->
                         </a>
-                        
+
                     </div>
                     </a>
                 </div>
@@ -212,20 +212,19 @@
                 <!-- </a> -->
                 </div>
             </div>
-            
           <div class="modal-body">
         <div>
         <form role="form" action="{{ route('client.wallet.submit', app()->getLocale()) }}" method="post">
-            @csrf                  
+            @csrf
             <div class="form-group mb-3">
                 <div class="input-group input-group-merge input-group-alternative">
                     <div class="input-group-prepend">
                         <span class="input-group-text">NGN</span>
                     </div>
                     <input type="number" step="any" class="form-control" placeholder="" name="amount" required>
-                    <input type="hidden" name="gateway" value="{{$val->id}}">   
-                    <input type="hidden" name="payment_channel" value="{{$val->keyword}}">  
-                    <input type="hidden" name="payment_for" value="e-wallet">  
+                    <input type="hidden" name="gateway" value="{{$val->id}}">
+                    <input type="hidden" name="payment_channel" value="{{$val->keyword}}">
+                    <input type="hidden" name="payment_for" value="e-wallet">
                 </div>
             </div>
             <div class="text-center">
@@ -242,8 +241,8 @@
    @endforeach
 
 
-</div> 
-</div> 
+</div>
+</div>
 
 <!-- payment options ends here -->
 
@@ -265,7 +264,7 @@
                             </select>
                         </div>
                     </div><!--end col-->
-    
+
                     <div class="col-md-4 specific-date d-none">
                         <div class="form-group position-relative">
                             <label>Specify Date <span class="text-danger">*</span></label>
@@ -273,7 +272,7 @@
                             <input name="name" id="name" type="date" class="form-control pl-5">
                         </div>
                     </div>
-    
+
                     <div class="col-md-4 sort-by-year d-none">
                         <div class="form-group position-relative">
                             <label>Specify Year <span class="text-danger">*</span></label>
@@ -305,7 +304,7 @@
                             </select>
                         </div>
                     </div>
-    
+
                     <div class="col-md-4 date-range d-none">
                         <div class="form-group position-relative">
                             <label>From <span class="text-danger">*</span></label>
@@ -313,7 +312,7 @@
                             <input name="name" id="name" type="date" class="form-control pl-5">
                         </div>
                     </div>
-    
+
                     <div class="col-md-4 date-range d-none">
                         <div class="form-group position-relative">
                             <label>To <span class="text-danger">*</span></label>
@@ -338,20 +337,20 @@
                             {{-- <th class="py-3">Balance</th> --}}
                         </tr>
                     </thead>
-        
+
                     <tbody>
                     @foreach($mytransactions as $k=>$val)
                         <tr>
                             <td>{{++$k}}.</td>
-                            <td>{{$val->reference_id}}</td>  
+                            <td>{{$val->reference_id}}</td>
                             <td>{{$val->transaction_id}}</td>
                             <td class="font-weight-bold">{{$val->payment_for}}</td>
                             <td>{{$val->amount}}</td>
-                            
+
                             @if($val->status=='success')
                             <td class="text-center text-success">Success</td>
                             @elseif($val->status=='pending')
-                            <td class="text-center text-danger">Pending</td>                 
+                            <td class="text-center text-danger">Pending</td>
                             @elseif($val->status=='failed')
                             <td class="text-center text-warning">Failed</td>
                             @elseif($val->status=='timeout')
@@ -365,8 +364,8 @@
                         @endforeach
                     </tbody>
                 </table>
-        
-                
+
+
             </div>
         </div>
 
@@ -434,15 +433,15 @@
           </div>
         </div>
     </div>
-    
 
-    
+
+
 </div><!--end col-->
 
 @section('scripts')
 <script>
     $(document).ready(function() {
-        $('#request-sorting').on('change', function (){        
+        $('#request-sorting').on('change', function (){
                 let option = $("#request-sorting").find("option:selected").val();
 
                 if(option === 'None'){

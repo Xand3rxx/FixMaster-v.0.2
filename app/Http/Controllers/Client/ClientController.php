@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Client;
 
 use App\Http\Controllers\Controller;
+use App\Http\Controllers\RatingController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Models\Category;
@@ -22,6 +23,7 @@ use App\Models\Cse;
 use App\Models\ServiceRequestSetting;
 use DB;
 use App\Models\ServiceRequest;
+// use App\Models\Servicerequest;
 use App\Helpers\CustomHelpers;
 use App\Traits\GenerateUniqueIdentity as Generator;
 use App\Traits\RegisterPaymentTransaction;
@@ -40,7 +42,6 @@ use PHPMailer\PHPMailer\SMTP;
 use PHPMailer\PHPMailer\Exception;
 
 use App\Http\Controllers\Messaging\MessageController;
-
 
 
 class ClientController extends Controller
@@ -586,10 +587,12 @@ class ClientController extends Controller
                 }
                 // dd($walTrans);
                 $walTrans->save();
-
-        }
-
-
+            }else{
+                $walTrans = WalletTransaction::where('user_id', auth()->user()->id)->orderBy('id', 'DESC')->first();
+                $walTrans['opening_balance'] = $walTrans->closing_balance;
+                $walTrans['closing_balance'] = $walTrans->opening_balance + $data->amount;
+                $walTrans->update();
+            }
 
         /** Finally return the callback view for the end user */
         return redirect()->route('client.wallet', app()->getLocale())->with('success', 'Fund successfully added!');
@@ -733,31 +736,16 @@ class ClientController extends Controller
         //     'payment_method'            =>   'required',
         //   ]);
 
-            // $all = $request->all();
-            // dd($all);
+            $all = $request->all();
+            dd($all);
 
-        $validatedData = $request->validate([
-            'balance'                   =>   'required',
-            'booking_fee'               =>   'required',
-            // 'timestamp'                 =>   'required',
-            'payment_method'            =>   'required',
-            'myContact_id'            =>   'required',
-          ]);
-        
-            // $all = $request->all(); 
-            // dd($all);
 
             // if payment method is wallet
             if($request->payment_method == 'Wallet'){
-                // if($request->balance<$request->booking_fee){
+                if($request->balance->$request->booking_fee){
 
-                    // $service_request                        = new Servicerequest;
-                    // $service_request->cliend_id             = auth()->user()->id;
-                // if wallet balance is less than the service fee
-                if($request->balance > $request->booking_fee){
                     $service_request                        = new Servicerequest;
-                    $service_request->uuid                  = auth()->user()->uuid;
-                    $service_request->client_id             = auth()->user()->id;
+                    $service_request->cliend_id             = auth()->user()->id;
                     $service_request->service_id            = $request->service_id;
                     $service_request->unique_id             = 'REF-'.$this->generateReference();
                     // $service_request->state_id              = $request->state_id;
@@ -822,15 +810,17 @@ class ClientController extends Controller
                     } 
 
                 }else{
-                    return back()->with('alert', 'sorry!, booking fee is greater than wallet balance');
+                        Session::flash('alert', 'sorry!, service amount is less than wallet balance');
                     }
                 }
-
-            // online method
-            if ($request->payment_method == 'Online') {
-                return back()->with('error', 'online payment coming soon');
-            } else{
-                return back()->with('error', 'sorry!, an error occured please try again');
+                if ($request->payment_method == 'Offline') {
+                    // $this->requestForService();
+                    echo 'denk';
+                } else{
+                    echo 'tony';
+                    // $discountServiceFee = 0.95 * $serviceFee;
+                    // $amount = $discountServiceFee;
+                    // $this->requestForService();
                 }
 
             }
@@ -1015,6 +1005,8 @@ class ClientController extends Controller
 
     public function loyaltySubmit(Request $request)
     {
+        // dd($request);
+
 
        $wallet  = ClientLoyaltyWithdrawal::select('wallet', 'withdrawal')->where('client_id', auth()->user()->id)->first();
        if($wallet->withdrawal != NULL){
@@ -1061,17 +1053,20 @@ class ClientController extends Controller
         ->with('error', 'Insufficient Loyalty Wallet Balance');
 
        }
-
     }
 
 
     }
 
-    public function payments()
+    public function client_rating(Request $request, RatingController $clientratings)
     {
-        return view('client.payment.list')->with([
-            'payments' => \App\Models\Payment::where('user_id', auth()->user()->id)->orderBy('id', 'DESC')->get(),
-        ]);
+        return $clientratings->handleClientRatings($request);
+    }
+
+    public function update_client_service_rating($language, Request $request, RatingController $updateClientRatings)
+    {
+
+        return $updateClientRatings->handleUpdateServiceRatings($request);
     }
 
 }

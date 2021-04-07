@@ -3,7 +3,9 @@
 namespace App\Http\Controllers\CSE;
 
 use App\Http\Controllers\Controller;
+use App\Http\Controllers\RatingController;
 use Illuminate\Http\Request;
+use App\Models\ServiceRequest;
 
 class CustomerServiceExecutiveController extends Controller
 {
@@ -82,4 +84,21 @@ class CustomerServiceExecutiveController extends Controller
     {
         //
     }
+
+     /**
+     * CSE rate the users related to the service rquest
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function user_rating(Request $request, RatingController $ratings)
+    {
+        return $ratings->handleRatings($request);
+    }
+
+    public function update_cse_service_rating($language, Request $request, RatingController $updateRatings)
+    {
+        return $updateRatings->handleServiceRatings($request);
+    }
+
 }

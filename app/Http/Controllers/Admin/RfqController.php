@@ -84,7 +84,7 @@ class RfqController extends Controller
             $supplierUpdate = RfqSupplier::create([
                 'rfq_id'        =>  $supplierRfqId,
                 'supplier_id'   =>  $supplierId,
-                'devlivery_fee' =>  $supplier->devlivery_fee,
+                'devlivery_fee' =>  $supplier->delivery_fee,
                 'delivery_time' =>  $supplier->delivery_time,
             ]);
 
@@ -94,11 +94,11 @@ class RfqController extends Controller
 
             $supplierUpdate = true;
 
-        }
+        });
 
-        // if($supplierUpdate){
-        //     return back()->with('success', 'Supplier has beeen selected.');
-        // }
+        if($supplierUpdate){
+            return back()->with('success', 'Supplier has beeen selected.');
+        }
 
         // return $supplierInvoiceBatches;
 

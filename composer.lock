@@ -4,7 +4,11 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
+<<<<<<< HEAD
     "content-hash": "b77c7f2542477bb85f2e82c7318e7da8",
+=======
+    "content-hash": "4f13eb5d2232d3a21ac5bb4c78c58517",
+>>>>>>> bc65fe6c4dce4e5a867812e89b01f65dd80aa573
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -1117,6 +1121,13 @@
                 "rest",
                 "web service"
             ],
+<<<<<<< HEAD
+=======
+            "support": {
+                "issues": "https://github.com/guzzle/guzzle/issues",
+                "source": "https://github.com/guzzle/guzzle/tree/7.3.0"
+            },
+>>>>>>> bc65fe6c4dce4e5a867812e89b01f65dd80aa573
             "funding": [
                 {
                     "url": "https://github.com/GrahamCampbell",
@@ -1261,6 +1272,13 @@
                 "uri",
                 "url"
             ],
+<<<<<<< HEAD
+=======
+            "support": {
+                "issues": "https://github.com/guzzle/psr7/issues",
+                "source": "https://github.com/guzzle/psr7/tree/1.8.1"
+            },
+>>>>>>> bc65fe6c4dce4e5a867812e89b01f65dd80aa573
             "time": "2021-03-21T16:25:00+00:00"
         },
         {
@@ -1387,6 +1405,7 @@
         },
         {
             "name": "laravel/framework",
+<<<<<<< HEAD
             "version": "v8.34.0",
             "source": {
                 "type": "git",
@@ -1397,6 +1416,18 @@
                 "type": "zip",
                 "url": "https://api.github.com/repos/laravel/framework/zipball/81892ca110795a9c46c7e198cba7763bfd2af0bf",
                 "reference": "81892ca110795a9c46c7e198cba7763bfd2af0bf",
+=======
+            "version": "v8.35.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/laravel/framework.git",
+                "reference": "d118c0df39e7524131176aaf76493eae63a8a602"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/laravel/framework/zipball/d118c0df39e7524131176aaf76493eae63a8a602",
+                "reference": "d118c0df39e7524131176aaf76493eae63a8a602",
+>>>>>>> bc65fe6c4dce4e5a867812e89b01f65dd80aa573
                 "shasum": ""
             },
             "require": {
@@ -1547,7 +1578,15 @@
                 "framework",
                 "laravel"
             ],
+<<<<<<< HEAD
             "time": "2021-03-23T15:12:51+00:00"
+=======
+            "support": {
+                "issues": "https://github.com/laravel/framework/issues",
+                "source": "https://github.com/laravel/framework"
+            },
+            "time": "2021-03-30T21:34:17+00:00"
+>>>>>>> bc65fe6c4dce4e5a867812e89b01f65dd80aa573
         },
         {
             "name": "laravel/tinker",
@@ -1676,6 +1715,53 @@
             "time": "2021-01-06T19:20:22+00:00"
         },
         {
+<<<<<<< HEAD
+=======
+            "name": "laraveldaily/laravel-charts",
+            "version": "0.1.25",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/LaravelDaily/laravel-charts.git",
+                "reference": "219ab2f71278b3d32152e7bf4e2ffb53cd87902f"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/LaravelDaily/laravel-charts/zipball/219ab2f71278b3d32152e7bf4e2ffb53cd87902f",
+                "reference": "219ab2f71278b3d32152e7bf4e2ffb53cd87902f",
+                "shasum": ""
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "LaravelDaily\\LaravelCharts\\LaravelChartsServiceProvider"
+                    ]
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "LaravelDaily\\LaravelCharts\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Povilas Korop",
+                    "email": "povilas@laraveldaily.com"
+                }
+            ],
+            "description": "Create charts and reports from Laravel",
+            "support": {
+                "issues": "https://github.com/LaravelDaily/laravel-charts/issues",
+                "source": "https://github.com/LaravelDaily/laravel-charts/tree/0.1.25"
+            },
+            "time": "2020-10-08T07:17:08+00:00"
+        },
+        {
+>>>>>>> bc65fe6c4dce4e5a867812e89b01f65dd80aa573
             "name": "league/commonmark",
             "version": "1.5.8",
             "source": {
@@ -3122,6 +3208,12 @@
                 "console",
                 "terminal"
             ],
+<<<<<<< HEAD
+=======
+            "support": {
+                "source": "https://github.com/symfony/console/tree/v5.2.6"
+            },
+>>>>>>> bc65fe6c4dce4e5a867812e89b01f65dd80aa573
             "funding": [
                 {
                     "url": "https://symfony.com/sponsor",
@@ -3320,6 +3412,12 @@
             ],
             "description": "Provides tools to manage errors and ease debugging PHP code",
             "homepage": "https://symfony.com",
+<<<<<<< HEAD
+=======
+            "support": {
+                "source": "https://github.com/symfony/error-handler/tree/v5.2.6"
+            },
+>>>>>>> bc65fe6c4dce4e5a867812e89b01f65dd80aa573
             "funding": [
                 {
                     "url": "https://symfony.com/sponsor",
@@ -3806,6 +3904,12 @@
             ],
             "description": "Provides a structured process for converting a Request into a Response",
             "homepage": "https://symfony.com",
+<<<<<<< HEAD
+=======
+            "support": {
+                "source": "https://github.com/symfony/http-kernel/tree/v5.2.6"
+            },
+>>>>>>> bc65fe6c4dce4e5a867812e89b01f65dd80aa573
             "funding": [
                 {
                     "url": "https://symfony.com/sponsor",
@@ -3886,6 +3990,12 @@
                 "mime",
                 "mime-type"
             ],
+<<<<<<< HEAD
+=======
+            "support": {
+                "source": "https://github.com/symfony/mime/tree/v5.2.6"
+            },
+>>>>>>> bc65fe6c4dce4e5a867812e89b01f65dd80aa573
             "funding": [
                 {
                     "url": "https://symfony.com/sponsor",
@@ -4764,6 +4874,12 @@
                 "uri",
                 "url"
             ],
+<<<<<<< HEAD
+=======
+            "support": {
+                "source": "https://github.com/symfony/routing/tree/v5.2.6"
+            },
+>>>>>>> bc65fe6c4dce4e5a867812e89b01f65dd80aa573
             "funding": [
                 {
                     "url": "https://symfony.com/sponsor",
@@ -4923,6 +5039,12 @@
                 "utf-8",
                 "utf8"
             ],
+<<<<<<< HEAD
+=======
+            "support": {
+                "source": "https://github.com/symfony/string/tree/v5.2.6"
+            },
+>>>>>>> bc65fe6c4dce4e5a867812e89b01f65dd80aa573
             "funding": [
                 {
                     "url": "https://symfony.com/sponsor",
@@ -5013,6 +5135,12 @@
             ],
             "description": "Provides tools to internationalize your application",
             "homepage": "https://symfony.com",
+<<<<<<< HEAD
+=======
+            "support": {
+                "source": "https://github.com/symfony/translation/tree/v5.2.6"
+            },
+>>>>>>> bc65fe6c4dce4e5a867812e89b01f65dd80aa573
             "funding": [
                 {
                     "url": "https://symfony.com/sponsor",
@@ -5176,6 +5304,12 @@
                 "debug",
                 "dump"
             ],
+<<<<<<< HEAD
+=======
+            "support": {
+                "source": "https://github.com/symfony/var-dumper/tree/v5.2.6"
+            },
+>>>>>>> bc65fe6c4dce4e5a867812e89b01f65dd80aa573
             "funding": [
                 {
                     "url": "https://symfony.com/sponsor",
@@ -6058,6 +6192,14 @@
                 "Xdebug",
                 "performance"
             ],
+<<<<<<< HEAD
+=======
+            "support": {
+                "irc": "irc://irc.freenode.org/composer",
+                "issues": "https://github.com/composer/xdebug-handler/issues",
+                "source": "https://github.com/composer/xdebug-handler/tree/1.4.6"
+            },
+>>>>>>> bc65fe6c4dce4e5a867812e89b01f65dd80aa573
             "funding": [
                 {
                     "url": "https://packagist.com",
@@ -6210,6 +6352,7 @@
         },
         {
             "name": "facade/ignition",
+<<<<<<< HEAD
             "version": "2.6.0",
             "source": {
                 "type": "git",
@@ -6220,6 +6363,18 @@
                 "type": "zip",
                 "url": "https://api.github.com/repos/facade/ignition/zipball/4be10a998815f77952b9eb983fb0b64c8a4defbb",
                 "reference": "4be10a998815f77952b9eb983fb0b64c8a4defbb",
+=======
+            "version": "2.7.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/facade/ignition.git",
+                "reference": "bdc8b0b32c888f6edc838ca641358322b3d9506d"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/facade/ignition/zipball/bdc8b0b32c888f6edc838ca641358322b3d9506d",
+                "reference": "bdc8b0b32c888f6edc838ca641358322b3d9506d",
+>>>>>>> bc65fe6c4dce4e5a867812e89b01f65dd80aa573
                 "shasum": ""
             },
             "require": {
@@ -6277,7 +6432,17 @@
                 "laravel",
                 "page"
             ],
+<<<<<<< HEAD
             "time": "2021-03-24T18:58:31+00:00"
+=======
+            "support": {
+                "docs": "https://flareapp.io/docs/ignition-for-laravel/introduction",
+                "forum": "https://twitter.com/flareappio",
+                "issues": "https://github.com/facade/ignition/issues",
+                "source": "https://github.com/facade/ignition"
+            },
+            "time": "2021-03-30T15:55:38+00:00"
+>>>>>>> bc65fe6c4dce4e5a867812e89b01f65dd80aa573
         },
         {
             "name": "facade/ignition-contracts",
@@ -6391,6 +6556,13 @@
                 "faker",
                 "fixtures"
             ],
+<<<<<<< HEAD
+=======
+            "support": {
+                "issues": "https://github.com/FakerPHP/Faker/issues",
+                "source": "https://github.com/FakerPHP/Faker/tree/v.1.14.1"
+            },
+>>>>>>> bc65fe6c4dce4e5a867812e89b01f65dd80aa573
             "time": "2021-03-30T06:27:33+00:00"
         },
         {
@@ -6452,6 +6624,13 @@
                 "throwable",
                 "whoops"
             ],
+<<<<<<< HEAD
+=======
+            "support": {
+                "issues": "https://github.com/filp/whoops/issues",
+                "source": "https://github.com/filp/whoops/tree/2.12.0"
+            },
+>>>>>>> bc65fe6c4dce4e5a867812e89b01f65dd80aa573
             "funding": [
                 {
                     "url": "https://github.com/denis-sokolov",
@@ -6583,6 +6762,7 @@
         },
         {
             "name": "laravel/sail",
+<<<<<<< HEAD
             "version": "v1.4.9",
             "source": {
                 "type": "git",
@@ -6593,6 +6773,18 @@
                 "type": "zip",
                 "url": "https://api.github.com/repos/laravel/sail/zipball/935b453bf536b284d6fef7c1b5dd2ea52bca34c0",
                 "reference": "935b453bf536b284d6fef7c1b5dd2ea52bca34c0",
+=======
+            "version": "v1.4.10",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/laravel/sail.git",
+                "reference": "4f0b2bac128ee60a11d9758651f103f78157474a"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/laravel/sail/zipball/4f0b2bac128ee60a11d9758651f103f78157474a",
+                "reference": "4f0b2bac128ee60a11d9758651f103f78157474a",
+>>>>>>> bc65fe6c4dce4e5a867812e89b01f65dd80aa573
                 "shasum": ""
             },
             "require": {
@@ -6635,7 +6827,15 @@
                 "docker",
                 "laravel"
             ],
+<<<<<<< HEAD
             "time": "2021-03-23T17:29:26+00:00"
+=======
+            "support": {
+                "issues": "https://github.com/laravel/sail/issues",
+                "source": "https://github.com/laravel/sail"
+            },
+            "time": "2021-03-30T21:26:44+00:00"
+>>>>>>> bc65fe6c4dce4e5a867812e89b01f65dd80aa573
         },
         {
             "name": "maximebf/debugbar",
@@ -7321,6 +7521,13 @@
                 "testing",
                 "xunit"
             ],
+<<<<<<< HEAD
+=======
+            "support": {
+                "issues": "https://github.com/sebastianbergmann/php-code-coverage/issues",
+                "source": "https://github.com/sebastianbergmann/php-code-coverage/tree/9.2.6"
+            },
+>>>>>>> bc65fe6c4dce4e5a867812e89b01f65dd80aa573
             "funding": [
                 {
                     "url": "https://github.com/sebastianbergmann",
@@ -7657,6 +7864,13 @@
                 "testing",
                 "xunit"
             ],
+<<<<<<< HEAD
+=======
+            "support": {
+                "issues": "https://github.com/sebastianbergmann/phpunit/issues",
+                "source": "https://github.com/sebastianbergmann/phpunit/tree/9.5.4"
+            },
+>>>>>>> bc65fe6c4dce4e5a867812e89b01f65dd80aa573
             "funding": [
                 {
                     "url": "https://phpunit.de/donate.html",
@@ -8906,6 +9120,12 @@
             ],
             "description": "Provides basic utilities for the filesystem",
             "homepage": "https://symfony.com",
+<<<<<<< HEAD
+=======
+            "support": {
+                "source": "https://github.com/symfony/filesystem/tree/v5.2.6"
+            },
+>>>>>>> bc65fe6c4dce4e5a867812e89b01f65dd80aa573
             "funding": [
                 {
                     "url": "https://symfony.com/sponsor",

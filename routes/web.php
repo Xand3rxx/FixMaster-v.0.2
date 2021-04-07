@@ -37,6 +37,9 @@ use App\Http\Controllers\ServiceRequest\AssignTechnicianController;
 use App\Http\Controllers\Admin\User\Administrator\SummaryController;
 use App\Http\Controllers\Admin\User\CustomerServiceExecutiveController;
 use App\Http\Controllers\QualityAssurance\QualityAssuranceProfileController;
+use App\Http\Controllers\RatingController;
+use App\Http\Controllers\Admin\AdminRatingController;
+use App\Http\Controllers\Admin\AdminReviewController;
 use App\Http\Controllers\CSE\CustomerServiceExecutiveController as CseController;
 use App\Http\Controllers\Admin\ToolsRequestController;
 use App\Http\Controllers\Admin\RfqController;
@@ -69,9 +72,17 @@ Route::prefix('admin')->group(function () {
     Route::name('admin.')->group(function () {
         Route::view('/', 'admin.index')->name('index'); //Take me to Admin Dashboard
 
-        Route::view('/ratings/cse-diagnosis', 'admin.ratings.cse_diagnosis_rating')->name('category');
-        Route::view('/ratings/services',      'admin.ratings.service_rating')->name('job');
-        Route::view('/ratings/service-reviews',      'admin.ratings.service_reviews')->name('category_reviews');
+        // Route::view('/ratings/cse-diagnosis', 'admin.ratings.cse_diagnosis_rating')->name('category');
+        // Route::view('/ratings/services',      'admin.ratings.service_rating')->name('job');
+        Route::get('/ratings/cse-diagnosis', [AdminRatingController::class, 'cseDiagnosis'])->name('category');
+        //Route::view('/ratings/service-reviews',      'admin.ratings.service_reviews')->name('category_reviews');
+        Route::get('/ratings/services',      [AdminRatingController::class, 'getServiceRatings'])->name('job');
+        Route::get('/ratings/service_reviews',      [AdminReviewController::class, 'getServiceReviews'])->name('category_reviews');
+        Route::get('/activate/{uuid}',      [AdminReviewController::class, 'activate'])->name('activate_review');
+        Route::get('/deactivate/{uuid}',      [AdminReviewController::class, 'deactivate'])->name('deactivate_review');
+        Route::get('/delete/{uuid}',      [AdminReviewController::class, 'delete'])->name('delete_review');
+
+
 
         Route::prefix('users')->name('users.')->group(function () {
             Route::resource('administrator', AdministratorController::class);
@@ -299,7 +310,7 @@ Route::prefix('admin')->group(function () {
 // Route::resource('client', ClientController::class);
 
 //All routes regarding clients should be in here
-Route::prefix('/client')->group(function () {
+Route::prefix('/client')->middleware('monitor.clientservice.request.changes')->group(function () {
     Route::name('client.')->group(function () {
         //All routes regarding clients should be in here
         Route::get('/',                   [ClientController::class, 'index'])->name('index'); //Take me to Supplier Dashboard
@@ -363,27 +374,8 @@ Route::prefix('/client')->group(function () {
         // post my contact to DB
         Route::post('/ajax_contactForm',            [ClientController::class, 'ajax_contactForm'])->name('ajax_contactForm');
 
-<<<<<<< HEAD
-            Route::post('/ipnpaystack',         [ClientController::class, 'paystackIPN'])->name('ipn.paystack');
-            Route::get('/apiRequest',           [ClientController::class, 'apiRequest'])->name('ipn.paystackApiRequest');
-            Route::get('/ipnflutter',           [ClientController::class, 'flutterIPN'])->name('ipn.flutter');
-          
-
-            // Service request SECTION
-            Route::get('/services',                     [ClientController::class, 'services'])->name('services.list');
-            Route::get('services/quote/{service}',      [ClientController::class, 'serviceQuote'])->name('services.quote');
-            Route::get('services/details/{service}',    [ClientController::class, 'serviceDetails'])->name('services.details');
-            Route::post('services/search',              [ClientController::class, 'search'])->name('services.search');
-            Route::get('services/custom/',              [ClientController::class, 'customService'])->name('services.custom');
-
-            Route::post('servicesRequest',              [ClientController::class, 'serviceRequest'])->name('services.serviceRequest');
-            // view all my service request
-            Route::get('myServicesRequest',              [ClientController::class, 'myServiceRequest'])->name('service.all');
-            
-=======
 
 
->>>>>>> 49c0c3a88dd3b7f385979dac8c7e63bd4eafc33a
             Route::get('myContactList',                  [ClientController::class, 'myContactList'])->name('service.myContacts');
 
         //Flutterwave Routes
@@ -392,21 +384,27 @@ Route::prefix('/client')->group(function () {
         Route::post('/request/flutterwave/notify',              [ClientController::class, 'notifyFlutterServiceRequest'])->name('flutterwave.notify');
         Route::get('/request/flutterwave/notify',               [ClientController::class, 'successFlutterServiceRequest'])->name('flutterwave.success');
 
-        //Paystack Routes
-        Route::post('/request/paystack/submit',                 [ClientController::class, 'storePaystackServiceRequest'])->name('paystack.submit');
-        Route::get('/request/paystack/{orderId}/apiRequest',    [ClientController::class, 'apiRequestPaystackServiceRequest'])->name('paystack.apiRequest');
-        Route::get('/request/paystack/notify',                  [ClientController::class, 'notifyPaystackServiceRequest'])->name('paystack.notify');
-
-
-        // Route::post('servicesRequest',              [ClientController::class, 'serviceRequest'])->name('paystack.submit');
-        // Route::post('servicesRequest',              [ClientController::class, 'serviceRequest'])->name('flutter.submit');
+            //Paystack Routes
+            Route::post('/request/paystack/submit',                 [ClientController::class, 'storePaystackServiceRequest'])->name('paystack.submit');
+            Route::get('/request/paystack/{orderId}/apiRequest',    [ClientController::class, 'apiRequestPaystackServiceRequest'])->name('paystack.apiRequest');
+            Route::get('/request/paystack/notify',                  [ClientController::class, 'notifyPaystackServiceRequest'])->name('paystack.notify');
+            Route::post('/update_service_request',  [ClientController::class, 'update_client_service_rating'])->name('update_service_request');
+            Route::post('/submit_ratings',  [ClientController::class, 'client_rating'])->name('handle.ratings');
+            // Route::post('servicesRequest',              [ClientController::class, 'serviceRequest'])->name('paystack.submit');
+            // Route::post('servicesRequest',              [ClientController::class, 'serviceRequest'])->name('flutter.submit');
 
 
     });
 });
 
+Route::resource('cse', CseController::class);
 
-Route::prefix('/cse')->group(function () {
+// Route::prefix('/cse')->group(function () {
+//     Route::name('cse.')->group(function () {
+//         //All routes regarding CSE's should be in here
+//         Route::view('/',                   'cse.index')->name('index'); //Take me to CSE Dashboard
+
+Route::prefix('/cse')->middleware('monitor.cseservice.request.changes')->group(function () {
     Route::name('cse.')->group(function () {
         //All routes regarding CSE's should be in here
         Route::view('/',                    'cse.index')->name('index'); //Take me to CSE Dashboard
@@ -436,6 +434,9 @@ Route::prefix('/cse')->group(function () {
 
         ])->name('edit_profile');
         Route::view('/location-request',    'cse.location_request')->name('location_request');
+        Route::post('/submit_ratings',  [CseController::class, 'user_rating'])->name('handle.ratings');
+        Route::post('/update_service_request',  [CseController::class, 'update_cse_service_rating'])->name('update_service_request');
+
     });
 });
 
@@ -479,7 +480,7 @@ Route::prefix('/technician')->group(function () {
     });
 });
 
-Route::prefix('/quality-assurance')->middleware('monitor.service.request.changes')->group(function () {
+Route::prefix('/quality-assurance')->group(function () {
     Route::name('quality-assurance.')->group(function () {
         //All routes regarding quality_assurance should be in here
         //Route::view('/', 'quality-assurance.index')->name('index'); //Take me to quality_assurance Dashboard

@@ -22,8 +22,14 @@
     <link href="{{ asset('assets/client/css/bootstrap.min.css') }}" rel="stylesheet" type="text/css" />
     <!-- Icons -->
     <link href="{{ asset('assets/client/css/materialdesignicons.min.css') }}" rel="stylesheet" type="text/css" />
+
+    <!-- DashForge CSS -->
+    <link rel="stylesheet" href="{{ asset('assets/dashboard/assets/css/dashforge.css') }}">
+
     <!-- Slider -->
     <link rel="stylesheet" href="{{ asset('assets/client/css/owl.carousel.min.css') }}" />
+    <link href="{{ asset('assets/dashboard/lib/fontawesome/fontawesome-free/css/all.min.css') }}" rel="stylesheet">
+    <link href="{{ asset('assets/dashboard/lib/ionicons/css/ionicons.min.css') }}" rel="stylesheet">
     {{-- <link rel="stylesheet" href="{{ asset('assets/client/css/owl.theme.default.min.css') }}" /> --}}
     <!-- Main Css -->
     <link href="{{ asset('assets/client/css/style.css') }}" rel="stylesheet" type="text/css" id="theme-opt" />
@@ -34,7 +40,7 @@
     <link rel="stylesheet" href="{{ asset('assets/client/datatables/dataTables.bs4-custom.css') }}" />
     <link href="{{ asset('assets/client/css/magnific-popup.css') }}" rel="stylesheet" type="text/css" />
     <link href="{{ asset('assets/client/css/sweetalert2.min.css') }}" rel="stylesheet" type="text/css" />
-    <link rel="stylesheet" href="https://unicons.iconscout.com/release/v2.1.9/css/unicons.css">
+    {{-- <link rel="stylesheet" href="https://unicons.iconscout.com/release/v2.1.9/css/unicons.css"> --}}
 
     <style>
       .card {
@@ -50,23 +56,13 @@
 
   <body>
 
-    {{-- <div id="preloader">
-      <div id="status">
-          <div class="spinner">
-              <div class="double-bounce1"></div>
-              <div class="double-bounce2"></div>
-          </div>
-      </div>
-  </div> --}}
-
     @include('layouts.partials._messages')
     @include('layouts.partials._client_header')
     @include('layouts.partials._client_sidebar')
     @include('layouts.partials._client_footer')
 
-
-    <script src="{{asset('assets/frontend/js/jquery-3.5.1.min.js')}}"></script>
-    {{-- <script src="{{asset('assets/client/js/jquery.min.js')}}"></script> --}}
+    {{-- <script src="{{asset('assets/frontend/js/jquery-3.5.1.min.js')}}"></script> --}}
+    <script src="{{asset('assets/client/js/jquery.min.js')}}"></script>
     <script src="{{asset('assets/frontend/js/bootstrap.bundle.min.js')}}"></script>
     <script src="{{asset('assets/frontend/js/jquery.easing.min.js')}}"></script>
     <script src="{{asset('assets/frontend/js/scrollspy.min.js')}}"></script>
@@ -100,8 +96,160 @@
     <script src="{{ asset('assets/client/js/sweetalert2.min.js') }}"></script>
 
     <script src="{{ asset('assets/dashboard/assets/js/jquery.tinymce.min.js') }}"></script>
-  
 
+    <!-- geolocation asset starts here -->
+    <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDeDLVAiaU13p2O0d3jfcPjscsbVsCQUzc&v=3.exp&libraries=places"></script>
+    <script src="{{asset('assets/frontend/js/geolocation.js')}}"></script>
+    <!-- geolocation asset starts here -->
+    {{-- @yield('scripts')
+    @stack('scripts') --}}
+
+    {{-- <button type="button" class="btn btn-success btn-lg" data-toggle="modal" data-target="#modalDetails">Open
+        Modal</button> --}}
+
+    <div class="modal fade" id="modalDetails" tabindex="-1" role="dialog" aria-hidden="true" data-backdrop="static">
+        <div class="modal-dialog modal-dialog-centered modal-lg wd-sm-650" role="document">
+            <div class="modal-content">
+                <div class="modal-body pd-x-25 pd-sm-x-30 pd-t-40 pd-sm-t-20 pd-b-15 pd-sm-b-20">
+                    <a href="" role="button" class="close pos-absolute t-15 r-15" data-dismiss="modal"
+                        aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </a>
+       <h4 class="text-center unique"></h4><hr>
+    <h6 class="text-center">Kindly rate the service and give a review to qualify for loyalty reward</h6>
+    <form action="{{ route('client.handle.ratings', app()->getLocale()) }}" method="POST">
+        @csrf
+            <div class="row">
+        <div class="col-md-12 col-lg-12 col-12">
+            <div id="ratings_cse"></div>
+                </div>
+
+                    <div class="form-group col-md-12 col-lg-12">
+                        <label>Leave a review</label>
+                        <textarea name="review" class="form-control" rows="4"
+                            placeholder=""></textarea>
+                    </div>
+
+                <div class="col-sm-12">
+                    <button type="submit" class="btn btn-primary">Submit</button>
+                    <button type="button" class="btn btn-danger" aria-label="Close"> Skip </button>
+                </div>
+
+            </div>
+        </form>
+                </div><!-- modal-body -->
+            </div><!-- modal-content -->
+        </div><!-- modal-dialog -->
+    </div><!-- modal -->
+
+    @yield('scripts')
+    @stack('scripts')
+
+    @if (\Request::filled('users') && \Request::filled('role') && \Request::filled('serviceRequestId') && \Request::filled('totalAmount') && \Request::filled('serviceId') && \Request::filled('unique_id'))
+    <script>
+      //console.log('{{ \Request::get('results') }}');
+      const users = @json(\Request::get('users'));
+      const serviceId = @json(\Request::get('serviceId'));
+      const totalAmount = @json(\Request::get('totalAmount'));
+      const service_request_id = @json(\Request::get('serviceRequestId'));
+      const unique_id = @json(\Request::get('unique_id'));
+      //console.log(totalAmount);
+      const role = @json(\Request::get('role'));
+      let ratings_row = `<div class="row">
+                                        <div class="col-md-4 col-lg-4 col-4">
+                                            <p id="user0" style="margin-top:20px;"> Rate CSE Job Diagnosis </p>
+                                        </div>
+                                        <div class="col-md-8 col-lg-8 col-8">
+                                            <div class="tx-40 text-center rate">
+                                                <i class="icon ion-md-star rates lh-0 tx-gray-300" data-number="1"></i>
+                                                <i class="icon ion-md-star rates lh-0 tx-gray-300" data-number="2"></i>
+                                                <i class="icon ion-md-star rates lh-0 tx-gray-300" data-number="3"></i>
+                                                <i class="icon ion-md-star rates lh-0 tx-gray-300" data-number="4"></i>
+                                                <i class="icon ion-md-star rates lh-0 tx-gray-300" data-number="5"></i>
+                                                <input type="hidden" name="diagnosis_star" class="star" readonly>
+                                            </div>
+                                        </div>
+                                    </div>`;
+                $('#ratings_cse').append(ratings_row);
+                $('.unique').append('SERVICE REQUEST UNIQUEID - ' +unique_id);
+
+
+      $.each(users, function(key, user) {
+        if(user.roles[0].name == "Customer Service Executive"){
+           //console.log(user.roles[0].name);
+           let ratings_row = `<div class="row">
+                                        <div class="col-md-4 col-lg-4 col-4">
+                                            <p id="user0" style="margin-top:20px;">` + user.account.first_name + " " + user.account.last_name + " " + "(" + user.roles[0].name + ")" + `</p>
+                                        </div>
+                                        <div class="col-md-8 col-lg-8 col-8">
+                                            <div class="tx-40 text-center rate">
+                                                <i class="icon ion-md-star rates lh-0 tx-gray-300" data-number="1"></i>
+                                                <i class="icon ion-md-star rates lh-0 tx-gray-300" data-number="2"></i>
+                                                <i class="icon ion-md-star rates lh-0 tx-gray-300" data-number="3"></i>
+                                                <i class="icon ion-md-star rates lh-0 tx-gray-300" data-number="4"></i>
+                                                <i class="icon ion-md-star rates lh-0 tx-gray-300" data-number="5"></i>
+                                                <input type="hidden" name="users_star[]" class="star" readonly>
+                                                <input type="hidden" name="users_id[]" value=` + user.account.user_id + ` readonly>
+                                            </div>
+                                        </div>
+                                    </div>`;
+                $('#ratings_cse').append(ratings_row);
+        }
+      });
+        $("#modalDetails").modal({show: true});
+
+
+        // Users Star Rating Count Integration
+        $('.rates').on('click', function() {
+            let ratedNumber = $(this).data('number');
+            $(this).parent().children('.star').val(ratedNumber);
+            $(this).parent().children().removeClass('tx-orange').addClass('tx-gray-300');
+            $(this).prevUntil(".rate").removeClass('tx-gray-300').addClass('tx-orange');
+            $(this).removeClass('tx-gray-300').addClass('tx-orange');
+        });
+
+        $(".btn-danger").on('click', function() {
+            Swal.fire({
+                title: 'Are you sure you want to skip this rating?',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    Swal.fire(
+                        'Rating Skipped'
+                    )
+
+                    $.ajaxSetup({
+                        headers: {
+                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                        }
+                    });
+                    $.ajax({
+                        url: "{{ route('client.update_service_request', app()->getLocale()) }}",
+                        method: 'POST',
+                        data: {
+                            "id": service_request_id
+                        },
+                        // return the result
+                        success: function(data) {
+                            // if (data) {
+                            //     alert(data)
+                            // } else {
+                            //     alert('No It is not working');
+                            // }
+                        }
+
+                    });
+                    $("#modalDetails").modal('hide');
+                }
+            });
+        });
+
+    </script>
+   @endif
     <script>
       tinymce.init({
         selector: '#message_body',
@@ -122,7 +270,7 @@
 
     <script>
         function displayMessage(message, type){
-      
+
           const Toast = swal.mixin({
               toast: true,
               position: 'top-end',
@@ -139,12 +287,9 @@
                 //   type: 'success',
                   title: message
           });
-      
+
         }
     </script>
- 
- @yield('scripts')
- @stack('scripts')
 
     <script>
       $(document).ready(function () {
@@ -160,13 +305,13 @@
         });
 
 
-        //Prevent characters or string asides number in ohone number input field 
+        //Prevent characters or string asides number in ohone number input field
         $("#number, #phone_number, #alternate_phone_number").on("keypress keyup blur", function(event) {
             $(this).val($(this).val().replace(/[^\d].+/, ""));
             if ((event.which < 48 || event.which > 57)) {
                 event.preventDefault();
             }
-        });  
+        });
 
         // Url for more info on datepicker options https://xdsoft.net/jqplugins/datetimepicker/
         $(document).on('click', '#service-date-time', function(){
@@ -184,43 +329,43 @@
 
         $('#customRadio1').change(function () {
             if ($(this).prop('checked')) {
-                $('.display-phone').addClass('d-none');    
+                $('.display-phone').addClass('d-none');
             }else {
-                $('.display-phone').removeClass('d-none');            
+                $('.display-phone').removeClass('d-none');
             }
         });
 
         $('#customRadio2').change(function () {
             if ($(this).prop('checked')) {
-                $('.display-phone').removeClass('d-none');    
+                $('.display-phone').removeClass('d-none');
             }
         });
 
         $('#customRadio3').change(function () {
             if ($(this).prop('checked')) {
-                $('.display-address').addClass('d-none');    
+                $('.display-address').addClass('d-none');
             }else {
-                $('.display-address').removeClass('d-none');            
+                $('.display-address').removeClass('d-none');
             }
         });
 
         $('#customRadio4').change(function () {
             if ($(this).prop('checked')) {
-                $('.display-address').removeClass('d-none');    
+                $('.display-address').removeClass('d-none');
             }
         });
 
         $('#customRadio33').change(function () {
             if ($(this).prop('checked')) {
-                $('.add-card').addClass('d-none');    
+                $('.add-card').addClass('d-none');
             }else {
-                $('.add-card').removeClass('d-none');            
+                $('.add-card').removeClass('d-none');
             }
         });
 
         $('#customRadio34').change(function () {
             if ($(this).prop('checked')) {
-                $('.add-card').removeClass('d-none');    
+                $('.add-card').removeClass('d-none');
             }
         });
 
@@ -251,11 +396,11 @@
 
       // })
 
-      
-      
+
+
       });
     </script>
-   
+
 
   </body>
 </html>

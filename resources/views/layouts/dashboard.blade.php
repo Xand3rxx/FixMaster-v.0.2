@@ -9,11 +9,9 @@
 
     <title>@yield('title') | FixMaster.ng - We Fix, You Relax!</title>
     <meta name="csrf-token" content="{{ csrf_token() }}">
-
     {{-- <meta name="Author" content="Anthony Joboy (Lagos, Nigeria)" />
     <meta name="Telephone" content="Tel: +234 903 554 7107" /> --}}
-    <meta name="description"
-        content="FixMaster is your best trusted one-call solution for a wide range of home maintenance, servicing and repair needs. Our well-trained & certified uniformed technicians are fully insured professionals with robust experience to provide home services to fully meet your needs with singular objective to make you totally relax while your repair requests are professionally handled." />
+    <meta name="description" content="FixMaster is your best trusted one-call solution for a wide range of home maintenance, servicing and repair needs. Our well-trained & certified uniformed technicians are fully insured professionals with robust experience to provide home services to fully meet your needs with singular objective to make you totally relax while your repair requests are professionally handled." />
     <meta name="keywords" content="Home-fix, Home-improvement, Home-repairs, Cleaning-services, Modern" />
     <meta name="email" content="info@homefix.ng" />
     <meta name="website" content="https://www.fixmaster.com.ng" />
@@ -84,7 +82,6 @@
             background: linear-gradient(to bottom, rgb(233 125 31) 0%, rgb(233 125 31) 100%);
             border-color: #E97D1F !important;
         }
-
     </style>
 <input type="hidden" id="path_admin" value="{{url('/')}}">
     @include('layouts.partials._dashboard_sidebar')
@@ -92,43 +89,27 @@
     <div class="content ht-100v pd-0">
         @include('layouts.partials._dashboard_header')
         @yield('content')
-        <div class="modal fade" id="modalDetails" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal fade" id="modalDetails" tabindex="-1" role="dialog" aria-hidden="true" data-backdrop="static">
             <div class="modal-dialog modal-dialog-centered modal-lg wd-sm-650" role="document">
                 <div class="modal-content">
                     <div class="modal-body pd-x-25 pd-sm-x-30 pd-t-40 pd-sm-t-20 pd-b-15 pd-sm-b-20">
-                        <a href="" role="button" class="close pos-absolute t-15 r-15" data-dismiss="modal"
-                            aria-label="Close">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
-                        </a>
+                        </button>
+                        <h4 class="text-center unique"></h4><hr>
+                        <form action="{{ route('cse.handle.ratings', app()->getLocale()) }}" method="POST">
+                            @csrf
+                            <div class="row">
+                                <div class="col-md-12 col-lg-12 col-12">
+                                    <div id="ratings_users"></div>
+                                </div>
+                                <div class="col-sm-12">
+                                    <button type="submit" class="btn btn-primary">Submit</button>
+                                    <button type="button" class="btn btn-danger" aria-label="Close"> Skip </button>
+                                </div>
 
-     <h6 class="text-center">Kindly rate and review to get a 10% loyalty reward</h6>
-                                <form>
-                                    <div class="row">
-                                        <div class="col-md-12 col-lg-12 col-12">
-                                            <div class="tx-40 text-center" id="rate">
-                                                <i class="icon ion-md-star rat lh-0 tx-gray-300" data-number="1"></i>
-                                                {{-- <i class="icon ion-md-star lh-0 tx-orange"></i> --}}
-                                                <i class="icon ion-md-star rat lh-0 tx-gray-300" data-number="2"></i>
-                                                <i class="icon ion-md-star rat lh-0 tx-gray-300" data-number="3"></i>
-                                                <i class="icon ion-md-star rat lh-0 tx-gray-300" data-number="4"></i>
-                                                <i class="icon ion-md-star rat lh-0 tx-gray-300" data-number="5"></i>
-                                              </div>
-                                        </div>
-
-                                            <div class="form-group col-md-12 col-lg-12">
-                                                <label>Leave a review</label>
-                                                <textarea class="form-control" rows="4"
-                                                    placeholder=""></textarea>
-                                            </div>
-                                        <div class="col-sm-12">
-                                            <button type="submit" class="btn btn-primary">Submit</button>
-                                            <button type="button" class="btn btn-danger" data-dismiss="modal" aria-label="Close">
-                                                Close
-                                              </button>
-                                        </div>
-
-                                    </div>
-                                </form>
+                            </div>
+                        </form>
                     </div><!-- modal-body -->
                 </div><!-- modal-content -->
             </div><!-- modal-dialog -->
@@ -172,20 +153,115 @@
     <script src="https://cdn.datatables.net/buttons/1.6.5/js/buttons.html5.min.js"></script>
     <script src="https://cdn.datatables.net/buttons/1.6.5/js/buttons.print.min.js"></script>
     <script src="{{ asset('assets/frontend/js/custom.js') }}"></script>
-    <script type="text/javascript"
-        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDeDLVAiaU13p2O0d3jfcPjscsbVsCQUzc&v=3.exp&libraries=places">
+    <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDeDLVAiaU13p2O0d3jfcPjscsbVsCQUzc&v=3.exp&libraries=places">
     </script>
     <script src="{{ asset('assets/dashboard/assets/js/48a9782e-3e2b-4055-a9bb-8a926a937e2c.js') }}"></script>
 
     @yield('scripts')
     @stack('scripts')
 
-    @if (\Request::filled('results'))
-        <script>
-            console.log('{{\Request::get('results')}}');
-            //alert('i got serve');
-            $("#modalDetails").modal({show:true});
-        </script>
+    @if (\Request::filled('results') && \Request::filled('users') && \Request::filled('client') && \Request::filled('serviceRequestId') && \Request::filled('uniqueId'))
+    <script>
+        const data = @json(\Request::get('users'));
+        const uniqueId = @json(\Request::get('uniqueId'));
+        const client = @json(\Request::get('client'));
+        var serviceRequestId = @json(\Request::get('serviceRequestId'));
+        // client div to page
+        let ratings_row = `<div class="row">
+                                <div class="col-md-4 col-lg-4 col-4">
+                                    <p id="user0" style="margin-top:20px;">` + client.first_name + " " + client.last_name + " (Client)" + `</p>
+                                </div>
+                                <div class="col-md-8 col-lg-8 col-8">
+                                    <div class="tx-40 text-center rate">
+                                        <i class="icon ion-md-star rates lh-0 tx-gray-300" data-number="1"></i>
+                                        <i class="icon ion-md-star rates lh-0 tx-gray-300" data-number="2"></i>
+                                        <i class="icon ion-md-star rates lh-0 tx-gray-300" data-number="3"></i>
+                                        <i class="icon ion-md-star rates lh-0 tx-gray-300" data-number="4"></i>
+                                        <i class="icon ion-md-star rates lh-0 tx-gray-300" data-number="5"></i>
+                                        <input type="hidden" name="client_star" class="star" readonly>
+                                        <input type="hidden" name="client_id" value=` + client.id + ` readonly>
+                                    </div>
+                                </div>
+                            </div>`;
+        $('#ratings_users').append(ratings_row);
+        $('.unique').append('SERVICE REQUEST UNIQUEID - ' +uniqueId);
+        // end of client
+        $.each(data, function(key, user) {
+            //console.log(key);
+            if (user.roles[0].name != "Administrator" && user.uuid != '{{Auth::user()->uuid}}') {
+                let ratings_row = `<div class="row">
+                                        <div class="col-md-4 col-lg-4 col-4">
+                                            <p id="user0" style="margin-top:20px;">` + user.account.first_name + " " + user.account.last_name + " " + "(" + user.roles[0].name + ")" + `</p>
+                                        </div>
+                                        <div class="col-md-8 col-lg-8 col-8">
+                                            <div class="tx-40 text-center rate">
+                                                <i class="icon ion-md-star rates lh-0 tx-gray-300" data-number="1"></i>
+                                                <i class="icon ion-md-star rates lh-0 tx-gray-300" data-number="2"></i>
+                                                <i class="icon ion-md-star rates lh-0 tx-gray-300" data-number="3"></i>
+                                                <i class="icon ion-md-star rates lh-0 tx-gray-300" data-number="4"></i>
+                                                <i class="icon ion-md-star rates lh-0 tx-gray-300" data-number="5"></i>
+                                                <input type="hidden" name="users_star[]" class="star" readonly>
+                                                <input type="hidden" name="users_id[]" value=` + user.account.user_id + ` readonly>
+                                            </div>
+                                        </div>
+                                    </div>`;
+                $('#ratings_users').append(ratings_row);
+            }
+        });
+
+        $("#modalDetails").modal({
+            show: true
+        });
+
+        // Users Star Rating Count Integration
+        $('.rates').on('click', function() {
+            let ratedNumber = $(this).data('number');
+            $(this).parent().children('.star').val(ratedNumber);
+            $(this).parent().children().removeClass('tx-orange').addClass('tx-gray-300');
+            $(this).prevUntil(".rate").removeClass('tx-gray-300').addClass('tx-orange');
+            $(this).removeClass('tx-gray-300').addClass('tx-orange');
+        });
+
+        $(".btn-danger").on('click', function() {
+            Swal.fire({
+                title: 'Are you sure you want to skip this rating?',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    Swal.fire(
+                        'Rating Skipped'
+                    )
+
+                    $.ajaxSetup({
+                        headers: {
+                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                        }
+                    });
+                    $.ajax({
+                        url: "{{ route('cse.update_service_request', app()->getLocale()) }}",
+                        method: 'POST',
+                        data: {
+                            "id": serviceRequestId
+                        },
+                        // return the result
+                        success: function(data) {
+                            // if (data) {
+                            //     alert(data)
+                            // } else {
+                            //     alert('No It is not working');
+                            // }
+                        }
+
+                    });
+                    $("#modalDetails").modal('hide');
+                }
+            });
+        });
+    </script>
     @endif
 
 </body>

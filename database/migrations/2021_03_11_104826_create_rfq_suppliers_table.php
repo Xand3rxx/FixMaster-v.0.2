@@ -22,7 +22,7 @@ class CreateRfqSuppliersTable extends Migration
             $table->foreignId('rfq_id');
             $table->foreignId('supplier_id');
             $table->unsignedInteger('devlivery_fee');
-            $table->string('delivery_time');
+            $table->dateTime('delivery_time');
         });
     }
 
