@@ -163,7 +163,8 @@ trait Invoices
             'total_amount'          => $total_amount,
             'amount_due'            => $total_amount,
             'amount_paid'           => $amount_paid,
-            'status'                => $status
+            'status'                => $status,
+            'phase'                 => '1'
         ]);
     }
 

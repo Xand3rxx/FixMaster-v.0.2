@@ -299,6 +299,9 @@ Route::prefix('/client')->group(function () {
         // view all my service request
         // Route::get('requests',                      [ClientController::class, 'myServiceRequest'])->name('service.all');
 
+        Route::post('invoicePayment', [InvoiceController::class, 'savePayment'])->name('invoice.payment');
+        Route::get('verify/invoicePayment', [InvoiceController::class, 'verifyPayment'])->name('invoice.verifyPayment');
+
         // // view all my service request
         Route::get('requests',                     [ClientController::class, 'myServiceRequest'])->name('service.all');
         Route::get('/requests/details/{ref}',      [ClientController::class, 'requestDetails'])->name('client.request_details');
