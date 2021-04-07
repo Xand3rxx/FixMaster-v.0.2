@@ -461,8 +461,8 @@ Route::prefix('/supplier')->group(function () {
         Route::view('/profile/edit',        'supplier.edit_profile')->name('edit_profile');
         Route::get('/rfqs',                               [SupplierRfqController::class, 'index'])->name('rfq');
         Route::get('/rfqs/details/{rfq:uuid}',            [SupplierRfqController::class, 'rfqDetails'])->name('rfq_details');
-        Route::get('/rfqs/details/{rfq:uuid}',            [SupplierRfqController::class, 'sendInvoice'])->name('rfq_send_supplier_invoice');
-        Route::post('/rfqs/store/',                       [SupplierRfqController::class, 'store'])->name('rfq_store_supplier_invoice');
+        Route::get('/rfqs/supplier/update/{rfq:uuid}',            [SupplierRfqController::class, 'sendInvoice'])->name('rfq_send_supplier_invoice');
+        Route::post('/rfqs/supplier/store/',                       [SupplierRfqController::class, 'store'])->name('rfq_store_supplier_invoice');
         Route::get('/sent-invoices',                               [SupplierRfqController::class, 'sentInvoices'])->name('rfq_sent_invoices');
         Route::get('/sent-invoices/details/{rfq:id}',            [SupplierRfqController::class, 'sentInvoiceDetails'])->name('rfq_details');
     });
