@@ -44,9 +44,9 @@ class HandleCompletedDiagnosisController extends Controller
 
             'intiate_trf'               =>  'bail|string|in:yes,no',
             'tool_id'                   =>  'bail|sometimes|required_unless:intiate_trf,no|array',
-            'tool_id.*'                 =>  'bail|sometimes|required_unless:intiate_rfq,no|nullable',
+            'tool_id.*'                 =>  'bail|sometimes|required_unless:intiate_trf,no|nullable',
             'tool_quantity'             =>  'bail|sometimes|required_unless:intiate_trf,no|array',
-            'tool_quantity.*'           =>  'bail|sometimes|required_unless:intiate_rfq,no|nullable',
+            'tool_quantity.*'           =>  'bail|sometimes|required_unless:intiate_trf,no|nullable',
 
         ]);
 
@@ -96,14 +96,7 @@ class HandleCompletedDiagnosisController extends Controller
             });
         }
 
-
-        // Check if New Technician is assigned
-        // store in the service_request_progresses
-        // \App\Models\ServiceRequestProgress::storeProgress($user->id, $serviceRequest->id, $substatus->status_id, $substatus->id);
-        // store in the activity log
-        // $this->log('request', 'Informational', Route::currentRouteAction(), $user->account->last_name . ' ' . $user->account->first_name . ' ' . $substatus->name . ' for (' . $serviceRequest->unique_id . ') Job.');
-        // $serviceRequest_id = $serviceRequest->id;
-        // $invoice = $this->diagnosticInvoice($serviceRequest_id);
+        // find the subservice
         $subServiceId = SubService::select('id')->where('uuid', $request->sub_service_uuid)->first();
 
         // Check if an rfq id exists
@@ -140,18 +133,17 @@ class HandleCompletedDiagnosisController extends Controller
         $this->log('request', 'Informational', Route::currentRouteAction(), auth()->user()->account->last_name . ' ' . auth()->user()->account->first_name . ' ' . $substatus->name . ' for (' . $serviceRequest->unique_id . ') Job.');
 
         //Send mail notification to client to preview the invoice
-        if($invoice)
-        {
-           $type = 'email';
-           $subject = 'Diagnosis Email Confirmation';
-           $from = auth()->user()->email;
-           $to = $invoice->serviceRequest->client->email;
-           $mail_data = '<div><span>Kindly check your dashboard for your diagnosis completion invoice. Thank you.</span></div>';
-//           return $this->sendNewEMail($type, $subject, $from, $to, $mail_data,$feature="");
+        if ($invoice) {
+            $type = 'email';
+            $subject = 'Diagnosis Email Confirmation';
+            $from = auth()->user()->email;
+            $to = $invoice->serviceRequest->client->email;
+            $mail_data = '<div><span>Kindly check your dashboard for your diagnosis completion invoice. Thank you.</span></div>';
+            //           return $this->sendNewEMail($type, $subject, $from, $to, $mail_data,$feature="");
         }
 
         // store in the activity log
-//        dd();
+        //        dd();
         $invoice->update([
             'phase' => '1'
         ]);
