@@ -1033,42 +1033,6 @@ class ClientController extends Controller
             }
             }
 
-
-            public function sendMailToAdmin(Request $request){
-                $mail = new PHPMailer(true);
-
-                // dd($setting);
-                // if ($setting->is_smtp == 1) {
-                    try {
-                        //Server settings
-                        $mail->SMTPDebug = SMTP::DEBUG_SERVER;                      //Enable verbose debug output
-                        $mail->isSMTP();                                            //Send using SMTP
-                        $mail->Host       = 'smtp.gmail.com';                     //Set the SMTP server to send through
-                        $mail->SMTPAuth   = true;                                   //Enable SMTP authentication
-                        $mail->Username   = 'denkogy@gmail.com';                     //SMTP username
-                        $mail->Password   = 'Chemistry!1';                               //SMTP password
-                        $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;         //Enable TLS encryption; `PHPMailer::ENCRYPTION_SMTPS` encouraged
-                        $mail->Port       = 587;                                    //TCP port to connect to, use 465 for `PHPMailer::ENCRYPTION_SMTPS` above
-
-                        //Recipients
-                        $mail->setFrom('denkogy@gmail.com', 'New Order Placed!!!');
-                        $mail->addAddress($request->email, $request->FirstName);
-
-                        //Content
-                        $mail->isHTML(true);
-                        $mail->Subject = 'Request Successful!';
-                         $mail->Body  = 'First Name:';
-                                $mail->send();
-                                    if ( $mail->send() ) {
-                                    return back()->with('success', 'Your Request has been sent Successful');
-                                    }
-                                echo 'Message has been sent';
-                            } catch (Exception $e) {
-                                echo "Message could not be sent. Mailer Error: {$mail->ErrorInfo}";
-                            }
-                // }
-            }
-
     /**
      * Display a more details about a FixMaster service.
      *
@@ -1100,31 +1064,6 @@ class ClientController extends Controller
 
     }
 
-    /**
-     * Get all my contact for all the services i have requested
-     * @return \Illuminate\Http\Response
-     */
-    // public function myContactList(){
-    //     // $data['myContacts'] = Contact::orderBy('id','DESC')->get();
-    //     $myContacts = Client::where('user_id', auth()->user()->id)->with('contact')->get();
-    //     // dd($data['myContacts']);
-    //     return $myContacts;
-    // }
-
-    // public function index(){
-
-    //     $userServiceRequests = Auth::user()->requests()->orderBy('created_at', 'DESC')->get();
-
-    //     $createdBy = Name::get();
-
-    //     $data = [
-    //         'userServiceRequests'   =>  $userServiceRequests,
-    //         'createdBy'             =>  $createdBy,
-    //     ];
-
-    //     return view('client.requests', $data)->with('i');
-    // }
-
 
     public function myServiceRequest(){
         $myRequest = Client::where('user_id', auth()->user()->id)->with('service_request')->firstOrFail();
@@ -1132,15 +1071,6 @@ class ClientController extends Controller
         // return $data['myServiceRequests'];
         return view('client.services.list', $data);
     }
-
-    // public function requestDetails($ref){
-    //     $requestDetail = ServiceRequest::findOrFail($ref);
-    //     // return $requestDetail->cse;
-    //     $data = [
-    //         'requestDetail'   =>  $requestDetail,
-    //     ];
-    //     return view('client.request_details', $data);
-    // }
 
     public function loyalty()
     {
