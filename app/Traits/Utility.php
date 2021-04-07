@@ -61,9 +61,16 @@ trait Utility
     //updates firsttime  on users table to if user is not firsttime login
     switch ($type) {
       case 'client':
+
+        
         $referral = '';
         $client = Client::select('firsttime')->where('account_id', $user->id)
           ->first();
+
+          if ($user->email_verified_at != NULL && $client->firsttime == 1) {
+            return false;
+           }
+
         if ($user->email_verified_at != NULL && $client->firsttime == 0) {
 
           $code = $this->generate('referrals', 'ClI-', 'referral_code'); // Create a Unique referral code
@@ -125,16 +132,17 @@ trait Utility
           }
         }
 
-        if ($user->email_verified_at != NULL && $client->firsttime == 1) {
-          Client::where('account_id', $user->id)
-            ->update(['firsttime' => 2,]);
-        }
+      
         break;
       case 'cse':
         $referral = '';
 
         $cse = Cse::select('firsttime')->where('account_id', $user->id)
           ->first();
+          if ($user->email_verified_at != NULL && $cse->firsttime == 1) {
+            return false;
+           }
+
         if ($user->email_verified_at != NULL && $cse->firsttime == 0) {
           $unique_id = Cse::where('user_id', $user->id)
             ->first();
