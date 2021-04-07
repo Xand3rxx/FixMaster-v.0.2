@@ -19,8 +19,8 @@ class CreateRfqSupplierInvoiceBatches extends Migration
             $table->collation = 'utf8mb4_unicode_ci';
 
             $table->id();
-            $table->foreignId('rfq_supplier_invoice_id');
-            $table->foreignId('rfq_batch_id');
+            $table->foreignId('rfq_supplier_invoice_id')->index();
+            $table->foreignId('rfq_batch_id')->index();
             $table->unsignedInteger('quantity');
             $table->unsignedInteger('unit_price')->default(0);
             $table->unsignedInteger('total_amount')->default(0);

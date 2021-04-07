@@ -20,7 +20,6 @@ class CreateContactsTable extends Migration
 
             $table->id();
             $table->foreignId('user_id')->index();
-            // newly added
             $table->foreignId('account_id')->index();
             $table->foreignId('country_id')->index();
             $table->foreignId('state_id')->nullable();
