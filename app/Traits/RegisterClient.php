@@ -5,6 +5,7 @@ namespace App\Traits;
 use App\Models\Referral;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Auth\Events\Registered;
 
 trait RegisterClient
 {
@@ -18,7 +19,7 @@ trait RegisterClient
     public function register(array $valid)
     {
         (bool) $registred = false;
-        
+
         DB::transaction(function () use ($valid, &$registred) {
             // store in users Table
             $user = $this->createUser($valid);
@@ -51,18 +52,37 @@ trait RegisterClient
                 'profession_id' => $valid['profession_id'] ?? "0",
             ]);
 
-             // Store in referrals table
-             if(isset($valid['ref'])){
+            // Store in referrals table
+            if (isset($valid['ref'])) {
                 $code = $valid['ref'];
-                if($code){
-                   Referral::where('referral_code', $code )->increment('referral_count' , 1);
-                   Referral::create(['user_id'=> $user->id, 'referral'=> $code, 'referral_count'=> 0]);  
+                if ($code) {
+                    Referral::where('referral_code', $code)->increment('referral_count', 1);
+                    Referral::create(['user_id' => $user->id, 'referral' => $code, 'referral_count' => 0]);
                 }
-               }
-           
+            }
+
+            // Store in Contact Address Details
+            $user->contact()->create([
+                'user_id'               => $user->id,
+                'account_id'            => $account->id,
+                'country_id'            =>  156,
+                'state_id'              =>  $valid['state_id'],
+                'lga_id'                =>  $valid['lga_id'],
+                'town_id'               =>  $valid['town_id'],
+                'name'                  =>  $account->first_name . ' ' . $account->last_name,
+                'phone_number'          =>  $valid['phone_number'],
+                'address'               =>  $valid['full_address'],
+                'address_longitude'     =>  $valid['address_longitude'],
+                'address_latitude'      =>  $valid['address_latitude'],
+            ]);
+            // register new client event
+            event(new Registered($user));
+
+            // Log the User into the Application
+            $this->guard()->login($user);
+
             // update registered to be true
             $registred = true;
-            $this->guard()->login($user);
         });
 
         return $registred;

@@ -59,9 +59,10 @@ class Client extends Model
         return $this->hasMany(ServiceRequest::class, 'client_id', 'user_id')->with('service');
     }
 
-    public function service_requests()
+    
+    public function invoice()
     {
-        return $this->hasMany(ServiceRequest::class, 'client_id', 'user_id')->with('service');
+        return $this->hasMany(Invoice::class, 'client_id', 'user_id');
     }
 
     public function clientAverageRating(){

@@ -5,7 +5,7 @@
     <div class="bg-overlay bg-overlay-white"></div>
     <div class="container">
         <div class="row" style="justify-content: center;">
-            <div class="col-lg-6 col-md-8"> 
+            <div class="col-lg-6 col-md-8">
                 <table style="box-sizing: border-box; width: 100%; border-radius: 6px; overflow: hidden; background-color: #fff; box-shadow: 0 0 3px rgba(60, 72, 88, 0.15);">
                     <thead>
                         <tr style="background-color: #E97D1F; text-align: center; color: #fff; font-size: 24px; font-weight: 700; letter-spacing: 1px;">
@@ -21,8 +21,18 @@
                         </tr>
                         <tr>
                             <td style="padding: 15px 24px 15px; color: #8492a6;">
-                                Thanks for creating a <span class="font-weight-bold">Fix<span style="color: #E97D1F;">Master</span></span> account. To complete your registration, simply click the link in the email we just sent to <a href="mailto: {{ $email }}" class="text-primary">{{ $email }}</a>
+                                Thanks for creating a <span class="font-weight-bold">Fix<span style="color: #E97D1F;">Master</span></span> account. To complete your registration, simply click the link in the email we just sent to <a href="mailto: {{$email}}" class="text-primary">{{$email}}</a>
                             </td>
+                        </tr>
+
+                        <tr>
+                            <td style="padding: 15px 24px 15px; color: #8492a6;">
+                                <a class="btn btn-primary btn-block" onclick="event.preventDefault();
+                            document.getElementById('verify-email').submit();" href="{{ route('verification.notice', app()->getLocale()) }}"> Resend Verification</a>
+                            </td>
+                            <form id="verify-email" action="{{ route('verification.send', app()->getLocale()) }}" method="POST" style="display: none;">
+                                @csrf
+                            </form>
                         </tr>
 
 
@@ -39,8 +49,12 @@
                         </tr>
                     </tbody>
                 </table>
-            </div><!--end col-->
-        </div><!--end row-->
-    </div> <!--end container-->
-</section><!--end section-->
+            </div>
+            <!--end col-->
+        </div>
+        <!--end row-->
+    </div>
+    <!--end container-->
+</section>
+<!--end section-->
 @endsection

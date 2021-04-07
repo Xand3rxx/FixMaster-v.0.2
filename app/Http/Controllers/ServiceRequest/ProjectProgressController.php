@@ -26,13 +26,14 @@ class ProjectProgressController extends Controller
             'sub_status_uuid'       =>  'bail|required|string|uuid',
             'service_request_uuid'  =>  'required|string|uuid|exists:service_requests,uuid',
             'technician_user_uuid'  =>  'sometimes|nullable|uuid|exists:users,uuid',
+            // 'accept_materials'      =>  'sometimes|nullable|in:Yes,No Null',
         ]);
 
         $request->whenFilled('technician_user_uuid', function () use ($request) {
             $assignTechnician =  new AssignTechnicianController();
             $assignTechnician->handleAdditionalTechnician($request);
         });
-
+        
         return $this->updateProjectProgress($request);
     }
 

@@ -284,18 +284,18 @@ Route::prefix('admin')->group(function () {
         // Route::get('service/request/criteria/{id}',      [ServiceRequestSettingController::class, 'Edit'])->name('editCriteria');
         // Route::post('service/request/criteriaUpdate',    [ServiceRequestSettingController::class, 'update'])->name('serviceReq.update');
 
-    Route::get('/serviceCriteria/delete/{criteria}',              [ServiceRequestSettingController::class, 'destroy'])->name('serviceReq.delete');
-    Route::resource('serviceCriteria',                            ServiceRequestSettingController::class);
+        Route::get('/serviceCriteria/delete/{criteria}',              [ServiceRequestSettingController::class, 'destroy'])->name('serviceReq.delete');
+        Route::resource('serviceCriteria',                            ServiceRequestSettingController::class);
 
-     //Tool Request Management
-     Route::get('/tools-request',                        [ToolsRequestController::class, 'index'])->name('tools_request');
-     Route::get('/tools-request/details/{tool_request:uuid}',           [ToolsRequestController::class, 'toolRequestDetails'])->name('tool_request_details');
-     Route::get('/tools-request/approve/{tool_request:uuid}',           [ToolsRequestController::class, 'approveRequest'])->name('approve_tool_request');
-     Route::get('/tools-request/decline/{tool_request:uuid}',           [ToolsRequestController::class, 'declineRequest'])->name('decline_tool_request');
-     Route::get('/tools-request/return/{tool_request:uuid}',            [ToolsRequestController::class, 'returnToolsRequested'])->name('return_tools_requested');
+        //Tool Request Management
+        Route::get('/tools-request',                        [ToolsRequestController::class, 'index'])->name('tools_request');
+        Route::get('/tools-request/details/{tool_request:uuid}',           [ToolsRequestController::class, 'toolRequestDetails'])->name('tool_request_details');
+        Route::get('/tools-request/approve/{tool_request:uuid}',           [ToolsRequestController::class, 'approveRequest'])->name('approve_tool_request');
+        Route::get('/tools-request/decline/{tool_request:uuid}',           [ToolsRequestController::class, 'declineRequest'])->name('decline_tool_request');
+        Route::get('/tools-request/return/{tool_request:uuid}',            [ToolsRequestController::class, 'returnToolsRequested'])->name('return_tools_requested');
 
-     Route::get('/rfqs',                               [RfqController::class, 'index'])->name('rfq');
-     Route::get('/rfqs/details/{rfq:uuid}',                  [RfqController::class, 'rfqDetails'])->name('rfq_details');
+        Route::get('/rfqs',                               [RfqController::class, 'index'])->name('rfq');
+        Route::get('/rfqs/details/{rfq:uuid}',                  [RfqController::class, 'rfqDetails'])->name('rfq_details');
 
         Route::get('/serviceCriteria/delete/{criteria}',              [ServiceRequestSettingController::class, 'destroy'])->name('serviceReq.delete');
         Route::resource('serviceCriteria',                            ServiceRequestSettingController::class);
@@ -310,7 +310,7 @@ Route::prefix('admin')->group(function () {
 // Route::resource('client', ClientController::class);
 
 //All routes regarding clients should be in here
-Route::prefix('/client')->middleware('monitor.clientservice.request.changes')->group(function () {
+Route::prefix('/client')->middleware('verified')->group(function () {
     Route::name('client.')->group(function () {
         //All routes regarding clients should be in here
         Route::get('/',                   [ClientController::class, 'index'])->name('index'); //Take me to Supplier Dashboard
@@ -330,9 +330,11 @@ Route::prefix('/client')->middleware('monitor.clientservice.request.changes')->g
         Route::get('/requests/send-messages',          [ClientController::class, 'sendMessages'])->name('send_messages');
         Route::post('/requests/update-request/{request:id}',          [ClientController::class, 'updateRequest'])->name('update_request');
         Route::post('/requests/technician_profile',          [ClientController::class, 'technicianProfile'])->name('technician_profile');
-        Route::get('requests/all',                 [ClientController::class, 'myServiceRequest'])->name('service.all');
-   
-     
+
+
+
+
+
 
 
 
@@ -343,12 +345,12 @@ Route::prefix('/client')->middleware('monitor.clientservice.request.changes')->g
         Route::any('/getDistanceDifference',    [ClientController::class, 'getDistanceDifference'])->name('getDistanceDifference');
 
         // Route::get('/wallet',                [ClientController::class, 'wallet'])->name('wallet'); //Take me to Supplier Dashboard
-            // Route::get('/requests',          [ClientRequestController::class, 'index'])->name('client.requests');
-            Route::get('wallet',                [ClientController::class, 'wallet'])->name('wallet');
-            Route::any('fund',                  [ClientController::class, 'walletSubmit'])->name('wallet.submit');
-            Route::get('loyalty',                [ClientController::class, 'loyalty'])->name('loyalty');
-            Route::any('loyalty/submit',                 [ClientController::class, 'loyaltySubmit'])->name('loyalty.submit');
-            Route::get('payments',          [ClientController::class, 'payments'])->name('payments');
+        // Route::get('/requests',          [ClientRequestController::class, 'index'])->name('client.requests');
+        Route::get('wallet',                [ClientController::class, 'wallet'])->name('wallet');
+        Route::any('fund',                  [ClientController::class, 'walletSubmit'])->name('wallet.submit');
+        Route::get('loyalty',                [ClientController::class, 'loyalty'])->name('loyalty');
+        Route::any('loyalty/submit',                 [ClientController::class, 'loyaltySubmit'])->name('loyalty.submit');
+        Route::get('payments',          [ClientController::class, 'payments'])->name('payments');
         // Route::get('/requests',          [ClientRequestController::class, 'index'])->name('client.requests');
 
    
@@ -423,9 +425,9 @@ Route::prefix('/cse')->middleware('monitor.cseservice.request.changes')->group(f
             '/request/details',
             'cse.request_details',
             [
-                // 'tools' => \App\Models\ToolInventory::all(),
-                // 'ongoingSubStatuses' => \App\Models\SubStatus::where('status_id', 2)->get(['id', 'name']),
-                // 'warranties' => \App\Models\Warranty::all(),
+                'tools' => \App\Models\ToolInventory::all(),
+                'ongoingSubStatuses' => \App\Models\SubStatus::where('status_id', 2)->get(['id', 'name']),
+                'warranties' => \App\Models\Warranty::all(),
             ]
         )->name('request_details');
         Route::view('/profile',             'cse.view_profile')->name('view_profile');

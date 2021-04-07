@@ -143,8 +143,10 @@
                                 <div class="form-group position-relative">
                                     <label>Town/City <span class="text-danger">*</span></label>
                                     <i data-feather="navigation" class="fea icon-sm icons"></i>
-                                    <input type="text" class="form-control pl-5 @error('town') is-invalid @enderror" placeholder="e.g. CMS, Ikoyi, Egbeda" name="town" id="town" value="{{ old('town') }}" required>
-                                    @error('town')
+                                    <select class="form-control pl-5" name="town_id" id="town_id">
+                                        <option selected value="">Select...</option>
+                                    </select>
+                                    @error('town_id')
                                     <span class="invalid-feedback" role="alert">
                                         <strong>{{ $message }}</strong>
                                     </span>
@@ -192,7 +194,7 @@
                                     @enderror
                                 </div>
                             </div>
-                           
+
 
                             <div class="col-md-12">
                                 <div class="form-group position-relative">
@@ -209,23 +211,11 @@
                                 </div>
                             </div>
 
-                            
+
                             <!-- hidden input field for long, and lat -->
                             <input type="hidden" class="form-control" value="" name="user_address" id="user_address" placeholder="Your Location">
-                            <input type="hidden" value="" name="user_latitude" id="user_latitude">
-                            <input type="hidden" value="" name="user_longitude" id="user_longitude">
-
-                            <input type="hidden" id="user_address_values" value="">
-                            <input type="hidden" id="user_latitude_values" value="">
-                            <input type="hidden" id="user_longitude_values" value="">
-                            
-                            <!-- <div class="col-md-12">
-                             <a class="current-loc-icon current_location" data-id="1" href="javascript:void(0);"><i class="fas fa-crosshairs"></i></a>
-                            </div> -->
-
-                            <div class="mx-auto">
-                                {{-- <a class="current-loc-icon current_location" data-id="1" class="text-dark font-weight-bold">myLocation</a>                            --}}
-                            </div>
+                            <input type="hidden" value="" name="address_latitude" id="user_latitude">
+                            <input type="hidden" value="" name="address_longitude" id="user_longitude">
 
                             <div class="col-md-12">
                                 <div class="form-group">
@@ -279,10 +269,10 @@
 </section>
 
 @push('scripts')
-<script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDeDLVAiaU13p2O0d3jfcPjscsbVsCQUzc&v=3.exp&libraries=places"></script>
-
+<script src="{{ asset('assets/js/geolocation.js') }}"></script>
 <script>
     $(document).ready(function() {
+        "use strict";
         //Get list of L.G.A's in a particular state.
         $('#state_id').on('change', function() {
             let stateId = $('#state_id').find('option:selected').val();
@@ -312,33 +302,33 @@
                 },
             })
         });
-    });
-
-    (function($) {
-        "use strict";
-        var autocomplete;
-        initialize();
-
-        $( document ).ready(function() {
-            $('.current_location').on('click',function(){
-                var id=$(this).attr('data-id');
-                current_location(id);
-            });
+        // Get List of Towns in the selected State and LGA
+        $('#lga_id').on('change', function() {
+            let stateId = $('#state_id').find('option:selected').val();
+            let lgaId = $('#lga_id').find('option:selected').val();
+            $.ajax({
+                url: "{{ route('towns.show', app()->getLocale()) }}",
+                method: "POST",
+                dataType: "JSON",
+                data: {
+                    "_token": "{{ csrf_token() }}",
+                    "state_id": stateId, "lga_id": lgaId
+                },
+                success: function(data) {
+                    console.log(data);
+                    if (data) {
+                        $('#town_id').html(data.towns_list);
+                    } else {
+                        var message = 'Error occured while trying to get Town`s';
+                        var type = 'error';
+                        displayMessage(message, type);
+                    }
+                },
+            })
         });
 
-        function initialize() {
-            // Create the autocomplete object, restricting the search
-            // to geographical location types.
-            autocomplete = new google.maps.places.Autocomplete(
-                /** @type {HTMLInputElement} */
-                (document.querySelector('.user_address')), {
-                    types: ['geocode']
-                });
 
-            google.maps.event.addDomListener(document.querySelector('.user_address'), 'focus');
-        }
-
-    })(jQuery);
+    });
 </script>
 @endpush
 @endsection

@@ -1,4 +1,3 @@
-@if (!empty($technicains))
 <form class="form-data" method="POST" action="{{route('cse.assign.technician', [app()->getLocale()])}}">
   @csrf
   <div class="form-row mt-4">
@@ -10,13 +9,13 @@
           <div class="form-row mt-4">
             <div class="form-group col-md-12">
               <label for="name">Assign Technician</label>
-              <select required class="form-control custom-select @error('technician_user_id') is-invalid @enderror" name="technician_user_id">
+              <select required class="form-control custom-select @error('technician_user_uuid') is-invalid @enderror" name="technician_user_uuid">
                 <option selected disabled value="0" selected>Select...</option>
                 @foreach ($technicains as $technicain)
-                <option value="{{$technicain['user']['id']}}">{{$technicain['user']['account']['last_name'] .' '. $technicain['user']['account']['first_name']}}</option>
+                <option value="{{$technicain['user']['uuid']}}">{{$technicain['user']['account']['last_name'] .' '. $technicain['user']['account']['first_name']}}</option>
                 @endforeach
               </select>
-              @error('technician_user_id')
+              @error('technician_user_uuid')
               <span class="invalid-feedback" role="alert">
                 <strong>{{ $message }}</strong>
               </span>
@@ -35,4 +34,3 @@
   <button type="submit" class="btn btn-primary d-none" id="update-progress">Update Progress</button>
 
 </form>
-@endif
