@@ -167,6 +167,7 @@ return [
         Illuminate\Translation\TranslationServiceProvider::class,
         Illuminate\Validation\ValidationServiceProvider::class,
         Illuminate\View\ViewServiceProvider::class,
+        Unicodeveloper\Paystack\PaystackServiceProvider::class,
 
         /*
          * Package Service Providers...
@@ -235,6 +236,7 @@ return [
         'EnumHelper' => App\Helpers\EnumHelper::class,
         'CustomHelpers' => App\Helpers\CustomHelpers::class,
         'Image' => Intervention\Image\Facades\Image::class,
+        'Paystack' => Unicodeveloper\Paystack\Facades\Paystack::class,
     ],
 
 ];
