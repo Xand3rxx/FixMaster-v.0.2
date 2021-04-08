@@ -280,6 +280,11 @@
 </div><!--end col-->
 
 @push('scripts')
+  <!-- geolocation asset starts here -->
+  <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDeDLVAiaU13p2O0d3jfcPjscsbVsCQUzc&v=3.exp&libraries=places"></script>
+  <script src="{{asset('assets/js/geolocation.js')}}"></script>
+  <!-- geolocation asset starts here -->
+  
 <script>
     $(document).ready(function (){
         $('#state_id').on('change',function () {

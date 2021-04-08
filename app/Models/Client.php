@@ -56,23 +56,24 @@ class Client extends Model
      */
     public function service_requests()
     {
-        return $this->hasMany(ServiceRequest::class, 'client_id', 'user_id')->with('service');
+        return $this->hasMany(ServiceRequest::class, 'client_id', 'user_id')->with('service', 'warranty', 'bookingFee');
     }
 
-    // public function service_requests()
-    // {
-    //     return $this->hasMany(ServiceRequest::class, 'client_id', 'user_id')->with('service');
-    // }
-
-    
-    public function invoice()
+    public function service_request()
     {
-        return $this->hasMany(Invoice::class, 'client_id', 'user_id');
+        return $this->hasOne(ServiceRequest::class, 'client_id', 'user_id')->with('service');
+    }
+
+    public function invoices()
+    {
+        return $this->hasMany(Invoice::class, 'service_request_id');
     }
 
     public function clientAverageRating(){
         return round($this->ratings->avg('star'));
     }
+
+    
 
 }
 

@@ -4,7 +4,7 @@
                 <tbody>
                   <tr>
                     <td class="tx-medium">Supplier's Name</td>
-                    <td class="tx-color-03">{{ Str::title($rfqDetails['rfqSupplier']['supplier']['account']['first_name'] ." ". $rfqDetails['rfqSupplier']['supplier']['account']['last_name']) }}({{ $rfqDetails['supplier']['supplier']['business_name'] }})</td>
+                    <td class="tx-color-03">{{ Str::title($rfqDetails['rfqSupplier']['supplier']['account']['first_name'] ." ". $rfqDetails['rfqSupplier']['supplier']['account']['last_name']) }}</td>
                   </tr>
                   <tr>
                     <td class="tx-medium">Delivery Fee</td>
@@ -52,7 +52,7 @@
                       <th>Component Name</th>
                       <th>Model Number</th>
                       <th class="text-center">Quantity</th>
-                      <th class="text-center">Amount</th>
+                      <th class="text-center">Amount(₦)</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -62,7 +62,7 @@
                             <td class="tx-medium">{{ $item->component_name }}</td>
                             <td class="tx-medium">{{ $item->model_number }}</td>
                             <td class="tx-medium text-center">{{ $item->quantity }}</td>
-                            <td class="tx-medium text-center">₦{{ number_format($item->amount) }}</td>
+                            <td class="tx-medium text-center">{{ number_format($item->amount) }}</td>
                         </tr>
                       @endforeach
                   </tbody>

@@ -122,6 +122,12 @@ class Service extends Model
 
         return $this->hasMany(Rating::class,'service_id');
 
-        }
+    }
+
+    public function subServices(){
+
+        return $this->hasMany(SubService::class);
+
+    }
 
 }

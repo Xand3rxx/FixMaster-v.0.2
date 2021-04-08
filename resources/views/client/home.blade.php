@@ -133,11 +133,11 @@
                         <p class="mb-0">Status: 
                             @if($userServiceRequest->status_id == '1')
                                 <span class="text-warning">Pending</span>
-                            @elseif($userServiceRequest->status_id > '3')
-                                <span class="text-info">Ongoing</span>
-                            @elseif($userServiceRequest->status_id == '3')
-                                <span class="text-success">Completed</span>
                             @elseif($userServiceRequest->status_id == '2')
+                                <span class="text-info">Ongoing</span>
+                            @elseif($userServiceRequest->status_id == '4')
+                                <span class="text-success">Completed</span>
+                            @elseif($userServiceRequest->status_id == '3')
                                 <span class="text-danger">Cancelled</span>
                             @endif
                         </p>  

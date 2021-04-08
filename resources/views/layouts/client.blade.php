@@ -9,8 +9,6 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
     <title>@yield('title') | FixMaster.ng - We Fix, You Relax!</title>
-    <meta name="Author" content="Anthony Joboy (Lagos, Nigeria)" />
-    <meta name="Telephone" content="Tel: +234 903 554 7107" />
     <meta name="description" content="FixMaster is your best trusted one-call solution for a wide range of home maintenance, servicing and repair needs. Our well-trained & certified uniformed technicians are fully insured professionals with robust experience to provide home services to fully meet your needs with singular objective to make you totally relax while your repair requests are professionally handled." />
     <meta name="keywords" content="Home-fix, Home-improvement, Home-repairs, Cleaning-services, Modern" />
     <meta name="email" content="info@fixmaster.com.ng" />
@@ -23,13 +21,9 @@
     <!-- Icons -->
     <link href="{{ asset('assets/client/css/materialdesignicons.min.css') }}" rel="stylesheet" type="text/css" />
 
-    <!-- DashForge CSS -->
-    <link rel="stylesheet" href="{{ asset('assets/dashboard/assets/css/dashforge.css') }}">
-
     <!-- Slider -->
     <link rel="stylesheet" href="{{ asset('assets/client/css/owl.carousel.min.css') }}" />
-    <link href="{{ asset('assets/dashboard/lib/fontawesome/fontawesome-free/css/all.min.css') }}" rel="stylesheet">
-    <link href="{{ asset('assets/dashboard/lib/ionicons/css/ionicons.min.css') }}" rel="stylesheet">
+    
     {{-- <link rel="stylesheet" href="{{ asset('assets/client/css/owl.theme.default.min.css') }}" /> --}}
     <!-- Main Css -->
     <link href="{{ asset('assets/client/css/style.css') }}" rel="stylesheet" type="text/css" id="theme-opt" />
@@ -40,7 +34,7 @@
     <link rel="stylesheet" href="{{ asset('assets/client/datatables/dataTables.bs4-custom.css') }}" />
     <link href="{{ asset('assets/client/css/magnific-popup.css') }}" rel="stylesheet" type="text/css" />
     <link href="{{ asset('assets/client/css/sweetalert2.min.css') }}" rel="stylesheet" type="text/css" />
-    {{-- <link rel="stylesheet" href="https://unicons.iconscout.com/release/v2.1.9/css/unicons.css"> --}}
+    <link rel="stylesheet" href="https://unicons.iconscout.com/release/v2.1.9/css/unicons.css">
 
     <style>
       .card {
@@ -67,11 +61,6 @@
     <script src="{{asset('assets/frontend/js/jquery.easing.min.js')}}"></script>
     <script src="{{asset('assets/frontend/js/scrollspy.min.js')}}"></script>
 
-          <!-- geolocation asset starts here -->
-    <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDeDLVAiaU13p2O0d3jfcPjscsbVsCQUzc&v=3.exp&libraries=places"></script>
-    <script src="{{asset('assets/js/geolocation.js')}}"></script>
-    <!-- geolocation asset starts here -->
-
     <!-- SLIDER -->
     <script src="{{asset('assets/frontend/js/owl.carousel.min.js')}}"></script>
     <script src="{{asset('assets/frontend/js/owl.init.js')}}"></script>
@@ -95,17 +84,6 @@
     <script src="https://unicons.iconscout.com/release/v2.1.9/script/monochrome/bundle.js"></script>
     <script src="{{ asset('assets/client/js/sweetalert2.min.js') }}"></script>
 
-    <script src="{{ asset('assets/dashboard/assets/js/jquery.tinymce.min.js') }}"></script>
-
-    <!-- geolocation asset starts here -->
-    <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDeDLVAiaU13p2O0d3jfcPjscsbVsCQUzc&v=3.exp&libraries=places"></script>
-    <script src="{{asset('assets/frontend/js/geolocation.js')}}"></script>
-    <!-- geolocation asset starts here -->
-    {{-- @yield('scripts')
-    @stack('scripts') --}}
-
-    {{-- <button type="button" class="btn btn-success btn-lg" data-toggle="modal" data-target="#modalDetails">Open
-        Modal</button> --}}
 
     <div class="modal fade" id="modalDetails" tabindex="-1" role="dialog" aria-hidden="true" data-backdrop="static">
         <div class="modal-dialog modal-dialog-centered modal-lg wd-sm-650" role="document">
@@ -326,57 +304,6 @@
           });
         });
 
-
-        $('#customRadio1').change(function () {
-            if ($(this).prop('checked')) {
-                $('.display-phone').addClass('d-none');
-            }else {
-                $('.display-phone').removeClass('d-none');
-            }
-        });
-
-        $('#customRadio2').change(function () {
-            if ($(this).prop('checked')) {
-                $('.display-phone').removeClass('d-none');
-            }
-        });
-
-        $('#customRadio3').change(function () {
-            if ($(this).prop('checked')) {
-                $('.display-address').addClass('d-none');
-            }else {
-                $('.display-address').removeClass('d-none');
-            }
-        });
-
-        $('#customRadio4').change(function () {
-            if ($(this).prop('checked')) {
-                $('.display-address').removeClass('d-none');
-            }
-        });
-
-        $('#customRadio33').change(function () {
-            if ($(this).prop('checked')) {
-                $('.add-card').addClass('d-none');
-            }else {
-                $('.add-card').removeClass('d-none');
-            }
-        });
-
-        $('#customRadio34').change(function () {
-            if ($(this).prop('checked')) {
-                $('.add-card').removeClass('d-none');
-            }
-        });
-
-      //   $('.video-play-icon').magnificPopup({
-      //     disableOn: 375,
-      //     type: 'iframe',
-      //     mainClass: 'mfp-fade',
-      //     removalDelay: 160,
-      //     preloader: false,
-      //     fixedContentPos: false,
-      // });
 
       $(function () {
         $('.popup-modal').magnificPopup({

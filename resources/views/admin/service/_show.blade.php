@@ -31,7 +31,7 @@
         </tr>
         <tr>
             <td class="tx-medium" width="25%">Service Charge</td>
-            <td class="tx-color-03" width="75%">{{ $category->service_charge }}</td>
+            <td class="tx-color-03" width="75%">₦{{ $category->service_charge }}</td>
         </tr>
         <tr>
             <td class="tx-medium" width="25%">Created By</td>
