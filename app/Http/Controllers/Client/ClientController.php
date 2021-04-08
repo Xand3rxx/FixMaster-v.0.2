@@ -728,18 +728,6 @@ class ClientController extends Controller
     // return $serviceRequests;
 
     public function serviceRequest(Request $request){
-        // $validatedData = $request->validate([
-        //     'service_fee'               =>   'required',
-        //     'description'               =>   'required',
-        //     'timestamp'                 =>   'required',
-        //     'phone_number'              =>   'required',
-        //     'address'                   =>   'required',
-        //     'payment_method'            =>   'required',
-        //   ]);
-
-            $all = $request->all();
-            dd($all);
-
         
             $validatedData = $request->validate([            
             'balance'                   =>   'required',
@@ -748,37 +736,9 @@ class ClientController extends Controller
             'payment_method'            =>   'required',          
             'myContact_id'            =>   'required',          
           ]);
-        
-           
-        // $all = $request->all(); 
-            // dd($all);
 
             // if payment method is wallet
             if($request->payment_method == 'Wallet'){
-                if($request->balance->$request->booking_fee){
-
-                    $service_request                        = new Servicerequest;
-                    $service_request->cliend_id             = auth()->user()->id;
-                    $service_request->service_id            = $request->service_id;
-                    $service_request->unique_id             = 'REF-'.$this->generateReference();
-                    // $service_request->state_id              = $request->state_id;
-                    // $service_request->lga_id                = $request->lga_id;
-                    // $service_request->town_id               = $request->town_id;
-                    $service_request->price_id              = $request->price_id;
-                    $service_request->contact_id              = $request->myContact_id;
-                    $service_request->client_discount_id    = $request->client_discount_id;
-                    $service_request->client_security_code  = 'SEC-'.strtoupper(substr(md5(time()), 0, 8));
-                    $service_request->status_id             = '1';
-                    $service_request->description           = $request->description;
-                    $service_request->total_amount          = $request->booking_fee;
-                    $service_request->preferred_time        = date("Y-m-d"); //fix this later before pushing
-                    $service_request->has_client_rated      = 'No'; 
-                    $service_request->has_cse_rated         = 'No';
-                    $service_request->created_at         = Carbon::now()->toDateTimeString();
-                    $service_request->updated_at         = Carbon::now()->toDateTimeString();
-
-                    // $service_request                        = new Servicerequest;
-                    // $service_request->cliend_id             = auth()->user()->id;
                 // if wallet balance is less than the service fee
                 if($request->balance > $request->booking_fee){
                     $SavedRequest = $this->saveRequest($request);
@@ -879,7 +839,6 @@ class ClientController extends Controller
                 }
 
            }
-        }
             
             public function initiatePayment(){
                 $track  = Session::get('Track');
@@ -1030,7 +989,7 @@ class ClientController extends Controller
                         // dd($cses->distance);
                 }
 
-                
+
             }
             }
 
