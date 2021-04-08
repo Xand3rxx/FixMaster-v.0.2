@@ -26,7 +26,6 @@ class ToolRequest extends Model
         static::creating(function ($toolRequest) {
             // Create a Unique Tool Request uuid id
             $toolRequest->uuid = (string) Str::uuid();
- 
             // Create a Unique Tool Request Batch Number
             $toolRequest->unique_id = static::generate('tool_requests', 'TRF-');
 

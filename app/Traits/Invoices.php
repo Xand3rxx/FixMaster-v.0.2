@@ -14,9 +14,11 @@ use App\Models\Tax;
 use App\Models\Warranty;
 use Illuminate\Support\Str;
 use phpDocumentor\Reflection\Types\Integer;
+use App\Traits\GenerateUniqueIdentity as Generator;
 
 trait Invoices
 {
+    use Generator;
     /**
      * Create a Diagnostic Invoice
      *
@@ -33,7 +35,7 @@ trait Invoices
      * @return \App\Models\Invoice|Null
      */
 
-    public static function diagnosisInvoice($service_request_id, $rfq_id, $sub_service_id, $hours_spent)
+    public static function diagnosisInvoice($service_request_id, $rfq_id, $sub_service_id, $warranty_id, $hours_spent)
     {
         $serviceRequest = ServiceRequest::where('id', $service_request_id)->first();
 
@@ -43,10 +45,10 @@ trait Invoices
         $serviceCharge = Service::where('id', $service_id)->first();
         $total_amount = $serviceCharge->service_charge;
 
-        return self::getDiagnosisDetails($service_request_id, $rfq_id, $sub_service_id, $hours_spent, $total_amount);
+        return self::getDiagnosisDetails($service_request_id, $rfq_id, $sub_service_id, $warranty_id, $hours_spent, $total_amount);
     }
 
-    protected static function getDiagnosisDetails($service_request_id, $rfq_id, $sub_service_id, $hours_spent, $total_amount)
+    protected static function getDiagnosisDetails($service_request_id, $rfq_id, $sub_service_id, $warranty_id, $hours_spent, $total_amount)
     {
         $invoice_type = 'Diagnosis Invoice';
         $status = '1';
@@ -74,25 +76,26 @@ trait Invoices
         $markupPrice = $fixMasterMarkup->percentage * $total_hours_spent;
         $labour_cost = $total_hours_spent + $markupPrice;
 
-        return self::createDiagnosisInvoice($client_id, $service_request_id, $rfq_id, $sub_service_id, $invoice_type, $labour_cost, $hours_spent, $total_amount, $amount_paid, $status);
+        return self::createDiagnosisInvoice($client_id, $service_request_id, $rfq_id, $sub_service_id, $warranty_id, $invoice_type, $labour_cost, $hours_spent, $total_amount, $amount_paid, $status);
     }
 
-    protected static function createDiagnosisInvoice($client_id, $service_request_id, $rfq_id, $sub_service_id, $invoice_type, $labour_cost, $hours_spent, $total_amount, $amount_paid, $status)
+    protected static function createDiagnosisInvoice($client_id, $service_request_id, $rfq_id, $sub_service_id, $warranty_id, $invoice_type, $labour_cost, $hours_spent, $total_amount, $amount_paid, $status)
     {
         $createInvoice = Invoice::create([
             'uuid'                  => Str::uuid('uuid'),
             'client_id'             => $client_id,
             'service_request_id'    => $service_request_id,
             'rfq_id'                => $rfq_id,
+            'warranty_id'           => $warranty_id,
             'sub_service_id'        => $sub_service_id,
-            'invoice_number'        => 'INV-'.strtoupper(substr(md5(time()), 0, 8)),
+            'unique_id'             => static::generate('invoices', 'INV-'),
             'invoice_type'          => $invoice_type,
             'labour_cost'           => $labour_cost,
             'hours_spent'           => $hours_spent,
             'total_amount'          => $total_amount,
             'amount_due'            => $total_amount,
             'amount_paid'           => $amount_paid,
-            'status'                => $status
+            'status'                => $status,
         ]);
 
         $invoice_id = $createInvoice->id;
@@ -128,7 +131,7 @@ trait Invoices
             'client_id'             => $client_id,
             'service_request_id'    => $service_request_id,
             'rfq_id'                => $rfq_id,
-            'invoice_number'        => 'INV-'.strtoupper(substr(md5(time()), 0, 8)),
+            'unique_id'             => static::generate('invoices', 'INV-'),
             'invoice_type'          => $invoice_type,
             'status'                => $status
         ]);
@@ -155,12 +158,13 @@ trait Invoices
             'client_id'             => $client_id,
             'service_request_id'    => $service_request_id,
             'rfq_id'                => $rfq_id,
-            'invoice_number'        => 'INV-'.strtoupper(substr(md5(time()), 0, 8)),
+            'unique_id'             => static::generate('invoices', 'INV-'),
             'invoice_type'          => $invoice_type,
             'total_amount'          => $total_amount,
             'amount_due'            => $total_amount,
             'amount_paid'           => $amount_paid,
-            'status'                => $status
+            'status'                => $status,
+            'phase'                 => '1'
         ]);
     }
 
@@ -211,7 +215,7 @@ trait Invoices
             'rfq_id'                => $rfq_id,
             'warranty_id'           => $warranty_id,
             'sub_service_id'        => $sub_service_id,
-            'invoice_number'        => 'INV-'.strtoupper(substr(md5(time()), 0, 8)),
+            'unique_id'             => static::generate('invoices', 'INV-'),
             'invoice_type'          => $invoice_type,
             'labour_cost'           => $labour_cost,
             'materials_cost'        => $materials_cost,
@@ -250,8 +254,9 @@ trait Invoices
         if($invoice->invoice_type == 'Diagnosis Invoice')
         {
             $fixMasterRoyalty = $fixMaster_royalty_value * ( $total_amount );
+            $bookingCost = $invoice->serviceRequest->price->amount;
             $tax_cost = $tax * ( $total_amount + $logistics_cost + $fixMasterRoyalty );
-            $total_cost = $total_amount + $fixMasterRoyalty + $tax_cost + $logistics_cost;
+            $total_cost = $total_amount + $fixMasterRoyalty + $tax_cost + $logistics_cost - $bookingCost;
         }
         elseif ($invoice->invoice_type == 'Completion Invoice')
         {

@@ -1,5 +1,5 @@
 @extends('layouts.dashboard')
-@section('title', 'RFQ')
+@section('title', 'Request For Quote(RFQ)')
 @include('layouts.partials._messages')
 @section('content')
 

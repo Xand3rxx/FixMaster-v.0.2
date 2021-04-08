@@ -10,7 +10,18 @@ use App\Traits\Utility;
 
 class ClientRegistrationController extends Controller
 {
-    use RegisterClient,Utility;
+    use RegisterClient, Utility;
+
+    /**
+     * Create a new controller instance.
+     *
+     * @return void
+     */
+    public function __construct()
+    {
+        $this->middleware('guest');
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -18,14 +29,14 @@ class ClientRegistrationController extends Controller
      */
     public function index(Request $request)
     {
-        if($request->ref){
+        if ($request->ref) {
             $link = $request->ref;
             $authenticateReferral = $this->authenticateRefferralLink($link);
-            if(!$authenticateReferral){
-             return abort(404);
+            if (!$authenticateReferral) {
+                return abort(404);
             }
         }
-      
+
         return view('frontend.registration.client.index', [
             'states' => \App\Models\State::all(),
             'activeEstates' => \App\Models\Estate::select('id', 'estate_name')
@@ -36,26 +47,6 @@ class ClientRegistrationController extends Controller
     }
 
     /**
-     * Show the application registration form.
-     *
-     * @return \Illuminate\View\View
-     */
-    public function showRegistrationForm()
-    {
-        return view('auth.register');
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
@@ -63,64 +54,15 @@ class ClientRegistrationController extends Controller
      */
     public function store(Request $request)
     {
-        // dd($request->all());
         // Validate Client Registration
-        $oldvalid = $this->validateCreateClient($request); 
-        if(isset($request->ref)){
-            $valid = array_merge($oldvalid, ["ref" =>  $request->ref]);
-            }
-       
-        // Register a Client User
-        $registered = $this->register($valid);
+        $valid = $this->validateCreateClient($request);
+        if (isset($request->ref)) {
+            $valid = array_merge($valid, ["ref" =>  $request->ref]);
+        }
         // If registered, redirect to client url
-        return ($registered == true)
+        return ($this->register($valid) == true)
             ? redirect()->route('client.index', app()->getLocale())->with('success', "User Account Created Successfully!!")
             : back()->with('error', "An error occurred while creating User Account!!");
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
-    {
-        //
     }
 
     /**
@@ -134,18 +76,18 @@ class ClientRegistrationController extends Controller
     protected function validateCreateClient(Request $request)
     {
         return $request->validate([
-            'state_id'                  =>   'required',
-            'lga_id'                    =>   'required',
-            'first_name'                =>   'required',
-            'middle_name'               =>   'sometimes|nullable',
-            'last_name'                 =>   'required',
+            'state_id'                  =>   'required|numeric',
+            'lga_id'                    =>   'required|numeric',
+            'first_name'                =>   'required|string|max:190',
+            'middle_name'               =>   'sometimes|nullable|string|max:190',
+            'last_name'                 =>   'required|string|max:190',
             'email'                     =>   'required|email|unique:users,email',
-            'phone_number'              =>   'required|Numeric|unique:phones,number',
+            'phone_number'              =>   'required|Numeric|unique:contacts,phone_number',
             'gender'                    =>   'required|in:Male,Female',
-            'town'                      =>   'required|string|max:190',
+            'town_id'                   =>   'required|numeric',
             'password'                  =>   'required|min:8',
             'confirm_password'          =>   'required|same:password',
-            'full_address'              =>   'required',
+            'full_address'              =>   'required|string',
             'terms_and_conditions'      =>   'required|accepted',
             'estate_id'                 =>   'nullable|numeric',
             'address_latitude'          =>   'required|string',

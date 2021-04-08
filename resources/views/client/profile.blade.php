@@ -20,10 +20,10 @@
                         <img src="{{ asset('assets/images/default-female-avatar.png') }}" alt="Default female profile avatar" class="avatar float-md-left avatar-medium rounded-circle shadow mr-md-4" />
                     @endif
                 @endif
-                
+
                 <div class="mt-md-4 mt-3 mt-sm-0">
                     <button type="button" class="btn btn-primary btn-sm mt-2 change-picture">Change Picture</button>
-                    
+
                     <form method="POST" action="{{ route('client.update_profile_avatar') }}" enctype="multipart/form-data">
                     @csrf @method('PUT')
                         <input type="hidden" id="old_avatar" name="old_avatar" value="{{ $client->avatar }}">
@@ -83,7 +83,7 @@
                                     <strong>{{ $message }}</strong>
                                 </span>
                             @enderror
-                        </div> 
+                        </div>
                     </div><!--end col-->
                     <div class="col-md-4">
                         <div class="form-group position-relative">
@@ -181,7 +181,7 @@
                 </div><!--end row-->
             </form><!--end form-->
 
-            
+
             <div class="row">
                 {{-- <div class="col-md-6 mt-4 pt-2">
                     <h5>Card Details :</h5>
@@ -198,7 +198,7 @@
                                 <div class="form-group">
                                     <label>Card Number :</label>
                                     <input type="tel" min="0" autocomplete="off" id="cardnumber" maxlength="16" class="form-control font-weight-bold" required placeholder="0000 0000 0000 0000">
-                                </div>                                                                               
+                                </div>
                             </div><!--end col-->
                             <div class="col-md-6">
                                 <div class="form-group">
@@ -220,8 +220,8 @@
                         </div><!--end row-->
                     </form><!--end form-->
                 </div><!--end col--> --}}
-                
-                <div class="col-md-12 mt-4 pt-2"> 
+
+                <div class="col-md-12 mt-4 pt-2">
                     <h5>Change password :</h5>
                     <small class="text-danger">In order to change your password, you need to provide the current password.</small>
 
@@ -285,7 +285,7 @@
         $('#state_id').on('change',function () {
             let stateId = $('#state_id').find('option:selected').val();
             let stateName = $('#state_id').find('option:selected').text();
-            
+
             // console.log(stateId, stateName); return;
             $.ajaxSetup({
                 headers: {
@@ -309,7 +309,7 @@
 
                     }
                 },
-            })  
+            })
         });
 
         $(document).on('click', '.change-picture', function (){

@@ -5,7 +5,7 @@
 
 <div class="col-lg-8 col-12">
     <div class="float-right mt-4">
-        <a href="{{ route('client.requests', app()->getLocale()) }}" class="btn btn-sm btn-primary">Back </a>
+        <a href="{{ route('client.service.all', app()->getLocale()) }}" class="btn btn-sm btn-primary">Back </a>
         @if($requestDetail->status_id == '1')
         <a href="#editRequest" id="edit-request" data-toggle="modal" data-url="{{ route('client.edit_request', [ 'request'=>$requestDetail->uuid, 'locale'=>app()->getLocale() ])}}" data-job-reference="{{ $requestDetail->unique_id  }}" class="btn btn-sm btn-warning">Edit Request </a>
 
@@ -39,20 +39,21 @@
             </div>
         </div>
 
-        @if($requestDetail->service_request_assignee->status == 'Active' && $requestDetail->status_id > '1')
+   
+        @if($requestDetail->service_request_assignee->status == 'Active' && $requestDetail->status_id >= '3')
         <h5 class="mt-4">CSE Assigned</h5>
         <div class="col-lg-12 col-12 mt-4">
             <div class="card rounded bg-light overflow-hidden border-0 m-2">
                 <div class="row align-items-center no-gutters">
                     <div class="col-md-5">
-                        {{-- <img src="{{ asset('assets/images/default-male-avatar.png') }}" class="img-fluid" alt="" /> --}}
+                        {{-- <img src="{{ asset('assets/user-avatars/default-male-avatar.png') }}" class="img-fluid" alt="" /> --}}
                          @if(!empty($requestDetail->cses[0]->avatar) &&
                         file_exists(public_path().'/assets/cse-technician-images/'.$requestDetail->cses[0]->account->avatar))
-                        <img src="{{ asset('assets/cse-technician-images/'.$requestDetail->cses[0]->avatar) }}" class="img-fluid" alt="" />
-                        @else @if($requestDetail->cses[0]->account->gender == 'Male')
-                        <img src="{{ asset('assets/images/default-male-avatar.png') }}" alt="Default male profile avatar" class="img-fluid" />
+                        <img src="{{ asset('assets/user-avatars/'.$requestDetail->cses[0]->avatar) }}" class="img-fluid" alt="" />
+                        @else @if($requestDetail->cses[0]->account->gender == 'male')
+                        <img src="{{ asset('assets/user-avatars/default-male-avatar.png') }}" alt="Default male profile avatar" class="img-fluid" />
                         @else
-                        <img src="{{ asset('assets/images/default-female-avatar.png') }}" alt="Default female profile avatar" class="img-fluid" />
+                        <img src="{{ asset('assets/user-avatars/default-female-avatar.png') }}" alt="Default female profile avatar" class="img-fluid" />
                         @endif @endif
                     </div>
                     <!--end col-->
@@ -85,11 +86,12 @@
             </div>
         </div>
         @endif
+       
 
         <h5 class="mt-4">Location & Time</h5>
         <p style="font-size: 10px;" class="text-muted">Location and appointemnt time as specified by you.</p>
         <ul class="list-unstyled">
-            <li class="text-muted"><i data-feather="map-pin" class="fea icon-sm text-primary mr-2"></i>{{ $requestDetail->addressee->address }}</li>
+            <li class="text-muted"><i data-feather="map-pin" class="fea icon-sm text-primary mr-2"></i>{{ $requestDetail->address->address }}</li>
             <li class="text-muted"><i data-feather="calendar" class="fea icon-sm text-primary mr-2"></i>{{ Carbon\Carbon::parse($requestDetail->preferred_time, 'UTC')->isoFormat('dddd Do YYYY, h:mm:ssa') }}</li>
         </ul>
 
@@ -246,7 +248,7 @@
     </div><!-- modal-dialog -->
 </div><!-- modal -->
 
-@if($requestDetail->service_request_assignee->status == 'Active' && $requestDetail->status_id > '1')
+@if($requestDetail->service_request_assignee->status == 'Active' && $requestDetail->status_id >= '3')
 
 <div class="modal fade" id="cseTechnicianModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
@@ -293,12 +295,13 @@
                             <div class="card rounded bg-light overflow-hidden border-0 m-2">
                                 <div class="row align-items-center no-gutters">
                                     <div class="col-md-5">
-                                        @if(!empty($requestDetail->cses[0]->account->avatar) && file_exists(public_path().'/assets/cse-technician-images/'.$requestDetail->cses[0]->account->avatar))
-                                        <img src="{{ asset('assets/cse-technician-images/'.$requestDetail->cses[0]->account->avatar) }}" class="img-fluid" alt="" />
-                                        @else @if($requestDetail->cses[0]->account->gender == 'Male')
-                                        <img src="{{ asset('assets/images/default-male-avatar.png') }}" alt="Default male profile avatar" class="img-fluid" />
+                                    
+                                        @if(!empty($requestDetail->cses[0]->account->avatar) && file_exists(public_path().'/assets/user-avatars/'.$requestDetail->cses[0]->account->avatar))
+                                        <img src="{{ asset('assets/user-avatars/'.$requestDetail->cses[0]->account->avatar) }}" class="img-fluid" alt="" />
+                                        @else @if($requestDetail->cses[0]->account->gender == 'male')
+                                        <img src="{{ asset('assets/user-avatars/default-male-avatar.png') }}" alt="Default male profile avatar" class="img-fluid" />
                                         @else
-                                        <img src="{{ asset('assets/images/default-female-avatar.png') }}" alt="Default female profile avatar" class="img-fluid" />
+                                        <img src="{{ asset('assets/user-avatars/default-female-avatar.png') }}" alt="Default female profile avatar" class="img-fluid" />
                                         @endif @endif
                                     </div>
 
@@ -320,9 +323,9 @@
                                                 </li>
                                                 <li class="h6"><i data-feather="map-pin" class="fea icon-sm text-warning mr-2"></i><span class="text-muted">State :</span> {{ $requestDetail->cses[0]->account->state->name }}</li>
                                                 <li class="h6"><i data-feather="map-pin" class="fea icon-sm text-warning mr-2"></i><span class="text-muted">Town/City :</span> {{ $requestDetail->cses[0]->account->lga->name }}</li>
-                                                <li class="h6"><i data-feather="home" class="fea icon-sm text-warning mr-2"></i><span class="text-muted">Address :</span> {{ $requestDetail->cses[0]->contact->address }}</li>
+                                                <li class="h6"><i data-feather="home" class="fea icon-sm text-warning mr-2"></i><span class="text-muted">Address :</span> {{ $requestDetail->cses[0]->contact == null ? '': $requestDetail->cses[0]->contact->address }}</li>
 
-                                                <li class="h6"><i data-feather="phone" class="fea icon-sm text-warning mr-2"></i><span class="text-muted">Mobile :</span> {{ $requestDetail->cses[0]->contact->phone_number }}</li>
+                                                <li class="h6"><i data-feather="phone" class="fea icon-sm text-warning mr-2"></i><span class="text-muted">Mobile :</span> {{ $requestDetail->cses[0]->contact == null ? '' : $requestDetail->cses[0]->contact->phone_number }}</li>
                                             </ul>
                                         </div>
                                     </div>
@@ -337,11 +340,11 @@
                                 <div class="row align-items-center no-gutters">
                                     <div class="col-md-5">
                                         @if(!empty($technician->account->avatar) && file_exists(public_path().'/assets/cse-technician-images/'.$requestDetail->cses[0]->account->avatar))
-                                        <img src="{{ asset('assets/cse-technician-images/'.$technician->account->avatar) }}" class="img-fluid" alt="" />
-                                        @else @if($technician->account->gender == 'Male')
-                                        <img src="{{ asset('assets/images/default-male-avatar.png') }}" alt="Default male profile avatar" class="img-fluid" />
+                                        <img src="{{ asset('assets/user-avatars/'.$technician->account->avatar) }}" class="img-fluid" alt="" />
+                                        @else @if($technician->account->gender == 'male')
+                                        <img src="{{ asset('assets/user-avatars/default-male-avatar.png') }}" alt="Default male profile avatar" class="img-fluid" />
                                         @else
-                                        <img src="{{ asset('assets/images/default-female-avatar.png') }}" alt="Default female profile avatar" class="img-fluid" />
+                                        <img src="{{ asset('assets/user-avatars/default-female-avatar.png') }}" alt="Default female profile avatar" class="img-fluid" />
                                         @endif @endif
                                     </div>
 
@@ -364,9 +367,9 @@
                                                 </li>
                                                 <li class="h6"><i data-feather="map-pin" class="fea icon-sm text-warning mr-2"></i><span class="text-muted">State :</span> {{ $technician->account->state->name }}</li>
                                                 <li class="h6"><i data-feather="map-pin" class="fea icon-sm text-warning mr-2"></i><span class="text-muted">Town/City :</span> {{ $technician->account->lga->name }}</li>
-                                                <li class="h6"><i data-feather="home" class="fea icon-sm text-warning mr-2"></i><span class="text-muted">Address :</span> {{ $technician->contact->address }}</li>
+                                                <li class="h6"><i data-feather="home" class="fea icon-sm text-warning mr-2"></i><span class="text-muted">Address :</span> {{ $technician->contact == null ? '' : $technician->contact->address }}</li>
 
-                                                <li class="h6"><i data-feather="phone" class="fea icon-sm text-warning mr-2"></i><span class="text-muted">Mobile :</span> {{ $technician->contact->phone_number }}</li>
+                                                <li class="h6"><i data-feather="phone" class="fea icon-sm text-warning mr-2"></i><span class="text-muted">Mobile :</span> {{ $technician->contact == null ? '': $technician->contact->phone_number }}</li>
                                             </ul>
                                         </div>
                                     </div>

@@ -37,13 +37,13 @@ class Cse extends Model
      */
     protected static function createCSEReferralID($user_id, string $unique_id)
     {
-        // return $this->belongsTo(User::class)->with(['account', 'contact']);
-        return $this->belongsTo(User::class)->with(['account', 'contact']);
-    }
-
-    public function serviceRequest(){
         return collect($referral = Referral::create(['user_id' => $user_id, 'referral_code' => $unique_id, 'created_by' => auth()->user()->email ?? 'admin@fix-master.com']))->isNotEmpty()
             ? $referral->id : 0;
+    }
+
+    public function serviceRequest()
+    {
+        return $this->belongsTo(User::class)->with(['account', 'contact']);
     }
 
     /**
@@ -66,5 +66,4 @@ class Cse extends Model
     {
         return $this->hasMany(ServiceRequest::class);
     }
-
 }

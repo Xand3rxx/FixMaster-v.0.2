@@ -3,8 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Models\State;
-use Illuminate\Http\Request;
+use App\Models\Rating;
+use App\Models\Review;
 use App\Traits\Services;
+use Illuminate\Http\Request;
 
 
 class PageController extends Controller
@@ -23,10 +25,16 @@ class PageController extends Controller
         return view('frontend.services.index', $this->categoryAndServices());
     }
 
-    public function serviceDetails($language, $uuid){
+    public function serviceDetails($language, $uuid){//'rating'=> Rating::where('service_id', $this->service($id))->avg('star')
 
         //Return Service details
-        return view('frontend.services.show', ['service' => $this->service($uuid)]);
+        $service = $this->service($uuid);
+        $rating = Rating::where('service_id', $service->id)
+                    ->where('service_request_id', null)
+                    ->where('service_diagnosis_by', null)
+                    ->where('ratee_id', '!=', null)->get();
+        $reviews = Review::where('service_id', $service->id)->where('status', 1)->get();
+        return view('frontend.services.show', compact('service','rating','reviews'));
     }
 
     public function search($language, Request $request){

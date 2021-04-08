@@ -201,17 +201,17 @@ class ServiceRequestSeeder extends Seeder
                 'status'                =>  NULL,
                 'created_at'            => NULL, 
             ),
-            array(
-                'user_id'               => '13', 
-                'service_request_id'    => '1',
-                'job_accepted'          =>  NULL, 
-                'job_acceptance_time'   => NULL,
-                'job_diagnostic_date'   =>  NULL,
-                'job_declined_time'     =>  NULL,
-                'job_completed_date'    =>  NULL,
-                'status'                =>  NULL,
-                'created_at'            => NULL, 
-            ),
+            // array(
+            //     'user_id'               => '13', 
+            //     'service_request_id'    => '1',
+            //     'job_accepted'          =>  NULL, 
+            //     'job_acceptance_time'   => NULL,
+            //     'job_diagnostic_date'   =>  NULL,
+            //     'job_declined_time'     =>  NULL,
+            //     'job_completed_date'    =>  NULL,
+            //     'status'                =>  NULL,
+            //     'created_at'            => NULL, 
+            // ),
 
             array(
                 'user_id'               => '22', 

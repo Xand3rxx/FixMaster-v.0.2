@@ -184,11 +184,11 @@
           </ul>
         </li>
 
-        <li class="nav-item with-sub {{ Route::currentRouteNamed('admin.rfq') ? 'active show' : '' }}">
+        <li class="nav-item with-sub {{ Route::currentRouteNamed('admin.rfq', 'admin.supplier_invoices') ? 'active show' : '' }}">
           <a href="" class="nav-link"><i data-feather="file-text"></i> <span>RFQ's</span></a>
           <ul>
             <li class="{{ Route::currentRouteNamed('admin.rfq') ? 'active' : '' }}"><a href="{{ route('admin.rfq', app()->getLocale()) }}">Requests</a></li>
-            <li class=""><a href="#">Supplier's invoices</a></li>
+          <li class="{{ Route::currentRouteNamed('admin.supplier_invoices') ? 'active' : '' }}"><a href="{{ route('admin.supplier_invoices', app()->getLocale()) }}">Supplier's invoices</a></li>
           </ul>
         </li>
 
@@ -218,7 +218,14 @@
           </ul>
         </li> --}}
 
-        <li class="nav-item"><a href="#" class="nav-link"><i data-feather="thumbs-up"></i> <span>Warranty Management</span></a></li>
+        <li class="nav-item with-sub">
+          <a href="" class="nav-link"><i data-feather="user-check"></i> <span>Warranty Management</span></a>
+          <ul>
+            <li class=""><a href="{{route('admin.warranty_list', app()->getLocale())}}">Add</a></li>
+            <li class=""><a href="{{route('admin.warranty_list', app()->getLocale())}}">List</a></li>
+            <li class=""><a href="{{route('admin.warranty_transaction_sort', app()->getLocale())}}">Transactions</a></li>
+          </ul>
+        </li>
 
         <li class="nav-label mg-t-25">Users</li>
         <li class="nav-item with-sub">

@@ -111,6 +111,7 @@
             </div><!--end col-->
 
             @yield('content')
+
         </div><!--end row-->
     </div><!--end container-->
 </section><!--end section-->

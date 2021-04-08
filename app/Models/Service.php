@@ -26,9 +26,9 @@ class Service extends Model
      *
      * @var array
      */
-    protected $hidden = [
-        // 'id'
-    ];
+    // protected $hidden = [
+    //     'id'
+    // ];
 
     /**
      * The "booted" method of the model.
@@ -43,29 +43,27 @@ class Service extends Model
         });
     }
 
-    /** 
+     /**
      * Scope a query to only include active banches
      *
      * @param \Illuminate\Database\Eloquent\Builder $query
      * @return \Illuminate\Database\Eloquent\Builder
      */
-    //Scope to return all services  
-    public function scopeServicies($query)
-    {
+    //Scope to return all services
+    public function scopeServicies($query){
         return $query->select('*')
             ->orderBy('name', 'ASC');
         // ->withTrashed();
     }
 
-    /** 
-     * Scope a query to only include active services
-     * 
+    /**
+     * Scope a query to only include active banches
+     *
      * @param \Illuminate\Database\Eloquent\Builder $query
      * @return \Illuminate\Database\Eloquent\Builder
      */
-    //Scope to return all active services  
-    public function scopeActiveServicies($query)
-    {
+    //Scope to return all active services
+    public function scopeActiveServicies($query){
         return $query->select('*')
             ->where('status', '=', 1)
             // ->whereNull('deleted_at')
@@ -80,11 +78,6 @@ class Service extends Model
     public function users()
     {
         return $this->hasMany(User::class, 'user_id')->withDefault();
-    }
-
-    public function sub_service()
-    {
-        return $this->hasMany(SubService::class);
     }
 
     /**
@@ -115,16 +108,20 @@ class Service extends Model
         return $this->belongsTo(ClientDiscount::class, 'client_id');
     }
 
+    public function serviceRequest()
+    {
+        return $this->hasOne(ServiceRequest::class, 'service_id', 'id');
+    }
+
     public function clientDiscounts()
     {
         return $this->hasMany(ClientDiscount::class, 'client_id');
     }
 
-    public function subServices()
-    {
-        return $this->hasMany(SubService::class);
-    }
+    public function ratings(){
 
- 
+        return $this->hasMany(Rating::class,'service_id');
+
+        }
 
 }

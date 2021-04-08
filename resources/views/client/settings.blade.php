@@ -61,7 +61,7 @@
                               <div class="form-group position-relative">
                                   <label>Phone No. :</label>
                                   <i data-feather="phone" class="fea icon-sm icons"></i>
-                                  <input name="phone_number" id="phone_number" type="tel" maxlength="11" class="form-control pl-5" value="{{$client->user->phones[0]->number}}" placeholder="Phone :" />
+                                  <input name="phone_number" id="phone_number" type="tel" maxlength="11" class="form-control pl-5" value=" " placeholder="Phone :" />
                               </div>
                           </div>
                           <!--end col-->

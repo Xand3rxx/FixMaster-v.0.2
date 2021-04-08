@@ -223,11 +223,12 @@ class ClientSeeder extends Seeder
         ]);
 
         //3 more contacts for client@fix-master.com
-        DB::table('contacts')->delete();
+        // DB::table('contacts')->delete();
 
         $contacts = array(
 
             array(
+                // 'id'                =>  1,
                 'user_id'           =>  $client->id,
                 'account_id'        =>  $clientAccount->id,
                 'country_id'        =>  156,
@@ -241,6 +242,7 @@ class ClientSeeder extends Seeder
                 'address_latitude'  =>  '6.4658893',
             ),
             array(
+                // 'id'                =>  2,
                 'user_id'           =>  $client->id,
                 'account_id'        =>  $clientAccount->id,
                 'country_id'        =>  156,
@@ -254,6 +256,7 @@ class ClientSeeder extends Seeder
                 'address_latitude'  =>  '6.4941095',
             ),
             array(
+                // 'id'                =>  3,
                 'user_id'           =>  $client->id,
                 'account_id'        =>  $clientAccount->id,
                 'country_id'        =>  156,

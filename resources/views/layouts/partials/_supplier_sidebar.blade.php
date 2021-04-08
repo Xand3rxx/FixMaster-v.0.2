@@ -51,6 +51,8 @@
 
         <li class="nav-item {{ Route::currentRouteNamed('supplier.payments') ? 'active show' : '' }}"><a href="{{ route('supplier.payments', app()->getLocale()) }}" class="nav-link"><i data-feather="credit-card"></i> <span>Payments</span></a></li>
 
+        <li class="nav-item {{ Route::currentRouteNamed('supplier.rfq_sent_invoices') ? 'active show' : '' }}"><a href="{{ route('supplier.rfq_sent_invoices', app()->getLocale()) }}" class="nav-link"><i data-feather="file-text"></i> <span>Sent Invoices</span></a></li>
+
       </ul>
     </div>
   </aside>

@@ -19,6 +19,7 @@ use App\Http\Controllers\Client\ClientController;
 use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\ActivityLogController;
 use App\Http\Controllers\Admin\ToolInventoryController;
+use App\Http\Controllers\WarrantyController;
 use App\Http\Controllers\Admin\User\SupplierController;
 use App\Http\Controllers\AdminLocationRequestController;
 
@@ -36,6 +37,9 @@ use App\Http\Controllers\ServiceRequest\AssignTechnicianController;
 use App\Http\Controllers\Admin\User\Administrator\SummaryController;
 use App\Http\Controllers\Admin\User\CustomerServiceExecutiveController;
 use App\Http\Controllers\QualityAssurance\QualityAssuranceProfileController;
+use App\Http\Controllers\RatingController;
+use App\Http\Controllers\Admin\AdminRatingController;
+use App\Http\Controllers\Admin\AdminReviewController;
 use App\Http\Controllers\CSE\CustomerServiceExecutiveController as CseController;
 use App\Http\Controllers\Admin\ToolsRequestController;
 use App\Http\Controllers\Admin\RfqController;
@@ -68,9 +72,17 @@ Route::prefix('admin')->group(function () {
     Route::name('admin.')->group(function () {
         Route::view('/', 'admin.index')->name('index'); //Take me to Admin Dashboard
 
-        Route::view('/ratings/cse-diagnosis', 'admin.ratings.cse_diagnosis_rating')->name('category');
-        Route::view('/ratings/services',      'admin.ratings.service_rating')->name('job');
-        Route::view('/ratings/service-reviews',      'admin.ratings.service_reviews')->name('category_reviews');
+        // Route::view('/ratings/cse-diagnosis', 'admin.ratings.cse_diagnosis_rating')->name('category');
+        // Route::view('/ratings/services',      'admin.ratings.service_rating')->name('job');
+        Route::get('/ratings/cse-diagnosis', [AdminRatingController::class, 'cseDiagnosis'])->name('category');
+        //Route::view('/ratings/service-reviews',      'admin.ratings.service_reviews')->name('category_reviews');
+        Route::get('/ratings/services',      [AdminRatingController::class, 'getServiceRatings'])->name('job');
+        Route::get('/ratings/service_reviews',      [AdminReviewController::class, 'getServiceReviews'])->name('category_reviews');
+        Route::get('/activate/{uuid}',      [AdminReviewController::class, 'activate'])->name('activate_review');
+        Route::get('/deactivate/{uuid}',      [AdminReviewController::class, 'deactivate'])->name('deactivate_review');
+        Route::get('/delete/{uuid}',      [AdminReviewController::class, 'delete'])->name('delete_review');
+
+
 
         Route::prefix('users')->name('users.')->group(function () {
             Route::resource('administrator', AdministratorController::class);
@@ -96,7 +108,24 @@ Route::prefix('admin')->group(function () {
         Route::get('/estate/decline/{estate:uuid}',      [EstateController::class, 'decline'])->name('decline_estate');
         Route::get('/estate/delete/{estate:uuid}',      [EstateController::class, 'delete'])->name('delete_estate');
 
-        //Routes for Invoice Management
+        //Routes for Warranty Management
+        Route::get('/warranty',      [WarrantyController::class, 'index'])->name('warranty_list');
+        Route::get('/warranty/summary/{details:uuid}',  [WarrantyController::class, 'show'])->name('warranty_summary');
+        Route::post('/warranty/add',                    [WarrantyController::class, 'storeWarranty'])->name('save_warranty');
+        Route::get('/warranty/edit/{details:uuid}',  [WarrantyController::class, 'edit'])->name('edit_warranty');
+        Route::put('/warranty/update/{details:uuid}',  [WarrantyController::class, 'update'])->name('update_warranty');
+        Route::get('/warranty/delete/{details:uuid}',  [WarrantyController::class, 'deleteWarranty'])->name('delete_warranty');
+        Route::get('/warranty/transactions/sort',      [WarrantyController::class, 'warrantyTransactionSort'])->name('warranty_transaction_sort');
+        Route::get('/warranty/transactions',      [WarrantyController::class, 'warrantyTransaction'])->name('warranty_transaction');
+
+        //Routes for Simulation
+        Route::get('/diagnostic', [SimulationController::class, 'diagnosticSimulation'])->name('diagnostic');
+        Route::get('/end-service/{service_request:uuid}', [SimulationController::class, 'endService'])->name('end_service');
+        Route::get('/complete-service/{service_request:uuid}', [SimulationController::class, 'completeService'])->name('complete_service');
+        Route::get('/invoice/{invoice:id}', [SimulationController::class, 'invoice'])->name('invoice');
+
+
+ //Routes for Invoice Management
         Route::get('/invoices',      [InvoiceController::class, 'index'])->name('invoices');
         Route::get('/invoice/{invoice:uuid}', [InvoiceController::class, 'invoice'])->name('invoice');
 
@@ -104,6 +133,17 @@ Route::prefix('admin')->group(function () {
         Route::get('/diagnostic', [SimulationController::class, 'diagnosticSimulation'])->name('diagnostic');
         Route::get('/end-service/{service_request:uuid}', [SimulationController::class, 'endService'])->name('end_service');
         Route::get('/complete-service/{service_request:uuid}', [SimulationController::class, 'completeService'])->name('complete_service');
+
+
+         //Routes for Invoice Management
+         Route::get('/invoices',      [InvoiceController::class, 'index'])->name('invoices');
+
+         //Routes for Simulation
+         Route::get('/diagnostic', [SimulationController::class, 'diagnosticSimulation'])->name('diagnostic');
+         Route::get('/end-service/{service_request:uuid}', [SimulationController::class, 'endService'])->name('end_service');
+         Route::get('/complete-service/{service_request:uuid}', [SimulationController::class, 'completeService'])->name('complete_service');
+         Route::get('/invoice/{invoice:id}', [SimulationController::class, 'invoice'])->name('invoice');
+
 
         Route::get('/rfq',                                  [SimulationController::class, 'rfqSimulation'])->name('rfq');
         Route::get('/rfq/details/{serviceRequest:id}',    [SimulationController::class, 'rfqDetailsSimulation'])->name('rfq_details');
@@ -234,9 +274,9 @@ Route::prefix('admin')->group(function () {
         Route::resource('booking-fees',                     PriceController::class);
 
         //Routes for Status Management
-        Route::get('/statuses/deactivate/{status}',         [StatusController::class, 'deactivate'])->name('statuses.deactivate');
-        Route::get('/statuses/reinstate/{status}',          [StatusController::class, 'reinstate'])->name('statuses.reinstate');
-        Route::get('/statuses/delete/{status}',             [StatusController::class, 'destroy'])->name('statuses.delete');
+        Route::get('/statuses/deactivate/{status:uuid}',         [StatusController::class, 'deactivate'])->name('statuses.deactivate');
+        Route::get('/statuses/reinstate/{status:uuid}',          [StatusController::class, 'reinstate'])->name('statuses.reinstate');
+        Route::get('/statuses/delete/{status:uuid}',             [StatusController::class, 'destroy'])->name('statuses.delete');
         Route::resource('statuses',                         StatusController::class);
 
         //Setting controller
@@ -244,21 +284,26 @@ Route::prefix('admin')->group(function () {
         // Route::get('service/request/criteria/{id}',      [ServiceRequestSettingController::class, 'Edit'])->name('editCriteria');
         // Route::post('service/request/criteriaUpdate',    [ServiceRequestSettingController::class, 'update'])->name('serviceReq.update');
 
-    Route::get('/serviceCriteria/delete/{criteria}',              [ServiceRequestSettingController::class, 'destroy'])->name('serviceReq.delete');
-    Route::resource('serviceCriteria',                            ServiceRequestSettingController::class);
+        Route::get('/serviceCriteria/delete/{criteria}',              [ServiceRequestSettingController::class, 'destroy'])->name('serviceReq.delete');
+        Route::resource('serviceCriteria',                            ServiceRequestSettingController::class);
 
-     //Tool Request Management
-     Route::get('/tools-request',                        [ToolsRequestController::class, 'index'])->name('tools_request');
-     Route::get('/tools-request/details/{tool_request:uuid}',           [ToolsRequestController::class, 'toolRequestDetails'])->name('tool_request_details');
-     Route::get('/tools-request/approve/{tool_request:uuid}',           [ToolsRequestController::class, 'approveRequest'])->name('approve_tool_request');
-     Route::get('/tools-request/decline/{tool_request:uuid}',           [ToolsRequestController::class, 'declineRequest'])->name('decline_tool_request');
-     Route::get('/tools-request/return/{tool_request:uuid}',            [ToolsRequestController::class, 'returnToolsRequested'])->name('return_tools_requested');
+        //Tool Request Management
+        Route::get('/tools-request',                        [ToolsRequestController::class, 'index'])->name('tools_request');
+        Route::get('/tools-request/details/{tool_request:uuid}',           [ToolsRequestController::class, 'toolRequestDetails'])->name('tool_request_details');
+        Route::get('/tools-request/approve/{tool_request:uuid}',           [ToolsRequestController::class, 'approveRequest'])->name('approve_tool_request');
+        Route::get('/tools-request/decline/{tool_request:uuid}',           [ToolsRequestController::class, 'declineRequest'])->name('decline_tool_request');
+        Route::get('/tools-request/return/{tool_request:uuid}',            [ToolsRequestController::class, 'returnToolsRequested'])->name('return_tools_requested');
 
-     Route::get('/rfqs',                               [RfqController::class, 'index'])->name('rfq');
-     Route::get('/rfqs/details/{rfq:uuid}',                  [RfqController::class, 'rfqDetails'])->name('rfq_details');
+        Route::get('/rfqs',                               [RfqController::class, 'index'])->name('rfq');
+        Route::get('/rfqs/details/{rfq:uuid}',                  [RfqController::class, 'rfqDetails'])->name('rfq_details');
 
         Route::get('/serviceCriteria/delete/{criteria}',              [ServiceRequestSettingController::class, 'destroy'])->name('serviceReq.delete');
         Route::resource('serviceCriteria',                            ServiceRequestSettingController::class);
+
+    Route::get('/supplier-invoices',                               [RfqController::class, 'supplierInvoices'])->name('supplier_invoices');
+    Route::get('/supplier-invoices/details/{rfq:uuid}',              [RfqController::class, 'supplierInvoiceDetails'])->name('supplier_invoices_details');
+    Route::get('/supplier-invoices/accept/{rfq:uuid}',              [RfqController::class, 'acceptSupplierInvoice'])->name('supplier_invoices_acceptance');
+     
     });
 });
 
@@ -286,10 +331,10 @@ Route::prefix('/client')->group(function () {
         Route::post('/requests/update-request/{request:id}',          [ClientController::class, 'updateRequest'])->name('update_request');
         Route::post('/requests/technician_profile',          [ClientController::class, 'technicianProfile'])->name('technician_profile');
 
-       
 
-       
-     
+
+
+
 
 
 
@@ -300,12 +345,12 @@ Route::prefix('/client')->group(function () {
         Route::any('/getDistanceDifference',    [ClientController::class, 'getDistanceDifference'])->name('getDistanceDifference');
 
         // Route::get('/wallet',                [ClientController::class, 'wallet'])->name('wallet'); //Take me to Supplier Dashboard
-            // Route::get('/requests',          [ClientRequestController::class, 'index'])->name('client.requests');
-            Route::get('wallet',                [ClientController::class, 'wallet'])->name('wallet');
-            Route::any('fund',                  [ClientController::class, 'walletSubmit'])->name('wallet.submit');
-            Route::get('loyalty',                [ClientController::class, 'loyalty'])->name('loyalty');
-            Route::any('loyalty/submit',                 [ClientController::class, 'loyaltySubmit'])->name('loyalty.submit');
-            Route::get('payments',          [ClientController::class, 'payments'])->name('payments');
+        // Route::get('/requests',          [ClientRequestController::class, 'index'])->name('client.requests');
+        Route::get('wallet',                [ClientController::class, 'wallet'])->name('wallet');
+        Route::any('fund',                  [ClientController::class, 'walletSubmit'])->name('wallet.submit');
+        Route::get('loyalty',                [ClientController::class, 'loyalty'])->name('loyalty');
+        Route::any('loyalty/submit',                 [ClientController::class, 'loyaltySubmit'])->name('loyalty.submit');
+        Route::get('payments',          [ClientController::class, 'payments'])->name('payments');
         // Route::get('/requests',          [ClientRequestController::class, 'index'])->name('client.requests');
         Route::get('wallet',                [ClientController::class, 'wallet'])->name('wallet');
         Route::any('fund',                  [ClientController::class, 'walletSubmit'])->name('wallet.submit');
@@ -314,6 +359,12 @@ Route::prefix('/client')->group(function () {
 
         Route::post('/ipnpaystack',         [ClientController::class, 'paystackIPN'])->name('ipn.paystack');
         Route::get('/apiRequest',           [ClientController::class, 'apiRequest'])->name('ipn.paystackApiRequest');
+        // for payment
+        Route::any('/serviceRequestpaystack',         [ClientController::class, 'initiatePayment'])->name('serviceRequest.initiatePayment');
+        Route::get('/serviceRequestVerify',                     [ClientController::class, 'verifyPayment'])->name('serviceRequest.verifyPayment');
+        
+        // Route::post('/ipnpaystack',         [ClientController::class, 'paystackIPN'])->name('ipn.paystack');
+        // Route::get('/apiRequest',           [ClientController::class, 'apiRequest'])->name('serviceRequest.paystackApiRequest');
 
         Route::get('/ipnflutter',           [ClientController::class, 'flutterIPN'])->name('ipn.flutter');
 
@@ -328,35 +379,23 @@ Route::prefix('/client')->group(function () {
         // view all my service request
         // Route::get('requests',                      [ClientController::class, 'myServiceRequest'])->name('service.all');
 
+        Route::any('invoicePayment', [InvoiceController::class, 'savePayment'])->name('invoice.payment');
+        Route::get('verify/invoicePayment', [InvoiceController::class, 'verifyPayment'])->name('invoice.verifyPayment');
+        Route::any('/invoiceRequestpaystack',         [InvoiceController::class, 'initiatePayment'])->name('invoice.initiatePayment');
+
         // // view all my service request
         Route::get('requests',                     [ClientController::class, 'myServiceRequest'])->name('service.all');
         Route::get('/requests/details/{ref}',      [ClientController::class, 'requestDetails'])->name('client.request_details');
         Route::get('/requests/edit/{id}',          [ClientController::class, 'edit'])->name('client.edit_request');
         Route::put('/requests/update/{id}',        [ClientController::class, 'update'])->name('client.update_request');
 
-                
+
         Route::post('servicesRequest',              [ClientController::class, 'serviceRequest'])->name('services.serviceRequest');
         // post my contact to DB
         Route::post('/ajax_contactForm',            [ClientController::class, 'ajax_contactForm'])->name('ajax_contactForm');
-        
 
-            Route::post('/ipnpaystack',         [ClientController::class, 'paystackIPN'])->name('ipn.paystack');
-            Route::get('/apiRequest',           [ClientController::class, 'apiRequest'])->name('ipn.paystackApiRequest');
 
-            Route::get('/ipnflutter',           [ClientController::class, 'flutterIPN'])->name('ipn.flutter');
-          
 
-            // Service request SECTION
-            Route::get('/services',                     [ClientController::class, 'services'])->name('services.list');
-            Route::get('services/quote/{service}',      [ClientController::class, 'serviceQuote'])->name('services.quote');
-            Route::get('services/details/{service}',    [ClientController::class, 'serviceDetails'])->name('services.details');
-            Route::post('services/search',              [ClientController::class, 'search'])->name('services.search');
-            Route::get('services/custom/',              [ClientController::class, 'customService'])->name('services.custom');
-
-            Route::post('servicesRequest',              [ClientController::class, 'serviceRequest'])->name('services.serviceRequest');
-            // view all my service request
-            Route::get('myServicesRequest',              [ClientController::class, 'myServiceRequest'])->name('service.all');
-            
             Route::get('myContactList',                  [ClientController::class, 'myContactList'])->name('service.myContacts');
 
         //Flutterwave Routes
@@ -365,21 +404,27 @@ Route::prefix('/client')->group(function () {
         Route::post('/request/flutterwave/notify',              [ClientController::class, 'notifyFlutterServiceRequest'])->name('flutterwave.notify');
         Route::get('/request/flutterwave/notify',               [ClientController::class, 'successFlutterServiceRequest'])->name('flutterwave.success');
 
-        //Paystack Routes
-        Route::post('/request/paystack/submit',                 [ClientController::class, 'storePaystackServiceRequest'])->name('paystack.submit');
-        Route::get('/request/paystack/{orderId}/apiRequest',    [ClientController::class, 'apiRequestPaystackServiceRequest'])->name('paystack.apiRequest');
-        Route::get('/request/paystack/notify',                  [ClientController::class, 'notifyPaystackServiceRequest'])->name('paystack.notify');
-
-
-        // Route::post('servicesRequest',              [ClientController::class, 'serviceRequest'])->name('paystack.submit');
-        // Route::post('servicesRequest',              [ClientController::class, 'serviceRequest'])->name('flutter.submit');
+            //Paystack Routes
+            Route::post('/request/paystack/submit',                 [ClientController::class, 'storePaystackServiceRequest'])->name('paystack.submit');
+            Route::get('/request/paystack/{orderId}/apiRequest',    [ClientController::class, 'apiRequestPaystackServiceRequest'])->name('paystack.apiRequest');
+            Route::get('/request/paystack/notify',                  [ClientController::class, 'notifyPaystackServiceRequest'])->name('paystack.notify');
+            Route::post('/update_service_request',  [ClientController::class, 'update_client_service_rating'])->name('update_service_request');
+            Route::post('/submit_ratings',  [ClientController::class, 'client_rating'])->name('handle.ratings');
+            // Route::post('servicesRequest',              [ClientController::class, 'serviceRequest'])->name('paystack.submit');
+            // Route::post('servicesRequest',              [ClientController::class, 'serviceRequest'])->name('flutter.submit');
 
 
     });
 });
 
+Route::resource('cse', CseController::class);
 
-Route::prefix('/cse')->group(function () {
+// Route::prefix('/cse')->group(function () {
+//     Route::name('cse.')->group(function () {
+//         //All routes regarding CSE's should be in here
+//         Route::view('/',                   'cse.index')->name('index'); //Take me to CSE Dashboard
+
+Route::prefix('/cse')->middleware('monitor.cseservice.request.changes')->group(function () {
     Route::name('cse.')->group(function () {
         //All routes regarding CSE's should be in here
         Route::view('/',                    'cse.index')->name('index'); //Take me to CSE Dashboard
@@ -394,15 +439,13 @@ Route::prefix('/cse')->group(function () {
 
         // Route::view('/requests',            'cse.requests')->name('requests');
 
-        Route::post('client-decision', [ClientDecisionController::class, '__invoke'])->name('client.decision');
-
         Route::view(
             '/request/details',
             'cse.request_details',
             [
-                'tools' => \App\Models\ToolInventory::all(),
-                'ongoingSubStatuses' => \App\Models\SubStatus::where('status_id', 2)->get(['id', 'name']),
-                'warranties' => \App\Models\Warranty::all(),
+                // 'tools' => \App\Models\ToolInventory::all(),
+                // 'ongoingSubStatuses' => \App\Models\SubStatus::where('status_id', 2)->get(['id', 'name']),
+                // 'warranties' => \App\Models\Warranty::all(),
             ]
         )->name('request_details');
         Route::view('/profile',             'cse.view_profile')->name('view_profile');
@@ -411,6 +454,9 @@ Route::prefix('/cse')->group(function () {
 
         ])->name('edit_profile');
         Route::view('/location-request',    'cse.location_request')->name('location_request');
+        Route::post('/submit_ratings',  [CseController::class, 'user_rating'])->name('handle.ratings');
+        Route::post('/update_service_request',  [CseController::class, 'update_cse_service_rating'])->name('update_service_request');
+
     });
 });
 
@@ -428,7 +474,9 @@ Route::prefix('/supplier')->group(function () {
         Route::get('/rfqs',                               [SupplierRfqController::class, 'index'])->name('rfq');
         Route::get('/rfqs/details/{rfq:uuid}',            [SupplierRfqController::class, 'rfqDetails'])->name('rfq_details');
         Route::get('/rfqs/details/{rfq:uuid}',            [SupplierRfqController::class, 'sendInvoice'])->name('rfq_send_supplier_invoice');
-        
+        Route::post('/rfqs/store/',                       [SupplierRfqController::class, 'store'])->name('rfq_store_supplier_invoice');
+        Route::get('/sent-invoices',                               [SupplierRfqController::class, 'sentInvoices'])->name('rfq_sent_invoices');
+        Route::get('/sent-invoices/details/{rfq:id}',            [SupplierRfqController::class, 'sentInvoiceDetails'])->name('rfq_details');
     });
 });
 
@@ -452,7 +500,7 @@ Route::prefix('/technician')->group(function () {
     });
 });
 
-Route::prefix('/quality-assurance')->middleware('monitor.service.request.changes')->group(function () {
+Route::prefix('/quality-assurance')->group(function () {
     Route::name('quality-assurance.')->group(function () {
         //All routes regarding quality_assurance should be in here
         //Route::view('/', 'quality-assurance.index')->name('index'); //Take me to quality_assurance Dashboard

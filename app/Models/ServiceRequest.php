@@ -21,7 +21,23 @@ class ServiceRequest extends Model
     public $incrementing = false;
 
     protected $fillable = [
-        'client_id', 'service_id', 'unique_id', 'state_id', 'lga_id', 'town_id', 'price_id', 'phone_id', 'address_id', 'client_discount_id', 'client_security_code', 'status_id', 'description', 'total_amount', 'preferred_time'
+        'client_id',
+        'service_id',
+        'unique_id',
+        'state_id',
+        'lga_id',
+        'town_id',
+        'price_id',
+        'phone_id',
+        'address_id',
+        'client_discount_id',
+        'client_security_code',
+        'status_id',
+        'description',
+        'total_amount',
+        'preferred_time',
+        'has_cse_rated',
+        'has_client_rated'
     ];
     /**
      * @var mixed
@@ -154,14 +170,37 @@ class ServiceRequest extends Model
     {
         return $this->hasOne(Account::class, 'user_id', 'client_id');
     }
-
     public function address(){
         return $this->belongsTo(Contact::class, 'contact_id');
     }
 
-    public function phone()
+
+    public function technician()
     {
-        return $this->belongsTo(Contact::class);
+        return $this->belongsTo(Account::class);
+    }
+    
+
+    public function technicians()
+    {
+
+            return $this->hasOne(Price::class, 'user_id', 'service_id')->withDefault();
+    }
+
+
+    public function service_request_assignee(){
+        return $this->belongsTo(ServiceRequestAssigned::class, 'id' ,'service_request_id');
+    }
+     
+  
+    public function clientDiscount()
+    {
+        return $this->belongsTo(ClientDiscount::class, 'client_id');
+    }
+
+    public function clientDiscounts()
+    {
+        return $this->hasMany(ClientDiscount::class, 'client_id', 'client_id');
     }
 
     public function payment_status()
@@ -174,45 +213,15 @@ class ServiceRequest extends Model
         return $this->belongsTo(ServiceRequestAssigned::class, 'service_request_id')->with('users', 'client');
     }
 
-    public function service_request_assignee(){
-        return $this->belongsTo(ServiceRequestAssigned::class, 'id' ,'service_request_id');
-    }
-
+  
     public function payment_statuses()
     {
         return $this->belongsTo(Payment::class, 'unique_id', 'unique_id');
     }
 
 
-    public function addressee()
-    {
-        return $this->belongsTo(Contact::class, 'contact_id');
-    }
-
     public function service_request_cancellation()
     {
         return $this->belongsTo(ServiceRequestCancellation::class, 'id' ,'service_request_id');
     }
-
-    public function technician()
-    {
-        return $this->belongsTo(Account::class);
-    }
-    
-
-    public function technicians()
-    {
-        return $this->belongsToMany(User::class, 'service_request_assigned')->with('account', 'roles', 'contact');
-    }
-
-    public function clientDiscount()
-    {
-        return $this->belongsTo(ClientDiscount::class, 'client_id');
-    }
-
-    public function clientDiscounts()
-    {
-        return $this->hasMany(ClientDiscount::class, 'client_id', 'client_id')->with('discount');
-    }
-   
 }

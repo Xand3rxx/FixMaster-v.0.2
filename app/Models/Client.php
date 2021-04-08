@@ -30,6 +30,12 @@ class Client extends Model
         });
     }
 
+    public function ratings(){
+
+        return $this->hasMany(Rating::class,'ratee_id');
+
+        }
+
     /**
      * Get the user that owns the Account.
      */
@@ -37,6 +43,8 @@ class Client extends Model
     {
         return $this->belongsTo(User::class)->with(['account', 'contact']);
     }
+
+
 
     public function account()
     {
@@ -46,27 +54,25 @@ class Client extends Model
     /**
      * Get the service request of the Client
      */
-    public function service_request()
-    {
-        return $this->hasMany(ServiceRequest::class, 'client_id', 'user_id')->with('service');
-    }
-
     public function service_requests()
     {
         return $this->hasMany(ServiceRequest::class, 'client_id', 'user_id')->with('service');
     }
+
+    // public function service_requests()
+    // {
+    //     return $this->hasMany(ServiceRequest::class, 'client_id', 'user_id')->with('service');
+    // }
+
     
     public function invoice()
     {
         return $this->hasMany(Invoice::class, 'client_id', 'user_id');
     }
 
-    /**
-     * Get the contact added
-     */
-    // public function contact(){
-    //     return $this->hasMany(Contact::class, 'user_id', 'user_id');
-    // }
+    public function clientAverageRating(){
+        return round($this->ratings->avg('star'));
+    }
 
 }
 

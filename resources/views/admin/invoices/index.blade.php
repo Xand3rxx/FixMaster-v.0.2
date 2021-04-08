@@ -52,7 +52,7 @@
                                 @foreach($invoices as $invoice)
                                     <tr>
                                         <td class="tx-color-03 tx-center">{{ $loop->iteration }}</td>
-                                        <td class="tx-medium">{{ $invoice['invoice_number'] }}</td>
+                                        <td class="tx-medium">{{ $invoice['unique_id'] }}</td>
                                         <td class="tx-medium">{{ $invoice['invoice_type'] }}</td>
                                         <td class="tx-medium">{{ Str::title($invoice['client']['account']['first_name']. ' '.$invoice['client']['account']['last_name']) }}</td>
                                         <td class="tx-medium">{{ Carbon\Carbon::parse($invoice->created_at, 'UTC')->isoFormat('MMMM Do YYYY, h:mm:ssa') }}</td>

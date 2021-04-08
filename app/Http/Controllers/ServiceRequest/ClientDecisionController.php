@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\ServiceRequest;
 
 use App\Http\Controllers\Controller;
+use App\Models\Invoice;
 use App\Models\SubStatus;
 use Illuminate\Http\Request;
 
@@ -18,16 +19,39 @@ class ClientDecisionController extends Controller
     {
         $clientAcceptedId = SubStatus::select('id')->where('phase', 9)->first();
         $clientDeclinedId = SubStatus::select('id')->where('phase', 10)->first();
-//        dd($request, $clientAcceptedId, $clientDeclinedId);
+        $invoice = Invoice::find($request->invoice_id);
         if ($request['client_choice'] == 'accepted')
         {
             \App\Models\ServiceRequestProgress::storeProgress(auth()->user()->id, $request->request_id, 2, $clientAcceptedId->id);
-            return redirect()->route('cse.requests.show', [app()->getLocale(), $request->request_uuid]);
+            $invoice->update([
+                'phase' => '0'
+            ]);
+
+            if(auth()->user()->type->role->url == 'client')
+            {
+                return redirect()->route('client.service.all', app()->getLocale())->with('success', 'Diagnosis Invoice Accepted');
+            }
+            else
+            {
+                return redirect()->route('cse.requests.show', [app()->getLocale(), $request->request_uuid])->with('success', 'Diagnosis Invoice Accepted');
+            }
+
         }
         else if($request['client_choice'] == 'declined')
         {
             \App\Models\ServiceRequestProgress::storeProgress(auth()->user()->id, $request->request_id, 2, $clientDeclinedId->id);
-            return redirect()->route('cse.requests.show', [app()->getLocale(), $request->request_uuid]);
+            $invoice->update([
+                'phase' => '2'
+            ]);
+
+            if(auth()->user()->type->role->url == 'client')
+            {
+                return redirect()->route('client.service.all', app()->getLocale())->with('success', 'Diagnosis Invoice Accepted');
+            }
+            else
+            {
+                return redirect()->route('cse.requests.show', [app()->getLocale(), $request->request_uuid])->with('success', 'Diagnosis Invoice Accepted');
+            }
         }
     }
 }

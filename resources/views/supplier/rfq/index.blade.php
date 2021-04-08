@@ -52,7 +52,7 @@
                   <td class="tx-medium">{{ $rfq->unique_id }}</td>
                   <td class="tx-medium">{{ Str::title($rfq['issuer']['account']['first_name'] ." ". $rfq['issuer']['account']['last_name']) }}</td>
                   @if($rfq->status == 'Pending')
-                    <td class="text-medium text-success">Opened</td>
+                    <td class="text-medium text-success">Open</td>
                   @else
                     <td class="text-medium text-danger">Closed</td>
                   @endif
@@ -148,28 +148,32 @@
     var unitPrice = parseFloat(($('#unit-price-'+count).val().replace(/,/g , '')));
     var quantity  = parseInt($('.quantity-'+count).text());
     var totalAmount = (unitPrice * quantity);
+    $('#unit-amount-'+count).val(totalAmount);
     $('.amount-'+count).text(numberWithCommas(totalAmount.toFixed(2)));
-    totalAmount();
+    getTotalAmount();
   }
 
-  
+  function deliveryFee(){
+    // $('#delivery_fee').keyup(function(){
+    //     return $(this).val();
+    // });
+    $('.delivery-fee').text(numberWithCommas($('#delivery_fee').val()));
+    getTotalAmount();
+  }
 
-  function totalAmount()
+  function getTotalAmount()
   {
     var totalEachAmount = 0;
     var totalAmount = 0;
-    var deliveryFee = parseInt($('#delivery_fee').val());
 
     $('.each-amount').each(function (){
-
-        var total  = parseFloat($(this).text());
-
+        var total  = parseInt($(this).val());
         if(isNaN(total) == false){
           totalEachAmount += total;
-          totalAmount = totalAmount + deliveryFee;
-          $('.total-amount').text('₦'+numberWithCommas(totalAmount.toFixed(2)));
+          $('.total-amount').text('₦'+numberWithCommas(totalEachAmount.toFixed(2)));
+          $('#total_amount').val(totalEachAmount);
+          // return totalEachAmount;
         }
-
     });
   }
 

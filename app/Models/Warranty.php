@@ -11,9 +11,10 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class Warranty extends Model
 {
     use SoftDeletes, Generator;
+    use HasFactory;
 
     protected $fillable = [
-        'name', 'unique_id', 'percentage', 'warranty_type', 'description'
+        'user_id','name', 'unique_id', 'percentage', 'warranty_type', 'duration', 'description'
     ];
 
     /**
@@ -33,5 +34,10 @@ class Warranty extends Model
 
         });
 
+    }
+
+    public function scopeWarranties($query){
+        return $query->select('*')
+        ->orderBy('name', 'ASC');
     }
 }

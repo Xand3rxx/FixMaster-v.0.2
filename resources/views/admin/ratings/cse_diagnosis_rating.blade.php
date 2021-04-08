@@ -42,27 +42,16 @@
                     </tr>
                   </thead>
                   <tbody>
+                    @php $sn = 1; @endphp
+                @foreach($diagnosisRatings as $rating)
                     <tr>
-                      <td class="tx-color-03 tx-center">1</td>
-                      <td class="tx-medium">Kelvin Adesanya</td>
-                      <td class="tx-medium">Okoye Jackson</td>
-                      <td class="tx-medium text-center">REF-79A722D6</td>
-                      <td class="text-medium text-center">3.0</td>
+                      <td class="tx-color-03 tx-center">{{$sn++}}</td>
+                      <td class="tx-medium">{{$rating->clientAccount->first_name}} {{$rating->clientAccount->last_name}}</td>
+                      <td class="tx-medium">{{$rating->cseAccount->first_name}} {{$rating->cseAccount->last_name}}</td>
+                      <td class="tx-medium text-center">{{$rating->service_request->unique_id}}</td>
+                      <td class="text-medium text-center">{{number_format($rating->star,1)}}</td>
                     </tr>
-                    <tr>
-                        <td class="tx-color-03 tx-center">2</td>
-                        <td class="tx-medium">Wisdom Basil</td>
-                        <td class="tx-medium">Olaoye Benedict</td>
-                        <td class="tx-medium text-center">REF-27D2F0BE</td>
-                        <td class="text-medium text-center">4.0</td>
-                    </tr>
-                    <tr>
-                        <td class="tx-color-03 tx-center">3</td>
-                        <td class="tx-medium">Adebola Julius</td>
-                        <td class="tx-medium">Simpson Susan</td>
-                        <td class="tx-medium text-center">REF-EEE7FD14</td>
-                        <td class="text-medium text-center">4.0</td>
-                    </tr>
+                @endforeach
                   </tbody>
                 </table>
               </div><!-- table-responsive -->

@@ -6,6 +6,7 @@ use App\Http\Controllers\Messaging\MessageController;
 use App\Models\Income;
 use App\Models\SubService;
 use App\Models\Tax;
+use App\Models\Warranty;
 use App\Traits\Invoices;
 use Illuminate\Http\Request;
 
@@ -95,21 +96,16 @@ class HandleCompletedDiagnosisController extends Controller
             });
         }
 
-
-        // Check if New Technician is assigned
-        // store in the service_request_progresses
-        // \App\Models\ServiceRequestProgress::storeProgress($user->id, $serviceRequest->id, $substatus->status_id, $substatus->id);
-        // store in the activity log
-        // $this->log('request', 'Informational', Route::currentRouteAction(), $user->account->last_name . ' ' . $user->account->first_name . ' ' . $substatus->name . ' for (' . $serviceRequest->unique_id . ') Job.');
-        // $serviceRequest_id = $serviceRequest->id;
-        // $invoice = $this->diagnosticInvoice($serviceRequest_id);
         $subServiceId = SubService::select('id')->where('uuid', $request->sub_service_uuid)->first();
 
         // Check if an rfq id exists
         $rfq = $request['intiate_rfq'] == 'yes' ? $rfq->id : null;
 
+        // Get free warranty from DB
+        $warranty = Warranty::where('name', 'Free Warranty')->first();
+
         // Generate the diagnosis invoice
-        $invoice = $this->diagnosisInvoice($serviceRequest->id, $rfq, $subServiceId->id, $request->estimated_work_hours);
+        $invoice = $this->diagnosisInvoice($serviceRequest->id, $rfq, $subServiceId->id, $warranty->id, $request->estimated_work_hours);
 
         // Get the values that will be poulated in the invoice
         $get_fixMaster_royalty = Income::select('amount', 'percentage')->where('income_name', 'FixMaster Royalty')->first();
@@ -136,18 +132,20 @@ class HandleCompletedDiagnosisController extends Controller
         $this->log('request', 'Informational', Route::currentRouteAction(), auth()->user()->account->last_name . ' ' . auth()->user()->account->first_name . ' ' . $substatus->name . ' for (' . $serviceRequest->unique_id . ') Job.');
 
         //Send mail notification to client to preview the invoice
-        if($invoice)
-        {
-           $type = 'email';
-           $subject = 'Diagnosis Email Confirmation';
-           $from = auth()->user()->email;
-           $to = $invoice->serviceRequest->client->email;
-           $mail_data = '<div><span>Kindly check your dashboard for your diagnosis completion invoice. Thank you.</span></div>';
-//           return $this->sendNewEMail($type, $subject, $from, $to, $mail_data,$feature="");
+        if ($invoice) {
+            $type = 'email';
+            $subject = 'Diagnosis Email Confirmation';
+            $from = auth()->user()->email;
+            $to = $invoice->serviceRequest->client->email;
+            $mail_data = '<div><span>Kindly check your dashboard for your diagnosis completion invoice. Thank you.</span></div>';
+            //           return $this->sendNewEMail($type, $subject, $from, $to, $mail_data,$feature="");
         }
 
         // store in the activity log
-
+        //        dd();
+        $invoice->update([
+            'phase' => '1'
+        ]);
         return view('frontend.invoices.invoice')->with([
             'invoice' => $invoice,
             'rfqExists' => $invoice->rfq_id,
@@ -155,11 +153,11 @@ class HandleCompletedDiagnosisController extends Controller
             'serviceRequestUUID' => $serviceRequest->uuid,
             'fixmaster_royalty' => $fixMasterRoyalty,
             'fixmaster_royalty_value' => $fixMaster_royalty_value,
-            'warranty' => 0,
             'get_fixMaster_royalty' => $get_fixMaster_royalty,
             'taxes' => $tax_cost,
             'tax' => $tax,
             'logistics' => $logistics_cost,
+            'warranty' => $warranty->percentage,
             'total_cost' => $total_cost
         ]);
     }
