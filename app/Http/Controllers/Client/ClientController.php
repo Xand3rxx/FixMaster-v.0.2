@@ -57,6 +57,7 @@ class ClientController extends Controller
     {
 
         $myRequest = Client::where('user_id', auth()->user()->id)->with('service_requests')->firstOrFail();
+
         $myServiceRequests = $myRequest->service_requests;
    
         //Get total available serviecs
@@ -728,6 +729,7 @@ class ClientController extends Controller
     // return $serviceRequests;
 
     public function serviceRequest(Request $request){
+        return $this->saveRequest($request);
         
             $validatedData = $request->validate([            
             'balance'                   =>   'required',
@@ -739,6 +741,7 @@ class ClientController extends Controller
 
             // if payment method is wallet
             if($request->payment_method == 'Wallet'){
+
                 // if wallet balance is less than the service fee
                 if($request->balance > $request->booking_fee){
                     $SavedRequest = $this->saveRequest($request);
@@ -835,7 +838,7 @@ class ClientController extends Controller
             }
             // return back()->with('error', 'online payment coming soon');
             } else{
-                return back()->with('error', 'sorry!, an error occured please try again');
+                return back()->with('error', 'Sorry!, an error occured please try again');
                 }
 
            }
@@ -944,7 +947,7 @@ class ClientController extends Controller
                 }
         
                 /** Finally return the callback view for the end user */
-                return redirect()->route('client.services.list', app()->getLocale())->with('success', 'Service Request was successful!');
+                return redirect()->route('client.service.all', app()->getLocale())->with('success', 'Service Request was successful!');
             }
 
 
@@ -1026,10 +1029,14 @@ class ClientController extends Controller
 
 
     public function myServiceRequest(){
-        $myRequest = Client::where('user_id', auth()->user()->id)->with('service_request')->firstOrFail();
-        $data['myServiceRequests'] = $myRequest->service_request;
-        // return $data['myServiceRequests'];
-        return view('client.services.list', $data);
+
+        $myServiceRequests = Client::where('user_id', auth()->user()->id)->with('service_requests')->firstOrFail();
+
+        // return $myServiceRequests;
+
+        return view('client.services.list', [
+            'myServiceRequests' =>  $myServiceRequests
+        ]);
     }
 
     public function loyalty()
@@ -1128,30 +1135,37 @@ class ClientController extends Controller
     }
 
     public function saveRequest($request){
-        $service_request                        = new Servicerequest;
-        $service_request->uuid                  = auth()->user()->uuid;
-        $service_request->client_id             = auth()->user()->id;
-        $service_request->service_id            = $request->service_id;
-        $service_request->unique_id             = 'REF-'.$this->generateReference();
-        // $service_request->state_id              = $request->state_id;
-        // $service_request->lga_id                = $request->lga_id;
-        // $service_request->town_id               = $request->town_id;
-        $service_request->price_id              = $request->price_id;
-        $service_request->contact_id              = $request->myContact_id;
-        $service_request->client_discount_id    = $request->client_discount_id;
-        $service_request->client_security_code  = 'SEC-'.strtoupper(substr(md5(time()), 0, 8));
-        $service_request->status_id             = '1';
-        $service_request->description           = $request->description;
-        $service_request->total_amount          = $request->booking_fee;
-        $service_request->preferred_time        = date("Y-m-d"); //fix this later before pushing
-        $service_request->has_client_rated      = 'No'; 
-        $service_request->has_cse_rated         = 'No';
-        $service_request->created_at         = Carbon::now()->toDateTimeString();
-        $service_request->updated_at         = Carbon::now()->toDateTimeString();
+        // $service_request                        = new Servicerequest;
+        // $service_request->uuid                  = auth()->user()->uuid;
+        // $service_request->client_id             = auth()->user()->id;
+        // $service_request->service_id            = $request->service_id;
+        // $service_request->unique_id             = 'REF-'.$this->generateReference();
+        // // $service_request->state_id              = $request->state_id;
+        // // $service_request->lga_id                = $request->lga_id;
+        // // $service_request->town_id               = $request->town_id;
+        // $service_request->price_id              = $request->price_id;
+        // $service_request->contact_id              = $request->myContact_id;
+        // $service_request->client_discount_id    = $request->client_discount_id;
+        // $service_request->client_security_code  = 'SEC-'.strtoupper(substr(md5(time()), 0, 8));
+        // $service_request->status_id             = '1';
+        // $service_request->description           = $request->description;
+        // $service_request->total_amount          = $request->booking_fee;
+        // $service_request->preferred_time        = date("Y-m-d"); //fix this later before pushing
+        // $service_request->has_client_rated      = 'No'; 
+        // $service_request->has_cse_rated         = 'No';
+        // $service_request->created_at         = Carbon::now()->toDateTimeString();
+        // $service_request->updated_at         = Carbon::now()->toDateTimeString();
 
-        $service_request->save();
+        // $service_request->save();
 
-        return $service_request;
+
+        //Temporary Assign a CSE to a client's request for demo purposes
+        //List of CSE's Id's on the DB
+        $cseArray = array(2, 3, 4);
+
+        $randomCSE = array_rand($cseArray);
+
+        return $cseArray[$randomCSE];
     }
 
 }

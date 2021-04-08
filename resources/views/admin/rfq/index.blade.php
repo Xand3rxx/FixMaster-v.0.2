@@ -39,7 +39,7 @@
                   <th>Client</th>
                   <th>Issued By</th>
                   <th>Status</th>
-                  <th class="text-center">Total Amount</th>
+                  <th class="text-center">Total Amount(₦)</th>
                   <th>Date Created</th>
                   <th>Action</th>
                 </tr>
@@ -60,7 +60,7 @@
                   @else
                     <td class="text-medium text-success">RFQ Delivered</td>
                   @endif
-                  <td class="tx-medium text-center">₦{{ number_format($rfq->total_amount) ?? 'Null'}}</td>
+                  <td class="tx-medium text-center">{{ number_format($rfq->total_amount) ?? 'Null'}}</td>
                   <td class="text-medium">{{ Carbon\Carbon::parse($rfq->created_at, 'UTC')->isoFormat('MMMM Do YYYY, h:mm:ssa') }}</td>
                   <td class=" text-center">
                     <div class="dropdown-file">

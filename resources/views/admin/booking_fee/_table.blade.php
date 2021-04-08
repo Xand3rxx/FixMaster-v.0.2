@@ -4,7 +4,7 @@
         <th class="text-center">#</th>
         <th>Name</th>
         <th>Created By</th>
-        <th class="text-center">Amount</th>
+        <th class="text-center">Amount(₦)</th>
         <th class="text-center">Description</th>
         <th>Date Created</th>
         <th class="text-center">Action</th>
@@ -17,7 +17,7 @@
           <td class="tx-medium">{{ !empty($bookingFee->name) ? $bookingFee->name : 'UNAVAIALABLE' }}</td>
           <td>{{ !empty($bookingFee->user->email) ? $bookingFee->user->email : 'UNAVAIALABLE' }}</td>
           <td class="tx-medium text-center">{{ !empty($bookingFee->amount) ? number_format($bookingFee->amount) : '0' }}</td>
-          <td>{{ !empty($bookingFee->description) ? : 'No description found.' }}</td>
+          <td>{{ !empty($bookingFee->description) ? $bookingFee->description : 'UNAVAILABLE' }}</td>
           <td>{{ Carbon\Carbon::parse($bookingFee->created_at, 'UTC')->isoFormat('MMMM Do YYYY, h:mm:ssa') ?? Carbon\Carbon::now('UTC')->isoFormat('MMMM Do YYYY, h:mm:ssa') }}</td>
           <td class=" text-center">
             @if(!empty($bookingFee->name))

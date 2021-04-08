@@ -33,57 +33,71 @@
                                 <tr>
                                     <th class="text-center">#</th>
                                     <th>Service Name</th>
-                                    <th>Service Cost</th>
+                                    <th>Service Charge(₦)</th>
                                     <!-- <th>Phone Number</th>
                                     <th>Clients</th> -->
                                     <th>Status</th>
                                     <th>Created </th>
-                                    <th>Updated </th>
+                                    <th>Scheduled Date</th>
                                     <th class="text-center">Action</th> 
                                 </tr>
                                 </thead>
                                 <tbody>
-                                @foreach ($myServiceRequests as $k=> $myServiceRequest)
+                                {{-- {{ dd($myServiceRequests) }} --}}
+                                
+
+                                @foreach ($myServiceRequests['service_requests'] as $myServiceRequest)
+
+                                
                                 <tr>
 
-                                <!-- <li class="badge badge-danger badge-pill">Remote</li> -->
+                                    {{-- @foreach($item as $myServiceRequests)
+                                        <td class="tx-medium">{{ $myServiceRequest['service_request'][0]['service']['name'] }}</td>
+                                    @endforeach --}}
 
-                                <td class="tx-color-03 tx-center">{{ ++$k }}</td>
-                                <td class="tx-medium">{{ $myServiceRequest->service->name }}</td>
-                                <td class="tx-medium">{{ $myServiceRequest->total_amount }}</td>
+                                <td class="tx-color-03 tx-center">{{ $loop->iteration }}</td>
+                                <td class="font-weight-bold">{{ $myServiceRequest['service']['name'] }}</td>
+                                <td class="font-weight-bold">{{ $myServiceRequest->bookingFee->amount }}</td>
                                 <td class="tx-medium">
-                                @if($myServiceRequest->service->status==1)
-                                <span class="badge badge-primary rounded">Pending</span>
-                                @elseif($myServiceRequest->service->status==2)
-                                <span class="badge badge-success rounded">Ongoing</span>
-                                @elseif($myServiceRequest->service->status==3)
-                                <span class="badge badge-warning rounded">Cancelled</span>
-                                @elseif($myServiceRequest->service->status==4)
-                                <span class="badge badge-danger rounded">Completed</span>
+                                @if($myServiceRequest->status_id == 1)
+                                <span class="badge badge-warning rounded">Pending</span>
+                                @elseif($myServiceRequest->status_id == 2)
+                                <span class="badge badge-info rounded">Ongoing</span>
+                                @elseif($myServiceRequest->status_id == 3)
+                                <span class="badge badge-danger rounded">Cancelled</span>
+                                @elseif($myServiceRequest->status_id == 4)
+                                <span class="badge badge-success rounded">Completed</span>
                                 @endif
                                 </td>
-                                <td class="tx-medium">{{date("Y/m/d h:i:A", strtotime($myServiceRequest->created_at))}} </td>
-                                <td class="tx-medium">{{date("Y/m/d h:i:A", strtotime($myServiceRequest->updated_at))}} </td>
+                                <td class="tx-medium">{{ Carbon\Carbon::parse($myServiceRequest['created_at'], 'UTC')->isoFormat('MMMM Do YYYY, h:mm:ssa') }}</td>
+                                <td class="tx-medium font-weight-bold">{{ !empty($myServiceRequest['preferred_time']) ? Carbon\Carbon::parse($myServiceRequest['preferred_time'], 'UTC')->isoFormat('MMMM Do YYYY, h:mm:ssa') : 'Not Scheduled yet'}} </td>
                                 <td class=" text-center">
-                                    <div class="dropdown-file">
-                                    <a href="" class="dropdown-link" data-toggle="dropdown"><i data-feather="more-vertical"></i></a>
-                                    <div class="dropdown-menu dropdown-menu-right">
-                                       <a href="javascript:void(0)" data-target="#view{{$myServiceRequest->service->id }}" data-toggle="modal" class="dropdown-item details text-primary" title="View {{ $myServiceRequest->service->name}} details"><i class="far fa-clipboard"></i> Details</a>
-                                        @if(\App\Models\Invoice::where('service_request_id', $myServiceRequest->service->id)->where('phase', '1')->count() > 0 || \App\Models\Invoice::where('service_request_id', $myServiceRequest->service->id)->where('phase', '2')->count() > 0)
-                                        <hr>
-                                        @foreach(\App\Models\Invoice::where('service_request_id', $myServiceRequest->service->id)->where('phase', '1')->orWhere('phase', '2')->where('invoice_type', 'Diagnosis Invoice')->orWhere('invoice_type', 'Completion Invoice')->get() as $invoice)
-                                            <a href="{{ route('invoice', ['locale' => app()->getLocale(), 'invoice' => $invoice['uuid']]) }}" class="dropdown-item details text-info"><i data-feather="file-text" class="fea icon-sm"></i> View {{ $invoice['invoice_type'] }}</a>
-                                        @endforeach
-                                        @endif
-                                        <hr>
-                                        <a href="{{ route('client.request_details', [ 'request'=>$myServiceRequest->uuid, 'locale'=>app()->getLocale() ]) }}" title="View {{ $myServiceRequest->service->name}} details"><i class="far fa-clipboard"></i> Initiate Warranty</a>
-                                         </div>
+
+                                    <div class="btn-group dropdown-primary mr-2 mt-2">
+                                        <button type="button" class="btn btn-primary btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                            Action
+                                        </button>
+                                        <div class="dropdown-menu">
+                                             <a href="{{ route('client.request_details', [ 'request'=>$myServiceRequest->uuid, 'locale'=>app()->getLocale() ]) }}" class="dropdown-item text-primary"><i data-feather="clipboard" class="fea icon-sm"></i> Details</a>
+
+                                            @if(\App\Models\Invoice::where('service_request_id', $myServiceRequest->service->id)->where('phase', '1')->count() > 0 || \App\Models\Invoice::where('service_request_id', $myServiceRequest->service->id)->where('phase', '2')->count() > 0)
+                                                <hr>
+                                                @foreach(\App\Models\Invoice::where('service_request_id', $myServiceRequest->service->id)->where('phase', '1')->orWhere('phase', '2')->where('invoice_type', 'Diagnosis Invoice')->orWhere('invoice_type', 'Completion Invoice')->get() as $invoice)
+                                                    <a href="{{ route('invoice', ['locale' => app()->getLocale(), 'invoice' => $invoice['uuid']]) }}" class="dropdown-item details text-info"><i data-feather="file-text" class="fea icon-sm"></i> {{ $invoice['invoice_type'] }} Invoice</a>
+                                                @endforeach
+                                            @endif
+
+                                            @if(!empty($myServiceRequest['warranty']))
+                                            <hr>
+                                                <a href="""><i class="fas fa-award"></i> Initiate Warranty</a>
+                                            @endif
+                                        </div>
                                     </div>
                                 </td>
                                 </tr>
 
                                 <!-- <div class="modal fade" id="LoginForm" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true"> -->
-                <div class="modal fade" id="view{{$myServiceRequest->service->id }}" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                {{-- <div class="modal fade" id="view{{$myServiceRequest->service->id }}" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
                 <div class="modal-dialog modal-dialog-centered" role="document">
                     <div class="modal-content">
                     <div class="modal-header">
@@ -126,7 +140,7 @@
                             <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                         </div><!-- modal-footer -->
 
-    </div><!-- modal-content -->
+    </div><!-- modal-content --> --}}
   </div><!-- modal-dialog -->
 </div><!-- modal -->
 

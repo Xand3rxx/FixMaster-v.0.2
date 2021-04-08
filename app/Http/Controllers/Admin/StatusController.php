@@ -30,11 +30,10 @@ class StatusController extends Controller
      */
     public function index()
     {
-        //Return all Sub Statuses, including inactive ones
-        $subStatuses = SubStatus::SubStatuses()->get();
 
         return view('admin.sub_statuses.index', [
-            'subStatuses'   =>  $subStatuses
+            //Return all Sub Statuses, including inactive ones
+            'subStatuses'   =>  SubStatus::SubStatuses()->get()
         ]);
     }
 
@@ -46,6 +45,7 @@ class StatusController extends Controller
      */
     public function store(Request $request)
     {
+        //Get the last inserted phase count
         $lastPhase = (int) SubStatus::select('phase')->where('status_id', 2)->latest()->first()->phase;
 
         //Validate user input fields
@@ -53,6 +53,9 @@ class StatusController extends Controller
             'name'              =>   'required',
             'recurrence'        =>   'required|in:Yes,No',
         ]);
+
+        //Set 'createSubStatus` to false
+        (bool) $createSubStatus = false;
 
         DB::transaction(function () use ($request, $lastPhase, &$createSubStatus) {
 

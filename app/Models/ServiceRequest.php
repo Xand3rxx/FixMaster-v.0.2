@@ -224,4 +224,13 @@ class ServiceRequest extends Model
     {
         return $this->belongsTo(ServiceRequestCancellation::class, 'id' ,'service_request_id');
     }
+
+    public function warranty(){
+        return $this->hasOne(ServiceRequestWarranty::class, 'service_request_id');
+    }
+
+    public function bookingFee(){
+        return $this->hasOne(Price::class, 'id', 'price_id');
+    }
+
 }
