@@ -104,17 +104,18 @@
                                             <form method="POST" action="{{ route('client.invoice.payment', app()->getLocale()) }}">
                                                 @csrf
                                                 {{-- REQUIREMENTS FOR PAYMENT GATWAYS  --}}
-                                                <input type="hidden" class="d-none" value={{ $invoice['serviceRequest']['service']['service_charge'] + $fixmaster_royalty_value * ($invoice['serviceRequest']['service']['service_charge']) + $logistics + $tax * (($invoice['serviceRequest']['service']['service_charge']) + ( $fixmaster_royalty_value * ($invoice['serviceRequest']['service']['service_charge']) ) + $logistics)
-                                                - $invoice->serviceRequest->price->amount }} name="booking_fee">
+                                                <input type="hidden" class="d-none" value={{ $total_cost }} name="booking_fee">
 
                                                 <input type="hidden" class="d-none" value="paystack" id="payment_channel" name="payment_channel">
 
                                                 <input type="hidden" class="d-none" value="{{ $invoice['unique_id'] }}" id="unique_id" name="unique_id">
 
+                                                <input type="hidden" class="d-none" value="{{ $invoice['uuid'] }}" id="uuid" name="uuid">
+
                                                 <button type="submit" id="paystack_option"  class="btn btn-success">PAY </button>
                                             </form>
                                             <span class="text-primary"> Pending Payment</span><br>
-                                        @elseif($invoice->status == 2 && $invoice['invoice_type'] == 'Completion Invoice')
+                                        @elseif($invoice->status == 2 && $invoice['invoice_type'] == 'Diagnosis Invoice')
                                             <span class="text-success">Paid</span><br>
                                         @endif
                                     </div>
@@ -213,14 +214,12 @@
                                 <div class="row pb-4">
                                     <div class="col-lg-4 col-md-5 ml-auto">
                                         <ul class="list-unstyled h5 font-weight-normal mt-4 mb-0">
-                                            <li class="text-muted d-flex justify-content-between">Subtotal :<span>₦ {{ number_format($invoice['serviceRequest']['service']['service_charge'] ,2) }}</span></li>
-                                            <li class="text-muted d-flex justify-content-between">FixMaster Royalty :<span> ₦ {{ number_format( $fixmaster_royalty_value * ($invoice['serviceRequest']['service']['service_charge']) ,2) }}</span></li>
-                                            <li class="text-muted d-flex justify-content-between">Logistics :<span> ₦ {{ number_format( $logistics,2 ) }}</span></li>
-                                            <li class="text-muted d-flex justify-content-between">Taxes :<span> ₦ {{ number_format($tax * (($invoice['serviceRequest']['service']['service_charge']) + ( $fixmaster_royalty_value * ($invoice['serviceRequest']['service']['service_charge']) ) + $logistics), 2) }}</span></li>
-                                            <li class="d-flex justify-content-between text-danger">Booking :<span> - ₦ {{ number_format($invoice->serviceRequest->price->amount, 2) }}</span></li>
-                                            <li class="d-flex justify-content-between">Total :<span>₦ {{ number_format(
-    $invoice['serviceRequest']['service']['service_charge'] + $fixmaster_royalty_value * ($invoice['serviceRequest']['service']['service_charge']) + $logistics + $tax * (($invoice['serviceRequest']['service']['service_charge']) + ( $fixmaster_royalty_value * ($invoice['serviceRequest']['service']['service_charge']) ) + $logistics)
-    - $invoice->serviceRequest->price->amount
+                                            <li class="text-muted d-flex justify-content-between">Subtotal :<span>₦ {{ number_format($subTotal ,2) }}</span></li>
+                                            <li class="text-muted d-flex justify-content-between">FixMaster Royalty :<span> ₦ {{ number_format( $fixmasterRoyalty ,2) }}</span></li>
+                                            <li class="text-muted d-flex justify-content-between">Logistics :<span> ₦ {{ number_format( $logistics ,2 ) }}</span></li>
+                                            <li class="text-muted d-flex justify-content-between">Taxes :<span> ₦ {{ number_format($tax , 2) }}</span></li>
+                                            <li class="d-flex justify-content-between text-danger">Booking :<span> - ₦ {{ number_format($bookingCost, 2) }}</span></li>
+                                            <li class="d-flex justify-content-between">Total :<span>₦ {{ number_format($total_cost
     ,2) }}</span></li>
                                         </ul>
                                     </div><!--end col-->

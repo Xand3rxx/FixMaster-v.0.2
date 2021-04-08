@@ -33,6 +33,7 @@ class InvoiceController extends Controller
 
     public function invoice($language, Invoice $invoice)
     {
+        // Get the values for calculation
         $get_fixMaster_royalty = Income::select('amount', 'percentage')->where('income_name', 'FixMaster Royalty')->first();
         $get_logistics = Income::select('amount', 'percentage')->where('income_name', 'Logistics Cost')->first();
         $get_taxes = Tax::select('percentage')->where('name', 'VAT')->first();
@@ -43,19 +44,21 @@ class InvoiceController extends Controller
         $logistics_cost = $get_logistics->amount;
         $materials_cost = $invoice->materials_cost == null ? 0 : $invoice->materials_cost;
         $sub_total = $materials_cost + $invoice->labour_cost;
+        // End here
 
         $fixMasterRoyalty = '';
-
-        $warrantyCost = '';
+        $subTotal = '';
         $bookingCost = '';
         $tax_cost = '';
         $total_cost = '';
         $warranty = Warranty::where('name', 'Free Warranty')->first();
 
-        if ($invoice->invoice_type == 'Diagnostic Invoice') {
-            $fixMasterRoyalty = $fixMaster_royalty_value * ($serviceCharge);
-            $tax_cost = $tax * ($serviceCharge + $logistics_cost + $fixMasterRoyalty);
-            $total_cost = $serviceCharge + $fixMasterRoyalty + $tax_cost + $logistics_cost;
+        if ($invoice->invoice_type == 'Diagnosis Invoice') {
+            $subTotal = $serviceCharge;
+            $fixMasterRoyalty = $fixMaster_royalty_value * ($subTotal);
+            $bookingCost = $invoice->serviceRequest->price->amount;
+            $tax_cost = $tax * ($subTotal + $logistics_cost + $fixMasterRoyalty);
+            $total_cost = $serviceCharge + $fixMasterRoyalty + $tax_cost + $logistics_cost - $bookingCost;
         } else {
             $warrantyCost = 0.1 * ($invoice->labour_cost + $materials_cost);
             $bookingCost = $invoice->serviceRequest->price->amount;
@@ -64,16 +67,18 @@ class InvoiceController extends Controller
             $total_cost = $materials_cost + $invoice->labour_cost + $fixMasterRoyalty + $warrantyCost + $logistics_cost - $bookingCost - 1500 + $tax_cost;
         }
 
+//        dd($total_cost);
+
         return view('frontend.invoices.invoice')->with([
             'invoice' => $invoice,
             'rfqExists' => $invoice->rfq_id,
             'serviceRequestID' => $invoice->serviceRequest->id,
             'serviceRequestUUID' => $invoice->serviceRequest->uuid,
-            'fixmaster_royalty' => $fixMasterRoyalty,
-            'fixmaster_royalty_value' => $fixMaster_royalty_value,
             'get_fixMaster_royalty' => $get_fixMaster_royalty,
-            'tax' => $tax,
-            'taxes' => $tax_cost,
+            'subTotal' => $subTotal,
+            'bookingCost' => $bookingCost,
+            'fixmasterRoyalty' => $fixMasterRoyalty,
+            'tax' => $tax_cost,
             'logistics' => $logistics_cost,
             'warranty' => $warranty->percentage,
             'total_cost' => $total_cost
@@ -82,7 +87,7 @@ class InvoiceController extends Controller
 
     public function savePayment(Request $request)
     {
-        // dd($request);
+//         dd($request);
         $valid = $this->validate($request, [
             // List of things needed from the request like
             'booking_fee' => 'required',
@@ -90,17 +95,11 @@ class InvoiceController extends Controller
         ]);
         $generatedVal = $this->generateReference();
         $payment = $this->payment($request['booking_fee'], $valid['payment_channel'], 'service-request', $request['unique_id'], 'pending', $generatedVal);
+
         Session::put('Track', $generatedVal);
-
-        return $this->initiatePayment();
-
-    }
-
-    public function initiatePayment()
-    {
-        $track = Session::get('Track');
+        Session::put('InvoiceUUID', $request->uuid);
         // dd($track);
-        $data = Payment::where('reference_id', $track)->orderBy('id', 'DESC')->first();
+        $data = Payment::where('reference_id', $payment->reference_id)->orderBy('id', 'DESC')->first();
         //    dd($data);
         $user = User::find($data->user_id);
         // dd($user);
@@ -134,16 +133,20 @@ class InvoiceController extends Controller
 
             if (!$tranx['status']) {
                 return back()->with('error', $tranx['message']);
-
-
             }
+
+            return redirect($tranx['data']['authorization_url']);
+
         }
+
     }
 
     public function verifyPayment()
     {
         $track  = Session::get('Track');
+        $invoiceUUID = Session::get('InvoiceUUID');
         $data = Payment::where('reference_id', $track)->orderBy('id', 'DESC')->first();
+        $invoice = Invoice::where('uuid', $invoiceUUID)->first();
 
         $curl = curl_init();
 
@@ -192,8 +195,13 @@ class InvoiceController extends Controller
 
             // $client = \App\Models\Client::where('user_id', auth()->user()->id)->with('user')->firstOrFail();
         }
+        if($invoice['status'] == '1')
+        {
+            $invoice['status'] = '2';
+            $invoice->update();
+        }
 
         /** Finally return the callback view for the end user */
-        return redirect()->route('client.services.list', app()->getLocale())->with('success', 'Service Request was successful!');
+        return redirect()->route('invoice', [app()->getLocale(), $invoiceUUID])->with('success', 'Invoice payment was successful!');
     }
 }
