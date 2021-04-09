@@ -439,14 +439,11 @@ Route::prefix('/cse')->middleware('monitor.cseservice.request.changes')->group(f
                 // 'warranties' => \App\Models\Warranty::all(),
             ]
         )->name('request_details');
-//        Route::view('/profile',             'cse.view_profile')->name('view_profile');
-//        Route::view('/profile/edit',        'cse.edit_profile', [
-//             'banks' => \App\Models\Bank::all(),
-//
-//        ])->name('edit_profile');
-        Route::get('/profile/{cse:uuid}', [CseController::class, 'show'])->name('view_profile');
-        Route::get('/profile/edit/{cse:uuid}', [CseController::class, 'edit'])->name('edit_profile');
-        Route::patch('update-profile/{cse:uuid}', [CseController::class, 'update'])->name('update_profile');
+        Route::view('/profile',             'cse.view_profile')->name('view_profile');
+        Route::view('/profile/edit',        'cse.edit_profile', [
+            // 'banks' => \App\Models\Bank::all(),
+
+        ])->name('edit_profile');
         Route::view('/location-request',    'cse.location_request')->name('location_request');
         Route::post('/submit_ratings',  [CseController::class, 'user_rating'])->name('handle.ratings');
         Route::post('/update_service_request',  [CseController::class, 'update_cse_service_rating'])->name('update_service_request');

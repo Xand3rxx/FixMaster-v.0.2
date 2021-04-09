@@ -3,18 +3,12 @@
 namespace App\Http\Controllers\CSE;
 
 use App\Http\Controllers\Controller;
-use App\Models\Account;
-use App\Models\Contact;
-use App\Models\User;
+use App\Http\Controllers\RatingController;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Route;
-
-use App\Traits\Loggable;
-
+use App\Models\ServiceRequest;
 
 class CustomerServiceExecutiveController extends Controller
 {
-    use Loggable;
     /**
      * Display a listing of the resource.
      *
@@ -50,29 +44,22 @@ class CustomerServiceExecutiveController extends Controller
      * Display the specified resource.
      *
      * @param  int  $id
-     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View|\Illuminate\Http\Response
+     * @return \Illuminate\Http\Response
      */
-    public function show($language, $cse)
+    public function show($id)
     {
-        $user = User::where('uuid', $cse)->first();
-        return view('cse.view_profile', [
-            'user' => $user,
-        ]);
+        //
     }
 
     /**
      * Show the form for editing the specified resource.
      *
      * @param  int  $id
-     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View|\Illuminate\Http\Response
+     * @return \Illuminate\Http\Response
      */
-    public function edit($language, $cse)
+    public function edit($id)
     {
-        $user = User::where('uuid', $cse)->first();
-        return view('cse.edit_profile', [
-            'user' => $user,
-            'banks' => \App\Models\Bank::all()
-        ]);
+        //
     }
 
     /**
@@ -80,36 +67,11 @@ class CustomerServiceExecutiveController extends Controller
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  int  $id
-     * @return \Illuminate\Http\RedirectResponse
+     * @return \Illuminate\Http\Response
      */
-    public function update($language, Request $request, $cse)
+    public function update(Request $request, $id)
     {
-        $this->validateUpdateRequest();
-        $cseId = User::select('id')->where('uuid', $cse)->first();
-        $accountExists = Account::where('id', $cseId->id)->first();
-        $contactExists = Contact::where('id', $cseId->id)->first();
-
-        \Illuminate\Support\Facades\DB::transaction(function () use ($request, $accountExists, $contactExists)
-        {
-            // Update CSE Accounts Records table
-            $accountExists->update([
-                'first_name'        => $request->input('first_name'),
-                'middle_name'       => $request->input('middle_name'),
-                'last_name'         => $request->input('last_name'),
-                'gender'            => $request->input('gender'),
-                'bank_id'           => $request->input('bank_id'),
-                'account_number'    => $request->input('account_number'),
-            ]);
-
-            // Update CSE Contacts Records table
-            $contactExists->update([
-                'full_address'      => $request->input('full_address'),
-            ]);
-            $this->log('request', 'Informational', Route::currentRouteAction(), auth()->user()->account->last_name . ' ' . auth()->user()->account->first_name  . ') Job.');
-        });
-
-        return redirect()->route('cse.view_profile', [app()->getLocale(), $cse])->with('success', 'Account Updated Successfully');
-
+        //
     }
 
     /**
@@ -123,18 +85,20 @@ class CustomerServiceExecutiveController extends Controller
         //
     }
 
-    private function validateUpdateRequest()
+     /**
+     * CSE rate the users related to the service rquest
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function user_rating(Request $request, RatingController $ratings)
     {
-        return request()->validate([
-           'first_name'         => 'required|string',
-           'middle_name'        => 'string',
-           'last_name'          => 'required|string',
-           'gender'             => 'required',
-           'phone_number'       => 'required|numeric|min:11',
-           'profile_avatar'     => 'file',
-           'bank_id'            => 'required',
-           'account_number'     => 'numeric',
-           'full_address'       => 'required',
-        ]);
+        return $ratings->handleRatings($request);
     }
+
+    public function update_cse_service_rating($language, Request $request, RatingController $updateRatings)
+    {
+        return $updateRatings->handleServiceRatings($request);
+    }
+
 }
