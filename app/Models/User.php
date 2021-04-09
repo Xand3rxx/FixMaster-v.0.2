@@ -52,7 +52,7 @@ class User extends Authenticatable implements MustVerifyEmail
         static::creating(function ($user) {
             $user->uuid = (string) Str::uuid(); // Create uuid when a new user is to be created
         });
-    } 
+    }
 
     /**
      * Get the Type associated with the user.
@@ -62,11 +62,11 @@ class User extends Authenticatable implements MustVerifyEmail
         return $this->hasOne(UserType::class);
     }
 
-            public function ratings(){
+    public function ratings()
+    {
 
-            return $this->hasMany(Rating::class,'ratee_id');
-
-            }
+        return $this->hasMany(Rating::class, 'ratee_id');
+    }
 
     /**
      * Get the Category associated with the user who created it.
@@ -106,7 +106,7 @@ class User extends Authenticatable implements MustVerifyEmail
     public function account()
     {
         return $this->hasOne(Account::class);
-    } 
+    }
 
     /**
      * Get the Account associated with the user.
@@ -202,7 +202,7 @@ class User extends Authenticatable implements MustVerifyEmail
     {
         return $this->hasMany(ServiceRequestAssigned::class, 'user_id');
     }
-    
+
     public function clientRequest()
     {
         return $this->hasOne(ServiceRequest::class, 'client_id');
@@ -219,12 +219,12 @@ class User extends Authenticatable implements MustVerifyEmail
 
     public function serviceCompleted()
     {
-        return $this->hasMany(Status::class, 'user_id')->where('name','=', 'Completed');
+        return $this->hasMany(Status::class, 'user_id')->where('name', '=', 'Completed');
     }
 
     public function serviceCancelled()
     {
-        return $this->hasMany(Status::class, 'user_id')->where('name','=', 'Cancelled');
+        return $this->hasMany(Status::class, 'user_id')->where('name', '=', 'Cancelled');
     }
 
     public function cse_jobs()
@@ -236,8 +236,9 @@ class User extends Authenticatable implements MustVerifyEmail
     {
         return $this->hasMany(ServiceRequest::class, 'client_id');
     }
-    
-    public function userAverageRating(){
+
+    public function userAverageRating()
+    {
         return round($this->ratings->avg('star'));
     }
 
