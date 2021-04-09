@@ -1121,6 +1121,13 @@ class ClientController extends Controller
 
     }
 
+    public function payments()
+    {
+        return view('client.payment.list')->with([
+            'payments' => \App\Models\Payment::where('user_id', auth()->user()->id)->orderBy('id', 'DESC')->get(),
+        ]);
+    }
+
     public function client_rating(Request $request, RatingController $clientratings)
     {
         return $clientratings->handleClientRatings($request);
