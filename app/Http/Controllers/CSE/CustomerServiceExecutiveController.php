@@ -5,7 +5,6 @@ namespace App\Http\Controllers\CSE;
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\RatingController;
 use Illuminate\Http\Request;
-use App\Models\ServiceRequest;
 
 class CustomerServiceExecutiveController extends Controller
 {
