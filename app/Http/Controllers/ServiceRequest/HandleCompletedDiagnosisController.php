@@ -44,9 +44,9 @@ class HandleCompletedDiagnosisController extends Controller
 
             'intiate_trf'               =>  'bail|string|in:yes,no',
             'tool_id'                   =>  'bail|sometimes|required_unless:intiate_trf,no|array',
-            'tool_id.*'                 =>  'bail|sometimes|required_unless:intiate_trf,no|nullable',
+            'tool_id.*'                 =>  'bail|sometimes|required_unless:intiate_rfq,no|nullable',
             'tool_quantity'             =>  'bail|sometimes|required_unless:intiate_trf,no|array',
-            'tool_quantity.*'           =>  'bail|sometimes|required_unless:intiate_trf,no|nullable',
+            'tool_quantity.*'           =>  'bail|sometimes|required_unless:intiate_rfq,no|nullable',
 
         ]);
 
@@ -96,7 +96,6 @@ class HandleCompletedDiagnosisController extends Controller
             });
         }
 
-        // find the subservice
         $subServiceId = SubService::select('id')->where('uuid', $request->sub_service_uuid)->first();
 
         // Check if an rfq id exists

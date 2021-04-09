@@ -76,6 +76,9 @@ class RfqController extends Controller
         //Assign selected supplier rfq ID to `supplierRfqId`
         $supplierRfqId = $supplier->rfq_id;
 
+        //Assign selected supplier invoice ID to `supplierRfqId`
+        $supplierInvoiceId = $supplier->id;
+
         //Check if the selcted supplier has already been chosen
         $supplierAcceptanceExists = RfqSupplier::where('rfq_id', $supplierRfqId)->where('supplier_id', Auth::id())->count();
 
@@ -84,13 +87,13 @@ class RfqController extends Controller
         }
 
         //Get selected supplier rfq batches
-        $supplierInvoiceBatches =  RfqSupplierInvoiceBatch::where('rfq_supplier_invoice_id', $supplierRfqId)->get();
+        $supplierInvoiceBatches =  RfqSupplierInvoiceBatch::where('rfq_supplier_invoice_id', $supplierInvoiceId)->get();
 
         (bool) $supplierUpdate = false;
         (bool) $rfqBatchUpdate = false;
-        $totalAmount = 0;
+        $grandTotalAmount = 0;
 
-        DB::transaction(function () use ($supplier, $supplierId, $supplierInvoiceBatches, $supplierRfqId, $totalAmount, &$supplierUpdate, &$rfqBatchUpdate) {
+        DB::transaction(function () use ($supplier, $supplierId, $supplierInvoiceBatches, $supplierRfqId, $grandTotalAmount, &$supplierUpdate, &$rfqBatchUpdate) {
 
             $supplierUpdate = RfqSupplier::create([
                 'rfq_id'        =>  $supplierRfqId,
@@ -102,16 +105,16 @@ class RfqController extends Controller
             foreach ($supplierInvoiceBatches as $item => $value){
 
                 $rfqBatchUpdate = RfqBatch::where('id', $value->rfq_batch_id)->update([
-                    'amount'    => $value->unit_price,
+                    'amount'    => $value->total_amount,
                 ]);
 
-                $totalAmount += ($value->total_amount);
+                $grandTotalAmount += $value->total_amount;
             }
 
             Rfq::where('id', $supplier->rfq_id)->update([
                 'status'        =>   'Awaiting',
                 'accepted'      =>   'No',
-                'total_amount'  =>   $totalAmount
+                'total_amount'  =>   $grandTotalAmount + $supplier->delivery_fee,
             ]);
 
             $supplierUpdate = true;

@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\CSE;
 
 use App\Models\Cse;
-use Illuminate\Support\Arr;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
@@ -52,7 +51,7 @@ class RequestController extends Controller
     public function show($language, $uuid)
     {
         // find the service reqquest using the uuid and relations
-        $service_request = \App\Models\ServiceRequest::where('uuid', $uuid)->with(['price', 'service', 'service.sub_service'])->firstOrFail();
+        $service_request = \App\Models\ServiceRequest::where('uuid', $uuid)->with(['price', 'service', 'service.subServices'])->firstOrFail();
         // find the technician role CACHE THIS DURING PRODUCTION
         $technicainsRole = \App\Models\Role::where('slug', 'technician-artisans')->first();
         (array) $variables = [
@@ -72,19 +71,14 @@ class RequestController extends Controller
                         return $query->where('recurrence', 'yes')->whereBetween('phase', [1, 20]);
                     })->get(['id', 'uuid', 'name']),
             ]);
-            if ($service_request_progresses->sub_status_id >= 17) {
+            if ($service_request_progresses->sub_status_id >= 10) {
                 // find the Issued RFQ
                 $service_request->load(['rfqs' => function ($query) {
-                    $query->where('status','Awaiting')->where('accepted', 'no')->with('rfqBatches','rfqSupplier', 'rfqSupplier.supplier')->first();
+                    $query->where('status', 'Awaiting')->where('accepted', 'No')->with('rfqBatches', 'rfqSupplier', 'rfqSupplier.supplier')->first();
                 }]);
-                    // dd($service_request->load(['rfqs' => function ($query) {
-                    //     $query->where('status','Awaiting')->where('accepted', 'no')->with('rfqBatches','rfqSupplier', 'rfqSupplier.supplier')->first();
-                    // }]), $service_request['rfqs'][0]['rfqSupplier']);
+                // dd($service_request['rfqs']);
             }
-            // dd($variables);
         }
-
-
         return view('cse.requests.show', $variables);
     }
 

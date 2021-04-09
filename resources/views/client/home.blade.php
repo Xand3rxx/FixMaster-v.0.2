@@ -110,7 +110,7 @@
                 @foreach ($userServiceRequests['service_requests'] as $userServiceRequest)
                 @if($count++ < 3)
                     <div class="media key-feature align-items-center p-3 rounded shadow mt-4">
-                    <img src="{{ asset('assets/images/job/Circleci.svg')}}" class="avatar avatar-ex-sm" alt="">
+                    <img src="{{ asset('assets/images/job/Webhooks.svg')}}" class="avatar avatar-ex-sm" alt="">
                     <div class="media-body content ml-3">
                         <h4 class="title mb-0">{{ $userServiceRequest['service']['name'] }}({{ $userServiceRequest['service']['category']['name'] }})</h4>
                      

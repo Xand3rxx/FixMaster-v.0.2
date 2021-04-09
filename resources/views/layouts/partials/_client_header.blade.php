@@ -98,11 +98,11 @@
 
                         <li class="{{ Route::currentRouteNamed('client.service.all', 'client.request_details') ? 'active' : '' }}"><a href="{{route('client.service.all', app()->getLocale()) }}">Requests</a></li>
 
-                        <li class="{{ Route::currentRouteNamed('') ? 'active' : '' }}"><a href="#">Payments</a></li>
+                    <li class="{{ Route::currentRouteNamed('client.payments') ? 'active' : '' }}"><a href="{{ route('client.payments', app()->getLocale()) }}">Payments</a></li>
 
                         <li class="{{ Route::currentRouteNamed('') ? 'active' : '' }}"><a href="#">Messages</a></li> 
 
-                        <li class="{{ Route::currentRouteNamed('') ? 'active' : '' }}"><a href="{{ route('client.settings', app()->getLocale()) }}">Settings</a></li>
+                        <li class="{{ Route::currentRouteNamed('client.settings') ? 'active' : '' }}"><a href="{{ route('client.settings', app()->getLocale()) }}">Settings</a></li>
 
                         {{-- <li><a href="{{ route('login') }}">Logout</a></li> --}}
                     </ul>
@@ -163,7 +163,7 @@
                                                     <i data-feather="message-circle" class="fea icon-sm fea-social" ></i>
                                                 </a>
                                             </li>
-                                            <li class="list-inline-item"><a href="#" class="rounded" data-toggle="tooltip" data-placement="bottom" title="Book a Service"><i data-feather="layers" class="fea icon-sm fea-social"></i></a></li>
+                                            <li class="list-inline-item"><a href="#" class="rounded" data-toggle="tooltip" data-placement="bottom" title="Book a Service"><i data-feather="calendar" class="fea icon-sm fea-social"></i></a></li>
                                             <li class="list-inline-item"><a href="#" class="rounded" data-toggle="tooltip" data-placement="bottom" title="Settings"><i data-feather="settings" class="fea icon-sm fea-social"></i></a></li>
                                         </ul><!--end icon-->
                                     </div><!--end col-->
