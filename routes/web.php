@@ -415,7 +415,7 @@ Route::resource('cse', CseController::class);
 //         //All routes regarding CSE's should be in here
 //         Route::view('/',                   'cse.index')->name('index'); //Take me to CSE Dashboard
 
-Route::prefix('/cse')->group(function () {
+Route::prefix('/cse')->middleware('monitor.cseservice.request.changes')->group(function () {
     Route::name('cse.')->group(function () {
         //All routes regarding CSE's should be in here
         Route::view('/',                    'cse.index')->name('index'); //Take me to CSE Dashboard
@@ -445,6 +445,9 @@ Route::prefix('/cse')->group(function () {
 
         ])->name('edit_profile');
         Route::view('/location-request',    'cse.location_request')->name('location_request');
+        Route::post('/submit_ratings',  [CseController::class, 'user_rating'])->name('handle.ratings');
+        Route::post('/update_service_request',  [CseController::class, 'update_cse_service_rating'])->name('update_service_request');
+
     });
 });
 

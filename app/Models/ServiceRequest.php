@@ -105,7 +105,7 @@ class ServiceRequest extends Model
      */
     public function service()
     {
-        return $this->hasOne(Service::class, 'id', 'service_id');
+        return $this->hasOne(Service::class, 'id', 'service_id')->with('category');
     }
 
 

@@ -61,7 +61,10 @@ class ClientController extends Controller
 
         // $myServiceRequests = $myRequest->service_requests;
    
+        //  return Auth::user()->clientRequests()->with('service_request_assignees')->latest()->take(3)->get();
+
         return $myRequest;
+
         //Get total available serviecs
         $totalServices = Service::count();
 
