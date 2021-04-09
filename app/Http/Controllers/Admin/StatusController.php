@@ -2,26 +2,17 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\URL;
-use Auth;
-use Route;
-use DB;
-
 use App\Traits\Loggable;
 use App\Models\SubStatus;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Route;
 
 class StatusController extends Controller
 {
     use Loggable;
-    /**
-     * This method will redirect users back to the login page if not properly authenticated
-     * @return void
-     */  
-    public function __construct() {
-        $this->middleware('auth:web');
-    }
 
     /**
      * Display a listing of the resource.
@@ -30,7 +21,6 @@ class StatusController extends Controller
      */
     public function index()
     {
-
         return view('admin.sub_statuses.index', [
             //Return all Sub Statuses, including inactive ones
             'subStatuses'   =>  SubStatus::SubStatuses()->get()
@@ -69,45 +59,26 @@ class StatusController extends Controller
             ]);
 
             $createSubStatus = true;
-
         });
 
-        if($createSubStatus){
-
-            //Record crurrenlty logged in user activity
-            $type = 'Others';
-            $severity = 'Informational';
-            $actionUrl = Route::currentRouteAction();
-            $message = Auth::user()->email.' updated '.ucwords($request->input('name')).' sub-status';
-            $this->log($type, $severity, $actionUrl, $message);
-
-            return redirect()->route('admin.statuses.index', app()->getLocale())->with('success', ucwords($request->input('name')).' sub-status was successfully updated.');
-
-        }else{
-            //Record Unauthorized user activity
-            $type = 'Errors';
-            $severity = 'Error';
-            $actionUrl = Route::currentRouteAction();
-            $message = 'An error occurred while '.Auth::user()->email.' was trying to update sub-status.';
-            $this->log($type, $severity, $actionUrl, $message);
-
-            return back()->with('error', 'An error occurred while trying to update '.ucwords($request->input('name')).' sub-status.');
+        if ($createSubStatus) {
+            $this->log('Others', 'Informational', Route::currentRouteAction(), Auth::user()->email . ' updated ' . ucwords($request->input('name')) . ' sub-status');
+            return redirect()->route('admin.statuses.index', app()->getLocale())->with('success', ucwords($request->input('name')) . ' sub-status was successfully updated.');
+        } else {
+            $this->log('Errors', 'Error',  Route::currentRouteAction(), 'An error occurred while ' . Auth::user()->email . ' was trying to update sub-status.');
+            return back()->with('error', 'An error occurred while trying to update ' . ucwords($request->input('name')) . ' sub-status.');
         }
-
         return back()->withInput();
-
-
     }
 
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  int  $id
+     * @param  string  $uuid
      * @return \Illuminate\Http\Response
      */
     public function edit($language, $uuid)
     {
-
         return view('admin.sub_statuses._edit', [
             'subStatus' => SubStatus::where('uuid', $uuid)->firstOrFail()
         ]);
@@ -139,33 +110,30 @@ class StatusController extends Controller
             ]);
 
             $updateSubStatus = true;
-
         });
 
-        if($updateSubStatus){
+        if ($updateSubStatus) {
 
             //Record crurrenlty logged in user activity
             $type = 'Others';
             $severity = 'Informational';
             $actionUrl = Route::currentRouteAction();
-            $message = Auth::user()->email.' updated '.ucwords($request->input('name')).' sub-status';
+            $message = Auth::user()->email . ' updated ' . ucwords($request->input('name')) . ' sub-status';
             $this->log($type, $severity, $actionUrl, $message);
 
-            return redirect()->route('admin.statuses.index', app()->getLocale())->with('success', ucwords($request->input('name')).' sub-status was successfully updated.');
-
-        }else{
+            return redirect()->route('admin.statuses.index', app()->getLocale())->with('success', ucwords($request->input('name')) . ' sub-status was successfully updated.');
+        } else {
             //Record Unauthorized user activity
             $type = 'Errors';
             $severity = 'Error';
             $actionUrl = Route::currentRouteAction();
-            $message = 'An error occurred while '.Auth::user()->email.' was trying to update sub-status.';
+            $message = 'An error occurred while ' . Auth::user()->email . ' was trying to update sub-status.';
             $this->log($type, $severity, $actionUrl, $message);
 
-            return back()->with('error', 'An error occurred while trying to update '.ucwords($request->input('name')).' sub-status.');
+            return back()->with('error', 'An error occurred while trying to update ' . ucwords($request->input('name')) . ' sub-status.');
         }
 
         return back()->withInput();
-
     }
     /**
      * Remove the specified resource from storage.
@@ -180,28 +148,27 @@ class StatusController extends Controller
 
         $deleteSubStatus = $SubStatus->delete();
 
-        if($deleteSubStatus){
+        if ($deleteSubStatus) {
             //Record crurrenlty logged in user activity
             $type = 'Others';
             $severity = 'Informational';
             $actionUrl = Route::currentRouteAction();
-            $message = Auth::user()->email.' deleted '.$SubStatus->name.' sub-status';
+            $message = Auth::user()->email . ' deleted ' . $SubStatus->name . ' sub-status';
             $this->log($type, $severity, $actionUrl, $message);
 
-            return back()->with('success', $SubStatus->name. ' sub-status has been deleted.');
-            
-        }else{
+            return back()->with('success', $SubStatus->name . ' sub-status has been deleted.');
+        } else {
             //Record crurrenlty logged in user activity
             $type = 'Errors';
             $severity = 'Error';
             $actionUrl = Route::currentRouteAction();
-            $message = 'An error occurred while '.Auth::user()->email.' was trying to delete '.$SubStatus->name.' sub-status.';
+            $message = 'An error occurred while ' . Auth::user()->email . ' was trying to delete ' . $SubStatus->name . ' sub-status.';
             $this->log($type, $severity, $actionUrl, $message);
 
-            return back()->with('error', 'An error occurred while trying to delete '.$SubStatus->name);
-        } 
+            return back()->with('error', 'An error occurred while trying to delete ' . $SubStatus->name);
+        }
     }
-    
+
     public function deactivate($language, $uuid)
     {
         //Get SubStatus record
@@ -212,27 +179,25 @@ class StatusController extends Controller
             'status'    => 'inactive'
         ]);
 
-        if($deactivateSubStatus){
+        if ($deactivateSubStatus) {
             //Record crurrenlty logged in user activity
             $type = 'Others';
             $severity = 'Informational';
             $actionUrl = Route::currentRouteAction();
-            $message = Auth::user()->email.' deactivated '.$SubStatus->name.' sub-status';
+            $message = Auth::user()->email . ' deactivated ' . $SubStatus->name . ' sub-status';
             $this->log($type, $severity, $actionUrl, $message);
 
-            return redirect()->route('admin.statuses.index', app()->getLocale())->with('success', $SubStatus->name.' sub-status has been deactivated.');
-            
-        }else{
+            return redirect()->route('admin.statuses.index', app()->getLocale())->with('success', $SubStatus->name . ' sub-status has been deactivated.');
+        } else {
             //Record crurrenlty logged in user activity
             $type = 'Errors';
             $severity = 'Error';
             $actionUrl = Route::currentRouteAction();
-            $message = 'An error occurred while '.Auth::user()->email.' was trying to deactivate '.$SubStatus->name.' sub-status.';
+            $message = 'An error occurred while ' . Auth::user()->email . ' was trying to deactivate ' . $SubStatus->name . ' sub-status.';
             $this->log($type, $severity, $actionUrl, $message);
 
             return back()->with('error', 'An error occurred while trying to deactivate sub-status.');
-        } 
-        
+        }
     }
 
     public function reinstate($language, $uuid)
@@ -245,25 +210,24 @@ class StatusController extends Controller
             'status'    => 'active'
         ]);
 
-        if($reinstateSubStatus){
+        if ($reinstateSubStatus) {
             //Record crurrenlty logged in user activity
             $type = 'Others';
             $severity = 'Informational';
             $actionUrl = Route::currentRouteAction();
-            $message = Auth::user()->email.' reinstated '.$SubStatus->name.' SubStatus';
+            $message = Auth::user()->email . ' reinstated ' . $SubStatus->name . ' SubStatus';
             $this->log($type, $severity, $actionUrl, $message);
 
-            return redirect()->route('admin.statuses.index', app()->getLocale())->with('success', $SubStatus->name.' sub-status has been reinstated.');
-            
-        }else{
+            return redirect()->route('admin.statuses.index', app()->getLocale())->with('success', $SubStatus->name . ' sub-status has been reinstated.');
+        } else {
             //Record crurrenlty logged in user activity
             $type = 'Errors';
             $severity = 'Error';
             $actionUrl = Route::currentRouteAction();
-            $message = 'An error occurred while '.Auth::user()->email.' was trying to reinstate '.$SubStatus->name.' sub-status.';
+            $message = 'An error occurred while ' . Auth::user()->email . ' was trying to reinstate ' . $SubStatus->name . ' sub-status.';
             $this->log($type, $severity, $actionUrl, $message);
 
             return back()->with('error', 'An error occurred while trying to reinstate sub-status.');
-        } 
+        }
     }
 }

@@ -87,7 +87,7 @@
                 
                 {{-- <li><a class="" href="#">Contact</a></li> --}}
 
-                <li class="has-submenu {{ Route::currentRouteNamed('client.index', 'client.services.list', 'client.services.details', 'client.services.quote') ? 'active' : '' }}">
+                <li class="has-submenu {{ Route::currentRouteNamed('client.index', 'client.services.list', 'client.services.details', 'client.services.quote', 'client.service.all', 'client.request_details') ? 'active' : '' }}">
                     <a href="javascript:void(0)" class="l-dark l-light">Profile</a><span class="menu-arrow"></span>
                     <ul class="submenu">
                     <li class="{{ Route::currentRouteNamed('client.index') ? 'active' : '' }}"><a href="{{ route('client.index', app()->getLocale()) }}">Dashboard</a></li>
@@ -96,7 +96,7 @@
 
                         <li class="{{ Route::currentRouteNamed('client.wallet') ? 'active' : '' }}"><a href="{{ route('client.wallet', app()->getLocale()) }}">E-Wallet</a></li>
 
-                        <li class="{{ Route::currentRouteNamed('') ? 'active' : '' }}"><a href="{{route('client.service.all', app()->getLocale()) }}">Requests</a></li>
+                        <li class="{{ Route::currentRouteNamed('client.service.all', 'client.request_details') ? 'active' : '' }}"><a href="{{route('client.service.all', app()->getLocale()) }}">Requests</a></li>
 
                         <li class="{{ Route::currentRouteNamed('') ? 'active' : '' }}"><a href="#">Payments</a></li>
 

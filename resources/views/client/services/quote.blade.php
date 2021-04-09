@@ -168,6 +168,10 @@ p {
 .pac-container {
     z-index: 100000;
 }
+
+tbody td, thead th {
+    width: 20% !important;
+}
 </style>
 
 <div class="col-lg-8 col-12">
@@ -176,11 +180,9 @@ p {
             {{--
             <h5><span class="font-weight-bold">{{ $service->name }}</span> Service Request</h5>
             --}}
-            <div class="card blog">
-                <div class="author">
-                    <h4 class="text-light user d-block"><i class="mdi mdi-bookmark"></i> {{ !empty($service->name) ? $service->name : 'UNAVAILABLE' }}</h4>
-                    <small class="text-light date"><i class="mdi mdi-bookmark"></i> {{ $service->serviceRequests()->count() ?? '0' }} Requests</small>
-                </div>
+            <div class="card bg-primary">
+                <h4 class="text-white ml-2 user d-block"><i class="mdi mdi-bookmark"></i> Service: {{ !empty($service->name) ? $service->name : 'UNAVAILABLE' }}</h4>
+                <small class="text-white ml-2 date"><i class="mdi mdi-star_rate"></i> Total Requests: {{ $service->serviceRequests()->count() ?? '0' }}</small>
             </div>
 
             <form class="rounded p-4" method="POST" action="{{ route('client.services.serviceRequest', app()->getLocale()) }}" enctype="multipart/form-data">
@@ -229,7 +231,7 @@ p {
 
 
                 <div class="d-flex align-items-center justify-content-between mt-4 col-lg-12">  
-                    <button type="button" name="add" id="add_new_contact" data-toggle="modal" data-target="#add_data_Modal" class="btn btn-success btn-lg btn-block">Add New Contact</button>  
+                    <button type="button" name="add" id="add_new_contact" data-toggle="modal" data-target="#add_data_Modal" class="btn btn-primary btn-sm"><i data-feather="plus" class="fea icon-sm"></i> Add New Contact</button>  
                 </div> 
 
 
@@ -257,7 +259,7 @@ p {
     <!--end col-->
     <div class="col-md-6">
         <div class="form-group position-relative">
-            <label>Date & Time :</label>
+            <label>Scheduled Date & Time :</label>
             <i data-feather="calendar" class="fea icon-sm icons"></i>
             <input name="timestamp" type="text" class="form-control pl-5 @error('timestamp') is-invalid @enderror" placeholder="Click to select :" id="service-date-time" readonly value="{{ old('timestamp') }}" />
             @error('timestamp')
@@ -360,7 +362,7 @@ p {
 
 <div class="row ml-4 mb-4">
     <div class="col-sm-12">
-    <button type="submit" class="btn btn-success btn-lg btn-block">Submit</button>
+    <button type="submit" class="btn btn-primary btn-lg btn-block">Submit</button>
     <!-- <button type="submit" class="submitBnt btn btn-primary">Submit</button> -->
     </div><!--end col-->
 </div><!--end row-->

@@ -270,7 +270,7 @@ class ServiceRequestSeeder extends Seeder
                 'created_at'            => NULL, 
             ),
             array(
-                'user_id'               => '2', 
+                'user_id'               => '3', 
                 'service_request_id'    => '3',
                 'job_accepted'          =>  'Yes', 
                 'job_acceptance_time'   => '2020-01-07 10:11:52',

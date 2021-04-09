@@ -47,7 +47,7 @@ class Account extends Model
     }
     public function state()
     {
-        return $this->belongsTo(State::class, 'id');
+        return $this->hasOne(State::class, 'id');
     }
     public function lga()
     {
@@ -73,6 +73,11 @@ class Account extends Model
     public function usercontact()
     {
         return $this->hasOne(Contact::class, 'user_id');
+    }
+
+    public function town()
+    {
+        return $this->belongsTo(Town::class, 'id');
     }
 
 }

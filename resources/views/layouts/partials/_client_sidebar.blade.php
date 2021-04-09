@@ -51,7 +51,7 @@
                                 </a>
                             </div><!--end col-->
                             <div class="col-6 mt-4 pt-2">
-                                <a href="{{ route('client.service.all', app()->getLocale()) }}" class="accounts rounded d-block shadow text-center py-3 {{ Route::currentRouteNamed('client.service.all') ? 'active' : '' }}">
+                                <a href="{{ route('client.service.all', app()->getLocale()) }}" class="accounts rounded d-block shadow text-center py-3 {{ Route::currentRouteNamed('client.service.all', 'client.request_details') ? 'active' : '' }}">
                                     <span class="pro-icons h3 text-muted"><i class="uil uil-chart"></i></span>
                                     <h6 class="title text-dark h6 my-0">Requests</h6>
                                 </a>

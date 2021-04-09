@@ -12,36 +12,24 @@
             <span id="form_result"></span>
                     <form method="post" id="insert_form">  
                     <div class="row">
-                                    <div class="col-6">
+                                    <div class="col-md-4">
                                         <div class="form-group position-relative">
-                                            <label>Your Name <span class="text-danger">*</span></label>
+                                            <label>First Name <span class="text-danger">*</span></label>
                                             <input name="name" id="first-name" type="text" class="form-control" placeholder="First Name :" />
                                         </div>
                                     </div>
                                     <!--end col-->
-                                    <div class="col-6">
+                                    <div class="col-md-4">
                                         <div class="form-group position-relative">
                                             <label>Last Name <span class="text-danger">*</span></label>
                                             <input name="name" id="last-name" type="text" class="form-control" placeholder="Last Name :" />
                                         </div>
                                     </div>
-                                    <!--end col-->
-                                    <div class="col-12">
-                                        <div class="form-group position-relative">
-                                            <label>Street address <span class="text-danger">*</span></label>
-                                            <input type="text" name="address1" id="street-address" class="form-control user_address" placeholder="House number and street name :" />
-                                        </div>
-                                    </div>
-                                    <!--end col-->
 
-                                    <!-- hidden fields -->
-                                    <input type="hidden" value="" name="user_latitude" id="user_latitude" />
-                                    <input type="hidden" value="" name="user_longitude" id="user_longitude" />
-
-                                    <div class="col-12">
+                                    <div class="col-md-4">
                                         <div class="form-group position-relative">
-                                            <label>Phone Number <span class="text-danger">*</span></label>
-                                            <input type="text" name="address1" id="phone-number" class="form-control" />
+                                            <label>Contact Phone Number <span class="text-danger">*</span></label>
+                                            <input type="tel" maxlength="11" name="address1" id="phone-number" class="form-control phone" placeholder="Phone Number :" />
                                         </div>
                                     </div>
                                     <!--end col-->
@@ -95,15 +83,31 @@
                                             <!-- <input type="text" name="state" id="state" class="form-control" placeholder="State Name :"> -->
                                         </div>
                                     </div>
+
+                                   
+                                    
+                                    <!--end col-->
+
+                                    <div class="col-12">
+                                        <div class="form-group position-relative">
+                                            <label>Full Address <span class="text-danger">*</span></label>
+                                            <input type="text" name="address1" id="street-address" class="form-control user_address" placeholder="Full address of contact :" />
+                                        </div>
+                                    </div>
+                                    <!--end col-->
+
+                                    <!-- hidden fields -->
+                                    <input type="hidden" value="" name="user_latitude" id="user_latitude" />
+                                    <input type="hidden" value="" name="user_longitude" id="user_longitude" />
                                     <!--end col-->
                                 </div>
                         <br />   
-                        <input type="submit" name="insert" id="insert" value="Insert" class="btn btn-success" />  
+                        <input type="submit" name="insert" id="insert" value="Create" class="btn btn-primary" />  
                     </form>  
             </div>  
-            <div class="modal-footer">  
+            {{-- <div class="modal-footer">  
                     <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>  
-            </div>  
+            </div>   --}}
         </div>  
     </div> 
 </div> 

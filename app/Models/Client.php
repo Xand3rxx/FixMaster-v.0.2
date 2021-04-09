@@ -56,7 +56,7 @@ class Client extends Model
      */
     public function service_requests()
     {
-        return $this->hasMany(ServiceRequest::class, 'client_id', 'user_id')->with('service', 'warranty', 'bookingFee');
+        return $this->hasMany(ServiceRequest::class, 'client_id', 'user_id')->with('service', 'warranty', 'bookingFee', 'price', 'service_request_assignees');
     }
 
     public function service_request()
@@ -72,8 +72,6 @@ class Client extends Model
     public function clientAverageRating(){
         return round($this->ratings->avg('star'));
     }
-
-    
 
 }
 

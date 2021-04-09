@@ -11,15 +11,6 @@ class ServiceRequest extends Model
 {
     use SoftDeletes, Generator;
 
-    // column name of key
-    // protected $primaryKey = 'uuid';
-
-    // type of key
-    protected $keyType = 'string';
-
-    // whether the key is automatically incremented or not
-    public $incrementing = false;
-
     protected $fillable = [
         'client_id',
         'service_id',
@@ -28,8 +19,7 @@ class ServiceRequest extends Model
         'lga_id',
         'town_id',
         'price_id',
-        'phone_id',
-        'address_id',
+        'contact_id',
         'client_discount_id',
         'client_security_code',
         'status_id',
@@ -115,7 +105,7 @@ class ServiceRequest extends Model
      */
     public function service()
     {
-        return $this->hasOne(Service::class, 'id', 'service_id');
+        return $this->hasOne(Service::class, 'id', 'service_id')->with('category');
     }
 
 
@@ -233,4 +223,8 @@ class ServiceRequest extends Model
         return $this->hasOne(Price::class, 'id', 'price_id');
     }
 
+    public function service_request_assignees(){
+
+        return $this->hasMany(ServiceRequestAssigned::class, 'service_request_id')->with('user');
+    }
 }

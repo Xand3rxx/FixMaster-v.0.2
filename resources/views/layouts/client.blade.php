@@ -284,7 +284,7 @@
 
 
         //Prevent characters or string asides number in ohone number input field
-        $("#number, #phone_number, #alternate_phone_number").on("keypress keyup blur", function(event) {
+        $("#number, #phone_number, #alternate_phone_number, .phone").on("keypress keyup blur", function(event) {
             $(this).val($(this).val().replace(/[^\d].+/, ""));
             if ((event.which < 48 || event.which > 57)) {
                 event.preventDefault();
