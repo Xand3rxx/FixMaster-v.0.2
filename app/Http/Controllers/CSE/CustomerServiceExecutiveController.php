@@ -85,17 +85,14 @@ class CustomerServiceExecutiveController extends Controller
     public function update($language, Request $request, $cse)
     {
         $this->validateUpdateRequest();
-        // $cseId = User::select('id')->where('uuid', $cse)->first();
-        // $accountExists = Account::where('id', $cseId->id)->first();
-        // $contactExists = Contact::where('id', $cseId->id)->first();
+        $cseId = User::select('id')->where('uuid', $cse)->first();
+        $accountExists = Account::where('id', $cseId->id)->first();
+        $contactExists = Contact::where('id', $cseId->id)->first();
 
-        // $user = $request->user();
-
-        // \Illuminate\Support\Facades\DB::transaction(function () use ($request, $accountExists, $contactExists)
-        \Illuminate\Support\Facades\DB::transaction(function () use ($request)
+        \Illuminate\Support\Facades\DB::transaction(function () use ($request, $accountExists, $contactExists)
         {
             // Update CSE Accounts Records table
-            $request->user()->account()->update([
+            $accountExists->update([
                 'first_name'        => $request->input('first_name'),
                 'middle_name'       => $request->input('middle_name'),
                 'last_name'         => $request->input('last_name'),

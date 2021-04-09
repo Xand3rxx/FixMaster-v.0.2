@@ -295,9 +295,14 @@ $(document).ready(function() {
           }
           return false;
       }
+
+
+
+
     });
 
  })(jQuery);
+
 
 </script>
 @endpush
