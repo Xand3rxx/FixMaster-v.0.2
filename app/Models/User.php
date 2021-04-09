@@ -245,4 +245,5 @@ class User extends Authenticatable implements MustVerifyEmail
     {
         return $this->hasMany(RfqSupplierInvoice::class, 'supplier_id');
     }
+
 }

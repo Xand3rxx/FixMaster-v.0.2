@@ -39,22 +39,22 @@
             </div>
         </div>
 
+        {{-- {{ dd($requestDetail->service_request_assignee) }} --}}
    
-        @if($requestDetail->service_request_assignee->status == 'Active' && $requestDetail->status_id >= '3')
+        @if((!empty($assignedCSE->status) && $assignedCSE->status == 'Active'))
         <h5 class="mt-4">CSE Assigned</h5>
         <div class="col-lg-12 col-12 mt-4">
             <div class="card rounded bg-light overflow-hidden border-0 m-2">
                 <div class="row align-items-center no-gutters">
                     <div class="col-md-5">
-                        {{-- <img src="{{ asset('assets/user-avatars/default-male-avatar.png') }}" class="img-fluid" alt="" /> --}}
-                         @if(!empty($requestDetail->cses[0]->avatar) &&
-                        file_exists(public_path().'/assets/cse-technician-images/'.$requestDetail->cses[0]->account->avatar))
-                        <img src="{{ asset('assets/user-avatars/'.$requestDetail->cses[0]->avatar) }}" class="img-fluid" alt="" />
-                        @else @if($requestDetail->cses[0]->account->gender == 'male')
-                        <img src="{{ asset('assets/user-avatars/default-male-avatar.png') }}" alt="Default male profile avatar" class="img-fluid" />
+                         @if(!empty($requestDetail->cses[0]->account->avatar) &&
+                        file_exists(public_path().'/assets/user-avatars/'.$requestDetail->cses[0]->account->avatar))
+                            <img src="{{ asset('assets/user-avatars/'.$requestDetail->cses[0]->account->avatar) }}" class="img-fluid" alt="" />
+                        @elseif($requestDetail->cses[0]->gender == 'male')
+                            <img src="{{ asset('assets/images/default-male-avatar.png') }}" alt="Default male profile avatar" class="img-fluid" />
                         @else
-                        <img src="{{ asset('assets/user-avatars/default-female-avatar.png') }}" alt="Default female profile avatar" class="img-fluid" />
-                        @endif @endif
+                            <img src="{{ asset('assets/images/default-female-avatar.png') }}" alt="Default female profile avatar" class="img-fluid" />
+                        @endif
                     </div>
                     <!--end col-->
 
@@ -74,10 +74,10 @@
                                 {{-- <a href="{{ route('client.technician_profile',app()->getLocale()) }}" class="btn btn-sm btn-outline-primary">View Profile</a> --}}
                                 <a href="#validateSecurityCode" data-toggle="modal" class="btn btn-sm btn-outline-primary">CSE & Technician Profiles</a>
 
-                                @if($requestDetail->status_id != '3')
+                                {{-- @if($requestDetail->status_id != '3')
                                     <a href="#" data-toggle="modal" data-target="#message-modal" class="btn btn-sm btn-primary">Send Message </a>
                                 @endif
-                            </div>
+                            </div> --}}
                         </div>
                     </div>
                     <!--end col-->
@@ -88,7 +88,7 @@
         @endif
        
 
-        <h5 class="mt-4">Location & Time</h5>
+        <h5 class="mt-4">Location & Scheduled Time</h5>
         <p style="font-size: 10px;" class="text-muted">Location and appointemnt time as specified by you.</p>
         <ul class="list-unstyled">
             <li class="text-muted"><i data-feather="map-pin" class="fea icon-sm text-primary mr-2"></i>{{ $requestDetail->address->address }}</li>
@@ -120,18 +120,18 @@
         <ul class="list-unstyled">
             @if($requestDetail->status_id == '1')
             <li class="text-warning"><i data-feather="arrow-right" class="fea icon-sm text-primary mr-2"></i>Pending</li>
-            @elseif($requestDetail->status_id > '3')
-            <li class="text-info"><i data-feather="arrow-right" class="fea icon-sm text-primary mr-2"></i>Ongoing</li>
-            @elseif($requestDetail->status_id == '3')
-            <li class="text-success"><i data-feather="arrow-right" class="fea icon-sm text-primary mr-2"></i>Completed</li>
             @elseif($requestDetail->status_id == '2')
+            <li class="text-info"><i data-feather="arrow-right" class="fea icon-sm text-primary mr-2"></i>Ongoing</li>
+            @elseif($requestDetail->status_id == '4')
+            <li class="text-success"><i data-feather="arrow-right" class="fea icon-sm text-primary mr-2"></i>Completed</li>
+            @elseif($requestDetail->status_id == '3')
             <li class="text-danger"><i data-feather="arrow-right" class="fea icon-sm text-primary mr-2"></i>Cancelled</li>
             @endif
         </ul>
 
         <h5 class="mt-4">Payment Method</h5>
         <ul class="list-unstyled">
-            <li class="text-muted"><i data-feather="arrow-right" class="fea icon-sm text-primary mr-2"></i>Payment Method: {{ucfirst($requestDetail->payment_statuses->payment_channel) }}</li>
+            <li class="text-muted"><i data-feather="arrow-right" class="fea icon-sm text-primary mr-2"></i>Payment Method: {{ !empty($requestDetail->payment_statuses->payment_channel) ? ucfirst($requestDetail->payment_statuses->payment_channel) : 'UNAVAILABLE' }}</li>
             {{--
             <li class="text-muted">
                 <i data-feather="arrow-right" class="fea icon-sm text-primary mr-2"></i>Payment Gateway: PayStack
@@ -193,7 +193,7 @@
                         <label>Security Code:<span class="text-danger">*</span></label>
                         <i data-feather="lock" class="fea icon-sm icons"></i>
                         <input name="security_code" type="text" class="form-control pl-5" placeholder="Security Code:" id="security_code" value="" required />
-                        <small style="font-size: 10px;" class="text-danger">Securoty Code must be in uppercase.<small>
+                        <small style="font-size: 10px;" class="text-danger">Security code must be in uppercase.<small>
                     </div>
                 </div>
                 <!--end col-->
@@ -248,8 +248,8 @@
     </div><!-- modal-dialog -->
 </div><!-- modal -->
 
-@if($requestDetail->service_request_assignee->status == 'Active' && $requestDetail->status_id >= '3')
 
+@if($requestDetail->service_request_assignees->count() > 0)
 <div class="modal fade" id="cseTechnicianModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
         <div class="modal-content rounded shadow border-0">
@@ -265,49 +265,49 @@
                 <div class="row justify-content-center">
                     <div class="col-lg-8 col-md-12 mt-4 pt-2 text-center">
                         <ul class="nav nav-pills nav-justified flex-column flex-sm-row rounded" id="pills-tab" role="tablist">
-                            <li class="nav-item">
-                                <a class="nav-link rounded active" id="inbox-tab" data-toggle="pill" href="#cseTab" role="tab" aria-controls="inbox" aria-selected="false">
-                                    <div class="text-center pt-1 pb-1">
-                                        <h4 class="title font-weight-normal mb-0">CSE</h4>
-                                    </div>
-                                </a>
-                                <!--end nav link-->
-                            </li>
-                            <!--end nav item-->
+                            @foreach ($requestDetail->service_request_assignees as $assignee)
+                            @if($assignee['user']['roles'][0]['slug'] != 'admin-user')
 
-                            <li class="nav-item">
-                                <a class="nav-link rounded" id="sent-tab" data-toggle="pill" href="#technicianTab" role="tab" aria-controls="sent" aria-selected="false">
-                                    <div class="text-center pt-1 pb-1">
-                                        <h4 class="title font-weight-normal mb-0">Technician</h4>
-                                    </div>
-                                </a>
-                                <!--end nav link-->
-                            </li>
-                            <!--end nav item-->
+                                <li class="nav-item">
+                                    <a class="nav-link rounded @if($assignee['user']['roles'][0]['slug'] == "cse-user") active @endif" id="{{ $assignee['user']['roles'][0]['slug'] }}-tab" data-toggle="pill" href="#{{ $assignee['user']['roles'][0]['slug'] }}" role="tab" aria-controls="{{ $assignee['user']['roles'][0]['slug'] }}" aria-selected="false">
+                                        <div class="text-center pt-1 pb-1">
+                                            <h4 class="title font-weight-normal mb-0">
+                                                {{ $assignee['user']['roles'][0]['name'] }}
+                                            </h4>
+                                        </div>
+                                    </a>
+                                </li>
+                                @endif
+                            @endforeach
+                            
                         </ul>
                         <!--end nav pills-->
                     </div>
                 </div>
 
                 <div class="tab-content" id="pills-tabContent">
-                    <div class="tab-pane fade show active" id="cseTab" role="tabpanel" aria-labelledby="cseTab-tab">
+
+                    @foreach($requestDetail->service_request_assignees as $assignee)
+                    @if($assignee['user']['roles'][0]['slug'] != 'admin-user')
+
+                        <div class="tab-pane fade show @if($assignee['user']['roles'][0]['slug'] == "cse-user") active @endif" id="{{ $assignee['user']['roles'][0]['slug'] }}" role="tabpanel" aria-labelledby="{{ $assignee['user']['roles'][0]['slug']}}-tab">
                         <div class="col-lg-12 col-12 mt-4">
                             <div class="card rounded bg-light overflow-hidden border-0 m-2">
                                 <div class="row align-items-center no-gutters">
                                     <div class="col-md-5">
                                     
-                                        @if(!empty($requestDetail->cses[0]->account->avatar) && file_exists(public_path().'/assets/user-avatars/'.$requestDetail->cses[0]->account->avatar))
-                                        <img src="{{ asset('assets/user-avatars/'.$requestDetail->cses[0]->account->avatar) }}" class="img-fluid" alt="" />
-                                        @else @if($requestDetail->cses[0]->account->gender == 'male')
-                                        <img src="{{ asset('assets/user-avatars/default-male-avatar.png') }}" alt="Default male profile avatar" class="img-fluid" />
+                                        @if(!empty($assignee['user']['account']['avatar']) && file_exists(public_path().'/assets/user-avatars/'.$assignee['user']['account']['avatar']))
+                                            <img src="{{ asset('assets/user-avatars/'.$assignee['user']['account']['avatar']) }}" class="img-fluid" alt="" />
+                                        @elseif($assignee['user']['account']['gender'] == 'male')
+                                            <img src="{{ asset('assets/images/default-male-avatar.png') }}" alt="Default male profile avatar" class="img-fluid" />
                                         @else
-                                        <img src="{{ asset('assets/user-avatars/default-female-avatar.png') }}" alt="Default female profile avatar" class="img-fluid" />
-                                        @endif @endif
+                                            <img src="{{ asset('assets/images/default-female-avatar.png') }}" alt="Default female profile avatar" class="img-fluid" />
+                                        @endif
                                     </div>
 
                                     <div class="col-md-7">
                                         <div class="card-body">
-                                            <h6 class="text-primary font-weight-bold">{{ $requestDetail->cses[0]->account->first_name.' '.$requestDetail->cses[0]->account->last_name }} <small class="text-muted d-block">CSE | FixMaster</small></h6>
+                                            <h6 class="text-primary font-weight-bold">{{ $assignee['user']['account']['first_name'].' '.$assignee['user']['account']['last_name'] }} <small class="text-muted d-block">{{ $assignee['user']['roles'][0]['name'] }} | FixMaster</small></h6>
                                             <ul class="list-unstyled mb-0">
                                                 <li class="list-inline-item"><i class="mdi mdi-star text-warning"></i></li>
                                                 <li class="list-inline-item"><i class="mdi mdi-star text-warning"></i></li>
@@ -317,15 +317,20 @@
                                             </ul>
 
                                             <ul class="list-unstyled">
-                                                <li class="h6">
-                                                    <i data-feather="activity" class="fea icon-sm text-warning mr-2"></i><span class="text-muted">Completed Jobs :</span> {{ $requestDetail->cses[0]->requests()->where('status_id',
-                                                    '3')->count() }}
-                                                </li>
-                                                <li class="h6"><i data-feather="map-pin" class="fea icon-sm text-warning mr-2"></i><span class="text-muted">State :</span> {{ $requestDetail->cses[0]->account->state->name }}</li>
-                                                <li class="h6"><i data-feather="map-pin" class="fea icon-sm text-warning mr-2"></i><span class="text-muted">Town/City :</span> {{ $requestDetail->cses[0]->account->lga->name }}</li>
-                                                <li class="h6"><i data-feather="home" class="fea icon-sm text-warning mr-2"></i><span class="text-muted">Address :</span> {{ $requestDetail->cses[0]->contact == null ? '': $requestDetail->cses[0]->contact->address }}</li>
+                                                {{-- <li class="h6">
+                                                    <i data-feather="activity" class="fea icon-sm text-warning mr-2"></i><span class="text-muted">Completed Jobs :</span> {{ $requestDetail->service_request_assignee['user']->userCompletedJobs()->where('status_id',
+                                                    4)->count() }}
+                                                </li> --}}
+                                                <li class="h6"><i data-feather="map-pin" class="fea icon-sm text-warning mr-2"></i><span class="text-muted">State :</span> {{ !empty($assignee['user']['account']['state_id']) ? $assignee['user']['account']->state->name : 'UNAVAILABLE' }}</li>
 
-                                                <li class="h6"><i data-feather="phone" class="fea icon-sm text-warning mr-2"></i><span class="text-muted">Mobile :</span> {{ $requestDetail->cses[0]->contact == null ? '' : $requestDetail->cses[0]->contact->phone_number }}</li>
+
+                                                <li class="h6"><i data-feather="map-pin" class="fea icon-sm text-warning mr-2"></i><span class="text-muted">L.G.A:</span> {{ !empty($assignee['user']['account']['lga_id']) ? $assignee['user']['account']->lga->name : 'UNAVAILABLE' }}</li> 
+
+                                                <li class="h6"><i data-feather="map-pin" class="fea icon-sm text-warning mr-2"></i><span class="text-muted">Town/Ward:</span> {{ !empty($assignee['user']['account']['town_id']) ? $assignee['user']['account']->town->name : 'UNAVAILABLE' }}</li> 
+
+                                                <li class="h6"><i data-feather="home" class="fea icon-sm text-warning mr-2"></i><span class="text-muted">Address :</span> {{ $assignee['user']->contact == null ? '': $assignee['user']->contact->address }}</li>
+
+                                                <li class="h6"><i data-feather="phone" class="fea icon-sm text-warning mr-2"></i><span class="text-muted">Mobile :</span> {{ $assignee['user']->contact == null ? '' : $assignee['user']->contact->phone_number }}</li> 
                                             </ul>
                                         </div>
                                     </div>
@@ -333,56 +338,16 @@
                             </div>
                         </div>
                     </div>
-
-                    <div class="tab-pane fade show" id="technicianTab" role="tabpanel" aria-labelledby="technicianTab-tab">
-                        <div class="col-lg-12 col-12 mt-4">
-                            <div class="card rounded bg-light overflow-hidden border-0 m-2">
-                                <div class="row align-items-center no-gutters">
-                                    <div class="col-md-5">
-                                        @if(!empty($technician->account->avatar) && file_exists(public_path().'/assets/cse-technician-images/'.$requestDetail->cses[0]->account->avatar))
-                                        <img src="{{ asset('assets/user-avatars/'.$technician->account->avatar) }}" class="img-fluid" alt="" />
-                                        @else @if($technician->account->gender == 'male')
-                                        <img src="{{ asset('assets/user-avatars/default-male-avatar.png') }}" alt="Default male profile avatar" class="img-fluid" />
-                                        @else
-                                        <img src="{{ asset('assets/user-avatars/default-female-avatar.png') }}" alt="Default female profile avatar" class="img-fluid" />
-                                        @endif @endif
-                                    </div>
-
-                                    <div class="col-md-7">
-                                        <div class="card-body">
-                                            <h6 class="text-primary font-weight-bold">
-                                                {{ $technician->account->first_name.' '.$technician->account->last_name }} <small class="text-muted d-block">Technician | FixMaster</small>
-                                            </h6>
-                                            <ul class="list-unstyled mb-0">
-                                                <li class="list-inline-item"><i class="mdi mdi-star text-warning"></i></li>
-                                                <li class="list-inline-item"><i class="mdi mdi-star text-warning"></i></li>
-                                                <li class="list-inline-item"><i class="mdi mdi-star text-warning"></i></li>
-                                                <li class="list-inline-item"><i class="mdi mdi-star text-warning"></i></li>
-                                            </ul>
-
-                                            <ul class="list-unstyled">
-                                                <li class="h6">
-                                                    <i data-feather="activity" class="fea icon-sm text-warning mr-2"></i><span class="text-muted">Completed Jobs :</span> {{
-                                                    $technician->requests()->where('status_id', '3')->count() }}
-                                                </li>
-                                                <li class="h6"><i data-feather="map-pin" class="fea icon-sm text-warning mr-2"></i><span class="text-muted">State :</span> {{ $technician->account->state->name }}</li>
-                                                <li class="h6"><i data-feather="map-pin" class="fea icon-sm text-warning mr-2"></i><span class="text-muted">Town/City :</span> {{ $technician->account->lga->name }}</li>
-                                                <li class="h6"><i data-feather="home" class="fea icon-sm text-warning mr-2"></i><span class="text-muted">Address :</span> {{ $technician->contact == null ? '' : $technician->contact->address }}</li>
-
-                                                <li class="h6"><i data-feather="phone" class="fea icon-sm text-warning mr-2"></i><span class="text-muted">Mobile :</span> {{ $technician->contact == null ? '': $technician->contact->phone_number }}</li>
-                                            </ul>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                    @endif
+                    @endforeach
                 </div>
             </div>
         </div>
     </div>
 </div>
 @endif
+
+
 
 @push('scripts')
 <script>

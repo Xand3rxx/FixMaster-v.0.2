@@ -110,7 +110,7 @@
                 <div class="media key-feature align-items-center p-3 rounded shadow mt-4">
                     <img src="images/job/Circleci.svg" class="avatar avatar-ex-sm" alt="">
                     <div class="media-body content ml-3">
-                        <h4 class="title mb-0">{{ $userServiceRequest->service->name }}({{ $userServiceRequest->service->category->name }})</h4>
+                        <h4 class="title mb-0">{{ $userServiceRequest['service']['name'] }}({{ $userServiceRequest['service']->category->name }})</h4>
                      
                         @if(!empty($userServiceRequest->clientDiscounts[0]->discount->rate) && ($userServiceRequest->clientDiscounts[0]->availability == 'unused') )
                         <p class="text-muted mb-0"><span>Amount:</span> 
@@ -128,7 +128,7 @@
                         @endif 
                       
                         <p class="mb-0"><a href="{{ route('client.request_details', [ 'request'=>$userServiceRequest->uuid, 'locale'=>app()->getLocale() ]) }}" style="color: #161c2d" title="View Service request details">CSE: <span class="text-muted">
-                            @if($userServiceRequest->status_id >= '3' && $userServiceRequest->service_request_assignee->status == 'Active') {{ $userServiceRequest->cses[0]->account->first_name.' '.$userServiceRequest->cses[0]->account->last_name }} @else Not Assigned @endif
+                            @if($userServiceRequest->status_id >= '2' && $userServiceRequest->cses[0]->status == 'Active') {{ $userServiceRequest->cses[0]->account->first_name.' '.$userServiceRequest->cses[0]->account->last_name }} @else Not Assigned @endif
                         </span></a></p> 
                         <p class="mb-0">Status: 
                             @if($userServiceRequest->status_id == '1')

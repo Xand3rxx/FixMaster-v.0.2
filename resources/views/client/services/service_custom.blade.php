@@ -52,7 +52,7 @@
                     </div><!--end col--> 
                     <div class="col-md-6">
                         <div class="form-group position-relative">
-                            <label>Date & Time :<span class="text-danger">*</span></label>
+                            <label>Scheduled Date & Time :<span class="text-danger">*</span></label>
                             <i data-feather="calendar" class="fea icon-sm icons"></i>
                             <input name="name" type="text" class="form-control pl-5" placeholder="Click to select :"  id="service-date-time" readonly>
                         </div>

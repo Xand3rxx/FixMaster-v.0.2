@@ -63,7 +63,7 @@ class EssentialsController extends Controller
             $towns =  $stateExists->towns;
 
             $optionValue = '';
-            $optionValue .= "<option value='' selected>Select towns</option>";
+            $optionValue .= "<option value='' selected>Select Town</option>";
             foreach ($towns as $town) {
 
                 $optionValue .= "<option value='$town->id' {{ old('town_id') == $town->id ? 'selected' : ''}}>$town->name</option>";

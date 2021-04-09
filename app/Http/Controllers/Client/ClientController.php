@@ -42,6 +42,7 @@ use PHPMailer\PHPMailer\Exception;
 use Carbon\Carbon;
 
 use App\Http\Controllers\Messaging\MessageController;
+use Illuminate\Support\Str;
 
 
 class ClientController extends Controller
@@ -58,8 +59,9 @@ class ClientController extends Controller
 
         $myRequest = Client::where('user_id', auth()->user()->id)->with('service_requests')->firstOrFail();
 
-        $myServiceRequests = $myRequest->service_requests;
+        // $myServiceRequests = $myRequest->service_requests;
    
+        return $myRequest;
         //Get total available serviecs
         $totalServices = Service::count();
 
@@ -81,24 +83,23 @@ class ClientController extends Controller
                 'phone_number' => '0909078888'
             ],
             'popularRequests'  =>  $popularRequests,
-            'userServiceRequests' =>  $myServiceRequests, 
+            'userServiceRequests' =>  $myRequest, 
          
         ]);
     }
 
     public function clientRequestDetails($language, $request){
-        $requestDetail = ServiceRequest::where('uuid', $request)->first();
-        foreach ($requestDetail->technicians as $value) {
-            if( $value->roles[0]->slug == 'technician-artisans'){
-              $technician = $value;
-            }
-        }
-      
-        $data = [
-            'requestDetail'   =>  $requestDetail,
-            'technician'      =>    $technician
-        ];
-        return view('client.request_details', $data);
+
+        $requestDetail = ServiceRequest::where('uuid', $request)->firstOrFail();
+
+        // return \App\Models\ServiceRequestAssigned::where('service_request_id', $requestDetail->id)->where('status', 'Active')->firstOrFail()->status;
+
+        return view('client.request_details', [
+
+            'requestDetail'     =>  $requestDetail,
+            'assignedCSE'       =>  \App\Models\ServiceRequestAssigned::where('service_request_id', $requestDetail->id)->where('status', 'Active')->first(),
+
+        ]);
     }
 
 
@@ -729,7 +730,6 @@ class ClientController extends Controller
     // return $serviceRequests;
 
     public function serviceRequest(Request $request){
-        return $this->saveRequest($request);
         
             $validatedData = $request->validate([            
             'balance'                   =>   'required',
@@ -1032,10 +1032,9 @@ class ClientController extends Controller
 
         $myServiceRequests = Client::where('user_id', auth()->user()->id)->with('service_requests')->firstOrFail();
 
-        // return $myServiceRequests;
 
         return view('client.services.list', [
-            'myServiceRequests' =>  $myServiceRequests
+            'myServiceRequests' =>  $myServiceRequests,
         ]);
     }
 
@@ -1135,28 +1134,24 @@ class ClientController extends Controller
     }
 
     public function saveRequest($request){
-        // $service_request                        = new Servicerequest;
+        $service_request                        = new ServiceRequest();
         // $service_request->uuid                  = auth()->user()->uuid;
-        // $service_request->client_id             = auth()->user()->id;
-        // $service_request->service_id            = $request->service_id;
+        $service_request->client_id             = auth()->user()->id;
+        $service_request->service_id            = $request->service_id;
         // $service_request->unique_id             = 'REF-'.$this->generateReference();
-        // // $service_request->state_id              = $request->state_id;
-        // // $service_request->lga_id                = $request->lga_id;
-        // // $service_request->town_id               = $request->town_id;
-        // $service_request->price_id              = $request->price_id;
-        // $service_request->contact_id              = $request->myContact_id;
-        // $service_request->client_discount_id    = $request->client_discount_id;
+        $service_request->price_id              = $request->price_id;
+        $service_request->contact_id              = $request->myContact_id;
+        $service_request->client_discount_id    = $request->client_discount_id;
         // $service_request->client_security_code  = 'SEC-'.strtoupper(substr(md5(time()), 0, 8));
-        // $service_request->status_id             = '1';
-        // $service_request->description           = $request->description;
-        // $service_request->total_amount          = $request->booking_fee;
-        // $service_request->preferred_time        = date("Y-m-d"); //fix this later before pushing
-        // $service_request->has_client_rated      = 'No'; 
-        // $service_request->has_cse_rated         = 'No';
-        // $service_request->created_at         = Carbon::now()->toDateTimeString();
+        $service_request->status_id             = '2';
+        $service_request->description           = $request->description;
+        $service_request->total_amount          = $request->booking_fee;
+        $service_request->preferred_time        = Carbon::parse($request->preferred_time, 'UTC'); //fix this later before pushing
+        $service_request->has_client_rated      = 'No'; 
+        $service_request->has_cse_rated         = 'No';
+        $service_request->created_at         = Carbon::now()->toDateTimeString();
         // $service_request->updated_at         = Carbon::now()->toDateTimeString();
-
-        // $service_request->save();
+        $service_request->save();
 
 
         //Temporary Assign a CSE to a client's request for demo purposes
@@ -1165,7 +1160,37 @@ class ClientController extends Controller
 
         $randomCSE = array_rand($cseArray);
 
-        return $cseArray[$randomCSE];
+        //Create 2 records to `service_request_progresses`
+        $serviceRequestProgresses = array(
+            array(
+                'user_id'               =>  1,
+                'service_request_id'    =>  $service_request->id,
+                'status_id'             =>  1,
+                'sub_status_id'         =>  1,
+            ),
+            array(
+                'user_id'               =>  1,
+                'service_request_id'    =>  $service_request->id,
+                'status_id'             =>  1,
+                'sub_status_id'         =>  1,
+            )
+        );
+
+        $serviceRequestAssign = array(
+            'user_id'               =>  $cseArray[$randomCSE],
+            'service_request_id'    =>  $service_request->id,
+            'job_accepted'          =>  'Yes',
+            'job_acceptance_time'   =>  \Carbon\Carbon::now('UTC'),
+            'status'                =>  'Active',
+        );
+
+        DB::table('service_request_progresses')->insert($serviceRequestProgresses);
+
+        //Create CSE record on `service_request_assigned` table
+        DB::table('service_request_assigned')->insert($serviceRequestAssign);
+
+
+        return $service_request;
     }
 
 }

@@ -73,7 +73,5 @@ class Client extends Model
         return round($this->ratings->avg('star'));
     }
 
-    
-
 }
 

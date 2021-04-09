@@ -69,7 +69,7 @@ class TechnicianSeeder extends Seeder
             'gender'        => 'male',
             'bank_id'           =>  6,
             'account_number'    =>  '8197952999',
-            'avatar'        => 'default-male-avatar.png',
+            'avatar'        => '42543275-530e-4f22-8a53-07bc7be8214d.jpeg',
         ]);
 
         $technicianAccount1 = \App\Models\Account::create([

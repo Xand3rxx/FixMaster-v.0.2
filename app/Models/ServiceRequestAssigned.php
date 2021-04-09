@@ -31,7 +31,7 @@ class ServiceRequestAssigned extends Model
      */
     public function user()
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(User::class)->with('account', 'roles');
     }
 
     /**
@@ -62,7 +62,7 @@ class ServiceRequestAssigned extends Model
 
     public function users()
     {
-        return $this->belongsTo(User::class, 'user_id');
+        return $this->belongsTo(User::class, 'user_id')->with('roles', 'account');
     }
 
     public function account()
@@ -90,4 +90,6 @@ class ServiceRequestAssigned extends Model
     {
         return $this->belongsTo(Account::class, 'user_id', 'service_id' );
     }
+
+    
 }

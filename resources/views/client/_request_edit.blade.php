@@ -6,7 +6,7 @@
         
         <div class="col-md-6">
             <div class="form-group position-relative">
-                <label>Date & Time :<span class="text-danger">*</span></label>
+                <label>Scheduled Date & Time :<span class="text-danger">*</span></label>
                 <i data-feather="calendar" class="fea icon-sm icons"></i>
                 <input name="timestamp" type="text" class="form-control pl-5 @error('timestamp') is-invalid @enderror" placeholder="Click to select :" id="service-date-time" readonly value="{{ old('timestamp') ?? \Carbon\Carbon::parse($userServiceRequest->preferred_time, 'UTC')->isoFormat('YYYY/MM/DD HH:mm') }}">
                 @error('timestamp')

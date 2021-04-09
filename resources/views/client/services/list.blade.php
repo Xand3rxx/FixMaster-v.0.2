@@ -33,40 +33,31 @@
                                 <tr>
                                     <th class="text-center">#</th>
                                     <th>Service Name</th>
-                                    <th>Service Charge(₦)</th>
-                                    <!-- <th>Phone Number</th>
-                                    <th>Clients</th> -->
+                                    <th class="text-center">Service Charge(₦)</th>
                                     <th>Status</th>
-                                    <th>Created </th>
+                                    <th>Issued Created </th>
                                     <th>Scheduled Date</th>
                                     <th class="text-center">Action</th> 
                                 </tr>
                                 </thead>
                                 <tbody>
-                                {{-- {{ dd($myServiceRequests) }} --}}
-                                
 
                                 @foreach ($myServiceRequests['service_requests'] as $myServiceRequest)
 
-                                
                                 <tr>
 
-                                    {{-- @foreach($item as $myServiceRequests)
-                                        <td class="tx-medium">{{ $myServiceRequest['service_request'][0]['service']['name'] }}</td>
-                                    @endforeach --}}
-
                                 <td class="tx-color-03 tx-center">{{ $loop->iteration }}</td>
-                                <td class="font-weight-bold">{{ $myServiceRequest['service']['name'] }}</td>
-                                <td class="font-weight-bold">{{ $myServiceRequest->bookingFee->amount }}</td>
+                                <td>{{ $myServiceRequest['service']['name'] }}</td>
+                                <td class="text-center font-weight-bold">{{ $myServiceRequest->bookingFee->amount }}</td>
                                 <td class="tx-medium">
                                 @if($myServiceRequest->status_id == 1)
-                                <span class="badge badge-warning rounded">Pending</span>
+                                    <span class="badge badge-warning rounded">Pending</span>
                                 @elseif($myServiceRequest->status_id == 2)
-                                <span class="badge badge-info rounded">Ongoing</span>
+                                    <span class="badge badge-info rounded">Ongoing</span>
                                 @elseif($myServiceRequest->status_id == 3)
-                                <span class="badge badge-danger rounded">Cancelled</span>
+                                    <span class="badge badge-danger rounded">Cancelled</span>
                                 @elseif($myServiceRequest->status_id == 4)
-                                <span class="badge badge-success rounded">Completed</span>
+                                    <span class="badge badge-success rounded">Completed</span>
                                 @endif
                                 </td>
                                 <td class="tx-medium">{{ Carbon\Carbon::parse($myServiceRequest['created_at'], 'UTC')->isoFormat('MMMM Do YYYY, h:mm:ssa') }}</td>
@@ -80,16 +71,26 @@
                                         <div class="dropdown-menu">
                                              <a href="{{ route('client.request_details', [ 'request'=>$myServiceRequest->uuid, 'locale'=>app()->getLocale() ]) }}" class="dropdown-item text-primary"><i data-feather="clipboard" class="fea icon-sm"></i> Details</a>
 
+                                             @if($myServiceRequest->status_id == 1)
+                                                <div class="dropdown-divider"></div>
+                                                <a href="#cancelRequest" id="cancel-request" data-toggle="modal" data-url="#" data-job-reference="{{ $myServiceRequest->unique_id }}" class="dropdown-item text-danger cancel_reques"><i data-feather="x" class="fea icon-sm"></i> Cancel Request</a>
+
+                                            @endif
+                                            @if($myServiceRequest->status_id == 3)
+                                                <div class="dropdown-divider"></div>
+                                                <a href="javascript:void(0)" class="dropdown-item text-success"><i data-feather="corner-up-left" class="fea icon-sm"></i> Reinstate Request</a>
+                                            @endif
+
                                             @if(\App\Models\Invoice::where('service_request_id', $myServiceRequest->service->id)->where('phase', '1')->count() > 0 || \App\Models\Invoice::where('service_request_id', $myServiceRequest->service->id)->where('phase', '2')->count() > 0)
-                                                <hr>
+                                                <div class="dropdown-divider"></div>
                                                 @foreach(\App\Models\Invoice::where('service_request_id', $myServiceRequest->service->id)->where('phase', '1')->orWhere('phase', '2')->where('invoice_type', 'Diagnosis Invoice')->orWhere('invoice_type', 'Completion Invoice')->get() as $invoice)
                                                     <a href="{{ route('invoice', ['locale' => app()->getLocale(), 'invoice' => $invoice['uuid']]) }}" class="dropdown-item details text-info"><i data-feather="file-text" class="fea icon-sm"></i> {{ $invoice['invoice_type'] }} Invoice</a>
                                                 @endforeach
                                             @endif
 
                                             @if(!empty($myServiceRequest['warranty']))
-                                            <hr>
-                                                <a href="""><i class="fas fa-award"></i> Initiate Warranty</a>
+                                                <div class="dropdown-divider"></div>
+                                                <a href="#" class="dropdown-item text-success"><i data-feather="award" class="fea icon-sm"></i> Initiate Warranty</a>
                                             @endif
                                         </div>
                                     </div>
