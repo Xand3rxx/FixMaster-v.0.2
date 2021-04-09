@@ -106,9 +106,11 @@
             <div class="col-md-6 mt-4 pt-2 pt-sm-0">
                 <h5>Recent Requests :</h5>
               
+                @php $count = 0; @endphp
                 @foreach ($userServiceRequests['service_requests'] as $userServiceRequest)
-                <div class="media key-feature align-items-center p-3 rounded shadow mt-4">
-                    <img src="images/job/Circleci.svg" class="avatar avatar-ex-sm" alt="">
+                @if($count++ < 3)
+                    <div class="media key-feature align-items-center p-3 rounded shadow mt-4">
+                    <img src="{{ asset('assets/images/job/Circleci.svg')}}" class="avatar avatar-ex-sm" alt="">
                     <div class="media-body content ml-3">
                         <h4 class="title mb-0">{{ $userServiceRequest['service']['name'] }}({{ $userServiceRequest['service']['category']['name'] }})</h4>
                      
@@ -127,9 +129,24 @@
                         </p>
                         @endif 
                       
-                        {{-- {{dd($userServiceRequest['uuid'])}} --}}
+                        {{-- {{dd($userServiceRequest['service_request_assignees']->count())}} --}}
                         <p class="mb-0"><a href="{{ route('client.request_details', [ 'request'=>$userServiceRequest['uuid'], 'locale'=>app()->getLocale() ]) }}" style="color: #161c2d" title="View Service request details">CSE: <span class="text-muted">
-                            @if($userServiceRequest['service_request_assignees'] >= '2') {{ $userServiceRequest->cses[0]->account->first_name.' '.$userServiceRequest->cses[0]->account->last_name }} @else Not Assigned @endif
+
+                            
+
+                            {{-- {{dd()}} --}}
+                            @if($userServiceRequest['service_request_assignees']->count() > 0)
+                                @foreach ($userServiceRequest['service_request_assignees'] as $item)
+                                    @if(($item['user']['roles'][0]['slug'] == 'cse-user') && ($item['status'] == 'Active'))
+                                        {{ $item['user']['account']['first_name'].' '.$item['user']['account']['last_name'] }}
+                                        @php break; @endphp
+                                    @else
+                                        Not Assigned
+                                    @endif
+                                @endforeach
+                            @else
+                                Not Assigned 
+                            @endif
                         </span></a></p> 
                         <p class="mb-0">Status: 
                             @if($userServiceRequest->status_id == '1')
@@ -144,6 +161,7 @@
                         </p>  
                     </div>
                 </div>
+                     @endif  
                 @endforeach 
             </div><!--end col-->
         </div><!--end row-->

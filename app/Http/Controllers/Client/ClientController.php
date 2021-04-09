@@ -59,12 +59,6 @@ class ClientController extends Controller
 
         $myRequest = Client::where('user_id', auth()->user()->id)->with('service_requests')->firstOrFail();
 
-        // $myServiceRequests = $myRequest->service_requests;
-   
-        //  return Auth::user()->clientRequests()->with('service_request_assignees')->latest()->take(3)->get();
-
-        return $myRequest;
-
         //Get total available serviecs
         $totalServices = Service::count();
 
@@ -76,6 +70,8 @@ class ClientController extends Controller
 
         $user = Auth::user();
 
+        // return $user->contact->phone_number ?? 'UNAVAILABLE';
+
         return view('client.home', [
             // data
             'totalRequests' => $user->clientRequests()->count(),
@@ -83,7 +79,7 @@ class ClientController extends Controller
             'cancelledRequests' => $user->clientRequests()->where('status_id', 3)->count(),
             'user' => auth()->user()->account,
             'client' => [
-                'phone_number' => '0909078888'
+                'phone_number' => $user->contact->phone_number ?? 'UNAVAILABLE',
             ],
             'popularRequests'  =>  $popularRequests,
             'userServiceRequests' =>  $myRequest, 

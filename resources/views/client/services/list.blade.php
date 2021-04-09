@@ -88,7 +88,7 @@
                                                 @endforeach
                                             @endif
 
-                                            @if(!empty($myServiceRequest['warranty']))
+                                            @if($myServiceRequest->status_id == 4 && !empty($myServiceRequest['warranty']))
                                                 <div class="dropdown-divider"></div>
                                                 <a href="#" class="dropdown-item text-success"><i data-feather="award" class="fea icon-sm"></i> Initiate Warranty</a>
                                             @endif
