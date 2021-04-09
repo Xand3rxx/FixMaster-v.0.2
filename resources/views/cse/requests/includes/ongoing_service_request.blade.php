@@ -71,7 +71,7 @@
 
                     </section>
                     @endif
-                    @if($service_request['rfqs']->isNotEmpty())
+
                     <h3>Material Acceptance</h3>
                     <section>
                         This portion will display only if the CSE initially executed a RFQ, the Client paid for the components and the Supplier has made the delivery.
@@ -98,7 +98,7 @@
 
                             <div class="form-group col-md-4">
                                 <label for="delivery_time">Delivery Time</label>
-                                <input type="text" min="{{ \Carbon\Carbon::now()->isoFormat('2021-04-07 08:53:12') }}" class="form-control @error('delivery_time') is-invalid @enderror" name="delivery_time" id="service-date-time" value="{{ $service_request['rfqs'][0]['rfqSupplier']['delivery_time'] }}" readonly>
+                                <input type="text" min="{{ \Carbon\Carbon::now()->isoFormat('2021-04-07 08:53:12') }}" class="form-control @error('delivery_time') is-invalid @enderror" name="delivery_time" id="service-date-time" value="{{ old('delivery_time') }}" readonly>
                                 @error('delivery_time')
                                 <span class="invalid-feedback" role="alert">
                                     <strong>{{ $message }}</strong>
@@ -106,26 +106,24 @@
                                 @enderror
                             </div>
                         </div>
-                        @foreach ($service_request['rfqs'][0]['rfqBatches'] as $batch)
-                            
-                        @endforeach
+
                         <div class="form-row">
                             <div class="form-group col-md-4">
                                 <label for="component_name">Component Name</label>
-                                <input type="text" class="form-control" id="component_name" name="component_name" value="{{ $batch['component_name'] }}" readonly>
+                                <input type="text" class="form-control" id="component_name" name="component_name" value="{{ old('component_name') }}" readonly>
                             </div>
 
                             <div class="form-group col-md-3">
                                 <label for="model_number">Model Number</label>
-                                <input type="text" class="form-control" id="model_number" name="model_number" value="{{ $batch['model_number']}}" readonly>
+                                <input type="text" class="form-control" id="model_number" name="model_number" value="{{ old('model_number') }}" readonly>
                             </div>
                             <div class="form-group col-md-2">
                                 <label for="quantity">Quantity</label>
-                                <input type="number" class="form-control" id="quantity" name="quantity[]" value="{{ $batch['quantity'] }}" min="" max="" readonly>
+                                <input type="number" class="form-control" id="quantity" name="quantity[]" value="{{ old('quantity') }}" min="" max="" readonly>
                             </div>
                             <div class="form-group col-md-3">
                                 <label for="amount">Amount</label>
-                                <input type="tel" class="form-control amount" id="amount" placeholder="" value="{{ $batch['amount'] }}" name="amount[]" autocomplete="off">
+                                <input type="tel" class="form-control amount" id="amount" placeholder="" value="{{ old('amount') }}" name="amount[]" autocomplete="off">
                             </div>
                         </div>
 
@@ -146,8 +144,6 @@
                             </div>
                         </div>
                     </section>
-                    @endif
-
 
                     <h3>New RFQ</h3>
                     <section>

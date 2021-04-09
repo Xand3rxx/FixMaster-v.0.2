@@ -72,14 +72,19 @@ class RequestController extends Controller
                         return $query->where('recurrence', 'yes')->whereBetween('phase', [1, 20]);
                     })->get(['id', 'uuid', 'name']),
             ]);
-            if ($service_request_progresses->sub_status_id >= 10) {
+            if ($service_request_progresses->sub_status_id >= 17) {
                 // find the Issued RFQ
                 $service_request->load(['rfqs' => function ($query) {
-                    $query->where('status', 'Awaiting')->where('accepted', 'No')->with('rfqBatches', 'rfqSupplier', 'rfqSupplier.supplier')->first();
+                    $query->where('status','Awaiting')->where('accepted', 'no')->with('rfqBatches','rfqSupplier', 'rfqSupplier.supplier')->first();
                 }]);
-                // dd($service_request['rfqs']);
+                    // dd($service_request->load(['rfqs' => function ($query) {
+                    //     $query->where('status','Awaiting')->where('accepted', 'no')->with('rfqBatches','rfqSupplier', 'rfqSupplier.supplier')->first();
+                    // }]), $service_request['rfqs'][0]['rfqSupplier']);
             }
+            // dd($variables);
         }
+
+
         return view('cse.requests.show', $variables);
     }
 
