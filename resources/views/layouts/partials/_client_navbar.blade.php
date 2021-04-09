@@ -137,11 +137,12 @@
 
                         <li class="{{ Route::currentRouteNamed('client.service.all', 'client.request_details') ? 'active' : '' }}"><a href="{{ route('client.requests') }}">Requests</a></li>
 
-                        <li class="{{ Route::currentRouteNamed('client.payments') ? 'active' : '' }}"><a href="#">Payments</a></li>
+                        <li class="{{ Route::currentRouteNamed('client.payments') ? 'active' : '' }}"><a href="{{ route('client.payments'), app()->getLocale() }}">Payments</a></li>
 
                         <li class="{{ Route::currentRouteNamed('client.messages') ? 'active' : '' }}"><a href="#">Messages</a></li>
 
-                        <li class="{{ Route::currentRouteNamed('client.settings') ? 'active' : '' }}"><a href="#">Settings</a></li> 
+                        <li class="{{ Route::currentRouteNamed('client.settings') ? 'active' : '' }}"><a href="{{ route('client.settings', app()->getLocale()) }}">Settings</a></li>
+
 
                         {{-- <li><a href="{{ route('login') }}">Logout</a></li> --}}
                     </ul>

@@ -57,7 +57,7 @@
                                 <label for="estimated_hours">{{$service_request['service']['name']}}</label>
                                 <select class="form-control custom-select @error('sub_service_uuid') is-invalid @enderror" name="sub_service_uuid">
                                     <option selected disabled value="0" selected>Select a sub service</option>
-                                    @foreach($service_request['service']['sub_service'] as $key => $sub_service)
+                                    @foreach($service_request['service']['subServices'] as $key => $sub_service)
                                     <option value="{{$sub_service['uuid']}}">{{$sub_service['name']}} </option>
                                     @endforeach
                                 </select>
@@ -71,14 +71,14 @@
 
                     </section>
                     @endif
-
+                    @if($service_request['rfqs']->isNotEmpty())
                     <h3>Material Acceptance</h3>
                     <section>
                         This portion will display only if the CSE initially executed a RFQ, the Client paid for the components and the Supplier has made the delivery.
                         <div class="mt-4 form-row">
                             <div class="form-group col-md-4">
                                 <label for="supplier_name">Supplier's Name</label>
-                                <input type="text" class="form-control @error('supplier_name') is-invalid @enderror" id="supplier_name" value="{{ $service_request['rfqs'][0]['rfqSupplier']['supplier']['account']['last_name'] .' '.$service_request['rfqs'][0]['rfqSupplier']['supplier']['account']['first_name'] }}" name="supplier_name">
+                                <input type="text" class="form-control @error('supplier_name') is-invalid @enderror" id="supplier_name" value="{{ $service_request['rfqs'][0]['rfqSupplier']['supplier']['account']['last_name'] .' '.$service_request['rfqs'][0]['rfqSupplier']['supplier']['account']['first_name'] }}" name="supplier_name" readonly>
                                 @error('supplier_name')
                                 <span class="invalid-feedback" role="alert">
                                     <strong>{{ $message }}</strong>
@@ -88,7 +88,7 @@
 
                             <div class="form-group col-md-4">
                                 <label for="devlivery_fee">Delivery Fee</label>
-                                <input type="tel" class="form-control amount @error('devlivery_fee') is-invalid @enderror" id="devlivery_fee" name="devlivery_fee" value="{{ $service_request['rfqs'][0]['rfqSupplier']['devlivery_fee']}}">
+                                <input type="tel" class="form-control amount @error('devlivery_fee') is-invalid @enderror" id="devlivery_fee" name="devlivery_fee" value="{{ $service_request['rfqs'][0]['rfqSupplier']['devlivery_fee']}}" readonly>
                                 @error('devlivery_fee')
                                 <span class="invalid-feedback" role="alert">
                                     <strong>{{ $message }}</strong>
@@ -98,7 +98,7 @@
 
                             <div class="form-group col-md-4">
                                 <label for="delivery_time">Delivery Time</label>
-                                <input type="text" min="{{ \Carbon\Carbon::now()->isoFormat('2021-04-07 08:53:12') }}" class="form-control @error('delivery_time') is-invalid @enderror" name="delivery_time" id="service-date-time" value="{{ old('delivery_time') }}" readonly>
+                                <input type="text" min="{{ \Carbon\Carbon::now()->isoFormat('2021-04-07 08:53:12') }}" class="form-control @error('delivery_time') is-invalid @enderror" name="delivery_time" id="service-date-time" value="{{ $service_request['rfqs'][0]['rfqSupplier']['delivery_time'] }}" readonly>
                                 @error('delivery_time')
                                 <span class="invalid-feedback" role="alert">
                                     <strong>{{ $message }}</strong>
@@ -106,26 +106,29 @@
                                 @enderror
                             </div>
                         </div>
-
+                        @foreach ($service_request['rfqs'][0]['rfqBatches'] as $batch)
+                            
                         <div class="form-row">
                             <div class="form-group col-md-4">
                                 <label for="component_name">Component Name</label>
-                                <input type="text" class="form-control" id="component_name" name="component_name" value="{{ old('component_name') }}" readonly>
+                                <input type="text" class="form-control" id="component_name" name="component_name" value="{{ $batch['component_name'] }}" readonly>
                             </div>
 
                             <div class="form-group col-md-3">
                                 <label for="model_number">Model Number</label>
-                                <input type="text" class="form-control" id="model_number" name="model_number" value="{{ old('model_number') }}" readonly>
+                                <input type="text" class="form-control" id="model_number" name="model_number" value="{{ $batch['model_number']}}" readonly>
                             </div>
                             <div class="form-group col-md-2">
                                 <label for="quantity">Quantity</label>
-                                <input type="number" class="form-control" id="quantity" name="quantity[]" value="{{ old('quantity') }}" min="" max="" readonly>
+                                <input type="number" class="form-control" id="quantity" name="quantity[]" value="{{ $batch['quantity'] }}" min="" max="" readonly>
                             </div>
                             <div class="form-group col-md-3">
                                 <label for="amount">Amount</label>
-                                <input type="tel" class="form-control amount" id="amount" placeholder="" value="{{ old('amount') }}" name="amount[]" autocomplete="off">
+                                <input type="tel" class="form-control amount" id="amount" placeholder="" value="{{ $batch['amount'] }}" name="amount[]" autocomplete="off" readonly>
                             </div>
                         </div>
+
+                        @endforeach
 
                         <h5>Accept Materials Delivery</h5>
                         <div class="form-row">
@@ -144,6 +147,8 @@
                             </div>
                         </div>
                     </section>
+                    @endif
+
 
                     <h3>New RFQ</h3>
                     <section>

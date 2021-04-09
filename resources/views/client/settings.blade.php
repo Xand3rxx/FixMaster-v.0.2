@@ -52,7 +52,7 @@
                               <div class="form-group position-relative">
                                   <label>Your Email</label>
                                   <i data-feather="mail" class="fea icon-sm icons"></i>
-                                  <input name="email" id="email" type="email" class="form-control pl-5" value="{{$client->user->email}}" placeholder="Your E-Mail :" />
+                                  <input name="email" id="email" type="email" class="form-control pl-5" value="{{$client->user->email}}" readonly disabled placeholder="Your E-Mail :" />
                               </div>
                           </div>
                           <!--end col-->
@@ -61,7 +61,7 @@
                               <div class="form-group position-relative">
                                   <label>Phone No. :</label>
                                   <i data-feather="phone" class="fea icon-sm icons"></i>
-                                  <input name="phone_number" id="phone_number" type="tel" maxlength="11" class="form-control pl-5" value=" " placeholder="Phone :" />
+                                  <input name="phone_number" id="phone_number" type="tel" maxlength="11" class="form-control pl-5" value="{{ $client->user->contact->phone_number }}" placeholder="Phone :" />
                               </div>
                           </div>
                           <!--end col-->
