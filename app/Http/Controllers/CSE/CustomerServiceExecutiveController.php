@@ -5,6 +5,7 @@ namespace App\Http\Controllers\CSE;
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\RatingController;
 use Illuminate\Http\Request;
+use App\Http\Controllers\RatingController;
 
 class CustomerServiceExecutiveController extends Controller
 {
@@ -99,5 +100,4 @@ class CustomerServiceExecutiveController extends Controller
     {
         return $updateRatings->handleServiceRatings($request);
     }
-
 }

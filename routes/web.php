@@ -315,11 +315,6 @@ Route::prefix('/client')->group(function () {
         //All routes regarding clients should be in here
         Route::get('/',                   [ClientController::class, 'index'])->name('index'); //Take me to Supplier Dashboard
 
-        // Route::get('password',          [ClientController::class, 'changePassword'])->name('client.password');
-        // Route::post('password',         [ClientController::class, 'submitPassword'])->name('change.password');
-
-        // Route::get('/profile/view',             [ClientController::class, 'view_profile'])->name('client.view_profile');
-        // Route::get('/profile/edit',             [ClientController::class, 'edit_profile'])->name('client.edit_profile');
         Route::post('/profile/update',              [ClientController::class, 'update_profile'])->name('updateProfile');
         Route::post('/updatePassword',                 [ClientController::class, 'updatePassword'])->name('updatePassword');
 
@@ -331,21 +326,12 @@ Route::prefix('/client')->group(function () {
         Route::post('/requests/update-request/{request:id}',          [ClientController::class, 'updateRequest'])->name('update_request');
         Route::post('/requests/technician_profile',          [ClientController::class, 'technicianProfile'])->name('technician_profile');
 
-
-
-
-
-
-
-
         // E-wallet Routes for clients
         //Profile and password update
-
         Route::get('/settings',                 [ClientController::class, 'settings'])->name('settings');
         Route::any('/getDistanceDifference',    [ClientController::class, 'getDistanceDifference'])->name('getDistanceDifference');
 
-        // Route::get('/wallet',                [ClientController::class, 'wallet'])->name('wallet'); //Take me to Supplier Dashboard
-        // Route::get('/requests',          [ClientRequestController::class, 'index'])->name('client.requests');
+       
         Route::get('wallet',                [ClientController::class, 'wallet'])->name('wallet');
         Route::any('fund',                  [ClientController::class, 'walletSubmit'])->name('wallet.submit');
         Route::get('loyalty',                [ClientController::class, 'loyalty'])->name('loyalty');
@@ -367,8 +353,6 @@ Route::prefix('/client')->group(function () {
         Route::get('services/custom/',              [ClientController::class, 'customService'])->name('services.custom');
 
         Route::post('servicesRequest',              [ClientController::class, 'serviceRequest'])->name('services.serviceRequest');
-        // view all my service request
-        // Route::get('requests',                      [ClientController::class, 'myServiceRequest'])->name('service.all');
 
         Route::any('invoicePayment', [InvoiceController::class, 'savePayment'])->name('invoice.payment');
         Route::get('verify/invoicePayment', [InvoiceController::class, 'verifyPayment'])->name('invoice.verifyPayment');
@@ -380,14 +364,11 @@ Route::prefix('/client')->group(function () {
         Route::get('/requests/edit/{id}',          [ClientController::class, 'edit'])->name('client.edit_request');
         Route::put('/requests/update/{id}',        [ClientController::class, 'update'])->name('client.update_request');
 
-
         Route::post('servicesRequest',              [ClientController::class, 'serviceRequest'])->name('services.serviceRequest');
         // post my contact to DB
         Route::post('/ajax_contactForm',            [ClientController::class, 'ajax_contactForm'])->name('ajax_contactForm');
 
-
-
-            Route::get('myContactList',                  [ClientController::class, 'myContactList'])->name('service.myContacts');
+        Route::get('myContactList',                  [ClientController::class, 'myContactList'])->name('service.myContacts');
 
         //Flutterwave Routes
         Route::post('/request/flutterwave/submit',              [ClientController::class, 'storeFlutterServiceRequest'])->name('flutterwave.submit');
@@ -395,25 +376,17 @@ Route::prefix('/client')->group(function () {
         Route::post('/request/flutterwave/notify',              [ClientController::class, 'notifyFlutterServiceRequest'])->name('flutterwave.notify');
         Route::get('/request/flutterwave/notify',               [ClientController::class, 'successFlutterServiceRequest'])->name('flutterwave.success');
 
-            //Paystack Routes
-            Route::post('/request/paystack/submit',                 [ClientController::class, 'storePaystackServiceRequest'])->name('paystack.submit');
-            Route::get('/request/paystack/{orderId}/apiRequest',    [ClientController::class, 'apiRequestPaystackServiceRequest'])->name('paystack.apiRequest');
-            Route::get('/request/paystack/notify',                  [ClientController::class, 'notifyPaystackServiceRequest'])->name('paystack.notify');
-            Route::post('/update_service_request',  [ClientController::class, 'update_client_service_rating'])->name('update_service_request');
-            Route::post('/submit_ratings',  [ClientController::class, 'client_rating'])->name('handle.ratings');
-            // Route::post('servicesRequest',              [ClientController::class, 'serviceRequest'])->name('paystack.submit');
-            // Route::post('servicesRequest',              [ClientController::class, 'serviceRequest'])->name('flutter.submit');
-
+        //Paystack Routes
+        Route::post('/request/paystack/submit',                 [ClientController::class, 'storePaystackServiceRequest'])->name('paystack.submit');
+        Route::get('/request/paystack/{orderId}/apiRequest',    [ClientController::class, 'apiRequestPaystackServiceRequest'])->name('paystack.apiRequest');
+        Route::get('/request/paystack/notify',                  [ClientController::class, 'notifyPaystackServiceRequest'])->name('paystack.notify');
+        Route::post('/update_service_request',  [ClientController::class, 'update_client_service_rating'])->name('update_service_request');
+        Route::post('/submit_ratings',  [ClientController::class, 'client_rating'])->name('handle.ratings');
 
     });
 });
 
-Route::resource('cse', CseController::class);
-
-// Route::prefix('/cse')->group(function () {
-//     Route::name('cse.')->group(function () {
-//         //All routes regarding CSE's should be in here
-//         Route::view('/',                   'cse.index')->name('index'); //Take me to CSE Dashboard
+// Route::resource('cse', CseController::class);
 
 Route::prefix('/cse')->middleware('monitor.cseservice.request.changes')->group(function () {
     Route::name('cse.')->group(function () {
@@ -494,7 +467,6 @@ Route::prefix('/technician')->group(function () {
 Route::prefix('/quality-assurance')->group(function () {
     Route::name('quality-assurance.')->group(function () {
         //All routes regarding quality_assurance should be in here
-        //Route::view('/', 'quality-assurance.index')->name('index'); //Take me to quality_assurance Dashboard
         Route::get('/', [ServiceRequestController::class, 'index'])->name('index');
         Route::get('/profile',    [QualityAssuranceProfileController::class, 'view_profile'])->name('view_profile');
         Route::get('/profile/edit_profile', [QualityAssuranceProfileController::class, 'edit'])->name('edit_profile');

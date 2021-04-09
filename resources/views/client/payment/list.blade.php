@@ -1,124 +1,12 @@
 @extends('layouts.client')
-@section('title', 'E-Wallet')
+@section('title', 'Payments')
 @section('content')
     @include('layouts.partials._messages')
-
-    <style>
-        [type=radio] {
-            position: absolute;
-            opacity: 0;
-            width: 0;
-            height: 0;
-        }
-
-        /* IMAGE STYLES */
-        [type=radio] + img {
-            cursor: pointer;
-        }
-
-        /* CHECKED STYLES */
-        [type=radio]:checked + img {
-            outline: 2px solid #E97D1F;
-            outline-style: dashed;
-        }
-
-        .vodiapicker{
-            display: none;
-        }
-
-        #a{
-            padding-left: 0px;
-        }
-
-        #a img, .btn-select img{
-            width: 45px;
-        }
-
-        #a li{
-            list-style: none;
-            padding-top: 5px;
-            padding-bottom: 5px;
-        }
-
-        #a li:hover{
-            background-color: #F4F3F3;
-        }
-
-        #a li img{
-            margin-left: 15px;
-        }
-
-        #a li span, .btn-select li span{
-            margin-left: 30px;
-        }
-
-        /* item list */
-
-        .b{
-            display: none;
-            width: 100%;
-            /* max-width: 350px; */
-            max-width: 335px;
-            box-shadow: 0 6px 12px rgba(0,0,0,.175);
-            border: 1px solid rgba(0,0,0,.15);
-            border-radius: 5px;
-            position: absolute;
-            z-index: 1000;
-        }
-
-        .open{
-            display: show !important;
-        }
-
-        .btn-select{
-            margin-top: 10px;
-            width: 100%;
-            max-width: 350px;
-            height: 42px;
-            border-radius: 5px;
-            background-color: #fff;
-            border: 1px solid #ccc;
-        }
-        .btn-select li{
-            list-style: none;
-            float: left;
-            padding-bottom: 0px;
-        }
-
-        .btn-select:hover li{
-            margin-left: 0px;
-        }
-
-        .btn-select:hover{
-            background-color: #F4F3F3;
-            border: 1px solid transparent;
-            box-shadow: inset 0 0px 0px 1px #ccc;
-        }
-
-        .btn-select:focus{
-            outline:none;
-        }
-
-        .lang-select{
-            margin-top: -10px;
-        }
-
-
-
-
-
-        .avatar.avatar-ex-smm {
-            max-height: 75px;
-        }
-
-
-    </style>
 
 
     <div class="col-lg-8 col-12">
         <div class="border-bottom pb-4 row">
-            {{-- <h5>Femi Joseph</h5>
-            <p class="text-muted mb-0">I have started my career as a trainee and prove my self and achieve all the milestone with good guidance and reach up to the project manager. In this journey, I understand all the procedure which make me a good developer, team leader, and a project manager.</p>--}}
+            
             <div class="col-md-4 mt-4">
                 <div class="media key-feature align-items-center p-3 rounded shadow mt-4">
                     <img src="{{ asset('assets/images/job/Circleci.svg') }}" class="avatar avatar-ex-sm" alt="">
@@ -136,7 +24,7 @@
                     <img src="{{ asset('assets/images/job/Circleci.svg') }}" class="avatar avatar-ex-sm" alt="">
                     <div class="media-body content ml-3">
                         <h4 class="title mb-0">Amount Spent</h4>
-                        <!-- <p class="text-muted mb-0">₦30,000.00</p> -->
+                        <p class="text-muted mb-0">₦30,000.00</p> 
                     <!-- {{-- <p class="text-muted mb-0"><a href="javascript:void(0)" class="text-primary">CircleCi</a> @London, UK</p>     --}} -->
                     </div>
                 </div>
@@ -157,7 +45,7 @@
         <div class="tab-content mt-3" id="pills-tabContent">
             <!-- payment options ends here -->
             <div class="tab-pane fade show active" id="transactions" role="tabpanel" aria-labelledby="transactions-tab">
-                <h5 class="mb-0">Transactions</h5>
+                <h5 class="mb-0">All Payments Transactions</h5>
                 <div class="table-responsive mt-4 bg-white rounded shadow">
                     <div class="row mt-1 mb-1 ml-1 mr-1">
                         <div class="col-md-4">
@@ -236,7 +124,7 @@
                             <th class="py-3">Reference No</th>
                             <th class="py-3">Transaction ID</th>
                             <th class="py-3">Payment For</th>
-                            <th class="py-3">Amount</th>
+                            <th class="py-3">Amount(₦)</th>
                             <th class="py-3">Status</th>
                             <th class="py-3">Transacation Date</th>
                             <th class="py-3">Action</th>
@@ -248,7 +136,7 @@
                         <tbody>
                         @foreach($payments as $payment)
                             <tr>
-                                <td>.</td>
+                            <td>{{ $loop->iteration }}</td>
                                 <td>{{$payment->reference_id}}</td>
                                 <td>{{$payment->transaction_id == null ? 'UNAVAILABLE' : $payment->transaction_id  }}</td>
                                 <td class="font-weight-bold">{{$payment->payment_for}}</td>
@@ -264,9 +152,8 @@
                                     <td class="text-center text-info">Timeout</td>
                                 @endif
 
-                                <td>{{date("Y/m/d h:i:A", strtotime($payment->created_at))}}</td>
-                            <!-- <td>{{ Carbon\Carbon::parse('', 'UTC')->isoFormat('MMMM Do YYYY, h:mm:ssa') }}</td> -->
-                                <td><a href="{{ route('client.payments', $payment['id']) }}" data-toggle="modal" data-target="#myEditModal{{ $payment['id'] }}" class="btn btn-primary btn-sm ">Details</a></td>
+                                <td>{{ Carbon\Carbon::parse($payment->created_at, 'UTC')->isoFormat('MMMM Do YYYY, h:mm:ssa') }}</td>
+                                <td><a href="#" data-toggle="modal" data-target="#transactionDetails" class="btn btn-primary btn-sm ">Details</a></td>
                             </tr>
                         @endforeach
                         </tbody>
@@ -279,65 +166,65 @@
         </div>
 
 
-        <div class="modal fade" id="myEditModal{{ $payment['id'] }}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel2" aria-hidden="true" data-keyboard="false" data-backdrop="static">
+        <div class="modal fade" id="transactionDetails" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel2" aria-hidden="true" data-keyboard="false" data-backdrop="static">
             <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
-                <div class="modal-content tx-14">
-                    <div class="modal-header">
-                        <h6 class="modal-title" id="exampleModalLabel2">E-Wallet Transaction Details</h6>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-                    <div class="modal-body pd-x-25 pd-sm-x-30 pd-t-40 pd-sm-t-20 pd-b-15 pd-sm-b-20">
-                        <div class="table-responsive mt-4">
-                            <table class="table table-striped table-sm mg-b-0">
-                                <tbody>
-                                <tr>
-                                    <td class="tx-medium" width="25%">Unique ID</td>
-                                    <td class="tx-color-03" width="75%">WAL-23782382</td>
-                                </tr>
-                                <tr>
-                                    <td class="tx-medium" width="25%">Reference No.</td>
-                                    <td class="tx-color-03" width="75%">32e3lh2e23083h432b</td>
-                                </tr>
-                                <tr>
-                                    <td class="tx-medium" width="25%">Transaction ID.</td>
-                                    <td class="tx-color-03" width="75%">Transaction ID returned on success should be displayed here only if payment gateway was used or UNAVAILABLE</td>
-                                </tr>
-                                <tr>
-                                    <td class="tx-medium" width="25%">Transaction Type</td>
-                                    <td class="tx-color-03" width="75%">Credit</td>
-                                </tr>
-                                <tr>
-                                    <td class="tx-medium" width="25%">Payment Type</td>
-                                    <td class="tx-color-03" width="75%">Funding</td>
-                                </tr>
-                                <tr>
-                                    <td class="tx-medium" width="25%">Payment Channel</td>
-                                    <td class="tx-color-03" width="75%">Paystack or Flutterwave or Offline or Wallet</td>
-                                </tr>
-                                <tr>
-                                    <td class="tx-medium" width="25%">Payment For</td>
-                                    <td class="tx-color-03" width="75%">Wallet</td>
-                                </tr>
-                                <tr>
-                                    <td class="tx-medium" width="25%">Amount</td>
-                                    <td class="tx-color-03" width="75%">₦{{ number_format(10000) }}</td>
-                                </tr>
-                                <tr>
-                                    <td class="tx-medium" width="25%">Status</td>
-                                    <td class="text-warning" width="75%">Pending</td>
-                                </tr>
-                                <tr>
-                                    <td class="tx-medium" width="25%">Refund Reason</td>
-                                    <td class="tx-color-03" width="75%">This section should only be visible in a case of refund, the reason should be displayed here or UNAVAILABLE</td>
-                                </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                    </div><!-- modal-body -->
-                    <div class="modal-footer"></div>
+              <div class="modal-content tx-14">
+                <div class="modal-header">
+                  <h6 class="modal-title" id="exampleModalLabel2">E-Wallet Transaction Details</h6>
+                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                  </button>
                 </div>
+                <div class="modal-body pd-x-25 pd-sm-x-30 pd-t-40 pd-sm-t-20 pd-b-15 pd-sm-b-20">
+                    <div class="table-responsive mt-4">
+                        <table class="table table-striped table-sm mg-b-0">
+                        <tbody>
+                            <tr>
+                                <td class="tx-medium" width="25%">Unique ID</td>
+                                <td class="tx-color-03" width="75%">WAL-23782382</td>
+                            </tr>
+                            <tr>
+                                <td class="tx-medium" width="25%">Reference No.</td>
+                                <td class="tx-color-03" width="75%">32e3lh2e23083h432b</td>
+                            </tr>
+                            <tr>
+                                <td class="tx-medium" width="25%">Transaction ID.</td>
+                                <td class="tx-color-03" width="75%">Transaction ID returned on success should be displayed here only if payment gateway was used or UNAVAILABLE</td>
+                            </tr>
+                            <tr>
+                                <td class="tx-medium" width="25%">Transaction Type</td>
+                                <td class="tx-color-03" width="75%">Credit</td>
+                            </tr>
+                            <tr>
+                                <td class="tx-medium" width="25%">Payment Type</td>
+                                <td class="tx-color-03" width="75%"3">Funding</td>
+                            </tr>
+                            <tr>
+                                <td class="tx-medium" width="25%">Payment Channel</td>
+                                <td class="tx-color-03" width="75%"3">Paystack or Flutterwave or Offline or Wallet</td>
+                            </tr>
+                            <tr>
+                                <td class="tx-medium" width="25%">Payment For</td>
+                                <td class="tx-color-03" width="75%"3">Wallet</td>
+                            </tr>
+                            <tr>
+                                <td class="tx-medium" width="25%">Amount</td>
+                                <td class="tx-color-03" width="75%">₦{{ number_format(10000) }}</td>
+                            </tr>
+                            <tr>
+                                <td class="tx-medium" width="25%">Status</td>
+                                <td class="text-warning" width="75%">Pending</td>
+                            </tr>
+                            <tr>
+                                <td class="tx-medium" width="25%">Refund Reason</td>
+                                <td class="tx-color-03" width="75%">This section should only be visible in a case of refund, the reason should be displayed here or UNAVAILABLE</td>
+                            </tr>
+                        </tbody>
+                        </table>
+                    </div>
+                  </div><!-- modal-body -->
+                <div class="modal-footer"></div>
+              </div>
             </div>
         </div>
 
@@ -370,59 +257,6 @@
                     $('.specific-date, .sort-by-year').addClass('d-none');
                 }
             });
-
-            //test for getting url value from attr
-            // var img1 = $('.test').attr("data-thumbnail");
-            // console.log(img1);
-
-            //test for iterating over child elements
-            var langArray = [];
-            $('.vodiapicker option').each(function(){
-                var img = $(this).attr("data-thumbnail");
-                var text = this.innerText;
-                var value = $(this).val();
-                var item = '<li><img src="'+ img +'" alt="" value="'+value+'"/><span>'+ text +'</span></li>';
-                langArray.push(item);
-            })
-
-            $('#a').html(langArray);
-
-            //Set the button value to the first el of the array
-            $('.btn-select').html(langArray[0]);
-            $('.btn-select').attr('value', 'en');
-
-            //change button stuff on click
-            $('#a li').click(function(){
-                var img = $(this).find('img').attr("src");
-                var value = $(this).find('img').attr('value');
-                var text = this.innerText;
-                var item = '<li><img src="'+ img +'" alt="" /><span>'+ text +'</span></li>';
-                $('.btn-select').html(item);
-                $('.btn-select').attr('value', value);
-                $(".b").toggle();
-                //console.log(value);
-            });
-
-            $(".btn-select").click(function(){
-                $(".b").toggle();
-            });
-
-            //check local storage for the lang
-            var sessionLang = localStorage.getItem('lang');
-            if (sessionLang){
-                //find an item with value of sessionLang
-                var langIndex = langArray.indexOf(sessionLang);
-                $('.btn-select').html(langArray[langIndex]);
-                $('.btn-select').attr('value', sessionLang);
-            } else {
-                var langIndex = langArray.indexOf('ch');
-                console.log(langIndex);
-                $('.btn-select').html(langArray[langIndex]);
-                //$('.btn-select').attr('value', 'en');
-            }
-
-
-
         });
     </script>
 

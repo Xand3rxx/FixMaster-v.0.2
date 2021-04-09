@@ -23,7 +23,7 @@
                       @foreach ($rfqDetails->rfqBatches as $item)
 
                       <input value="{{ $item->id }}" type="hidden" name="rfq_batch_id[]" class="d-none">
-                      <input value="{{ $item->id }}" type="hidden" name="quantity[]"> 
+                      <input value="{{ $item->quantity }}" type="hidden" name="quantity[]"> 
                         <tr>
                             <td class="tx-color-03 tx-center">{{ ++$i }}</td>
                             <td class="tx-medium">{{ $item->component_name }}</td>

@@ -58,7 +58,7 @@
       
       <li class="nav-item {{ Route::currentRouteNamed('cse.payments') ? 'active show' : '' }}"><a href="{{ route('cse.payments', app()->getLocale()) }}" class="nav-link"><i data-feather="credit-card"></i> <span>Payments</span></a></li>
 
-      <li class="nav-item {{ Route::currentRouteNamed('cse.requests.index', 'cse.request_details') ? 'active show' : '' }}"><a href="{{ route('cse.requests.index', app()->getLocale()) }}" class="nav-link"><i data-feather="git-pull-request"></i> <span>Requests</span></a></li>
+      <li class="nav-item {{ Route::currentRouteNamed('cse.requests.index', 'cse.request_details', 'cse.requests.show') ? 'active show' : '' }}"><a href="{{ route('cse.requests.index', app()->getLocale()) }}" class="nav-link"><i data-feather="git-pull-request"></i> <span>Requests</span></a></li>
 
     </ul>
   </div>

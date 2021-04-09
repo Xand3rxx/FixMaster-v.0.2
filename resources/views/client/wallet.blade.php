@@ -116,43 +116,6 @@
 
 
 <div class="col-lg-8 col-12">
-    <div class="border-bottom pb-4 row">
-        {{-- <h5>Femi Joseph</h5>
-        <p class="text-muted mb-0">I have started my career as a trainee and prove my self and achieve all the milestone with good guidance and reach up to the project manager. In this journey, I understand all the procedure which make me a good developer, team leader, and a project manager.</p>--}}
-        <div class="col-md-4 mt-4">
-            <div class="media key-feature align-items-center p-3 rounded shadow mt-4">
-                <img src="{{ asset('assets/images/job/Circleci.svg') }}" class="avatar avatar-ex-sm" alt="">
-                <div class="media-body content ml-3">
-                    <h4 class="title mb-0">Transactions</h4>
-                <p class="text-muted mb-0">3</p>
-                    <!-- {{-- <p class="text-muted mb-0"><a href="javascript:void(0)" class="text-primary">CircleCi</a> @London, UK</p>     --}} -->
-                </div>
-            </div>
-
-        </div>
-
-        <div class="col-md-4 mt-4">
-            <div class="media key-feature align-items-center p-3 rounded shadow mt-4">
-                <img src="{{ asset('assets/images/job/Circleci.svg') }}" class="avatar avatar-ex-sm" alt="">
-                <div class="media-body content ml-3">
-                    <h4 class="title mb-0">Amount Spent</h4>
-                    <!-- <p class="text-muted mb-0">₦30,000.00</p> -->
-                    <!-- {{-- <p class="text-muted mb-0"><a href="javascript:void(0)" class="text-primary">CircleCi</a> @London, UK</p>     --}} -->
-                </div>
-            </div>
-        </div>
-
-        <div class="col-md-4 mt-4">
-            <div class="media key-feature align-items-center p-3 rounded shadow mt-4">
-                <img src="{{ asset('assets/images/job/Circleci.svg') }}" class="avatar avatar-ex-sm" alt="">
-                <div class="media-body content ml-3">
-                    <h4 class="title mb-0">Amount Recieved</h4>
-                    <p class="text-muted mb-0">₦84,560.00</p>
-                    <!-- {{-- <p class="text-muted mb-0"><a href="javascript:void(0)" class="text-primary">CircleCi</a> @London, UK</p>     --}} -->
-                </div>
-            </div>
-        </div>
-    </div>
 
     <div class="row justify-content-center">
         <div class="col-lg-8 col-md-12 mt-4 pt-2 text-center">
@@ -329,7 +292,7 @@
                             <th class="py-3">Reference No</th>
                             <th class="py-3">Transaction ID</th>
                             <th class="py-3">Payment For</th>
-                            <th class="py-3">Amount</th>
+                            <th class="py-3">Amount(₦)</th>
                             <th class="py-3">Status</th>
                             <th class="py-3">Transacation Date</th>
                             <th class="py-3">Action</th> 
@@ -341,7 +304,7 @@
                     <tbody>
                     @foreach($mytransactions as $k=>$val)
                         <tr>
-                            <td>{{++$k}}.</td>
+                            <td>{{ $loop->iteration }}</td>
                             <td>{{$val->reference_id}}</td>
                             <td>{{$val->transaction_id}}</td>
                             <td class="font-weight-bold">{{$val->payment_for}}</td>
@@ -357,8 +320,7 @@
                             <td class="text-center text-info">Timeout</td>
                             @endif
 
-                            <td>{{date("Y/m/d h:i:A", strtotime($val->created_at))}}</td>
-                            <!-- <td>{{ Carbon\Carbon::parse('', 'UTC')->isoFormat('MMMM Do YYYY, h:mm:ssa') }}</td> -->
+                             <td>{{ Carbon\Carbon::parse($val->created_at, 'UTC')->isoFormat('MMMM Do YYYY, h:mm:ssa') }}</td> 
                             <td><a href="#transactionDetails" data-toggle="modal" class="btn btn-primary btn-sm ">Details</a></td> 
                         </tr>
                         @endforeach
@@ -509,7 +471,7 @@
         $('.btn-select').attr('value', sessionLang);
         } else {
         var langIndex = langArray.indexOf('ch');
-        console.log(langIndex);
+        // console.log(langIndex);
         $('.btn-select').html(langArray[langIndex]);
         //$('.btn-select').attr('value', 'en');
     }
