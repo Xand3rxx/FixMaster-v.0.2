@@ -22,7 +22,7 @@ trait Services
         ->where('id', '!=', 1)
         ->orderBy('name', 'ASC')
         ->with(['services'    =>  function($query){
-            return $query->select('name', 'uuid', 'image', 'category_id');
+            return $query->select('id','name', 'uuid', 'image', 'category_id');
         }])
         ->has('services')->get();
 
@@ -41,8 +41,8 @@ trait Services
      */
     public function service($uuid){
 
-        return Service::select('id', 'uuid', 'name', 'image', 'description')
-        ->findOrFail($uuid);
+        return Service::where('uuid', $uuid)->select('id', 'uuid', 'name', 'image', 'description')
+        ->firstOrFail();
     }
 
     /**

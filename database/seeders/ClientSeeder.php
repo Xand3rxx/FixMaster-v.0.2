@@ -3,6 +3,7 @@
 namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
+use DB;
 
 class ClientSeeder extends Seeder
 {
@@ -180,5 +181,97 @@ class ClientSeeder extends Seeder
         \App\Models\Contact::attemptToStore($client2->id, $clientAccount2->id, 156, '08069386641', "Bisola Durosinmi Etti Drive, The Rock Dr, Lekki Phase 1, Lagos", "3.464150", "6.437240");
         \App\Models\Contact::attemptToStore($client3->id, $clientAccount3->id, 156, '07036722889', "8 Oba Akinjobi Way, Ikeja GRA, Ikeja", "3.346660", "6.586420");
         \App\Models\Contact::attemptToStore($client4->id, $clientAccount4->id, 156, '09082354911', "8 Oremeji St, Oke Odo, Lagos", "3.299630", "6.618710");
+
+        $clientDiscount = \App\Models\ClientDiscount::create([
+            'discount_id'      =>  1, 
+            'client_id'        =>  $client->id, 
+            'estate_id'        =>  NULL,
+            'service_id'       =>  NULL, 
+            'availability'     =>  'unused', 
+        ]);
+
+        $clientDiscount = \App\Models\ClientDiscount::create([
+            'discount_id'      =>  1, 
+            'client_id'        =>  $client1->id, 
+            'estate_id'        =>  NULL,
+            'service_id'       =>  NULL, 
+            'availability'     =>  'unused', 
+        ]);
+
+        $clientDiscount = \App\Models\ClientDiscount::create([
+            'discount_id'      =>  1, 
+            'client_id'        =>  $client2->id, 
+            'estate_id'        =>  NULL,
+            'service_id'       =>  NULL, 
+            'availability'     =>  'unused', 
+        ]);
+
+        $clientDiscount = \App\Models\ClientDiscount::create([
+            'discount_id'      =>  1, 
+            'client_id'        =>  $client3->id, 
+            'estate_id'        =>  NULL,
+            'service_id'       =>  NULL, 
+            'availability'     =>  'unused', 
+        ]);
+
+        $clientDiscount = \App\Models\ClientDiscount::create([
+            'discount_id'       =>  1, 
+            'client_id'         =>  $client4->id, 
+            'estate_id'         =>  NULL,
+            'service_id'        =>  NULL, 
+            'availability'      =>  'unused', 
+        ]);
+
+        //3 more contacts for client@fix-master.com
+        // DB::table('contacts')->delete();
+
+        $contacts = array(
+
+            array(
+                // 'id'                =>  1,
+                'user_id'           =>  $client->id,
+                'account_id'        =>  $clientAccount->id,
+                'country_id'        =>  156,
+                'state_id'          =>  24,
+                'lga_id'            =>  505,
+                'town_id'           =>  80,
+                'name'              =>  'Yinka Odumosu',
+                'phone_number'      =>  '08086717489',
+                'address'           => 'C99 Rd 27, Victoria Garden City, Lekki',
+                'address_longitude' =>  '3.5375363',
+                'address_latitude'  =>  '6.4658893',
+            ),
+            array(
+                // 'id'                =>  2,
+                'user_id'           =>  $client->id,
+                'account_id'        =>  $clientAccount->id,
+                'country_id'        =>  156,
+                'state_id'          =>  24,
+                'lga_id'            =>  505,
+                'town_id'           =>  94,
+                'name'              =>  'Adewale Daniel',
+                'phone_number'      =>  '08085517815',
+                'address'           => 'Holly Ave, Eti-Osa, Lekki',
+                'address_longitude' =>  '3.6066907',
+                'address_latitude'  =>  '6.4941095',
+            ),
+            array(
+                // 'id'                =>  3,
+                'user_id'           =>  $client->id,
+                'account_id'        =>  $clientAccount->id,
+                'country_id'        =>  156,
+                'state_id'          =>  24,
+                'lga_id'            =>  508,
+                'town_id'           =>  116,
+                'name'              =>  'Folarin Funsho',
+                'phone_number'      =>  '08035957862',
+                'address'           => '7 Unity Road, Omole Phase 1, Ikeja, Lagos',
+                'address_longitude' =>  '3.3582073',
+                'address_latitude'  =>  '6.4941095',
+            )
+           
+        );
+
+        DB::table('contacts')->insert($contacts);
     }
 }

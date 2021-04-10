@@ -1,0 +1,46 @@
+<?php
+
+namespace App\Models;
+
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
+use App\Traits\GenerateUniqueIdentity as Generator;
+use Illuminate\Support\Str;
+
+class RfqSupplierInvoice extends Model
+{
+    use Generator;
+
+    protected $fillable = [
+        'rfq_id', 'supplier_id', 'delivery_fee', 'delivery_time', 'total_amount',
+    ];
+
+    /**
+     * The "booted" method of the model.
+     *
+     * @return void
+     */
+    protected static function booted()
+    {
+        // Create a uuid when a new Serivce Request is to be created
+        static::creating(function ($rfq) {
+            $rfq->uuid = (string) Str::uuid();
+        });
+    }
+
+    public function rfq()
+    {
+        return $this->belongsTo(Rfq::class);
+    }
+
+    public function supplier()
+    {
+        return $this->belongsTo(User::class, 'supplier_id')->with('account', 'supplier');
+    }
+
+    public function supplierInvoiceBatches()
+    {
+        return $this->belongsToMany(RfqSupplierInvoiceBatch::class);
+    }
+
+}

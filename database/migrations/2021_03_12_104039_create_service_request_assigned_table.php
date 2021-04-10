@@ -33,6 +33,8 @@ class CreateServiceRequestAssignedTable extends Migration
             $table->timestamp('job_diagnostic_date')->nullable();
             $table->timestamp('job_declined_time')->nullable();
             $table->timestamp('job_completed_date')->nullable();
+            $table->enum('status', ['Active', 'Inactive'])->nullable()->default('Inactive');
+            
             $table->primary(['user_id', 'service_request_id']);
             $table->timestamps();
         });

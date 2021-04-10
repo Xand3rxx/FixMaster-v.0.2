@@ -24,7 +24,7 @@ class Cse extends Model
     {
         static::creating(function ($cse) {
             $cse->unique_id = static::generate('cses', 'CSE-'); // Create a Unique cse id
-            $cse->referral_id = static::createCSEReferralID($cse->user_id, $cse->unique_id); // Store referral details
+            // $cse->referral_id = static::createCSEReferralID($cse->user_id, $cse->unique_id); // Store referral details
         });
     }
 
@@ -41,12 +41,17 @@ class Cse extends Model
             ? $referral->id : 0;
     }
 
+    public function serviceRequest()
+    {
+        return $this->belongsTo(User::class)->with(['account', 'contact']);
+    }
+
     /**
      * Get the user that owns the Account.
      */
     public function user()
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(User::class)->with(['account', 'contact']);
     }
 
     /**
@@ -57,14 +62,8 @@ class Cse extends Model
         return $this->hasMany(ServiceRequestAssigned::class, 'user_id', 'user_id');
     }
 
-    // public function serviceRequest()
-    // {
-    //     return $this->hasOne(ServiceRequest::class);
-    // }
-
-    // public function serviceRequests()
-    // {
-    //     return $this->hasMany(ServiceRequest::class);
-    // }
-
+    public function serviceRequests()
+    {
+        return $this->hasMany(ServiceRequest::class);
+    }
 }

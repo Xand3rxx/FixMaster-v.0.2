@@ -2,23 +2,20 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Str;
 
 class Service extends Model
 {
-    use HasFactory, SoftDeletes;
 
     // column name of key
-    protected $primaryKey = 'uuid';
+    // protected $primaryKey = 'uuid';
 
     // type of key
-    protected $keyType = 'string';
+    // protected $keyType = 'string';
 
     // whether the key is automatically incremented or not
-    public $incrementing = false;
+    // public $incrementing = false;
 
     protected $fillable = [
         'user_id', 'category_id', 'name', 'service_charge', 'description', 'status', 'image'
@@ -40,7 +37,7 @@ class Service extends Model
      */
     protected static function booted()
     {
-        // Create a uuid when a new serivce uuid and url is to be created
+        // Create a uuid when a new serivce uuid is to be created
         static::creating(function ($service) {
             $service->uuid = (string) Str::uuid();
         });
@@ -55,7 +52,7 @@ class Service extends Model
     //Scope to return all services
     public function scopeServicies($query){
         return $query->select('*')
-        ->orderBy('name', 'ASC');
+            ->orderBy('name', 'ASC');
         // ->withTrashed();
     }
 
@@ -68,9 +65,9 @@ class Service extends Model
     //Scope to return all active services
     public function scopeActiveServicies($query){
         return $query->select('*')
-        ->where('status', '=', 1)
-        // ->whereNull('deleted_at')
-        ->orderBy('name', 'ASC');
+            ->where('status', '=', 1)
+            // ->whereNull('deleted_at')
+            ->orderBy('name', 'ASC');
     }
 
     public function user()
@@ -125,6 +122,13 @@ class Service extends Model
 
         return $this->hasMany(Rating::class,'service_id');
 
-        }
+    }
+
+    public function subServices(){
+
+        return $this->hasMany(SubService::class);
+
+    }
+    
 
 }

@@ -1,14 +1,11 @@
 <aside class="aside aside-fixed" id="sidebarMenu">
   <div class="aside-header">
-      <a href="{{ route('cse.index',app()->getLocale())}}" class="aside-logo">
-
-    </a>
+    <a href="{{ route('cse.index', app()->getLocale()) }}" class="aside-logo"></a>
     <a href="" class="aside-menu-link">
       <i data-feather="menu"></i>
       <i data-feather="x"></i>
     </a>
-    <a href="" id="mailSidebar" class="burger-menu d-md-none"><i data-feather="arrow-left"></i></a>
-
+    <a href="" id="chatContentClose" class="burger-menu d-none"><i data-feather="arrow-left"></i></a>
   </div>
   <div class="aside-body">
     <div class="aside-loggedin">
@@ -29,7 +26,7 @@
           <i data-feather="chevron-down"></i>
         </a>
         <p class="tx-color-03 tx-12 mg-b-0">Customer Service Executive(CSE)</p>
-        <p class="tx-15 mg-b-0 mt-4 font-weight-bold text-center">Job Availabilty</p><br>
+        <p class="tx-15 mg-b-0 mt-4 font-weight-bold text-center">Job availability</p><br>
         <div class="custom-control custom-switch" style="margin-left: 4rem !important; margin-top: -12px !important;">
           <input type="checkbox" checked class="custom-control-input" id="cse-availability">
           <label class="custom-control-label font-weight-bold" for="cse-availability"></label>
@@ -39,9 +36,9 @@
       </div>
       <div class="collapse {{ Route::currentRouteNamed('cse.view_profile', 'cse.edit_profile') ? 'show' : '' }}" id="loggedinMenu">
         <ul class="nav nav-aside mg-b-0">
-          <li class="nav-item {{ Route::currentRouteNamed('cse.view_profile') ? 'active' : '' }}"><a href="{{ route('cse.view_profile', app()->getLocale()) }}" class="nav-link"><i data-feather="user"></i> <span>View Profile</span></a></li>
+          <li class="nav-item {{ Route::currentRouteNamed('cse.view_profile') ? 'active' : '' }}"><a href="{{ route('cse.view_profile', [app()->getLocale(), auth()->user()->uuid]) }}" class="nav-link"><i data-feather="user"></i> <span>View Profile</span></a></li>
 
-          <li class="nav-item {{ Route::currentRouteNamed('cse.edit_profile') ? 'active' : '' }}"><a href="{{ route('cse.edit_profile',app()->getLocale()) }}" class="nav-link"><i data-feather="settings"></i> <span>Account Settings</span></a></li>
+          <li class="nav-item {{ Route::currentRouteNamed('cse.edit_profile') ? 'active' : '' }}"><a href="{{ route('cse.edit_profile',[app()->getLocale(), auth()->user()->uuid]) }}" class="nav-link"><i data-feather="settings"></i> <span>Account Settings</span></a></li>
         </ul>
       </div>
     </div><!-- aside-loggedin -->
@@ -61,7 +58,7 @@
 
       <li class="nav-item {{ Route::currentRouteNamed('cse.payments') ? 'active show' : '' }}"><a href="{{ route('cse.payments', app()->getLocale()) }}" class="nav-link"><i data-feather="credit-card"></i> <span>Payments</span></a></li>
 
-      <li class="nav-item {{ Route::currentRouteNamed('cse.requests.index', 'cse.request_details') ? 'active show' : '' }}"><a href="{{ route('cse.requests.index', app()->getLocale()) }}" class="nav-link"><i data-feather="git-pull-request"></i> <span>Requests</span></a></li>
+      <li class="nav-item {{ Route::currentRouteNamed('cse.requests.index', 'cse.request_details', 'cse.requests.show') ? 'active show' : '' }}"><a href="{{ route('cse.requests.index', app()->getLocale()) }}" class="nav-link"><i data-feather="git-pull-request"></i> <span>Requests</span></a></li>
 
     </ul>
   </div>

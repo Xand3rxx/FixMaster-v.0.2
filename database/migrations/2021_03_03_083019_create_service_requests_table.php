@@ -24,12 +24,11 @@ class CreateServiceRequestsTable extends Migration
 		    $table->foreignId('client_id');
             $table->foreignId('service_id');
             $table->string('unique_id')->unique();
-            $table->foreignId('state_id');
-            $table->foreignId('lga_id');
-            $table->foreignId('town_id');
+            // $table->foreignId('state_id');
+            // $table->foreignId('lga_id');
+            // $table->foreignId('town_id')->nullable();
             $table->foreignId('price_id');
-            $table->foreignId('phone_id');
-            $table->foreignId('address_id');
+            $table->foreignId('contact_id');
             $table->foreignId('client_discount_id')->nullable();
             $table->string('client_security_code')->unique();
             $table->foreignId('status_id')->default(1);

@@ -79,45 +79,7 @@
 
 @section('scripts')
 @push('scripts')
-<script>
-$(document).ready(function() {
-
-    $(document).on('click', '#delete', function(event) {
-        event.preventDefault();
-        let route = $(this).attr('data-url');
-        let url = "<a href='" + route + "'  class='confirm-link'>Yes Delete</a>";
-        displayAlert(url, 'Would you like to detele this Discount?')
-    });
-
-    $(document).on('click', '#deactivate', function(event) {
-        event.preventDefault();
-        let route = $(this).attr('data-url');
-        let url = "<a href='" + route + "'  class='confirm-link'>Yes Deactivate</a>";
-        displayAlert(url, 'Would you like to deactivate this Discount?')
-    })
-
-    $(document).on('click', '#activate', function(event) {
-        event.preventDefault();
-        let route = $(this).attr('data-url');
-        let url = "<a href='" + route + "'  class='confirm-link'>Yes Reinstate</a>"
-        displayAlert(url, 'Would you like to reinstate this Discount?')
-    });
-
-
-    function displayAlert(url, message) {
-        Swal.fire({
-            title: 'Are you sure?',
-            text: message,
-            showCancelButton: true,
-            confirmButtonColor: '#E97D1F',
-            cancelButtonColor: '#8392a5',
-            confirmButtonText: url
-        })
-
-    }
-
-});
-</script>
+<script src="{{ asset('assets/dashboard/assets/js/admin/loyalty/4d5e497c-d12d-43ec-ac7a-a14f825ffaed.js') }}"></script>
 @endpush
 @endsection
 @endsection

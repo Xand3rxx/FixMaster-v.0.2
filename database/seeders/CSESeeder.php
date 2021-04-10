@@ -71,7 +71,7 @@ class CSESeeder extends Seeder
             'gender'            => 'male',
             'bank_id'           =>  9,
             'account_number'    =>  '0927628912',
-            'avatar'            => 'default-male-avatar.png'
+            'avatar'            => '446bac7e-ab48-46af-91ff-c55961214fe2.jpeg'
         ]);
 
         $cseAccount1 = \App\Models\Account::create([
@@ -79,10 +79,10 @@ class CSESeeder extends Seeder
             'first_name'        => "Susan",
             'middle_name'       => "Ngozi",
             'last_name'         => "Simpson",
-            'gender'            => 'male',
+            'gender'            => 'female',
             'bank_id'           =>  3,
             'account_number'    =>  '1092732912',
-            'avatar'            => 'default-female-avatar.png'
+            'avatar'            => '60137e90-2d10-447f-857f-9368e2d61cf2.jpg'
         ]);
 
         $cseAccount2 = \App\Models\Account::create([

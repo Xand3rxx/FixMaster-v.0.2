@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Client;
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\RatingController;
 use Illuminate\Http\Request;
-use Image;
+use Illuminate\Support\Facades\Route;
 use App\Models\Category;
 use App\Models\Service;
 use App\Models\PaymentGateway;
@@ -16,18 +16,34 @@ use App\Models\Client;
 use App\Models\State;
 use App\Models\Lga;
 use App\Models\Account;
-use App\Models\Phone;
-use App\Models\Address;
-use App\Models\Servicerequest;
-use App\Helpers\CustomHelpers;
+use App\Models\ClientDiscount;
+use App\Models\Contact;
+use App\Models\Invoice;
+use App\Models\Cse;
+use App\Models\ServiceRequestSetting;
+use DB;
+use App\Models\ServiceRequest;
 use App\Traits\GenerateUniqueIdentity as Generator;
 use App\Traits\RegisterPaymentTransaction;
 use App\Traits\Services;
 use App\Traits\PasswordUpdator;
-use Auth;
+use Auth; 
 use App\Models\LoyaltyManagement;
 use App\Models\ClientLoyaltyWithdrawal;
+use App\Models\ServiceRequestPayment;
+use App\Models\ServiceRequestProgress;
+use App\Models\ServiceRequestCancellation;
 use Session;
+
+use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\SMTP;
+use PHPMailer\PHPMailer\Exception;
+
+use Carbon\Carbon;
+
+use App\Http\Controllers\Messaging\MessageController;
+use Illuminate\Support\Str;
+
 
 class ClientController extends Controller
 {
@@ -40,6 +56,9 @@ class ClientController extends Controller
      */
     public function index()
     {
+
+        $myRequest = Client::where('user_id', auth()->user()->id)->with('service_requests')->firstOrFail();
+
         //Get total available serviecs
         $totalServices = Service::count();
 
@@ -51,6 +70,8 @@ class ClientController extends Controller
 
         $user = Auth::user();
 
+        // return $user->contact->phone_number ?? 'UNAVAILABLE';
+
         return view('client.home', [
             // data
             'totalRequests' => $user->clientRequests()->count(),
@@ -58,15 +79,172 @@ class ClientController extends Controller
             'cancelledRequests' => $user->clientRequests()->where('status_id', 3)->count(),
             'user' => auth()->user()->account,
             'client' => [
-                'phone_number' => '0909078888'
+                'phone_number' => $user->contact->phone_number ?? 'UNAVAILABLE',
             ],
-            'popularRequests'   =>  $popularRequests ,
-            // 'myWallet'          =>  $myWallet,
-            // JoeBoy Fill this data
-            // 1. 'userServiceRequests'
-            // 2. 'popularRequests'
-            // 3. 'cseName'
+            'popularRequests'  =>  $popularRequests,
+            'userServiceRequests' =>  $myRequest, 
+         
         ]);
+    }
+
+    public function clientRequestDetails($language, $request){
+
+        $requestDetail = ServiceRequest::where('uuid', $request)->with('price')->firstOrFail();
+
+        // return \App\Models\ServiceRequestAssigned::where('service_request_id', $requestDetail->id)->where('status', 'Active')->firstOrFail()->status;
+
+        return view('client.request_details', [
+
+            'requestDetail'     =>  $requestDetail,
+            'assignedCSE'       =>  \App\Models\ServiceRequestAssigned::where('service_request_id', $requestDetail->id)->where('status', 'Active')->first(),
+
+        ]);
+    }
+
+
+    public function editRequest($language, $request){
+
+        $userServiceRequest = ServiceRequest::where('uuid', $request)->first();
+        $data = [
+            'userServiceRequest'    =>  $userServiceRequest,
+        ];
+
+        return view('client._request_edit', $data);
+    }
+
+    public function updateRequest(Request $request, $language, $id){
+
+        $requestExist = ServiceRequest::where('uuid', $id)->first();
+
+        $request->validate([
+            'timestamp'             =>   'required',
+            'phone_number'          =>   'required',
+            'address'               =>   'required',
+            'description'           =>   'required',
+        ]);
+
+
+        $timestamp = \Carbon\Carbon::parse($request->input('timestamp'), 'UTC')->isoFormat('MMMM Do YYYY, h:mm:ssa');
+
+        $updateServiceRequest = ServiceRequest::where('uuid', $id)->update([
+            'preferred_time'             =>   $request->input('timestamp'),
+            'description'           =>   $request->description,
+        ]);
+
+        $updateContactRequest = Contact::where('user_id', auth()->user()->id)->update([
+            'phone_number'          =>   $request->phone_number,
+            'address'               =>   $request->address,
+        ]);
+
+        if($updateServiceRequest){
+          //acitvity log
+            return redirect()->route('client.requests', app()->getLocale())->with('success', $requestExist->unique_id.' was successfully updated.');
+
+        }else{
+
+     //acitvity log
+            return back()->with('error', 'An error occurred while trying to update a '.$requestExist->unique_id.' service request.');
+        }
+       
+        return back()->withInput();
+    }
+
+
+    public function cancelRequest(Request $request, $language, $id){
+
+        $requestExists = ServiceRequest::where('uuid', $id)->first();
+       
+
+        if($requestExists->status_id == '3'){
+            return back()->with('error', 'Sorry! This service request('.$requestExists->unique_id.') has already been completed.');
+        }
+
+        //Validate user input fields
+        $request->validate([
+            'reason'       =>   'required',
+        ]);
+
+    
+        if(!empty($requestExists->clientDiscounts)){
+            $rate = $requestExists->clientDiscounts[0]->discount->rate;
+            $refundAmount = floor( (float)$rate * (float)$requestExists->total_amount / 100 );
+        }else{
+            $refundAmount = $requestExists->total_amount;
+        }
+
+
+        $walTrans = WalletTransaction::where('user_id', auth()->user()->id)->orderBy('id', 'DESC')->first();
+        $closingBalance =  $walTrans->closing_balance;
+        $NewWalletbalance = floor((float)$refundAmount + (float)$closingBalance);
+
+        //service_request_status_id = Pending(1), Ongoing(4), Completed(3), Cancelled(2) 
+        $cancelRequest = ServiceRequest::where('uuid', $id)->update([
+            'status_id' =>  '2',
+        ]);
+
+        $jobReference = $requestExists->unique_id;
+
+        //Create record in `service_request_progress` table
+        $recordServiceProgress = ServiceRequestProgress::create([
+            'user_id'                       =>  Auth::id(), 
+            'service_request_id'            =>  $requestExists->id, 
+            'status_id'                     => '2',
+            'sub_status_id'                 => '1'
+        ]);
+
+        $recordCancellation = ServiceRequestCancellation::create([
+            'user_id'                       =>  Auth::id(), 
+            'service_request_id'            =>  $requestExists->id, 
+            'reason'                        =>  $request->reason,
+        ]);
+  
+      
+        $walTrans = new WalletTransaction;
+        $walTrans->user_id = auth()->user()->id;
+        $walTrans->payment_id = '12';
+        $walTrans->amount =  $requestExists->total_amount;
+        $walTrans->payment_type = 'refund';
+        $walTrans->unique_id = $requestExists->unique_id;
+        $walTrans->transaction_type = 'credit';
+        $walTrans->opening_balance =  $closingBalance;
+        $walTrans->closing_balance = $NewWalletbalance;
+        $walTrans->save();
+
+
+        $clientId = $requestExists->client->id;
+        $clientName = $requestExists->client->account->first_name. ' '.$requestExists->client->account->last_name;
+        $clientEmail = $requestExists->client->email;
+        $reason = $request->reason;
+        $jobReference = $requestExists->unique_id;
+        $supervisorId = 'dev@fix-master.com';
+
+     
+
+        if($cancelRequest AND $recordServiceProgress AND $recordCancellation){
+
+            /*
+            * Code to send email goes here...
+            */
+
+            //Notify CSE and Technician with messages
+            // $this->cancellationMessage = new EssentialsController();
+            // $this->cancellationMessage->clientServiceRequestCancellationMessage($clientName, $clientId, $jobReference, $reason);
+            // $this->cancellationMessage->adminServiceRequestCancellationMessage($clientName, $clientId, $jobReference, $reason, $supervisorId);
+
+            // MailController::clientServiceRequestCancellationEmailNotification($clientEmail, $clientName,$jobReference, $reason);
+            // MailController::adminServiceRequestCancellationEmailNotification('info@fixmaster.com.ng', $clientName,$jobReference, $reason);
+
+            //Record crurrenlty logged in user activity
+            //activity log
+            return redirect()->route('client.requests', app()->getLocale())->with('success', $requestExists->unique_id.' was successfully updated.');
+
+        }else{
+            //Record Unauthorized user activity
+         //activity log
+            return back()->with('error', 'An error occurred while trying to cancel '.$jobReference.' service request.');
+        }
+
+        return back()->withInput();
     }
 
     /**
@@ -244,13 +422,8 @@ class ClientController extends Controller
         return view('client.wallet', compact('myWallet')+$data);
     }
 
-
-
-
-
     public function walletSubmit(Request $request)
     {
-
         $myWallet    = WalletTransaction::where('user_id', auth()->user()->id)->orderBy('id', 'DESC')->get();
         // validate Request
         $valid = $this->validate($request, [
@@ -283,7 +456,7 @@ class ClientController extends Controller
                     return redirect()->route('client.wallet', app()->getLocale())->with('alert', 'Invalid Deposit Request');
                 }
                 $gatewayData = PaymentGateway::where('keyword', $pay->payment_channel)->first();
-
+                
                 // dd($gatewayData);
                 if ($pay->payment_channel == 'paystack') {
                     $paystack['amount'] = $pay->amount;
@@ -386,7 +559,7 @@ class ClientController extends Controller
             die('Api returned Error ' . $trans->message);
         }
 
-        /** If the transaction stats are successful snd to DB */
+        /** If the transaction status are successful send to DB */
         if ($data->status == 'pending') {
             $data['status'] = 'success';
             $data['transaction_id'] = rawurlencode($reference);
@@ -396,7 +569,7 @@ class ClientController extends Controller
 
             $client = \App\Models\Client::where('user_id', auth()->user()->id)->with('user')->firstOrFail();
 
-            if (!WalletTransaction::where('unique_id', '=', $client['unique_id'])->exists()) {
+            // if (!WalletTransaction::where('unique_id', '=', $client['unique_id'])->exists()) {
                 $walTrans = new WalletTransaction;
                 $walTrans['user_id'] = auth()->user()->id;
                 $walTrans['payment_id'] = $data->id;
@@ -404,8 +577,16 @@ class ClientController extends Controller
                 $walTrans['payment_type'] = 'funding';
                 $walTrans['unique_id'] = $data->unique_id;
                 $walTrans['transaction_type'] = 'debit';
+                // if the user has not used this wallet for any transaction
+                if (!WalletTransaction::where('unique_id', '=', $client['unique_id'])->exists()) {
                 $walTrans['opening_balance'] = '0';
                 $walTrans['closing_balance'] = $data->amount;
+                }else{
+                    $previousWallet = WalletTransaction::where('user_id', auth()->user()->id)->orderBy('id', 'DESC')->first();
+                    $walTrans['opening_balance'] = $previousWallet->closing_balance;
+                    $walTrans['closing_balance'] = $previousWallet->closing_balance + $data->amount;
+                }
+                // dd($walTrans);
                 $walTrans->save();
             }else{
                 $walTrans = WalletTransaction::where('user_id', auth()->user()->id)->orderBy('id', 'DESC')->first();
@@ -413,8 +594,6 @@ class ClientController extends Controller
                 $walTrans['closing_balance'] = $walTrans->opening_balance + $data->amount;
                 $walTrans->update();
             }
-
-        }
 
         /** Finally return the callback view for the end user */
         return redirect()->route('client.wallet', app()->getLocale())->with('success', 'Fund successfully added!');
@@ -478,7 +657,7 @@ class ClientController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function serviceQuote($language, $uuid){
+    public function serviceQuote($language, $uuid, Request $request){
         $data['gateways']     = PaymentGateway::whereStatus(1)->orderBy('id', 'DESC')->get();
         $data['service']      = $this->service($uuid);
         $data['bookingFees']  = $this->bookingFees();
@@ -491,8 +670,58 @@ class ClientController extends Controller
         //     'discounts'     =>  $this->clientDiscounts(),
         // ]
         // dd($data['balance']->closing_balance );
+        // dd($data['discounts'] ); 
+        $data['states'] = State::select('id', 'name')->orderBy('name', 'ASC')->get();
+
+        // $data['lgas'] = Lga::select('id', 'name')->orderBy('name', 'ASC')->get();
+
         //Return Service details
+        $data['myContacts'] = Contact::where('user_id', auth()->user()->id)->get();
+        //Return Service details
+        // $data['myContacts'] = Contact::where('user_id', auth()->user()->id)->get();
+        // dd($data['myContacts']);
+
+        $data['registeredAccount'] = Account::where('user_id', auth()->user()->id)
+                                    ->with('usercontact')
+                                    ->orderBy('id','DESC')
+                                    ->firstOrFail();
+                                    // dd($data['registeredAccount']);
         return view('client.services.quote', $data);
+    }
+
+    function ajax_contactForm(Request $request){
+        // $clientAccount = new Account;
+
+        $clientContact = new Contact;
+        $clientContact->user_id   = auth()->user()->id;
+        $clientContact->name      = $request->firstName.' '.$request->lastName;
+        $clientContact->state_id  = $request->state;
+        $clientContact->lga_id    = $request->lga;
+        $clientContact->town_id    = $request->town;
+        $client  = Client::where('user_id',auth()->user()->id)->orderBy('id','DESC')->firstOrFail();
+        $clientContact->account_id  = $client->account_id;
+        $clientContact->country_id    = '156';
+        // $clientContact->is_default        = '1';
+        $clientContact->phone_number       = $request->phoneNumber;
+        $clientContact->address            = $request->streetAddress;
+        $clientContact->address_longitude  = $request->addressLat;
+        $clientContact->address_latitude   = $request->addressLng;
+
+        if ($clientContact->save()) {
+            // return back()->with('success', 'New contact saved');
+            // return response()->json(['success' => 'Data Added successfully.']);
+
+            return view('client.services._contactList', [
+                'myContacts'    => Contact::where('user_id', auth()->user()->id)->get(),
+                // 'success' => 'Data Added successfully.'
+            ]);
+
+        } else{
+            return back()->with('error', 'sorry!, an error occured please try again');
+        }
+
+
+
     }
 
     // $serviceRequests = ServiceRequestAssigned::where('user_id', Auth::id())->with('service_request')->get();
@@ -500,54 +729,271 @@ class ClientController extends Controller
     // return $serviceRequests;
 
     public function serviceRequest(Request $request){
-        // $validatedData = $request->validate([
-        //     'service_fee'               =>   'required',
-        //     'description'               =>   'required',
-        //     'timestamp'                 =>   'required',
-        //     'phone_number'              =>   'required',
-        //     'address'                   =>   'required',
-        //     'payment_method'            =>   'required',
-        //   ]);
+        
+            $validatedData = $request->validate([            
+            'balance'                   =>   'required',
+            'booking_fee'               =>   'required',
+            'description'                 =>   'required',
+            'payment_method'            =>   'required',          
+            'myContact_id'            =>   'required',          
+          ]);
 
-            $all = $request->all();
-            dd($all);
-
-
-            //if payment method is wallet
+            // if payment method is wallet
             if($request->payment_method == 'Wallet'){
-                if($request->balance<$request->booking_fee){
 
-                    $service_request                        = new Servicerequest;
-                    $service_request->cliend_id             = auth()->user()->id;
-                    $service_request->service_id            = $request->service_id;
-                    $service_request->unique_id             = 'REF-'.$this->generateReference();
-                    $service_request->price_id              = $request->price_id;
-                    $service_request->phone_id              = $request->phone_number;
-                    $service_request->address_id            = $request->address;
-                    $service_request->client_discount_id    = $request->client_discount_id;
-                    $service_request->client_security_code  = 'SEC-'.strtoupper(substr(md5(time()), 0, 8));
-                    $service_request->status_id             = '1';
-                    $service_request->description           = $request->description;
-                    $service_request->total_amount          = $request->booking_fee;
-                    $service_request->preferred_time        = $request->timestamp;
-                    $service_request->closing_balance       = $request->balance;
-                    dd($service_request);
+                // if wallet balance is less than the service fee
+                if($request->balance > $request->booking_fee){
+                    $SavedRequest = $this->saveRequest($request);
+                    // dd($service_request);
+                    if ($SavedRequest) {
+
+                    // fetch the Client Table Record
+                    $client = \App\Models\Client::where('user_id', $request->user()->id)->with('user')->firstOrFail();
+                    // generate reference string for this transaction
+                    $generatedVal = $this->generateReference();
+                    // call the payment Trait and submit record on the
+                    $payment = $this->payment($SavedRequest->total_amount, 'wallet', 'service-request', $client['unique_id'], 'success', $generatedVal);
+                    // save the reference_id as track in session
+                    Session::put('Track', $generatedVal);
+                        if ($payment) {            
+                            //   new starts here 
+                            $user_id = auth()->user()->id;
+                            $track = Session::get('Track');
+                            $pay =  Payment::where('reference_id', $track)->orderBy('id', 'DESC')->first();
+                            //save to the wallet transaction table
+                            if ($pay) {
+                                $wallet_transaction = new WalletTransaction;
+                                $wallet_transaction->user_id = auth()->user()->id;
+                                $wallet_transaction->payment_id = $pay->id;
+                                $wallet_transaction->amount = $pay->amount;
+                                $wallet_transaction->payment_type = $pay->payment_for;
+                                $wallet_transaction->unique_id = $pay->unique_id;
+                                $wallet_transaction->transaction_type = 'credit';
+                                $wallet_transaction->opening_balance = $request->balance;
+                                $wallet_transaction->closing_balance = $request->balance - $pay->amount;
+                                $wallet_transaction->status = 'success';
+                                $wallet_transaction->save();    
+                                // $this->getDistanceDifference();    
+                                // return back()->with('success', 'Success! Transaction was successful and your request has been placed.');
+                            
+                                // save to ServiceRequestPayment table 
+                                $service_reqPayment = new ServiceRequestPayment;
+                                $service_reqPayment->user_id = auth()->user()->id;
+                                $service_reqPayment->payment_id = $pay->id;  
+                                $service_reqPayment->service_request_id = $SavedRequest->id;  
+                                $service_reqPayment->amount = $pay->amount;  
+                                $service_reqPayment->unique_id = $pay->unique_id;  
+                                $service_reqPayment->payment_type = $pay->payment_for;  
+                                $service_reqPayment->status = 'success';  
+                            }                        
+                        }
+                        return back()->with('success', 'Service Request Successful');
+                        // return response()->json(['success' => 'Service Request Successful.']);
+                    } else{
+                        return back()->with('error', 'sorry!, your service request is not successful');
+                    } 
+
                 }else{
-                        Session::flash('alert', 'sorry!, service amount is less than wallet balance');
+                    return back()->with('error', 'sorry!, booking fee is greater than wallet balance');
                     }
                 }
-                if ($request->payment_method == 'Offline') {
-                    // $this->requestForService();
-                    echo 'denk';
-                } else{
-                    echo 'tony';
-                    // $discountServiceFee = 0.95 * $serviceFee;
-                    // $amount = $discountServiceFee;
-                    // $this->requestForService();
+
+
+
+            // online method
+            if ($request->payment_method == 'Online') {
+                //  $all = $request->all(); 
+                // dd($all);
+                $valid = $this->validate($request, [
+                    // List of things needed from the request like
+                    'booking_fee'           => 'required',
+                    'payment_channel'  => 'required',
+                ]);
+                // fetch the Client Table Record
+                $client = Client::where('user_id', $request->user()->id)->with('user')->firstOrFail();
+                // save the reference_id as track in session
+                $generatedVal = $this->generateReference();
+
+            $payment = $this->payment($valid['booking_fee'], $valid['payment_channel'], 'service-request', $client['unique_id'], 'pending', $generatedVal);
+                Session::put('Track', $generatedVal);
+            if ($payment) {
+                // paystack
+                if($request->payment_channel == 'paystack'){                
+                    // if($this->initiatePayment()){
+
+                        $SavedRequest = $this->saveRequest($request);
+
+                        // $this->initiatePayment();
+                        return redirect()->route('client.serviceRequest.initiatePayment', app()->getLocale());
+
+                    // }
+                 // flutter
+                }elseif ($request->payment_channel == 'flutter') {
+                    # flutter...
+                    // if($this->initiatePayment()){
+                        $this->initiatePayment(); 
+                    // }
+                }
+            }
+            // return back()->with('error', 'online payment coming soon');
+            } else{
+                return back()->with('error', 'Sorry!, an error occured please try again');
                 }
 
-    }
+           }
+            
+            public function initiatePayment(){
+                $track  = Session::get('Track');
+                // dd($track);
+                $data = Payment::where('reference_id', $track)->orderBy('id', 'DESC')->first();
+            //    dd($data);
+                $user = User::find($data->user_id);
+                if($user){
 
+                    $curl = curl_init();
+        
+                    curl_setopt_array($curl, array(
+                        CURLOPT_URL => "https://api.paystack.co/transaction/initialize",
+                        CURLOPT_RETURNTRANSFER => true,
+                        CURLOPT_CUSTOMREQUEST => "POST",
+                        CURLOPT_POSTFIELDS => json_encode([
+                            'amount' => $data->amount * 100,
+                            'email' => $user->email, 
+                            'callback_url' => route('client.serviceRequest.verifyPayment', app()->getLocale())
+                        ]),
+                        CURLOPT_HTTPHEADER => [
+                            "authorization: Bearer sk_test_b612f25bd992c4d84760e312175c7515336b77fc",
+                            "content-type: application/json",
+                            "cache-control: no-cache"
+                        ],
+                    ));
+            
+                    $response = curl_exec($curl);
+                    $err = curl_error($curl);
+                    if ($err) {
+                        return back()->with('error', $err);
+                    }
+            
+                    $tranx = json_decode($response, true);
+            
+                    if (!$tranx['status']) {
+                        return back()->with('error', $tranx['message']);
+                    }
+                    return redirect($tranx['data']['authorization_url']);
+
+                }else{
+                    return back()->with('error', 'Error occured while making payment');
+                }
+                
+            }
+
+
+
+
+            public function verifyPayment()
+            {
+                $track  = Session::get('Track');
+                $data = Payment::where('reference_id', $track)->orderBy('id', 'DESC')->first();
+        
+                $curl = curl_init();
+        
+                /** Check for a reference and return else make empty */
+                $reference = isset($_GET['reference']) ? $_GET['reference'] : '';
+                if (!$reference) {
+                    die('No reference supplied');
+                }
+        
+                /** Set the client for url's array values for the Curl's */
+                curl_setopt_array($curl, array(
+                    CURLOPT_URL => "https://api.paystack.co/transaction/verify/" . rawurlencode($reference),
+                    CURLOPT_RETURNTRANSFER => true,
+        
+                    /** Set the client for url header values passed */
+                    CURLOPT_HTTPHEADER => [
+                        "accept: application/json",
+                        "authorization: Bearer sk_test_b612f25bd992c4d84760e312175c7515336b77fc",
+                        "cache-control: no-cache"
+                    ],
+                ));
+        
+                /** The response should be executed if successful */
+                $response = curl_exec($curl);
+        
+                /** If there's an error return the error message */
+                $err = curl_error($curl);
+        
+                if ($err) {
+                    print_r('Api returned error ' . $err);
+                }
+        
+                /** The transaction details and stats would be returned */
+                $trans = json_decode($response);
+                if (!$trans->status) {
+                    die('Api returned Error ' . $trans->message);
+                }
+        
+                /** If the transaction status are successful send to DB */
+                if ($data->status == 'pending') {
+                    $data['status'] = 'success';
+                    $data['transaction_id'] = rawurlencode($reference);
+                    $data->update();
+                    $track = Session::get('Track');
+                    $data  = Payment::where('reference_id', $track)->orderBy('id', 'DESC')->first();
+        
+                    // $client = \App\Models\Client::where('user_id', auth()->user()->id)->with('user')->firstOrFail();
+                    
+                    
+                }
+        
+                /** Finally return the callback view for the end user */
+                return redirect()->route('client.service.all', app()->getLocale())->with('success', 'Service Request was successful!');
+            }
+
+
+
+
+
+            public function getDistanceDifference(Request $request){
+                // $the_message = new MessageController;
+                //         $type = 'email';
+                //         $subject = 'new job notice';
+                //         $from = 'client@fix-master.com';
+                //         $to = 'cse@fix-master.com';
+                //         $mail_data = ["firstname"=>"Olaoluwa", "url"=>"www.google.com"];
+                //         $feature = 'NEW_JOB_NOTIFICATION';
+                // // $the_message->sendMessage( $type, $subject, $from, $to, $mail_data, $feature);
+                // $the_message->sendNewMessage( $type, $subject, $from, $to, $mail_data, $feature);
+                $client = Client::where('user_id', $request->user()->id)->with('user')->orderBy('id','DESC')->firstOrFail();
+
+                // $latitude  = '3.921007';
+                $latitude  = $client->user->contact->address_latitude;
+                // $longitude = '1.8386';
+                $longitude = $client->user->contact->address_longitude;
+                // $radius    = 325;
+                $radius        = ServiceRequestSetting::find(1)->radius;   
+
+                $cse = DB::table('cses')
+                ->join('contacts', 'cses.user_id','=','contacts.user_id')
+                ->join('users', 'cses.user_id', '=', 'users.id')              
+                ->join('accounts', 'cses.user_id', '=', 'accounts.user_id')              
+                // // // ->select(DB::raw('contacts.*,1.609344 * 3956 * 2 * ASIN(SQRT( POWER(SIN((" . $latitude . " - abs(address_latitude)) *  pi()/180 / 2), 2) + COS(" . $latitude . " * pi()/180) * COS(abs(address_latitude) * pi()/180) * POWER(SIN((" . $longitude . " - address_longitude) * pi()/180 / 2), 2)  )) AS calculatedDistance'))
+                ->select(DB::raw('cses.*, contacts.address, accounts.first_name, users.email,  6353 * 2 * ASIN(SQRT( POWER(SIN(('.$latitude.' - abs(address_latitude)) * pi()/180 / 2),2) + COS('.$latitude.' * pi()/180 ) * COS(abs(address_latitude) *  pi()/180) * POWER(SIN(('.$longitude.' - address_longitude) *  pi()/180 / 2), 2) )) as distance'))
+                ->having('distance', '<=', $radius)
+                // // ->having('town', '=', '')
+                ->orderBy('distance', 'DESC')
+                ->get();
+               
+                if ( count($cse) > 0) {
+                    // dd($cse);
+                    foreach ($cse as $key => $cses){
+                        // dd($cse);
+                        dd($cses->id);
+                        // dd($cses->distance);
+                }
+
+
+            }
+            }
 
     /**
      * Display a more details about a FixMaster service.
@@ -581,7 +1027,16 @@ class ClientController extends Controller
     }
 
 
+    public function myServiceRequest(){
 
+        $myServiceRequests = Client::where('user_id', auth()->user()->id)->with('service_requests')->firstOrFail();
+
+        // return $myServiceRequests;
+
+        return view('client.services.list', [
+            'myServiceRequests' =>  $myServiceRequests,
+        ]);
+    }
 
     public function loyalty()
     {
@@ -603,7 +1058,10 @@ class ClientController extends Controller
 
 
         $data['mytransactions']    = Payment::where('user_id', auth()->user()->id)->orderBy('id', 'DESC')->get();
-        $data['ewallet'] = !isset($json->withdraw)? '10000.00': (is_array($json->withdraw) ?  (float)'10000.00' + (float)array_sum($json->withdraw): (float)'10000.00' + (float)$json->withdraw) ;
+        $walTrans = WalletTransaction::where('user_id', auth()->user()->id)->orderBy('id', 'DESC')->first();
+        //  $data['ewallet'] = !isset($json->withdraw)? $walTrans->closing_balance: (is_array($json->withdraw) ?  (float)$walTrans->closing_balance + (float)array_sum($json->withdraw): (float)'1000.000' + (float)$json->withdraw) ;
+
+        $data['ewallet'] =  $walTrans->closing_balance;
         $myWallet    = WalletTransaction::where('user_id', auth()->user()->id)->orderBy('id', 'DESC')->get();
         return view('client.loyalty', compact('myWallet')+$data);
     }
@@ -628,6 +1086,22 @@ class ClientController extends Controller
        }
 
        if((float)$wallet->wallet > (float)$request->amount){
+        $client = Client::where('user_id', auth()->user()->id)->first();
+        $generatedVal = $this->generateReference();
+        $payment = $this->payment($request->amount, 'loyalty', 'e-wallet', $client->unique_id, 'success', $generatedVal);
+        if($payment){
+
+            $walTrans = new WalletTransaction;
+            $walTrans->user_id = auth()->user()->id;
+            $walTrans->payment_id = $payment->id;
+            $walTrans->amount =  $payment->amount;
+            $walTrans->payment_type = 'funding';
+            $walTrans->unique_id = $payment->unique_id;
+            $walTrans->transaction_type = 'credit';
+            $walTrans->opening_balance = $request->opening_balance;
+            $walTrans->closing_balance = (float)$payment->amount + (float)$request->opening_balance;
+            $walTrans->save();
+
         $update_wallet = (float)$wallet->wallet - (float)$request->amount;
         ClientLoyaltyWithdrawal::where(['client_id'=> auth()->user()->id])->update([
             'withdrawal'=> json_encode($withdrawal),
@@ -638,12 +1112,21 @@ class ClientController extends Controller
              ->with('success', 'Funds transfered  successfully ');
 
        }else{
+
         return redirect()->route('client.loyalty', app()->getLocale())
-        ->with('error', 'Insufficient Wallet Balance');
+        ->with('error', 'Insufficient Loyalty Wallet Balance');
 
        }
+    }
 
 
+    }
+
+    public function payments()
+    {
+        return view('client.payment.list')->with([
+            'payments' => \App\Models\Payment::where('user_id', auth()->user()->id)->orderBy('id', 'DESC')->get(),
+        ]);
     }
 
     public function client_rating(Request $request, RatingController $clientratings)
@@ -655,6 +1138,66 @@ class ClientController extends Controller
     {
 
         return $updateClientRatings->handleUpdateServiceRatings($request);
+    }
+
+    public function saveRequest($request){
+        $service_request                        = new ServiceRequest();
+        // $service_request->uuid                  = auth()->user()->uuid;
+        $service_request->client_id             = auth()->user()->id;
+        $service_request->service_id            = $request->service_id;
+        // $service_request->unique_id             = 'REF-'.$this->generateReference();
+        $service_request->price_id              = $request->price_id;
+        $service_request->contact_id              = $request->myContact_id;
+        $service_request->client_discount_id    = $request->client_discount_id;
+        // $service_request->client_security_code  = 'SEC-'.strtoupper(substr(md5(time()), 0, 8));
+        $service_request->status_id             = '2';
+        $service_request->description           = $request->description;
+        $service_request->total_amount          = $request->booking_fee;
+        $service_request->preferred_time        = Carbon::parse($request->preferred_time, 'UTC'); //fix this later before pushing
+        $service_request->has_client_rated      = 'No'; 
+        $service_request->has_cse_rated         = 'No';
+        $service_request->created_at         = Carbon::now()->toDateTimeString();
+        // $service_request->updated_at         = Carbon::now()->toDateTimeString();
+        $service_request->save();
+
+
+        //Temporary Assign a CSE to a client's request for demo purposes
+        //List of CSE's Id's on the DB
+        $cseArray = array(2, 3, 4);
+
+        $randomCSE = array_rand($cseArray);
+
+        //Create 2 records to `service_request_progresses`
+        $serviceRequestProgresses = array(
+            array(
+                'user_id'               =>  1,
+                'service_request_id'    =>  $service_request->id,
+                'status_id'             =>  1,
+                'sub_status_id'         =>  1,
+            ),
+            array(
+                'user_id'               =>  1,
+                'service_request_id'    =>  $service_request->id,
+                'status_id'             =>  1,
+                'sub_status_id'         =>  1,
+            )
+        );
+
+        $serviceRequestAssign = array(
+            'user_id'               =>  $cseArray[$randomCSE],
+            'service_request_id'    =>  $service_request->id,
+            'job_accepted'          =>  'Yes',
+            'job_acceptance_time'   =>  \Carbon\Carbon::now('UTC'),
+            'status'                =>  'Active',
+        );
+
+        DB::table('service_request_progresses')->insert($serviceRequestProgresses);
+
+        //Create CSE record on `service_request_assigned` table
+        DB::table('service_request_assigned')->insert($serviceRequestAssign);
+
+
+        return $service_request;
     }
 
 }

@@ -1,14 +1,11 @@
 <aside class="aside aside-fixed" id="sidebarMenu">
     <div class="aside-header">
-        <a href="{{ route('quality-assurance.index',app()->getLocale())}}" class="aside-logo">
-
-      </a>
+      <a href="#" class="aside-logo"></a>
       <a href="" class="aside-menu-link">
         <i data-feather="menu"></i>
         <i data-feather="x"></i>
       </a>
-      <a href="" id="mailSidebar" class="burger-menu d-md-none"><i data-feather="arrow-left"></i></a>
-
+      <a href="" id="chatContentClose" class="burger-menu d-none"><i data-feather="arrow-left"></i></a>
     </div>
     <div class="aside-body">
       <div class="aside-loggedin">

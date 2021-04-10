@@ -40,8 +40,9 @@
                     <a href="{{ route('admin.categories.reinstate', ['category'=>$category->uuid, 'locale'=>app()->getLocale()]) }}" class="dropdown-item details text-success" title="Reinstate {{ $category->name}}"><i class="fas fa-undo"></i> Reinstate</a>
                   @endif
 
+                  @if(Auth::id() == 1)
                   <a href="#serviceReassign" data-toggle="modal" class="dropdown-item details text-secondary" id="service-reassign" data-url="{{ route('admin.categories.reassign', ['category'=>$category->uuid, 'locale'=>app()->getLocale()]) }}" data-service-name="{{ $category->name}}" title="Reassign {{ $category->name}} categories"><i class="fas fa-arrows-alt"></i> Reassign</a>
-
+                  @endif
                   <a data-url="{{ route('admin.categories.delete', ['category'=>$category->uuid, 'locale'=>app()->getLocale()]) }}" class="dropdown-item delete-entity text-danger" title="Delete {{ $category->name}}" style="cursor: pointer;"><i class="fas fa-trash"></i> Delete</a>
 
                 @else

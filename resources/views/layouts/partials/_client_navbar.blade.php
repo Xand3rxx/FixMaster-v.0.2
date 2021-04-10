@@ -126,7 +126,7 @@
                 
                 <li><a class="{{ Route::currentRouteNamed('frontend.contact') ? 'selected' : '' }}" href="{{ route('frontend.contact', app()->getLocale()) }}">Contact</a></li>
 
-                <li class="has-submenu {{ Route::currentRouteNamed('client.index', 'client.services.list', 'client.services.details', 'client.services.quote') ? 'active' : '' }}">
+                <li class="has-submenu {{ Route::currentRouteNamed('client.index', 'client.services.list', 'client.services.details', 'client.services.quote', 'client.service.all', 'client.request_details') ? 'active' : '' }}">
                     <a href="javascript:void(0)" class="l-dark l-light">Profile</a><span class="menu-arrow"></span>
                     <ul class="submenu">
                         <li class="{{ Route::currentRouteNamed('client.index', app()->getLocale()) ? 'active' : '' }}"><a href="{{ route('client.index') }}">Dashboard</a></li>
@@ -135,13 +135,14 @@
 
                         <li class="{{ Route::currentRouteNamed('') ? 'active' : '' }}"><a href="#">E-Wallet</a></li>
 
-                        <li class="{{ Route::currentRouteNamed('') ? 'active' : '' }}"><a href="{{ route('client.requests') }}">Requests</a></li>
+                        <li class="{{ Route::currentRouteNamed('client.service.all', 'client.request_details') ? 'active' : '' }}"><a href="{{ route('client.requests') }}">Requests</a></li>
 
-                        <li class="{{ Route::currentRouteNamed('client.payments') ? 'active' : '' }}"><a href="#">Payments</a></li>
+                        <li class="{{ Route::currentRouteNamed('client.payments') ? 'active' : '' }}"><a href="{{ route('client.payments'), app()->getLocale() }}">Payments</a></li>
 
                         <li class="{{ Route::currentRouteNamed('client.messages') ? 'active' : '' }}"><a href="#">Messages</a></li>
 
-                        <li class="{{ Route::currentRouteNamed('client.settings') ? 'active' : '' }}"><a href="#">Settings</a></li>
+                        <li class="{{ Route::currentRouteNamed('client.settings') ? 'active' : '' }}"><a href="{{ route('client.settings', app()->getLocale()) }}">Settings</a></li>
+
 
                         {{-- <li><a href="{{ route('login') }}">Logout</a></li> --}}
                     </ul>

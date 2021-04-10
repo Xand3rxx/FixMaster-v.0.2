@@ -13,4 +13,18 @@ class ServiceRequestCancellation extends Model
         'user_id', 'service_request_id', 'reason'
     ];
 
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
+    public function users()
+    {
+        return $this->belongsTo(User::class, 'user_id');
+    }
+
+    public function service_request(){
+        return $this->belongsTo(ServiceRequest::class)->with('users', 'client');
+    }
+
+
 }

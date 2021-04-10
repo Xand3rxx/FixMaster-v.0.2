@@ -1,6 +1,7 @@
 @extends('layouts.dashboard')
 @section('title', 'Request Details')
 @include('layouts.partials._messages')
+
 @section('content')
 
 <div class="content-body">
@@ -50,45 +51,19 @@
 
                         <div class="tab-pane fade show active" id="update3" role="tabpanel" aria-labelledby="update-tab3">
                             <small class="text-danger">This tab is only visible onc the Service request has an Ongoing status. Which logically is updated by the system or the CSE Coordinator by assigning a CSE to the request</small>
-
-                            <form method="POST" action="">
-                                @csrf
-
-                                <div class="form-row mt-4">
-                                    <div class="tx-13 mg-b-25">
-                                        <div id="wizard3">
-
-                                            <h3>Project Progress</h3>
-                                            <section>
-                                                <p class="mg-b-0">Specify the current progress of the job.</p>
-                                                <div class="form-row mt-4">
-                                                    <div class="form-group col-md-8">
-                                                        This portion will display only Ongoing Status Sub statuses<br>
-                                                       
-
-                                                        <select class="form-control custom-select @error('status_id') is-invalid @enderror" name="status_id">
-                                                            <option value="" selected>Select...</option>
-                                                            <option value="" selected></option>
-                                                        </select>
-                                                        @error('status_id')
-                                                        <span class="invalid-feedback" role="alert">
-                                                            <strong>{{ $message }}</strong>
-                                                        </span>
-                                                        @enderror
-                                                    </div>
-                                                </div>
-                                            </section>
-
-                                        </div>
-                                    </div>
-                                </div><!-- df-example -->
-
-                                <button type="submit" class="btn btn-primary d-none" id="update-progress">Update Progress</button>
-
-                            </form>
-
+                            @if ($service_request->status_id == 1)
+                            @include('cse.requests.includes.assign_first_technician')
+                            @elseif($service_request->status_id == 2)
+                            @include('cse.requests.includes.ongoing_service_request')
+                            @push('scripts')
+                            @include('cse.requests.includes.ongoing_service_request_script')
+                            @endpush
+                            @else
+                            <h4> Completed the Service Request </h4>
+                            @endif
                         </div>
 
+                        <!-- Service Description Tab -->
                         <div class="tab-pane fade" id="description3" role="tabpanel" aria-labelledby="description-tab3">
 
                             <div class="divider-text">Service Request Description</div>
@@ -195,7 +170,9 @@
                                 </div><!-- df-example -->
                             </div>
                         </div>
+                        <!-- End of Service Description Tab -->
 
+                        <!-- Service Request Summary Tab -->
                         <div class="tab-pane fade" id="media3" role="tabpanel" aria-labelledby="media-tab3">
                             <h5 class="mt-4 text-primary">Service Request Progress</h5>
                             <div class="table-responsive mb-4">
@@ -290,8 +267,7 @@
                                 </table>
                             </div><!-- table-responsive -->
                         </div>
-
-
+                        <!-- End Service Request Summary Tab -->
                     </div>
                 </div>
             </div>
@@ -334,36 +310,40 @@
 </div>
 
 @push('scripts')
+
 <script>
     $(function() {
         'use strict'
 
         $('#wizard3').steps({
-            headerTag: 'h3',
-            bodyTag: 'section',
-            autoFocus: true,
-            titleTemplate: '<span class="number">#index#</span> <span class="title">#title#</span>',
-            loadingTemplate: '<span class="spinner"></span> #text#',
-            labels: {
+            headerTag: 'h3'
+            , bodyTag: 'section'
+            , autoFocus: true
+            , titleTemplate: '<span class="number">#index#</span> <span class="title">#title#</span>'
+            , loadingTemplate: '<span class="spinner"></span> #text#'
+            , labels: {
                 // current: "current step:",
                 // pagination: "Pagination",
                 finish: "Update Job Progress",
                 // next: "Next",
                 // previous: "Previous",
                 loading: "Loading ..."
-            },
-            stepsOrientation: 1,
+            }
+            , stepsOrientation: 1,
             // transitionEffect: "fade",
             // transitionEffectSpeed: 200,
-            showFinishButtonAlways: false,
-            onFinished: function(event, currentIndex) {
+            showFinishButtonAlways: false
+            , onFinished: function(event, currentIndex) {
                 $('#update-progress').trigger('click');
-            },
-        });
+
+            }
+        , });
 
         let count = 1;
 
-        //Add and Remove Request for 
+
+
+        //Add and Remove Request for
         $(document).on('click', '.add-rfq', function() {
             count++;
             addRFQ(count);
@@ -431,8 +411,8 @@
             let batchNumber = $(this).attr('data-batch-number');
 
             $.ajax({
-                url: route,
-                beforeSend: function() {
+                url: route
+                , beforeSend: function() {
                     $("#spinner-icon").html('<div class="d-flex justify-content-center mt-4 mb-4"><span class="loadingspinner"></span></div>');
                 },
                 // return the result
@@ -440,17 +420,17 @@
                     $('#modal-body').modal("show");
                     $('#modal-body').html('');
                     $('#modal-body').html(result).show();
-                },
-                complete: function() {
+                }
+                , complete: function() {
                     $("#spinner-icon").hide();
-                },
-                error: function(jqXHR, testStatus, error) {
+                }
+                , error: function(jqXHR, testStatus, error) {
                     var message = error + ' An error occured while trying to retireve ' + batchNumber + '  details.';
                     var type = 'error';
                     displayMessage(message, type);
                     $("#spinner-icon").hide();
-                },
-                timeout: 8000
+                }
+                , timeout: 8000
             })
         });
 
@@ -460,8 +440,8 @@
             let batchNumber = $(this).attr('data-batch-number');
 
             $.ajax({
-                url: route,
-                beforeSend: function() {
+                url: route
+                , beforeSend: function() {
                     $("#spinner-icon").html('<div class="d-flex justify-content-center mt-4 mb-4"><span class="loadingspinner"></span></div>');
                 },
                 // return the result
@@ -469,17 +449,17 @@
                     $('#modal-body-rfq-details').modal("show");
                     $('#modal-body-rfq-details').html('');
                     $('#modal-body-rfq-details').html(result).show();
-                },
-                complete: function() {
+                }
+                , complete: function() {
                     $("#spinner-icon").hide();
-                },
-                error: function(jqXHR, testStatus, error) {
+                }
+                , error: function(jqXHR, testStatus, error) {
                     var message = error + ' An error occured while trying to retireve ' + batchNumber + '  details.';
                     var type = 'error';
                     displayMessage(message, type);
                     $("#spinner-icon").hide();
-                },
-                timeout: 8000
+                }
+                , timeout: 8000
             })
         });
 
@@ -489,39 +469,6 @@
 
     });
 
-    function addRFQ(count) {
-
-        let html = '<div class="form-row remove-rfq-row"><div class="form-group col-md-4"> <label for="component_name">Component Name</label> <input type="text" class="form-control @error('
-        component_name ') is-invalid @enderror" id="component_name" name="component_name[]" value="{{ old('
-        component_name ') }}"> @error('
-        component_name ') <span class="invalid-feedback" role="alert"> <strong>{{ $message }}</strong> </span> @enderror</div><div class="form-group col-md-3"> <label for="model_number">Model Number</label> <input type="text" class="form-control @error('
-        model_number ') is-invalid @enderror" id="model_number" name="model_number[]" placeholder="" value="{{ old('
-        model_number ') }}"> @error('
-        model_number ') <span class="invalid-feedback" role="alert"> <strong>{{ $message }}</strong> </span> @enderror</div><div class="form-group col-md-2"> <label for="quantity">Quantity</label> <input type="number" class="form-control @error('
-        quantity ') is-invalid @enderror" id="quantity" name="quantity[]" placeholder="" value="{{ old('
-        quantity ') }}"> @error('
-        quantity ') <span class="invalid-feedback" role="alert"> <strong>{{ $message }}</strong> </span> @enderror</div><div class="form-group col-md-2 mt-1"> <button class="btn btn-sm pd-x-15 btn-danger btn-uppercase mg-l-5 mt-4 remove-rfq" type="button"><i class="fas fa-times" class="wd-10 mg-r-5"></i></button></div></div>';
-
-        $('.add-rfq-row').append(html);
-
-    }
-
-    function addTRF(count) {
-
-        let html = '<div class="tool-request form-row remove-trf-row"><div class="form-group col-md-4"> <label for="tool_id">Equipment/Tools Name</label> <select class="form-control custom-select @error('
-        tool_id ') is-invalid @enderror tool_id" id="tool_id" name="tool_id[]" ><option value="" selected>Select...</option> @foreach($tools as $tool)<option value="{{ $tool->id }}" {{ old('
-        tool_id ') == $tool->id ? '
-        selected ' : '
-        '}} data-id="tool_quantity' + count + '">{{ $tool->name }}</option> @endforeach </select> @error('
-        tool_id ') <span class="invalid-feedback" role="alert"> <strong>{{ $message }}</strong> </span> @enderror</div><div class="form-group quantity-section col-md-2"> <label for="tool_quantity">Quantity</label> <input type="number" class="form-control @error('
-        tool_quantity ') is-invalid @enderror tool_quantity" name="tool_quantity[]" id="tool_quantity' + count + '" min="1" pattern="\d*" maxlength="2" value="{{ old('
-        tool_quantity ') }}"> @error('
-        tool_quantity ') <span class="invalid-feedback" role="alert"> <strong>{{ $message }}</strong> </span> @enderror</div><div class="form-group col-md-2 mt-1"> <button class="btn btn-sm pd-x-15 btn-danger btn-uppercase mg-l-5 mt-4 remove-trf" type="button"><i class="fas fa-times" class="wd-10 mg-r-5"></i> </button></div></div>';
-
-        $('.add-trf-row').append(html);
-
-    }
-
     //Get available quantity of a particular tool.
     $(document).on('change', '.tool_id', function() {
         let toolId = $(this).find('option:selected').val();
@@ -529,29 +476,30 @@
         let quantityName = $(this).children('option:selected').data('id');
 
         $.ajax({
-            url: "{{ route('available_quantity', app()->getLocale()) }}",
-            method: "POST",
-            dataType: "JSON",
-            data: {
-                "_token": "{{ csrf_token() }}",
-                "tool_id": toolId
-            },
-            success: function(data) {
+            url: "{{ route('available_quantity', app()->getLocale()) }}"
+            , method: "POST"
+            , dataType: "JSON"
+            , data: {
+                "_token": "{{ csrf_token() }}"
+                , "tool_id": toolId
+            }
+            , success: function(data) {
                 if (data) {
 
                     $('#' + quantityName + '').attr({
-                        "value": data,
-                        "max": data,
-                    });
+                        "value": data
+                        , "max": data
+                    , });
 
                 } else {
                     var message = 'Error occured while trying to get ' + toolName + ' available quantity';
                     var type = 'error';
                     displayMessage(message, type);
                 }
-            },
-        })
+            }
+        , })
     });
+
 </script>
 @endpush
 

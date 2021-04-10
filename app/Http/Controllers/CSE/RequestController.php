@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers\CSE;
 
-use App\Http\Controllers\Controller;
 use App\Models\Cse;
 use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
 
 class RequestController extends Controller
 {
@@ -44,15 +44,42 @@ class RequestController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
+     * @param  string  $labguage
+     * @param  string  $uuid
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show($language, $uuid)
     {
-        return view('cse.requests.show', [
-            'tools' => \App\Models\ToolInventory::all(),
-            // 'statuses' => \App\Models\Status::where('name','Ongoing')->select('sub_status')->first()
-        ]);
+        // find the service reqquest using the uuid and relations
+        $service_request = \App\Models\ServiceRequest::where('uuid', $uuid)->with(['price', 'service', 'service.subServices'])->firstOrFail();
+        // find the technician role CACHE THIS DURING PRODUCTION
+        $technicainsRole = \App\Models\Role::where('slug', 'technician-artisans')->first();
+        (array) $variables = [
+            'service_request' => $service_request,
+            'technicains' => \App\Models\UserService::where('service_id', $service_request->service_id)->where('role_id', $technicainsRole->id)->with('user')->get(),
+        ];
+        if ($service_request->status_id == 2) {
+            $service_request_progresses = \App\Models\ServiceRequestProgress::where('user_id', auth()->user()->id)->latest('created_at')->first();
+            // Determine Ongoing Status List
+            $variables = array_merge($variables, [
+                'tools' => \App\Models\ToolInventory::all(),
+                'latest_service_request_progress' => $service_request_progresses,
+                'ongoingSubStatuses' => \App\Models\SubStatus::where('status_id', 2)
+                    ->when($service_request_progresses->sub_status_id <= 10, function ($query, $sub_status) {
+                        return $query->whereBetween('phase', [2, 6]);
+                    }, function ($query) {
+                        return $query->where('recurrence', 'yes')->whereBetween('phase', [1, 20]);
+                    })->get(['id', 'uuid', 'name']),
+            ]);
+            if ($service_request_progresses->sub_status_id >= 10) {
+                // find the Issued RFQ
+                $service_request->load(['rfqs' => function ($query) {
+                    $query->where('status', 'Awaiting')->where('accepted', 'No')->with('rfqBatches', 'rfqSupplier', 'rfqSupplier.supplier')->first();
+                }]);
+                // dd($service_request['rfqs']);
+            }
+        }
+        return view('cse.requests.show', $variables);
     }
 
     /**

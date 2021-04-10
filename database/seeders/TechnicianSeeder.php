@@ -69,7 +69,7 @@ class TechnicianSeeder extends Seeder
             'gender'        => 'male',
             'bank_id'           =>  6,
             'account_number'    =>  '8197952999',
-            'avatar'        => 'default-male-avatar.png',
+            'avatar'        => '42543275-530e-4f22-8a53-07bc7be8214d.jpeg',
         ]);
 
         $technicianAccount1 = \App\Models\Account::create([
@@ -115,7 +115,7 @@ class TechnicianSeeder extends Seeder
         \App\Models\Contact::attemptToStore($technician1->id, $technicianAccount1->id, 156, '07052222678', "2 Bello St, Volkswagen, Lagos", "3.2198137", "6.4563318");
         \App\Models\Contact::attemptToStore($technician2->id, $technicianAccount2->id, 156, '08035413397', "21-13 Ayo Adeife St, Idimu, Lagos", "3.286114654549155", "6.59493974136504");
 
-        DB::table('users_services')->delete();
+        // DB::table('users_services')->delete();
 
         $technicianServices = array(
             array(

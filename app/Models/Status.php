@@ -34,4 +34,5 @@ class Status extends Model
             $status->uuid = (string) Str::uuid();
         });
     }
+
 }

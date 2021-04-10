@@ -9,7 +9,7 @@ class Invoice extends Model
 {
     use HasFactory;
     protected $fillable = [
-      'uuid', 'user_id', 'service_request_id', 'rfq_id', 'invoice_number', 'invoice_type', 'total_amount', 'amount_due', 'amount_paid', 'status'
+      'uuid', 'client_id', 'service_request_id', 'rfq_id', 'warranty_id', 'sub_service_id', 'unique_id', 'invoice_type', 'labour_cost', 'materials_cost', 'hours_spent', 'total_amount', 'amount_due', 'amount_paid', 'status', 'phase'
     ];
 
     public function user()
@@ -24,7 +24,7 @@ class Invoice extends Model
 
     public function client()
     {
-        return $this->belongsTo(Client::class);
+        return $this->belongsTo(User::class);
     }
 
     public function clients()
@@ -42,7 +42,7 @@ class Invoice extends Model
         return $this->hasOne(Rfq::class, 'id', 'rfq_id');
     }
 
-    public function serviceRequests()
+    public function serviceRequest()
     {
         return $this->hasOne(ServiceRequest::class, 'id', 'service_request_id');
     }

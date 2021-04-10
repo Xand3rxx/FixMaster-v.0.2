@@ -7,6 +7,7 @@
           <th>Name</th>
           <th>Category</th>
           <th class="text-center">Service Charge</th>
+          <th class="text-center">Sub Services</th>
           <th class="text-center">Requests</th>
           <th>Status</th>
           <th>Date Created</th>
@@ -20,7 +21,9 @@
           <td class="tx-medium">{{ !empty($service->name) ? $service->name : 'UNAVAILABLE' }}</td>
           <td class="tx-medium">{{ !empty($service->category->name) ? $service->category->name : 'UNAVAILABLE' }}</td>
           <td class="tx-medium text-center">{{ !empty($service->service_charge) ? $service->service_charge : 'UNAVAILABLE' }}</td>
-        <td class="tx-medium text-center">{{ $service->serviceRequests->count() ?? '0' }}</td>
+          <td class="tx-medium text-center">{{ $service->subServices->count() ?? '0' }}</td>
+          <td class="tx-medium text-center">{{ $service->serviceRequests->count() ?? '0' }}</td>
+        
           @if(!empty($service->status) == 1) 
             <td class="text-success">Active</td>
           @else 

@@ -10,7 +10,7 @@ class Account extends Model
     /**
      * The attributes that are mass assignable.
      *
-     * @var array
+     * @var array 
      */
     protected $fillable = ['user_id', 'state_id',  'lga_id', 'town_id', 'first_name', 'middle_name', 'last_name', 'gender', 'account_number', 'bank_id', 'avatar'];
 
@@ -41,14 +41,13 @@ class Account extends Model
         return $this->belongsTo(Bank::class);
     }
 
-
     public function payment()
     {
         return $this->hasMany(PaymentDisbursed::class, 'user_id', 'user_id');
     }
     public function state()
     {
-        return $this->belongsTo(State::class, 'id');
+        return $this->hasOne(State::class, 'id');
     }
     public function lga()
     {
@@ -67,5 +66,19 @@ class Account extends Model
     {
         return $this->hasMany(ServiceRequest::class, 'user_id', 'client_id');
     }
+
+    /**
+     * Get the Account associated with the contact.
+     */
+    public function usercontact()
+    {
+        return $this->hasOne(Contact::class, 'user_id');
+    }
+
+    public function town()
+    {
+        return $this->belongsTo(Town::class, 'id');
+    }
+
 }
 

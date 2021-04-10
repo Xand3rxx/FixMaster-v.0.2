@@ -211,10 +211,7 @@
         <div class="modal-content tx-14">
          
           <div class="card-header bg-transparent pb-5">
-          <div class="text-muted text-center mt-2 mb-3"><small></small></div>
-                <div class="btn-wrapper text-center">
-            
-                </div>
+          <div class="text-muted text-center mt-2 mb-3">Add To E-wallet</div>
             </div>
 
 
@@ -227,25 +224,28 @@
                 <div class="input-group-prepend">
                     <span class="input-group-text">Loyalty Wallet Balance</span>
                         <span class="input-group-text" id="loyalty" >{{$loyalty->wallet}}</span>
-                        </div>
+                    </div>
+                </div>
+
+                <div class="input-group input-group-merge input-group-alternative">
                         <div class="input-group-prepend">
                     <span class="input-group-text">E-wallet Balance</span>
                         <span class="input-group-text" id="e-wallet" >{{$ewallet}}</span>
                     </div>
-
-                   
                 </div>
+              
                 <br/>
                
-                <div class="form-group col-md-6 parameter">
+                <div class="form-group col-md-12 parameter">
                     <label for="specified_request_amount_from">Enter Amount</label>
                 <input type="number" class="form-control custom-input-1" id="sum"
                         id="specified_request_amount" name="amount"
                         value="" autocomplete="off">
                         </div>
+                <input type="hidden" name="opening_balance"  value="{{$ewallet}}" />
             </div>
             <div class="text-center">
-                <button type="submit" class="btn btn-primary my-4">Add</button>
+                <button type="submit" class="btn btn-primary my-4 add-loyalty">Add</button>
             </div>
             </form>
         </div>
@@ -438,6 +438,7 @@
 </div><!--end col-->
 
 @section('scripts')
+@push('scripts')
 <script>
     $(document).ready(function() {
         $('#request-sorting').on('change', function (){        
@@ -520,6 +521,14 @@ let sum,loyalty,ewallet,total_loyalty, total_ewallet, prev_total_loyalty,prev_to
         loyalty = $('#loyalty').text();
         ewallet = $('#e-wallet').text();
         if(sum != ''){
+        if(parseInt(sum) > parseFloat(loyalty)){
+            $('.add-loyalty').attr('disabled', true);
+            var message = 'Insufficient Loyalty Wallet Balance';
+            var type = 'error';
+           displayMessage(message, type);
+            return 
+        }
+        $('.add-loyalty').attr('disabled', false);
        total_loyalty = parseFloat(loyalty) - parseInt(sum);;
        total_ewallet= parseFloat(ewallet) + parseInt(sum);
        $('#loyalty').text(total_loyalty);
@@ -536,7 +545,7 @@ let sum,loyalty,ewallet,total_loyalty, total_ewallet, prev_total_loyalty,prev_to
 
     });
 </script>
-
+@endpush
 @endsection
 
 @endsection

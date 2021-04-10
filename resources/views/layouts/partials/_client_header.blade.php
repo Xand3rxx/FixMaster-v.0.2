@@ -87,7 +87,7 @@
                 
                 {{-- <li><a class="" href="#">Contact</a></li> --}}
 
-                <li class="has-submenu {{ Route::currentRouteNamed('client.index', 'client.services.list', 'client.services.details', 'client.services.quote') ? 'active' : '' }}">
+                <li class="has-submenu {{ Route::currentRouteNamed('client.index', 'client.services.list', 'client.services.details', 'client.services.quote', 'client.service.all', 'client.request_details') ? 'active' : '' }}">
                     <a href="javascript:void(0)" class="l-dark l-light">Profile</a><span class="menu-arrow"></span>
                     <ul class="submenu">
                     <li class="{{ Route::currentRouteNamed('client.index') ? 'active' : '' }}"><a href="{{ route('client.index', app()->getLocale()) }}">Dashboard</a></li>
@@ -96,13 +96,13 @@
 
                         <li class="{{ Route::currentRouteNamed('client.wallet') ? 'active' : '' }}"><a href="{{ route('client.wallet', app()->getLocale()) }}">E-Wallet</a></li>
 
-                        <li class="{{ Route::currentRouteNamed('') ? 'active' : '' }}"><a href="#">Requests</a></li>
+                        <li class="{{ Route::currentRouteNamed('client.service.all', 'client.request_details') ? 'active' : '' }}"><a href="{{route('client.service.all', app()->getLocale()) }}">Requests</a></li>
 
-                        <li class="{{ Route::currentRouteNamed('') ? 'active' : '' }}"><a href="#">Payments</a></li>
+                    <li class="{{ Route::currentRouteNamed('client.payments') ? 'active' : '' }}"><a href="{{ route('client.payments', app()->getLocale()) }}">Payments</a></li>
 
                         <li class="{{ Route::currentRouteNamed('') ? 'active' : '' }}"><a href="#">Messages</a></li> 
 
-                        <li class="{{ Route::currentRouteNamed('') ? 'active' : '' }}"><a href="{{ route('client.settings', app()->getLocale()) }}">Settings</a></li>
+                        <li class="{{ Route::currentRouteNamed('client.settings') ? 'active' : '' }}"><a href="{{ route('client.settings', app()->getLocale()) }}">Settings</a></li>
 
                         {{-- <li><a href="{{ route('login') }}">Logout</a></li> --}}
                     </ul>
@@ -128,11 +128,12 @@
     <section class="bg-profile d-table w-100  bg-primar" style="background-color: #ff9800 !important;" >
     <div class="container">
         <div class="row">
-            <div class="col-lg-12">
+            <div class="col-lg-12"> 
                 <div class="card public-profile border-0 rounded shadow" style="z-index: 1;">
                     <div class="card-body">
                         <div class="row align-items-center">
                             <div class="col-lg-2 col-md-3 text-md-left text-center">
+                       
                                 {{-- <img src="{{ asset('assets/images/default-male-avatar.png') }}" class="avatar avatar-large rounded-circle shadow d-block mx-auto" alt=""> --}}
                                 @if(!empty($profile->avatar) && file_exists(public_path().'/assets/user-avatars/'.$profile->avatar))
                                     <img src="{{ asset('assets/user-avatars/'.$profile->avatar) }}" class="avatar avatar-large rounded-circle shadow d-block mx-auto" alt="Client avatar" />
@@ -162,7 +163,7 @@
                                                     <i data-feather="message-circle" class="fea icon-sm fea-social" ></i>
                                                 </a>
                                             </li>
-                                            <li class="list-inline-item"><a href="#" class="rounded" data-toggle="tooltip" data-placement="bottom" title="Book a Service"><i data-feather="layers" class="fea icon-sm fea-social"></i></a></li>
+                                            <li class="list-inline-item"><a href="#" class="rounded" data-toggle="tooltip" data-placement="bottom" title="Book a Service"><i data-feather="calendar" class="fea icon-sm fea-social"></i></a></li>
                                             <li class="list-inline-item"><a href="#" class="rounded" data-toggle="tooltip" data-placement="bottom" title="Settings"><i data-feather="settings" class="fea icon-sm fea-social"></i></a></li>
                                         </ul><!--end icon-->
                                     </div><!--end col-->

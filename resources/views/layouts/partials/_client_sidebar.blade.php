@@ -39,7 +39,7 @@
                         <div class="row">
                             <div class="col-6 mt-4 pt-2">
                             <a href="{{ route('client.index', app()->getLocale()) }}" class="accounts rounded d-block shadow text-center py-3 {{ Route::currentRouteNamed('client.index') ? 'active' : '' }}">
-                                    <span class="pro-icons h3 text-muted"><i class="uil uil-user"></i></span>
+                                    <span class="pro-icons h3 text-muted"><i class="uil uil-home-alt"></i></span>
                                     <h6 class="title text-dark h6 my-0">Dashboard</h6>
                                 </a>
                             </div><!--end col-->
@@ -51,15 +51,15 @@
                                 </a>
                             </div><!--end col-->
                             <div class="col-6 mt-4 pt-2">
-                                <a href="#" class="accounts rounded d-block shadow text-center py-3 {{ Route::currentRouteNamed('') ? 'active' : '' }}">
-                                    <span class="pro-icons h3 text-muted"><i class="uil uil-chart"></i></span>
+                                <a href="{{ route('client.service.all', app()->getLocale()) }}" class="accounts rounded d-block shadow text-center py-3 {{ Route::currentRouteNamed('client.service.all', 'client.request_details') ? 'active' : '' }}">
+                                    <span class="pro-icons h3 text-muted"><i class="uil uil-sitemap"></i></span>
                                     <h6 class="title text-dark h6 my-0">Requests</h6>
                                 </a>
                             </div><!--end col-->
 
                             <div class="col-6 mt-4 pt-2">
                             <a href="{{ route('client.wallet', app()->getLocale()) }}" class="accounts rounded d-block shadow text-center py-3 {{ Route::currentRouteNamed('client.wallet') ? 'active' : '' }}">
-                                    <span class="pro-icons h3 text-muted"><i class="uil uil-file"></i></span>
+                                    <span class="pro-icons h3 text-muted"><i class="uil uil-wallet"></i></span>
                                     <h6 class="title text-dark h6 my-0">E-Wallet</h6>
                                 </a>
                             </div><!--end col-->
@@ -67,27 +67,27 @@
                             @if(CustomHelpers::ifLoyaltyExist(auth()->user()->id) == 1)
                             <div class="col-6 mt-4 pt-2">
                             <a href="{{ route('client.loyalty', app()->getLocale()) }}" class="accounts rounded d-block shadow text-center py-3 {{ Route::currentRouteNamed('client.loyalty') ? 'active' : '' }}">
-                                    <span class="pro-icons h3 text-muted"><i class="uil uil-file"></i></span>
+                                    <span class="pro-icons h3 text-muted"><i class="uil uil-award"></i></span>
                                     <h6 class="title text-dark h6 my-0">Loyalty Wallet </h6>
                                 </a>
                             </div><!--end col-->
                             @endif
                             <div class="col-6 mt-4 pt-2">
                             <a href="#" class="accounts rounded d-block shadow text-center py-3 {{ Route::currentRouteNamed('') ? 'active' : '' }}">
-                                    <span class="pro-icons h3 text-muted"><i class="uil uil-envelope-star text-danger" data-toggle="tooltip" title="You have 0 unread messages"></i></span>
+                                    <span class="pro-icons h3 text-muted"><i class="uil uil-envelope-download text-danger" data-toggle="tooltip" title="You have 0 unread messages"></i></span>
                                     <h6 class="title text-dark h6 my-0">Messages</h6>
                                 </a>
                             </div><!--end col-->
 
                             <div class="col-6 mt-4 pt-2">
-                            <a href="#" class="accounts rounded d-block shadow text-center py-3 {{ Route::currentRouteNamed('') ? 'active' : '' }}">
+                            <a href="{{ route('client.payments', app()->getLocale()) }}" class="accounts rounded d-block shadow text-center py-3 {{ Route::currentRouteNamed('client.payments') ? 'active' : '' }}">
                                     <span class="pro-icons h3 text-muted"><i class="uil uil-transaction"></i></span>
                                     <h6 class="title text-dark h6 my-0">Payments</h6>
                                 </a>
                             </div><!--end col-->
 
                             <div class="col-6 mt-4 pt-2">
-                            <a href="#" class="accounts rounded d-block shadow text-center py-3 {{ Route::currentRouteNamed('') ? 'active' : '' }}">
+                            <a href="{{ route('client.settings', app()->getLocale()) }}"" class="accounts rounded d-block shadow text-center py-3 {{ Route::currentRouteNamed('client.settings') ? 'active' : '' }}">
                                     <span class="pro-icons h3 text-muted"><i class="uil uil-setting"></i></span>
                                     <h6 class="title text-dark h6 my-0">Settings</h6>
                                 </a>
@@ -116,4 +116,3 @@
     </div><!--end container-->
 </section><!--end section-->
 <!-- Profile End -->
-

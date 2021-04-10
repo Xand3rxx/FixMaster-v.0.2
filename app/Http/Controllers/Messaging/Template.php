@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\Log;
 
 
 class Template extends Controller
-{
+{ 
     public function getMessageModules()
     {
         $enumHelper = new EnumHelper();

@@ -1,12 +1,12 @@
-<h5><strong>Tax Percentage History for {{ $priceName }}</strong></h5>
+<h5><strong>Booking Fee History for {{ $priceName }}</strong></h5>
 
 <div class="table-responsive">
     <table class="table table-hover mg-b-0" id="basicExample">
       <thead class="thead-primary">
         <tr>
           <th class="text-center">#</th>
-          <th>Created By</th>
-          <th class="text-center">Percentage</th>
+          <th>Updated By</th>
+          <th class="text-center">Amount(₦)</th>
           <th>Date Created</th>
         </tr>
       </thead>

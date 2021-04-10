@@ -134,7 +134,7 @@ class SupplierSeeder extends Seeder
         \App\Models\Contact::attemptToStore($supplier1->id, $supplierAccount1->id, 156, '08039473705', "9 Gregal Mission St, Iju, Lagos", "3.3386946", "6.6654238");
         \App\Models\Contact::attemptToStore($supplier2->id, $supplierAccount2->id, 156, '08145318883', "Suite 8a Tafawa Balewa Square Onikan, 101231, Lagos", "3.3992997", "6.4486122");
 
-        DB::table('users_services')->delete();
+        // DB::table('users_services')->delete();
 
         $supplierServices = array(
             array(

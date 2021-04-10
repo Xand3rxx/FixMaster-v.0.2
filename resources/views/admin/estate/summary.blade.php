@@ -18,11 +18,17 @@
 
               <div class="d-md-block">
                   <a href="{{ route('admin.list_estate', app()->getLocale()) }}" class="btn btn-primary"><i class="fas fa-arrow-left"></i> Back</a>
+                  @if($estate->is_active == 'deactivated' || $estate->is_active == 'reinstated')
                   <a href="{{ route('admin.edit_estate', [ 'estate'=>$estate->uuid, 'locale'=>app()->getLocale() ]) }}" class="btn btn-warning"><i class="fas fa-edit"></i> Edit</a>
-                  @if($estate->is_active == 0)
+                  @endif
+                  @if($estate->is_active == 'deactivated')
                       <a href="{{ route('admin.reinstate_estate', ['estate'=>$estate->uuid, 'locale'=>app()->getLocale()]) }}" class="btn btn-success"><i class="fas fa-undo"></i>Reinstate</a>
-                  @else
+                  @elseif($estate->is_active == 'reinstated')
                   <a href="{{ route('admin.deactivate_estate', ['estate'=>$estate->uuid, 'locale'=>app()->getLocale()]) }}" class="btn btn-warning"><i class="fas fa-ban"></i> Deactivate</a>
+                  @endif
+                  @if($estate['approved_by'] == null || $estate['is_active'] == 'declined' || $estate['is_active'] == 'pending')
+                      <a href="{{ route('admin.approve_estate', ['estate'=>$estate->uuid, 'locale'=>app()->getLocale()]) }}" class="btn btn-success"><i class="fas fa-check"></i> Approve</a>
+                      <a href="{{ route('admin.decline_estate', ['estate'=>$estate->uuid, 'locale'=>app()->getLocale()]) }}" class="btn btn-warning"><i class="fas fa-ban"></i> Decline</a>
                   @endif
                   <a href="{{ route('admin.delete_estate', ['estate'=>$estate->uuid, 'locale'=>app()->getLocale()]) }}" class="btn btn-danger"><i class="fas fa-trash"></i> Delete</a>
               </div>
@@ -41,8 +47,10 @@
                           <div class="contact-content-header mt-4">
                             <nav class="nav">
                               <a href="#summary" class="nav-link active" data-toggle="tab">Summary</a>
-                              <a href="#discount" class="nav-link" data-toggle="tab"><span>Discount History</a>
-                              <a href="#client" class="nav-link" data-toggle="tab"><span>Registered Clients</a>
+                              @if($estate['is_active'] == 'reinstated' || $estate['is_active'] == 'deactivated')
+                              <a href="#discount" class="nav-link" data-toggle="tab"><span>Discount History</span></a>
+                              <a href="#client" class="nav-link" data-toggle="tab"><span>Registered Clients</span></a>
+                              @endif
                               {{-- <a href="#activityLog" class="nav-link" data-toggle="tab"><span>Activity Log</a> --}}
                             </nav>
                             <a href="" id="contactOptions" class="text-secondary mg-l-auto d-xl-none"><i data-feather="more-horizontal"></i></a>
@@ -82,7 +90,7 @@
                                           </tr>
                                           <tr>
                                               <td class="tx-medium">Status</td>
-                                              <td class="tx-color-03"> @if($estate->is_active == '1') Active @else Inactive @endif </td>
+                                              <td class="tx-color-03"> {{ $estate['is_active'] == 'reinstated' ? 'Active' : 'Inactive' }} </td>
                                           </tr>
                                           <tr>
                                               <td class="tx-medium">Date of Birth</td>
@@ -149,17 +157,20 @@
                                           <thead class="thead-primary">
                                             <tr>
                                                 <th class="text-center">#</th>
-                                                <th>Discount Name</th>
-                                                <th>Discount Type</th>
-                                                <th>Discount Duration</th>
-                                                <th>Discount Percentage (%)</th>
-                                                <th>Date Registered</th>
+                                                <th>Discount ID</th>
+                                                <th>Name</th>
+                                                <th>Duration</th>
+                                                <th>Applied To</th>
+                                                <th>Rate (%)</th>
+                                                <th>Date Created</th>
                                                 <th>Action</th>
                                             </tr>
                                           </thead>
                                           <tbody>
+                                          @foreach($estateDiscounts as $estateDiscount)
                                             <tr>
                                               <td class="tx-color-03 tx-center">1</td>
+                                              <td class="tx-medium">{{ $estateDiscount['discount_id'] }}</td>
                                               <td class="tx-medium">Family and Friends</td>
                                               <td class="tx-medium">Service discount</td>
                                               <td class="tx-medium">6 Months</td>
@@ -175,6 +186,7 @@
                                                 </div>
                                             </td>
                                             </tr>
+                                          @endforeach
                                           </tbody>
                                       </table>
                                   </div>
@@ -206,12 +218,13 @@
                                         </tr>
                                       </thead>
                                       <tbody>
+                                      @foreach($registeredClients as $clients)
                                         <tr>
-                                          <td class="tx-color-03 tx-center">1</td>
-                                          <td class="tx-medium">Colin Hayward</td>
+                                          <td class="tx-color-03 tx-center">{{ $loop->iteration }}</td>
+                                          <td class="tx-medium">{{ $clients['user']['account']['first_name']. " " .$clients['user']['account']['last_name'] }}</td>
                                           <td class="tx-medium">09072345421</td>
-                                          <td class="tx-medium">colinh20@gmail.com</td>
-                                          <td class="tx-medium">20/05/2020</td>
+                                          <td class="tx-medium">{{ $clients['user']['email'] }}</td>
+                                          <td class="tx-medium">{{ Carbon\Carbon::parse($clients['user']['created_at'], 'UTC')->isoFormat('MMMM Do YYYY, h:mm:ssa') }}</td>
                                           <td class=" text-center">
                                             <div class="dropdown-file">
                                                 <a href="" class="dropdown-link" data-toggle="dropdown"><i data-feather="more-vertical"></i></a>
@@ -222,38 +235,7 @@
                                             </div>
                                         </td>
                                         </tr>
-                                        <tr>
-                                            <td class="tx-color-03 tx-center">2</td>
-                                            <td class="tx-medium">Martin Philips</td>
-                                            <td class="tx-medium">08041234586</td>
-                                            <td class="tx-medium">m.philips@gmail.com</td>
-                                            <td class="tx-medium">11/01/2020</td>
-                                            <td class=" text-center">
-                                              <div class="dropdown-file">
-                                                  <a href="" class="dropdown-link" data-toggle="dropdown"><i data-feather="more-vertical"></i></a>
-                                                  <div class="dropdown-menu dropdown-menu-right">
-                                                      <a href="" class="dropdown-item details text-primary"><i class="far fa-user"></i> Summary</a>
-                                                      <a href="" class="dropdown-item details text-danger"><i class="fas fa-trash"></i> Delete</a>
-                                                  </div>
-                                              </div>
-                                          </td>
-                                          </tr>
-                                          <tr>
-                                            <td class="tx-color-03 tx-center">3</td>
-                                            <td class="tx-medium">Kolade Michaels</td>
-                                            <td class="tx-medium">07056685943</td>
-                                            <td class="tx-medium">kolade_mic@gmail.com</td>
-                                            <td class="tx-medium">25/12/2020</td>
-                                            <td class=" text-center">
-                                              <div class="dropdown-file">
-                                                  <a href="" class="dropdown-link" data-toggle="dropdown"><i data-feather="more-vertical"></i></a>
-                                                  <div class="dropdown-menu dropdown-menu-right">
-                                                      <a href="" class="dropdown-item details text-primary"><i class="far fa-user"></i> Summary</a>
-                                                      <a href="" class="dropdown-item details text-danger"><i class="fas fa-trash"></i> Delete</a>
-                                                  </div>
-                                              </div>
-                                          </td>
-                                          </tr>
+                                      @endforeach
                                       </tbody>
                                   </table>
                               </div>

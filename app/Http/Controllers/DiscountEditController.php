@@ -18,6 +18,7 @@ use App\Models\Estate;
 use App\Models\DiscountHistory;
 use App\Traits\Utility;
 use App\Traits\Loggable;
+use App\Models\EstateDiscountHistory;
 
 class DiscountEditController extends Controller
 {
@@ -31,12 +32,12 @@ class DiscountEditController extends Controller
         $status = Discount::select('*')->where('uuid', $discount)->first();
         $data = ['status' => $status];
         $data['apply_discounts'] = ['Total bill', 'Materials', 'Labour cost', 'FixMaster royalty', 'Logistics'];
-        $json = json_decode($status->parameter);
-        $data['field']= $json->field;
-        $data['users']= json_encode($json->users);
-        $data['estate']= json_encode($json->estate);
-        $data['category']= json_encode($json->category);
-        $data['services']= json_encode($json->services);
+        $json = !empty($status->parameter) ? json_decode($status->parameter): [];
+        $data['field']= $json ?? $json->field;
+        $data['users']= $json ? json_encode($json->users):'';
+        $data['estate']= $json ? json_encode($json->estate): '';
+        $data['category']= $json ? json_encode($json->category):'';
+        $data['services']= $json ? json_encode($json->services): '';
         $data['entities'] = $this->entityArray();
         $data['states'] = State::select('id', 'name')->orderBy('name', 'ASC')->get();
         $data['request_lga']= isset($data['field']->specified_request_lga)? Lga::select('*')->where('id',  $data['field']->specified_request_lga)->first(): '';
@@ -52,7 +53,7 @@ class DiscountEditController extends Controller
         if ($request->ajax())
         {
             $category = [];
-            parse_str($request->data['form'], $fields);
+            parse_str($request->form, $fields);
             $entity = $fields['entity'];
             $replace_value = 'user_id';
             $edit_category = json_decode($fields['edit_category'][0]) == ""? []: json_decode($fields['edit_category'][0]);  
@@ -130,14 +131,16 @@ class DiscountEditController extends Controller
             $groupby = '';
             $replace_amount = 'middle_name';
             $replace_user = 'client_id';
-            parse_str($request->data['form'], $fields);
+         
+            parse_str($request->form, $fields);
             $entity = $fields['entity'];
             $replace_value = 'client_id';
             $WHERE=$SQL= $SQLx='';
-            $edit_users = json_decode($fields['edit_users'][0]);  
+            $edit = $request->edit;
+            
+            $edit_users = $edit == 1 ? []: json_decode($fields['edit_users'][0]);  
             $fields['estate_name'] = isset($fields['estate_name']) && $fields['estate_name'] != '' ? $fields['estate_name']: str_replace('"', "", $fields['estate_value']);
-
-     
+   
 
             $chk_fields = ['specified_request_count_morethan' =>
              $fields['specified_request_count_morethan'], 
@@ -152,148 +155,137 @@ class DiscountEditController extends Controller
 
           
                 if ($fields['specified_request_count_morethan'] != '' && $fields['specified_request_count_equalto'] == '')
-                {
-                    $whx[] ="sr.users >='".$fields['specified_request_count_morethan']."'";
-                    $groupby = 'group by client_id';
-    
-                }
-    
-                if ($fields['specified_request_count_equalto'] != '' && $fields['specified_request_count_morethan'] == '')
-                {
-                    $whx[] ="sr.users <='".$fields['specified_request_count_equalto']."'";
-                    $groupby = 'group by client_id';
-                }
-    
-    
-                if ($fields['specified_request_count_equalto'] != '' && $fields['specified_request_count_morethan'] != '')
-                {
-                    $whx[] ="sr.users between'".$fields['specified_request_count_morethan']."' and  '".$fields['specified_request_count_equalto']."'";
-                    $groupby = 'group by client_id';
-                }
-    
-    
-                if ($fields['specified_request_amount_from'] != '' && $fields['specified_request_amount_to'] == '')
-                {
-                    $wh[] ="total_amount >='".$fields['specified_request_amount_from']."'";
-                    $replace_amount = "total_amount";
-                    $replace_user = 'total_amount, client_id';
-                    $groupby = 'group by total_amount';
-                   
-                }
-    
-                if ($fields['specified_request_amount_to'] != '' && $fields['specified_request_amount_from'] == '')
-                {
-                   
-                    $wh[] ="total_amount <='".$fields['specified_request_amount_to']."'";
-                    $replace_amount = "total_amount";
-                    $replace_user = 'total_amount, client_id';
-                    $groupby = 'group by total_amount';
-                }
-    
-                if ($fields['specified_request_amount_to'] != '' && $fields['specified_request_amount_from'] != '')
-                {
-                   
-                    $wh[] ="total_amount between'".$fields['specified_request_amount_from']."' and '".$fields['specified_request_amount_to']."'";
-                    $replace_amount = "total_amount";
-                    $replace_user = 'total_amount, client_id';
-                    $groupby = 'group by total_amount';
-                }
+            {
+                $whx[] ="sr.users >='".$fields['specified_request_count_morethan']."'";
+                $groupby = 'group by client_id';
+
+            }
+
+            if ($fields['specified_request_count_equalto'] != '' && $fields['specified_request_count_morethan'] == '')
+            {
+                $whx[] ="sr.users <='".$fields['specified_request_count_equalto']."'";
+                $groupby = 'group by client_id';
+            }
 
 
-    
-                if ($fields['specified_request_start_date'] != '' && $fields['specified_request_end_date'] == '')
-                {
-                    $start_date = date('Y-m-d', strtotime($fields['specified_request_start_date']));
-                    $wh[] ="preferred_time <='".$start_date."'";
-                    $replace_amount = "preferred_time";
-                    $replace_user = 'preferred_time, client_id';
-                    $groupby = 'group by client_id';
-                  
-                }
-    
-                if ($fields['specified_request_end_date'] != '' && $fields['specified_request_start_date'] == '')
-                {
-                    $end_date = date('Y-m-d', strtotime($fields['specified_request_end_date']));
-                    $wh[] ="preferred_time <='".$end_date."'";
-                    $replace_amount = "preferred_time";
-                    $replace_user = 'preferred_time, client_id';
-                    $groupby = 'group by client_id';
-                  
-                }
-    
-                if ($fields['specified_request_end_date'] != '' && $fields['specified_request_start_date'] != '')
-                {
-                    $end_date = date('Y-m-d', strtotime($fields['specified_request_end_date']));
-                    $start_date = date('Y-m-d', strtotime($fields['specified_request_start_date']));              
-                    $wh[] ="preferred_time between'".$start_date."' and '".$end_date."'";
-                    $replace_amount = "preferred_time";
-                    $replace_user = 'preferred_time, client_id';
-                    $groupby = 'group by client_id';
-                  
-                }
+            if ($fields['specified_request_count_equalto'] != '' && $fields['specified_request_count_morethan'] != '')
+            {
+                $equalto = (int) $fields['specified_request_count_equalto'] + 1;
+                $whx[] ="sr.users between'".$fields['specified_request_count_morethan']."' and '".$equalto."'";
+                $groupby = 'group by client_id';
+            }
 
-                if (isset($fields['specified_request_state']) && $fields['specified_request_state'] != '')
-                {
-                    // $wh[] = 'state_id', '=', $fields['state'];
-                    $wh[] = "state_id = '".$fields['specified_request_state']."'";
-                    $groupby = 'group by client_id';
-                    if ($entity == 'estate')
-                    {
-                        $wh[] = ['est.state_id', '=', $fields['specified_request_state']];
-                        $replace_value = "created_at";
-                        $groupby = 'group by uuid,created_at';
-                    }
-                }
-    
-    
-                if (isset($fields['specified_request_lga']) && $fields['specified_request_lga'] != '')
-                {
-                
-                    $wh[] = "lga_id = '".$fields['specified_request_lga']."'";
-                    $groupby = 'group by client_id';
-                    if ($entity == 'estate')
-                    {
-                        $wh[] = ['est.lga_id', '=', $fields['specified_request_lga']];
-                        $replace_value = "created_at";
-                        $groupby = 'group by uuid,created_at';
-                    }
-                }
-    
-                if (isset($fields['estate_name']) && $fields['estate_name'] != '')
-                {
-                    $est[] = ['estate_name', '=', $fields['estate_name']];
-                }
-    
-    
-    
-                if (count($wh) == 0 && count($whx) == 0 )
-                {
-                    $groupby = 'group by user_id';
-                    if ($entity == 'estate')
-                    {
-                        $groupby = 'uuid';
-                        $replace_value = "'*'";
-                    }
-    
-                }
-                if (count($wh) > 0) {
-                    $WHERE = implode(' and ', $wh);
-                    $SQL .= " WHERE ( $WHERE )";
-                }
-                else
-                {
-                    $SQL .= " WHERE (1)";
-                }
-    
-                if (count($whx) > 0) {
-                    $WHERE = implode(' and ', $whx);
-                    $SQLx .= " WHERE ( $WHERE )";
-                }
-                else
-                {
-                    $SQLx .= " WHERE (1)";
-                }
+            if ($fields['specified_request_amount_from'] != '' && $fields['specified_request_amount_to'] == '')
+            {
+                $wh[] ="total_amount >='".$fields['specified_request_amount_from']."'";
+                $replace_amount = "total_amount";
+                $replace_user = 'total_amount, client_id';
+                $groupby = 'group by total_amount';
+               
+            }
+
+            if ($fields['specified_request_amount_to'] != '' && $fields['specified_request_amount_from'] == '')
+            {
+               
+                $wh[] ="total_amount <='".$fields['specified_request_amount_to']."'";
+                $replace_amount = "total_amount";
+                $replace_user = 'total_amount, client_id';
+                $groupby = 'group by total_amount';
               
+
+            }
+
+            if ($fields['specified_request_amount_to'] != '' && $fields['specified_request_amount_from'] != '')
+            {
+                $amount_to = (int) $fields['specified_request_amount_to'] + 1;
+                $wh[] ="total_amount between'".$fields['specified_request_amount_from']."' and '".$amount_to."'";
+                $replace_amount = "total_amount";
+                $replace_user = 'total_amount, client_id';
+                $groupby = 'group by total_amount';
+              
+
+            }
+          
+            if ($fields['specified_request_start_date'] != '' && $fields['specified_request_end_date'] == '')
+            {
+                $start_date = date('Y-m-d', strtotime($fields['specified_request_start_date']));
+                $wh[] ="Date(created_at) >='".$start_date."'";
+                $replace_amount = "sr.created_at";
+                $replace_user = 'created_at, client_id';
+                $groupby = 'group by client_id';
+              
+            }
+
+            if ($fields['specified_request_end_date'] != '' && $fields['specified_request_start_date'] == '')
+            {
+                $end_date = date('Y-m-d', strtotime($fields['specified_request_end_date']));
+                $wh[] ="Date(created_at) >='".$end_date."'";
+                $replace_amount = "sr.created_at";
+                $replace_user = 'created_at, client_id';
+                $groupby = 'group by client_id';
+            }
+
+            if ($fields['specified_request_end_date'] != '' && $fields['specified_request_start_date'] != '')
+            {
+                $end_date = date('Y-m-d', strtotime($fields['specified_request_end_date']));
+                $start_date = date('Y-m-d', strtotime($fields['specified_request_start_date']));              
+                $wh[] ="Date(created_at) between'".$start_date."' and '".$end_date."'";
+                $replace_amount = "sr.created_at";
+                $replace_user = 'created_at, client_id';
+                $groupby = 'group by client_id';
+              
+            }
+
+            if (isset($fields['specified_request_state']) && $fields['specified_request_state'] != '')
+            {
+           
+                $wh[] = "state_id = '".$fields['specified_request_state']."'";
+                $groupby = 'group by client_id';
+              
+            }
+
+
+            if (isset($fields['specified_request_lga']) && $fields['specified_request_lga'] != '')
+            {
+            
+                $wh[] = "lga_id = '".$fields['specified_request_lga']."'";
+                $groupby = 'group by client_id';
+              
+            }
+
+            if (isset($fields['estate_name']) && $fields['estate_name'] != '')
+            {
+                $estate_id = $fields['estate_name'];
+              
+                $est = ['estates.id' => $estate_id, 'estates.is_active'=>'reinstated' ];
+                $whx[] = "est.id = '".$fields['estate_name']."' and est.is_active ='reinstated'";
+                
+            }
+
+            if (count($wh) == 0 && count($whx) == 0 )
+            {
+                $groupby = 'group by user_id';
+               
+
+            }
+            if (count($wh) > 0) {
+                $WHERE = implode(' and ', $wh);
+                $SQL .= "WHERE ( $WHERE )";
+            }
+            else
+            {
+                $SQL .= "WHERE (1)";
+            }
+
+            if (count($whx) > 0) {
+                $WHERE = implode(' and ', $whx);
+                $SQLx .= "WHERE ( $WHERE )";
+            }
+            else
+            {
+                $SQLx .= "WHERE (1)";
+            }
+          
                 $name = $optionValue = '';
 
             switch ($entity)
@@ -307,7 +299,7 @@ class DiscountEditController extends Controller
                         ->withTrashed()
                         ->get();
 
-                    
+                   
                         $optionValue .= "<option value='[all]' class='select-all'>All Users </option>";
                         $optionValue .= " <option value='' data-divider='true'></option>";
                         foreach ($dataArry as $row)
@@ -316,7 +308,7 @@ class DiscountEditController extends Controller
 
 
                         $selected = '';
-                        if(isset($edit_users)){
+                        if(isset($edit_users) && count($edit_users) > 0){
                             $selected = in_array($row->client_id, $edit_users)? 'selected': '';
                         }
                         $optionValue .= "<option value='$row->client_id' $selected >$name</option>";
@@ -336,7 +328,6 @@ class DiscountEditController extends Controller
                         $optionValue .= "<option value='[all]' class='select-all'>All Users </option>";
                         $optionValue .= " <option value='' data-divider='true'></option>";
                      
-                
                         foreach ($dataArry as $row)
                         {
                             $name = $row->first_name . ' ' . $row->last_name;
@@ -361,7 +352,7 @@ class DiscountEditController extends Controller
                     $dataArry=[];
                     if (count(array_filter($chk_fields)) > 0 && count($est) > 0)
                     {
-                        $dataArry = ServiceRequest::select('sr.client_id', $replace_amount, 'ac.first_name', 'ac.last_name')
+                        $dataArry = ServiceRequest::select('sr.client_id', 'ac.first_name', 'ac.last_name')
                         ->from(ServiceRequest::raw("(select  $replace_user, count(client_id) as users from service_requests $SQL $groupby)
                         sr Join accounts ac ON sr.client_id=ac.user_id Join clients cs ON sr.client_id=cs.account_id 
                         Join estates est ON est.id=cs.estate_id $SQLx"))
@@ -372,13 +363,21 @@ class DiscountEditController extends Controller
                         $optionValue .= " <option value='' data-divider='true'></option>";
                         foreach ($dataArry as $row)
                         {
+                           
+                    
                             $name = $row->first_name . ' ' . $row->last_name;
-                            $optionValue .= "<option value='$row->client_id' {{ old('lga') == $row->client_id ? 'selected' : ''}}>$name</option>";
+                            $selected = '';
+                            if(isset($edit_users) && count($edit_users) > 0){
+                                $selected = in_array($row->client_id, $edit_users)? 'selected': '';
+                            }
+
+                            $optionValue .= "<option value='$row->client_id' $selected >$name</option>";
                         }
     
 
                     }
-                    if(count($est) > 0)
+                 
+                    if(count($est) > 0 && count(array_filter($chk_fields)) < 1)
                     {
                     
                         $dataArry = Account::select('accounts.user_id', 'accounts.first_name', 'accounts.last_name')
@@ -401,6 +400,7 @@ class DiscountEditController extends Controller
                             $optionValue .= "<option value='$row->user_id' $selected >$name</option>";
                         }
                     }
+                
             
                     $data = array(
                         'options' => $optionValue,
@@ -636,30 +636,35 @@ class DiscountEditController extends Controller
         $discount = Discount::select('id')->where('uuid', $request->discount_id)->first();
         ClientDiscount::where(['discount_id'=>$discount->id])->delete();
         DiscountHistory::where(['discount_id'=>$discount->id])->delete();
-
-        $estates = Estate::select('id')->where('estate_name', $request->estate_name)
-        ->first();
+        EstateDiscountHistory::where(['discount_id'=>$discount->id])->delete();
+    
         $accounts = Account::select('first_name', 'last_name', 'user_id')->whereIn('user_id', $request->users)->get();
 
 
         foreach ($request->users as $user)
         {           
          ClientDiscount::create([
-            'discount_id' => $discounts->id,
+            'discount_id' => $discount->id,
             'client_id' => $user,
-            'estate_id' =>  $estates->id,
+            'estate_id' =>   $request->estate_name,
                 ]);
         
         }
         foreach ($accounts as $user)
         {           
-          DiscountHistory::create([
-            'discount_id' => $discounts->id,
-            'estate_id' =>  $estates->id,
+            $discountHistory = DiscountHistory::create([
+            'discount_id' => $discount->id,
+            'estate_id' =>  $request->estate_name,
             'client_name' => $user->first_name.' '.$user->last_name,
             'client_id' => $user->user_id,
-            'estate_name'=> $request->estate_name
+            'estate_name'=>  $request->estate_name
            
+                ]);
+
+                EstateDiscountHistory::create([
+                    'discount_id' => $discount->id,
+                    'discount_history_id' => $discountHistory->id,
+                    'estate_id' =>  $request->estate_name,
                 ]);
         }
          

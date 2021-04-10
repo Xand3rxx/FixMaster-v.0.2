@@ -18,7 +18,7 @@ class Price extends Model
 
     // whether the key is automatically incremented or not
     public $incrementing = false;
-    
+
     protected $table = 'prices';
 
     protected $fillable = [
@@ -41,9 +41,9 @@ class Price extends Model
      */
     protected static function booted()
     {
-        // Create a uuid when a new Tax is to be created 
+        // Create a uuid when a new Tax is to be created
         static::creating(function ($price) {
-            $price->uuid = (string) Str::uuid(); 
+            $price->uuid = (string) Str::uuid();
         });
     }
 
@@ -67,7 +67,7 @@ class Price extends Model
         return $this->hasMany(PriceHistory::class, 'price_id', 'id')->orderBy('created_at', 'DESC');
     }
 
-    public function service_requests()
+    public function serviceRequests()
     {
         return $this->hasMany(ServiveRequest::class, 'user_id')->withDefault();
     }
