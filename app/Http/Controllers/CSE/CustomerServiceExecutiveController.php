@@ -90,8 +90,7 @@ class CustomerServiceExecutiveController extends Controller
         $accountExists = Account::where('user_id', $cseId->id)->first();
         $contactExists = Contact::where('user_id', $cseId->id)->first();
 
-        \Illuminate\Support\Facades\DB::transaction(function () use ($request, $accountExists, $contactExists)
-        {
+        \Illuminate\Support\Facades\DB::transaction(function () use ($request, $accountExists, $contactExists) {
             // Update CSE Accounts Records table
             $accountExists->update([
                 'first_name'        => $request->input('first_name'),
@@ -110,7 +109,6 @@ class CustomerServiceExecutiveController extends Controller
         });
 
         return redirect()->route('cse.view_profile', [app()->getLocale(), $cse])->with('success', 'Account Updated Successfully');
-
     }
 
     /**
@@ -127,15 +125,15 @@ class CustomerServiceExecutiveController extends Controller
     private function validateUpdateRequest()
     {
         return request()->validate([
-           'first_name'         => 'required|string',
-           'middle_name'        => 'string',
-           'last_name'          => 'required|string',
-           'gender'             => 'required',
-           'phone_number'       => 'required|numeric|min:11',
-           'profile_avatar'     => 'file',
-           'bank_id'            => 'required',
-           'account_number'     => 'numeric',
-           'full_address'       => 'required',
+            'first_name'         => 'required|string',
+            'middle_name'        => 'string',
+            'last_name'          => 'required|string',
+            'gender'             => 'required',
+            'phone_number'       => 'required|numeric|min:11',
+            'profile_avatar'     => 'file',
+            'bank_id'            => 'required',
+            'account_number'     => 'numeric',
+            'full_address'       => 'required',
         ]);
     }
 }

@@ -125,7 +125,7 @@ Route::prefix('admin')->group(function () {
         Route::get('/invoice/{invoice:id}', [SimulationController::class, 'invoice'])->name('invoice');
 
 
- //Routes for Invoice Management
+        //Routes for Invoice Management
         Route::get('/invoices',      [InvoiceController::class, 'index'])->name('invoices');
         Route::get('/invoice/{invoice:uuid}', [InvoiceController::class, 'invoice'])->name('invoice');
 
@@ -135,14 +135,14 @@ Route::prefix('admin')->group(function () {
         Route::get('/complete-service/{service_request:uuid}', [SimulationController::class, 'completeService'])->name('complete_service');
 
 
-         //Routes for Invoice Management
-         Route::get('/invoices',      [InvoiceController::class, 'index'])->name('invoices');
+        //Routes for Invoice Management
+        Route::get('/invoices',      [InvoiceController::class, 'index'])->name('invoices');
 
-         //Routes for Simulation
-         Route::get('/diagnostic', [SimulationController::class, 'diagnosticSimulation'])->name('diagnostic');
-         Route::get('/end-service/{service_request:uuid}', [SimulationController::class, 'endService'])->name('end_service');
-         Route::get('/complete-service/{service_request:uuid}', [SimulationController::class, 'completeService'])->name('complete_service');
-         Route::get('/invoice/{invoice:id}', [SimulationController::class, 'invoice'])->name('invoice');
+        //Routes for Simulation
+        Route::get('/diagnostic', [SimulationController::class, 'diagnosticSimulation'])->name('diagnostic');
+        Route::get('/end-service/{service_request:uuid}', [SimulationController::class, 'endService'])->name('end_service');
+        Route::get('/complete-service/{service_request:uuid}', [SimulationController::class, 'completeService'])->name('complete_service');
+        Route::get('/invoice/{invoice:id}', [SimulationController::class, 'invoice'])->name('invoice');
 
 
         Route::get('/rfq',                                  [SimulationController::class, 'rfqSimulation'])->name('rfq');
@@ -300,10 +300,9 @@ Route::prefix('admin')->group(function () {
         Route::get('/serviceCriteria/delete/{criteria}',              [ServiceRequestSettingController::class, 'destroy'])->name('serviceReq.delete');
         Route::resource('serviceCriteria',                            ServiceRequestSettingController::class);
 
-    Route::get('/supplier-invoices',                               [RfqController::class, 'supplierInvoices'])->name('supplier_invoices');
-    Route::get('/supplier-invoices/details/{rfq:uuid}',              [RfqController::class, 'supplierInvoiceDetails'])->name('supplier_invoices_details');
-    Route::get('/supplier-invoices/accept/{rfq:uuid}',              [RfqController::class, 'acceptSupplierInvoice'])->name('supplier_invoices_acceptance');
-     
+        Route::get('/supplier-invoices',                               [RfqController::class, 'supplierInvoices'])->name('supplier_invoices');
+        Route::get('/supplier-invoices/details/{rfq:uuid}',              [RfqController::class, 'supplierInvoiceDetails'])->name('supplier_invoices_details');
+        Route::get('/supplier-invoices/accept/{rfq:uuid}',              [RfqController::class, 'acceptSupplierInvoice'])->name('supplier_invoices_acceptance');
     });
 });
 
@@ -331,7 +330,7 @@ Route::prefix('/client')->group(function () {
         Route::get('/settings',                 [ClientController::class, 'settings'])->name('settings');
         Route::any('/getDistanceDifference',    [ClientController::class, 'getDistanceDifference'])->name('getDistanceDifference');
 
-       
+
         Route::get('wallet',                [ClientController::class, 'wallet'])->name('wallet');
         Route::any('fund',                  [ClientController::class, 'walletSubmit'])->name('wallet.submit');
         Route::get('loyalty',                [ClientController::class, 'loyalty'])->name('loyalty');
@@ -382,7 +381,6 @@ Route::prefix('/client')->group(function () {
         Route::get('/request/paystack/notify',                  [ClientController::class, 'notifyPaystackServiceRequest'])->name('paystack.notify');
         Route::post('/update_service_request',  [ClientController::class, 'update_client_service_rating'])->name('update_service_request');
         Route::post('/submit_ratings',  [ClientController::class, 'client_rating'])->name('handle.ratings');
-
     });
 });
 
@@ -412,18 +410,17 @@ Route::prefix('/cse')->middleware('monitor.cseservice.request.changes')->group(f
                 // 'warranties' => \App\Models\Warranty::all(),
             ]
         )->name('request_details');
-//        Route::view('/profile',             'cse.view_profile')->name('view_profile');
-//        Route::view('/profile/edit',        'cse.edit_profile', [
-//             'banks' => \App\Models\Bank::all(),
-//
-//        ])->name('edit_profile');
+        //        Route::view('/profile',             'cse.view_profile')->name('view_profile');
+        //        Route::view('/profile/edit',        'cse.edit_profile', [
+        //             'banks' => \App\Models\Bank::all(),
+        //
+        //        ])->name('edit_profile');
         Route::get('/profile/{cse:uuid}', [CseController::class, 'show'])->name('view_profile');
         Route::get('/profile/edit/{cse:uuid}', [CseController::class, 'edit'])->name('edit_profile');
         Route::patch('update-profile/{cse:uuid}', [CseController::class, 'update'])->name('update_profile');
         Route::view('/location-request',    'cse.location_request')->name('location_request');
         Route::post('/submit_ratings',  [CseController::class, 'user_rating'])->name('handle.ratings');
         Route::post('/update_service_request',  [CseController::class, 'update_cse_service_rating'])->name('update_service_request');
-
     });
 });
 
