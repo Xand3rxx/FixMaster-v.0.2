@@ -116,10 +116,29 @@ class HandleCompletedDiagnosisController extends Controller
         $tax = $get_taxes->percentage / 100;
         $fixMaster_royalty_value = $get_fixMaster_royalty->percentage;
         $logistics_cost = $get_logistics->amount;
+        $materials_cost = $invoice->materials_cost == null ? 0 : $invoice->materials_cost;
+        $sub_total = $materials_cost + $invoice->labour_cost;
 
-        $fixMasterRoyalty = $fixMaster_royalty_value * ($serviceCharge);
-        $tax_cost = $tax * ($serviceCharge + $logistics_cost + $fixMasterRoyalty);
-        $total_cost = $serviceCharge + $fixMasterRoyalty + $tax_cost + $logistics_cost;
+        $fixMasterRoyalty = '';
+        $subTotal = '';
+        $bookingCost = '';
+        $tax_cost = '';
+        $total_cost = '';
+        $warranty = Warranty::where('name', 'Free Warranty')->first();
+
+        if ($invoice->invoice_type == 'Diagnosis Invoice') {
+            $subTotal = $serviceCharge;
+            $fixMasterRoyalty = $fixMaster_royalty_value * ($subTotal);
+            $bookingCost = $invoice->serviceRequest->price->amount;
+            $tax_cost = $tax * ($subTotal + $logistics_cost + $fixMasterRoyalty);
+            $total_cost = $serviceCharge + $fixMasterRoyalty + $tax_cost + $logistics_cost - $bookingCost;
+        } else {
+            $warrantyCost = 0.1 * ($invoice->labour_cost + $materials_cost);
+            $bookingCost = $invoice->serviceRequest->price->amount;
+            $fixMasterRoyalty = $fixMaster_royalty_value * ($invoice->labour_cost + $materials_cost + $logistics_cost);
+            $tax_cost = $tax * $sub_total;
+            $total_cost = $materials_cost + $invoice->labour_cost + $fixMasterRoyalty + $warrantyCost + $logistics_cost - $bookingCost - 1500 + $tax_cost;
+        }
         //End here
 
 
@@ -151,11 +170,12 @@ class HandleCompletedDiagnosisController extends Controller
             'rfqExists' => $invoice->rfq_id,
             'serviceRequestID' => $serviceRequest->id,
             'serviceRequestUUID' => $serviceRequest->uuid,
-            'fixmaster_royalty' => $fixMasterRoyalty,
-            'fixmaster_royalty_value' => $fixMaster_royalty_value,
             'get_fixMaster_royalty' => $get_fixMaster_royalty,
-            'taxes' => $tax_cost,
-            'tax' => $tax,
+            'fixmaster_royalty_value' => $fixMaster_royalty_value,
+            'subTotal' => $subTotal,
+            'bookingCost' => $bookingCost,
+            'fixmasterRoyalty' => $fixMasterRoyalty,
+            'tax' => $tax_cost,
             'logistics' => $logistics_cost,
             'warranty' => $warranty->percentage,
             'total_cost' => $total_cost

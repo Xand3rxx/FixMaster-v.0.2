@@ -747,13 +747,13 @@
                                             </li>
                                             <li class="text-muted d-flex justify-content-between">Warranty Cost :<span> ₦ {{ number_format($warranty * ($invoice['materials_cost'] + $invoice['labour_cost']) ,2) }}</span></li>
                                             <li class="text-muted d-flex justify-content-between">Logistics :<span> ₦ {{ number_format($logistics ,2) }}</span></li>
-                                            <li class="text-muted d-flex justify-content-between">Taxes :<span> ₦ {{ number_format($tax * (($invoice['materials_cost'] + $invoice['labour_cost']) + $fixmaster_royalty_value * (($invoice['materials_cost'] + $invoice['labour_cost'])) + ($warranty * ($invoice['materials_cost'] + $invoice['labour_cost'])) + $logistics ) ,2) }}</span></li>
+                                            <li class="text-muted d-flex justify-content-between">Taxes :<span> ₦ {{ number_format($tax ,2) }}</span></li>
                                             <li class="d-flex justify-content-between text-danger">Booking :<span> - ₦ {{ number_format($invoice->serviceRequest->price->amount,2) }}</span></li>
                                             <li class="d-flex justify-content-between text-danger">Discount :<span> - ₦ {{ number_format( 0.5 * $logistics ,2) }}</span></li>
                                             <li class="d-flex justify-content-between">Total :<span>₦ {{ number_format(
     ($invoice['materials_cost'] + $invoice['labour_cost']) + ( $fixmaster_royalty_value * (($invoice['materials_cost'] + $invoice['labour_cost'])) ) +
     ($warranty) + ($logistics) - ($invoice->serviceRequest->price->amount) - ( 0.5 * $logistics ) +
-    ($tax * (($invoice['materials_cost'] + $invoice['labour_cost']) + $fixmaster_royalty_value * (($invoice['materials_cost'] + $invoice['labour_cost'])) + ($warranty * ($invoice['materials_cost'] + $invoice['labour_cost'])) + $logistics ))
+    ($tax)
  ,2) }}</span></li>
                                         </ul>
                                     </div><!--end col-->
