@@ -71,6 +71,14 @@
                                         <div class="dropdown-menu">
                                              <a href="{{ route('client.request_details', [ 'request'=>$myServiceRequest->uuid, 'locale'=>app()->getLocale() ]) }}" class="dropdown-item text-primary"><i data-feather="clipboard" class="fea icon-sm"></i> Details</a>
 
+                                             @if($myServiceRequest->status_id == 2)
+                                                <a href="#" class="dropdown-item details text-success"><i data-feather="check" class="fea icon-sm"></i> Mark as Completed</a>
+                                             @endif
+
+                                             @if($myServiceRequest->status_id == 1)
+                                                <a href="#" class="dropdown-item details text-warning"><i data-feather="edit" class="fea icon-sm"></i> Edit</a>
+                                             @endif
+
                                              @if($myServiceRequest->status_id == 1)
                                                 <div class="dropdown-divider"></div>
                                                 <a href="#cancelRequest" id="cancel-request" data-toggle="modal" data-url="#" data-job-reference="{{ $myServiceRequest->unique_id }}" class="dropdown-item text-danger cancel_reques"><i data-feather="x" class="fea icon-sm"></i> Cancel Request</a>
@@ -87,6 +95,7 @@
                                                     <a href="{{ route('invoice', ['locale' => app()->getLocale(), 'invoice' => $invoice['uuid']]) }}" class="dropdown-item details text-info"><i data-feather="file-text" class="fea icon-sm"></i> {{ $invoice['invoice_type'] }} Invoice</a>
                                                 @endforeach
                                             @endif
+                                            {{-- {{ dd($myServiceRequest['warranty']) }} --}}
 
                                             @if($myServiceRequest->status_id == 4 && !empty($myServiceRequest['warranty']))
                                                 <div class="dropdown-divider"></div>
