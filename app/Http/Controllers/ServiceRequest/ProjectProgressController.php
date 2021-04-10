@@ -50,7 +50,7 @@ class ProjectProgressController extends Controller
         //  2. Find the Substatus selected 
         $substatus = \App\Models\SubStatus::where('uuid', $request['sub_status_uuid'])->firstOrFail();
 
-        if ($substatus->phase === 8) {
+        if ($substatus->phase === 6) {
             return $this->handleCompletedDiagnosis($request, $serviceRequest, $substatus);
         }
 

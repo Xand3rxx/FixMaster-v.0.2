@@ -31,14 +31,14 @@
                 <div class="tab-pane fade show active" id="description3" role="tabpanel" aria-labelledby="description-tab3">
                   <h6>UPDATE PROFILE</h6>
                   <div class="card-body pd-20 pd-lg-25">
-                    <form action="" method="post" role="form" enctype="multipart/form-data">
+                    <form action="{{ route('cse.update_profile', [app()->getLocale(), $user['uuid']]) }}" method="post" role="form" enctype="multipart/form-data">
                       {{ csrf_field() }}
                       @method('PATCH')
                       <div class="d-sm-flex float-left">
                             <div class="mg-sm-r-30">
                                 <div class="pos-relative d-inline-block mg-b-20">
                                   <a href="#">
-                                  
+
                                     <div class="avatar avatar-xxl">
                                       <div class="user-img">
                                       <img class="rounded-circle wh-150p img-fluid image profile_image_preview" src="{{ asset('assets/user-avatars/default-male-avatar.png') }}" alt="user-image">
@@ -51,7 +51,7 @@
                         <div class="form-row">
                           <div class="form-group col-md-3">
                             <label for="inputEmail4">First Name</label>
-                            <input type="text" class="form-control @error('first_name') is-invalid @enderror" name="first_name" id="first_name" value="">
+                            <input type="text" class="form-control @error('first_name') is-invalid @enderror" name="first_name" id="first_name" value="{{ $user['account']['first_name'] }}">
                             @error('first_name')
                             <span class="invalid-feedback" role="alert">
                                 <strong>{{ $message }}</strong>
@@ -60,7 +60,7 @@
                         </div>
                         <div class="form-group col-md-3">
                           <label for="inputEmail4">Middle Name</label>
-                          <input type="text" class="form-control @error('middle_name') is-invalid @enderror" id="middle_name" name="middle_name" value="">
+                          <input type="text" class="form-control @error('middle_name') is-invalid @enderror" id="middle_name" name="middle_name" value="{{ $user['account']['middle_name'] }}">
                           @error('middle_name')
                           <span class="invalid-feedback" role="alert">
                               <strong>{{ $message }}</strong>
@@ -70,7 +70,7 @@
                             <!-- Last Name -->
                             <div class="form-group col-md-3">
                               <label for="inputEmail4">Last Name</label>
-                              <input type="text" class="form-control @error('last_name') is-invalid @enderror" id="last_name" name="last_name" value="">
+                              <input type="text" class="form-control @error('last_name') is-invalid @enderror" id="last_name" name="last_name" value="{{ $user['account']['last_name'] }}">
                               @error('last_name')
                               <span class="invalid-feedback" role="alert">
                                   <strong>{{ $message }}</strong>
@@ -81,9 +81,9 @@
                           <div class="form-group col-md-3">
                             <label>Gender</label>
                             <select name="gender" id="gender" class="form-control @error('gender') is-invalid @enderror" required>
-                              <option value="</option>
+                              <option value="{{ $user['account']['gender'] }}">{{ $user['account']['gender'] }}</option>
                               <option value="">Choose....</option>
-                              <option value="male"}>Male</option>
+                              <option value="male">Male</option>
                               <option value="female">Female</option>
                               <option value="others">Others</option>
                            </select>
@@ -96,7 +96,7 @@
                             <!-- Email -->
                             <div class="form-group col-md-4">
                               <label for="inputEmail4">Email</label>
-                              <input type="email" class="form-control @error('email') is-invalid @enderror" id="email" value="" disabled>
+                              <input type="email" class="form-control @error('email') is-invalid @enderror" id="email" value="{{ $user['email'] }}" disabled>
                               @error('email')
                               <span class="invalid-feedback" role="alert">
                                   <strong>{{ $message }}</strong>
@@ -106,7 +106,7 @@
                           <!-- Phone Number -->
                           <div class="form-group col-md-4">
                             <label for="inputEmail4">Phone Number</label>
-                            <input type="tel" class="form-control @error('phone_number') is-invalid @enderror" id="phone_number" name="phone_number" maxlength="11" value="">
+                            <input type="tel" class="form-control @error('phone_number') is-invalid @enderror" id="phone_number" name="phone_number" maxlength="11" value="{{ $user['contact']['phone_number'] }}">
                             @error('phone_number')
                               <span class="invalid-feedback" role="alert">
                                   <strong>{{ $message }}</strong>
@@ -130,7 +130,8 @@
                           <div class="form-group col-md-6">
                             <label>Bank</label>
                             <select name="bank_id" id="bank_id" class="form-control @error('bank_id') is-invalid @enderror" required>
-                              <option value="">Select...</option>
+                              <option value="{{ $user['bank']['id'] }}">{{ $user['bank']['name'] }}</option>
+                              <option value="">---Select Bank---</option>
                               @foreach($banks as $bank)
                               <option value="{{ $bank->id }}" {{ old('bank_id') == $bank->id ? 'selected' : ''}}>{{ $bank->name }}</option>
                               @endforeach
@@ -144,7 +145,7 @@
 
                           <div class="form-group col-md-6">
                             <label for="inputEmail4">Account Number</label>
-                            <input type="tel" class="form-control @error('account_number') is-invalid @enderror" id="account_number" name="account_number" maxlength="11" value="{{ old('account_number') }}" required>
+                            <input type="tel" class="form-control @error('account_number') is-invalid @enderror" id="account_number" name="account_number" maxlength="11" value="{{ $user['account']['account_number']!= null ? $user['account']['account_number'] : old('account_number') }}"  required>
                             @error('account_number')
                               <span class="invalid-feedback" role="alert">
                                   <strong>{{ $message }}</strong>
@@ -155,7 +156,7 @@
                             <!-- Full Address -->
                             <div class="form-group col-md-12">
                               <label for="inputAddress2">Full Address</label>
-                              <textarea rows="3" class="user_address form-control @error('full_address') is-invalid @enderror" id="" name="full_address" value=""></textarea>
+                              <textarea rows="3" class="user_address form-control @error('full_address') is-invalid @enderror" id="" name="full_address" value="">{{ $user['contact']['address'] }}</textarea>
                               @error('full_address')
                             <span class="invalid-feedback" role="alert">
                                 <strong>{{ $message }}</strong>

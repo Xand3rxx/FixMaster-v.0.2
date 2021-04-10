@@ -3,27 +3,6 @@
     <div class="form-row mt-4">
         <div class="tx-13 mg-b-25">
             <div id="wizard3">
-
-                <h3>Project Progress</h3>
-                <section>
-                    <p class="mg-b-0">Specify the current progress of the job.</p>
-                    <div class="form-row mt-4">
-                        <div class="form-group col-md-12">
-                            <select required class="form-control custom-select @error('sub_status_uuid') is-invalid @enderror" name="sub_status_uuid">
-                                <option selected disabled value="0">Select...</option>
-                                @foreach($ongoingSubStatuses as $status)
-                                <option value="{{ $status->uuid }}">{{ $status->name }}</option>
-                                @endforeach
-                            </select>
-                            @error('sub_status_uuid')
-                            <span class="invalid-feedback" role="alert">
-                                <strong>{{ $message }}</strong>
-                            </span>
-                            @enderror
-                        </div>
-                    </div>
-                </section>
-
                 @if($latest_service_request_progress->sub_status_id > 9)
                 @if($latest_service_request_progress->sub_status_id < 11) <h3>Project Cost Estimate</h3>
                     <section>
@@ -107,7 +86,7 @@
                             </div>
                         </div>
                         @foreach ($service_request['rfqs'][0]['rfqBatches'] as $batch)
-                            
+
                         <div class="form-row">
                             <div class="form-group col-md-4">
                                 <label for="component_name">Component Name</label>
@@ -287,6 +266,25 @@
                         </div>
                     </section>
 
+                    <h3>Project Progress</h3>
+                    <section>
+                        <p class="mg-b-0">Specify the current progress of the job.</p>
+                        <div class="form-row mt-4">
+                            <div class="form-group col-md-12">
+                                <select required class="form-control custom-select @error('sub_status_uuid') is-invalid @enderror" name="sub_status_uuid">
+                                    <option selected disabled value="0">Select...</option>
+                                    @foreach($ongoingSubStatuses as $status)
+                                    <option value="{{ $status->uuid }}">{{ $status->name }}</option>
+                                    @endforeach
+                                </select>
+                                @error('sub_status_uuid')
+                                <span class="invalid-feedback" role="alert">
+                                    <strong>{{ $message }}</strong>
+                                </span>
+                                @enderror
+                            </div>
+                        </div>
+                    </section>
             </div>
         </div>
     </div><!-- df-example -->
