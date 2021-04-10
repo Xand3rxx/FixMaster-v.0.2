@@ -30,4 +30,12 @@ class AdminRatingController extends Controller
 
         return view('admin.ratings.service_rating', compact('cards'));
     }
+
+    public function getRatings(Request $request){
+       $results = Rating::where('service_id', $request->id)->with('clientAccount', 'service_request')
+                ->where('service_request_id', null)
+                ->where('service_diagnosis_by', null)
+                ->where('ratee_id', '!=', null)->get();
+      return response()->json($results);
+    }
 }

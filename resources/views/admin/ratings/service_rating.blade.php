@@ -54,7 +54,7 @@
                         <div class="dropdown-file">
                             <a href="" class="dropdown-link" data-toggle="dropdown"><i data-feather="more-vertical"></i></a>
                             <div class="dropdown-menu dropdown-menu-right">
-                            <a href="#serviceDetails" data-toggle="modal" class="dropdown-item details text-primary" title="View Computer & Laptops ratings"><i class="far fa-star"></i> Ratings</a>
+                            <a href="javascript:void(0)" data-toggle="modal" data-number="{{$rating->service_id}}" class="dropdown-item details text-primary" title="View Computer & Laptops ratings"><i class="far fa-star"></i> Ratings</a>
                             </div>
                         </div>
                       </td>
@@ -94,30 +94,9 @@
               <th class="text-center">Date</th>
             </tr>
           </thead>
-          <tbody>
-            <tr>
-              <td class="tx-color-03 tx-center">1</td>
-              <td class="tx-medium">REF-EEE7FD14</td>
-              <td>Kelvin Adesanya</td>
-              <td class="text-medium text-center">3.0</td>
-              <td>March 19th 2021, 9:06:56pm</td>
-            </tr>
+          <tbody id="tbody">
 
-            <tr>
-              <td class="tx-color-03 tx-center">2</td>
-              <td class="tx-medium">REF-27D2F0BE</td>
-              <td>Haruna Ahmadu</td>
-              <td class="text-medium text-center">4.0</td>
-              <td>March 19th 2021, 9:06:56pm</td>
-            </tr>
 
-            <tr>
-              <td class="tx-color-03 tx-center">3</td>
-              <td class="tx-medium">REF-79A722D6</td>
-              <td>Oluyemi Ayotunde</td>
-              <td class="text-medium text-center">5.0</td>
-              <td>March 19th 2021, 9:06:56pm</td>
-            </tr>
           </tbody>
         </table>
         </div><!-- modal-body -->
@@ -125,5 +104,58 @@
     </div>
   </div>
 </div>
+@endsection
+@yield('scripts')
+@stack('scripts')
+@section('scripts')
+<script>
+$(document).ready(function(){
+   $(document).on('click', ".dropdown-item", function() {
+       let service_id = $(this).data('number');
+       //alert(id);
 
+                    $.ajaxSetup({
+                        headers: {
+                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                        }
+                    });
+                    $.ajax({
+                        url: "{{ route('admin.get_ratings_by_service', app()->getLocale()) }}",
+                        method: 'GET',
+                        data: {
+                            "id": service_id
+                        },
+                        // return the result
+                        success: function(data) {
+                            if (data) {
+                            console.log(data);
+                            var sn = 1;
+                                $.each(data, function(key, rating) { //+rating.service_request.unique_id+
+                                var rate_table = `
+                                <tr>
+                                    <td class="tx-color-03 tx-center">`+ sn++ +`</td>
+                                    <td class="tx-medium">hgy</td>
+                                    <td>`+ rating.client_account.first_name+" "+rating.client_account.last_name +`</td>
+                                    <td class="text-medium text-center">`+ rating.star +`</td>
+                                    <td>`+ rating.created_at +`</td>
+                                </tr>
+                                `;
+                                $("#tbody").append(rate_table);
+                                $("#serviceDetails").modal({show: true});
+                                });
+
+
+
+                            }
+                        }
+
+                    });
+   });
+
+   $('.close').click(function(){
+       location.reload();
+   })
+
+})
+</script>
 @endsection

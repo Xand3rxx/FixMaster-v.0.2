@@ -72,7 +72,7 @@ Route::prefix('admin')->group(function () {
         Route::get('/activate/{uuid}',      [AdminReviewController::class, 'activate'])->name('activate_review');
         Route::get('/deactivate/{uuid}',      [AdminReviewController::class, 'deactivate'])->name('deactivate_review');
         Route::get('/delete/{uuid}',      [AdminReviewController::class, 'delete'])->name('delete_review');
-
+        Route::get('/get_ratings_by_service',    [AdminRatingController::class, 'getRatings'])->name('get_ratings_by_service');
 
 
         Route::prefix('users')->name('users.')->group(function () {
@@ -319,11 +319,8 @@ Route::prefix('/cse')->middleware('monitor.cseservice.request.changes')->group(f
         Route::view('/messages/inbox',      'cse.messages.inbox')->name('messages.inbox');
         Route::view('/messages/sent',       'cse.messages.sent')->name('messages.sent');
         Route::view('/payments',            'cse.payments')->name('payments');
-
         Route::resource('requests', RequestController::class);
-
-        // Route::view('/requests',            'cse.requests')->name('requests');
-
+        //Route::view('/requests',            'cse.requests')->name('requests');
         Route::view('/request/details',    'cse.request_details',
             [
                 // 'tools' => \App\Models\ToolInventory::all(),
@@ -339,7 +336,6 @@ Route::prefix('/cse')->middleware('monitor.cseservice.request.changes')->group(f
         Route::view('/location-request',    'cse.location_request')->name('location_request');
         Route::post('/submit_ratings',  [CseController::class, 'user_rating'])->name('handle.ratings');
         Route::post('/update_service_request',  [CseController::class, 'update_cse_service_rating'])->name('update_service_request');
-
     });
 });
 
