@@ -44,9 +44,9 @@ class HandleCompletedDiagnosisController extends Controller
 
             'intiate_trf'               =>  'bail|string|in:yes,no',
             'tool_id'                   =>  'bail|sometimes|required_unless:intiate_trf,no|array',
-            'tool_id.*'                 =>  'bail|sometimes|required_unless:intiate_rfq,no|nullable',
+            'tool_id.*'                 =>  'bail|sometimes|required_unless:intiate_trf,no|nullable',
             'tool_quantity'             =>  'bail|sometimes|required_unless:intiate_trf,no|array',
-            'tool_quantity.*'           =>  'bail|sometimes|required_unless:intiate_rfq,no|nullable',
+            'tool_quantity.*'           =>  'bail|sometimes|required_unless:intiate_trf,no|nullable',
 
         ]);
 

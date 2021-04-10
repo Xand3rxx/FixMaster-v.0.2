@@ -386,7 +386,7 @@ Route::prefix('/client')->group(function () {
 
 // Route::resource('cse', CseController::class);
 
-Route::prefix('/cse')->middleware('monitor.cseservice.request.changes')->group(function () {
+Route::prefix('/cse')->group(function () {
     Route::name('cse.')->group(function () {
         //All routes regarding CSE's should be in here
         Route::view('/',                    'cse.index')->name('index'); //Take me to CSE Dashboard
