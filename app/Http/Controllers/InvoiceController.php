@@ -75,6 +75,7 @@ class InvoiceController extends Controller
             'serviceRequestID' => $invoice->serviceRequest->id,
             'serviceRequestUUID' => $invoice->serviceRequest->uuid,
             'get_fixMaster_royalty' => $get_fixMaster_royalty,
+            'fixmaster_royalty_value' => $fixMaster_royalty_value,
             'subTotal' => $subTotal,
             'bookingCost' => $bookingCost,
             'fixmasterRoyalty' => $fixMasterRoyalty,
