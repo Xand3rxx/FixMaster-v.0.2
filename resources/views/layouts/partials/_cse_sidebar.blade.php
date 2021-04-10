@@ -36,9 +36,9 @@
       </div>
       <div class="collapse {{ Route::currentRouteNamed('cse.view_profile', 'cse.edit_profile') ? 'show' : '' }}" id="loggedinMenu">
         <ul class="nav nav-aside mg-b-0">
-          <li class="nav-item {{ Route::currentRouteNamed('cse.view_profile') ? 'active' : '' }}"><a href="{{ route('cse.view_profile', app()->getLocale()) }}" class="nav-link"><i data-feather="user"></i> <span>View Profile</span></a></li>
+          <li class="nav-item {{ Route::currentRouteNamed('cse.view_profile') ? 'active' : '' }}"><a href="{{ route('cse.view_profile', [app()->getLocale(), auth()->user()->uuid]) }}" class="nav-link"><i data-feather="user"></i> <span>View Profile</span></a></li>
 
-          <li class="nav-item {{ Route::currentRouteNamed('cse.edit_profile') ? 'active' : '' }}"><a href="{{ route('cse.edit_profile',app()->getLocale()) }}" class="nav-link"><i data-feather="settings"></i> <span>Account Settings</span></a></li>
+          <li class="nav-item {{ Route::currentRouteNamed('cse.edit_profile') ? 'active' : '' }}"><a href="{{ route('cse.edit_profile',[app()->getLocale(), auth()->user()->uuid]) }}" class="nav-link"><i data-feather="settings"></i> <span>Account Settings</span></a></li>
         </ul>
       </div>
     </div><!-- aside-loggedin -->
@@ -55,7 +55,7 @@
           <li class="{{ Route::currentRouteNamed('cse.messages.sent') ? 'active' : '' }}"><a href="{{ route('cse.messages.sent', app()->getLocale()) }}">Sent</a></li>
         </ul>
       </li>
-      
+
       <li class="nav-item {{ Route::currentRouteNamed('cse.payments') ? 'active show' : '' }}"><a href="{{ route('cse.payments', app()->getLocale()) }}" class="nav-link"><i data-feather="credit-card"></i> <span>Payments</span></a></li>
 
       <li class="nav-item {{ Route::currentRouteNamed('cse.requests.index', 'cse.request_details', 'cse.requests.show') ? 'active show' : '' }}"><a href="{{ route('cse.requests.index', app()->getLocale()) }}" class="nav-link"><i data-feather="git-pull-request"></i> <span>Requests</span></a></li>
