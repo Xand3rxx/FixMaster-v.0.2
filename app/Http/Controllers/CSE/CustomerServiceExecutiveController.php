@@ -86,8 +86,8 @@ class CustomerServiceExecutiveController extends Controller
     {
         $this->validateUpdateRequest();
         $cseId = User::select('id')->where('uuid', $cse)->first();
-        $accountExists = Account::where('id', $cseId->id)->first();
-        $contactExists = Contact::where('id', $cseId->id)->first();
+        $accountExists = Account::where('user_id', $cseId->id)->first();
+        $contactExists = Contact::where('user_id', $cseId->id)->first();
 
         \Illuminate\Support\Facades\DB::transaction(function () use ($request, $accountExists, $contactExists)
         {
