@@ -88,10 +88,12 @@
 </head>
 
 <body>
-<div class="d-flex justify-content-center mt-3 border-bottom">
-    <h5>
-        Clicking decline end the service request and diagnosis bill will be paid and you will not enjoy the discount option. While selecting accept continues to the end of the request and discount bonus will be applied here.
-    </h5>
+<div class="d-flex justify-content-center mt-5 border-bottom">
+    <p style="font-size: 12px; text-align: center;">
+        If you click <strong>decline</strong> , your service request will end here and you'll be required<br />to pay for diagnosis alone but you will not enjoy the discount bonus.<br>
+
+        If you click <strong>accept</strong> , your service request continues till the end of the fix and your<br /> discount bonus will be applied.
+    </p>
 </div>
 
 <section class="bg-invoice">
@@ -103,7 +105,7 @@
                         <div class="invoice-top pb-4 border-bottom">
                             <div class="row">
                                 <div class="col-md-8">
-                                    <img src="{{ asset('assets/images/home-fix-logo-colored.png') }}" class="l-dark" style="margin-top: -38px !important;" height="140" alt="FixMaster Logo">
+                                    <img src="{{ asset('assets/images/home-fix-logo-colored.png') }}" class="l-dark" style="margin-top: 10px !important;" height="80" alt="FixMaster Logo">
 
                                     <div class="logo-invoice mb-2">
                                         @if($invoice->status == 1 && $invoice['phase'] == '2' && $invoice['invoice_type'] == 'Diagnosis Invoice')
@@ -622,7 +624,7 @@
                         <div class="invoice-top pb-4 border-bottom">
                             <div class="row">
                                 <div class="col-md-8">
-                                    <img src="{{ asset('assets/images/home-fix-logo-colored.png') }}" class="l-dark" style="margin-top: -38px !important;" height="140" alt="FixMaster Logo">
+                                    <img src="{{ asset('assets/images/home-fix-logo-colored.png') }}" class="l-dark" style="margin-top: 10px !important;" height="80" alt="FixMaster Logo">
 
                                     <div class="logo-invoice mb-2">
                                         @if($invoice->status == 1 && $invoice['invoice_type'] == 'Completion Invoice')
