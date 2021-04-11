@@ -1157,12 +1157,8 @@ class ClientController extends Controller
         $service_request->has_cse_rated         = 'No';
         $service_request->created_at         = Carbon::now()->toDateTimeString();
         // $service_request->updated_at         = Carbon::now()->toDateTimeString();
-        // $service_request->save();
-        dd($service_request);
-        // return;
-
-
-        //Temporary Assign a CSE to a client's request for demo purposes
+        if ($service_request->save()) {
+                    //Temporary Assign a CSE to a client's request for demo purposes
         //List of CSE's Id's on the DB
         $cseArray = array(2, 3, 4);
 
@@ -1199,6 +1195,7 @@ class ClientController extends Controller
 
 
         return $service_request;
+        }
     }
 
 }

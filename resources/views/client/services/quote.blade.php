@@ -556,38 +556,6 @@ tbody td, thead th {
         }); 
 
 
-
-    //     $('#submit').click(function(){
-           
-    //             $.ajax({  
-    //                 url: "{{ route('client.ajax_contactForm', app()->getLocale()) }}",  
-    //                  method:"POST",  
-    //                  data: {
-    //                 _token: "{{ csrf_token() }}",
-    //                 firstName: $("#first-name").val(),
-    //                 lastName: $("#last-name").val(),
-    //                 streetAddress: $("#street-address").val(),
-    //                 phoneNumber: $("#phone-number").val(),
-    //                 state: $("#state_id").val(),
-    //                 lga: $("#lga_id").val(),
-    //                 town: $("#town_id").val(),
-    //                 addressLat: $("#user_latitude").val(),
-    //                 addressLng: $("#user_longitude").val(),
-    //             },  
-    //                  success:function(data){  
-    //                       $("form").trigger("reset");  
-    //                       $('#success_message').fadeIn().html(data);  
-    //                       setTimeout(function(){  
-    //                            $('#success_message').fadeOut("Slow");  
-    //                       }, 2000);  
-    //                  }  
-    //             });  
-           
-    //   });
-
-
-
-
     });
 
     $(document).ready(function () {
