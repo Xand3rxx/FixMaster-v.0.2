@@ -331,11 +331,12 @@ Route::prefix('/client')->group(function () {
         Route::any('/getDistanceDifference',    [ClientController::class, 'getDistanceDifference'])->name('getDistanceDifference');
 
 
-        Route::get('wallet',                [ClientController::class, 'wallet'])->name('wallet');
-        Route::any('fund',                  [ClientController::class, 'walletSubmit'])->name('wallet.submit');
-        Route::get('loyalty',                [ClientController::class, 'loyalty'])->name('loyalty');
-        Route::any('loyalty/submit',                 [ClientController::class, 'loyaltySubmit'])->name('loyalty.submit');
-        Route::get('payments',          [ClientController::class, 'payments'])->name('payments');
+        Route::get('wallet',                             [ClientController::class, 'wallet'])->name('wallet');
+        Route::any('fund',                               [ClientController::class, 'walletSubmit'])->name('wallet.submit');
+        Route::get('loyalty',                            [ClientController::class, 'loyalty'])->name('loyalty');
+        Route::any('loyalty/submit',                     [ClientController::class, 'loyaltySubmit'])->name('loyalty.submit');
+        Route::get('payments',                           [ClientController::class, 'payments'])->name('payments');
+        Route::get('payments-details/{payment:uuid}',   [ClientController::class, 'paymentDetails'])->name('payment.details');
 
         Route::post('/ipnpaystack',         [ClientController::class, 'paystackIPN'])->name('ipn.paystack');
         Route::get('/apiRequest',           [ClientController::class, 'apiRequest'])->name('ipn.paystackApiRequest');

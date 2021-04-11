@@ -6,7 +6,7 @@
 
     <div class="col-lg-8 col-12">
         <div class="border-bottom pb-4 row">
-            
+
             <div class="col-md-4 mt-4">
                 <div class="media key-feature align-items-center p-3 rounded shadow mt-4">
                     <img src="{{ asset('assets/images/job/Circleci.svg') }}" class="avatar avatar-ex-sm" alt="">
@@ -24,7 +24,7 @@
                     <img src="{{ asset('assets/images/job/Circleci.svg') }}" class="avatar avatar-ex-sm" alt="">
                     <div class="media-body content ml-3">
                         <h4 class="title mb-0">Amount Spent</h4>
-                        <p class="text-muted mb-0">₦30,000.00</p> 
+                        <p class="text-muted mb-0">₦30,000.00</p>
                     <!-- {{-- <p class="text-muted mb-0"><a href="javascript:void(0)" class="text-primary">CircleCi</a> @London, UK</p>     --}} -->
                     </div>
                 </div>
@@ -121,6 +121,7 @@
                         <thead>
                         <tr>
                             <th class="py-3">#</th>
+                            <th class="py-3">Job/Wallet No</th>
                             <th class="py-3">Reference No</th>
                             <th class="py-3">Transaction ID</th>
                             <th class="py-3">Payment For</th>
@@ -137,6 +138,7 @@
                         @foreach($payments as $payment)
                             <tr>
                             <td>{{ $loop->iteration }}</td>
+                                <td>{{$payment->unique_id}}</td>
                                 <td>{{$payment->reference_id}}</td>
                                 <td>{{$payment->transaction_id == null ? 'UNAVAILABLE' : $payment->transaction_id  }}</td>
                                 <td class="font-weight-bold">{{$payment->payment_for}}</td>
@@ -153,7 +155,7 @@
                                 @endif
 
                                 <td>{{ Carbon\Carbon::parse($payment->created_at, 'UTC')->isoFormat('MMMM Do YYYY, h:mm:ssa') }}</td>
-                                <td><a href="#" data-toggle="modal" data-target="#transactionDetails" class="btn btn-primary btn-sm ">Details</a></td>
+                                <td><a href="#" data-toggle="modal" data-url="{{ route('client.payment.details', ['payment'=>$payment->uuid, 'locale'=>app()->getLocale()] ) }}"  data-target="#transactionDetails" data-payment-ref="{{ $payment->unique_id }}" class="btn btn-primary btn-sm ">Details</a></td>
                             </tr>
                         @endforeach
                         </tbody>
@@ -176,52 +178,7 @@
                   </button>
                 </div>
                 <div class="modal-body pd-x-25 pd-sm-x-30 pd-t-40 pd-sm-t-20 pd-b-15 pd-sm-b-20">
-                    <div class="table-responsive mt-4">
-                        <table class="table table-striped table-sm mg-b-0">
-                        <tbody>
-                            <tr>
-                                <td class="tx-medium" width="25%">Unique ID</td>
-                                <td class="tx-color-03" width="75%">WAL-23782382</td>
-                            </tr>
-                            <tr>
-                                <td class="tx-medium" width="25%">Reference No.</td>
-                                <td class="tx-color-03" width="75%">32e3lh2e23083h432b</td>
-                            </tr>
-                            <tr>
-                                <td class="tx-medium" width="25%">Transaction ID.</td>
-                                <td class="tx-color-03" width="75%">Transaction ID returned on success should be displayed here only if payment gateway was used or UNAVAILABLE</td>
-                            </tr>
-                            <tr>
-                                <td class="tx-medium" width="25%">Transaction Type</td>
-                                <td class="tx-color-03" width="75%">Credit</td>
-                            </tr>
-                            <tr>
-                                <td class="tx-medium" width="25%">Payment Type</td>
-                                <td class="tx-color-03" width="75%"3">Funding</td>
-                            </tr>
-                            <tr>
-                                <td class="tx-medium" width="25%">Payment Channel</td>
-                                <td class="tx-color-03" width="75%"3">Paystack or Flutterwave or Offline or Wallet</td>
-                            </tr>
-                            <tr>
-                                <td class="tx-medium" width="25%">Payment For</td>
-                                <td class="tx-color-03" width="75%"3">Wallet</td>
-                            </tr>
-                            <tr>
-                                <td class="tx-medium" width="25%">Amount</td>
-                                <td class="tx-color-03" width="75%">₦{{ number_format(10000) }}</td>
-                            </tr>
-                            <tr>
-                                <td class="tx-medium" width="25%">Status</td>
-                                <td class="text-warning" width="75%">Pending</td>
-                            </tr>
-                            <tr>
-                                <td class="tx-medium" width="25%">Refund Reason</td>
-                                <td class="tx-color-03" width="75%">This section should only be visible in a case of refund, the reason should be displayed here or UNAVAILABLE</td>
-                            </tr>
-                        </tbody>
-                        </table>
-                    </div>
+
                   </div><!-- modal-body -->
                 <div class="modal-footer"></div>
               </div>
@@ -256,6 +213,34 @@
                     $('.date-range').removeClass('d-none');
                     $('.specific-date, .sort-by-year').addClass('d-none');
                 }
+            });
+
+            $(document).on('click', '#transactionDetails', function (e) {
+                e.preventDefault();
+                let route = $(this).attr('data-url');
+                let paymentRef = $(this).attr('data-payment-ref');
+
+                $.ajax({
+                    url: route,
+                    beforeSend: function () {
+                        $("#modal-body").html('<div class="d-flex justify-content-center mt-4 mb-4"><span class="loadingspinner"></span></div>')
+                    },
+                    success: function (result) {
+                        $('#modal-body').modal("show");
+                        $('#modal-body').html("");
+                        $('#modal-body').html(result).show();
+                    },
+                    complete: function () {
+                        $("#spinner-icon").hide();
+                    },
+                    error: function (jqXHR, testStatus, error) {
+                        var message = error+ " An error occurred while trying to retrieve "+ paymentRef+ " payment history.";
+                        var type = 'error';
+                        displayMessage(message, type);
+                        $("#spinner-icon").hide();
+                    },
+                    timeout: 8000
+                })
             });
         });
     </script>
