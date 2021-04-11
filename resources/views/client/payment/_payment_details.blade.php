@@ -1,9 +1,9 @@
 <div class="table-responsive mt-4">
     <table class="table table-striped table-sm mg-b-0">
-        <tbody>
+    <tbody>
         <tr>
             <td class="tx-medium" width="25%">Unique ID</td>
-            <td class="tx-color-03" width="75%">{{ $payment->unique_id }}</td>
+            <td class="tx-color-03" width="75%">WAL-23782382</td>
         </tr>
         <tr>
             <td class="tx-medium" width="25%">Reference No.</td>
@@ -41,6 +41,7 @@
             <td class="tx-medium" width="25%">Refund Reason</td>
             <td class="tx-color-03" width="75%">This section should only be visible in a case of refund, the reason should be displayed here or UNAVAILABLE</td>
         </tr>
-        </tbody>
+
+    </tbody>
     </table>
 </div>

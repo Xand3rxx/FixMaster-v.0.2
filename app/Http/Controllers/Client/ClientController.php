@@ -89,7 +89,7 @@ class ClientController extends Controller
 
     public function clientRequestDetails($language, $request){
 
-        $requestDetail = ServiceRequest::where('uuid', $request)->firstOrFail();
+        $requestDetail = ServiceRequest::where('uuid', $request)->with('price')->firstOrFail();
 
         // return \App\Models\ServiceRequestAssigned::where('service_request_id', $requestDetail->id)->where('status', 'Active')->firstOrFail()->status;
 
@@ -1031,6 +1031,7 @@ class ClientController extends Controller
 
         $myServiceRequests = Client::where('user_id', auth()->user()->id)->with('service_requests')->firstOrFail();
 
+        // return $myServiceRequests;
 
         return view('client.services.list', [
             'myServiceRequests' =>  $myServiceRequests,

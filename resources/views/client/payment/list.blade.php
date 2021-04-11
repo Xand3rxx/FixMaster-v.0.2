@@ -121,7 +121,7 @@
                         <thead>
                         <tr>
                             <th class="py-3">#</th>
-                            <th class="py-3">Job/Wallet No</th>
+                            <th class="py-3">Job/Wallet Ref</th>
                             <th class="py-3">Reference No</th>
                             <th class="py-3">Transaction ID</th>
                             <th class="py-3">Payment For</th>
@@ -155,7 +155,7 @@
                                 @endif
 
                                 <td>{{ Carbon\Carbon::parse($payment->created_at, 'UTC')->isoFormat('MMMM Do YYYY, h:mm:ssa') }}</td>
-                                <td><a href="#" data-toggle="modal" data-url="{{ route('client.payment.details', ['payment'=>$payment->uuid, 'locale'=>app()->getLocale()] ) }}"  data-target="#transactionDetails" data-payment-ref="{{ $payment->unique_id }}" class="btn btn-primary btn-sm ">Details</a></td>
+                                <td><a href="#" data-toggle="modal" data-target="#transactionDetails" data-payment-ref="{{ $payment->unique_id }}" data-url="" id="payment-details" class="btn btn-primary btn-sm ">Details</a></td>
                             </tr>
                         @endforeach
                         </tbody>
@@ -177,7 +177,7 @@
                     <span aria-hidden="true">&times;</span>
                   </button>
                 </div>
-                <div class="modal-body pd-x-25 pd-sm-x-30 pd-t-40 pd-sm-t-20 pd-b-15 pd-sm-b-20">
+                    <div class="modal-body pd-x-25 pd-sm-x-30 pd-t-40 pd-sm-t-20 pd-b-15 pd-sm-b-20" id="modal-body">
 
                   </div><!-- modal-body -->
                 <div class="modal-footer"></div>
@@ -235,6 +235,27 @@
                     },
                     error: function (jqXHR, testStatus, error) {
                         var message = error+ " An error occurred while trying to retrieve "+ paymentRef+ " payment history.";
+            $(document).on('click', '#payment-details', function(event) {
+                event.preventDefault();
+                let route = $(this).attr('data-url');
+                let paymentRef = $(this).attr('data-payment-ref');
+
+                $.ajax({
+                    url: route,
+                    beforeSend: function() {
+                        $("#modal-body").html('<div class="d-flex justify-content-center mt-4 mb-4"><span class="loadingspinner"></span></div>');
+                    },
+                    // return the result
+                    success: function(result) {
+                        $('#modal-body').modal("show");
+                        $('#modal-body').html('');
+                        $('#modal-body').html(result).show();
+                    },
+                    complete: function() {
+                        $("#spinner-icon").hide();
+                    },
+                    error: function(jqXHR, testStatus, error) {
+                        var message = error+ ' An error occured while trying to retireve '+ paymentRef +' record.';
                         var type = 'error';
                         displayMessage(message, type);
                         $("#spinner-icon").hide();

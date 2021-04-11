@@ -96,7 +96,7 @@
         </ul>
 
 
-        <h5 class="mt-4">Service Charge (Urgent):</h5>
+        <h5 class="mt-4">Service Charge ({{ $requestDetail['price']['name'] }}):</h5>
         <ul class="list-unstyled">
         @if(!empty($requestDetail->clientDiscounts[0]->discount->rate) && ($requestDetail->clientDiscounts[0]->availability == 'unused'))
 

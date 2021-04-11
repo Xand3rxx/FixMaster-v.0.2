@@ -264,6 +264,42 @@ class StatusSeeder extends Seeder
                 'recurrence'    =>  'No',
                 'status'        =>  'active',
             ),
+            array(
+                'user_id'       =>  1,
+                'uuid'          =>  '06dda2af-3831-41af-854d-595e4f6f6b77',
+                'status_id'     =>  3,
+                'name'          =>  'Client cancelled job request',
+                'phase'         =>  1,
+                'recurrence'    =>  'No',
+                'status'        =>  'active',
+            ),
+            array(
+                'user_id'       =>  1,
+                'uuid'          =>  '8aebf411-23ba-4ad0-8890-0918ac239376',
+                'status_id'     =>  3,
+                'name'          =>  'Admin cancelled job request',
+                'phase'         =>  2,
+                'recurrence'    =>  'No',
+                'status'        =>  'active',
+            ),
+            array(
+                'user_id'       =>  1,
+                'uuid'          =>  'fca5a961-39d4-42e5-be9d-20e4b579d4b1',
+                'status_id'     =>  4,
+                'name'          =>  'Client marked job as completed',
+                'phase'         =>  1,
+                'recurrence'    =>  'No',
+                'status'        =>  'active',
+            ),
+            array(
+                'user_id'       =>  1,
+                'uuid'          =>  'ce316687-62d8-45a9-a1b9-f75da104fc18',
+                'status_id'     =>  4,
+                'name'          =>  'Admin marked job as completed',
+                'phase'         =>  2,
+                'recurrence'    =>  'No',
+                'status'        =>  'active',
+            ),
 
         );
 
