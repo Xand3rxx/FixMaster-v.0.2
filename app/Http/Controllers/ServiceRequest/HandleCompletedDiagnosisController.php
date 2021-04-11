@@ -17,6 +17,9 @@ use Illuminate\Support\Facades\Route;
 class HandleCompletedDiagnosisController extends Controller
 {
     use Invoices, Loggable;
+    public function __construct() {
+        $this->middleware('auth:web');
+    }
     /**
      * Generate Diagnosis Invoice
      *

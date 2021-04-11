@@ -19,6 +19,10 @@ class InvoiceController extends Controller
 {
     use RegisterPaymentTransaction, Generator;
 
+    public function __construct() {
+        $this->middleware('auth:web');
+    }
+
     /**
      * Display a listing of the resource.
      *

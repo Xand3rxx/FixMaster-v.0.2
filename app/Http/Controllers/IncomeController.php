@@ -14,6 +14,12 @@ use App\Traits\Loggable;
 class IncomeController extends Controller
 {
     use Loggable;
+
+    public function __construct() {
+        $this->middleware('auth:web');
+    }
+
+
     public function index()
     {
         $incomes = Income::all();

@@ -15,6 +15,10 @@ class EarningController extends Controller
 {
     use Loggable;
 
+    public function __construct() {
+        $this->middleware('auth:web');
+    }
+
     public function index()
     {
         $earnings = Earning::all();
