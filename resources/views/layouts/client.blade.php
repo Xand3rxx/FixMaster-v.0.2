@@ -23,7 +23,7 @@
 
     <!-- Slider -->
     <link rel="stylesheet" href="{{ asset('assets/client/css/owl.carousel.min.css') }}" />
-    
+
     {{-- <link rel="stylesheet" href="{{ asset('assets/client/css/owl.theme.default.min.css') }}" /> --}}
     <!-- Main Css -->
     <link href="{{ asset('assets/client/css/style.css') }}" rel="stylesheet" type="text/css" id="theme-opt" />
@@ -56,7 +56,8 @@
     @include('layouts.partials._client_footer')
 
     {{-- <script src="{{asset('assets/frontend/js/jquery-3.5.1.min.js')}}"></script> --}}
-    <script src="{{asset('assets/client/js/jquery.min.js')}}"></script>
+{{--    <script src="{{asset('assets/client/js/jquery.min.js')}}"></script>--}}
+    <script src="{{ asset('assets/dashboard/lib/jquery/jquery.min.js') }}"></script>
     <script src="{{asset('assets/frontend/js/bootstrap.bundle.min.js')}}"></script>
     <script src="{{asset('assets/frontend/js/jquery.easing.min.js')}}"></script>
     <script src="{{asset('assets/frontend/js/scrollspy.min.js')}}"></script>

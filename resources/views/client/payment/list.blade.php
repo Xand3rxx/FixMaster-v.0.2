@@ -155,7 +155,7 @@
                                 @endif
 
                                 <td>{{ Carbon\Carbon::parse($payment->created_at, 'UTC')->isoFormat('MMMM Do YYYY, h:mm:ssa') }}</td>
-                                <td><a href="#" data-toggle="modal" data-target="#transactionDetails" data-payment-ref="{{ $payment->unique_id }}" data-url="" id="payment-details" class="btn btn-primary btn-sm ">Details</a></td>
+                                <td><a href="#" data-toggle="modal" data-target="#transactionDetails" data-payment-ref="{{ $payment->unique_id }}" data-url="{{ route('client.payment.details', ['payment' => $payment->id, 'locale' => app()->getLocale()]) }}" id="payment-details" class="btn btn-primary btn-sm ">Details</a></td>
                             </tr>
                         @endforeach
                         </tbody>
@@ -168,17 +168,18 @@
         </div>
 
 
-        <div class="modal fade" id="transactionDetails" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel2" aria-hidden="true" data-keyboard="false" data-backdrop="static">
+        <div class="modal fade" id="transactionDetails" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel2" aria-hidden="true" data-keyboard="true" data-backdrop="static">
             <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
               <div class="modal-content tx-14">
                 <div class="modal-header">
                   <h6 class="modal-title" id="exampleModalLabel2">E-Wallet Transaction Details</h6>
-                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                  </button>
+                    <a href="" role="button" class="close pos-absolute t-15 r-15" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </a>
                 </div>
                     <div class="modal-body pd-x-25 pd-sm-x-30 pd-t-40 pd-sm-t-20 pd-b-15 pd-sm-b-20" id="modal-body">
 
+                        <div id="spinner-icon"></div>
                   </div><!-- modal-body -->
                 <div class="modal-footer"></div>
               </div>
@@ -192,49 +193,6 @@
 @section('scripts')
     <script>
         $(document).ready(function() {
-            $('#request-sorting').on('change', function (){
-                let option = $("#request-sorting").find("option:selected").val();
-
-                if(option === 'None'){
-                    $('.specific-date, .sort-by-year, .date-range').addClass('d-none');
-                }
-
-                if(option === 'Date'){
-                    $('.specific-date').removeClass('d-none');
-                    $('.sort-by-year, .date-range').addClass('d-none');
-                }
-
-                if(option === 'Month'){
-                    $('.sort-by-year').removeClass('d-none');
-                    $('.specific-date, .date-range').addClass('d-none');
-                }
-
-                if(option === 'Date Range'){
-                    $('.date-range').removeClass('d-none');
-                    $('.specific-date, .sort-by-year').addClass('d-none');
-                }
-            });
-
-            $(document).on('click', '#transactionDetails', function (e) {
-                e.preventDefault();
-                let route = $(this).attr('data-url');
-                let paymentRef = $(this).attr('data-payment-ref');
-
-                $.ajax({
-                    url: route,
-                    beforeSend: function () {
-                        $("#modal-body").html('<div class="d-flex justify-content-center mt-4 mb-4"><span class="loadingspinner"></span></div>')
-                    },
-                    success: function (result) {
-                        $('#modal-body').modal("show");
-                        $('#modal-body').html("");
-                        $('#modal-body').html(result).show();
-                    },
-                    complete: function () {
-                        $("#spinner-icon").hide();
-                    },
-                    error: function (jqXHR, testStatus, error) {
-                        var message = error+ " An error occurred while trying to retrieve "+ paymentRef+ " payment history.";
             $(document).on('click', '#payment-details', function(event) {
                 event.preventDefault();
                 let route = $(this).attr('data-url');
@@ -262,6 +220,9 @@
                     },
                     timeout: 8000
                 })
+            });
+            $('.close').click(function (){
+                $(".modal-backdrop").remove();
             });
         });
     </script>

@@ -88,12 +88,18 @@
 </head>
 
 <body>
+<div class="d-flex justify-content-center mt-3 border-bottom">
+    <h5>
+        Clicking decline end the service request and diagnosis bill will be paid and you will not enjoy the discount option. While selecting accept continues to the end of the request and discount bonus will be applied here.
+    </h5>
+</div>
+
 <section class="bg-invoice">
     <div class="container">
         <div class="row mt-5 pt-4 pt-sm-0 justify-content-center">
             <div class="col-lg-10">
                 <div class="card shadow rounded border-0">
-                    <div class="card-body">
+                    <div class="card-body" style="border: 0.5px solid grey">
                         <div class="invoice-top pb-4 border-bottom">
                             <div class="row">
                                 <div class="col-md-8">
@@ -148,7 +154,9 @@
                                     </dl>
                                 </div><!--end col-->
                             </div><!--end row-->
-                            <h2 class="d-flex justify-content-center">{{ $invoice['invoice_type'] }}</h2>
+                            <div class="d-flex justify-content-center">
+                                <h2 style="border: 2px solid grey; padding: 5px">{{$invoice['invoice_type']}}</h2>
+                            </div>
                         </div>
 
                         <div class="invoice-middle py-4">
@@ -610,7 +618,7 @@
         <div class="row mt-5 pt-4 pt-sm-0 justify-content-center">
             <div class="col-lg-10">
                 <div class="card shadow rounded border-0">
-                    <div class="card-body">
+                    <div class="card-body" style="border: 0.5px solid grey">
                         <div class="invoice-top pb-4 border-bottom">
                             <div class="row">
                                 <div class="col-md-8">
@@ -653,7 +661,9 @@
                                     </dl>
                                 </div><!--end col-->
                             </div><!--end row-->
-                            <h2 class="d-flex justify-content-center">Estimated Final Invoice</h2>
+                            <div class="d-flex justify-content-center">
+                                <h2 style="border: 2px solid grey; padding: 5px">Estimated Final Invoice</h2>
+                            </div>
                         </div>
 
                         <div class="invoice-middle py-4">
@@ -809,7 +819,7 @@
     </div><!--end container-->
 </section>
 @if(auth()->user()->type->role->url == 'client')
-<div class="row justify-content-center border-top mt-4">
+<div class="row justify-content-center border-top mt-4" style="margin-bottom: 50px; padding-top: 0">
     <div class="col-lg-8 col-md-12 mt-4 mb-4 pt-2 text-center">
         <div><h3>Proceed with Service</h3></div>
         <div>

@@ -336,7 +336,7 @@ Route::prefix('/client')->group(function () {
         Route::get('loyalty',                            [ClientController::class, 'loyalty'])->name('loyalty');
         Route::any('loyalty/submit',                     [ClientController::class, 'loyaltySubmit'])->name('loyalty.submit');
         Route::get('payments',                           [ClientController::class, 'payments'])->name('payments');
-        Route::get('payments-details/{payment:uuid}',   [ClientController::class, 'paymentDetails'])->name('payment.details');
+        Route::get('payment/details/{payment:id}',   [ClientController::class, 'paymentDetails'])->name('payment.details');
 
         Route::post('/ipnpaystack',         [ClientController::class, 'paystackIPN'])->name('ipn.paystack');
         Route::get('/apiRequest',           [ClientController::class, 'apiRequest'])->name('ipn.paystackApiRequest');

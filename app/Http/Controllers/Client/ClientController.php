@@ -1131,7 +1131,9 @@ class ClientController extends Controller
 
     public function paymentDetails($language, Payment $payment)
     {
-        return view('client.payment._payment_details')->with($payment);
+        return view('client.payment._payment_details')->with([
+            'payment' => $payment
+        ]);
     }
 
     public function client_rating(Request $request, RatingController $clientratings)

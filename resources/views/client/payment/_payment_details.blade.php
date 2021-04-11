@@ -3,43 +3,39 @@
     <tbody>
         <tr>
             <td class="tx-medium" width="25%">Unique ID</td>
-            <td class="tx-color-03" width="75%">WAL-23782382</td>
+            <td class="tx-color-03" width="75%">{{ $payment['unique_id'] }}</td>
         </tr>
         <tr>
             <td class="tx-medium" width="25%">Reference No.</td>
-            <td class="tx-color-03" width="75%">32e3lh2e23083h432b</td>
+            <td class="tx-color-03" width="75%">{{ $payment['reference_id'] }}</td>
         </tr>
         <tr>
             <td class="tx-medium" width="25%">Transaction ID.</td>
-            <td class="tx-color-03" width="75%">Transaction ID returned on success should be displayed here only if payment gateway was used or UNAVAILABLE</td>
-        </tr>
-        <tr>
-            <td class="tx-medium" width="25%">Transaction Type</td>
-            <td class="tx-color-03" width="75%">Credit</td>
-        </tr>
-        <tr>
-            <td class="tx-medium" width="25%">Payment Type</td>
-            <td class="tx-color-03" width="75%"3">Funding</td>
+            <td class="tx-color-03" width="75%">{{$payment->transaction_id == null ? 'UNAVAILABLE' : $payment->transaction_id  }}</td>
         </tr>
         <tr>
             <td class="tx-medium" width="25%">Payment Channel</td>
-            <td class="tx-color-03" width="75%"3">Paystack or Flutterwave or Offline or Wallet</td>
+            <td class="tx-color-03" width="75%">{{ $payment['payment_channel'] }}</td>
         </tr>
         <tr>
             <td class="tx-medium" width="25%">Payment For</td>
-            <td class="tx-color-03" width="75%"3">Wallet</td>
+            <td class="tx-color-03" width="75%">{{ $payment['payment_for'] }}</td>
         </tr>
         <tr>
             <td class="tx-medium" width="25%">Amount</td>
-            <td class="tx-color-03" width="75%">₦{{ number_format(10000) }}</td>
+            <td class="tx-color-03" width="75%">₦{{ number_format($payment['amount']) }}</td>
         </tr>
         <tr>
             <td class="tx-medium" width="25%">Status</td>
-            <td class="text-warning" width="75%">Pending</td>
-        </tr>
-        <tr>
-            <td class="tx-medium" width="25%">Refund Reason</td>
-            <td class="tx-color-03" width="75%">This section should only be visible in a case of refund, the reason should be displayed here or UNAVAILABLE</td>
+            @if($payment->status=='success')
+                <td class="text-success" width="75%">Success</td>
+            @elseif($payment->status=='pending')
+                <td class="text-danger" width="75%">Pending</td>
+            @elseif($payment->status=='failed')
+                <td class="text-warning" width="75%">Failed</td>
+            @elseif($payment->status=='timeout')
+                <td class="text-info" width="75%">Timeout</td>
+            @endif
         </tr>
 
     </tbody>
