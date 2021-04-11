@@ -148,6 +148,7 @@
                                     </dl>
                                 </div><!--end col-->
                             </div><!--end row-->
+                            <h2 class="d-flex justify-content-center">{{ $invoice['invoice_type'] }}</h2>
                         </div>
 
                         <div class="invoice-middle py-4">
@@ -652,6 +653,7 @@
                                     </dl>
                                 </div><!--end col-->
                             </div><!--end row-->
+                            <h2 class="d-flex justify-content-center">Estimated Final Invoice</h2>
                         </div>
 
                         <div class="invoice-middle py-4">
@@ -807,7 +809,7 @@
     </div><!--end container-->
 </section>
 @if(auth()->user()->type->role->url == 'client')
-<div class="row justify-content-center border-top">
+<div class="row justify-content-center border-top mt-4">
     <div class="col-lg-8 col-md-12 mt-4 mb-4 pt-2 text-center">
         <div><h3>Proceed with Service</h3></div>
         <div>

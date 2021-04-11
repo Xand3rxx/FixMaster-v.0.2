@@ -142,7 +142,7 @@ class InvoiceController extends Controller
 
     }
 
-    public function verifyPayment()
+    public function verifyPayment(Request $request)
     {
         $track  = Session::get('Track');
         $invoiceUUID = Session::get('InvoiceUUID');
