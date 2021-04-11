@@ -532,6 +532,8 @@ tbody td, thead th {
                         
                         $('#insert_form')[0].reset(); 
                         $('#add_data_Modal').modal('hide');
+                        // $('.contact-list').html('');
+                        $('#contacts_table').html(data);
 
                      },
                      complete: function(data) {
