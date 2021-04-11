@@ -699,7 +699,7 @@ class ClientController extends Controller
         $clientContact->lga_id    = $request->lga;
         $clientContact->town_id    = $request->town;
         $client  = Client::where('user_id',auth()->user()->id)->orderBy('id','DESC')->firstOrFail();
-        $clientContact->account_id  = $client->account_id;
+        $clientContact->account_id    = $client->account_id;
         $clientContact->country_id    = '156';
         // $clientContact->is_default        = '1';
         $clientContact->phone_number       = $request->phoneNumber;

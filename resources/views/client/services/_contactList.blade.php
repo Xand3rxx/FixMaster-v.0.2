@@ -8,7 +8,6 @@
         <tbody>
             @if($myContacts) 
                 @foreach($myContacts as $k=>$myContact)
-                    @if($k > 0)
                         <tr>
                             <td>
                                 <div class="media">
@@ -32,7 +31,6 @@
                                 </div>
                             </td>
                         </tr>
-                    @endif
                 @endforeach 
             @endif
         </tbody>

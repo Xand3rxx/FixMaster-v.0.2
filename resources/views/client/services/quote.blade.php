@@ -532,7 +532,6 @@ tbody td, thead th {
                         
                         $('#insert_form')[0].reset(); 
                         $('#add_data_Modal').modal('hide');
-                        // $('.contact-list').html('');
                         $('#contacts_table').html(data);
 
                      },
@@ -542,15 +541,15 @@ tbody td, thead th {
                         var type = 'success';
                         $('#add_data_Modal').modal('hide');
                         displayMessage(message, type);
-                        $('#contacts_table').html(data);
+                        $('.contact-list').html(data);
                         // $(".contact-list").html('<div class="d-flex justify-content-center mt-4 mb-4"><span class="loadingspinner"></span></div>');  
                        
                     },
                     error: function(jqXHR, testStatus, error) {
                         var message = error+ ' An error occured while trying to save the new contact information.';
                         var type = 'error';
-                        // displayMessage(message, type);
-                        // $(".contact-list").html('Failed to save new contact.');
+                        displayMessage(message, type);
+                        $(".contact-list").html('Failed to save new contact.');
                     },
 
                     timeout: 8000  
