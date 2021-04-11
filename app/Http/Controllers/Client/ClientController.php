@@ -706,14 +706,10 @@ class ClientController extends Controller
         $clientContact->address            = $request->streetAddress;
         $clientContact->address_longitude  = $request->addressLat;
         $clientContact->address_latitude   = $request->addressLng;
-
+        // dd($clientContact);
         if ($clientContact->save()) {
-            // return back()->with('success', 'New contact saved');
-            // return response()->json(['success' => 'Data Added successfully.']);
-
             return view('client.services._contactList', [
                 'myContacts'    => Contact::where('user_id', auth()->user()->id)->get(),
-                // 'success' => 'Data Added successfully.'
             ]);
 
         } else{
@@ -733,10 +729,13 @@ class ClientController extends Controller
             $validatedData = $request->validate([            
             'balance'                   =>   'required',
             'booking_fee'               =>   'required',
-            'description'                 =>   'required',
+            'description'               =>   'required', 
             'payment_method'            =>   'required',          
-            'myContact_id'            =>   'required',          
+            'myContact_id'              =>   'required',          
+            'addressLat'                =>   'required',          
+            'addressLng'                =>   'required',          
           ]);
+
 
             // if payment method is wallet
             if($request->payment_method == 'Wallet'){
@@ -744,6 +743,7 @@ class ClientController extends Controller
                 // if wallet balance is less than the service fee
                 if($request->balance > $request->booking_fee){
                     $SavedRequest = $this->saveRequest($request);
+                    
                     // dd($service_request);
                     if ($SavedRequest) {
 
@@ -1140,9 +1140,8 @@ class ClientController extends Controller
         return $updateClientRatings->handleUpdateServiceRatings($request);
     }
 
-    public function saveRequest($request){
+    private function saveRequest($request){
         $service_request                        = new ServiceRequest();
-        // $service_request->uuid                  = auth()->user()->uuid;
         $service_request->client_id             = auth()->user()->id;
         $service_request->service_id            = $request->service_id;
         // $service_request->unique_id             = 'REF-'.$this->generateReference();
@@ -1153,12 +1152,14 @@ class ClientController extends Controller
         $service_request->status_id             = '2';
         $service_request->description           = $request->description;
         $service_request->total_amount          = $request->booking_fee;
-        $service_request->preferred_time        = Carbon::parse($request->preferred_time, 'UTC'); //fix this later before pushing
+        $service_request->preferred_time        = Carbon::parse($request->preferred_time, 'UTC'); 
         $service_request->has_client_rated      = 'No'; 
         $service_request->has_cse_rated         = 'No';
         $service_request->created_at         = Carbon::now()->toDateTimeString();
         // $service_request->updated_at         = Carbon::now()->toDateTimeString();
-        $service_request->save();
+        // $service_request->save();
+        dd($service_request);
+        // return;
 
 
         //Temporary Assign a CSE to a client's request for demo purposes

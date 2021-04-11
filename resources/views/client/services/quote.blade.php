@@ -441,6 +441,8 @@ tbody td, thead th {
    
 
 @push('scripts')
+<script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDeDLVAiaU13p2O0d3jfcPjscsbVsCQUzc&v=3.exp&libraries=places"></script>
+<script src="{{ asset('assets/js/geolocation.js') }}"></script>
 
 <script>
 
@@ -514,11 +516,11 @@ tbody td, thead th {
                     _token: "{{ csrf_token() }}",
                     firstName: $("#first-name").val(),
                     lastName: $("#last-name").val(),
-                    streetAddress: $("#street-address").val(),
                     phoneNumber: $("#phone-number").val(),
                     state: $("#state_id").val(),
                     lga: $("#lga_id").val(),
                     town: $("#town_id").val(),
+                    streetAddress: $("#street-address").val(), 
                     addressLat: $("#user_latitude").val(),
                     addressLng: $("#user_longitude").val(),
                     },  
@@ -530,8 +532,6 @@ tbody td, thead th {
                         
                         $('#insert_form')[0].reset(); 
                         $('#add_data_Modal').modal('hide');
-                        // $('.contact-list').html('');
-                        $('#contacts_table').html(data);
 
                      },
                      complete: function(data) {
@@ -540,48 +540,50 @@ tbody td, thead th {
                         var type = 'success';
                         $('#add_data_Modal').modal('hide');
                         displayMessage(message, type);
+                        $('#contacts_table').html(data);
                         // $(".contact-list").html('<div class="d-flex justify-content-center mt-4 mb-4"><span class="loadingspinner"></span></div>');  
                        
                     },
                     error: function(jqXHR, testStatus, error) {
                         var message = error+ ' An error occured while trying to save the new contact information.';
                         var type = 'error';
-                        displayMessage(message, type);
-                        $(".contact-list").html('Failed to save new contact.');
+                        // displayMessage(message, type);
+                        // $(".contact-list").html('Failed to save new contact.');
                     },
+
                     timeout: 8000  
                 }); 
         }); 
 
 
 
-        $('#submit').click(function(){
+    //     $('#submit').click(function(){
            
-                $.ajax({  
-                    url: "{{ route('client.ajax_contactForm', app()->getLocale()) }}",  
-                     method:"POST",  
-                     data: {
-                    _token: "{{ csrf_token() }}",
-                    firstName: $("#first-name").val(),
-                    lastName: $("#last-name").val(),
-                    streetAddress: $("#street-address").val(),
-                    phoneNumber: $("#phone-number").val(),
-                    state: $("#state_id").val(),
-                    lga: $("#lga_id").val(),
-                    town: $("#town_id").val(),
-                    addressLat: $("#user_latitude").val(),
-                    addressLng: $("#user_longitude").val(),
-                },  
-                     success:function(data){  
-                          $("form").trigger("reset");  
-                          $('#success_message').fadeIn().html(data);  
-                          setTimeout(function(){  
-                               $('#success_message').fadeOut("Slow");  
-                          }, 2000);  
-                     }  
-                });  
+    //             $.ajax({  
+    //                 url: "{{ route('client.ajax_contactForm', app()->getLocale()) }}",  
+    //                  method:"POST",  
+    //                  data: {
+    //                 _token: "{{ csrf_token() }}",
+    //                 firstName: $("#first-name").val(),
+    //                 lastName: $("#last-name").val(),
+    //                 streetAddress: $("#street-address").val(),
+    //                 phoneNumber: $("#phone-number").val(),
+    //                 state: $("#state_id").val(),
+    //                 lga: $("#lga_id").val(),
+    //                 town: $("#town_id").val(),
+    //                 addressLat: $("#user_latitude").val(),
+    //                 addressLng: $("#user_longitude").val(),
+    //             },  
+    //                  success:function(data){  
+    //                       $("form").trigger("reset");  
+    //                       $('#success_message').fadeIn().html(data);  
+    //                       setTimeout(function(){  
+    //                            $('#success_message').fadeOut("Slow");  
+    //                       }, 2000);  
+    //                  }  
+    //             });  
            
-      });
+    //   });
 
 
 
@@ -629,8 +631,10 @@ tbody td, thead th {
 
 
 
-@endpush @endsection
-
+@endpush 
 @include('client.services._newAddress')
+@endsection
+
+
 
 

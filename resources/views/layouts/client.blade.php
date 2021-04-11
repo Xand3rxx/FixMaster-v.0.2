@@ -228,23 +228,6 @@
 
     </script>
    @endif
-    <script>
-      tinymce.init({
-        selector: '#message_body',
-        height: 200,
-        theme: 'modern',
-        plugins: [
-          'advlist autolink lists charmap hr anchor pagebreak',
-          'searchreplace wordcount visualblocks visualchars',
-          'insertdatetime nonbreaking save table contextmenu directionality',
-          'emoticons paste textcolor colorpicker textpattern'
-        ],
-        toolbar1: 'undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent',
-        toolbar2: 'forecolor backcolor emoticons',
-        image_advtab: true
-      });
-    </script>
-
 
     <script>
         function displayMessage(message, type){
