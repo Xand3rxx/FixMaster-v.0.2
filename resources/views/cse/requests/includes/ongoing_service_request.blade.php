@@ -248,7 +248,7 @@
                     </section>
                     @endif
 
-                    <h3>Assign Additional Technician</h3>
+                    <h3>Assign New Technician</h3>
                     <section>
                         <div class="form-group col-md-12">
                             <label for="name">Assign Technician</label>

@@ -48,7 +48,7 @@
               <div class="tab-content bd bd-gray-300 bd-t-0 pd-20" id="myTabContent3">
 
                 <div class="tab-pane fade show active" id="update3" role="tabpanel" aria-labelledby="update-tab3">
-                  <small class="text-danger">This tab is only visible onc the Service request has an Ongoing status. Which logically is updated by the system or the CSE Coordinator by assigning a CSE to the request</small>
+                  <small class="text-danger">This tab is only visible once the Service request has an Ongoing status. Which logically is updated by the system or the CSE Coordinator by assigning a CSE to the request</small>
 
                   <form method="POST" action="">
                     @csrf
