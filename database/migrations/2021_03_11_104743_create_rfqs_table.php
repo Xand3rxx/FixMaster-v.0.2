@@ -24,7 +24,7 @@ class CreateRfqsTable extends Migration
             $table->foreignId('issued_by');
             $table->foreignId('client_id');
             $table->foreignId('service_request_id');
-            $table->enum('status', ['Pending', 'Awaiting', 'Delivered'])->default('Pending');
+            $table->enum('status', ['Pending', 'Awaiting', 'Delivered', 'Rejected'])->default('Pending');
             $table->enum('accepted', ['None', 'Yes', 'No'])->default('None');
             $table->unsignedInteger('total_amount')->default(0);
             $table->softDeletes();
