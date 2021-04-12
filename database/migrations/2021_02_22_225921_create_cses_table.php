@@ -28,6 +28,7 @@ class CreateCsesTable extends Migration
             
             $table->foreignId('franchisee_id')->nullable();
             $table->integer('firsttime')->default(0);
+            $table->enum('job_availability', ['Yes', 'No'])->default('Yes');
 
             $table->timestamps();
             
