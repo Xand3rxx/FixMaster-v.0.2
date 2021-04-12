@@ -9,10 +9,15 @@ use App\Models\ServiceRequestWarranty;
 use App\Models\SubStatus;
 use App\Models\Warranty;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Route;
 use Illuminate\Validation\Rules\In;
+
+use App\Traits\Loggable;
 
 class ClientDecisionController extends Controller
 {
+    use Loggable;
+
     public function __construct() {
         $this->middleware('auth:web');
     }
@@ -34,9 +39,21 @@ class ClientDecisionController extends Controller
 //            dd($request);
             if($request['invoice_type'] == 'Supplier Invoice')
             {
-                $invoice->update([
-                    'phase' => '0'
-                ]);
+                $rfq = Rfq::where('service_request_id', $invoice->serviceRequest->id)->first();
+                \Illuminate\Support\Facades\DB::transaction(function () use ($invoice, $rfq) {
+                    //Update the RFQ Table
+                    $rfq->update([
+                        'status' => 'Accepted',
+                        'accepted' => 'Yes'
+                    ]);
+
+                    // Update the Supplier Invoice row to hide the Invoice from the client
+                    $invoice->update([
+                        'phase' => '0'
+                    ]);
+                    $this->log('request', 'Informational', Route::currentRouteAction(), auth()->user()->account->last_name . ' ' . auth()->user()->account->first_name  . ' accepted supplier return invoice.');
+
+                });
                 return redirect()->route('client.service.all', app()->getLocale())->with('success', 'Supplier Return Invoice Accepted');
             }
             else
@@ -54,6 +71,7 @@ class ClientDecisionController extends Controller
                             'phase' => '0'
                         ]);
                     }
+                    $this->log('request', 'Informational', Route::currentRouteAction(), auth()->user()->account->last_name . ' ' . auth()->user()->account->first_name  . ' accepted estimated final invoice.');
                 });
                 return redirect()->route('client.service.all', app()->getLocale())->with('success', 'Estimated Final Invoice Accepted');
             }
@@ -80,7 +98,7 @@ class ClientDecisionController extends Controller
                     $invoice->update([
                         'phase' => '0'
                     ]);
-
+                    $this->log('request', 'Informational', Route::currentRouteAction(), auth()->user()->account->last_name . ' ' . auth()->user()->account->first_name  . ' declined supplier return invoice.');
                 });
                 return redirect()->route('invoice', [app()->getLocale(), $diagnosisInvoice->uuid])->with('success', 'Diagnosis Invoice Accepted');
             }
@@ -89,7 +107,7 @@ class ClientDecisionController extends Controller
                 $invoice->update([
                     'phase' => '2'
                 ]);
-
+                $this->log('request', 'Informational', Route::currentRouteAction(), auth()->user()->account->last_name . ' ' . auth()->user()->account->first_name  . ' accepted diagnosis invoice.');
                 return redirect()->route('invoice', [app()->getLocale(), $invoice->uuid])->with('success', 'Diagnosis Invoice Accepted');
             }
         }
