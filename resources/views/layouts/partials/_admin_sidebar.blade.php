@@ -218,12 +218,12 @@
           </ul>
         </li> --}}
 
-        <li class="nav-item with-sub {{ Route::currentRouteNamed('admin.warranty_list', 'admin.warranty_transaction_sort', 'admin.warranty_summary') ? 'active show' : '' }}">
+        <li class="nav-item with-sub {{ Route::currentRouteNamed('admin.warranty_list', 'admin.issued_warranty', 'admin.warranty_summary', 'admin.edit_warranty') ? 'active show' : '' }}">
           <a href="" class="nav-link"><i data-feather="award"></i> <span>Warranty Management</span></a>
           <ul>
             <li class="{{ Route::currentRouteNamed('admin.warranty_list') ? 'active' : '' }}"><a href="{{route('admin.warranty_list', app()->getLocale())}}">Add</a></li>
-            <li class="{{ Route::currentRouteNamed('admin.warranty_list', 'admin.warranty_summary') ? 'active' : '' }}"><a href="{{route('admin.warranty_list', app()->getLocale())}}">List</a></li>
-            <li class="{{ Route::currentRouteNamed('admin.warranty_transaction_sort') ? 'active' : '' }}"><a href="{{route('admin.warranty_transaction_sort', app()->getLocale())}}">Transactions</a></li>
+            <li class="{{ Route::currentRouteNamed('admin.warranty_list', 'admin.warranty_summary', 'admin.edit_warranty') ? 'active' : '' }}"><a href="{{route('admin.warranty_list', app()->getLocale())}}">List</a></li>
+            <li class="{{ Route::currentRouteNamed('admin.issued_warranty') ? 'active' : '' }}"><a href="{{route('admin.issued_warranty', app()->getLocale())}}">Issued</a></li>
           </ul>
         </li>
 
