@@ -29,20 +29,20 @@
           <tbody>
             <tr>
               <td class="tx-medium">Warranty Name</td>
-              <td class="tx-color-03">{{$warranty->name ?? ''}}</td>
+              <td class="tx-color-03">{{ !empty($warranty->name) ? $warranty->name : 'UNAVAILABLE' }}</td>
             </tr>
             <tr>
               <td class="tx-medium">Warranty Type</td>
-              <td class="tx-color-03">{{$warranty->warranty_type ?? ''}}</td>
+              <td class="tx-color-03">{{ !empty($warranty->warranty_type) ? $warranty->warranty_type : 'UNAVAILABLE' }}</td>
             </tr>
             <tr>
               <td class="tx-medium">Warranty Percentage</td>
-              <td class="tx-color-03">{{$warranty->percentage ?? ''}}</td>
+              <td class="tx-color-03">{{ !empty($warranty->percentage) ? $warranty->percentage : '0' }}</td>
             </tr>
             
             <tr>
               <td class="tx-medium">Duration</td>
-              <td class="tx-color-03">{{$warranty->duration ?? ''}}</td>
+              <td class="tx-color-03">{{ !empty($warranty->duration) ? $warranty->duration : '0' }}</td>
             </tr>
             <tr>
               <td class="tx-medium">Description</td>
@@ -53,12 +53,9 @@
               <td class="tx-color-03">{{ Carbon\Carbon::parse($warranty->created_at, 'UTC')->isoFormat('MMMM Do YYYY, h:mm:ssa') }}</td>
             </tr>
             <tr>
-              <td class="tx-medium">Date Updated</td>
-              <td class="tx-color-03">{{ Carbon\Carbon::parse($warranty->updated_at, 'UTC')->isoFormat('MMMM Do YYYY, h:mm:ssa') }}</td>
+              <td class="tx-medium">Created By</td>
+              <td class="tx-color-03">{{ $warranty->user->account->first_name.' '.$warranty->user->account->last_name }}</td>
             </tr>
-          
-          
-
             
           </tbody>
         </table>

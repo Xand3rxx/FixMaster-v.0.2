@@ -19,7 +19,7 @@
           <td>{{ !empty($warranty->name) ? $warranty->name : 'UNAVAILABLE' }}</td>
           <td>{{ $warranty->warranty_type }}</td>
           <td class="tx-medium text-center">{{ !empty($warranty->percentage) ? $warranty->percentage : '0' }}</td>
-          <td class="tx-medium text-center">{{ $warranty->duration}}</td>
+          <td class="tx-medium text-center">{{ !empty($warranty->duration) ? $warranty->duration : '0' }}</td>
           <td>{{ Carbon\Carbon::parse($warranty->created_at, 'UTC')->isoFormat('MMMM Do YYYY, h:mm:ssa') }}</td>
           <td class=" text-center">
             <div class="dropdown-file">

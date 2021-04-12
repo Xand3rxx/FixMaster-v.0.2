@@ -99,9 +99,10 @@ class WarrantyController extends Controller
 
     public function show($language, $details)
     {
+        // return Warranty::where('uuid', $details)->with('user')->firstOrFail();
         //Return the warranty object based on the uuid
         return view('admin.warranty.warranty_details', [
-            'warranty'  =>  Warranty::where('uuid', $details)->firstOrFail()
+            'warranty'  =>  Warranty::where('uuid', $details)->with('user')->firstOrFail()
         ]);
     }
 
@@ -193,15 +194,12 @@ class WarrantyController extends Controller
 
     public function issuedWarranties()
     {
-        $issuedWarranties = ServiceRequestWarranty::with('user.account')->orderBy('has_been_attended_to', 'ASC')->latest()->get();
-        
-        return $issuedWarranties;
-        
-        $data = [
-            'warranties' =>  $warranty
-        ];
+        return ServiceRequestWarranty::with('user.account', 'service_request', 'warranty')->orderBy('has_been_attended_to', 'ASC')->latest()->get();
 
-        // return view('admin.warranty.warranty_transaction', $data)->with('i');
+        //Return all issued warranties bt clients
+        return view('admin.warranty.issued_warranties', [
+            'issuedWarranties' => ServiceRequestWarranty::with('user.account', 'service_request', 'warranty')->orderBy('has_been_attended_to', 'ASC')->latest()->get()
+        ]);
     }
 
 }
