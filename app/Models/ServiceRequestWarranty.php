@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class ServiceRequestWarranty extends Model
 {
     use HasFactory;
-    
+
     protected $fillable = [
         'client_id', 'warranty_id', 'service_request_id', 'start_date', 'expiration_date', 'amount', 'status', 'initiated', 'has_been_attended_to', 'reason',
     ];

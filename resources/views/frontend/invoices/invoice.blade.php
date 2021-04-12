@@ -91,6 +91,7 @@
 
 <body>
 @if($invoice['phase'] == 1)
+    @if($invoice['invoice_type'] == 'Diagnosis Invoice')
 <div class="d-flex justify-content-center mt-5 border-bottom">
     <p style="font-size: 12px; text-align: center;">
         If you click <strong>decline</strong> , your service request will end here and you'll be required<br />to pay for diagnosis alone but you will not enjoy the discount bonus.<br>
@@ -98,6 +99,7 @@
         If you click <strong>accept</strong> , your service request continues till the end of the fix and your<br /> discount bonus will be applied.
     </p>
 </div>
+    @endif
 @elseif($invoice['phase'] == 2)
 <section class="bg-invoice pb-5">
 @else

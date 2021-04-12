@@ -68,7 +68,7 @@ class ClientDecisionController extends Controller
                 \Illuminate\Support\Facades\DB::transaction(function () use ($invoice, $diagnosisInvoice, $rfq) {
                     //Update the RFQ Table
                     $rfq->update([
-                        'status' => 'Pending',
+                        'status' => 'Rejected',
                         'accepted' => 'No'
                     ]);
                     // Update the Diagnosis Invoice row to display the Invoice to the client
