@@ -37,7 +37,7 @@ class SubStatus extends Model
     //Scope to return all services  
     public function scopeSubStatuses($query){
         return $query->select('*')
-        ->orderBy('phase', 'ASC');
+        ->orderBy('id', 'ASC');
         // ->withTrashed();
     }
 

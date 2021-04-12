@@ -76,7 +76,10 @@
                     <td class="tx-medium">
                       {{Str::title($user['account']['last_name'] .' '. $user['account']['first_name'])}}
                     </td>
+                    {{-- @else
+                    <td>UNAVAILABLE</td> --}}
                     @php break; @endphp
+
                     @endif
                   @endforeach
                   <td class="text-medium text-center">₦{{number_format($request['service_request']['total_amount']) }}</td>

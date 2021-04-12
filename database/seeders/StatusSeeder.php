@@ -185,7 +185,7 @@ class StatusSeeder extends Seeder
             ),
             array(
                 'user_id'       =>  1,
-                'uuid'          =>  '',
+                'uuid'          =>  'c0cce9c8-1fce-47c4-9529-204f403cdb1f',
                 'status_id'     =>  2,
                 'name'          =>  'Client declined Diagnosis Invoice',
                 'phase'         =>  11,
@@ -222,9 +222,9 @@ class StatusSeeder extends Seeder
             array(
                 'user_id'       =>  1,
                 'uuid'          =>  'c615f5ce-fe3b-43f7-9125-d6568eddf1c5',
-                'status_id'     =>  15,
+                'status_id'     =>  2,
                 'name'          =>  'A supplier sent an invoice',
-                'phase'         =>  1,
+                'phase'         =>  15,
                 'recurrence'    =>  'Yes',
                 'status'        =>  'active',
             ),

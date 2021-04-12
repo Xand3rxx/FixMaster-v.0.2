@@ -29,6 +29,8 @@ class CreateServiceRequestWarrantiesTable extends Migration
             $table->enum('initiated', ['Yes', 'No'])->default('No');
             $table->enum('has_been_attended_to', ['Yes', 'No'])->default('No');
             $table->text('reason')->nullable();
+            $table->dateTime('date_initiated')->nullable();
+            $table->dateTime('date_resolved')->nullable();
             $table->timestamps();
         });
     }

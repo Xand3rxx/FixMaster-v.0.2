@@ -3,6 +3,20 @@
     <div class="form-row mt-4">
         <div class="tx-13 mg-b-25">
             <div id="wizard3">
+                <h3>Update Scheduled Date</h3>
+                <section>
+                    <div class="mt-4 form-row">
+                        <div class="form-group col-md-12">
+                            <label for="delivery_time">Scheduled Date & Time</label>
+                        <input type="datetime-local" min="{{ \Carbon\Carbon::now()->isoFormat('2021-04-13 00:00:00') }}" class="form-control @error('preferred_time') is-invalid @enderror" name="preferred_time" placeholder="Enter Scheduled Date & Time" value="{{ old('preferred_time') }}" >
+                            @error('preferred_time')
+                            <span class="invalid-feedback" role="alert">
+                                <strong>{{ $message }}</strong>
+                            </span>
+                            @enderror
+                        </div>
+                    </div>
+                </section>
                 @if($latest_service_request_progress->sub_status_id > 9)
                 @if($latest_service_request_progress->sub_status_id < 11) <h3>Project Cost Estimate</h3>
                     <section>
@@ -111,7 +125,12 @@
 
                         <h5>Accept Materials Delivery</h5>
                         <div class="form-row">
-                            <div class="form-group col-md-12">
+                            <div class="form-group col-md-6">
+                                <label for="accept_materials">Verify Supplier Code</label>
+                                <input type="text" class="form-control" id="verify_code" placeholder="e.g DEV-02397432" value="">
+                            </div>
+
+                            <div class="form-group col-md-6">
                                 <label for="accept_materials">Accept Delivery</label>
                                 <select class="form-control custom-select" id="accept_materials" name="accept_materials">
                                     <option selected disabled value="" selected>Select...</option>

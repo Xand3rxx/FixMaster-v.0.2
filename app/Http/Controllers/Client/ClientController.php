@@ -1179,16 +1179,16 @@ class ClientController extends Controller
         $accountAdmin = User::where('id', '1')->first();
 
         //Validate user input fields
-     $request->validate([
+        $request->validate([
             'reason'       =>   'required',
         ]);
 
       $initateWarranty = ServiceRequestWarranty::where('client_id', auth()->user()->id)->update([
-        'status' => 'used',
-        'initiated' => 'Yes',
-        'reason' => $request->reason
-
-            ]);
+        'status'            => 'used',
+        'initiated'         => 'Yes',
+        'reason'            => $request->reason,
+        'date_initiated'    =>  \Carbon\Carbon::now('UTC'),
+      ]);
         
             $user = (object)[
                 'name' => $account->first_name,
