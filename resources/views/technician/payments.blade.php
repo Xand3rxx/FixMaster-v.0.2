@@ -1,5 +1,5 @@
 @extends('layouts.dashboard')
-@section('title', 'Quality Assurance Payments')
+@section('title', 'Technician Payments')
 @include('layouts.partials._messages')
 @section('content')
 
