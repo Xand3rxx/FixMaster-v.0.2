@@ -31,62 +31,51 @@ class WarrantyController extends Controller
     public function index()
     {
         //Return all warranty including deleted and inactive ones
-        return Warranty::AllWaranties()->get();
+        return Warranty::AllWarranties()->get();
         
         return view('admin.warranty.index', [
             'warranties' =>  $warranty
         ]);
     }
 
-   
-
     public function storeWarranty($language, Request $request)
     {
-        
 
-              //Validate user input fields
-            $request->validate([
-                'name'          =>   'required',
-                'percentage'    =>   'required',
-                'warranty_type'    =>   'required',
-                'duration'    =>   'required',
-                'description'   =>   'required', 
-            ]);
+        //Validate user input fields
+        $this->validateRequest();
 
+        $createWarranty = Warranty::create([
+            'user_id'        =>   Auth::id(),
+            'name'           =>   ucwords($request->name),
+            'percentage'     =>   $request->percentage,
+            'warranty_type'  =>   $request->warranty_type,
+            'duration'       =>   $request->duration, 
+            'description'    =>   $request->description,
+        ]);
+
+
+        if($createWarranty){
             
-            $createWarranty = Warranty::create([
-                'user_id'        =>  Auth::id(),
-                'name'           => $request->name,
-                'percentage'     =>   $request->percentage,
-                'warranty_type'  =>   $request->warranty_type,
-                'duration'       =>   $request->duration, 
-                'description'    =>   $request->description,
-            ]);
+            $type = 'Others';
+            $severity = 'Informational';
+            $actionUrl = Route::currentRouteAction();
+            $message = Auth::user()->email.' created '.ucwords($request->input('name')).' warranty';
+            $this->log($type, $severity, $actionUrl, $message);
 
+            return redirect()->route('admin.warranty_list', app()->getLocale())->with('success', ucwords($request->input('name')).' warranty was successfully updated.');
 
-            if($createWarranty){
+        }else{
+            
+            $type = 'Errors';
+            $severity = 'Error';
+            $actionUrl = Route::currentRouteAction();
+            $message = 'An error occurred while '.Auth::user()->email.' was trying to create warranty.';
+            $this->log($type, $severity, $actionUrl, $message);
 
-               
-                $type = 'Others';
-                $severity = 'Informational';
-                $actionUrl = Route::currentRouteAction();
-                $message = Auth::user()->email.' saved '.ucwords($request->input('name')).' warranty';
-                $this->log($type, $severity, $actionUrl, $message);
-    
-                return redirect()->route('admin.warranty_list', app()->getLocale())->with('success', ucwords($request->input('name')).' warranty was successfully updated.');
-    
-            }else{
-                
-                $type = 'Errors';
-                $severity = 'Error';
-                $actionUrl = Route::currentRouteAction();
-                $message = 'An error occurred while '.Auth::user()->email.' was trying to create warranty.';
-                $this->log($type, $severity, $actionUrl, $message);
-    
-                return back()->with('error', 'An error occurred while trying to create '.ucwords($request->input('name')).' Warranty.');
-            }
-    
-            return back()->withInput();
+            return back()->with('error', 'An error occurred while trying to create '.ucwords($request->input('name')).' Warranty.');
+        }
+
+        return back()->withInput();
                
     }
 
@@ -95,8 +84,9 @@ class WarrantyController extends Controller
      */
     private function validateRequest(){
         return request()->validate([
-            'warranty_name' =>   'required|unique:warranty,name',
+            'warranty_name' =>   'required|unique:warranties,name',
             'percentage'    =>   'required|numeric',
+            'duration'      =>   'required|numeric',
             'warranty_type' =>   'required', 
             'description'   =>   'required', 
         ]);

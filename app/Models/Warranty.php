@@ -36,21 +36,32 @@ class Warranty extends Model
 
     }
 
+    public function scopeWarranties($query){
+        return $query->select('*')
+        ->orderBy('name', 'ASC');
+    }
+
     /**
-     * Scope a query to only include active banches
+     * Scope a query to only return all warranties either deleted or inactive
      *
      * @param \Illuminate\Database\Eloquent\Builder $query
      * @return \Illuminate\Database\Eloquent\Builder
      */
-    //Scope to return all active services
     public function scopeAllWarranties($query){
         return $query->select('*')
-            ->whereNull('deleted_at')
+            // ->whereNull('deleted_at')
             ->orderBy('name', 'ASC');
     }
 
-    public function scopeWarranties($query){
+    /**
+     * Scope a query to only return all warranties either deleted or inactive
+     *
+     * @param \Illuminate\Database\Eloquent\Builder $query
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function scopeActiveWarranties($query){
         return $query->select('*')
-        ->orderBy('name', 'ASC');
+            ->whereNull('deleted_at')
+            ->orderBy('name', 'ASC');
     }
 }
