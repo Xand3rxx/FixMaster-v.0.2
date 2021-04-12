@@ -52,7 +52,7 @@
                               <div class="form-group position-relative">
                                   <label>Your Email</label>
                                   <i data-feather="mail" class="fea icon-sm icons"></i>
-                                  <input name="email" id="email" type="email" class="form-control pl-5" value="{{$client->user->email}}" readonly disabled placeholder="Your E-Mail :" />
+                                  <input name="email" id="email" type="email" class="form-control pl-5" value="{{$client->user->email}}" readonly placeholder="Your E-Mail :" />
                               </div>
                           </div>
                           <!--end col-->
@@ -76,7 +76,7 @@
                             </div>
                         <!--end col-->
                         <!-- gender -->
-                        <div class="col-md-4">
+                        <div class="col-md-3">
                             <label>Gender</label>
                             <select name="gender" id="gender" class="form-control @error('gender') is-invalid @enderror" required>
                             <option value="">Choose....</option>
@@ -85,7 +85,7 @@
                             </select> 
                         </div>
                           <!-- State -->
-                          <div class="col-md-4">
+                          <div class="col-md-3">
                               <div class="form-group position-relative">
                                   <label>State <span class="text-danger">*</span></label>
                                   <i data-feather="map-pin" class="fea icon-sm icons"></i>
@@ -103,8 +103,8 @@
                               </div>
                           </div>
                           <!--End row-->
-                          <!-- Town/City -->
-                          <div class="col-md-4">
+                          <!-- LGA -->
+                          <div class="col-md-3">
                              <div class="form-group position-relative">
                                 <label>L.G.A <span class="text-danger">*</span></label>
                                 <i data-feather="map" class="fea icon-sm icons"></i>
@@ -113,13 +113,29 @@
                                     @foreach($lgas as $lga)
                                     <option value="{{ $client->user->account->lga_id }}" {{old('lga_id') == $lga->id ? 'selected' : ''}} @if($client->user->account->lga_id == $lga->id) selected @endif>{{ $lga->name }}</option>
                                     @endforeach
-                         </select>
+                               </select>
                                 @error('lga_id')
                                 <span class="invalid-feedback" role="alert">
                                     <strong>{{ $message }}</strong>
                                 </span>
                                 @enderror
                             </div>
+                        </div>
+                          <!--End row-->
+                          <!-- Town -->
+                          <div class="col-md-3">
+                          <div class="form-group position-relative">
+                                <label>Town/City <span class="text-danger">*</span></label>
+
+                                <select class="form-control pl-5 @error('town_id') is-invalid @enderror" name="town_id" id="town_id">
+                                    <option selected value="">Select...</option>
+                                </select>
+                                @error('town_id')
+                                <span class="invalid-feedback" role="alert">
+                                    <strong>{{ $message }}</strong>
+                                </span>
+                                @enderror
+                             </div>
                         </div>
                           <!--End row-->
                           <!-- Residential Address -->
@@ -135,6 +151,11 @@
                               </div>
                           </div>
                       </div>
+
+                      <!-- hidden fields -->
+                      <input type="hidden" value="" id="user_latitude" name="user_latitude"/>
+                      <input type="hidden" value="" id="user_longitude" name="user_longitude"/>
+                      <!--end col-->
                      
                       <!--end row-->
                       <div class="row">
@@ -263,11 +284,6 @@ $(document).ready(function() {
             let stateId = $('#state_id').find('option:selected').val();
             let stateName = $('#state_id').find('option:selected').text();
 
-            // $.ajaxSetup({
-            //         headers: {
-            //             'X-CSRF_TOKEN':$('meta[name="csrf-token"]').attr('content')
-            //         }
-            //     });
             $.ajax({
                 url: "{{ route('lga_list', app()->getLocale()) }}",
                 method: "POST",
@@ -287,6 +303,37 @@ $(document).ready(function() {
                 },
             })
         });
+
+        // AJAX to get the towns of a particular LGA
+        $("#lga_id").on("change", function () {
+            let stateId = $("#state_id").find("option:selected").val();
+            let stateName = $("#state_id").find("option:selected").text();
+
+            let lgaId = $("#lga_id").find("option:selected").val();
+            let lgaName = $("#lga_id").find("option:selected").text();
+
+            $.ajax({
+                url: "{{ route('ward_list', app()->getLocale()) }}",
+                method: "POST",
+                dataType: "JSON",
+                data: {
+                    _token: "{{ csrf_token() }}",
+                    state_id: stateId,
+                    lga_id: lgaId,
+                },
+                success: function (data) {
+                    if (data) {
+                        $("#town_id").html(data.townList);
+                    } else {
+                        var message = "Error occured while trying to get wards in " + lgaName + " local government";
+                        var type = "error";
+                        displayMessage(message, type);
+                    }
+                },
+            });
+        });
+
+
     });
 
     $(document).on('click', '.change-picture', function (){

@@ -373,6 +373,8 @@ Route::prefix('/client')->group(function () {
         Route::post('/ajax_contactForm',            [ClientController::class, 'ajax_contactForm'])->name('ajax_contactForm');
 
         Route::get('myContactList',                 [ClientController::class, 'myContactList'])->name('service.myContacts');
+        
+        Route::post('/submit_ratings',              [ClientController::class, 'client_rating'])->name('handle.ratings');
     });
 });
 

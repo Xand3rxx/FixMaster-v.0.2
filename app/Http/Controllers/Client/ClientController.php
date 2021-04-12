@@ -37,6 +37,7 @@ use App\Models\ServiceRequestWarranty;
 use App\Traits\Utility;
 use App\Traits\Loggable;
 use Session;
+use Image;
 
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\SMTP;
@@ -177,7 +178,7 @@ class ClientController extends Controller
 
         $data['states'] = State::select('id', 'name')->orderBy('name', 'ASC')->get();
 
-        $data['lgas'] = Lga::select('id', 'name')->orderBy('name', 'ASC')->get();
+        $data['lgas'] = Lga::select('id', 'name')->where('state_id', Account::where('user_id',auth()->user()->id)->orderBy('id','ASC')->firstOrFail()->state_id)->orderBy('name', 'ASC')->get();
 
         return view('client.settings', $data);
     }
@@ -185,13 +186,14 @@ class ClientController extends Controller
 
     public function update_profile(Request $request)
     {
+        // $all = $request->all();
+        // dd($all);
+        // return;
         $img = $request->file('profile_avater');
         $allowedExts = array('jpg', 'png', 'jpeg');
 
         $validatedData = $request->validate([
             'first_name'  => 'required|max:255',
-            'middle_name' => 'required|max:255',
-            'last_name'   => 'required|max:255',
             'gender'   => 'required',
             'phone_number'   => 'required|max:255',
             'email'       => 'required|email|max:255',
@@ -210,55 +212,49 @@ class ClientController extends Controller
             'full_address'   => 'required|max:255',
           ]);
 
-         //user table
-        $user_data = User::find(auth()->user()->id);
-        $user_data['email'] = $request->email;
-        $user_data->update();
+        // update contact table
+        $contact = Contact::where('user_id', auth()->user()->id)->orderBy('id','ASC')->firstOrFail();
+        $contact->name              = $request->first_name. ' ' . $request->middle_name.' '. $request->last_name;
+        $contact->state_id          = $request->state_id;
+        $contact->lga_id            = $request->lga_id;
+        $contact->town_id           = $request->town_id;
+        $contact->account_id        = Client::where('user_id',auth()->user()->id)->orderBy('id','ASC')->firstOrFail()->account_id;
+        $contact->country_id        = '156';
+        $contact->phone_number      = $request->phone_number;
+        $contact->address           = $request->full_address;
+        $contact->address_longitude = $request->user_longitude;
+        $contact->address_latitude  = $request->user_latitude;
+        $contact->update();
 
-        // update phones
-        $phones = Phone::where('user_id', auth()->user()->id)->orderBy('id','DESC')->first();
-        $phones->number = $request->phone_number;
-        $phones->update();
-        // update address
-        $addresses = Address::where('user_id', auth()->user()->id)->orderBy('id','DESC')->first();
-        $addresses->address = $request->full_address;
-        $addresses->update();
-
-
-            //  $client_data = Account::find(auth()->user()->id);
-             $client_data = Account::where('user_id', auth()->user()->id)->orderBy('id','DESC')->first();
-            // if ($client_data->user_id) {
-                //account table
-                $client_data->first_name = $request->first_name;
-                $client_data->middle_name = $request->middle_name;
-                $client_data->last_name = $request->last_name;
-                $client_data->gender = $request->gender;
-
-                if($request->hasFile('profile_avater')){
-                    $image = $request->file('profile_avater');
-                    $imageName = sha1(time()) .'.'.$image->getClientOriginalExtension();
-                    $imagePath = public_path('assets/user-avatars').'/'.$imageName;
-                    //Delete old image
-                    if(\File::exists(public_path('assets/user-avatars/'.$request->input('old_avatar')))){
-                        $done = \File::delete(public_path('assets/user-avatars/'.$request->input('old_avatar')));
-                        if($done){
-                            // echo 'File has been deleted';
-                        }
-                    }
-                    //Move new image to `client-avatars` folder
-                    Image::make($image->getRealPath())->resize(220, 220)->save($imagePath);
-                    $client_data->avatar = $imageName;
-                }else{
-                    // $imageName = $request->input('old_avatar'); profile_avater
-                    $client_data->avatar = $request->input('old_avatar');
+        // update account table
+        $account = Account::where('user_id', auth()->user()->id)->orderBy('id','ASC')->firstOrFail();
+        $account->state_id = $request->state_id;
+        $account->lga_id = $request->lga_id;
+        $account->town_id = $request->town_id;
+        $account->first_name = $request->first_name;
+        $account->middle_name = $request->middle_name;
+        $account->last_name = $request->last_name;
+        $account->gender = $request->gender;
+        // $account->avatar = $request->input('old_avatar');
+        if($request->hasFile('profile_avater')){
+            $image = $request->file('profile_avater');
+            $imageName = sha1(time()) .'.'.$image->getClientOriginalExtension();
+            $imagePath = public_path('assets/user-avatars').'/'.$imageName;
+            //Delete old image
+            if(\File::exists(public_path('assets/user-avatars/'.$request->input('old_avatar')))){
+                $done = \File::delete(public_path('assets/user-avatars/'.$request->input('old_avatar')));
+                if($done){
+                    // echo 'File has been deleted';
                 }
-
-                $client_data->state_id = $request->state_id;
-                $client_data->lga_id = $request->lga_id;
-                $client_data->save();
-                // dd($client_data);
-            // }
-
+            }
+            //Move new image to `client-avatars` folder
+            Image::make($image->getRealPath())->resize(220, 220)->save($imagePath);
+            $account->avatar = $imageName;
+        }else{
+            // $imageName = $request->input('old_avatar'); profile_avater
+            $account->avatar = $request->input('old_avatar');
+        }
+        $account->update();
 
         // if($user_data){
         Session::flash('success', 'Profile updated successfully!');
