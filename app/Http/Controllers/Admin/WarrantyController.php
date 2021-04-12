@@ -99,9 +99,10 @@ class WarrantyController extends Controller
 
     public function show($language, $details)
     {
+        // return Warranty::where('uuid', $details)->with('user')->firstOrFail();
         //Return the warranty object based on the uuid
         return view('admin.warranty.warranty_details', [
-            'warranty'  =>  Warranty::where('uuid', $details)->firstOrFail()
+            'warranty'  =>  Warranty::where('uuid', $details)->with('user')->firstOrFail()
         ]);
     }
 
@@ -125,14 +126,21 @@ class WarrantyController extends Controller
             'description'   =>   'required', 
         ]);
 
+        //Set 'createWarranty` to false
+        (bool) $updateWarranty = false;
 
         //Update Warranty
-        $updateWarranty= Warranty::where('uuid', $details)->update([
-            'name'          =>   ucwords($request->name),
-            'percentage'    =>   $request->percentage,
-            'warranty_type'    =>   $request->warranty_type,
-            'description'   =>   $request->description,
-        ]);
+        DB::transaction(function () use ($request, &$updateWarranty, $details) {
+
+            $updateWarranty= Warranty::where('uuid', $details)->update([
+                'name'          =>   ucwords($request->name),
+                'percentage'    =>   $request->percentage,
+                'warranty_type' =>   $request->warranty_type,
+                'description'   =>   $request->description,
+            ]);
+
+            $updateWarranty = true;
+        });
         
         if($updateWarranty){
 
@@ -153,7 +161,7 @@ class WarrantyController extends Controller
             $message = 'An error occurred while '.Auth::user()->email.' was trying to update warranty.';
             $this->log($type, $severity, $actionUrl, $message);
 
-            return back()->with('error', 'An error occurred while trying to update '.ucwords($request->input('name')).' Warranty.');
+            return back()->with('error', 'An error occurred while trying to update '.ucwords($request->input('name')).' warranty.');
         }
 
         return back()->withInput();
@@ -164,9 +172,7 @@ class WarrantyController extends Controller
     {
         $warrantyExist = Warranty::where('uuid', $details)->firstOrFail();
 
-        // $softDeleteWarranty = $warrantyExist->delete();
-
-        return $warrantyExist;
+        $softDeleteWarranty = $warrantyExist->delete();
 
         if ($softDeleteWarranty){
             $type = 'Others';
@@ -174,49 +180,26 @@ class WarrantyController extends Controller
             $actionUrl = Route::currentRouteAction();
             $message = Auth::user()->email.' deleted '.$warrantyExist->name;
             $this->log($type, $severity, $actionUrl, $message);
-            return redirect()->route('admin.warranty_list', app()->getLocale())->with('success', 'warranty has been deleted successfully.');
+            return redirect()->route('admin.warranty_list', app()->getLocale())->with('success', $warrantyExist->name.' warranty has been deleted successfully.');
         }
         else {
             $type = 'Errors';
             $severity = 'Error';
             $actionUrl = Route::currentRouteAction();
-            $message = 'An Error Occured while '. Auth::user()->email. ' was trying to delete '.$details->name;
+            $message = 'An Error Occured while '. Auth::user()->email. ' was trying to delete '.$warrantyExist->name;
             $this->log($type, $severity, $actionUrl, $message);
-            return back()->with('error', 'An error occurred while trying to delete ');
+            return back()->with('error', 'An error occurred while trying to delete '.$warrantyExist->name);
         }
     }
 
-
-    public function warrantyTransactionSort(Request $request)
+    public function issuedWarranties()
     {
-       
+        return ServiceRequestWarranty::with('user.account', 'service_request', 'warranty')->orderBy('has_been_attended_to', 'ASC')->latest()->get();
 
-            // $user = Auth::user();
-            // $payments = $user->payments();
-            $years =  $this->getDistinctYears($tableName = 'warranty_payments'); 
-    
-            //$payments = WarrantyPayment::where('recipient_id',Auth::id())
-            //->orderBy('created_at', 'DESC')->get();
-            $warranties = ServiceRequestWarranty::with('user', 'user.account')->get();
-
-            return view('admin.warranty.warranty_sort', compact('years', 'warranties',));
-    }
-
-    public function warrantyTransaction()
-    {
-
-        //return view('admin.users.cse.index')->with([
-          //  'users' => \App\Models\Cse::with('user', 'user.account', 'user.contact', 'user.roles')->withCount('service_request_assgined')->get(),
-        //]);
-        $warranty = ServiceRequestWarranty::with('user', 'user.account')->get();
-        
-
-        //Append collections to $data array
-        $data = [
-            'warranties' =>  $warranty
-        ];
-
-        return view('admin.warranty.warranty_transaction', $data)->with('i');
+        //Return all issued warranties bt clients
+        return view('admin.warranty.issued_warranties', [
+            'issuedWarranties' => ServiceRequestWarranty::with('user.account', 'service_request', 'warranty')->orderBy('has_been_attended_to', 'ASC')->latest()->get()
+        ]);
     }
 
 }

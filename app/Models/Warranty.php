@@ -54,7 +54,7 @@ class Warranty extends Model
     }
 
     /**
-     * Scope a query to only return all warranties either deleted or inactive
+     * Scope a query to only return all active warranties regardless of the stype
      *
      * @param \Illuminate\Database\Eloquent\Builder $query
      * @return \Illuminate\Database\Eloquent\Builder
@@ -66,7 +66,7 @@ class Warranty extends Model
     }
 
     /**
-     * Scope a query to only return all warranties either deleted or inactive
+     * Scope a query to only return all active extended warranties
      *
      * @param \Illuminate\Database\Eloquent\Builder $query
      * @return \Illuminate\Database\Eloquent\Builder
@@ -76,5 +76,10 @@ class Warranty extends Model
             ->where('warranty_type', 'Extended')
             ->whereNull('deleted_at')
             ->orderBy('duration', 'ASC');
+    }
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
     }
 }
