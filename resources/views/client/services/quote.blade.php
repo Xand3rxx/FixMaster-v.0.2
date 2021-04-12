@@ -534,25 +534,25 @@ tbody td, thead th {
                         $('#add_data_Modal').modal('hide');
                         $('#contacts_table').html(data);
 
-                     },
-                     complete: function(data) {
-                        // $(".contact-list").hide();
-                        var message = ' New contact saved.';
-                        var type = 'success';
-                        $('#add_data_Modal').modal('hide');
-                        displayMessage(message, type);
-                        $('.contact-list').html(data);
-                        // $(".contact-list").html('<div class="d-flex justify-content-center mt-4 mb-4"><span class="loadingspinner"></span></div>');  
+                     }
+                    //  complete: function(data) {
+                    //     // $(".contact-list").hide();
+                    //     var message = ' New contact saved.';
+                    //     var type = 'success';
+                    //     $('#add_data_Modal').modal('hide');
+                    //     displayMessage(message, type);
+                    //     $('.contact-list').html(data);
+                    //     // $(".contact-list").html('<div class="d-flex justify-content-center mt-4 mb-4"><span class="loadingspinner"></span></div>');  
                        
-                    },
-                    error: function(jqXHR, testStatus, error) {
-                        var message = error+ ' An error occured while trying to save the new contact information.';
-                        var type = 'error';
-                        displayMessage(message, type);
-                        $(".contact-list").html('Failed to save new contact.');
-                    },
+                    // },
+                    // error: function(jqXHR, testStatus, error) {
+                    //     var message = error+ ' An error occured while trying to save the new contact information.';
+                    //     var type = 'error';
+                    //     displayMessage(message, type);
+                    //     $(".contact-list").html('Failed to save new contact.');
+                    // },
 
-                    timeout: 8000  
+                    // timeout: 8000  
                 }); 
         }); 
 
