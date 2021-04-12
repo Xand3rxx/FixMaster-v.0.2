@@ -77,7 +77,7 @@
 
                             <div class="form-group col-md-4">
                                 <label for="delivery_time">Delivery Time</label>
-                                <input type="text" min="{{ \Carbon\Carbon::now()->isoFormat('2021-04-07 08:53:12') }}" class="form-control @error('delivery_time') is-invalid @enderror" name="delivery_time" id="service-date-time" value="{{ $service_request['rfqs'][0]['rfqSupplier']['delivery_time'] }}" readonly>
+                                <input type="text" min="{{ \Carbon\Carbon::now()->isoFormat('2021-04-07 08:53:12') }}" class="form-control @error('delivery_time') is-invalid @enderror" name="delivery_time" value="{{ $service_request['rfqs'][0]['rfqSupplier']['delivery_time'] }}" readonly>
                                 @error('delivery_time')
                                 <span class="invalid-feedback" role="alert">
                                     <strong>{{ $message }}</strong>
