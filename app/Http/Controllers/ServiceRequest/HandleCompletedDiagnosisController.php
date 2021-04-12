@@ -173,6 +173,7 @@ class HandleCompletedDiagnosisController extends Controller
             'rfqExists' => $invoice->rfq_id,
             'serviceRequestID' => $serviceRequest->id,
             'serviceRequestUUID' => $serviceRequest->uuid,
+            'client_id' => $invoice->serviceRequest->client_id,
             'get_fixMaster_royalty' => $get_fixMaster_royalty,
             'fixmaster_royalty_value' => $fixMaster_royalty_value,
             'subTotal' => $subTotal,

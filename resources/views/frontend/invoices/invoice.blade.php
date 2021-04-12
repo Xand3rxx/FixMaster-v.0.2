@@ -36,6 +36,8 @@
     <link href="{{ asset('assets/dashboard/lib/select2/css/select2.min.css') }}" rel="stylesheet">
     <link href="{{ asset('assets/dashboard/lib/prismjs/themes/prism-vs.css') }}" rel="stylesheet">
     <link rel="stylesheet" href="{{ asset('assets/client/css/jquery.datetimepicker.min.css') }}">
+    <link href="{{ asset('assets/client/css/magnific-popup.css') }}" rel="stylesheet" type="text/css" />
+    <link href="{{ asset('assets/client/css/sweetalert2.min.css') }}" rel="stylesheet" type="text/css" />
     <link rel="stylesheet" href="https://cdn.datatables.net/buttons/1.6.5/css/buttons.dataTables.min.css">
     @yield('css')
 
@@ -89,6 +91,7 @@
 
 <body>
 @if($invoice['phase'] == 1)
+    @if($invoice['invoice_type'] == 'Diagnosis Invoice')
 <div class="d-flex justify-content-center mt-5 border-bottom">
     <p style="font-size: 12px; text-align: center;">
         If you click <strong>decline</strong> , your service request will end here and you'll be required<br />to pay for diagnosis alone but you will not enjoy the discount bonus.<br>
@@ -96,6 +99,7 @@
         If you click <strong>accept</strong> , your service request continues till the end of the fix and your<br /> discount bonus will be applied.
     </p>
 </div>
+    @endif
 @elseif($invoice['phase'] == 2)
 <section class="bg-invoice pb-5">
 @else
@@ -274,7 +278,7 @@
                                         </thead>
                                         <tbody>
                                         <tr>
-                                            <td class="text-left">{{ $invoice->rfqs->rfqSupplier->name }}</td>
+                                            <td class="text-left">{{ $invoice->rfqs->rfqSupplier->supplier->account->first_name }} {{ $invoice->rfqs->rfqSupplier->supplier->account->last_name }}</td>
                                             <td class="text-left">₦ {{ number_format($invoice->rfqs->rfqSupplier->devlivery_fee) }}</td>
                                             <td class="text-left">{{ Carbon\Carbon::parse($invoice->rfqs->rfqSupplier->delivery_time, 'UTC')->isoFormat('MMMM Do YYYY') }}</td>
                                         </tr>
@@ -290,7 +294,7 @@
                                             <th scope="col" class="text-left">Component Name</th>
                                             <th scope="col" class="text-left">Model Number</th>
                                             <th scope="col" class="text-left">Quantity</th>
-                                            <th scope="col" class="text-left">Amount</th>
+                                            <th scope="col" class="text-left">Unit Price</th>
                                             <th scope="col" class="text-left">Total</th>
                                         </tr>
                                         </thead>
@@ -301,8 +305,8 @@
                                                 <td class="text-left">{{ $item->component_name }}</td>
                                                 <td class="text-left">{{ $item->model_number }}</td>
                                                 <td class="text-left">{{ $item->quantity }}</td>
+                                                <td class="text-left">₦ {{ number_format($item->amount / $item->quantity) }}</td>
                                                 <td class="text-left">₦ {{ number_format($item->amount) }}</td>
-                                                <td class="text-left">₦ {{ number_format($item->quantity * $item->amount) }}</td>
                                             </tr>
                                         @endforeach
                                         </tbody>
@@ -311,7 +315,7 @@
                                 <div class="row">
                                     <div class="col-lg-4 col-md-5 ml-auto">
                                         <ul class="list-unstyled h5 font-weight-normal mt-4 mb-0">
-                                            <li class="d-flex justify-content-between">Total :<span>₦ {{ number_format($invoice->rfqs->total_amount + $invoice->rfqs->rfqSupplier->devlivery_fee) }}</span></li>
+                                            <li class="d-flex justify-content-between">Total :<span>₦ {{ number_format($invoice->rfqs->total_amount) }}</span></li>
                                             {{--                                                                    <li class="text-muted d-flex justify-content-between">Labour Cost :<span> ₦ {{ number_format(3500) }}</span></li>--}}
                                             {{--                                                                    <li class="text-muted d-flex justify-content-between">FixMaster Royalty :<span> ₦ {{ number_format(5000) }}</span></li>--}}
                                             {{--                                                                    <li class="text-muted d-flex justify-content-between">Taxes :<span> ₦ {{ number_format(253) }}</span></li>--}}
@@ -824,22 +828,30 @@
         </div><!--end row-->
     </div><!--end container-->
 </section>
+@endif
 @if(auth()->user()->type->role->url == 'client')
+    @if($invoice['phase'] == 1)
 <div class="row justify-content-center border-top mt-4" style="margin-bottom: 50px; padding-top: 0">
     <div class="col-lg-8 col-md-12 mt-4 mb-4 pt-2 text-center">
         <div><h3>Proceed with Service</h3></div>
-        <div>
+        <div class="d-flex justify-content-center">
+            @if($invoice['invoice_type'] == 'Supplier Invoice')
             <form method="POST" action="{{ route('client.decision', app()->getLocale()) }}">
                 @csrf
                 <input type="hidden" name="request_id" value="{{ $serviceRequestID }}">
                 <input type="hidden" name="invoice_id" value="{{ $invoice['id'] }}">
+                <input type="hidden" name="invoice_type" value="{{ $invoice['invoice_type'] }}">
                 <input type="hidden" name="request_uuid" value="{{ $serviceRequestUUID }}">
                 <button class="btn btn-outline-primary" name="client_choice" value="accepted">Client Accept</button>
-                <button class="btn btn-outline-primary" name="client_choice" value="declined">Client Decline</button>
             </form>
+            @else
+                <a href="#" data-toggle="modal" data-target="#clientAccept" data-payment-ref="" data-url="" id="payment-details" class="btn btn-outline-primary ">Client Accept</a>
+            @endif
+            <a href="#" data-toggle="modal" data-target="#clientDecline" data-payment-ref="" data-url="" id="payment-details" class="btn btn-outline-primary ">Client Decline</a>
         </div>
     </div>
 </div>
+        @endif
 @else
     <div class="row justify-content-center border-top">
         <div class="col-lg-8 col-md-12 mt-4 mb-4 pt-2 text-center">
@@ -849,7 +861,116 @@
         </div>
     </div>
 @endif
-@endif
+
+        @if(auth()->user()->type->role->url == 'client')
+        <div class="modal fade" id="clientAccept" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel2" aria-hidden="true" data-keyboard="true" data-backdrop="static">
+            <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+                <div class="modal-content tx-14">
+                    <div class="modal-header">
+                        <h6 class="modal-title" id="exampleModalLabel2">Select Warranty Type</h6>
+                        <a href="" role="button" class="close pos-absolute t-15 r-15" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </a>
+                    </div>
+                    <div class="modal-body pd-x-25 pd-sm-x-30 pd-t-40 pd-sm-t-20 pd-b-15 pd-sm-b-20" id="modal-body">
+                        <div class="container">
+                            <div class="mb-4">
+                                <span>Selected warranty will be applied on the final invoice</span>
+                            </div>
+                            <form method="POST" action="{{ route('client.decision', app()->getLocale()) }}">
+                                @csrf
+                                <input type="hidden" name="request_id" value="{{ $serviceRequestID }}">
+                                <input type="hidden" name="invoice_id" value="{{ $invoice['id'] }}">
+                                <input type="hidden" name="client_id" value="{{ $client_id }}">
+                                <input type="hidden" name="request_uuid" value="{{ $serviceRequestUUID }}">
+                                <input type="hidden" name="client_choice" value="accepted">
+                                <input type="hidden" name="amount" value="{{ $invoice['labour_cost'] + $invoice['materials_cost'] }}">
+                                @foreach($ActiveWarranties as $ActiveWarranty)
+                                    <div class="form-group">
+                                        <div class="custom-control custom-radio">
+                                            <input class="custom-control-input" type="radio" name="warranty_id" id="inlineRadio{{ $ActiveWarranty->id }}" value="{{ $ActiveWarranty->id }}" data-warranty-id="{{$ActiveWarranty->id}}">
+                                            <label class="custom-control-label" for="inlineRadio{{ $ActiveWarranty->id }}">{{ $ActiveWarranty->name }} - (₦ {{ number_format($ActiveWarranty->percentage * ($invoice['materials_cost'] + $invoice['labour_cost']), 2) }}) - (id : {{ $ActiveWarranty->id }})</label><br>
+                                        </div>
+                                    </div>
+                                @endforeach
+
+
+                        </div>
+                    </div><!-- modal-body -->
+                    <div class="modal-footer">
+                        <button class="btn btn-primary">Submit</button>
+                    </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <div class="modal fade" id="clientDecline" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel2" aria-hidden="true" data-keyboard="true" data-backdrop="static">
+            <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+                <div class="modal-content tx-14">
+                    <div class="modal-header">
+                        <h6 class="modal-title" id="exampleModalLabel2">Select Warranty Type</h6>
+                        <a href="" role="button" class="close pos-absolute t-15 r-15" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </a>
+                    </div>
+                    <div class="modal-body pd-x-25 pd-sm-x-30 pd-t-40 pd-sm-t-20 pd-b-15 pd-sm-b-20" id="modal-body">
+                        <div class="container">
+                            <div class="mb-4 d-flex justify-content-center">
+                                <h3>Are you want to decline?</h3>
+                            </div>
+                            <form method="POST" action="{{ route('client.decision', app()->getLocale()) }}" class="d-flex justify-content-center">
+                                @csrf
+                                <input type="hidden" name="request_id" value="{{ $serviceRequestID }}">
+                                <input type="hidden" name="invoice_id" value="{{ $invoice['id'] }}">
+                                @if($invoice['invoice_type'] == 'Supplier Invoice')
+                                    <input type="hidden" name="invoice_type" value="{{ $invoice['invoice_type'] }}">
+                                @endif
+                                <input type="hidden" name="request_uuid" value="{{ $serviceRequestUUID }}">
+                                <div class="row mb-4">
+                                    <div class="mr-3">
+                                        <button class="btn btn-outline-primary" name="client_choice" value="declined">Yes! Decline</button>
+                                    </div>
+                                    <div class="ml-3">
+                                        <a href="" role="button" class="btn btn-outline-primary" data-dismiss="modal" aria-label="Close">
+                                            Cancel
+                                        </a>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        @endif
+        <script src="{{asset('assets/frontend/js/jquery-3.5.1.min.js')}}"></script>
+        {{-- <script src="{{asset('assets/client/js/jquery.min.js')}}"></script> --}}
+        <script src="{{asset('assets/frontend/js/bootstrap.bundle.min.js')}}"></script>
+        <script src="{{asset('assets/frontend/js/jquery.easing.min.js')}}"></script>
+        <script src="{{asset('assets/frontend/js/scrollspy.min.js')}}"></script>
+        <script src="{{asset('assets/frontend/js/owl.carousel.min.js')}}"></script>
+        <script src="{{asset('assets/frontend/js/owl.init.js')}}"></script>
+        <!-- Icons -->
+        <script src="{{asset('assets/frontend/js/feather.min.js')}}"></script>
+        <!-- Switcher -->
+        <script src="{{asset('assets/frontend/js/switcher.js')}}"></script>
+        <!-- Main Js -->
+        <script src="{{asset('assets/frontend/js/app.js')}}"></script>
+        <!-- scroll -->
+        <script src="{{ asset('assets/frontend/js/scroll.js')}}"></script>
+        <script src="{{ asset('assets/frontend/js/typed/lib/typed.js')}}"></script>
+        <script src="{{ asset('assets/client/datatables/dataTables.min.js') }}"></script>
+        <script src="{{ asset('assets/client/datatables/dataTables.bootstrap.min.js') }}"></script>
+        <!-- Datepicker -->
+        <script src="{{ asset('assets/client/js/jquery.datetimepicker.full.min.js') }}"></script>
+        <script src="{{ asset('assets/client/js/moment.js') }}"></script>
+        <script src="{{ asset('assets/client/js/jquery.magnific-popup.min.js') }}"></script>
+        <script src="{{ asset('assets/client/js/sweetalert2.min.js') }}"></script>
+        <script src="{{ asset('assets/client/js/polyfill.js') }}"></script>
+        <script src="https://unicons.iconscout.com/release/v2.1.9/script/monochrome/bundle.js"></script>
+        <script src="{{ asset('assets/client/js/sweetalert2.min.js') }}"></script>
+        <script src="{{ asset('assets/dashboard/assets/js/jquery.tinymce.min.js') }}"></script>
 </body>
 
 
@@ -878,6 +999,9 @@
                     $('.date-range').removeClass('d-none');
                     $('.specific-date, .sort-by-year').addClass('d-none');
                 }
+            });
+            $('.close').click(function (){
+                $(".modal-backdrop").remove();
             });
         });
 

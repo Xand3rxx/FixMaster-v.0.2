@@ -13,6 +13,7 @@ class ServiceRequestWarranty extends Model
         'client_id', 'warranty_id', 'service_request_id', 'start_date', 'expiration_date', 'amount', 'status', 'initiated', 'has_been_attended_to', 'reason',
     ];
 
+
     public function service_request(){
         return $this->hasOne(ServiceRequest::class, 'id', 'service_request_id');
     }
@@ -37,5 +38,5 @@ class ServiceRequestWarranty extends Model
         return $this->hasOne(ServiceRequest::class, 'id', 'service_request_id');
     }
 
-    
+
 }
