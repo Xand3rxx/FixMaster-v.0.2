@@ -116,6 +116,7 @@ Route::prefix('admin')->group(function () {
         Route::put('/warranty/update/{details:uuid}',  [WarrantyController::class, 'update'])->name('update_warranty');
         Route::get('/warranty/delete/{details:uuid}',  [WarrantyController::class, 'deleteWarranty'])->name('delete_warranty');
         Route::get('/warranty/issued',      [WarrantyController::class, 'issuedWarranties'])->name('issued_warranty');
+        Route::get('/warranty/issued/{warranty:uuid}',      [WarrantyController::class, 'issuedWarranties'])->name('issued_warranty_details');
 
         //Routes for Simulation
         Route::get('/diagnostic', [SimulationController::class, 'diagnosticSimulation'])->name('diagnostic');

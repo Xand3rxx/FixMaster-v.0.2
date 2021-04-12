@@ -19,7 +19,7 @@ class RfqSupplier extends Model
      * @var array
      */
     protected $fillable = [
-        'rfq_id', 'supplier_id', 'devlivery_fee', 'delivery_time'
+        'rfq_id', 'supplier_id', 'unique_id', 'devlivery_fee', 'delivery_time'
     ];
 
     public function rfq()
