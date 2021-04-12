@@ -24,7 +24,7 @@ class CreateWarrantiesTable extends Migration
             $table->string('unique_id')->comment('e.g. WAR-09328932');
             $table->string('name')->unique();
             $table->float('percentage')->nullable()->default(0);
-            $table->enum('warranty_type', ['free', 'extended']);
+            $table->enum('warranty_type', ['Free', 'Extended']);
             $table->unsignedInteger('duration')->comment('i.e 1month equals 30days.');
             $table->text('description')->nullable();
             $table->softDeletes();
