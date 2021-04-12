@@ -10,7 +10,8 @@ use App\Http\Controllers\Controller;
 class AdminRatingController extends Controller
 {
     public function cseDiagnosis(Request $request){
-        $diagnosisRatings = Rating::where('service_diagnosis_by', '!=', null)->with('clientAccount', 'cseAccount','service_request')->get();
+        $diagnosisRatings = Rating::where('service_diagnosis_by', '!=', null)
+        ->where('ratee_id', null)->with('clientAccount', 'cseAccount','service_request')->get();
         //return dd($cse);
         return view('admin.ratings.cse_diagnosis_rating', compact('diagnosisRatings'));
     }

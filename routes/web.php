@@ -309,7 +309,7 @@ Route::prefix('admin')->group(function () {
 // Route::resource('client', ClientController::class);
 
 //All routes regarding clients should be in here
-Route::prefix('/client')->group(function () {
+Route::prefix('/client')->middleware('monitor.clientservice.request.changes')->group(function () {
     Route::name('client.')->group(function () {
         //All routes regarding clients should be in here
         Route::get('/',                   [ClientController::class, 'index'])->name('index'); //Take me to Supplier Dashboard
@@ -386,7 +386,7 @@ Route::prefix('/client')->group(function () {
 
 // Route::resource('cse', CseController::class);
 
-Route::prefix('/cse')->group(function () {
+Route::prefix('/cse')->middleware('monitor.cseservice.request.changes')->group(function () {
     Route::name('cse.')->group(function () {
         //All routes regarding CSE's should be in here
         Route::view('/',                    'cse.index')->name('index'); //Take me to CSE Dashboard

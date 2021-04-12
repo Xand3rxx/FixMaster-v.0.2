@@ -134,7 +134,7 @@ $(document).ready(function(){
                                 var rate_table = `
                                 <tr>
                                     <td class="tx-color-03 tx-center">`+ sn++ +`</td>
-                                    <td class="tx-medium">hgy</td>
+                                    <td class="tx-medium">jou</td>
                                     <td>`+ rating.client_account.first_name+" "+rating.client_account.last_name +`</td>
                                     <td class="text-medium text-center">`+ rating.star +`</td>
                                     <td>`+ rating.created_at +`</td>
