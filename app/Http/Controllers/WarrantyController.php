@@ -77,7 +77,7 @@ class WarrantyController extends Controller
                 $message = Auth::user()->email.' saved '.ucwords($request->input('name')).' warranty';
                 $this->log($type, $severity, $actionUrl, $message);
     
-                return redirect()->route('admin.warranty_list', app()->getLocale())->with('success', ucwords($request->input('name')).' warranty was successfully updated.');
+                return redirect()->route('admin.warranty_list', app()->getLocale())->with('success', ucwords($request->input('name')).' warranty created successfully.');
     
             }else{
                 

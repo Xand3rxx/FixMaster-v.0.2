@@ -66,7 +66,7 @@ class ServiceRequest extends Model
     }
 
     public function lga(){
-        return $this->belongsTo(Lga::class);
+        return $this->belongsTo(Lga::class, 'id');
     }
 
     // public function price(){
@@ -144,7 +144,7 @@ class ServiceRequest extends Model
 
     public function price()
     {
-        return $this->hasOne(Price::class, 'price_id')->withDefault();
+        return $this->hasOne(Price::class, 'id')->withDefault();
     }
 
     public function address(){
