@@ -315,18 +315,12 @@ class ClientController extends Controller
     }
 
     public function settings(Request $request){
-        // return view('client.profile', $data);
-        // $data['client'] = Client::where('user_id',auth()->user()->id)->first();
         $data['client'] = Client::where('user_id', $request->user()->id)->with('user')->firstOrFail();
 
-        // $data['user'] =  User::where('id', auth()->user()->id)->first();
         $data['states'] = State::select('id', 'name')->orderBy('name', 'ASC')->get();
 
         $data['lgas'] = Lga::select('id', 'name')->orderBy('name', 'ASC')->get();
-        // dd($data['lga'] );
-        // echo "<pre>";
-        // print_r($data['client']->user->phones[0]->number);
-        // echo "<pre>";
+
         return view('client.settings', $data);
     }
 
@@ -343,16 +337,16 @@ class ClientController extends Controller
             'gender'   => 'required',
             'phone_number'   => 'required|max:255',
             'email'       => 'required|email|max:255',
-        'profile_avater' => [
-            function ($attribute, $value, $fail) use ($request, $img, $allowedExts) {
-                if ($request->hasFile('profile_avater')) {
-                    $ext = $img->getClientOriginalExtension();
-                    if (!in_array($ext, $allowedExts)) {
-                        return $fail("Only png, jpg, jpeg image is allowed");
+            'profile_avater' => [
+                function ($attribute, $value, $fail) use ($request, $img, $allowedExts) {
+                    if ($request->hasFile('profile_avater')) {
+                        $ext = $img->getClientOriginalExtension();
+                        if (!in_array($ext, $allowedExts)) {
+                            return $fail("Only png, jpg, jpeg image is allowed");
+                        }
                     }
-                }
-            },
-        ],
+                },
+            ],
             'state_id'   => 'required|max:255',
             'lga_id'   => 'required|max:255',
             'full_address'   => 'required|max:255',
@@ -362,7 +356,6 @@ class ClientController extends Controller
         $user_data = User::find(auth()->user()->id);
         $user_data['email'] = $request->email;
         $user_data->update();
-        // dd($validatedData);
 
         // update phones
         $phones = Phone::where('user_id', auth()->user()->id)->orderBy('id','DESC')->first();
@@ -691,7 +684,6 @@ class ClientController extends Controller
     }
 
     function ajax_contactForm(Request $request){
-        // $clientAccount = new Account;
         $rules = [
             'firstName' => 'required|max:191',
             'lastName' => 'required|max:191',
@@ -731,7 +723,6 @@ class ClientController extends Controller
         $clientContact->address            = $request->streetAddress;
         $clientContact->address_longitude  = $request->addressLat;
         $clientContact->address_latitude   = $request->addressLng;
-        // dd($clientContact);
         if ($clientContact->save()) {
             return view('client.services._contactList', [
                 'myContacts'    => Contact::where('user_id', auth()->user()->id)->get(),
@@ -740,8 +731,6 @@ class ClientController extends Controller
         } else{
             return back()->with('error', 'sorry!, an error occured please try again');
         }
-
-
 
     }
 
@@ -760,7 +749,6 @@ class ClientController extends Controller
             'addressLat'                =>   'required',          
             'addressLng'                =>   'required',          
           ]);
-
 
             // if payment method is wallet
             if($request->payment_method == 'Wallet'){
@@ -813,7 +801,6 @@ class ClientController extends Controller
                             }                        
                         }
                         return back()->with('success', 'Service Request Successful');
-                        // return response()->json(['success' => 'Service Request Successful.']);
                     } else{
                         return back()->with('error', 'sorry!, your service request is not successful');
                     } 
@@ -860,7 +847,7 @@ class ClientController extends Controller
                     // }
                 }
             }
-            // return back()->with('error', 'online payment coming soon');
+
             } else{
                 return back()->with('error', 'Sorry!, an error occured please try again');
                 }
