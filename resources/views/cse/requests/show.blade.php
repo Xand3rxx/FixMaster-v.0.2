@@ -32,40 +32,33 @@
 
         <div class="row row-xs">
             <div class="col-lg-12 col-xl-12">
-                <div class="card">
-                    <ul class="nav nav-tabs nav-justified" id="myTab3" role="tablist">
 
-                        <li class="nav-item">
-                            <a class="nav-link active" id="update-tab3" data-toggle="tab" href="#update3" role="tab" aria-controls="update" aria-selected="true">Service Request Actions</a>
-                        </li>
+                <div class="contact-content-header mt-4">
+                    <nav class="nav">
+                        <a href="#serviceRequestActions" class="nav-link active" data-toggle="tab">Service Request Actions</a>
+                        <a href="#description" class="nav-link" data-toggle="tab"><span>Description</a>
+                        <a href="#serviceRequestSummary" class="nav-link" data-toggle="tab"><span>Service Request Summary</a>
+                    </nav>
+                    {{-- <a href="" id="contactOptions" class="text-secondary mg-l-auto d-xl-none"><i data-feather="more-horizontal"></i></a> --}}
+                  </div><!-- contact-content-header -->
 
-                        <li class="nav-item">
-                            <a class="nav-link" id="description-tab3" data-toggle="tab" href="#description3" role="tab" aria-controls="description" aria-selected="true">Description</a>
-                        </li>
-
-                        <li class="nav-item">
-                            <a class="nav-link" id="media-tab3" data-toggle="tab" href="#media3" role="tab" aria-controls="media" aria-selected="false">Service Request Summary</a>
-                        </li>
-                    </ul>
-                    <div class="tab-content bd bd-gray-300 bd-t-0 pd-20" id="myTabContent3">
-
-                        <div class="tab-pane fade show active" id="update3" role="tabpanel" aria-labelledby="update-tab3">
-                            <small class="text-danger">This tab is only visible onc the Service request has an Ongoing status. Which logically is updated by the system or the CSE Coordinator by assigning a CSE to the request</small>
+                  <div class="contact-content-body">
+                    <div class="tab-content">
+                        <div id="serviceRequestActions" class="tab-pane show active pd-20 pd-xl-25">
+                            <small class="text-danger">This tab is only visible once the Service request has an Ongoing status. Which logically is updated by the system or the CSE Coordinator by assigning a CSE to the request</small>
                             @if ($service_request->status_id == 1)
-                            @include('cse.requests.includes.assign_first_technician')
+                                @include('cse.requests.includes.assign_first_technician')
                             @elseif($service_request->status_id == 2)
-                            @include('cse.requests.includes.ongoing_service_request')
+                                @include('cse.requests.includes.ongoing_service_request')
                             @push('scripts')
-                            @include('cse.requests.includes.ongoing_service_request_script')
+                                @include('cse.requests.includes.ongoing_service_request_script')
                             @endpush
                             @else
                             <h4> Completed the Service Request </h4>
                             @endif
                         </div>
 
-                        <!-- Service Description Tab -->
-                        <div class="tab-pane fade" id="description3" role="tabpanel" aria-labelledby="description-tab3">
-
+                        <div id="description" class="tab-pane pd-20 pd-xl-25">
                             <div class="divider-text">Service Request Description</div>
 
                             <h6>SERVICE REQUEST DESCRIPTION</h6>
@@ -170,10 +163,8 @@
                                 </div><!-- df-example -->
                             </div>
                         </div>
-                        <!-- End of Service Description Tab -->
 
-                        <!-- Service Request Summary Tab -->
-                        <div class="tab-pane fade" id="media3" role="tabpanel" aria-labelledby="media-tab3">
+                        <div id="serviceRequestSummary" class="tab-pane pd-20 pd-xl-25">
                             <h5 class="mt-4 text-primary">Service Request Progress</h5>
                             <div class="table-responsive mb-4">
                                 <table class="table table-hover mg-b-0">
@@ -267,9 +258,10 @@
                                 </table>
                             </div><!-- table-responsive -->
                         </div>
-                        <!-- End Service Request Summary Tab -->
+
                     </div>
-                </div>
+                  </div>
+
             </div>
         </div>
     </div>

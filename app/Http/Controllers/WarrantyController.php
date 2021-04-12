@@ -18,8 +18,7 @@ use DB;
 
 class WarrantyController extends Controller
 {
-    use Loggable;
-    use Utility;
+    use Loggable, Utility;
     /**
      * This method will redirect users back to the login page if not properly authenticated
      * @return void
@@ -31,15 +30,12 @@ class WarrantyController extends Controller
 
     public function index()
     {
-        //Return all warranty
-        $warranty = Warranty::get();
+        //Return all warranty including deleted and inactive ones
+        return Warranty::AllWaranties()->get();
         
-        //Append collections to $data array
-        $data = [
+        return view('admin.warranty.index', [
             'warranties' =>  $warranty
-        ];
-
-        return view('admin.warranty.index', $data)->with('i');
+        ]);
     }
 
    

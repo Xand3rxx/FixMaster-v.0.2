@@ -9,6 +9,7 @@ use App\Models\Account;
 use App\Models\Referral;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\MailNotify;
+use App\Mail\WarrantyNotify;
 use App\Traits\GenerateUniqueIdentity as Generator;
 use Session;
 use Auth;
@@ -313,4 +314,12 @@ trait Utility
 
         return array_unique($yearList);
   }
+
+
+  public function sendWarrantyInitiationMail($user, $type)
+  {
+    $name = ucfirst($user->name);
+    Mail::to($user->email)->send(new WarrantyNotify($user));
+  }
+
 }

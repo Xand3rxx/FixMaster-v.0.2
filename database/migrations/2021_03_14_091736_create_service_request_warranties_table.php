@@ -25,6 +25,7 @@ class CreateServiceRequestWarrantiesTable extends Migration
             $table->foreignId('service_request_id')->unique();
             $table->dateTime('start_date')->nullable();
             $table->dateTime('expiration_date')->nullable();
+            $table->integer('amount')->unsigned()->nullable()->default(0);
             $table->enum('status', ['used', 'unused'])->default('unused');
             $table->enum('initiated', ['Yes', 'No'])->default('No');
             $table->enum('has_been_attended_to', ['Yes', 'No'])->default('No');

@@ -65,7 +65,7 @@
 
             <div class="form-group col-md-12">
               <label for="message_body">Message</label>
-              <textarea rows="4" class="form-control" id="message_body" name="message"></textarea>
+              <textarea rows="4" class="form-control" id="messageBody" name="message"></textarea>
             </div>
 
            <div class="form-group col-md-12">
