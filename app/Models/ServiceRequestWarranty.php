@@ -9,9 +9,9 @@ class ServiceRequestWarranty extends Model
 {
     use HasFactory;
 
-    // protected $fillable = [
-    //     'created_by', 'warranty_id', 'service_request_id', 'start_date', 'expiration_date'
-    // ];
+     protected $fillable = [
+         'client_id', 'warranty_id', 'service_request_id', 'start_date', 'exppiration_date', 'amount', 'status', 'initiated', 'has_been_attended_to', 'reason'
+     ];
 
     public function service_request(){
         return $this->hasOne(ServiceRequest::class, 'uuid', 'service_request_id');
@@ -37,5 +37,5 @@ class ServiceRequestWarranty extends Model
         return $this->hasOne(ServiceRequest::class, 'id', 'service_request_id');
     }
 
-    
+
 }
