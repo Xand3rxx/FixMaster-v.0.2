@@ -181,7 +181,7 @@
                             <div class="form-group position-relative">
                                 <label>Message <span class="text-danger">*</span></label>
                                 <i data-feather="message-circle" class="fea icon-sm icons"></i>
-                                <textarea name="message" id="message_body" rows="4" class="form-control pl-5 @error('message') is-invalid @enderror" placeholder="Your message :"></textarea>
+                                <textarea name="message" id="messageBody" rows="4" class="form-control pl-5 @error('message') is-invalid @enderror" placeholder="Your message :"></textarea>
                                 @error('message')
                                     <span class="invalid-feedback" role="alert">
                                         <strong>{{ $message }}</strong>

@@ -37,9 +37,6 @@
               <a href="{{ route('admin.warranty_summary', ['details'=>$warranty->uuid, 'locale'=>app()->getLocale()]) }}" class="dropdown-item details text-primary"><i class="far fa-clipboard"></i> Details</a>
               <a href="{{ route('admin.edit_warranty', ['details'=>$warranty->uuid, 'locale'=>app()->getLocale()]) }}" class="dropdown-item details text-info"><i class="far fa-edit"></i> Edit</a>
               <a href="{{ route('admin.delete_warranty', ['details'=>$warranty->uuid, 'locale'=>app()->getLocale()]) }}" class="dropdown-item details text-danger"><i class="fas fa-trash"></i> Delete</a>
-  
-
-
                 
               </div>
             </div>

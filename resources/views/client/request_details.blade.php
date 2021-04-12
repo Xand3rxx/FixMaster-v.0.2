@@ -10,6 +10,10 @@
         <a href="#editRequest" id="edit-request" data-toggle="modal" data-url="{{ route('client.edit_request', [ 'request'=>$requestDetail->uuid, 'locale'=>app()->getLocale() ])}}" data-job-reference="{{ $requestDetail->unique_id  }}" class="btn btn-sm btn-warning">Edit Request </a>
 
         <a href="#cancelRequest" id="cancel-request" data-toggle="modal" data-url="{{ route('client.cancel_request', [ 'request'=>$requestDetail->uuid, 'locale'=>app()->getLocale() ]) }}" data-job-reference="{{ $requestDetail->unique_id  }}" class="btn btn-sm btn-danger">Cancel Request </a>
+        @elseif($requestDetail->status_id == '3')
+        <a href="#" id="activate"
+        data-url="{{ route('client.reinstate_request', [ 'request'=>$requestDetail->uuid, 'locale'=>app()->getLocale() ]) }}" 
+        class="btn btn-sm btn-warning" title="Reinstate">Reinstate Request </a>
         @endif
     </div>
 
@@ -347,65 +351,10 @@
 </div>
 @endif
 
-
+@section('scripts')
 
 @push('scripts')
-<script>
-    $(document).ready(function () {
-        $(document).on("click", "#edit-request", function (event) {
-            event.preventDefault();
-            let route = $(this).attr("data-url");
-            let jobReference = $(this).attr("data-job-reference");
-
-            $.ajax({
-                url: route,
-                beforeSend: function () {
-                    $("#spinner-icon").html('<div class="d-flex justify-content-center mt-4 mb-4"><span class="loadingspinner"></span></div>');
-                },
-                // return the result
-                success: function (result) {
-                    $("#modal-edit-request").modal("show");
-                    $("#modal-edit-request").html("");
-                    $("#modal-edit-request").html(result).show();
-                },
-                complete: function () {
-                    $("#spinner-icon").hide();
-                },
-                error: function (jqXHR, testStatus, error) {
-                    var message = error + "An error occured while trying to retireve " + jobReference + " service request details.";
-                    var type = "error";
-                    displayMessage(message, type);
-                    $("#spinner-icon").hide();
-                },
-                timeout: 8000,
-            });
-        });
-
-        $(".close").click(function () {
-            $(".modal-backdrop").remove();
-        });
-
-        $(document).on("click", ".verify-security-code", function () {
-            if ($("#security_code").val() == $("#security-code").val()) {
-                $("#security_code").val("");
-                $("#validateSecurityCode").modal("hide");
-
-                $("#cseTechnicianModal").modal("show");
-            } else {
-                var message = "Invalid Security code";
-                var type = "error";
-                displayMessage(message, type);
-            }
-        });
-
-        $(document).on('click', '#cancel-request', function(event) {
-            event.preventDefault();
-            let route = $(this).attr('data-url');
-            let jobReference = $(this).attr('data-job-reference');
-
-            $('#cancel-request-form').attr('action', route);
-        });
-    });
-</script>
-@endpush 
+<script src="{{ asset('assets/client/js/requests/4c676ab8-78c9-4a00-8466-a10220785892.js') }}"></script> 
+@endpush
+@endsection
 @endsection

@@ -9,6 +9,8 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
     <title>@yield('title') | FixMaster.ng - We Fix, You Relax!</title>
+    <meta name="Author" content="Anthony Joboy (Lagos, Nigeria)" />
+    <meta name="Telephone" content="Tel: +234 903 554 7107" />
     <meta name="description" content="FixMaster is your best trusted one-call solution for a wide range of home maintenance, servicing and repair needs. Our well-trained & certified uniformed technicians are fully insured professionals with robust experience to provide home services to fully meet your needs with singular objective to make you totally relax while your repair requests are professionally handled." />
     <meta name="keywords" content="Home-fix, Home-improvement, Home-repairs, Cleaning-services, Modern" />
     <meta name="email" content="info@fixmaster.com.ng" />
@@ -20,10 +22,8 @@
     <link href="{{ asset('assets/client/css/bootstrap.min.css') }}" rel="stylesheet" type="text/css" />
     <!-- Icons -->
     <link href="{{ asset('assets/client/css/materialdesignicons.min.css') }}" rel="stylesheet" type="text/css" />
-
     <!-- Slider -->
     <link rel="stylesheet" href="{{ asset('assets/client/css/owl.carousel.min.css') }}" />
-    
     {{-- <link rel="stylesheet" href="{{ asset('assets/client/css/owl.theme.default.min.css') }}" /> --}}
     <!-- Main Css -->
     <link href="{{ asset('assets/client/css/style.css') }}" rel="stylesheet" type="text/css" id="theme-opt" />
@@ -45,21 +45,42 @@
       .shadow {
         box-shadow: 0 2px 5px rgba(233, 125, 31, 0.2) !important;
       }
+
+      .swal2-styled.swal2-confirm a.confirm-link {
+  color: #fff  !important;
+  font-size: 1.0625em;
+
+}
     </style>
   </head>
 
   <body>
+
+    {{-- <div id="preloader">
+      <div id="status">
+          <div class="spinner">
+              <div class="double-bounce1"></div>
+              <div class="double-bounce2"></div>
+          </div>
+      </div>
+  </div> --}}
 
     @include('layouts.partials._messages')
     @include('layouts.partials._client_header')
     @include('layouts.partials._client_sidebar')
     @include('layouts.partials._client_footer')
 
-    {{-- <script src="{{asset('assets/frontend/js/jquery-3.5.1.min.js')}}"></script> --}}
-    <script src="{{asset('assets/client/js/jquery.min.js')}}"></script>
+
+    <script src="{{asset('assets/frontend/js/jquery-3.5.1.min.js')}}"></script>
+    {{-- <script src="{{asset('assets/client/js/jquery.min.js')}}"></script> --}}
     <script src="{{asset('assets/frontend/js/bootstrap.bundle.min.js')}}"></script>
     <script src="{{asset('assets/frontend/js/jquery.easing.min.js')}}"></script>
     <script src="{{asset('assets/frontend/js/scrollspy.min.js')}}"></script>
+
+          <!-- geolocation asset starts here -->
+    <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDeDLVAiaU13p2O0d3jfcPjscsbVsCQUzc&v=3.exp&libraries=places"></script>
+    <script src="{{asset('assets/js/geolocation.js')}}"></script>
+    <!-- geolocation asset starts here -->
 
     <!-- SLIDER -->
     <script src="{{asset('assets/frontend/js/owl.carousel.min.js')}}"></script>
@@ -83,8 +104,8 @@
     <script src="{{ asset('assets/client/js/polyfill.js') }}"></script>
     <script src="https://unicons.iconscout.com/release/v2.1.9/script/monochrome/bundle.js"></script>
     <script src="{{ asset('assets/client/js/sweetalert2.min.js') }}"></script>
-
-
+    <script src="{{ asset('assets/dashboard/assets/js/jquery.tinymce.min.js') }}"></script>
+  
     <div class="modal fade" id="modalDetails" tabindex="-1" role="dialog" aria-hidden="true" data-backdrop="static">
         <div class="modal-dialog modal-dialog-centered modal-lg wd-sm-650" role="document">
             <div class="modal-content">
@@ -120,10 +141,12 @@
         </div><!-- modal-dialog -->
     </div><!-- modal -->
 
-    @yield('scripts')
-    @stack('scripts')
+
 
     @if (\Request::filled('users') && \Request::filled('role') && \Request::filled('serviceRequestId') && \Request::filled('totalAmount') && \Request::filled('serviceId') && \Request::filled('unique_id'))
+
+    @yield('scripts')
+    @stack('scripts')
     <script>
       //console.log('{{ \Request::get('results') }}');
       const users = @json(\Request::get('users'));
@@ -251,6 +274,9 @@
 
         }
     </script>
+ 
+ @yield('scripts')
+ @stack('scripts')
 
     <script>
       $(document).ready(function () {
@@ -266,13 +292,13 @@
         });
 
 
-        //Prevent characters or string asides number in ohone number input field
-        $("#number, #phone_number, #alternate_phone_number, .phone").on("keypress keyup blur", function(event) {
-            $(this).val($(this).val().replace(/[^\d].+/, ""));
+        //Prevent characters or string asides number in ohone number input field 
+        $("#number, #phone_number, #alternate_phone_number").on("keypress keyup blur", function(event) {
+        $(this).val($(this).val().replace(/[^\d].+/, ""));
             if ((event.which < 48 || event.which > 57)) {
                 event.preventDefault();
             }
-        });
+        });  
 
         // Url for more info on datepicker options https://xdsoft.net/jqplugins/datetimepicker/
         $(document).on('click', '#service-date-time', function(){
@@ -287,6 +313,8 @@
           });
         });
 
+
+     
 
       $(function () {
         $('.popup-modal').magnificPopup({
@@ -306,11 +334,11 @@
 
       // })
 
-
-
+      
+      
       });
     </script>
-
+   
 
   </body>
 </html>

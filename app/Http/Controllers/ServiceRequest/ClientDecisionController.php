@@ -9,6 +9,9 @@ use Illuminate\Http\Request;
 
 class ClientDecisionController extends Controller
 {
+    public function __construct() {
+        $this->middleware('auth:web');
+    }
     /**
      * Handle the incoming request.
      *
@@ -26,16 +29,7 @@ class ClientDecisionController extends Controller
             $invoice->update([
                 'phase' => '0'
             ]);
-
-            if(auth()->user()->type->role->url == 'client')
-            {
-                return redirect()->route('client.service.all', app()->getLocale())->with('success', 'Diagnosis Invoice Accepted');
-            }
-            else
-            {
-                return redirect()->route('cse.requests.show', [app()->getLocale(), $request->request_uuid])->with('success', 'Diagnosis Invoice Accepted');
-            }
-
+            return redirect()->route('client.service.all', app()->getLocale())->with('success', 'Estimated Final Invoice Accepted');
         }
         else if($request['client_choice'] == 'declined')
         {
@@ -44,14 +38,7 @@ class ClientDecisionController extends Controller
                 'phase' => '2'
             ]);
 
-            if(auth()->user()->type->role->url == 'client')
-            {
-                return redirect()->route('client.service.all', app()->getLocale())->with('success', 'Diagnosis Invoice Accepted');
-            }
-            else
-            {
-                return redirect()->route('cse.requests.show', [app()->getLocale(), $request->request_uuid])->with('success', 'Diagnosis Invoice Accepted');
-            }
+            return redirect()->route('invoice', [app()->getLocale(), $invoice->uuid])->with('success', 'Diagnosis Invoice Accepted');
         }
     }
 }

@@ -325,18 +325,23 @@ Route::prefix('/client')->group(function () {
         Route::get('/requests/send-messages',                [ClientController::class, 'sendMessages'])->name('send_messages');
         Route::post('/requests/update-request/{request:id}', [ClientController::class, 'updateRequest'])->name('update_request');
         Route::post('/requests/technician_profile',          [ClientController::class, 'technicianProfile'])->name('technician_profile');
+        Route::get('/requests/warranty/{request:id}',          [ClientController::class, 'warrantyInitiate'])->name('warranty_initiate');
+        Route::get('/requests/reinstate/{request:id}',          [ClientController::class, 'reinstateRequest'])->name('reinstate_request');
+        Route::get('/requests/completed-reques/{request:id}',          [ClientController::class, 'markCompletedRequest'])->name('completed_request');
 
+   
         // E-wallet Routes for clients
         //Profile and password update
 
         Route::any('/getDistanceDifference',                 [ClientController::class, 'getDistanceDifference'])->name('getDistanceDifference');
 
 
-        Route::get('wallet',                                 [ClientController::class, 'wallet'])->name('wallet');
-        Route::any('fund',                                   [ClientController::class, 'walletSubmit'])->name('wallet.submit');
-        Route::get('loyalty',                                [ClientController::class, 'loyalty'])->name('loyalty');
-        Route::any('loyalty/submit',                         [ClientController::class, 'loyaltySubmit'])->name('loyalty.submit');
-        Route::get('payments',                               [ClientController::class, 'payments'])->name('payments');
+        Route::get('wallet',                             [ClientController::class, 'wallet'])->name('wallet');
+        Route::any('fund',                               [ClientController::class, 'walletSubmit'])->name('wallet.submit');
+        Route::get('loyalty',                            [ClientController::class, 'loyalty'])->name('loyalty');
+        Route::any('loyalty/submit',                     [ClientController::class, 'loyaltySubmit'])->name('loyalty.submit');
+        Route::get('payments',                           [ClientController::class, 'payments'])->name('payments');
+        Route::get('payment/details/{payment:id}',   [ClientController::class, 'paymentDetails'])->name('payment.details');
 
         Route::post('/ipnpaystack',                          [ClientController::class, 'paystackIPN'])->name('ipn.paystack');
         Route::get('/apiRequest',                            [ClientController::class, 'apiRequest'])->name('ipn.paystackApiRequest');
@@ -361,6 +366,7 @@ Route::prefix('/client')->group(function () {
         Route::get('/requests/details/{ref}',      [ClientController::class, 'requestDetails'])->name('client.request_details');
         Route::get('/requests/edit/{id}',          [ClientController::class, 'edit'])->name('client.edit_request');
         Route::put('/requests/update/{id}',        [ClientController::class, 'update'])->name('client.update_request');
+
 
         Route::post('servicesRequest',              [ClientController::class, 'serviceRequest'])->name('services.serviceRequest');
         // add my new contact to DB

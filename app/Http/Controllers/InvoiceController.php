@@ -19,6 +19,10 @@ class InvoiceController extends Controller
 {
     use RegisterPaymentTransaction, Generator;
 
+    public function __construct() {
+        $this->middleware('auth:web');
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -142,7 +146,7 @@ class InvoiceController extends Controller
 
     }
 
-    public function verifyPayment()
+    public function verifyPayment(Request $request)
     {
         $track  = Session::get('Track');
         $invoiceUUID = Session::get('InvoiceUUID');

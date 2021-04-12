@@ -88,16 +88,28 @@
 </head>
 
 <body>
+@if($invoice['phase'] == 1)
+<div class="d-flex justify-content-center mt-5 border-bottom">
+    <p style="font-size: 12px; text-align: center;">
+        If you click <strong>decline</strong> , your service request will end here and you'll be required<br />to pay for diagnosis alone but you will not enjoy the discount bonus.<br>
+
+        If you click <strong>accept</strong> , your service request continues till the end of the fix and your<br /> discount bonus will be applied.
+    </p>
+</div>
+@elseif($invoice['phase'] == 2)
+<section class="bg-invoice pb-5">
+@else
 <section class="bg-invoice">
+@endif
     <div class="container">
         <div class="row mt-5 pt-4 pt-sm-0 justify-content-center">
             <div class="col-lg-10">
                 <div class="card shadow rounded border-0">
-                    <div class="card-body">
+                    <div class="card-body" style="border: 0.5px solid grey">
                         <div class="invoice-top pb-4 border-bottom">
                             <div class="row">
                                 <div class="col-md-8">
-                                    <img src="{{ asset('assets/images/home-fix-logo-colored.png') }}" class="l-dark" style="margin-top: -38px !important;" height="140" alt="FixMaster Logo">
+                                    <img src="{{ asset('assets/images/home-fix-logo-colored.png') }}" class="l-dark" style="margin-top: 10px !important;" height="80" alt="FixMaster Logo">
 
                                     <div class="logo-invoice mb-2">
                                         @if($invoice->status == 1 && $invoice['phase'] == '2' && $invoice['invoice_type'] == 'Diagnosis Invoice')
@@ -148,6 +160,9 @@
                                     </dl>
                                 </div><!--end col-->
                             </div><!--end row-->
+                            <div class="d-flex justify-content-center">
+                                <h2 style="border: 2px solid grey; padding: 5px">{{$invoice['invoice_type']}}</h2>
+                            </div>
                         </div>
 
                         <div class="invoice-middle py-4">
@@ -609,11 +624,11 @@
         <div class="row mt-5 pt-4 pt-sm-0 justify-content-center">
             <div class="col-lg-10">
                 <div class="card shadow rounded border-0">
-                    <div class="card-body">
+                    <div class="card-body" style="border: 0.5px solid grey">
                         <div class="invoice-top pb-4 border-bottom">
                             <div class="row">
                                 <div class="col-md-8">
-                                    <img src="{{ asset('assets/images/home-fix-logo-colored.png') }}" class="l-dark" style="margin-top: -38px !important;" height="140" alt="FixMaster Logo">
+                                    <img src="{{ asset('assets/images/home-fix-logo-colored.png') }}" class="l-dark" style="margin-top: 10px !important;" height="80" alt="FixMaster Logo">
 
                                     <div class="logo-invoice mb-2">
                                         @if($invoice->status == 1 && $invoice['invoice_type'] == 'Completion Invoice')
@@ -652,6 +667,9 @@
                                     </dl>
                                 </div><!--end col-->
                             </div><!--end row-->
+                            <div class="d-flex justify-content-center">
+                                <h2 style="border: 2px solid grey; padding: 5px">Estimated Final Invoice</h2>
+                            </div>
                         </div>
 
                         <div class="invoice-middle py-4">
@@ -807,7 +825,7 @@
     </div><!--end container-->
 </section>
 @if(auth()->user()->type->role->url == 'client')
-<div class="row justify-content-center border-top">
+<div class="row justify-content-center border-top mt-4" style="margin-bottom: 50px; padding-top: 0">
     <div class="col-lg-8 col-md-12 mt-4 mb-4 pt-2 text-center">
         <div><h3>Proceed with Service</h3></div>
         <div>
