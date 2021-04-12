@@ -312,7 +312,7 @@ Route::prefix('admin')->group(function () {
 Route::prefix('/client')->group(function () {
     Route::name('client.')->group(function () {
         //All routes regarding clients should be in here
-        Route::get('/',                   [ClientController::class, 'index'])->name('index'); //Take me to Supplier Dashboard
+        Route::get('/',                                      [ClientController::class, 'index'])->name('index'); //Take me to Supplier Dashboard
         // Client profile
         Route::get('/settings',                              [ClientController::class, 'settings'])->name('settings');
         Route::post('/profile/update',                       [ClientController::class, 'update_profile'])->name('updateProfile');
