@@ -29,7 +29,7 @@ class PageController extends Controller
         //Return Service details
         $service = $this->service($uuid);
         $rating = Rating::where('service_id', $service->id)
-                    ->where('service_request_id', null)
+                    //->where('service_request_id', null)
                     ->where('service_diagnosis_by', null)
                     ->where('ratee_id', '!=', null)->get();
         $reviews = Review::where('service_id', $service->id)->where('status', 1)->get();

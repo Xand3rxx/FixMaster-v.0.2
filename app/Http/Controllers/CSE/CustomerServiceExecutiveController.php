@@ -121,8 +121,13 @@ class CustomerServiceExecutiveController extends Controller
         //
     }
 
+    public function user_rating(Request $request, RatingController $ratings)
+    {
+        return $ratings->handleRatings($request);
+    }
+
      /**
-     * 
+     *
      *
      */
     public function update_cse_service_rating($language, Request $request, RatingController $updateRatings)
