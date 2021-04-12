@@ -25,6 +25,7 @@ class CreateRfqSupplierInvoicesTable extends Migration
             $table->unsignedInteger('delivery_fee');
             $table->string('delivery_time');
             $table->unsignedInteger('total_amount')->default(0);
+            $table->enum('accepted', ['Pending', 'Yes', 'No'])->default('Pending');
             $table->timestamps();
         });
     }

@@ -68,6 +68,7 @@
                     <td class="tx-medium">
                       {{Str::title($user['account']['last_name'] .' '. $user['account']['first_name'])}}
                     </td>
+                    @php break; @endphp
                     @endif
                   @endforeach
                   @foreach ($request['service_request']['users'] as $user)
@@ -75,10 +76,19 @@
                     <td class="tx-medium">
                       {{Str::title($user['account']['last_name'] .' '. $user['account']['first_name'])}}
                     </td>
+                    @php break; @endphp
                     @endif
                   @endforeach
                   <td class="text-medium text-center">₦{{number_format($request['service_request']['total_amount']) }}</td>
-                  <td class="text-medium text-info">{{$request['service_request']['status']['name']}}</td>
+                  @if($request['service_request']['status']['name'] == 'Pending')
+                    <td class="text-medium text-warning">{{$request['service_request']['status']['name']}}</td>
+                  @elseif($request['service_request']['status']['name'] == 'Ongoing')
+                    <td class="text-medium text-info">{{$request['service_request']['status']['name']}}</td>
+                  @elseif($request['service_request']['status']['name'] == 'Cancelled')
+                    <td class="text-medium text-danger">{{$request['service_request']['status']['name']}}</td>
+                  @else
+                    <td class="text-medium text-success">{{$request['service_request']['status']['name']}}</td>
+                  @endif
                   <td class="text-medium">{{ Carbon\Carbon::parse($request['service_request']['created_at'] ?? '2020-12-28 16:58:54', 'UTC')->isoFormat('MMMM Do YYYY') }}</td>
                   <td class=" text-center">
                     <div class="dropdown-file">
@@ -90,7 +100,6 @@
                   </td>
                 </tr>
                 @endforeach
-
 
               </tbody>
             </table>

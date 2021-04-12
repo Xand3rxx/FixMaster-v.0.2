@@ -202,4 +202,9 @@ class WarrantyController extends Controller
         ]);
     }
 
+    public function issuedWarrantyDetail($language, $uuid)
+    {
+        return view('admin.warranty._');
+    }
+
 }
