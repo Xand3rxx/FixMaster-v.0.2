@@ -13,8 +13,9 @@ use App\Models\Payment;
 use App\Models\WalletTransaction;
 use App\Models\User;
 use App\Models\Client;
-use App\Models\State;
+use App\Models\State; 
 use App\Models\Lga;
+use App\Models\Town;
 use App\Models\Account;
 use App\Models\ClientDiscount;
 use App\Models\Contact;
@@ -180,6 +181,8 @@ class ClientController extends Controller
 
         $data['lgas'] = Lga::select('id', 'name')->where('state_id', Account::where('user_id',auth()->user()->id)->orderBy('id','ASC')->firstOrFail()->state_id)->orderBy('name', 'ASC')->get();
 
+        $data['towns'] = Town::select('id', 'name')->where('lga_id', Account::where('user_id',auth()->user()->id)->orderBy('id','ASC')->firstOrFail()->lga_id)->orderBy('name', 'ASC')->get();
+
         return view('client.settings', $data);
     }
 
@@ -250,10 +253,11 @@ class ClientController extends Controller
             //Move new image to `client-avatars` folder
             Image::make($image->getRealPath())->resize(220, 220)->save($imagePath);
             $account->avatar = $imageName;
-        }else{
-            // $imageName = $request->input('old_avatar'); profile_avater
-            $account->avatar = $request->input('old_avatar');
         }
+        // else{
+        //     // $imageName = $request->input('old_avatar'); profile_avater
+        //     $account->avatar = $request->input('old_avatar');
+        // }
         $account->update();
 
         // if($user_data){

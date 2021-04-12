@@ -126,9 +126,11 @@
                           <div class="col-md-3">
                           <div class="form-group position-relative">
                                 <label>Town/City <span class="text-danger">*</span></label>
-
+                                
                                 <select class="form-control pl-5 @error('town_id') is-invalid @enderror" name="town_id" id="town_id">
-                                    <option selected value="">Select...</option>
+                                    @foreach($towns as $town)
+                                        <option value="{{ $client->user->account->town_id }}" {{old('town_id') == $town->id ? 'selected' : ''}} @if($client->user->account->town_id == $town->id) selected @endif>{{ $town->name }}</option>
+                                    @endforeach
                                 </select>
                                 @error('town_id')
                                 <span class="invalid-feedback" role="alert">
@@ -153,8 +155,8 @@
                       </div>
 
                       <!-- hidden fields -->
-                      <input type="hidden" value="" id="user_latitude" name="user_latitude"/>
-                      <input type="hidden" value="" id="user_longitude" name="user_longitude"/>
+                      <input type="hidden" value="{{$client->user->contact->address_latitude}}" id="user_latitude" name="user_latitude"/>
+                      <input type="hidden" value="{{$client->user->contact->address_longitude}}" id="user_longitude" name="user_longitude"/>
                       <!--end col-->
                      
                       <!--end row-->
@@ -306,8 +308,8 @@ $(document).ready(function() {
 
         // AJAX to get the towns of a particular LGA
         $("#lga_id").on("change", function () {
-            let stateId = $("#state_id").find("option:selected").val();
-            let stateName = $("#state_id").find("option:selected").text();
+            // let stateId = $("#state_id").find("option:selected").val();
+            // let stateName = $("#state_id").find("option:selected").text();
 
             let lgaId = $("#lga_id").find("option:selected").val();
             let lgaName = $("#lga_id").find("option:selected").text();
@@ -318,7 +320,6 @@ $(document).ready(function() {
                 dataType: "JSON",
                 data: {
                     _token: "{{ csrf_token() }}",
-                    state_id: stateId,
                     lga_id: lgaId,
                 },
                 success: function (data) {
