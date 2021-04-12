@@ -352,9 +352,9 @@ Route::prefix('/client')->group(function () {
         Route::post('services/search',              [ClientController::class, 'search'])->name('services.search');
         Route::get('services/custom/',              [ClientController::class, 'customService'])->name('services.custom');
 
-        Route::any('invoicePayment', [InvoiceController::class, 'savePayment'])->name('invoice.payment');
-        Route::get('verify/invoicePayment', [InvoiceController::class, 'verifyPayment'])->name('invoice.verifyPayment');
-        Route::any('/invoiceRequestpaystack',         [InvoiceController::class, 'initiatePayment'])->name('invoice.initiatePayment');
+        Route::any('invoicePayment',                [InvoiceController::class, 'savePayment'])->name('invoice.payment');
+        Route::get('verify/invoicePayment',         [InvoiceController::class, 'verifyPayment'])->name('invoice.verifyPayment');
+        Route::any('/invoiceRequestpaystack',       [InvoiceController::class, 'initiatePayment'])->name('invoice.initiatePayment');
 
         // // view all my service request
         Route::get('requests',                     [ClientController::class, 'myServiceRequest'])->name('service.all');
@@ -366,7 +366,7 @@ Route::prefix('/client')->group(function () {
         // add my new contact to DB
         Route::post('/ajax_contactForm',            [ClientController::class, 'ajax_contactForm'])->name('ajax_contactForm');
 
-        Route::get('myContactList',                  [ClientController::class, 'myContactList'])->name('service.myContacts');
+        Route::get('myContactList',                 [ClientController::class, 'myContactList'])->name('service.myContacts');
     });
 });
 
