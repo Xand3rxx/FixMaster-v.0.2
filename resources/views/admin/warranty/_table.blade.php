@@ -5,8 +5,8 @@
         <th>Warranty ID</th>
         <th>Warranty Name</th>
         <th>Warranty Type</th>
-        <th>Percentage (%)</th>  
-        <th>Duration</th>  
+        <th class="text-center">Percentage(%)</th>  
+        <th class="text-center">Duration(Days)</th>  
         <th>Date Created</th>
         <th class="text-center">Action</th>
       </tr>
@@ -14,21 +14,12 @@
     <tbody>
       @foreach ($warranties as $warranty)
         <tr>
-          <td class="tx-color-03 tx-center">{{ ++$i }}</td>
-          <td class="tx-medium">{{ $warranty->unique_id }}</td>
-          <td class="tx-medium">{{ $warranty->name }}</td>
+          <td class="tx-color-03 tx-center">{{ ++$loop->iteration }}</td>
+          <td class="tx-medium">{{ !empty($warranty->unique_id) ? $warranty->unique_id : 'UNAVAILABLE' }}</td>
+          <td class="tx-medium">{{ !empty($warranty->name) ? $warranty->name : 'UNAVAILABLE' }}</td>
           <td class="tx-medium">{{ $warranty->warranty_type }}</td>
-          @if($warranty->percentage == null )
-                  
-          <td>Not Avalaible</td>
-          
-          @else
-            
-            
-            <td>{{ $warranty->percentage}}</td>
-          
-        @endif
-        <td>{{ $warranty->duration}}</td>
+          <td class="tx-medium text-center">{{ !empty($warranty->percentage) ? $warranty->percentage : '0' }}</td>
+          <td class="tx-medium text-center">{{ $warranty->duration}}</td>
           <td>{{ Carbon\Carbon::parse($warranty->created_at, 'UTC')->isoFormat('MMMM Do YYYY, h:mm:ssa') }}</td>
           <td class=" text-center">
             <div class="dropdown-file">

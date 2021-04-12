@@ -50,7 +50,7 @@ class Warranty extends Model
     public function scopeAllWarranties($query){
         return $query->select('*')
             // ->whereNull('deleted_at')
-            ->orderBy('name', 'ASC');
+            ->orderBy('duration', 'ASC');
     }
 
     /**
@@ -63,5 +63,18 @@ class Warranty extends Model
         return $query->select('*')
             ->whereNull('deleted_at')
             ->orderBy('name', 'ASC');
+    }
+
+    /**
+     * Scope a query to only return all warranties either deleted or inactive
+     *
+     * @param \Illuminate\Database\Eloquent\Builder $query
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function scopeActiveExtendedWarranties($query){
+        return $query->select('*')
+            ->where('warranty_type', 'Extended')
+            ->whereNull('deleted_at')
+            ->orderBy('duration', 'ASC');
     }
 }
