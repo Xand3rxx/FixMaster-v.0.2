@@ -29,8 +29,10 @@ class ClientDecisionController extends Controller
      */
     public function __invoke(Request $request)
     {
-        $clientAcceptedId = SubStatus::select('id')->where('phase', 9)->first();
-        $clientDeclinedId = SubStatus::select('id')->where('phase', 10)->first();
+        $clientAcceptedDiagId = SubStatus::select('id')->where('phase', 10)->first();
+        $clientDeclinedDiagId = SubStatus::select('id')->where('phase', 11)->first();
+        $clientAcceptedSuppId = SubStatus::select('id')->where('phase', 18)->first();
+        $clientDeclinedSuppId = SubStatus::select('id')->where('phase', 19)->first();
         $invoice = Invoice::find($request->invoice_id);
 //        dd($invoice['uuid']);
         $warranty = $request['warranty_id'] ? Warranty::findOrFail($request->warranty_id) : '' ;
@@ -40,7 +42,7 @@ class ClientDecisionController extends Controller
             if($request['invoice_type'] == 'Supplier Invoice')
             {
                 $rfq = Rfq::where('service_request_id', $invoice->serviceRequest->id)->first();
-                \Illuminate\Support\Facades\DB::transaction(function () use ($invoice, $rfq) {
+                \Illuminate\Support\Facades\DB::transaction(function () use ($invoice, $request, $rfq, $clientAcceptedSuppId) {
                     //Update the RFQ Table
                     $rfq->update([
                         'status' => 'Accepted',
@@ -52,13 +54,14 @@ class ClientDecisionController extends Controller
                         'phase' => '0'
                     ]);
                     $this->log('request', 'Informational', Route::currentRouteAction(), auth()->user()->account->last_name . ' ' . auth()->user()->account->first_name  . ' accepted supplier return invoice.');
+                    \App\Models\ServiceRequestProgress::storeProgress(auth()->user()->id, $request->request_id, 2, $clientAcceptedSuppId->id);
 
                 });
                 return redirect()->route('client.service.all', app()->getLocale())->with('success', 'Supplier Return Invoice Accepted');
             }
             else
             {
-                \Illuminate\Support\Facades\DB::transaction(function () use ($invoice, $request, $warranty, $clientAcceptedId, &$rfq) {
+                \Illuminate\Support\Facades\DB::transaction(function () use ($invoice, $request, $warranty, $clientAcceptedDiagId, &$rfq) {
                     $InitiateWarranty = ServiceRequestWarranty::create([
                         'client_id'           => $request->client_id,
                         'warranty_id'         => $request->warranty_id,
@@ -66,7 +69,7 @@ class ClientDecisionController extends Controller
                         'amount'              => $warranty->percentage * $request->amount
                     ]);
                     if($InitiateWarranty) {
-                        \App\Models\ServiceRequestProgress::storeProgress(auth()->user()->id, $request->request_id, 2, $clientAcceptedId->id);
+                        \App\Models\ServiceRequestProgress::storeProgress(auth()->user()->id, $request->request_id, 2, $clientAcceptedDiagId->id);
                         $invoice->update([
                             'phase' => '0'
                         ]);
@@ -83,7 +86,7 @@ class ClientDecisionController extends Controller
             {
                 $diagnosisInvoice = Invoice::where('service_request_id', $invoice['service_request_id'])->where('invoice_type', 'Diagnosis Invoice')->first();
                 $rfq = Rfq::where('service_request_id', $invoice->serviceRequest->id)->first();
-                \Illuminate\Support\Facades\DB::transaction(function () use ($invoice, $diagnosisInvoice, $rfq) {
+                \Illuminate\Support\Facades\DB::transaction(function () use ($invoice, $request, $clientDeclinedSuppId, $diagnosisInvoice, $rfq) {
                     //Update the RFQ Table
                     $rfq->update([
                         'status' => 'Rejected',
@@ -99,11 +102,12 @@ class ClientDecisionController extends Controller
                         'phase' => '0'
                     ]);
                     $this->log('request', 'Informational', Route::currentRouteAction(), auth()->user()->account->last_name . ' ' . auth()->user()->account->first_name  . ' declined supplier return invoice.');
+                    \App\Models\ServiceRequestProgress::storeProgress(auth()->user()->id, $request->request_id, 2, $clientDeclinedSuppId->id);
                 });
                 return redirect()->route('invoice', [app()->getLocale(), $diagnosisInvoice->uuid])->with('success', 'Diagnosis Invoice Accepted');
             }
             else{
-                \App\Models\ServiceRequestProgress::storeProgress(auth()->user()->id, $request->request_id, 2, $clientDeclinedId->id);
+                \App\Models\ServiceRequestProgress::storeProgress(auth()->user()->id, $request->request_id, 2, $clientDeclinedDiagId->id);
                 $invoice->update([
                     'phase' => '2'
                 ]);
