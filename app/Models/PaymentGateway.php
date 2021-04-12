@@ -24,4 +24,8 @@ class PaymentGateway extends Model
         });
     }
 
+    public function convertAutoData(){
+        return json_decode($this->information,true);
+    }
+
 }

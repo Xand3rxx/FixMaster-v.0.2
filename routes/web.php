@@ -313,7 +313,8 @@ Route::prefix('/client')->group(function () {
     Route::name('client.')->group(function () {
         //All routes regarding clients should be in here
         Route::get('/',                                      [ClientController::class, 'index'])->name('index'); //Take me to Supplier Dashboard
-        // Client profile
+
+        // *****************Client profile**********************//
         Route::get('/settings',                              [ClientController::class, 'settings'])->name('settings');
         Route::post('/profile/update',                       [ClientController::class, 'update_profile'])->name('updateProfile');
         Route::post('/updatePassword',                       [ClientController::class, 'updatePassword'])->name('updatePassword');
@@ -335,20 +336,22 @@ Route::prefix('/client')->group(function () {
 
         Route::any('/getDistanceDifference',                 [ClientController::class, 'getDistanceDifference'])->name('getDistanceDifference');
 
-
-        Route::get('wallet',                             [ClientController::class, 'wallet'])->name('wallet');
-        Route::any('fund',                               [ClientController::class, 'walletSubmit'])->name('wallet.submit');
+        // *****************client wallet funding**********************//
+        Route::get('wallet',                                [ClientController::class, 'wallet'])->name('wallet');
+        Route::any('fund',                                  [ClientController::class, 'walletSubmit'])->name('wallet.submit');
+        
         Route::get('loyalty',                            [ClientController::class, 'loyalty'])->name('loyalty');
         Route::any('loyalty/submit',                     [ClientController::class, 'loyaltySubmit'])->name('loyalty.submit');
         Route::get('payments',                           [ClientController::class, 'payments'])->name('payments');
         Route::get('payment/details/{payment:id}',   [ClientController::class, 'paymentDetails'])->name('payment.details');
 
-        Route::post('/ipnpaystack',                          [ClientController::class, 'paystackIPN'])->name('ipn.paystack');
+        Route::any('/ipnpaystack',                       [ClientController::class, 'paystackIPN'])->name('ipn.paystack');
         Route::get('/apiRequest',                            [ClientController::class, 'apiRequest'])->name('ipn.paystackApiRequest');
         // for payment
         Route::any('/serviceRequestpaystack',                [ClientController::class, 'initiatePayment'])->name('serviceRequest.initiatePayment');
         Route::get('/serviceRequestVerify',                  [ClientController::class, 'verifyPayment'])->name('serviceRequest.verifyPayment');
-        Route::get('/ipnflutter',                            [ClientController::class, 'flutterIPN'])->name('ipn.flutter');
+        Route::any('/ipnflutter',                            [ClientController::class, 'flutterIPN'])->name('ipn.flutter');
+        // Route::any('/ipnpaystack',                       [ClientController::class, 'paystackIPN'])->name('ipn.paystack');
 
         // Service request SECTION
         Route::get('/services',                     [ClientController::class, 'services'])->name('services.list');
@@ -375,6 +378,11 @@ Route::prefix('/client')->group(function () {
         Route::get('myContactList',                 [ClientController::class, 'myContactList'])->name('service.myContacts');
         
         Route::post('/submit_ratings',              [ClientController::class, 'client_rating'])->name('handle.ratings');
+
+        //Paystack Routes
+        Route::get('/paystack/paystack/initiate',   [PaystackController::class, 'initiatePayment'])->name('payment.paystack-initiate');
+        Route::get('/product/paystack/verify',      [PaystackController::class, 'verify'])->name('payment.paystack-verify');
+
     });
 });
 

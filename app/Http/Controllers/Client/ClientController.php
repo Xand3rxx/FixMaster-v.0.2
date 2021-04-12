@@ -39,6 +39,7 @@ use App\Traits\Utility;
 use App\Traits\Loggable;
 use Session;
 use Image;
+use App\Http\Controllers\Client\PaystackController;
 
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\SMTP;
@@ -254,13 +255,8 @@ class ClientController extends Controller
             Image::make($image->getRealPath())->resize(220, 220)->save($imagePath);
             $account->avatar = $imageName;
         }
-        // else{
-        //     // $imageName = $request->input('old_avatar'); profile_avater
-        //     $account->avatar = $request->input('old_avatar');
-        // }
         $account->update();
 
-        // if($user_data){
         Session::flash('success', 'Profile updated successfully!');
         return redirect()->back();
     }
@@ -277,54 +273,73 @@ class ClientController extends Controller
     public function walletSubmit(Request $request)
     {
         $myWallet    = WalletTransaction::where('user_id', auth()->user()->id)->orderBy('id', 'DESC')->get();
+        // Instantiate payment controller class in this controller's method
+        $paystack_controller = new PaystackController;
+
+        $myWallet    = WalletTransaction::where('user_id', auth()->user()->id)->orderBy('id', 'DESC')->get();
         // validate Request
         $valid = $this->validate($request, [
             // List of things needed from the request like
-            // Amount, Payment Channel, Payment for, Reference Id
+            // Amount, Payment Channel, Payment for
             'amount'           => 'required',
             'payment_channel'  => 'required',
             'payment_for'      => 'required',
         ]);
 
-        // fetch the Client Table Record
-        $client = \App\Models\Client::where('user_id', $request->user()->id)->with('user')->firstOrFail();
-        // save the reference_id as track in session
+        // fetch the Client Table Record of loggedIn user
+        $client = Client::where('user_id', $request->user()->id)->with('user')->firstOrFail();
 
+        // generate random string
         $generatedVal = $this->generateReference();
-        // call the payment Trait and submit record on the
+        $track  = Session::put('Track', $generatedVal);
+
+        // call the payment Trait and submit record on the payment table
         $payment = $this->payment($valid['amount'], $valid['payment_channel'], $valid['payment_for'], $client['unique_id'], 'pending', $generatedVal);
-        Session::put('Track', $generatedVal);
-        // $client->user()->email();
+
+        // if a payment record is saved to the payment table
         if ($payment) {
-                //   new starts here
-                $user_id = auth()->user()->id;
-                $track = Session::get('Track');
-                $pay =  Payment::where('reference_id', $track)->orderBy('id', 'DESC')->first();
+            // get the payment record saved in the DB using the generated Value as refId
+            $paymentRecord =  Payment::where('reference_id', $generatedVal)->orderBy('id', 'DESC')->first();
 
-                if (is_null($pay)) {
-                    return redirect()->route('client.wallet', app()->getLocale())->with('alert', 'Invalid Deposit Request');
-                }
-                if ($pay->status != 'pending') {
-                    return redirect()->route('client.wallet', app()->getLocale())->with('alert', 'Invalid Deposit Request');
-                }
-                $gatewayData = PaymentGateway::where('keyword', $pay->payment_channel)->first();
+            // authenticated user 
+            $user = User::find($paymentRecord->user_id);
 
-                // dd($gatewayData);
-                if ($pay->payment_channel == 'paystack') {
-                    $paystack['amount'] = $pay->amount;
-                    $paystack['track'] = $track;
-                    $title = $gatewayData->name;
+            // if there is no payment record saved
+            if (is_null($paymentRecord)) {
+                return redirect()->route('client.wallet', app()->getLocale())->with('error', 'Invalid Deposit Request');
+            }
+            // if the payment record have been saved and has a status of pending
+            if ($paymentRecord->status != 'pending') {
+                $return = redirect()->route('client.wallet', app()->getLocale())->with('error', 'Transaction already saved');
+            }
+            $gatewayData = PaymentGateway::where('keyword', $paymentRecord->payment_channel)->first();
+              switch ($paymentRecord->payment_channel) {
+                  case 'paystack':              
+                    // Use paymentcontroller method in this controller
+                    // $return = $paystack_controller->initiatePayment($request, $generatedVal, $paymentRecord, $user);
+                    
+                    $return = redirect()->route('client.ipn.paystack', app()->getLocale());
+                  break;
+                  case 'flutterwave': 
+                    // $this->initiatePayment(); 
+                    // $return = redirect()->route('client.ipn.flutter', app()->getLocale());
+
+                    $flutter['amount'] = $paymentRecord->amount;
+                    $flutter['track'] = Session::get('Track');
                     $client = User::find(auth()->user()->id);
-                    return view('client.payment.paystack', compact('paystack', 'title', 'gatewayData', 'pay', 'myWallet','client'));
-                } elseif ($pay->payment_channel == 'flutterwave') {
-                    $flutter['amount'] = $pay->amount;
-                    $flutter['track'] = $track;
-                    $title = $gatewayData->name;
-                    $client = User::find(auth()->user()->id);
-                    return view('client.payment.flutter', compact('flutter', 'title', 'gatewayData', 'pay', 'myWallet','client'));
-                }
+                    // dd($flutter);
+                    return view('client.payment.flutter', compact('flutter', 'gatewayData', 'paymentRecord', 'myWallet','client'));
+
+                    // $return = redirect()->route('client.ipn.flutter', app()->getLocale());
+
+                  break;
+                  
+              default:
+
+                $return = redirect()->route('client.wallet', app()->getLocale())->with('error', 'Please select a payment method');
+            }
+            return (!$return) ? redirect()->route('client.wallet', app()->getLocale())->with('error', 'an error occured') : $return;
         }
-
 
     }
 
@@ -372,7 +387,7 @@ class ClientController extends Controller
     public function apiRequest()
     {
         $track  = Session::get('Track');
-        $data = Payment::where('reference_id', $track)->orderBy('id', 'DESC')->first();
+        $data =  Payment::where('reference_id', $track)->orderBy('id', 'DESC')->first();
 
         $curl = curl_init();
 
@@ -410,7 +425,8 @@ class ClientController extends Controller
         if (!$trans->status) {
             die('Api returned Error ' . $trans->message);
         }
-
+        // dd($data);
+        // return;
         /** If the transaction status are successful send to DB */
         if ($data->status == 'pending') {
             $data['status'] = 'success';
