@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Payment;
+use App\Models\ServiceRequestWarranty;
 use App\Models\User;
 use App\Traits\GenerateUniqueIdentity as Generator;
 use App\Traits\RegisterPaymentTransaction;
@@ -57,6 +58,7 @@ class InvoiceController extends Controller
         $total_cost = '';
         $warranty = Warranty::where('name', 'Free Warranty')->first();
         $ActiveWarranties = Warranty::ActiveExtendedWarranties()->get();
+        $WarrantyAmount = ServiceRequestWarranty::where('service_request_id', $invoice->serviceRequest->id)->first();
 
         if ($invoice->invoice_type == 'Diagnosis Invoice') {
             $subTotal = $serviceCharge;
@@ -69,7 +71,8 @@ class InvoiceController extends Controller
             $bookingCost = $invoice->serviceRequest->price->amount;
             $fixMasterRoyalty = $fixMaster_royalty_value * ($invoice->labour_cost + $materials_cost + $logistics_cost);
             $tax_cost = $tax * $sub_total;
-            $total_cost = $materials_cost + $invoice->labour_cost + $fixMasterRoyalty + $warrantyCost + $logistics_cost - $bookingCost - 1500 + $tax_cost;
+            $total_cost = $materials_cost + $invoice->labour_cost + $fixMasterRoyalty + $WarrantyAmount->amount + $logistics_cost - $bookingCost - 1500 + $tax_cost;
+//            dd($fixMasterRoyalty);
         }
 
 //        dd($total_cost);
@@ -87,8 +90,9 @@ class InvoiceController extends Controller
             'fixmasterRoyalty' => $fixMasterRoyalty,
             'tax' => $tax_cost,
             'logistics' => $logistics_cost,
-            'warranty' => $warranty->percentage,
+            'warranty' => $warranty,
             'ActiveWarranties' => $ActiveWarranties,
+            'WarrantyAmount' => $WarrantyAmount,
             'total_cost' => $total_cost
         ]);
     }

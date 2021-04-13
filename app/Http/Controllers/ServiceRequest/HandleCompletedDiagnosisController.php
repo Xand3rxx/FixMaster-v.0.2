@@ -181,7 +181,7 @@ class HandleCompletedDiagnosisController extends Controller
             'fixmasterRoyalty' => $fixMasterRoyalty,
             'tax' => $tax_cost,
             'logistics' => $logistics_cost,
-            'warranty' => $warranty->percentage,
+            'warranty' => $warranty,
             'total_cost' => $total_cost
         ]);
     }
