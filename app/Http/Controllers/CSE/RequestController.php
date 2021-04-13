@@ -52,6 +52,8 @@ class RequestController extends Controller
     {
         // find the service reqquest using the uuid and relations
         $service_request = \App\Models\ServiceRequest::where('uuid', $uuid)->with(['price', 'service', 'service.subServices'])->firstOrFail();
+        // dd($service_request['preferred_time']);
+
         // find the technician role CACHE THIS DURING PRODUCTION
         $technicainsRole = \App\Models\Role::where('slug', 'technician-artisans')->first();
         (array) $variables = [
@@ -65,18 +67,18 @@ class RequestController extends Controller
                 'tools' => \App\Models\ToolInventory::all(),
                 'latest_service_request_progress' => $service_request_progresses,
                 'ongoingSubStatuses' => \App\Models\SubStatus::where('status_id', 2)
-                    ->when($service_request_progresses->sub_status_id <= 10, function ($query, $sub_status) {
-                        return $query->whereBetween('phase', [2, 6]);
+                    ->when($service_request_progresses->sub_status_id <= 13, function ($query, $sub_status) {
+                        return $query->whereBetween('phase', [4, 9]);
                     }, function ($query) {
-                        return $query->where('recurrence', 'yes')->whereBetween('phase', [1, 20]);
+                        return $query->whereBetween('phase', [20, 27]);
                     })->get(['id', 'uuid', 'name']),
             ]);
-            if ($service_request_progresses->sub_status_id >= 10) {
+            if ($service_request_progresses->sub_status_id >= 13) {
                 // find the Issued RFQ
                 $service_request->load(['rfqs' => function ($query) {
                     $query->where('status', 'Awaiting')->where('accepted', 'No')->with('rfqBatches', 'rfqSupplier', 'rfqSupplier.supplier')->first();
                 }]);
-                // dd($service_request['rfqs']);
+                // dd($variables);
             }
         }
         return view('cse.requests.show', $variables);

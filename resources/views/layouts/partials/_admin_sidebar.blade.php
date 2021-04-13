@@ -45,14 +45,15 @@
 
         <li class="nav-item {{ Route::currentRouteNamed('admin.activity-log.index') ? 'active' : '' }}"><a href="{{ route('admin.activity-log.index', app()->getLocale()) }}" class="nav-link"><i data-feather="activity"></i> <span>Activity Log</span></a></li>
 
-        <li class="nav-item with-sub {{ Route::currentRouteNamed('admin.categories.index', 'admin.services.index', 'admin.booking-fees.index', 'admin.statuses.index') ? 'active show' : '' }}">
+        <li class="nav-item with-sub {{ Route::currentRouteNamed('admin.categories.index', 'admin.services.index', 'admin.booking-fees.index', 'admin.statuses.index', 'admin.serviceCriteria.index') ? 'active show' : '' }}">
           <a href="" class="nav-link"><i data-feather="aperture"></i> <span>Category & Service</span></a>
           <ul>
           <li class="{{ Route::currentRouteNamed('admin.booking-fees.index') ? 'active' : '' }}"><a href="{{ route('admin.booking-fees.index', app()->getLocale()) }}">Booking Fee</a></li>
             <li class="{{ Route::currentRouteNamed('admin.categories.index') ? 'active' : '' }}"><a href="{{ route('admin.categories.index', app()->getLocale()) }}">Categories</a></li>
             <li class="{{ Route::currentRouteNamed('admin.services.index') ? 'active' : '' }}"><a href="{{ route('admin.services.index', app()->getLocale()) }}">Services</a></li>
-            <li class="{{ Route::currentRouteNamed('admin.services.index') ? 'active' : '' }}"><a href="{{ route('admin.services.index', app()->getLocale()) }}">Sub-Services</a></li>
+            {{-- <li class="{{ Route::currentRouteNamed('admin.services.index') ? 'active' : '' }}"><a href="{{ route('admin.services.index', app()->getLocale()) }}">Sub-Services</a></li> --}}
             <li class="{{ Route::currentRouteNamed('admin.statuses.index') ? 'active' : '' }}"><a href="{{ route('admin.statuses.index', app()->getLocale()) }}">Service Request Status</a></li>
+          {{-- <li class="{{ Route::currentRouteNamed('admin.serviceCriteria.index') ? 'active' : '' }}"><a href="{{ route('admin.serviceCriteria.index', app()->getLocale()) }}">Settings</a></li> --}}
           </ul>
         </li>
 
@@ -94,7 +95,7 @@
             <a href="{{ route('admin.invoices', app()->getLocale()) }}" class="nav-link"><i data-feather="file-text"></i> <span>Invoice Management</span></a>
         </li>
 
-        <li class="nav-item"><a href="" class="nav-link"><i data-feather="briefcase"></i> <span>Job Card</span></a></li>
+        
 
         <li class="nav-item {{ Route::currentRouteNamed('admin.location_request') ? 'active' : '' }}"><a href="{{ route('admin.location_request', app()->getLocale()) }}" class="nav-link"><i data-feather="map-pin"></i> <span>Location Request</span></a></li>
 
@@ -161,7 +162,7 @@
         </li>
 
         <li class="nav-item with-sub {{ Route::currentRouteNamed('admin.cse_reports') ? 'active show' : '' }}">
-          <a href="" class="nav-link"><i data-feather="git-pull-request"></i> <span>Reports</span></a>
+          <a href="" class="nav-link"><i data-feather="bar-chart-2"></i> <span>Reports</span></a>
           <ul>
             
           <li class="nav-item {{ Route::currentRouteNamed('admin.cse_reports') ? 'active' : '' }}"><a href="{{ route('admin.cse_reports', app()->getLocale()) }}">CSE</a></li>
@@ -172,17 +173,8 @@
             <li class=""><a href="#">Technician</a></li>
           </ul>
         </li>
-
-        <li class="nav-item with-sub">
-          <a href="" class="nav-link"><i data-feather="git-pull-request"></i> <span>Requests</span></a>
-          <ul>
-            <li class=""><a href="#">New</a></li>
-            <li class=""><a href="#">Ongoing</a></li>
-            <li class=""><a href="#">Completed</a></li>
-            <li class=""><a href="#">Cancelled</a></li>
-            <li class=""><a href="{{ Route::currentRouteNamed('admin.serviceCriteria.index') ? 'active' : '' }}">Settings</a></li>
-          </ul>
-        </li>
+        
+      <li class="nav-item {{ Route::currentRouteNamed('admin.requests') ? 'active show' : '' }}"><a href="{{ route('admin.requests', app()->getLocale()) }}" class="nav-link"><i data-feather="git-pull-request"></i> <span>Requests <sup class="font-weight-bold text-danger">{{ $pendingRequests }}</sup></span></a></li>
 
         <li class="nav-item with-sub {{ Route::currentRouteNamed('admin.rfq', 'admin.supplier_invoices') ? 'active show' : '' }}">
           <a href="" class="nav-link"><i data-feather="file-text"></i> <span>RFQ's</span></a>
@@ -219,7 +211,7 @@
         </li> --}}
 
         <li class="nav-item with-sub {{ Route::currentRouteNamed('admin.warranty_list', 'admin.issued_warranty', 'admin.warranty_summary', 'admin.edit_warranty') ? 'active show' : '' }}">
-          <a href="" class="nav-link"><i data-feather="award"></i> <span>Warranty Management</span></a>
+          <a href="" class="nav-link"><i data-feather="award"></i> <span>Warranty Management <sup class="font-weight-bold text-danger">{{ $unresolvedWarranties }}</sup></span> </a>
           <ul>
             <li class="{{ Route::currentRouteNamed('admin.warranty_list') ? 'active' : '' }}"><a href="{{route('admin.warranty_list', app()->getLocale())}}">Add</a></li>
             <li class="{{ Route::currentRouteNamed('admin.warranty_list', 'admin.warranty_summary', 'admin.edit_warranty') ? 'active' : '' }}"><a href="{{route('admin.warranty_list', app()->getLocale())}}">List</a></li>

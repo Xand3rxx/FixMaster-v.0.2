@@ -304,6 +304,10 @@ Route::prefix('admin')->group(function () {
         Route::get('/supplier-invoices',                               [RfqController::class, 'supplierInvoices'])->name('supplier_invoices');
         Route::get('/supplier-invoices/details/{rfq:uuid}',              [RfqController::class, 'supplierInvoiceDetails'])->name('supplier_invoices_details');
         Route::get('/supplier-invoices/accept/{rfq:uuid}',              [RfqController::class, 'acceptSupplierInvoice'])->name('supplier_invoices_acceptance');
+
+        //Service Reques Routes
+        Route::view('/requests',            'admin.requests.index')->name('requests');
+
     });
 });
 
