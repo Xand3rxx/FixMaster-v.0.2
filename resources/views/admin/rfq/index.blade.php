@@ -57,8 +57,10 @@
                     <td class="text-medium text-warning">Awaiting Supplier's invoices</td>
                   @elseif($rfq->status == 'Awaiting')
                     <td class="text-medium text-info">Awaiting Supplier's delivery</td>
-                  @else
+                  @elseif($rfq->status == 'Delivered')
                     <td class="text-medium text-success">RFQ Delivered</td>
+                  @elseif($rfq->status == 'Rejected')
+                    <td class="text-medium text-success">RFQ was rejected</td>
                   @endif
                   <td class="tx-medium text-center">{{ number_format($rfq->total_amount) ?? 'Null'}}</td>
                   <td class="text-medium">{{ Carbon\Carbon::parse($rfq->created_at, 'UTC')->isoFormat('MMMM Do YYYY, h:mm:ssa') }}</td>
