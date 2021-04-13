@@ -1,5 +1,5 @@
-<div class="table-responsive rounded">
-    <table class="table mb-0 table-center scroll" id="contacts_table">
+<div class="table-responsive rounded" id="contacts_table">
+    <table class="table mb-0 table-center scroll">
         <thead class="bg-light">
             <tr>
                 <th scope="col">Frequently Used Contacts</th>
@@ -8,7 +8,6 @@
         <tbody>
             @if($myContacts) 
                 @foreach($myContacts as $k=>$myContact)
-                    @if($k > 0)
                         <tr>
                             <td>
                                 <div class="media">
@@ -32,7 +31,6 @@
                                 </div>
                             </td>
                         </tr>
-                    @endif
                 @endforeach 
             @endif
         </tbody>

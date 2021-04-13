@@ -39,7 +39,7 @@ class RatingController extends Controller
         //dd($request->all());
         (array) $valid = $this->validateClientRatingsRequest($request);
         return self::storeClientRating($valid, $request->user()->id) == true
-            ? back()->withSuccess('Thank you for rating the service, you have qualified for a loyalty reward')
+            ? back()->with('notify','Thank you for rating this service, you have qualified for a loyalty reward')
             : back()->withError('Error occured while recording rating the request');
     }
 

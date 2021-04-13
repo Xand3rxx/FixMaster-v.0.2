@@ -215,7 +215,7 @@
           <ul>
             <li class="{{ Route::currentRouteNamed('admin.warranty_list') ? 'active' : '' }}"><a href="{{route('admin.warranty_list', app()->getLocale())}}">Add</a></li>
             <li class="{{ Route::currentRouteNamed('admin.warranty_list', 'admin.warranty_summary', 'admin.edit_warranty') ? 'active' : '' }}"><a href="{{route('admin.warranty_list', app()->getLocale())}}">List</a></li>
-            <li class="{{ Route::currentRouteNamed('admin.issued_warranty') ? 'active' : '' }}"><a href="{{route('admin.issued_warranty', app()->getLocale())}}">Issued</a></li>
+            <li class="{{ Route::currentRouteNamed('admin.issued_warranty') ? 'active' : '' }}"><a href="{{route('admin.issued_warranty', app()->getLocale())}}">Issued <sup class="font-weight-bold text-danger">{{ $unresolvedWarranties }}</sup></a></li>
           </ul>
         </li>
 

@@ -9,8 +9,6 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
     <title>@yield('title') | FixMaster.ng - We Fix, You Relax!</title>
-    <meta name="Author" content="Anthony Joboy (Lagos, Nigeria)" />
-    <meta name="Telephone" content="Tel: +234 903 554 7107" />
     <meta name="description" content="FixMaster is your best trusted one-call solution for a wide range of home maintenance, servicing and repair needs. Our well-trained & certified uniformed technicians are fully insured professionals with robust experience to provide home services to fully meet your needs with singular objective to make you totally relax while your repair requests are professionally handled." />
     <meta name="keywords" content="Home-fix, Home-improvement, Home-repairs, Cleaning-services, Modern" />
     <meta name="email" content="info@fixmaster.com.ng" />
@@ -26,9 +24,6 @@
     <link rel="stylesheet" href="{{ asset('assets/client/css/owl.carousel.min.css') }}" />
 
     {{-- <link rel="stylesheet" href="{{ asset('assets/client/css/owl.theme.default.min.css') }}" /> --}}
-    <!-- Main Css -->
-    <!-- DashForge CSS -->
-    {{-- <link rel="stylesheet" href="{{ asset('assets/dashboard/assets/css/dashforge.css') }}"> --}}
 
     {{-- <link href="{{ asset('assets/dashboard/lib/fontawesome/fontawesome-free/css/all.min.css') }}" rel="stylesheet"> --}}
     <link href="{{ asset('assets/dashboard/lib/ionicons/css/ionicons.min.css') }}" rel="stylesheet">
@@ -53,24 +48,40 @@
       }
 
       .swal2-styled.swal2-confirm a.confirm-link {
-  color: #fff  !important;
-  font-size: 1.0625em;
+        color: #fff  !important;
+        font-size: 1.0625em;
+      }
 
       .tx-gray-300 {
-  color: #cdd4e0;
-}
+        color: #cdd4e0; 
+      }
 
-.lh-0 {
-  line-height: 0;
-}
+      .lh-0 {
+        line-height: 0; 
+      }
 
-.tx-40 {
-  font-size: 40px;
-}
+      .tx-40 {
+        font-size: 40px; 
+      }
 
-.tx-orange {
-  color: #fd7e14;
-}
+      .tx-orange {
+        color: #fd7e14; 
+      }
+      .pplogo-container {
+        border: 2px solid #e97d1f !important;
+        box-shadow: 0px 3px 10px -2px rgb(233 125 31) !important;
+      }
+
+      input[type="radio"]:checked + .pplogo-container {
+          /* background: #fd7e14; */
+          box-shadow: 0px 0px 20px rgb(233 125 31);
+          box-shadow: 0px 0px 20px rgb(233 125 31);
+      }
+
+      input[type="radio"]:checked + .pplogo-container::after {
+        color: #fd7e14 !important;
+        border: 1px solid #fd7e14 !important;
+      }
     </style>
   </head>
 
@@ -85,7 +96,7 @@
       </div>
   </div> --}}
 
-    @include('layouts.partials._messages')
+    {{-- @include('layouts.partials._messages') --}}
     @include('layouts.partials._client_header')
     @include('layouts.partials._client_sidebar')
     @include('layouts.partials._client_footer')
@@ -271,23 +282,6 @@
 
     </script>
    @endif
-    <script>
-      tinymce.init({
-        selector: '#message_body',
-        height: 200,
-        theme: 'modern',
-        plugins: [
-          'advlist autolink lists charmap hr anchor pagebreak',
-          'searchreplace wordcount visualblocks visualchars',
-          'insertdatetime nonbreaking save table contextmenu directionality',
-          'emoticons paste textcolor colorpicker textpattern'
-        ],
-        toolbar1: 'undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent',
-        toolbar2: 'forecolor backcolor emoticons',
-        image_advtab: true
-      });
-    </script>
-
 
     <script>
         function displayMessage(message, type){
