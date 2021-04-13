@@ -1,5 +1,5 @@
 @extends('layouts.dashboard')
-@section('title', 'All CSE Service Requests')
+@section('title', 'All Service Requests')
 @include('layouts.partials._messages')
 @section('content')
 
@@ -23,7 +23,7 @@
           <div class="card-header pd-t-20 d-sm-flex align-items-start justify-content-between bd-b-0 pd-b-0">
             <div>
               <h6 class="mg-b-5">Your Most Recent Requests</h6>
-              <p class="tx-13 tx-color-03 mg-b-0">This table displays a list of all <strong>Service Requests</strong> assigned to you by FixMaster AI or your CSE Coodinator after careful understudy of each request and with assumed initial payments made by the clients.</p>
+              <p class="tx-13 tx-color-03 mg-b-0">This table displays a list of all <strong>Service Requests</strong> with assumed initial payments made by the clients.</p>
             </div>
 
           </div><!-- card-header -->
@@ -58,32 +58,16 @@
                 </tr>
               </thead>
               <tbody>
-                @foreach ($requests as $request)
                 <tr>
-                  <td class="tx-color-03 tx-center">{{$loop->iteration}}</td>
-                  <td class="tx-medium">{{$request['service_request']['unique_id']}}</td>
-                  <td class="tx-medium"> {{Str::title($request['service_request']['client']['account']['last_name'] .' '. $request['service_request']['client']['account']['first_name'])}} </td>
-                  @foreach ($request['service_request']['users'] as $user)
-                    @if($user['roles'][0]['slug'] == 'admin-user')
-                    <td class="tx-medium">
-                      {{Str::title($user['account']['last_name'] .' '. $user['account']['first_name'])}}
-                    </td>
-                    @php break; @endphp
-                    @endif
-                  @endforeach
-                  @foreach ($request['service_request']['users'] as $user)
-                    @if($user['roles'][0]['slug'] == 'technician-artisans')
-                    <td class="tx-medium">
-                      {{Str::title($user['account']['last_name'] .' '. $user['account']['first_name'])}}
-                    </td>
-                    {{-- @else
-                    <td>UNAVAILABLE</td> --}}
-                    @php break; @endphp
+                  <td class="tx-color-03 tx-center">1</td>
+                  <td class="tx-medium">REF-39432798</td>
+                  <td class="tx-medium">Kelvin Adesanya </td>
+                  <td class="tx-medium">Taofeek Adedokun</td>
+                  <td class="tx-medium">Jamal Diwa</td>
+                  <td class="text-medium text-center">₦{{number_format(7000) }}</td>
+                  <td class="text-medium text-info">Ongoing</td>
 
-                    @endif
-                  @endforeach
-                  <td class="text-medium text-center">₦{{number_format($request['service_request']['total_amount']) }}</td>
-                  @if($request['service_request']['status']['name'] == 'Pending')
+                  {{-- @if($request['service_request']['status']['name'] == 'Pending')
                     <td class="text-medium text-warning">{{$request['service_request']['status']['name']}}</td>
                   @elseif($request['service_request']['status']['name'] == 'Ongoing')
                     <td class="text-medium text-info">{{$request['service_request']['status']['name']}}</td>
@@ -91,18 +75,19 @@
                     <td class="text-medium text-danger">{{$request['service_request']['status']['name']}}</td>
                   @else
                     <td class="text-medium text-success">{{$request['service_request']['status']['name']}}</td>
-                  @endif
-                  <td class="text-medium">{{ Carbon\Carbon::parse($request['service_request']['created_at'] ?? '2020-12-28 16:58:54', 'UTC')->isoFormat('MMMM Do YYYY') }}</td>
+                  @endif --}}
+                  <td class="text-medium">{{ Carbon\Carbon::now('UTC')->isoFormat('MMMM Do YYYY') }}</td>
                   <td class=" text-center">
                     <div class="dropdown-file">
                       <a href="" class="dropdown-link" data-toggle="dropdown"><i data-feather="more-vertical"></i></a>
                       <div class="dropdown-menu dropdown-menu-right">
-                        <a href="{{ route('cse.requests.show', [app()->getLocale(), $request['service_request']['uuid']]) }}" class="dropdown-item details"><i class="far fa-clipboard"></i> Details</a>
+                        <a href="#" class="dropdown-item text-primary"><i class="far fa-clipboard"></i> Details</a>
+                        <a href="#" class="dropdown-item text-success"><i class="fas fa-check"></i> Mark as Completed</a>
+                        <a href="#" class="dropdown-item text-danger"><i class="fas fa-times"></i> Mark as Cancelled</a>
                       </div>
                     </div>
                   </td>
                 </tr>
-                @endforeach
 
               </tbody>
             </table>

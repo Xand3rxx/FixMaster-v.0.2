@@ -3,8 +3,8 @@
     <div class="form-row mt-4">
         <div class="tx-13 mg-b-25">
             <div id="wizard3">
-                @if($latest_service_request_progress->sub_status_id > 9)
-                @if($latest_service_request_progress->sub_status_id < 11) <h3>Project Cost Estimate</h3>
+                @if($latest_service_request_progress->sub_status_id > 12)
+                @if($latest_service_request_progress->sub_status_id < 14) <h3>Project Cost Estimate</h3>
                     <section>
                         <small class="text-danger">This portion will be displayed only if the CSE selects "Completed Diganosis" and the Client chooses to continue with the Service Request</small>
                         <div class="mt-4 form-row">
@@ -90,12 +90,12 @@
                         <div class="form-row">
                             <div class="form-group col-md-4">
                                 <label for="component_name">Component Name</label>
-                                <input type="text" class="form-control" id="component_name" name="component_name" value="{{ $batch['component_name'] }}" readonly>
+                                <input type="text" class="form-control" id="component_name" name="component_name[]" value="{{ $batch['component_name'] }}" readonly>
                             </div>
 
                             <div class="form-group col-md-3">
                                 <label for="model_number">Model Number</label>
-                                <input type="text" class="form-control" id="model_number" name="model_number" value="{{ $batch['model_number']}}" readonly>
+                                <input type="text" class="form-control" id="model_number" name="model_number[]" value="{{ $batch['model_number']}}" readonly>
                             </div>
                             <div class="form-group col-md-2">
                                 <label for="quantity">Quantity</label>
@@ -111,6 +111,11 @@
 
                         <h5>Accept Materials Delivery</h5>
                         <div class="form-row">
+                            {{-- <div class="form-group col-md-6">
+                                <label for="accept_materials">Verify Supplier Code</label>
+                                <input type="text" class="form-control" id="verify_code" placeholder="e.g DEV-02397432" value="">
+                            </div> --}}
+
                             <div class="form-group col-md-12">
                                 <label for="accept_materials">Accept Delivery</label>
                                 <select class="form-control custom-select" id="accept_materials" name="accept_materials">
@@ -154,8 +159,8 @@
                             <div class="form-row">
                                 <div class="form-group col-md-4">
                                     <label for="component_name">Component Name</label>
-                                    <input type="text" class="form-control @error('component_name') is-invalid @enderror" id="component_name" name="component_name[]" value="{{ old('component_name') }}">
-                                    @error('component_name')
+                                    <input type="text" class="form-control @error('component_name') is-invalid @enderror" id="component_name" name="component_name[]" value="{{ old('component_name[0]') }}">
+                                    @error('component_name[0]')
                                     <span class="invalid-feedback" role="alert">
                                         <strong>{{ $message }}</strong>
                                     </span>
@@ -164,8 +169,8 @@
 
                                 <div class="form-group col-md-3">
                                     <label for="model_number">Model Number</label>
-                                    <input type="text" class="form-control @error('model_number') is-invalid @enderror" id="model_number" name="model_number[]" placeholder="" value="{{ old('model_number') }}">
-                                    @error('model_number')
+                                    <input type="text" class="form-control @error('model_number') is-invalid @enderror" id="model_number" name="model_number[]" placeholder="" value="{{ old('model_number[0]') }}">
+                                    @error('model_number[0]')
                                     <span class="invalid-feedback" role="alert">
                                         <strong>{{ $message }}</strong>
                                     </span>
@@ -174,8 +179,8 @@
 
                                 <div class="form-group col-md-2">
                                     <label for="quantity">Quantity</label>
-                                    <input type="number" class="form-control @error('quantity') is-invalid @enderror" id="quantity" name="quantity[]" min="1" pattern="\d*" maxlength="2" value="{{ old('quantity') }}">
-                                    @error('quantity')
+                                    <input type="number" class="form-control @error('quantity') is-invalid @enderror" id="quantity" name="quantity[]" min="1" pattern="\d*" maxlength="2" value="{{ old('quantity[0]') }}">
+                                    @error('quantity[0]')
                                     <span class="invalid-feedback" role="alert">
                                         <strong>{{ $message }}</strong>
                                     </span>
@@ -220,10 +225,10 @@
                                     <select class="form-control custom-select @error('tool_id') is-invalid @enderror tool_id" id="tool_id" name="tool_id[]">
                                         <option value="" selected>Select...</option>
                                         @foreach($tools as $tool)
-                                        <option value="{{ $tool->id }}" {{ old('tool_id') == $tool->id ? 'selected' : ''}} data-id="tool_quantity">{{ $tool->name }}</option>
+                                        <option value="{{ $tool->id }}" {{ old('tool_id[0]') == $tool->id ? 'selected' : ''}} data-id="tool_quantity">{{ $tool->name }}</option>
                                         @endforeach
                                     </select>
-                                    @error('tool_id')
+                                    @error('tool_id[0]')
                                     <span class="invalid-feedback" role="alert">
                                         <strong>{{ $message }}</strong>
                                     </span>
@@ -232,8 +237,8 @@
 
                                 <div class="form-group quantity-section col-md-2">
                                     <label for="tool_quantity">Quantity</label>
-                                    <input type="number" class="form-control @error('tool_quantity') is-invalid @enderror tool_quantity" name="tool_quantity[]" id="tool_quantity" min="1" pattern="\d*" maxlength="2" value="{{ old('tool_quantity') }}">
-                                    @error('tool_quantity')
+                                    <input type="number" class="form-control @error('tool_quantity[0]') is-invalid @enderror tool_quantity" name="tool_quantity[]" id="tool_quantity" min="1" pattern="\d*" maxlength="2" value="{{ old('tool_quantity[0]') }}">
+                                    @error('tool_quantity[0]')
                                     <span class="invalid-feedback" role="alert">
                                         <strong>{{ $message }}</strong>
                                     </span>

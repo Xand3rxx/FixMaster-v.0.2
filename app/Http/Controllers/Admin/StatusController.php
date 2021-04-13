@@ -21,9 +21,11 @@ class StatusController extends Controller
      */
     public function index()
     {
+        // return SubStatus::SubStatuses()->with('parentStatus')->get();
+        
         return view('admin.sub_statuses.index', [
             //Return all Sub Statuses, including inactive ones
-            'subStatuses'   =>  SubStatus::SubStatuses()->get()
+            'subStatuses'   =>  SubStatus::SubStatuses()->with('parentStatus')->get()
         ]);
     }
 

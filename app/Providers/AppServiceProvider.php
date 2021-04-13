@@ -40,6 +40,8 @@ class AppServiceProvider extends ServiceProvider
 
             $view->with([
                 'profile'   =>  Auth::user()->account,
+                'pendingRequests'   => \App\Models\ServiceRequest::PendingRequests()->get()->count(),
+                'unresolvedWarranties'  =>  \App\Models\ServiceRequestWarranty::UnresolvedWarranties()->get()->count(),
             ]);
         });
 

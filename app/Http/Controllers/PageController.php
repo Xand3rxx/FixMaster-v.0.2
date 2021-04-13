@@ -25,12 +25,11 @@ class PageController extends Controller
         return view('frontend.services.index', $this->categoryAndServices());
     }
 
-    public function serviceDetails($language, $uuid){//'rating'=> Rating::where('service_id', $this->service($id))->avg('star')
-
+    public function serviceDetails($language, $uuid){
         //Return Service details
         $service = $this->service($uuid);
         $rating = Rating::where('service_id', $service->id)
-                    ->where('service_request_id', null)
+                    //->where('service_request_id', null)
                     ->where('service_diagnosis_by', null)
                     ->where('ratee_id', '!=', null)->get();
         $reviews = Review::where('service_id', $service->id)->where('status', 1)->get();

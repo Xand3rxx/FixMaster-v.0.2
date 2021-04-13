@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Str;
 
 class ServiceRequestWarranty extends Model
 {
@@ -12,6 +13,19 @@ class ServiceRequestWarranty extends Model
     protected $fillable = [
         'client_id', 'warranty_id', 'service_request_id', 'start_date', 'expiration_date', 'amount', 'status', 'initiated', 'has_been_attended_to', 'reason',
     ];
+
+    /**
+     * The "booted" method of the model.
+     *
+     * @return void
+     */
+    protected static function booted()
+    {
+        // Create a uuid when a new serivce uuid is to be created
+        static::creating(function ($service) {
+            $service->uuid = (string) Str::uuid();
+        });
+    }
 
     public function service_request(){
         return $this->hasOne(ServiceRequest::class, 'id', 'service_request_id');
@@ -37,5 +51,17 @@ class ServiceRequestWarranty extends Model
         return $this->hasOne(ServiceRequest::class, 'id', 'service_request_id');
     }
 
-    
+    /** 
+     * Scope a query to only include all pending requests
+     * 
+     * @param \Illuminate\Database\Eloquent\Builder $query
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    //Scope to return all services  
+    public function scopeUnresolvedWarranties($query)
+    {
+        return $query->select('*')
+        ->where('has_been_attended_to', 'No');
+    }
+
 }

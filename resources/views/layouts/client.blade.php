@@ -24,8 +24,14 @@
     <link href="{{ asset('assets/client/css/materialdesignicons.min.css') }}" rel="stylesheet" type="text/css" />
     <!-- Slider -->
     <link rel="stylesheet" href="{{ asset('assets/client/css/owl.carousel.min.css') }}" />
+
     {{-- <link rel="stylesheet" href="{{ asset('assets/client/css/owl.theme.default.min.css') }}" /> --}}
     <!-- Main Css -->
+    <!-- DashForge CSS -->
+    {{-- <link rel="stylesheet" href="{{ asset('assets/dashboard/assets/css/dashforge.css') }}"> --}}
+
+    {{-- <link href="{{ asset('assets/dashboard/lib/fontawesome/fontawesome-free/css/all.min.css') }}" rel="stylesheet"> --}}
+    <link href="{{ asset('assets/dashboard/lib/ionicons/css/ionicons.min.css') }}" rel="stylesheet">
     <link href="{{ asset('assets/client/css/style.css') }}" rel="stylesheet" type="text/css" id="theme-opt" />
     <link href="{{ asset('assets/client/css/colors/default.css') }}" rel="stylesheet" id="color-opt">
     <link rel="stylesheet" href="{{ asset('assets/client/css/jquery.datetimepicker.min.css') }}">
@@ -50,6 +56,20 @@
   color: #fff  !important;
   font-size: 1.0625em;
 
+      .tx-gray-300 {
+  color: #cdd4e0;
+}
+
+.lh-0 {
+  line-height: 0;
+}
+
+.tx-40 {
+  font-size: 40px;
+}
+
+.tx-orange {
+  color: #fd7e14;
 }
     </style>
   </head>

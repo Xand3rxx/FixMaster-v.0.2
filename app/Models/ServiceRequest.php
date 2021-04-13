@@ -227,4 +227,17 @@ class ServiceRequest extends Model
 
         return $this->hasMany(ServiceRequestAssigned::class, 'service_request_id')->with('user');
     }
+
+    /** 
+     * Scope a query to only include all pending requests
+     * 
+     * @param \Illuminate\Database\Eloquent\Builder $query
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    //Scope to return all services  
+    public function scopePendingRequests($query)
+    {
+        return $query->select('*')
+        ->where('status_id', 1);
+    }
 }

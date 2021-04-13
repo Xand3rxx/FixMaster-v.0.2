@@ -38,7 +38,7 @@ class Rating extends Model
     }
 
 public function service_request(){
-    return $this->hasOne(ServiceRequest::class, 'id', 'service_request_id');
+    return $this->hasOne(ServiceRequest::class,'id', 'service_request_id');
 }
 
 public function service(){

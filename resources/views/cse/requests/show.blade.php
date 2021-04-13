@@ -40,18 +40,18 @@
                         <a href="#serviceRequestSummary" class="nav-link" data-toggle="tab"><span>Service Request Summary</a>
                     </nav>
                     {{-- <a href="" id="contactOptions" class="text-secondary mg-l-auto d-xl-none"><i data-feather="more-horizontal"></i></a> --}}
-                  </div><!-- contact-content-header -->
+                </div><!-- contact-content-header -->
 
-                  <div class="contact-content-body">
+                <div class="contact-content-body">
                     <div class="tab-content">
                         <div id="serviceRequestActions" class="tab-pane show active pd-20 pd-xl-25">
                             <small class="text-danger">This tab is only visible once the Service request has an Ongoing status. Which logically is updated by the system or the CSE Coordinator by assigning a CSE to the request</small>
                             @if ($service_request->status_id == 1)
-                                @include('cse.requests.includes.assign_first_technician')
+                            @include('cse.requests.includes.assign_first_technician')
                             @elseif($service_request->status_id == 2)
-                                @include('cse.requests.includes.ongoing_service_request')
+                            @include('cse.requests.includes.ongoing_service_request')
                             @push('scripts')
-                                @include('cse.requests.includes.ongoing_service_request_script')
+                            @include('cse.requests.includes.ongoing_service_request_script')
                             @endpush
                             @else
                             <h4> Completed the Service Request </h4>
@@ -260,7 +260,7 @@
                         </div>
 
                     </div>
-                  </div>
+                </div>
 
             </div>
         </div>

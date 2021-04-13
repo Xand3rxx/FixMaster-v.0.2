@@ -56,6 +56,7 @@ class InvoiceController extends Controller
         $tax_cost = '';
         $total_cost = '';
         $warranty = Warranty::where('name', 'Free Warranty')->first();
+        $ActiveWarranties = Warranty::ActiveExtendedWarranties()->get();
 
         if ($invoice->invoice_type == 'Diagnosis Invoice') {
             $subTotal = $serviceCharge;
@@ -78,6 +79,7 @@ class InvoiceController extends Controller
             'rfqExists' => $invoice->rfq_id,
             'serviceRequestID' => $invoice->serviceRequest->id,
             'serviceRequestUUID' => $invoice->serviceRequest->uuid,
+            'client_id' => $invoice->serviceRequest->client_id,
             'get_fixMaster_royalty' => $get_fixMaster_royalty,
             'fixmaster_royalty_value' => $fixMaster_royalty_value,
             'subTotal' => $subTotal,
@@ -86,6 +88,7 @@ class InvoiceController extends Controller
             'tax' => $tax_cost,
             'logistics' => $logistics_cost,
             'warranty' => $warranty->percentage,
+            'ActiveWarranties' => $ActiveWarranties,
             'total_cost' => $total_cost
         ]);
     }
