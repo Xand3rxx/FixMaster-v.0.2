@@ -19,6 +19,7 @@ class CreateServiceRequestWarrantiesTable extends Migration
             $table->collation = 'utf8mb4_unicode_ci';
 
             $table->id();
+            $table->uuid('uuid')->unique();
             $table->foreignId('client_id');
             $table->foreignId('warranty_id');
             $table->foreignId('service_request_id')->unique();
