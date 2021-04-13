@@ -73,7 +73,7 @@
                         <i data-feather="map" class="fea icon-ex-md text-muted mr-3"></i>
                         <div class="media-body">
                             <h6 class="text-primary mb-0">State :</h6>
-                        <p class="text-muted mb-0">{{ $user->state->name ?? 'Lagos State' }}</p>
+                        <p class="text-muted mb-0">{{ $user->state->name ?? 'UNAVAILABLE' }}</p>
                         </div>
                     </div>
 
@@ -82,7 +82,7 @@
                         <i data-feather="map-pin" class="fea icon-ex-md text-muted mr-3"></i>
                         <div class="media-body">
                             <h6 class="text-primary mb-0">L.G.A :</h6>
-                        <p class="text-muted mb-0">{{ $user->lga->name ?? "Ikeja" }}</p>
+                        <p class="text-muted mb-0">{{ $user->lga->name ?? "UNAVAILABLE" }}</p>
                         </div>
                     </div>
 
@@ -90,14 +90,14 @@
                         <i data-feather="map-pin" class="fea icon-ex-md text-muted mr-3"></i>
                         <div class="media-body">
                             <h6 class="text-primary mb-0">Town/City :</h6>
-                        <p class="text-muted mb-0">{{ $client->town ?? "Opebi" }}</p>
+                        <p class="text-muted mb-0">{{ $user->town->name ?? "UNAVAILABLE" }}</p>
                         </div>
                     </div>
                     <div class="media align-items-center mt-3">
                         <i data-feather="map" class="fea icon-ex-md text-muted mr-3"></i>
                         <div class="media-body">
                             <h6 class="text-primary mb-0">Full Address :</h6>
-                        <a href="javascript:void(0)" class="text-muted">{{ $client->full_address ?? "30, Opebi Road, Lagos" }}</a>
+                        <a href="javascript:void(0)" class="text-muted">{{ $client['address'] }}</a>
                         </div>
                     </div>
                 </div>

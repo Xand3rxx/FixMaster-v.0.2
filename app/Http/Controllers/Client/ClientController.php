@@ -909,6 +909,7 @@ class ClientController extends Controller
             $query->latest('created_at');
         }])->firstOrFail();
         
+        
         return view('client.services.list', [
             'myServiceRequests' =>  $myServiceRequests,
         ]);
@@ -937,7 +938,7 @@ class ClientController extends Controller
         $walTrans = WalletTransaction::where('user_id', auth()->user()->id)->orderBy('id', 'DESC')->first();
         //  $data['ewallet'] = !isset($json->withdraw)? $walTrans->closing_balance: (is_array($json->withdraw) ?  (float)$walTrans->closing_balance + (float)array_sum($json->withdraw): (float)'1000.000' + (float)$json->withdraw) ;
 
-        $data['ewallet'] =  $walTrans->closing_balance;
+        $data['ewallet'] =  !empty($walTrans->closing_balance) ? $walTrans->closing_balance : 0;
         $myWallet    = WalletTransaction::where('user_id', auth()->user()->id)->orderBy('id', 'DESC')->get();
         return view('client.loyalty', compact('myWallet')+$data);
     }

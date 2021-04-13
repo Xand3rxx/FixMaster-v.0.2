@@ -91,7 +91,7 @@
 
 <body>
 @if($invoice['phase'] == '1')
-    @if($invoice['invoice_type'] == 'Diagnosis Invoice')
+    @if($invoice['invoice_type'] == 'Diagnosis Invoice' )
 <div class="d-flex justify-content-center mt-5 border-bottom">
     <p style="font-size: 12px; text-align: center;">
         If you click <strong>decline</strong> , your service request will end here and you'll be required<br />to pay for diagnosis alone but you will not enjoy the discount bonus.<br>
@@ -101,11 +101,8 @@
 </div>
     @endif
 @endif
-@if($invoice->invoice_type === 'Diagnosis Invoice' || $invoice['phase'] == '2')
+@if($invoice->invoice_type === 'Diagnosis Invoice' || $invoice['invoice_type'] == 'Supplier Invoice' || $invoice['phase'] == '2')
 <section class="bg-invoice pb-5">
-@else
-<section class="bg-invoice">
-@endif
     <div class="container">
         <div class="row mt-5 pt-4 pt-sm-0 justify-content-center">
             <div class="col-lg-10">
@@ -351,6 +348,7 @@
         </div><!--end row-->
     </div><!--end container-->
 </section>
+    @endif
 
 @if($invoice['invoice_type'] === 'Completion Invoice' && $invoice['phase'] === '1')
     <section class="bg-invoice">
@@ -368,7 +366,7 @@
                                                 <form method="POST" action="{{ route('client.invoice.payment', app()->getLocale()) }}">
                                                     @csrf
                                                     {{-- REQUIREMENTS FOR PAYMENT GATWAYS  --}}
-                                                    <input type="hidden" class="d-none" value={{ $total_cost }} name="booking_fee">
+                                                    <input type="hidden" class="d-none" value={{ $total_cost + $invoice->rfqs->rfqSupplier->devlivery_fee }} name="booking_fee">
 
                                                     <input type="hidden" class="d-none" value="paystack" id="payment_channel" name="payment_channel">
 
@@ -449,10 +447,28 @@
                                 </div>
                             </div>
 
-                            <div class="invoice-table pb-4">
+
                                 @if($invoice->invoice_type === 'Completion Invoice')
+                                    <div class="table-responsive bg-white shadow rounded">
+                                        <table class="table mb-0 table-center invoice-tb">
+                                            <thead class="bg-light">
+                                            <tr>
+                                                <th scope="col" class="text-left">Supplier Name</th>
+                                                <th scope="col" class="text-left">Delivery Fee</th>
+                                                <th scope="col" class="text-left">Delivery Time</th>
+                                            </tr>
+                                            </thead>
+                                            <tbody>
+                                            <tr>
+                                                <td class="text-left">{{ $invoice->rfqs->rfqSupplier->supplier->account->first_name }} {{ $invoice->rfqs->rfqSupplier->supplier->account->last_name }}</td>
+                                                <td class="text-left">₦ {{ number_format($invoice->rfqs->rfqSupplier->devlivery_fee) }}</td>
+                                                <td class="text-left">{{ Carbon\Carbon::parse($invoice->rfqs->rfqSupplier->delivery_time, 'UTC')->isoFormat('MMMM Do YYYY') }}</td>
+                                            </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
                                     @if($invoice->rfq_id != null)
-                                        <div class="table-responsive bg-white shadow rounded">
+                                        <div class="table-responsive bg-white shadow rounded mt-4">
                                             <table class="table mb-0 table-center invoice-tb">
                                                 <thead class="bg-light">
                                                 <tr>
@@ -506,7 +522,7 @@
                                     <div class="row">
                                         <div class="col-lg-4 col-md-5 ml-auto">
                                             <ul class="list-unstyled h5 font-weight-normal mt-4 mb-0">
-                                                <li class="test-muted d-flex justify-content-between">Subtotal :<span>₦ {{ number_format($invoice['materials_cost'] + $invoice['labour_cost'], 2) }}</span></li>
+                                                <li class="test-muted d-flex justify-content-between">Subtotal :<span>₦ {{ number_format($invoice['materials_cost'] + $invoice['labour_cost'] + $invoice->rfqs->rfqSupplier->devlivery_fee, 2) }}</span></li>
                                                 <li class="text-muted d-flex justify-content-between">
                                                     FixMaster Royalty :
                                                     @if($get_fixMaster_royalty['amount'] == null)
@@ -518,7 +534,7 @@
                                                 <li class="d-flex justify-content-between text-danger">Booking :<span> - ₦ {{ number_format($invoice->serviceRequest->price->amount, 2) }}</span></li>
                                                 <li class="d-flex justify-content-between text-danger">Discount :<span> - ₦ {{ number_format( 0.5 * $logistics , 2) }}</span></li>
                                                 <li class="text-muted d-flex justify-content-between">Taxes :<span> ₦ {{ number_format($tax, 2) }}</span></li>
-                                                <li class="d-flex justify-content-between">Total :<span>₦ {{ number_format( $total_cost, 2 ) }}</span></li>
+                                                <li class="d-flex justify-content-between">Total :<span>₦ {{ number_format( $total_cost + $invoice->rfqs->rfqSupplier->devlivery_fee, 2 ) }}</span></li>
                                             </ul>
                                         </div><!--end col-->
                                     </div>

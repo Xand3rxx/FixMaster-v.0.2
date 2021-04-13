@@ -91,6 +91,7 @@ class ClientSeeder extends Seeder
             'user_id'       =>  $client->id,
             'state_id'         =>  24,
             'lga_id'           =>  505,
+            'lga_id'           =>  88,
             'first_name'    => "Kelvin",
             'middle_name'   => "Israel",
             'last_name'     => "Adesanya",
