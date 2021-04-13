@@ -177,13 +177,14 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-
+                                        @foreach($request_progress as $key => $progress)
                                         <tr>
-                                            <td class="tx-color-03 tx-center">1</td>
-                                            <td class="tx-medium">David Akinsola (CSE)</td>
-                                            <td class="tx-medium text-success">Enroute to Client's house</td>
-                                            <td class="text-center">{{ Carbon\Carbon::parse('2020-12-28 16:58:54', 'UTC')->isoFormat('MMMM Do YYYY, h:mm:ssa') }}</td>
+                                            <td class="tx-color-03 tx-center">{{ $loop->iteration }}</td>
+                                            <td class="tx-medium">{{ Str::title($progress['user']['account']['last_name'] . ' '.$progress['user']['account']['first_name'])  }} ({{$progress['user']['roles'][0]['name']}})</td>
+                                            <td class="tx-medium text-success"> {{$progress['substatus']['name']}} </td>
+                                            <td class="text-center">{{ Carbon\Carbon::parse($progress['created_at'], 'UTC')->isoFormat('MMMM Do YYYY, h:mm:ssa') }}</td>
                                         </tr>
+                                        @endforeach
                                     </tbody>
                                 </table>
                             </div><!-- table-responsive -->

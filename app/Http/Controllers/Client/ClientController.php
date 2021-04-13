@@ -1061,7 +1061,7 @@ class ClientController extends Controller
                 'created_at'            =>  \Carbon\Carbon::now('UTC'),
             ),
             array(
-                'user_id'               =>  1,
+                'user_id'               =>  $cseArray[$randomCSE],
                 'service_request_id'    =>  $service_request->id,
                 'status_id'             =>  2,
                 'sub_status_id'         =>  8,
