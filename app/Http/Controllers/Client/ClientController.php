@@ -558,30 +558,18 @@ class ClientController extends Controller
     }
 
     function ajax_contactForm(Request $request){
-        $rules = [
-            'firstName' => 'required|max:191',
-            'lastName' => 'required|max:191',
-            'phoneNumber' => 'required|max:11',
-            'state' => 'required|email',
-            'lga' => 'required',           
-            'town' => 'required',           
-            'streetAddress' => 'required',           
-            'addressLat' => 'required',           
-            'addressLng' => 'required',           
-        ];
-        $messages = [
-            'firstName.required' => 'First Name field can not be empty',
-            'lastName.required' => 'Last Name field can not be empty',
-            'phoneNumber.required' => 'Please Enter phone number',
-            'state.required' => 'Please select state',
-            'lga.required' => 'Please select local govt',
-            'town.required' => 'Please select town',
-            'streetAddress.required' => 'Street field can not be empty',
-            'addressLat.required' => 'Address Latitude is required',
-            'addressLng.required' => 'Address Longitude is required',
-
-        ];
-        $validator = Validator::make($request->all(), $rules, $messages);       
+             
+        $validatedData = $request->validate([
+            'firstName'                   =>   'required',
+            'lastName'                    =>   'required',
+            'phoneNumber'                 =>   'required', 
+            'state'                       =>   'required',          
+            'lga'                         =>   'required',          
+            'town'                        =>   'required',          
+            'streetAddress'               =>   'required',          
+            'addressLat'                  =>   'required',          
+            'addressLng'                  =>   'required',          
+          ]);
 
         $clientContact = new Contact;
         $clientContact->user_id   = auth()->user()->id;
@@ -619,9 +607,7 @@ class ClientController extends Controller
             'booking_fee'               =>   'required',
             'description'               =>   'required', 
             'payment_method'            =>   'required',          
-            'myContact_id'              =>   'required',          
-            'addressLat'                =>   'required',          
-            'addressLng'                =>   'required',          
+            'myContact_id'              =>   'required',         
           ]);
 
             // if payment method is wallet
@@ -674,7 +660,7 @@ class ClientController extends Controller
                                 $service_reqPayment->status = 'success';
                             }
                         }
-                        return back()->with('success', 'Service Request Successful');
+                        return redirect()->route('client.service.all', app()->getLocale())->with('success', 'Service Request was successful!');
                     } else{
                         return back()->with('error', 'sorry!, your service request is not successful');
                     }

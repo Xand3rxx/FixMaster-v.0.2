@@ -379,7 +379,7 @@ Route::prefix('/client')->group(function () {
         
         Route::post('/submit_ratings',              [ClientController::class, 'client_rating'])->name('handle.ratings');
 
-        //Paystack Routes
+        // //Paystack Routes
         Route::get('/paystack/paystack/initiate',   [PaystackController::class, 'initiatePayment'])->name('payment.paystack-initiate');
         Route::get('/product/paystack/verify',      [PaystackController::class, 'verify'])->name('payment.paystack-verify');
 
