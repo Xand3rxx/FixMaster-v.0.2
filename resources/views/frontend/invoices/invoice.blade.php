@@ -90,7 +90,7 @@
 </head>
 
 <body>
-@if($invoice['phase'] == 1)
+@if($invoice['phase'] == '1')
     @if($invoice['invoice_type'] == 'Diagnosis Invoice')
 <div class="d-flex justify-content-center mt-5 border-bottom">
     <p style="font-size: 12px; text-align: center;">
@@ -100,7 +100,8 @@
     </p>
 </div>
     @endif
-@elseif($invoice['phase'] == 2)
+@endif
+@if($invoice->invoice_type === 'Diagnosis Invoice' || $invoice['phase'] == '2')
 <section class="bg-invoice pb-5">
 @else
 <section class="bg-invoice">
@@ -116,7 +117,7 @@
                                     <img src="{{ asset('assets/images/home-fix-logo-colored.png') }}" class="l-dark" style="margin-top: 10px !important;" height="80" alt="FixMaster Logo">
 
                                     <div class="logo-invoice mb-2">
-                                        @if($invoice->status == 1 && $invoice['phase'] == '2' && $invoice['invoice_type'] == 'Diagnosis Invoice')
+                                        @if($invoice->status == '1' && $invoice['phase'] == '2' && $invoice['invoice_type'] == 'Diagnosis Invoice')
                                             <form method="POST" action="{{ route('client.invoice.payment', app()->getLocale()) }}">
                                                 @csrf
                                                 {{-- REQUIREMENTS FOR PAYMENT GATWAYS  --}}
@@ -131,7 +132,7 @@
                                                 <button type="submit" id="paystack_option"  class="btn btn-success">PAY </button>
                                             </form>
                                             <span class="text-primary"> Pending Payment</span><br>
-                                        @elseif($invoice->status == 2 && $invoice['invoice_type'] == 'Diagnosis Invoice')
+                                        @elseif($invoice->status == '2' && $invoice['invoice_type'] == 'Diagnosis Invoice')
                                             <span class="text-success">Paid</span><br>
                                         @endif
                                     </div>
@@ -324,78 +325,7 @@
                                         </ul>
                                     </div><!--end col-->
                                 </div>
-                            @elseif ($invoice->invoice_type === 'Completion Invoice')
-                                @if($invoice->rfq_id != null)
-                                    <div class="table-responsive bg-white shadow rounded">
-                                        <table class="table mb-0 table-center invoice-tb">
-                                            <thead class="bg-light">
-                                            <tr>
-                                                <th scope="col" class="text-left">#</th>
-                                                <th scope="col" class="text-left">Component Name</th>
-                                                <th scope="col" class="text-left">Model Number</th>
-                                                <th scope="col" class="text-left">Quantity</th>
-                                                <th scope="col" class="text-left">Amount</th>
-                                                <th scope="col" class="text-left">Total</th>
-                                            </tr>
-                                            </thead>
-                                            <tbody>
-                                            @foreach($invoice->rfqs->rfqBatches as $item)
-                                                <tr>
-                                                    <td class="text-left">{{ $loop->iteration }}</td>
-                                                    <td class="text-left">{{ $item->component_name }}</td>
-                                                    <td class="text-left">{{ $item->model_number }}</td>
-                                                    <td class="text-left">{{ $item->quantity }}</td>
-                                                    <td class="text-left">₦ {{ number_format($item->amount) }}</td>
-                                                    <td class="text-left">₦ {{ number_format($item->quantity * $item->amount) }}</td>
-                                                </tr>
-                                            @endforeach
-                                            </tbody>
-                                        </table>
-                                    </div>
-                                @endif
 
-                                <div class="table-responsive bg-white shadow rounded mt-3">
-                                    <table class="table mb-0 table-center invoice-tb">
-                                        <thead class="bg-light">
-                                        <tr>
-                                            <th scope="col" class="text-left" colspan="2">Labour Cost</th>
-                                        </tr>
-                                        </thead>
-                                        <tbody>
-                                        <tr>
-                                            <td class="text-left">Hours worked</td>
-                                            <td class="text-left">{{$invoice['hours_spent']}} {{ $invoice['hours_spent']>1 ? 'hrs' : 'hr' }} </td>
-                                        </tr>
-                                        <tr>
-                                            <td class="text-left">Labor</td>
-                                            <td class="text-left">
-                                                ₦ {{ number_format($invoice['labour_cost']) }}
-                                            </td>
-                                        </tr>
-                                        </tbody>
-                                    </table>
-                                </div>
-
-
-                                <div class="row">
-                                    <div class="col-lg-4 col-md-5 ml-auto">
-                                        <ul class="list-unstyled h5 font-weight-normal mt-4 mb-0">
-                                            <li class="test-muted d-flex justify-content-between">Subtotal :<span>₦ {{ number_format($invoice['materials_cost'] + $invoice['labour_cost']) }}</span></li>
-                                            <li class="text-muted d-flex justify-content-between">
-                                                FixMaster Royalty :
-                                                @if($get_fixMaster_royalty['amount'] == null)
-                                                    <span> ₦ {{ number_format( $fixmaster_royalty ) }}</span>
-                                                @endif
-                                            </li>
-                                            <li class="text-muted d-flex justify-content-between">Warranty Cost :<span> ₦ {{ number_format($warranty) }}</span></li>
-                                            <li class="text-muted d-flex justify-content-between">Logistics :<span> ₦ {{ number_format($logistics) }}</span></li>
-                                            <li class="d-flex justify-content-between text-danger">Booking :<span> - ₦ {{ number_format($invoice->serviceRequest->price->amount) }}</span></li>
-                                            <li class="d-flex justify-content-between text-danger">Discount :<span> - ₦ {{ number_format( 0.5 * $logistics ) }}</span></li>
-                                            <li class="text-muted d-flex justify-content-between">Taxes :<span> ₦ {{ number_format($taxes) }}</span></li>
-                                            <li class="d-flex justify-content-between">Total :<span>₦ {{ number_format( $total_cost ) }}</span></li>
-                                        </ul>
-                                    </div><!--end col-->
-                                </div>
                             @endif
 
                         </div>
@@ -432,7 +362,26 @@
                             <div class="invoice-top pb-4 border-bottom">
                                 <div class="row">
                                     <div class="col-md-8">
-                                        <img src="{{ asset('assets/images/home-fix-logo-colored.png') }}" class="l-dark" style="margin-top: -38px !important;" height="140" alt="FixMaster Logo">
+                                        <img src="{{ asset('assets/images/home-fix-logo-colored.png') }}" class="l-dark" style="margin-top: 10px !important;" height="80" alt="FixMaster Logo">
+                                        <div class="logo-invoice mb-2">
+                                            @if($invoice->status == 1 && $invoice['invoice_type'] == 'Completion Invoice')
+                                                <form method="POST" action="{{ route('client.invoice.payment', app()->getLocale()) }}">
+                                                    @csrf
+                                                    {{-- REQUIREMENTS FOR PAYMENT GATWAYS  --}}
+                                                    <input type="hidden" class="d-none" value={{ $total_cost }} name="booking_fee">
+
+                                                    <input type="hidden" class="d-none" value="paystack" id="payment_channel" name="payment_channel">
+
+                                                    <input type="hidden" class="d-none" value="{{ $invoice['unique_id'] }}" id="unique_id" name="unique_id">
+
+                                                    <input type="hidden" class="d-none" value="{{ $invoice['uuid'] }}" id="uuid" name="uuid">
+
+                                                    <button type="submit" id="paystack_option"  class="btn btn-success">PAY </button>
+                                                </form>
+                                            @elseif($invoice->status == 2 && $invoice['invoice_type'] == 'Completion Invoice')
+                                                <span class="text-success">Paid</span><br>
+                                            @endif
+                                        </div>
                                         <a href="" class="text-primary h6"><i data-feather="link" class="fea icon-sm text-muted mr-2"></i>www.fixmaster.com.ng</a>
 
 
@@ -461,6 +410,9 @@
                                         </dl>
                                     </div><!--end col-->
                                 </div><!--end row-->
+                                <div class="d-flex justify-content-center">
+                                    <h2 style="border: 2px solid grey; padding: 5px">{{$invoice['invoice_type']}}</h2>
+                                </div>
                             </div>
 
                             <div class="invoice-middle py-4">
@@ -554,19 +506,19 @@
                                     <div class="row">
                                         <div class="col-lg-4 col-md-5 ml-auto">
                                             <ul class="list-unstyled h5 font-weight-normal mt-4 mb-0">
-                                                <li class="test-muted d-flex justify-content-between">Subtotal :<span>₦ {{ number_format($invoice['materials_cost'] + $invoice['labour_cost']) }}</span></li>
+                                                <li class="test-muted d-flex justify-content-between">Subtotal :<span>₦ {{ number_format($invoice['materials_cost'] + $invoice['labour_cost'], 2) }}</span></li>
                                                 <li class="text-muted d-flex justify-content-between">
                                                     FixMaster Royalty :
                                                     @if($get_fixMaster_royalty['amount'] == null)
-                                                        <span> ₦ {{ number_format( $fixmaster_royalty ) }}</span>
+                                                        <span> ₦ {{ number_format( $fixmasterRoyalty ,2) }}</span>
                                                     @endif
                                                 </li>
-                                                <li class="text-muted d-flex justify-content-between">Warranty Cost :<span> ₦ {{ number_format($warranty) }}</span></li>
+                                                <li class="text-muted d-flex justify-content-between">Warranty Cost :<span> ₦ {{ number_format($WarrantyAmount->amount, 2) }}</span></li>
                                                 <li class="text-muted d-flex justify-content-between">Logistics :<span> ₦ {{ number_format($logistics) }}</span></li>
-                                                <li class="d-flex justify-content-between text-danger">Booking :<span> - ₦ {{ number_format($invoice->serviceRequest->price->amount) }}</span></li>
-                                                <li class="d-flex justify-content-between text-danger">Discount :<span> - ₦ {{ number_format( 0.5 * $logistics ) }}</span></li>
-                                                <li class="text-muted d-flex justify-content-between">Taxes :<span> ₦ {{ number_format($taxes) }}</span></li>
-                                                <li class="d-flex justify-content-between">Total :<span>₦ {{ number_format( $total_cost ) }}</span></li>
+                                                <li class="d-flex justify-content-between text-danger">Booking :<span> - ₦ {{ number_format($invoice->serviceRequest->price->amount, 2) }}</span></li>
+                                                <li class="d-flex justify-content-between text-danger">Discount :<span> - ₦ {{ number_format( 0.5 * $logistics , 2) }}</span></li>
+                                                <li class="text-muted d-flex justify-content-between">Taxes :<span> ₦ {{ number_format($tax, 2) }}</span></li>
+                                                <li class="d-flex justify-content-between">Total :<span>₦ {{ number_format( $total_cost, 2 ) }}</span></li>
                                             </ul>
                                         </div><!--end col-->
                                     </div>
@@ -764,17 +716,17 @@
                                             <li class="text-muted d-flex justify-content-between">
                                                 FixMaster Royalty :
                                                 @if($get_fixMaster_royalty['amount'] == null)
-                                                    <span> ₦ {{ number_format( $fixmaster_royalty_value * (($invoice['materials_cost'] + $invoice['labour_cost'])) ,2) }}</span>
+                                                    <span> ₦ {{ number_format( $fixmaster_royalty_value * (($invoice['materials_cost'] + $invoice['labour_cost'] + $logistics)) ,2) }}</span>
                                                 @endif
                                             </li>
-                                            <li class="text-muted d-flex justify-content-between">Warranty Cost :<span> ₦ {{ number_format($warranty * ($invoice['materials_cost'] + $invoice['labour_cost']) ,2) }}</span></li>
+                                            <li class="text-muted d-flex justify-content-between">Warranty Cost :<span> ₦ {{ number_format($warranty->percentage/100 * ($invoice['materials_cost'] + $invoice['labour_cost']) ,2) }}</span></li>
                                             <li class="text-muted d-flex justify-content-between">Logistics :<span> ₦ {{ number_format($logistics ,2) }}</span></li>
                                             <li class="text-muted d-flex justify-content-between">Taxes :<span> ₦ {{ number_format($tax ,2) }}</span></li>
                                             <li class="d-flex justify-content-between text-danger">Booking :<span> - ₦ {{ number_format($invoice->serviceRequest->price->amount,2) }}</span></li>
                                             <li class="d-flex justify-content-between text-danger">Discount :<span> - ₦ {{ number_format( 0.5 * $logistics ,2) }}</span></li>
                                             <li class="d-flex justify-content-between">Total :<span>₦ {{ number_format(
     ($invoice['materials_cost'] + $invoice['labour_cost']) + ( $fixmaster_royalty_value * (($invoice['materials_cost'] + $invoice['labour_cost'])) ) +
-    ($warranty) + ($logistics) - ($invoice->serviceRequest->price->amount) - ( 0.5 * $logistics ) +
+    ($warranty->percentage/100) + ($logistics) - ($invoice->serviceRequest->price->amount) - ( 0.5 * $logistics ) +
     ($tax)
  ,2) }}</span></li>
                                         </ul>
@@ -885,11 +837,17 @@
                                 <input type="hidden" name="request_uuid" value="{{ $serviceRequestUUID }}">
                                 <input type="hidden" name="client_choice" value="accepted">
                                 <input type="hidden" name="amount" value="{{ $invoice['labour_cost'] + $invoice['materials_cost'] }}">
+                                <div class="form-group">
+                                    <div class="custom-control custom-radio">
+                                        <input class="custom-control-input" type="radio" name="warranty_id" id="inlineRadio{{ $warranty->id }}" value="{{ $warranty->id }}" data-warranty-id="{{$warranty->id}}" checked>
+                                        <label class="custom-control-label" for="inlineRadio{{ $warranty->id }}">{{ $warranty->name }} - (₦ {{ number_format($warranty->percentage/100 * ($invoice['materials_cost'] + $invoice['labour_cost']), 2) }})</label><br>
+                                    </div>
+                                </div>
                                 @foreach($ActiveWarranties as $ActiveWarranty)
                                     <div class="form-group">
                                         <div class="custom-control custom-radio">
                                             <input class="custom-control-input" type="radio" name="warranty_id" id="inlineRadio{{ $ActiveWarranty->id }}" value="{{ $ActiveWarranty->id }}" data-warranty-id="{{$ActiveWarranty->id}}">
-                                            <label class="custom-control-label" for="inlineRadio{{ $ActiveWarranty->id }}">{{ $ActiveWarranty->name }} - (₦ {{ number_format($ActiveWarranty->percentage * ($invoice['materials_cost'] + $invoice['labour_cost']), 2) }}) - (id : {{ $ActiveWarranty->id }})</label><br>
+                                            <label class="custom-control-label" for="inlineRadio{{ $ActiveWarranty->id }}">{{ $ActiveWarranty->name }} - (₦ {{ number_format($ActiveWarranty->percentage/100 * ($invoice['materials_cost'] + $invoice['labour_cost']), 2) }}) </label><br>
                                         </div>
                                     </div>
                                 @endforeach

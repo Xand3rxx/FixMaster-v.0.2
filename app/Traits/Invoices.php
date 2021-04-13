@@ -223,7 +223,8 @@ trait Invoices
             'total_amount'          => $total_amount,
             'amount_due'            => $total_amount,
             'amount_paid'           => $amount_paid,
-            'status'                => $status
+            'status'                => $status,
+            'phase'                 => 2
         ]);
          $invoice_id = $createInvoice->id;
          self::getTotalAmount($invoice_id, $labour_cost, $materials_cost, $total_amount);

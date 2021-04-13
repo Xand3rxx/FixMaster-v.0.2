@@ -52,13 +52,14 @@ class RequestController extends Controller
     {
         // find the service reqquest using the uuid and relations
         $service_request = \App\Models\ServiceRequest::where('uuid', $uuid)->with(['price', 'service', 'service.subServices'])->firstOrFail();
-        // dd($service_request['preferred_time']);
+        $request_progress = \App\Models\ServiceRequestProgress::where('service_request_id', $service_request->id)->with('user', 'substatus')->latest('created_at')->get();
 
         // find the technician role CACHE THIS DURING PRODUCTION
         $technicainsRole = \App\Models\Role::where('slug', 'technician-artisans')->first();
         (array) $variables = [
             'service_request' => $service_request,
             'technicains' => \App\Models\UserService::where('service_id', $service_request->service_id)->where('role_id', $technicainsRole->id)->with('user')->get(),
+            'request_progress' => $request_progress,
         ];
         if ($service_request->status_id == 2) {
             $service_request_progresses = \App\Models\ServiceRequestProgress::where('user_id', auth()->user()->id)->latest('created_at')->first();
@@ -78,7 +79,6 @@ class RequestController extends Controller
                 $service_request->load(['rfqs' => function ($query) {
                     $query->where('status', 'Awaiting')->where('accepted', 'No')->with('rfqBatches', 'rfqSupplier', 'rfqSupplier.supplier')->first();
                 }]);
-                // dd($variables);
             }
         }
         return view('cse.requests.show', $variables);

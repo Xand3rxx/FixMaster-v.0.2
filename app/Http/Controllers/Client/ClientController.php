@@ -905,7 +905,10 @@ class ClientController extends Controller
 
     public function myServiceRequest(){
 
-        $myServiceRequests = Client::where('user_id', auth()->user()->id)->with('service_requests')->firstOrFail();
+        $myServiceRequests = Client::where('user_id', auth()->user()->id)->with(['service_requests' => function ($query) {
+            $query->latest('created_at');
+        }])->firstOrFail();
+        
         return view('client.services.list', [
             'myServiceRequests' =>  $myServiceRequests,
         ]);
@@ -1061,7 +1064,7 @@ class ClientController extends Controller
                 'created_at'            =>  \Carbon\Carbon::now('UTC'),
             ),
             array(
-                'user_id'               =>  1,
+                'user_id'               =>  $cseArray[$randomCSE],
                 'service_request_id'    =>  $service_request->id,
                 'status_id'             =>  2,
                 'sub_status_id'         =>  8,
@@ -1075,6 +1078,7 @@ class ClientController extends Controller
             'job_accepted'          =>  'Yes',
             'job_acceptance_time'   =>  \Carbon\Carbon::now('UTC'),
             'status'                =>  'Active',
+            'created_at'            =>  \Carbon\Carbon::now('UTC'),
         );
 
         DB::table('service_request_progresses')->insert($serviceRequestProgresses);
