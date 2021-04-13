@@ -9,23 +9,14 @@
         <div class="container pd-x-0">
             <div class="d-sm-flex align-items-center justify-content-between mg-b-20 mg-lg-b-25 mg-xl-b-30">
                 <div>
-
-                    <h4 class="mg-b-0 tx-spacing--1">My Service Request List</h4>
+                    <h4 class="mg-b-0 tx-spacing--1">My Service Request as of {{ date('M, d Y') }}</h4>
                 </div>
 
             </div>
 
-            <div class="row row-xs">
+            <div class="row row-xs mt-4">
                 <div class="col-lg-12 col-xl-12 mg-t-10">
                     <div class="card mg-b-10">
-                        <div class="card-header pd-t-20 d-sm-flex align-items-start justify-content-between bd-b-0 pd-b-0">
-                            <div>
-                                <h6 class="mg-b-5">My Service Request as of {{ date('M, d Y') }}</h6>
-                                <p class="tx-13 tx-color-03 mg-b-0">This table displays a list of all My Service Request.</p>
-                            </div>
-
-                        </div><!-- card-header -->
-
                         <div class="table-responsive">
 
                             <table class="table table-hover mg-b-0" id="basicExample">

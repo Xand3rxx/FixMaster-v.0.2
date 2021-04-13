@@ -107,62 +107,67 @@
                 <h5>Recent Requests :</h5>
               
                 @php $count = 0; @endphp
-                @foreach ($userServiceRequests['service_requests'] as $userServiceRequest)
-                @if($count++ < 3)
-                    <div class="media key-feature align-items-center p-3 rounded shadow mt-4">
-                    <img src="{{ asset('assets/images/job/Webhooks.svg')}}" class="avatar avatar-ex-sm" alt="">
-                    <div class="media-body content ml-3">
-                        <h4 class="title mb-0">{{ $userServiceRequest['service']['name'] }}({{ $userServiceRequest['service']['category']['name'] }})</h4>
-                     
-                        @if(!empty($userServiceRequest->clientDiscounts[0]->discount->rate) && ($userServiceRequest->clientDiscounts[0]->availability == 'unused') )
-                        <p class="text-muted mb-0"><span>Amount:</span> 
-                         <del>₦ {{ $userServiceRequest->price->amount}}</del>
-                        </p>
-                        <p class="text-muted mb-0"><span>Discount:</span> 
-                                ₦{{ number_format(CustomHelpers::discountCalculation($userServiceRequest->clientDiscounts[0]->discount->rate,$userServiceRequest->price->amount )) }}
-                                <sup style="font-size: 10px;" class="text-success">Discount</sup>
-                                </p>
-                            @else
-
-                                <p class="text-muted mb-0"><span>Amount:</span> 
-                         ₦ {{ $userServiceRequest['price']['amount']}}
-                        </p>
-                        @endif 
-                      
-                        {{-- {{dd($userServiceRequest['service_request_assignees']->count())}} --}}
-                        <p class="mb-0"><a href="{{ route('client.request_details', [ 'request'=>$userServiceRequest['uuid'], 'locale'=>app()->getLocale() ]) }}" style="color: #161c2d" title="View Service request details">CSE: <span class="text-muted">
-
+                @if($userServiceRequests['service_requests']->isNotEmpty())
+                    @foreach ($userServiceRequests['service_requests'] as $userServiceRequest)
+                    @if($count++ < 3)
+                        <div class="media key-feature align-items-center p-3 rounded shadow mt-4">
+                            <img src="{{ asset('assets/images/job/Webhooks.svg')}}" class="avatar avatar-ex-sm" alt="">
+                            <div class="media-body content ml-3">
+                                <h4 class="title mb-0">{{ $userServiceRequest['service']['name'] }}({{ $userServiceRequest['service']['category']['name'] }})</h4>
                             
-
-                            {{-- {{dd()}} --}}
-                            @if($userServiceRequest['service_request_assignees']->count() > 0)
-                                @foreach ($userServiceRequest['service_request_assignees'] as $item)
-                                    @if(($item['user']['roles'][0]['slug'] == 'cse-user') && ($item['status'] == 'Active'))
-                                        {{ $item['user']['account']['first_name'].' '.$item['user']['account']['last_name'] }}
-                                        @php break; @endphp
+                                @if(!empty($userServiceRequest->clientDiscounts[0]->discount->rate) && ($userServiceRequest->clientDiscounts[0]->availability == 'unused') )
+                                <p class="text-muted mb-0"><span>Amount:</span> 
+                                <del>₦ {{ $userServiceRequest->price->amount}}</del>
+                                </p>
+                                <p class="text-muted mb-0"><span>Discount:</span> 
+                                        ₦{{ number_format(CustomHelpers::discountCalculation($userServiceRequest->clientDiscounts[0]->discount->rate,$userServiceRequest->price->amount )) }}
+                                        <sup style="font-size: 10px;" class="text-success">Discount</sup>
+                                        </p>
                                     @else
-                                        Not Assigned
+
+                                        <p class="text-muted mb-0"><span>Amount:</span> 
+                                ₦ {{ $userServiceRequest['price']['amount']}}
+                                </p>
+                                @endif 
+                            
+                                {{-- {{dd($userServiceRequest['service_request_assignees']->count())}} --}}
+                                <p class="mb-0"><a href="{{ route('client.request_details', [ 'request'=>$userServiceRequest['uuid'], 'locale'=>app()->getLocale() ]) }}" style="color: #161c2d" title="View Service request details">CSE: <span class="text-muted">
+
+                                    
+
+                                    {{-- {{dd()}} --}}
+                                    @if($userServiceRequest['service_request_assignees']->count() > 0)
+                                        @foreach ($userServiceRequest['service_request_assignees'] as $item)
+                                            @if(($item['user']['roles'][0]['slug'] == 'cse-user') && ($item['status'] == 'Active'))
+                                                {{ $item['user']['account']['first_name'].' '.$item['user']['account']['last_name'] }}
+                                                @php break; @endphp
+                                            @else
+                                                Not Assigned
+                                            @endif
+                                        @endforeach
+                                    @else
+                                        Not Assigned 
                                     @endif
-                                @endforeach
-                            @else
-                                Not Assigned 
-                            @endif
-                        </span></a></p> 
-                        <p class="mb-0">Status: 
-                            @if($userServiceRequest->status_id == '1')
-                                <span class="text-warning">Pending</span>
-                            @elseif($userServiceRequest->status_id == '2')
-                                <span class="text-info">Ongoing</span>
-                            @elseif($userServiceRequest->status_id == '4')
-                                <span class="text-success">Completed</span>
-                            @elseif($userServiceRequest->status_id == '3')
-                                <span class="text-danger">Cancelled</span>
-                            @endif
-                        </p>  
-                    </div>
-                </div>
-                     @endif  
-                @endforeach 
+                                </span></a></p> 
+                                <p class="mb-0">Status: 
+                                    @if($userServiceRequest->status_id == '1')
+                                        <span class="text-warning">Pending</span>
+                                    @elseif($userServiceRequest->status_id == '2')
+                                        <span class="text-info">Ongoing</span>
+                                    @elseif($userServiceRequest->status_id == '4')
+                                        <span class="text-success">Completed</span>
+                                    @elseif($userServiceRequest->status_id == '3')
+                                        <span class="text-danger">Cancelled</span>
+                                    @endif
+                                </p>  
+                            </div>
+                        </div>
+                    @endif  
+                    @endforeach 
+                @else
+                You have not booked a Service!<br>
+                    <a href="{{ route('client.services.list', app()->getLocale()) }}" class="btn btn-primary mouse-down">Book a  Service</a>
+                @endif
             </div><!--end col-->
         </div><!--end row-->
     </div>
