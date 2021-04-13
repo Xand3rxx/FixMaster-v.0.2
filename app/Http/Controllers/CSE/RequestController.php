@@ -62,6 +62,7 @@ class RequestController extends Controller
         ];
         if ($service_request->status_id == 2) {
             $service_request_progresses = \App\Models\ServiceRequestProgress::where('user_id', auth()->user()->id)->latest('created_at')->first();
+            dd($service_request_progresses);
             // Determine Ongoing Status List
             $variables = array_merge($variables, [
                 'tools' => \App\Models\ToolInventory::all(),
