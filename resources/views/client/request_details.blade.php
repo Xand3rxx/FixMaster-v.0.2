@@ -64,7 +64,7 @@
 
                     <div class="col-md-7">
                         <div class="card-body">
-                            <h6 class="text-primary font-weight-bold">{{ $requestDetail->cses[0]->account->first_name.' '.$requestDetail->cses[0]->account->last_name }} <small class="text-muted d-block">CSE | FixMaster</small></h6>
+                            <h6 class="text-primary font-weight-bold">{{ $requestDetail->cses[0]->account->first_name.' '.$requestDetail->cses[0]->account->last_name }} <small class="text-muted d-block">{{ $requestDetail->cses[0]->roles[0]->name ?? 'Customer Service Executive' }} | FixMaster</small></h6>
                             <ul class="list-unstyled mb-0">
                                 <li class="list-inline-item"><i class="mdi mdi-star text-warning"></i></li>
                                 <li class="list-inline-item"><i class="mdi mdi-star text-warning"></i></li>
