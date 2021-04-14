@@ -15,21 +15,21 @@
                                     <div class="col-md-4">
                                         <div class="form-group position-relative">
                                             <label>First Name <span class="text-danger">*</span></label>
-                                            <input id="first-name" type="text" class="form-control" placeholder="First Name :" / autocomplete="off">
+                                            <input id="first-name" type="text" class="form-control" placeholder="First Name :" autocomplete="off" />
                                         </div>
                                     </div>
                                     <!--end col-->
                                     <div class="col-md-4">
                                         <div class="form-group position-relative">
                                             <label>Last Name <span class="text-danger">*</span></label>
-                                            <input id="last-name" type="text" class="form-control" placeholder="Last Name :" / autocomplete="off">
+                                            <input id="last-name" type="text" class="form-control" placeholder="Last Name :" autocomplete="off" />
                                         </div>
                                     </div>
 
                                     <div class="col-md-4">
                                         <div class="form-group position-relative">
                                             <label>Contact Phone Number <span class="text-danger">*</span></label>
-                                            <input type="tel" maxlength="11" id="phone_number" class="form-control phone" placeholder="Phone Number :" / autocomplete="off">
+                                            <input type="tel" maxlength="11" id="phone_number" class="form-control phone" placeholder="Phone Number :" autocomplete="off" />
                                         </div>
                                     </div>
                                     <!--end col-->
@@ -91,7 +91,7 @@
                                     <div class="col-12">
                                         <div class="form-group position-relative">
                                             <label>Full Address <span class="text-danger">*</span></label>
-                                            <input type="text" id="street-address" class="form-control user_address" placeholder="Full address of contact :" / autocomplete="off">
+                                            <input type="text" id="street-address" class="form-control user_address" placeholder="Full address of contact :" autocomplete="off" >
                                         </div>
                                     </div>
                                     <!--end col-->
