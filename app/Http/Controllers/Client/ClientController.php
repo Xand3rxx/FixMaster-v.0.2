@@ -66,7 +66,11 @@ class ClientController extends Controller
     public function index()
     {
 
-        $myRequest = Client::where('user_id', auth()->user()->id)->with('service_requests')->firstOrFail();
+        $myRequest = Client::where('user_id', auth()->user()->id)->with(['service_requests' => function ($query) {
+            $query->latest('created_at');
+        }])->firstOrFail();
+
+        // return $myRequest;
 
         //Get total available serviecs
         $totalServices = Service::count();
@@ -85,6 +89,7 @@ class ClientController extends Controller
             'user' => auth()->user()->account,
             'client' => [
                 'phone_number' => auth()->user()->contact->phone_number ?? 'UNAVAILABLE',
+                'address' => auth()->user()->contact->address ?? 'UNAVAILABLE',
             ],
             'popularRequests'  =>  $popularRequests,
             'userServiceRequests' =>  $myRequest,
@@ -901,11 +906,11 @@ class ClientController extends Controller
 
     public function myServiceRequest(){
 
-        $myServiceRequests = Client::where('user_id', auth()->user()->id)->with(['service_requests' => function ($query) {
+        $myServiceRequests = Client::where('user_id', auth()->user()->id)->with(['service_requests.invoices' => function ($query) {
             $query->latest('created_at');
         }])->firstOrFail();
         
-        
+       
         return view('client.services.list', [
             'myServiceRequests' =>  $myServiceRequests,
         ]);

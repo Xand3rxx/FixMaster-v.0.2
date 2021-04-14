@@ -36,6 +36,7 @@ class ClientDecisionController extends Controller
         $clientDeclinedSuppId = SubStatus::select('id')->where('phase', 19)->first();
         $invoice = Invoice::find($request->invoice_id);
         $rfq = Rfq::where('service_request_id', $invoice->serviceRequest->id)->first();
+        $diagnosisInvoice = Invoice::where('service_request_id', $invoice->serviceRequest->id)->where('invoice_type', 'Diagnosis Invoice')->first();
 //        dd($invoice['uuid']);
         $warranty = $request['warranty_id'] ? Warranty::findOrFail($request->warranty_id) : '' ;
         if ($request['client_choice'] == 'accepted')
@@ -43,7 +44,7 @@ class ClientDecisionController extends Controller
 //            dd($request);
             if($request['invoice_type'] == 'Supplier Invoice')
             {
-                \Illuminate\Support\Facades\DB::transaction(function () use ($invoice, $request, $rfq, $clientAcceptedSuppId, &$completionInvoice) {
+                \Illuminate\Support\Facades\DB::transaction(function () use ($invoice, $request, $rfq, $clientAcceptedSuppId, $diagnosisInvoice, &$completionInvoice) {
                     //Update the RFQ Table
                     $rfq->update([
                         'status' => 'Delivered',
@@ -54,7 +55,7 @@ class ClientDecisionController extends Controller
                     $invoice->update([
                         'phase' => '0'
                     ]);
-                    $completionInvoice = $this->completedServiceInvoice($request->request_id,$rfq->id, $request->warranty_id, $invoice->sub_service_id, $invoice->hours_spent);
+                    $completionInvoice = $this->completedServiceInvoice($request->request_id,$invoice->rfq_id, $request->warranty_id, $diagnosisInvoice->sub_service_id, $diagnosisInvoice->hours_spent);
                     $this->log('request', 'Informational', Route::currentRouteAction(), auth()->user()->account->last_name . ' ' . auth()->user()->account->first_name  . ' accepted supplier return invoice.');
                     \App\Models\ServiceRequestProgress::storeProgress(auth()->user()->id, $request->request_id, 2, $clientAcceptedSuppId->id);
 
