@@ -125,6 +125,8 @@ class HandleCompletedDiagnosisController extends Controller
         $fixMasterRoyalty = '';
         $subTotal = '';
         $bookingCost = '';
+        $discount = '';
+        $discountValue = 5/100;
         $tax_cost = '';
         $total_cost = '';
         $warranty = Warranty::where('name', 'Free Warranty')->first();
@@ -133,14 +135,16 @@ class HandleCompletedDiagnosisController extends Controller
             $subTotal = $serviceCharge;
             $fixMasterRoyalty = $fixMaster_royalty_value * ($subTotal);
             $bookingCost = $invoice->serviceRequest->price->amount;
+            $discount = $discountValue * $bookingCost;
             $tax_cost = $tax * ($subTotal + $logistics_cost + $fixMasterRoyalty);
             $total_cost = $serviceCharge + $fixMasterRoyalty + $tax_cost + $logistics_cost - $bookingCost;
         } else {
             $warrantyCost = 0.1 * ($invoice->labour_cost + $materials_cost);
             $bookingCost = $invoice->serviceRequest->price->amount;
+            $discount = $discountValue * $bookingCost;
             $fixMasterRoyalty = $fixMaster_royalty_value * ($invoice->labour_cost + $materials_cost + $logistics_cost);
             $tax_cost = $tax * $sub_total;
-            $total_cost = $materials_cost + $invoice->labour_cost + $fixMasterRoyalty + $warrantyCost + $logistics_cost - $bookingCost - 1500 + $tax_cost;
+            $total_cost = $materials_cost + $invoice->labour_cost + $fixMasterRoyalty + $warrantyCost + $logistics_cost - $bookingCost - $discount + $tax_cost;
         }
         //End here
 
@@ -178,6 +182,7 @@ class HandleCompletedDiagnosisController extends Controller
             'fixmaster_royalty_value' => $fixMaster_royalty_value,
             'subTotal' => $subTotal,
             'bookingCost' => $bookingCost,
+            'discount' => $discount,
             'fixmasterRoyalty' => $fixMasterRoyalty,
             'tax' => $tax_cost,
             'logistics' => $logistics_cost,

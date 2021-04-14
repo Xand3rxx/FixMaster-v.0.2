@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Models\Payment;
+use App\Models\ServiceRequest;
 use App\Models\ServiceRequestWarranty;
+use App\Models\ServiceRequestPayment;
 use App\Models\User;
 use App\Traits\GenerateUniqueIdentity as Generator;
 use App\Traits\RegisterPaymentTransaction;
@@ -55,6 +57,8 @@ class InvoiceController extends Controller
         $subTotal = '';
         $bookingCost = '';
         $tax_cost = '';
+        $discount = '';
+        $discountValue = 5/100;
         $total_cost = '';
         $warranty = Warranty::where('name', 'Free Warranty')->first();
         $ActiveWarranties = Warranty::ActiveExtendedWarranties()->get();
@@ -64,14 +68,16 @@ class InvoiceController extends Controller
             $subTotal = $serviceCharge;
             $fixMasterRoyalty = $fixMaster_royalty_value * ($subTotal);
             $bookingCost = $invoice->serviceRequest->price->amount;
+            $discount = $discountValue * $bookingCost;
             $tax_cost = $tax * ($subTotal + $logistics_cost + $fixMasterRoyalty);
             $total_cost = $serviceCharge + $fixMasterRoyalty + $tax_cost + $logistics_cost - $bookingCost;
         } else {
             $warrantyCost = 0.1 * ($invoice->labour_cost + $materials_cost);
             $bookingCost = $invoice->serviceRequest->price->amount;
+            $discount = $discountValue * $bookingCost;
             $fixMasterRoyalty = $fixMaster_royalty_value * ($invoice->labour_cost + $materials_cost + $logistics_cost);
             $tax_cost = $tax * $sub_total;
-            $total_cost = $materials_cost + $invoice->labour_cost + $fixMasterRoyalty + $WarrantyAmount->amount + $logistics_cost - $bookingCost - 1500 + $tax_cost;
+            $total_cost = $materials_cost + $invoice->labour_cost + $fixMasterRoyalty + $WarrantyAmount->amount + $logistics_cost - $bookingCost - $discount + $tax_cost;
 //            dd($fixMasterRoyalty);
         }
 
@@ -89,6 +95,8 @@ class InvoiceController extends Controller
             'bookingCost' => $bookingCost,
             'fixmasterRoyalty' => $fixMasterRoyalty,
             'tax' => $tax_cost,
+            'discount' => $discount,
+            'tax_value' => $tax,
             'logistics' => $logistics_cost,
             'warranty' => $warranty,
             'ActiveWarranties' => $ActiveWarranties,
@@ -100,6 +108,7 @@ class InvoiceController extends Controller
     public function savePayment(Request $request)
     {
 //         dd($request);
+        $invoice = Invoice::where('uuid', $request->uuid)->first();
         $valid = $this->validate($request, [
             // List of things needed from the request like
             'booking_fee' => 'required',
@@ -113,6 +122,7 @@ class InvoiceController extends Controller
         // dd($track);
         $data = Payment::where('reference_id', $payment->reference_id)->orderBy('id', 'DESC')->first();
         //    dd($data);
+
         $user = User::find($data->user_id);
         // dd($user);
         if ($user) {
@@ -159,6 +169,26 @@ class InvoiceController extends Controller
         $invoiceUUID = Session::get('InvoiceUUID');
         $data = Payment::where('reference_id', $track)->orderBy('id', 'DESC')->first();
         $invoice = Invoice::where('uuid', $invoiceUUID)->first();
+        $service_request = ServiceRequest::where('id', $invoice->service_request_id)->first();
+
+
+        // Store Service_Request_Payments Record
+        $service_request_payment = ServiceRequestPayment::create([
+            'user_id'               =>    auth()->user()->id,
+            'payment_id'            =>    $data->id,
+            'service_request_id'    =>    $invoice->service_request_id,
+            'amount'                =>    $data->amount,
+            'unique_id'             =>    static::generate('invoices', 'REF-'),
+            'type'                  =>    $request['invoice_type'] == 'Diagnosis Invoice' ? 'diagnosis-fee' : 'final-invoice-fee',
+            'status'                =>    $data->status
+        ]);
+
+        if($service_request_payment)
+        {
+            $service_request->update([
+                'total_amount'  => $data->amount
+            ]);
+        }
 
         $curl = curl_init();
 
@@ -207,11 +237,36 @@ class InvoiceController extends Controller
 
             // $client = \App\Models\Client::where('user_id', auth()->user()->id)->with('user')->firstOrFail();
         }
-        if($invoice['status'] == '1')
-        {
-            $invoice['status'] = '2';
-            $invoice->update();
+
+        if($invoice['invoice_type'] == "Diagnosis Invoice"){
+            if($invoice['status'] == '1' && $invoice['phase'] == '2')
+            {
+                $invoice['status'] = '2';
+                $invoice->update();
+            }
+            else if($invoice['status'] == '1' && $invoice['phase'] == '0') {
+                $SelectedCompleteInvoice = Invoice::where('service_request_id', $invoice['service_request_id'])->where('invoice_type', 'Completion Invoice')->first();
+
+                $invoice['status'] = '2';
+                $invoice['phase'] = '2';
+                $invoice->update();
+
+                $SelectedCompleteInvoice['status'] = '0';
+                $SelectedCompleteInvoice['phase'] = '0';
+                $SelectedCompleteInvoice->update();
+            }
+
+            /** Finally return the callback view for the end user */
+            return redirect()->route('invoice', [app()->getLocale(), $invoiceUUID])->with('success', 'Invoice payment was successful!');
         }
+        else if($invoice['invoice_type'] == "Completion Invoice"){
+            if($invoice['status'] == '1')
+            {
+                $invoice['status'] = '2';
+                $invoice['phase'] = '2';
+                $invoice->update();
+            }
+    }
 
         /** Finally return the callback view for the end user */
         return redirect()->route('invoice', [app()->getLocale(), $invoiceUUID])->with('success', 'Invoice payment was successful!');
