@@ -269,15 +269,11 @@ class ClientController extends Controller
 
     public function walletSubmit(Request $request)
     {
-        $myWallet    = WalletTransaction::where('user_id', auth()->user()->id)->orderBy('id', 'DESC')->get();
-        // Instantiate payment controller class in this controller's method
-        $paystack_controller = new PaystackController;
-
+        // get the last wallet transaction of the loggedIn client
         $myWallet    = WalletTransaction::where('user_id', auth()->user()->id)->orderBy('id', 'DESC')->get();
         // validate Request
         $valid = $this->validate($request, [
-            // List of things needed from the request like
-            // Amount, Payment Channel, Payment for
+            // List of things needed from the request 
             'amount'           => 'required',
             'payment_channel'  => 'required',
             'payment_for'      => 'required',
@@ -309,11 +305,11 @@ class ClientController extends Controller
             if ($paymentRecord->status != 'pending') {
                 $return = redirect()->route('client.wallet', app()->getLocale())->with('error', 'Transaction already saved');
             }
-            $gatewayData = PaymentGateway::where('keyword', $paymentRecord->payment_channel)->first();
+            //check the payment method selected    
               switch ($paymentRecord->payment_channel) {
                   case 'paystack':              
                     // Use paymentcontroller method in this controller
-                    // $return = $paystack_controller->initiatePayment($request, $generatedVal, $paymentRecord, $user);
+                    $return = $this->initiatePayment($request, $generatedVal, $paymentRecord, $user);
                     
                     $return = redirect()->route('client.ipn.paystack', app()->getLocale());
                   break;
@@ -325,8 +321,8 @@ class ClientController extends Controller
                     $flutter['track'] = Session::get('Track');
                     $client = User::find(auth()->user()->id);
                     // dd($flutter);
-                    return view('client.payment.flutter', compact('flutter', 'gatewayData', 'paymentRecord', 'myWallet','client'));
-
+                    // return view('client.payment.flutter', compact('flutter', 'client'));
+                    $return = $paystack_controller->initiatePayment($request, $generatedVal, $paymentRecord, $user);
                     // $return = redirect()->route('client.ipn.flutter', app()->getLocale());
 
                   break;
@@ -689,7 +685,7 @@ class ClientController extends Controller
                 // paystack
                 if($request->payment_channel == 'paystack'){
                     // if($this->initiatePayment()){
-
+                            
                         $SavedRequest = $this->saveRequest($request);
 
                         // $this->initiatePayment();
