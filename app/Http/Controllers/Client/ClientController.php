@@ -85,6 +85,7 @@ class ClientController extends Controller
             'user' => auth()->user()->account,
             'client' => [
                 'phone_number' => auth()->user()->contact->phone_number ?? 'UNAVAILABLE',
+                'address' => auth()->user()->contact->address ?? 'UNAVAILABLE',
             ],
             'popularRequests'  =>  $popularRequests,
             'userServiceRequests' =>  $myRequest,
@@ -541,7 +542,7 @@ class ClientController extends Controller
         // $data['lgas'] = Lga::select('id', 'name')->orderBy('name', 'ASC')->get();
 
         //Return Service details
-        $data['myContacts'] = Contact::where('user_id', auth()->user()->id)->get();
+        $data['myContacts'] = Contact::where('user_id', auth()->user()->id)->latest('created_at')->get();
         //Return Service details
         // $data['myContacts'] = Contact::where('user_id', auth()->user()->id)->get();
         // dd($data['myContacts']);
@@ -905,7 +906,11 @@ class ClientController extends Controller
 
     public function myServiceRequest(){
 
-        $myServiceRequests = Client::where('user_id', auth()->user()->id)->with('service_requests')->firstOrFail();
+        $myServiceRequests = Client::where('user_id', auth()->user()->id)->with(['service_requests.invoices' => function ($query) {
+            $query->latest('created_at');
+        }])->firstOrFail();
+        
+       
         return view('client.services.list', [
             'myServiceRequests' =>  $myServiceRequests,
         ]);
@@ -934,7 +939,7 @@ class ClientController extends Controller
         $walTrans = WalletTransaction::where('user_id', auth()->user()->id)->orderBy('id', 'DESC')->first();
         //  $data['ewallet'] = !isset($json->withdraw)? $walTrans->closing_balance: (is_array($json->withdraw) ?  (float)$walTrans->closing_balance + (float)array_sum($json->withdraw): (float)'1000.000' + (float)$json->withdraw) ;
 
-        $data['ewallet'] =  $walTrans->closing_balance;
+        $data['ewallet'] =  !empty($walTrans->closing_balance) ? $walTrans->closing_balance : 0;
         $myWallet    = WalletTransaction::where('user_id', auth()->user()->id)->orderBy('id', 'DESC')->get();
         return view('client.loyalty', compact('myWallet')+$data);
     }
@@ -1075,6 +1080,7 @@ class ClientController extends Controller
             'job_accepted'          =>  'Yes',
             'job_acceptance_time'   =>  \Carbon\Carbon::now('UTC'),
             'status'                =>  'Active',
+            'created_at'            =>  \Carbon\Carbon::now('UTC'),
         );
 
         DB::table('service_request_progresses')->insert($serviceRequestProgresses);

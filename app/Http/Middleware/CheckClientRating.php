@@ -29,6 +29,7 @@ class CheckClientRating
                $serviceId = $clientServiceRequest->service_id; // Service Id
                $serviceRequestTotalAmt = $clientServiceRequest->total_amount;
                $serviceRequestClientId = $clientServiceRequest->client_id; // Service Request Client Id
+               $res = [];
                 foreach($response as $user){
                   $res = $user->roles;
                   $res2 = $user->account->first_name." ".$user->account->last_name; // Users Account Name

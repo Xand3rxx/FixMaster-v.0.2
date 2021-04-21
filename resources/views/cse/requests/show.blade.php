@@ -307,7 +307,6 @@
 <script>
     $(function() {
         'use strict'
-
         $('#wizard3').steps({
             headerTag: 'h3'
             , bodyTag: 'section'
@@ -328,81 +327,65 @@
             showFinishButtonAlways: false
             , onFinished: function(event, currentIndex) {
                 $('#update-progress').trigger('click');
-
             }
         , });
-
         let count = 1;
-
-
-
         //Add and Remove Request for
         $(document).on('click', '.add-rfq', function() {
             count++;
             addRFQ(count);
         });
-
         $(document).on('click', '.remove-rfq', function() {
             count--;
             $(this).closest(".remove-rfq-row").remove();
             // $(this).closest('tr').remove();
         });
-
         //Add and Remove Tools request form
         $(document).on('click', '.add-trf', function() {
             count++;
             addTRF(count);
         });
-
         $(document).on('click', '.remove-trf', function() {
             count--;
             $(this).closest(".remove-trf-row").remove();
         });
-
         //Hide and Unhide Work Experience form
         $('#work_experience_yes').change(function() {
             if ($(this).prop('checked')) {
                 $('.previous-employment').removeClass('d-none');
             }
         });
-
         $('#work_experience_no').change(function() {
             if ($(this).prop('checked')) {
                 $('.previous-employment').addClass('d-none');
             }
         });
-
         //Hide and Unhide RFQ
         $('#rfqYes').change(function() {
             if ($(this).prop('checked')) {
                 $('.d-rfq').removeClass('d-none');
             }
         });
-
         $('#rfqNo').change(function() {
             if ($(this).prop('checked')) {
                 $('.d-rfq').addClass('d-none');
             }
         });
-
         //Hide and Unhide TRF
         $('#trfYes').change(function() {
             if ($(this).prop('checked')) {
                 $('.d-trf').removeClass('d-none');
             }
         });
-
         $('#trfNo').change(function() {
             if ($(this).prop('checked')) {
                 $('.d-trf').addClass('d-none');
             }
         });
-
         $(document).on('click', '#tool-request-details', function(event) {
             event.preventDefault();
             let route = $(this).attr('data-url');
             let batchNumber = $(this).attr('data-batch-number');
-
             $.ajax({
                 url: route
                 , beforeSend: function() {
@@ -426,12 +409,10 @@
                 , timeout: 8000
             })
         });
-
         $(document).on('click', '#rfq-details', function(event) {
             event.preventDefault();
             let route = $(this).attr('data-url');
             let batchNumber = $(this).attr('data-batch-number');
-
             $.ajax({
                 url: route
                 , beforeSend: function() {
@@ -455,19 +436,15 @@
                 , timeout: 8000
             })
         });
-
         $('.close').click(function() {
             $(".modal-backdrop").remove();
         });
-
     });
-
     //Get available quantity of a particular tool.
     $(document).on('change', '.tool_id', function() {
         let toolId = $(this).find('option:selected').val();
         let toolName = $(this).children('option:selected').text();
         let quantityName = $(this).children('option:selected').data('id');
-
         $.ajax({
             url: "{{ route('available_quantity', app()->getLocale()) }}"
             , method: "POST"
@@ -478,12 +455,10 @@
             }
             , success: function(data) {
                 if (data) {
-
                     $('#' + quantityName + '').attr({
                         "value": data
                         , "max": data
                     , });
-
                 } else {
                     var message = 'Error occured while trying to get ' + toolName + ' available quantity';
                     var type = 'error';
@@ -492,7 +467,6 @@
             }
         , })
     });
-
 </script>
 @endpush
 
