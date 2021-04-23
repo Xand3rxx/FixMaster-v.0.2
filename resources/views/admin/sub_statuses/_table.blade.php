@@ -16,7 +16,7 @@
         <tr>
             <td class="tx-color-03 tx-center">{{ $loop->iteration }}</td>
             <td class="tx-medium">{{ !empty($subStatus->name) ? $subStatus->name : 'UNAVAILABLE' }}</td>
-            <td class="tx-medium text-center">{{ $subStatus->parentStatus->name }}</td>
+            <td class="tx-medium text-center">{{ $subStatus['parentStatus']['name'] }}</td>
             <td>{{ !empty($subStatus->user->email) ? $subStatus->user->email : 'UNAVAILABLE' }}</td>
             <td class="tx-medium text-center">{{ $subStatus->recurrence }}</td>
 

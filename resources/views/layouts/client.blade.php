@@ -20,14 +20,10 @@
     <link href="{{ asset('assets/client/css/bootstrap.min.css') }}" rel="stylesheet" type="text/css" />
     <!-- Icons -->
     <link href="{{ asset('assets/client/css/materialdesignicons.min.css') }}" rel="stylesheet" type="text/css" />
-
     <!-- Slider -->
     <link rel="stylesheet" href="{{ asset('assets/client/css/owl.carousel.min.css') }}" />
 
     {{-- <link rel="stylesheet" href="{{ asset('assets/client/css/owl.theme.default.min.css') }}" /> --}}
-    <!-- Main Css -->
-    <!-- DashForge CSS -->
-    {{-- <link rel="stylesheet" href="{{ asset('assets/dashboard/assets/css/dashforge.css') }}"> --}}
 
     {{-- <link href="{{ asset('assets/dashboard/lib/fontawesome/fontawesome-free/css/all.min.css') }}" rel="stylesheet"> --}}
     <link href="{{ asset('assets/dashboard/lib/ionicons/css/ionicons.min.css') }}" rel="stylesheet">
@@ -51,36 +47,71 @@
         box-shadow: 0 2px 5px rgba(233, 125, 31, 0.2) !important;
       }
 
+      .swal2-styled.swal2-confirm a.confirm-link {
+        color: #fff  !important;
+        font-size: 1.0625em;
+      }
+
       .tx-gray-300 {
-  color: #cdd4e0;
-}
+        color: #cdd4e0;
+      }
 
-.lh-0 {
-  line-height: 0;
-}
+      .lh-0 {
+        line-height: 0;
+      }
 
-.tx-40 {
-  font-size: 40px;
-}
+      .tx-40 {
+        font-size: 40px;
+      }
 
-.tx-orange {
-  color: #fd7e14;
-}
+      .tx-orange {
+        color: #fd7e14;
+      }
+      .pplogo-container {
+        border: 2px solid #e97d1f !important;
+        box-shadow: 0px 3px 10px -2px rgb(233 125 31) !important;
+      }
+
+      input[type="radio"]:checked + .pplogo-container {
+          /* background: #fd7e14; */
+          box-shadow: 0px 0px 20px rgb(233 125 31);
+          box-shadow: 0px 0px 20px rgb(233 125 31);
+      }
+
+      input[type="radio"]:checked + .pplogo-container::after {
+        color: #fd7e14 !important;
+        border: 1px solid #fd7e14 !important;
+      }
     </style>
   </head>
 
   <body>
 
-    @include('layouts.partials._messages')
+    {{-- <div id="preloader">
+      <div id="status">
+          <div class="spinner">
+              <div class="double-bounce1"></div>
+              <div class="double-bounce2"></div>
+          </div>
+      </div>
+  </div> --}}
+
+    {{-- @include('layouts.partials._messages') --}}
     @include('layouts.partials._client_header')
     @include('layouts.partials._client_sidebar')
     @include('layouts.partials._client_footer')
 
-    {{-- <script src="{{asset('assets/frontend/js/jquery-3.5.1.min.js')}}"></script> --}}
-    <script src="{{asset('assets/client/js/jquery.min.js')}}"></script>
+
+    <script src="{{asset('assets/frontend/js/jquery-3.5.1.min.js')}}"></script>
+    {{-- <script src="{{asset('assets/client/js/jquery.min.js')}}"></script> --}}
     <script src="{{asset('assets/frontend/js/bootstrap.bundle.min.js')}}"></script>
     <script src="{{asset('assets/frontend/js/jquery.easing.min.js')}}"></script>
     <script src="{{asset('assets/frontend/js/scrollspy.min.js')}}"></script>
+
+          <!-- geolocation asset starts here -->
+    <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDeDLVAiaU13p2O0d3jfcPjscsbVsCQUzc&v=3.exp&libraries=places"></script>
+    <script src="{{asset('assets/js/geolocation.js')}}"></script>
+    <!-- geolocation asset starts here -->
 
     <!-- SLIDER -->
     <script src="{{asset('assets/frontend/js/owl.carousel.min.js')}}"></script>
@@ -103,15 +134,8 @@
     <script src="{{ asset('assets/client/js/sweetalert2.min.js') }}"></script>
     <script src="{{ asset('assets/client/js/polyfill.js') }}"></script>
     <script src="https://unicons.iconscout.com/release/v2.1.9/script/monochrome/bundle.js"></script>
-    {{-- <script src="{{ asset('assets/client/js/sweetalert2.min.js') }}"></script> --}}
-
-    @if (session('notify'))
-            @section('scripts')
-                <script>
-                    displayMessage('{{session('notify')}}', 'success');
-                </script>
-            @endsection
-    @endif
+    <script src="{{ asset('assets/client/js/sweetalert2.min.js') }}"></script>
+    <script src="{{ asset('assets/dashboard/assets/js/jquery.tinymce.min.js') }}"></script>
 
     <div class="modal fade" id="modalDetails" tabindex="-1" role="dialog" aria-hidden="true" data-backdrop="static">
         <div class="modal-dialog modal-dialog-centered modal-lg wd-sm-650" role="document">
@@ -148,10 +172,12 @@
         </div><!-- modal-dialog -->
     </div><!-- modal -->
 
-    @yield('scripts')
-    @stack('scripts')
+
 
     @if (\Request::filled('users') && \Request::filled('role') && \Request::filled('serviceRequestId') && \Request::filled('totalAmount') && \Request::filled('serviceId') && \Request::filled('unique_id'))
+
+    @yield('scripts')
+    @stack('scripts')
     <script>
       //console.log('{{ \Request::get('results') }}');
       const users = @json(\Request::get('users'));
@@ -256,23 +282,6 @@
 
     </script>
    @endif
-    <script>
-      tinymce.init({
-        selector: '#message_body',
-        height: 200,
-        theme: 'modern',
-        plugins: [
-          'advlist autolink lists charmap hr anchor pagebreak',
-          'searchreplace wordcount visualblocks visualchars',
-          'insertdatetime nonbreaking save table contextmenu directionality',
-          'emoticons paste textcolor colorpicker textpattern'
-        ],
-        toolbar1: 'undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent',
-        toolbar2: 'forecolor backcolor emoticons',
-        image_advtab: true
-      });
-    </script>
-
 
     <script>
         function displayMessage(message, type){
@@ -297,6 +306,9 @@
         }
     </script>
 
+ @yield('scripts')
+ @stack('scripts')
+
     <script>
       $(document).ready(function () {
 
@@ -312,8 +324,8 @@
 
 
         //Prevent characters or string asides number in ohone number input field
-        $("#number, #phone_number, #alternate_phone_number, .phone").on("keypress keyup blur", function(event) {
-            $(this).val($(this).val().replace(/[^\d].+/, ""));
+        $("#number, #phone_number, #alternate_phone_number").on("keypress keyup blur", function(event) {
+        $(this).val($(this).val().replace(/[^\d].+/, ""));
             if ((event.which < 48 || event.which > 57)) {
                 event.preventDefault();
             }
@@ -331,6 +343,8 @@
               mask: true,
           });
         });
+
+
 
 
       $(function () {

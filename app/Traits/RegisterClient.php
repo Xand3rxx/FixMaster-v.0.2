@@ -76,7 +76,7 @@ trait RegisterClient
                 'address_latitude'      =>  $valid['address_latitude'],
             ]);
             // register new client event
-            event(new Registered($user));
+            // event(new Registered($user));
 
             // Log the User into the Application
             $this->guard()->login($user);

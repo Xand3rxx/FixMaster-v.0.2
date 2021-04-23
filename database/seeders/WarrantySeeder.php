@@ -25,9 +25,9 @@ class WarrantySeeder extends Seeder
                 'unique_id'     =>  'WAR-09328932',
                 'name'          =>  'Free Warranty',
                 'percentage'    =>  0,
-                'warranty_type' => 'free',
+                'warranty_type' => 'Free',
                 'duration'      => 7,
-                'description' =>  'This a free Warranty with maximum duration of one week after exectuion.'
+                'description' =>  'This a free Warranty with maximum duration of one week after client initiation.'
             ),
             array(
                 'uuid'          =>  Str::uuid('uuid'),      
@@ -35,9 +35,9 @@ class WarrantySeeder extends Seeder
                 'unique_id'     =>  'WAR-86935247',
                 'name'          =>  'Bronze Warranty',
                 'percentage'    =>  10,
-                'warranty_type' => 'extended',
+                'warranty_type' => 'Extended',
                 'duration'      => 31,
-                'description' =>  'This an extended Warranty with maximum duration of one(1) month after exectuion.',
+                'description' =>  'This an extended Warranty with maximum duration of one(1) month after client initiation.',
             ),
             array(
                 'uuid'          =>  Str::uuid('uuid'),      
@@ -45,9 +45,9 @@ class WarrantySeeder extends Seeder
                 'unique_id'     =>  'WAR-8693524',
                 'name'          =>  'Silver Warranty',
                 'percentage'    =>  20,
-                'warranty_type' => 'extended',
+                'warranty_type' => 'Extended',
                 'duration'      => 186,
-                'description' =>  'This an extended Warranty with maximum duration of six(6) months after exectuion.',
+                'description' =>  'This an extended Warranty with maximum duration of six(6) months after client initiation.',
             ),
             array(
                 'uuid'          =>  Str::uuid('uuid'),      
@@ -55,9 +55,9 @@ class WarrantySeeder extends Seeder
                 'unique_id'     =>  'WAR-24006260',
                 'name'          =>  'Gold Warranty',
                 'percentage'    =>  35,
-                'warranty_type' => 'extended',
+                'warranty_type' => 'Extended',
                 'duration'      => 366,
-                'description' =>  'This an extended Warranty with maximum duration of one(1) year after exectuion.',
+                'description' =>  'This an extended Warranty with maximum duration of one(1) year after client initiation.',
             ),
         );
 

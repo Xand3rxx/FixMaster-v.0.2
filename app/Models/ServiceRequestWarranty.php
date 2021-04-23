@@ -4,22 +4,36 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Str;
 
 class ServiceRequestWarranty extends Model
 {
     use HasFactory;
 
     protected $fillable = [
-        'created_by', 'warranty_id', 'service_request_id', 'start_date', 'expiration_date'
+        'client_id', 'warranty_id', 'service_request_id', 'start_date', 'expiration_date', 'amount', 'status', 'initiated', 'has_been_attended_to', 'reason',
     ];
 
+    /**
+     * The "booted" method of the model.
+     *
+     * @return void
+     */
+    protected static function booted()
+    {
+        // Create a uuid when a new serivce uuid is to be created
+        static::creating(function ($service) {
+            $service->uuid = (string) Str::uuid();
+        });
+    }
+
     public function service_request(){
-        return $this->hasOne(ServiceRequest::class, 'uuid', 'service_request_id');
+        return $this->hasOne(ServiceRequest::class, 'id', 'service_request_id');
     }
 
     public function user()
     {
-        return $this->belongsTo(User::class)->with(['account', 'contact']);
+        return $this->belongsTo(User::class, 'client_id', 'id')->with(['account']);
     }
 
     public function name()
@@ -27,7 +41,7 @@ class ServiceRequestWarranty extends Model
         return $this->hasOne(Account::class, 'user_id', 'client_id');
     }
 
-    public function warranty_name()
+    public function warranty()
     {
         return $this->hasOne(Warranty::class, 'id', 'warranty_id');
     }
@@ -37,5 +51,17 @@ class ServiceRequestWarranty extends Model
         return $this->hasOne(ServiceRequest::class, 'id', 'service_request_id');
     }
 
-    
+    /** 
+     * Scope a query to only include all pending requests
+     * 
+     * @param \Illuminate\Database\Eloquent\Builder $query
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    //Scope to return all services  
+    public function scopeUnresolvedWarranties($query)
+    {
+        return $query->select('*')
+        ->where('has_been_attended_to', 'No');
+    }
+
 }

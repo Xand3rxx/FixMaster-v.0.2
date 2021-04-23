@@ -1,5 +1,5 @@
 @extends('layouts.client')
-@section('title', 'E-Wallet')
+@section('title', 'Loyalty')
 @section('content')
 @include('layouts.partials._messages')
 
@@ -117,13 +117,13 @@
 
 <div class="col-lg-8 col-12">
     <div class="border-bottom pb-4 row">
-        {{-- <h5>Femi Joseph 77777</h5>
+        
         <p class="text-muted mb-0">I have started my career as a trainee and prove my self and achieve all the milestone with good guidance and reach up to the project manager. In this journey, I understand all the procedure which make me a good developer, team leader, and a project manager.</p>--}}
         <div class="col-md-3 mt-4">
             <div class="media key-feature align-items-center p-3 rounded shadow mt-4">
                 <img src="{{ asset('assets/images/job/Circleci.svg') }}" class="avatar avatar-ex-sm" alt="">
                 <div class="media-body content ml-3">
-                    <h4 class="title mb-0">Wallet</h4>
+                    <h4 class="title mb-0">Loyalty</h4>
                 <p class="text-muted mb-0">&#8358; {{$total_loyalty}}</p>
                 </div>
             </div>

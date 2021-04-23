@@ -25,6 +25,7 @@
 }
 
 function get_latitude_longitude() {
+    console.log('denk');
 	// Get the place details from the autocomplete object.
 	var place = autocomplete.getPlace();
 	
@@ -32,7 +33,7 @@ function get_latitude_longitude() {
 	$.get('https://maps.googleapis.com/maps/api/geocode/json',{address:place.formatted_address,key:key},function(data, status){
 
 		$(data.results).each(function(key,value){
-			 $('#user_address').val(place.formatted_address);
+			 $('.user_address').val(place.formatted_address);
              $('#user_latitude').val(value.geometry.location.lat);
              $('#user_longitude').val(value.geometry.location.lng);
 

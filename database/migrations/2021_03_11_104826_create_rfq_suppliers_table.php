@@ -21,6 +21,7 @@ class CreateRfqSuppliersTable extends Migration
             $table->id();
             $table->foreignId('rfq_id');
             $table->foreignId('supplier_id');
+            $table->string('unique_id')->unique()->nullable()->comment('Supplier delivery code e.g DEV-C85BEA04');
             $table->unsignedInteger('devlivery_fee');
             $table->dateTime('delivery_time');
         });

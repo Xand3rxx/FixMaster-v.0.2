@@ -9,23 +9,14 @@
         <div class="container pd-x-0">
             <div class="d-sm-flex align-items-center justify-content-between mg-b-20 mg-lg-b-25 mg-xl-b-30">
                 <div>
-
-                    <h4 class="mg-b-0 tx-spacing--1">My Service Request List</h4>
+                    <h4 class="mg-b-0 tx-spacing--1">My Service Request as of {{ date('M, d Y') }}</h4>
                 </div>
 
             </div>
 
-            <div class="row row-xs">
+            <div class="row row-xs mt-4">
                 <div class="col-lg-12 col-xl-12 mg-t-10">
                     <div class="card mg-b-10">
-                        <div class="card-header pd-t-20 d-sm-flex align-items-start justify-content-between bd-b-0 pd-b-0">
-                            <div>
-                                <h6 class="mg-b-5">My Service Request as of {{ date('M, d Y') }}</h6>
-                                <p class="tx-13 tx-color-03 mg-b-0">This table displays a list of all My Service Request.</p>
-                            </div>
-
-                        </div><!-- card-header -->
-
                         <div class="table-responsive">
 
                             <table class="table table-hover mg-b-0" id="basicExample">
@@ -37,7 +28,7 @@
                                     <th>Status</th>
                                     <th>Issued Created </th>
                                     <th>Scheduled Date</th>
-                                    <th class="text-center">Action</th> 
+                                    <th class="text-center">Action</th>
                                 </tr>
                                 </thead>
                                 <tbody>
@@ -72,34 +63,53 @@
                                              <a href="{{ route('client.request_details', [ 'request'=>$myServiceRequest->uuid, 'locale'=>app()->getLocale() ]) }}" class="dropdown-item text-primary"><i data-feather="clipboard" class="fea icon-sm"></i> Details</a>
 
                                              @if($myServiceRequest->status_id == 2)
-                                                <a href="#" class="dropdown-item details text-success"><i data-feather="check" class="fea icon-sm"></i> Mark as Completed</a>
+
+                                             <a href="#" id="completed"
+                                             data-url="{{ route('client.completed_request', [ 'request'=>$myServiceRequest->uuid, 'locale'=>app()->getLocale() ]) }}"
+                                                    class="dropdown-item details text-success" title="Mark as completed">
+                                                    <i data-feather="check" class="fea icon-sm"></i> Mark as Completed</a>
                                              @endif
 
                                              @if($myServiceRequest->status_id == 1)
-                                                <a href="#" class="dropdown-item details text-warning"><i data-feather="edit" class="fea icon-sm"></i> Edit</a>
+                                             <a href="#editRequest" id="edit-request"
+                                             data-toggle="modal"
+                                             data-url="{{ route('client.edit_request', [ 'request'=>$myServiceRequest->uuid, 'locale'=>app()->getLocale() ])}}"
+                                              data-job-reference="{{ $myServiceRequest->unique_id  }}" class="dropdown-item details text-warning">
+                                               <i data-feather="edit" class="fea icon-sm"></i> Edit Request </a>
+
                                              @endif
 
                                              @if($myServiceRequest->status_id == 1)
                                                 <div class="dropdown-divider"></div>
-                                                <a href="#cancelRequest" id="cancel-request" data-toggle="modal" data-url="#" data-job-reference="{{ $myServiceRequest->unique_id }}" class="dropdown-item text-danger cancel_reques"><i data-feather="x" class="fea icon-sm"></i> Cancel Request</a>
-
+                                                <a href="#cancelRequest" id="cancel-request" data-toggle="modal"
+                                                data-url="{{ route('client.cancel_request', [ 'request'=>$myServiceRequest->uuid, 'locale'=>app()->getLocale() ]) }}"
+                                                data-job-reference="{{ $myServiceRequest->unique_id  }}"
+                                                class="dropdown-item text-danger"><i data-feather="x" class="fea icon-sm"></i> Cancel Request </a>
                                             @endif
                                             @if($myServiceRequest->status_id == 3)
                                                 <div class="dropdown-divider"></div>
-                                                <a href="javascript:void(0)" class="dropdown-item text-success"><i data-feather="corner-up-left" class="fea icon-sm"></i> Reinstate Request</a>
+                                             <a href="#" id="activate"
+                                             data-url="{{ route('client.reinstate_request', [ 'request'=>$myServiceRequest->uuid, 'locale'=>app()->getLocale() ]) }}"
+                                                    class="dropdown-item details text-success" title="Reinstate">
+                                                    <i data-feather="corner-up-left" class="fea icon-sm"></i> Reinstate Request</a>
                                             @endif
 
-                                            @if(\App\Models\Invoice::where('service_request_id', $myServiceRequest->service->id)->where('phase', '1')->count() > 0 || \App\Models\Invoice::where('service_request_id', $myServiceRequest->service->id)->where('phase', '2')->count() > 0)
-                                                <div class="dropdown-divider"></div>
-                                                @foreach(\App\Models\Invoice::where('service_request_id', $myServiceRequest->service->id)->where('phase', '1')->orWhere('phase', '2')->where('invoice_type', 'Diagnosis Invoice')->orWhere('invoice_type', 'Completion Invoice')->get() as $invoice)
-                                                    <a href="{{ route('invoice', ['locale' => app()->getLocale(), 'invoice' => $invoice['uuid']]) }}" class="dropdown-item details text-info"><i data-feather="file-text" class="fea icon-sm"></i> {{ $invoice['invoice_type'] }} Invoice</a>
-                                                @endforeach
-                                            @endif
-                                            {{-- {{ dd($myServiceRequest['warranty']) }} --}}
+                                            @foreach($myServiceRequest['invoices']->where('service_request_id', $myServiceRequest->id)->whereIn('phase', ['1', '2']) as $invoice)
+                                                <a href="{{ route('invoice', ['locale' => app()->getLocale(), 'invoice' => $invoice['uuid']]) }}" class="dropdown-item details text-info"><i data-feather="file-text" class="fea icon-sm"></i> {{ $invoice['invoice_type'] }}</a>
+                                            @endforeach
+
 
                                             @if($myServiceRequest->status_id == 4 && !empty($myServiceRequest['warranty']))
                                                 <div class="dropdown-divider"></div>
-                                                <a href="#" class="dropdown-item text-success"><i data-feather="award" class="fea icon-sm"></i> Initiate Warranty</a>
+
+                                                @if($myServiceRequest['warranty']['initiated'] != 'Yes')
+                                                <a href="#warrantyInitiate" id="warranty-initiate"
+                                                data-toggle="modal"
+                                                data-url="{{ route('client.warranty_initiate', [ 'request'=> $myServiceRequest->uuid, 'locale'=>app()->getLocale() ]) }}"
+                                                 data-job-reference="{{ $myServiceRequest->unique_id  }}" class="dropdown-item text-success"><i data-feather="award" class="fea icon-sm"></i> Initiate Warranty</a>
+                                                @else
+                                                <a href="#" class="dropdown-item text-success"><i data-feather="award" class="fea icon-sm"></i> Pending Warranty</a>
+                                                 @endif
                                             @endif
                                         </div>
                                     </div>
@@ -177,4 +187,116 @@
 
 </div>
 
+<div class="modal fade" id="cancelRequest" tabindex="-1" role="dialog" aria-hidden="true" data-keyboard="false" data-backdrop="static">
+    <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+      <div class="modal-content rounded shadow border-0">
+        <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalCenterTitle">Kindly state your reason for cancellation </h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        <div class="modal-body" id="modal-cancel-request">
+            <form class="p-4" method="GET" id="cancel-request-form">
+                @csrf
+                <div class="row">
+
+                    <div class="col-md-12">
+                        <div class="form-group position-relative">
+                            <label>Reason</label>
+                            <i data-feather="info" class="fea icon-sm icons"></i>
+                            <textarea name="reason" id="reason" rows="3" class="form-control pl-5 @error('reason') is-invalid @enderror" placeholder="">{{ old('reason')  }}</textarea>
+                            @error('reason')
+                                <span class="invalid-feedback" role="alert">
+                                    <strong>{{ $message }}</strong>
+                                </span>
+                            @enderror
+                        </div>
+                    </div><!--end col-->
+
+                {{-- </div><!--end row--> --}}
+
+                    <div class="col-sm-12">
+                    <button type="submit" class="submitBnt btn btn-primary">Update</button>
+                    </div><!--end col-->
+                </div><!--end row-->
+            </form><!--end form-->
+        </div>
+        </div><!-- modal-body -->
+      </div><!-- modal-content -->
+    </div><!-- modal-dialog -->
+</div><!-- modal -->
+
+
+<div class="modal fade" id="warrantyInitiate" tabindex="-1" role="dialog" aria-hidden="true" data-keyboard="false" data-backdrop="static">
+    <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+      <div class="modal-content rounded shadow border-0">
+        <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalCenterTitle">Kindly state your reason for Initiating Warranty</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        <div class="modal-body" id="modal-cancel-request">
+            <form class="p-4" method="GET" id="warranty-initiate-form">
+                @csrf
+                <div class="row">
+
+                    <div class="col-md-12">
+                        <div class="form-group position-relative">
+                            <label>Reason</label>
+                            <i data-feather="info" class="fea icon-sm icons"></i>
+                            <textarea name="reason" id="reason" rows="3" class="form-control pl-5 @error('reason') is-invalid @enderror" placeholder="">{{ old('reason')  }}</textarea>
+                            @error('reason')
+                                <span class="invalid-feedback" role="alert">
+                                    <strong>{{ $message }}</strong>
+                                </span>
+                            @enderror
+                        </div>
+                    </div><!--end col-->
+
+                {{-- </div><!--end row--> --}}
+
+                    <div class="col-sm-12">
+                    <button type="submit" class="submitBnt btn btn-primary">Initiate</button>
+                    </div><!--end col-->
+                </div><!--end row-->
+            </form><!--end form-->
+        </div>
+        </div><!-- modal-body -->
+      </div><!-- modal-content -->
+    </div><!-- modal-dialog -->
+
+</div><!-- modal -->
+
+
+
+<div class="modal fade" id="editRequest" tabindex="-1" role="dialog" aria-hidden="true" data-keyboard="false" data-backdrop="static">
+    <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+        <div class="modal-content rounded shadow border-0">
+            <div class="modal-header">
+                {{--
+                <h5 class="modal-title" id="exampleModalCenterTitle">Modal title</h5>
+                --}}
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" id="modal-edit-request">
+                <!-- Modal displays here -->
+                <div id="spinner-icon"></div>
+            </div>
+        </div>
+        <!-- modal-body -->
+    </div>
+    <!-- modal-content -->
+</div>
+<!-- modal-dialog -->
+
+
+
+@push('scripts')
+
+<script src="{{ asset('assets/client/js/requests/4c676ab8-78c9-4a00-8466-a10220785892.js') }}"></script>
+@endpush
 @endsection

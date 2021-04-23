@@ -15,21 +15,21 @@
                                     <div class="col-md-4">
                                         <div class="form-group position-relative">
                                             <label>First Name <span class="text-danger">*</span></label>
-                                            <input name="name" id="first-name" type="text" class="form-control" placeholder="First Name :" />
+                                            <input id="first-name" type="text" class="form-control" placeholder="First Name :" autocomplete="off" />
                                         </div>
                                     </div>
                                     <!--end col-->
                                     <div class="col-md-4">
                                         <div class="form-group position-relative">
                                             <label>Last Name <span class="text-danger">*</span></label>
-                                            <input name="name" id="last-name" type="text" class="form-control" placeholder="Last Name :" />
+                                            <input id="last-name" type="text" class="form-control" placeholder="Last Name :" autocomplete="off" />
                                         </div>
                                     </div>
 
                                     <div class="col-md-4">
                                         <div class="form-group position-relative">
                                             <label>Contact Phone Number <span class="text-danger">*</span></label>
-                                            <input type="tel" maxlength="11" name="address1" id="phone-number" class="form-control phone" placeholder="Phone Number :" />
+                                            <input type="tel" maxlength="11" id="phone_number" class="form-control phone" placeholder="Phone Number :" autocomplete="off" />
                                         </div>
                                     </div>
                                     <!--end col-->
@@ -37,7 +37,7 @@
                                     <div class="col-md-4">
                                         <div class="form-group position-relative">
                                             <label>State <span class="text-danger">*</span></label>
-                                            <select class="form-control pl-5 @error('state_id') is-invalid @enderror" name="state_id" id="state_id">
+                                            <select class="form-control pl-5 @error('state_id') is-invalid @enderror" id="state_id">
                                                 <option selected value="">Select...</option>
                                                 @foreach($states as $state)
                                                 <option value="{{ $state->id }}">{{ $state->name }}</option>
@@ -55,7 +55,7 @@
                                     <div class="col-md-4">
                                         <div class="form-group position-relative">
                                             <label>LGA <span class="text-danger">*</span></label>
-                                            <select class="form-control pl-5 @error('lga_id') is-invalid @enderror" name="lga_id" id="lga_id">
+                                            <select class="form-control pl-5 @error('lga_id') is-invalid @enderror" id="lga_id">
                                                 <option selected value="">Select...</option>
                                             </select>
                                             @error('lga_id')
@@ -71,7 +71,7 @@
                                         <div class="form-group position-relative">
                                             <label>Town/City <span class="text-danger">*</span></label>
 
-                                            <select class="form-control pl-5 @error('town_id') is-invalid @enderror" name="town_id" id="town_id">
+                                            <select class="form-control pl-5 @error('town_id') is-invalid @enderror" id="town_id">
                                                 <option selected value="">Select...</option>
                                             </select>
                                             @error('town_id')
@@ -91,14 +91,14 @@
                                     <div class="col-12">
                                         <div class="form-group position-relative">
                                             <label>Full Address <span class="text-danger">*</span></label>
-                                            <input type="text" name="address1" id="street-address" class="form-control user_address" placeholder="Full address of contact :" />
+                                            <input type="text" id="street-address" class="form-control user_address" placeholder="Full address of contact :" autocomplete="off" >
                                         </div>
                                     </div>
                                     <!--end col-->
 
                                     <!-- hidden fields -->
-                                    <input type="hidden" value="" name="user_latitude" id="user_latitude" />
-                                    <input type="hidden" value="" name="user_longitude" id="user_longitude" />
+                                    <input type="hidden" value="" id="user_latitude" />
+                                    <input type="hidden" value="" id="user_longitude" />
                                     <!--end col-->
                                 </div>
                         <br />   

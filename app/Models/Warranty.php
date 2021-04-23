@@ -40,4 +40,46 @@ class Warranty extends Model
         return $query->select('*')
         ->orderBy('name', 'ASC');
     }
+
+    /**
+     * Scope a query to only return all warranties either deleted or inactive
+     *
+     * @param \Illuminate\Database\Eloquent\Builder $query
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function scopeAllWarranties($query){
+        return $query->select('*')
+            // ->whereNull('deleted_at')
+            ->orderBy('duration', 'ASC');
+    }
+
+    /**
+     * Scope a query to only return all active warranties regardless of the stype
+     *
+     * @param \Illuminate\Database\Eloquent\Builder $query
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function scopeActiveWarranties($query){
+        return $query->select('*')
+            ->whereNull('deleted_at')
+            ->orderBy('name', 'ASC');
+    }
+
+    /**
+     * Scope a query to only return all active extended warranties
+     *
+     * @param \Illuminate\Database\Eloquent\Builder $query
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function scopeActiveExtendedWarranties($query){
+        return $query->select('*')
+            ->where('warranty_type', 'Extended')
+            ->whereNull('deleted_at')
+            ->orderBy('duration', 'ASC');
+    }
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
 }

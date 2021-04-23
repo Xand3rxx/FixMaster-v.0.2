@@ -30,8 +30,8 @@ class RatingController extends Controller
         (array) $valid = $this->validateRatingsRequest($request);
         //return $request->clientStar."<br>".$request->getClient."<br>".$request->star."<br>".$request->usersIdentity."<br>".$request->serviceRequestId;
         return self::store($valid, $request->user()->id) == true
-            ? back()->withSuccess('Thank you for rating the request')
-            : back()->with('error', 'Error occured while recording rating the request');
+            ? back()->with('success', 'Thank you for rating the request')
+            : back()->with('error', 'Sorry! An error occured while recording rating the request.');
     }
 
     public function handleClientRatings(Request $request)
@@ -39,8 +39,8 @@ class RatingController extends Controller
         //dd($request->all());
         (array) $valid = $this->validateClientRatingsRequest($request);
         return self::storeClientRating($valid, $request->user()->id) == true
-            ? back()->with('notify','Thank you for rating this service, you have qualified for a loyalty reward')
-            : back()->withError('Error occured while recording rating the request');
+            ? back()->with('success','Thank you for rating this service, you have qualified for a loyalty reward.')
+            : back()->with('error', 'Sorry! An error occured while recording rating the request.');
     }
 
     public function handleServiceRatings(Request $request)

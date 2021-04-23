@@ -23,36 +23,10 @@
     <h5 class="mg-b-2"><strong>Editing "{{ $warranty->name }}" Warranty</strong></h5>
     <hr>
    
-    <div class="form-row">
-      <div class="form-group col-md-4">
-                    <label for="percentage">Max. Duration (Days)</label>
-                    <input type="number" class="form-control @error('percentage') is-invalid @enderror" name="duration" min="1" max="365" maxlength="5" id="duration" placeholder="Maximum Duration in Days" value="{{ old('duration') }}" autocomplete="off" required>
-                    @error('percentage')
-                      <span class="invalid-feedback" role="alert">
-                          <strong>{{ $message }}</strong>
-                      </span>
-                    @enderror
-                </div>
-               
-                <div class="form-group col-md-4">
-                <label>Waranty Type</label>
-                <select class="custom-select @error('applicable') is-invalid @enderror" name="warranty_type" required>
-                    <option selected value="">Select...</option>
-                    <option value="Free">Free (0%)</option>
-                    <option value="Extended">Extended</option>
-                  </select>
-                  
-                  @error('applicable')
-                    <span class="invalid-feedback" role="alert">
-                        <strong>{{ $message }}</strong>
-                    </span>
-                  @enderror
-                </div>
-              </div>
-
         <div class="form-row mt-4">
-          <div class="form-group col-md-4">
-              <label for="name">Warranty Name</label>
+
+          <div class="form-group col-md-6">
+              <label for="name">Name</label>
               <input type="text" class="form-control @error('name') is-invalid @enderror" name="name" id="name" placeholder="Name" value="{{ old('name') ?? $warranty->name }}"  autocomplete="off" required>
               @error('name')
                 <span class="invalid-feedback" role="alert">
@@ -60,10 +34,26 @@
                 </span>
               @enderror
           </div>
+          
+          <div class="form-group col-md-6">
+            <label>Type</label>
+            <select class="custom-select @error('warranty_type') is-invalid @enderror" name="warranty_type" required>
+              <option selected value="">Select...</option>
+              <option value="Free" @if($warranty->warranty_type == 'Free') selected @endif>Free (0%)</option>
+              <option value="Extended" @if($warranty->warranty_type == 'Extended') selected @endif>Extended</option>
+            </select>
+            @error('warranty_type')
+              <span class="invalid-feedback" role="alert">
+                  <strong>{{ $message }}</strong>
+              </span>
+            @enderror
+          </div>
+        </div>
 
-          <div class="form-group col-md-4">
-              <label for="percentage">Warranty Percentage(%)</label>
-              <input type="text" class="form-control @error('percentage') is-invalid @enderror" name="percentage" min="1" max="100" maxlength="5" id="percentage" placeholder="Percentage" value="{{ old('percentage') ?? $warranty->amount ?? '' }}" autocomplete="off" required>
+        <div class="form-row">
+          <div class="form-group col-md-6">
+              <label for="percentage">Percentage(%)</label>
+              <input type="text" class="form-control @error('percentage') is-invalid @enderror" name="percentage" min="1" max="100" maxlength="3" id="percentage" placeholder="Percentage" value="{{ old('percentage') ?? $warranty->percentage }}" autocomplete="off" required>
               @error('percentage')
                 <span class="invalid-feedback" role="alert">
                     <strong>{{ $message }}</strong>
@@ -71,19 +61,28 @@
               @enderror
           </div>
 
-         </div>
-      
-      <div class="form-row">
-        <div class="form-group col-md-9">
-          <label for="inputEmail4">Description(Optional)</label>
-          <textarea rows="3" class="form-control @error('description') is-invalid @enderror" name="description" id="description" required>{{ old('description') ?? $warranty->description }}</textarea>
-          @error('description')
-            <span class="invalid-feedback" role="alert">
-                <strong>{{ $message }}</strong>
-            </span>
-          @enderror
+          <div class="form-group col-md-6">
+            <label for="percentage">Maximum Duration (Days)</label>
+            <input type="number" class="form-control @error('duration') is-invalid @enderror" name="duration" min="1" max="366" maxlength="5" id="duration" placeholder="Maximum Duration in Days" value="{{ old('duration') ?? $warranty->duration }}" autocomplete="off" required>
+            @error('percentage')
+              <span class="invalid-feedback" role="alert">
+                  <strong>{{ $message }}</strong>
+              </span>
+            @enderror
+          </div>
         </div>
-      </div>
+      
+        <div class="form-row">
+          <div class="form-group col-md-12">
+            <label for="inputEmail4">Description</label>
+            <textarea rows="3" class="form-control @error('description') is-invalid @enderror" name="description" id="description" required>{{ old('description') ?? $warranty->description }}</textarea>
+            @error('description')
+              <span class="invalid-feedback" role="alert">
+                  <strong>{{ $message }}</strong>
+              </span>
+            @enderror
+          </div>
+        </div>
       </div>
       <button type="submit" class="btn btn-primary">Update</button>
     </div>

@@ -32,25 +32,20 @@
 
         <div class="row row-xs">
             <div class="col-lg-12 col-xl-12">
-                <div class="card">
-                    <ul class="nav nav-tabs nav-justified" id="myTab3" role="tablist">
 
-                        <li class="nav-item">
-                            <a class="nav-link active" id="update-tab3" data-toggle="tab" href="#update3" role="tab" aria-controls="update" aria-selected="true">Service Request Actions</a>
-                        </li>
+                <div class="contact-content-header mt-4">
+                    <nav class="nav">
+                        <a href="#serviceRequestActions" class="nav-link active" data-toggle="tab">Service Request Actions</a>
+                        <a href="#description" class="nav-link" data-toggle="tab"><span>Description</a>
+                        <a href="#serviceRequestSummary" class="nav-link" data-toggle="tab"><span>Service Request Summary</a>
+                    </nav>
+                    {{-- <a href="" id="contactOptions" class="text-secondary mg-l-auto d-xl-none"><i data-feather="more-horizontal"></i></a> --}}
+                </div><!-- contact-content-header -->
 
-                        <li class="nav-item">
-                            <a class="nav-link" id="description-tab3" data-toggle="tab" href="#description3" role="tab" aria-controls="description" aria-selected="true">Description</a>
-                        </li>
-
-                        <li class="nav-item">
-                            <a class="nav-link" id="media-tab3" data-toggle="tab" href="#media3" role="tab" aria-controls="media" aria-selected="false">Service Request Summary</a>
-                        </li>
-                    </ul>
-                    <div class="tab-content bd bd-gray-300 bd-t-0 pd-20" id="myTabContent3">
-
-                        <div class="tab-pane fade show active" id="update3" role="tabpanel" aria-labelledby="update-tab3">
-                            <small class="text-danger">This tab is only visible onc the Service request has an Ongoing status. Which logically is updated by the system or the CSE Coordinator by assigning a CSE to the request</small>
+                <div class="contact-content-body">
+                    <div class="tab-content">
+                        <div id="serviceRequestActions" class="tab-pane show active pd-20 pd-xl-25">
+                            <small class="text-danger">This tab is only visible once the Service request has an Ongoing status. Which logically is updated by the system or the CSE Coordinator by assigning a CSE to the request</small>
                             @if ($service_request->status_id == 1)
                             @include('cse.requests.includes.assign_first_technician')
                             @elseif($service_request->status_id == 2)
@@ -63,9 +58,7 @@
                             @endif
                         </div>
 
-                        <!-- Service Description Tab -->
-                        <div class="tab-pane fade" id="description3" role="tabpanel" aria-labelledby="description-tab3">
-
+                        <div id="description" class="tab-pane pd-20 pd-xl-25">
                             <div class="divider-text">Service Request Description</div>
 
                             <h6>SERVICE REQUEST DESCRIPTION</h6>
@@ -170,10 +163,8 @@
                                 </div><!-- df-example -->
                             </div>
                         </div>
-                        <!-- End of Service Description Tab -->
 
-                        <!-- Service Request Summary Tab -->
-                        <div class="tab-pane fade" id="media3" role="tabpanel" aria-labelledby="media-tab3">
+                        <div id="serviceRequestSummary" class="tab-pane pd-20 pd-xl-25">
                             <h5 class="mt-4 text-primary">Service Request Progress</h5>
                             <div class="table-responsive mb-4">
                                 <table class="table table-hover mg-b-0">
@@ -186,13 +177,14 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-
+                                        @foreach($request_progress as $key => $progress)
                                         <tr>
-                                            <td class="tx-color-03 tx-center">1</td>
-                                            <td class="tx-medium">David Akinsola (CSE)</td>
-                                            <td class="tx-medium text-success">Enroute to Client's house</td>
-                                            <td class="text-center">{{ Carbon\Carbon::parse('2020-12-28 16:58:54', 'UTC')->isoFormat('MMMM Do YYYY, h:mm:ssa') }}</td>
+                                            <td class="tx-color-03 tx-center">{{ $loop->iteration }}</td>
+                                            <td class="tx-medium">{{ Str::title($progress['user']['account']['last_name'] . ' '.$progress['user']['account']['first_name'])  }} ({{$progress['user']['roles'][0]['name']}})</td>
+                                            <td class="tx-medium text-success"> {{$progress['substatus']['name']}} </td>
+                                            <td class="text-center">{{ Carbon\Carbon::parse($progress['created_at'], 'UTC')->isoFormat('MMMM Do YYYY, h:mm:ssa') }}</td>
                                         </tr>
+                                        @endforeach
                                     </tbody>
                                 </table>
                             </div><!-- table-responsive -->
@@ -267,9 +259,10 @@
                                 </table>
                             </div><!-- table-responsive -->
                         </div>
-                        <!-- End Service Request Summary Tab -->
+
                     </div>
                 </div>
+
             </div>
         </div>
     </div>
@@ -314,7 +307,6 @@
 <script>
     $(function() {
         'use strict'
-
         $('#wizard3').steps({
             headerTag: 'h3'
             , bodyTag: 'section'
@@ -335,81 +327,65 @@
             showFinishButtonAlways: false
             , onFinished: function(event, currentIndex) {
                 $('#update-progress').trigger('click');
-
             }
         , });
-
         let count = 1;
-
-
-
         //Add and Remove Request for
         $(document).on('click', '.add-rfq', function() {
             count++;
             addRFQ(count);
         });
-
         $(document).on('click', '.remove-rfq', function() {
             count--;
             $(this).closest(".remove-rfq-row").remove();
             // $(this).closest('tr').remove();
         });
-
         //Add and Remove Tools request form
         $(document).on('click', '.add-trf', function() {
             count++;
             addTRF(count);
         });
-
         $(document).on('click', '.remove-trf', function() {
             count--;
             $(this).closest(".remove-trf-row").remove();
         });
-
         //Hide and Unhide Work Experience form
         $('#work_experience_yes').change(function() {
             if ($(this).prop('checked')) {
                 $('.previous-employment').removeClass('d-none');
             }
         });
-
         $('#work_experience_no').change(function() {
             if ($(this).prop('checked')) {
                 $('.previous-employment').addClass('d-none');
             }
         });
-
         //Hide and Unhide RFQ
         $('#rfqYes').change(function() {
             if ($(this).prop('checked')) {
                 $('.d-rfq').removeClass('d-none');
             }
         });
-
         $('#rfqNo').change(function() {
             if ($(this).prop('checked')) {
                 $('.d-rfq').addClass('d-none');
             }
         });
-
         //Hide and Unhide TRF
         $('#trfYes').change(function() {
             if ($(this).prop('checked')) {
                 $('.d-trf').removeClass('d-none');
             }
         });
-
         $('#trfNo').change(function() {
             if ($(this).prop('checked')) {
                 $('.d-trf').addClass('d-none');
             }
         });
-
         $(document).on('click', '#tool-request-details', function(event) {
             event.preventDefault();
             let route = $(this).attr('data-url');
             let batchNumber = $(this).attr('data-batch-number');
-
             $.ajax({
                 url: route
                 , beforeSend: function() {
@@ -433,12 +409,10 @@
                 , timeout: 8000
             })
         });
-
         $(document).on('click', '#rfq-details', function(event) {
             event.preventDefault();
             let route = $(this).attr('data-url');
             let batchNumber = $(this).attr('data-batch-number');
-
             $.ajax({
                 url: route
                 , beforeSend: function() {
@@ -462,19 +436,15 @@
                 , timeout: 8000
             })
         });
-
         $('.close').click(function() {
             $(".modal-backdrop").remove();
         });
-
     });
-
     //Get available quantity of a particular tool.
     $(document).on('change', '.tool_id', function() {
         let toolId = $(this).find('option:selected').val();
         let toolName = $(this).children('option:selected').text();
         let quantityName = $(this).children('option:selected').data('id');
-
         $.ajax({
             url: "{{ route('available_quantity', app()->getLocale()) }}"
             , method: "POST"
@@ -485,12 +455,10 @@
             }
             , success: function(data) {
                 if (data) {
-
                     $('#' + quantityName + '').attr({
                         "value": data
                         , "max": data
                     , });
-
                 } else {
                     var message = 'Error occured while trying to get ' + toolName + ' available quantity';
                     var type = 'error';
@@ -499,7 +467,6 @@
             }
         , })
     });
-
 </script>
 @endpush
 
