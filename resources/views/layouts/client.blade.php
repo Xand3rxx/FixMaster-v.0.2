@@ -103,8 +103,15 @@
     <script src="{{ asset('assets/client/js/sweetalert2.min.js') }}"></script>
     <script src="{{ asset('assets/client/js/polyfill.js') }}"></script>
     <script src="https://unicons.iconscout.com/release/v2.1.9/script/monochrome/bundle.js"></script>
-    <script src="{{ asset('assets/client/js/sweetalert2.min.js') }}"></script>
+    {{-- <script src="{{ asset('assets/client/js/sweetalert2.min.js') }}"></script> --}}
 
+    @if (session('notify'))
+            @section('scripts')
+                <script>
+                    displayMessage('{{session('notify')}}', 'success');
+                </script>
+            @endsection
+    @endif
 
     <div class="modal fade" id="modalDetails" tabindex="-1" role="dialog" aria-hidden="true" data-backdrop="static">
         <div class="modal-dialog modal-dialog-centered modal-lg wd-sm-650" role="document">

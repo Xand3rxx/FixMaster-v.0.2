@@ -47,7 +47,7 @@
                                             </tr>
                                             <tr>
                                                 <td class="tx-medium">Phone Number</td>
-                                                <td class="tx-color-03">{{$user['phones'][0]['number'] ?? 'UNAVAILABLE' }}</td>
+                                                <td class="tx-color-03">{{$user->contact->phone_number ?? 'UNAVAILABLE' }}</td>
                                             </tr>
                                             <tr>
                                                 <td class="tx-medium">Designation</td>
