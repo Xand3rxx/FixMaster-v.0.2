@@ -1,11 +1,12 @@
 <?php
 
-use App\Http\Controllers\ServiceRequest\ClientDecisionController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\EstateController;
 use App\Http\Controllers\IncomeController;
+use App\Http\Controllers\RatingController;
 use App\Http\Controllers\EarningController;
 use App\Http\Controllers\InvoiceController;
+use App\Http\Controllers\Admin\RfqController;
 use App\Http\Controllers\Admin\TaxController;
 use App\Http\Controllers\SimulationController;
 use App\Http\Controllers\Admin\PriceController;
@@ -17,33 +18,33 @@ use App\Http\Controllers\Admin\GatewayController;
 use App\Http\Controllers\Admin\ServiceController;
 use App\Http\Controllers\Client\ClientController;
 use App\Http\Controllers\Admin\CategoryController;
-use App\Http\Controllers\Admin\ActivityLogController;
-use App\Http\Controllers\Admin\ToolInventoryController;
 use App\Http\Controllers\Admin\WarrantyController;
+use App\Http\Controllers\Admin\ActivityLogController;
+use App\Http\Controllers\Admin\AdminRatingController;
+use App\Http\Controllers\Admin\AdminReviewController;
+
+use App\Http\Controllers\Admin\ToolsRequestController;
+use App\Http\Controllers\Admin\ToolInventoryController;
 use App\Http\Controllers\Admin\User\SupplierController;
 use App\Http\Controllers\AdminLocationRequestController;
-
 use App\Http\Controllers\Admin\User\FranchiseeController;
 use App\Http\Controllers\Admin\User\AdministratorController;
 use App\Http\Controllers\QualityAssurance\PaymentController;
 use App\Http\Controllers\Admin\ServiceRequestSettingController;
 use App\Http\Controllers\Admin\User\QualityAssuranceController;
 use App\Http\Controllers\Admin\User\TechnicianArtisanController;
+
 use App\Http\Controllers\Technician\TechnicianProfileController;
+use App\Http\Controllers\ServiceRequest\ClientDecisionController;
 use App\Http\Controllers\ServiceRequest\ProjectProgressController;
 use App\Http\Controllers\QualityAssurance\ServiceRequestController;
 use App\Http\Controllers\ServiceRequest\AssignTechnicianController;
-
 use App\Http\Controllers\Admin\User\Administrator\SummaryController;
 use App\Http\Controllers\Admin\User\CustomerServiceExecutiveController;
-use App\Http\Controllers\QualityAssurance\QualityAssuranceProfileController;
-use App\Http\Controllers\RatingController;
-use App\Http\Controllers\Admin\AdminRatingController;
-use App\Http\Controllers\Admin\AdminReviewController;
-use App\Http\Controllers\CSE\CustomerServiceExecutiveController as CseController;
-use App\Http\Controllers\Admin\ToolsRequestController;
-use App\Http\Controllers\Admin\RfqController;
 use App\Http\Controllers\Supplier\RfqController as SupplierRfqController;
+use App\Http\Controllers\QualityAssurance\QualityAssuranceProfileController;
+use App\Http\Controllers\CSE\CustomerServiceExecutiveController as CseController;
+use App\Http\Controllers\Admin\ServiceRequestController as RequestServiceController;
 use App\Http\Controllers\Admin\User\ClientController as AdministratorClientController;
 
 /*
@@ -118,7 +119,7 @@ Route::prefix('admin')->group(function () {
         Route::get('/warranty/issued',      [WarrantyController::class, 'issuedWarranties'])->name('issued_warranty');
         Route::get('/warranty/issued/details/{warranty:uuid}',      [WarrantyController::class, 'issuedWarranties'])->name('issued_warranty_details');
         Route::get('/warranty/issued/resolved/{warranty:uuid}',      [WarrantyController::class, 'resolvedWarranty'])->name('mark_warranty_resolved');
-        
+
         //Routes for Simulation
         Route::get('/diagnostic', [SimulationController::class, 'diagnosticSimulation'])->name('diagnostic');
         Route::get('/end-service/{service_request:uuid}', [SimulationController::class, 'endService'])->name('end_service');
@@ -306,8 +307,12 @@ Route::prefix('admin')->group(function () {
         Route::get('/supplier-invoices/accept/{rfq:uuid}',              [RfqController::class, 'acceptSupplierInvoice'])->name('supplier_invoices_acceptance');
 
         //Service Reques Routes
-        Route::view('/requests',            'admin.requests.index')->name('requests');
-
+        Route::resource('requests', RequestServiceController::class);
+        
+        // Route::prefix('requests')->name('requests.')->group(function () {
+        //     Route::view('/',            'admin.requests.index')->name('requests');
+        // });
+        
     });
 });
 
@@ -335,7 +340,7 @@ Route::prefix('/client')->middleware('monitor.clientservice.request.changes')->g
         Route::get('/requests/reinstate/{request:id}',          [ClientController::class, 'reinstateRequest'])->name('reinstate_request');
         Route::get('/requests/completed-request/{request:id}',          [ClientController::class, 'markCompletedRequest'])->name('completed_request');
 
-   
+
         // E-wallet Routes for clients
         //Profile and password update
 
@@ -394,7 +399,7 @@ Route::prefix('/client')->middleware('monitor.clientservice.request.changes')->g
 
 // Route::resource('cse', CseController::class);
 
-Route::prefix('/cse')->middleware('monitor.cseservice.request.changes')->group(function () {
+Route::prefix('/cse')->group(function () {
     Route::name('cse.')->group(function () {
         //All routes regarding CSE's should be in here
         Route::view('/',                    'cse.index')->name('index'); //Take me to CSE Dashboard
