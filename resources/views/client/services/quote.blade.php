@@ -4,7 +4,7 @@
 @include('layouts.partials._messages')
 
 
-<!-- <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" rel="stylesheet" type="text/css" /> -->
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" rel="stylesheet" type="text/css" />
 <style>
     .blog .author { opacity: 1 !important; }
     .blog .overlay { opacity: 0.6 !important; }
@@ -470,32 +470,28 @@ tbody td, thead th {
             });
         });
 
-        $("#lga_id").on("change", function () {
-            let stateId = $("#state_id").find("option:selected").val();
-            let stateName = $("#state_id").find("option:selected").text();
-
-            let lgaId = $("#lga_id").find("option:selected").val();
-            let lgaName = $("#lga_id").find("option:selected").text();
-
+        $('#lga_id').on('change', function() {
+            let stateId = $('#state_id').find('option:selected').val();
+            let lgaId = $('#lga_id').find('option:selected').val();
             $.ajax({
-                url: "{{ route('ward_list', app()->getLocale()) }}",
+                url: "{{ route('towns.show', app()->getLocale()) }}",
                 method: "POST",
                 dataType: "JSON",
                 data: {
-                    _token: "{{ csrf_token() }}",
-                    state_id: stateId,
-                    lga_id: lgaId,
+                    "_token": "{{ csrf_token() }}",
+                    "state_id": stateId, "lga_id": lgaId
                 },
-                success: function (data) {
+                success: function(data) {
+                    console.log(data);
                     if (data) {
-                        $("#town_id").html(data.townList);
+                        $('#town_id').html(data.towns_list);
                     } else {
-                        var message = "Error occured while trying to get wards in " + lgaName + " local government";
-                        var type = "error";
+                        var message = 'Error occured while trying to get Town`s';
+                        var type = 'error';
                         displayMessage(message, type);
                     }
                 },
-            });
+            })
         });
 
 
@@ -508,7 +504,7 @@ tbody td, thead th {
                     _token: "{{ csrf_token() }}",
                     firstName: $("#first-name").val(),
                     lastName: $("#last-name").val(),
-                    phoneNumber: $("#phone-number").val(),
+                    phoneNumber: $("#phone_number").val(),
                     state: $("#state_id").val(),
                     lga: $("#lga_id").val(),
                     town: $("#town_id").val(),

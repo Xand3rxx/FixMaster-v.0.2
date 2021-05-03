@@ -66,11 +66,7 @@ class ClientController extends Controller
     public function index()
     {
 
-        $myRequest = Client::where('user_id', auth()->user()->id)->with(['service_requests' => function ($query) {
-            $query->latest('created_at');
-        }])->firstOrFail();
-
-        // return $myRequest;
+        $myRequest = Client::where('user_id', auth()->user()->id)->with('service_requests')->firstOrFail();
 
         //Get total available serviecs
         $totalServices = Service::count();
@@ -542,7 +538,7 @@ class ClientController extends Controller
         // $data['lgas'] = Lga::select('id', 'name')->orderBy('name', 'ASC')->get();
 
         //Return Service details
-        $data['myContacts'] = Contact::where('user_id', auth()->user()->id)->get();
+        $data['myContacts'] = Contact::where('user_id', auth()->user()->id)->latest('created_at')->get();
         //Return Service details
         // $data['myContacts'] = Contact::where('user_id', auth()->user()->id)->get();
         // dd($data['myContacts']);
