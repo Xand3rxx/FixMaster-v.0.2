@@ -107,73 +107,35 @@
                         <th class="text-center">Transaction Type</th>
                         <th class="text-center">Payment Type</th>
                         <th class="text-center">Amount</th>
-                        <th class="text-center">Status</th>
+                        <!-- <th class="text-center">Status</th> -->
                         <th>Date Created</th>
                         <th class="text-center">Action</th>
                       </tr>
                     </thead>
                     <tbody>
-                        <tr>
-                            <td class="tx-color-03 tx-center">{{ ++$i }}</td>
-                            <td class="tx-medium">Kelvin Adesanya</td>
-                            <td class="tx-medium">WAL-23782382</td>
-                            <td class="text-center">Credit</td>
-                            <td class="text-center">Funding</td>
-                            <td class="tx-medium text-center">{{ number_format(10000) }}</td>
-                            <td class="text-center text-warning">Pending</td>
-                            <td>{{ Carbon\Carbon::parse('2021-02-17 16:58:54', 'UTC')->isoFormat('MMMM Do YYYY, h:mm:ssa') }}</td>
-                            <td class=" text-center">
-                            <div class="dropdown-file">
-                                <a href="" class="dropdown-link" data-toggle="dropdown"><i data-feather="more-vertical"></i></a>
-                                <div class="dropdown-menu dropdown-menu-right">
-                                
-                                <a href="#transactionDetails" data-toggle="modal" class="dropdown-item details text-primary" title="View WAL-23782382 details"><i class="far fa-clipboard"></i> Details</a>
-                
-                                </div>
-                            </div>
-                            </td>
-                        </tr>
+                    @foreach($walletTransactions as $k=>$val)
+                                <tr>
+                                    <td class="tx-color-03 tx-center">{{ $loop->iteration }}</td>
+                                    <td class="tx-medium">{{ $val['user']['account']['last_name'] ." ". $val['user']['account']['first_name'] }}</td>
+                                    <td class="tx-medium">{{$val->unique_id}}</td>
+                                    <td class="tx-medium">{{ $val['transaction_type'] }}</td>
+                                    <td class="tx-medium">{{ $val['payment_type'] }}</td>
+                                    <td class="tx-medium text-info">{{ $val['amount'] ?? 0 }}</td>
+                                    <!-- <td class="text-medium text-success">{{is_null($val['user']['deleted_at']) ? 'Active' : InActive}}</td> -->
+                                    <td class="text-medium">{{ Carbon\Carbon::parse($val->created_at, 'UTC')->isoFormat('MMMM Do YYYY, h:mm:ssa') }}</td>
+                                    <td class=" text-center">
+                                        <div class="dropdown-file">
+                                            <a href="" class="dropdown-link" data-toggle="dropdown"><i data-feather="more-vertical"></i></a>
+                                            <div class="dropdown-menu dropdown-menu-right">
+                                            
+                                            <a href="#view{{$val['id'] }}" data-toggle="modal" class="dropdown-item details text-primary" title="View WAL-23782382 details"><i class="far fa-clipboard"></i> Details</a>
+                            
+                                            </div>
+                                        </div>
+                                    </td>
+                                </tr>
 
-                        <tr>
-                            <td class="tx-color-03 tx-center">{{ ++$i }}</td>
-                            <td class="tx-medium">Kelvin Adesanya</td>
-                            <td class="tx-medium">WAL-23782382</td>
-                            <td class="text-center">Debit</td>
-                            <td class="text-center">Service Request</td>
-                            <td class="tx-medium text-center">{{ number_format(5000) }}</td>
-                            <td class="text-center text-success">Success</td>
-                            <td>{{ Carbon\Carbon::parse('2020-12-28 16:58:54', 'UTC')->isoFormat('MMMM Do YYYY, h:mm:ssa') }}</td>
-                            <td class=" text-center">
-                                <div class="dropdown-file">
-                                <a href="" class="dropdown-link" data-toggle="dropdown"><i data-feather="more-vertical"></i></a>
-                                <div class="dropdown-menu dropdown-menu-right">
-                                
-                                    <a href="#transactionDetails" data-toggle="modal" class="dropdown-item details text-primary" title="View WAL-23782382 details"><i class="far fa-clipboard"></i> Details</a>
-                    
-                                </div>
-                                </div>
-                            </td>
-                        </tr>
-
-                        <tr>
-                            <td class="tx-color-03 tx-center">{{ ++$i }}</td>
-                            <td class="tx-medium">Kelvin Adesanya</td>
-                            <td class="tx-medium">WAL-23782382</td>
-                            <td class="text-center">Credit</td>
-                            <td class="text-center">Refund</td>
-                            <td class="tx-medium text-center">{{ number_format(2000) }}</td>
-                            <td class="text-center text-success">Success</td>
-                            <td>{{ Carbon\Carbon::parse('2020-09-12 16:58:54', 'UTC')->isoFormat('MMMM Do YYYY, h:mm:ssa') }}</td>
-                            <td class=" text-center">
-                                <div class="dropdown-file">
-                                <a href="" class="dropdown-link" data-toggle="dropdown"><i data-feather="more-vertical"></i></a>
-                                <div class="dropdown-menu dropdown-menu-right">
-                                
-                                    <a href="#transactionDetails" data-toggle="modal" class="dropdown-item details text-primary" title="View WAL-23782382 details"><i class="far fa-clipboard"></i> Details</a>
-                                </div>
-                                </div>
-                            </td>
-                        </tr>
+                    @endforeach
                     </tbody>
                   </table>
               </div><!-- table-responsive -->
@@ -187,8 +149,9 @@
 </div>
 
 
-
-<div class="modal fade" id="transactionDetails" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel2" aria-hidden="true" data-keyboard="false" data-backdrop="static">
+     <!-- modal -->
+     <!-- <div class="modal fade" id="transactionDetails" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel2" aria-hidden="true" data-keyboard="false" data-backdrop="static"> -->
+     <div class="modal fade" id="view{{$val['id'] }}" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true" data-keyboard="false" data-backdrop="static"> 
     <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
       <div class="modal-content tx-14">
         <div class="modal-header">
@@ -253,6 +216,8 @@
       </div>
     </div>
 </div>
+<!-- modal -->
+
 
 @section('scripts')
 <script>

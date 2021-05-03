@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
+use App\Models\WalletTransaction;
+
 class EWalletController extends Controller
 {
      /**
@@ -15,14 +17,22 @@ class EWalletController extends Controller
         $this->middleware('auth:web');
     }
 
-    public function clients(){
+    public function clients()
+    {
 
-        return view('admin.ewallet.clients')->with('i');
+        // $myWallet    = WalletTransaction::where('user_id', auth()->user()->id)->orderBy('id', 'DESC')->get();
+        // return view('client.wallet', compact('myWallet')+$data);
+
+        return view('admin.ewallet.transactions')->with('i');
+
     }
 
     public function transactions(){
 
-        return view('admin.ewallet.transactions')->with('i');
+        $walletTransactions = WalletTransaction::with('user')->get();
+        return view('admin.ewallet.transactions', compact('walletTransactions'));
+
+        // return view('admin.ewallet.transactions')->with('i');
     }
 
     public function clientHistory(){
