@@ -174,7 +174,7 @@
           </ul>
         </li>
         
-      <li class="nav-item {{ Route::currentRouteNamed('admin.requests') ? 'active show' : '' }}"><a href="{{ route('admin.requests', app()->getLocale()) }}" class="nav-link"><i data-feather="git-pull-request"></i> <span>Requests <sup class="font-weight-bold text-danger">{{ $pendingRequests }}</sup></span></a></li>
+      <li class="nav-item {{ Route::currentRouteNamed('admin.requests.index') ? 'active show' : '' }}"><a href="{{ route('admin.requests.index', app()->getLocale()) }}" class="nav-link"><i data-feather="git-pull-request"></i> <span>Requests <sup class="font-weight-bold text-danger">{{ $pendingRequests }}</sup></span></a></li>
 
         <li class="nav-item with-sub {{ Route::currentRouteNamed('admin.rfq', 'admin.supplier_invoices') ? 'active show' : '' }}">
           <a href="" class="nav-link"><i data-feather="file-text"></i> <span>RFQ's</span></a>

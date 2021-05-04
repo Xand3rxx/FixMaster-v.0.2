@@ -53,19 +53,19 @@
       }
 
       .tx-gray-300 {
-        color: #cdd4e0; 
+        color: #cdd4e0;
       }
 
       .lh-0 {
-        line-height: 0; 
+        line-height: 0;
       }
 
       .tx-40 {
-        font-size: 40px; 
+        font-size: 40px;
       }
 
       .tx-orange {
-        color: #fd7e14; 
+        color: #fd7e14;
       }
       .pplogo-container {
         border: 2px solid #e97d1f !important;
@@ -136,7 +136,7 @@
     <script src="https://unicons.iconscout.com/release/v2.1.9/script/monochrome/bundle.js"></script>
     <script src="{{ asset('assets/client/js/sweetalert2.min.js') }}"></script>
     <script src="{{ asset('assets/dashboard/assets/js/jquery.tinymce.min.js') }}"></script>
-  
+
     <div class="modal fade" id="modalDetails" tabindex="-1" role="dialog" aria-hidden="true" data-backdrop="static">
         <div class="modal-dialog modal-dialog-centered modal-lg wd-sm-650" role="document">
             <div class="modal-content">
@@ -305,7 +305,7 @@
 
         }
     </script>
- 
+
  @yield('scripts')
  @stack('scripts')
 
@@ -323,13 +323,13 @@
         });
 
 
-        //Prevent characters or string asides number in ohone number input field 
+        //Prevent characters or string asides number in ohone number input field
         $("#number, #phone_number, #alternate_phone_number").on("keypress keyup blur", function(event) {
         $(this).val($(this).val().replace(/[^\d].+/, ""));
             if ((event.which < 48 || event.which > 57)) {
                 event.preventDefault();
             }
-        });  
+        });
 
         // Url for more info on datepicker options https://xdsoft.net/jqplugins/datetimepicker/
         $(document).on('click', '#service-date-time', function(){
@@ -345,7 +345,7 @@
         });
 
 
-     
+
 
       $(function () {
         $('.popup-modal').magnificPopup({
@@ -365,11 +365,11 @@
 
       // })
 
-      
-      
+
+
       });
     </script>
-   
+
 
   </body>
 </html>
