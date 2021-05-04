@@ -9,7 +9,6 @@
     background-color: #E97D1F;
     border-radius: 15px;
   }
-
 </style>
 
 <div class="content-body">
@@ -22,6 +21,7 @@
           </ol>
         </nav>
         <h4 class="mg-b-0 tx-spacing--1">Welcome to Fix<span style="color: #E97D1F;">Master</span> {{ Auth::user()->type->role->name ?? 'Quality Assurance' }} Dashboard</h4>
+        <p class="tx-13 tx-color-03 mg-b-0">Your current <span style="color: #E97D1F;"> <strong> Earnings is: ₦20,000 </strong> </span> </p>
       </div>
     </div>
 
@@ -43,7 +43,7 @@
         <div class="card-header pd-t-20 d-sm-flex align-items-start justify-content-between bd-b-0 pd-b-0">
           <div>
             <h6 class="mg-b-5">Pending Requests</h6>
-            <p class="tx-13 tx-color-03 mg-b-0">This table displays a list of all available <strong>Pending Request </strong> </p>
+            <p class="tx-13 tx-color-03 mg-b-0">This table displays a list of all <strong>Available Pending Request </strong> </p>
           </div>
 
         </div><!-- card-header -->
@@ -97,12 +97,12 @@
       responsive: true,
       "iDisplayLength": 10,
       "language": {
-            "lengthMenu": '_MENU_ items/page',
-            "zeroRecords": "No matching records found",
-            "info": "Showing page _PAGE_ of _PAGES_",
-            "infoEmpty": "No records available",
-            "infoFiltered": "(filtered from _MAX_ total records)"
-          },
+        "lengthMenu": '_MENU_ items/page',
+        "zeroRecords": "No matching records found",
+        "info": "Showing page _PAGE_ of _PAGES_",
+        "infoEmpty": "No records available",
+        "infoFiltered": "(filtered from _MAX_ total records)"
+      },
       "processing": true,
     });
 

@@ -46,6 +46,7 @@ use App\Http\Controllers\QualityAssurance\QualityAssuranceProfileController;
 use App\Http\Controllers\CSE\CustomerServiceExecutiveController as CseController;
 use App\Http\Controllers\Admin\ServiceRequestController as RequestServiceController;
 use App\Http\Controllers\Admin\User\ClientController as AdministratorClientController;
+use App\Http\Controllers\CSE\CustomerServiceExecutiveController as UserCustomerServiceExecutiveController;
 
 /*
 |--------------------------------------------------------------------------
@@ -402,7 +403,8 @@ Route::prefix('/client')->middleware('monitor.clientservice.request.changes')->g
 Route::prefix('/cse')->group(function () {
     Route::name('cse.')->group(function () {
         //All routes regarding CSE's should be in here
-        Route::view('/',                    'cse.index')->name('index'); //Take me to CSE Dashboard
+        // Route::view('/',                    'cse.index');
+        Route::get('/', [UserCustomerServiceExecutiveController::class, 'index'])->name('index'); //Take me to CSE Dashboard
         Route::view('/messages/inbox',      'cse.messages.inbox')->name('messages.inbox');
         Route::view('/messages/sent',       'cse.messages.sent')->name('messages.sent');
         Route::view('/payments',            'cse.payments')->name('payments');
