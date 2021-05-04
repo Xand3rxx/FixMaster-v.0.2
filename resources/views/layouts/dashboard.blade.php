@@ -83,14 +83,6 @@
             border-color: #E97D1F !important;
         }
 
-        .qa-style{
-            background-color: #E97D1F;
-            border-radius: 15px;
-        }
-
-        .qa{
-            color: #fff;
-        }
     </style>
 <input type="hidden" id="path_admin" value="{{url('/')}}">
     @include('layouts.partials._dashboard_sidebar')

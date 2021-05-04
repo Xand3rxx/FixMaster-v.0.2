@@ -3,6 +3,26 @@
 @include('layouts.partials._messages')
 @section('content')
 
+<style>
+.qa-style{
+            background-color: #E97D1F;
+            border-radius: 8px;
+        }
+
+        .qa{
+            color: #fff;
+        }
+
+        .earn{
+            border: 2px solid #E97D1F;
+            border-radius:5px;
+        }
+        .p-earn{
+            padding-top: 10px;
+            color: #E97D1F;
+        }
+
+</style>
 <div class="content-body">
   <div class="container pd-x-0">
     <div class="d-sm-flex align-items-center justify-content-between mg-b-20 mg-lg-b-25 mg-xl-b-30">
@@ -18,8 +38,28 @@
 
     <div class="row row-xs">
       <div class="col-lg-12 col-xl-12">
+          <div class="row">
+              <div class="col-md-9">
+
+              </div>
+
+              <div class="col-md-3">
+                <div class="text-center earn">
+                    <h5 class="p-earn">Earnings: N50,000</h5>
+                    </div>
+              </div><br><br><br>
+          </div>
         <div class="card">
           <div class="card-body pd-lg-25">
+
+            {{-- <div class="row">
+                <x-card cardtitle="Completed Jobs" cardnumber="10" />
+                <x-card cardtitle="Ongoing Jobs" cardnumber="11" />
+                <x-card cardtitle="Pending Consultations" cardnumber="20" />
+                <x-card cardtitle="Completed Consultations" cardnumber="10" />
+                <x-card cardtitle="Ongoing Consultations" cardnumber="11" />
+
+              </div> --}}
                  <div class="row">
 
                   <div class="col-md-4 mt-4">
@@ -74,11 +114,7 @@
                  </div>
           </div>
         </div><!-- card -->
-      </div><br><br>
-
-      {{-- <div class="qa-style"  style="margin-left: 860px;">
-        <p>Earnings: N500</p>
-    </div> --}}
+      </div>
 
       <div class="col-md-12 col-xl-12 mg-t-10">
 
@@ -93,7 +129,7 @@
         </div><!-- card-header -->
 
         <div class="table-responsive">
-            <table class="table table-hover mg-b-0" id="basicExample">
+            <table class="table table-hover mg-b-0" id="dashboardTable">
                 <thead class="thead-primary">
                     <tr>
                         <th class="text-center">#</th>
@@ -109,7 +145,7 @@
                             <td class="tx-medium">REF-79A722D6</td>
                             <td class="tx-medium">Unavailable</td>
                             <td class="tx-medium">2021-04-26</td>
-                            <td class="tx-medium"><button class="btn" style="background-color: #E97D1F; color:#fff">Details</button></td>
+                            <td class="tx-medium"><button class="btn btn-sm" style="background-color: #E97D1F; color:#fff">Details</button></td>
                         </tr>
 
                         <tr>
@@ -117,7 +153,7 @@
                             <td class="tx-medium">REF-79A722S5</td>
                             <td class="tx-medium">Unavailable</td>
                             <td class="tx-medium">2021-04-26</td>
-                            <td class="tx-medium"><button class="btn" style="background-color: #E97D1F; color:#fff">Details</button></td>
+                            <td class="tx-medium"><button class="btn btn-sm" style="background-color: #E97D1F; color:#fff">Details</button></td>
                         </tr>
                 </tbody>
             </table>
@@ -134,6 +170,19 @@
 @section('scripts')
 <script>
     $(document).ready(function() {
+
+        $('#dashboardTable').DataTable({
+      responsive: true,
+      "iDisplayLength": 10,
+      "language": {
+            "lengthMenu": '_MENU_ items/page',
+            "zeroRecords": "No matching records found",
+            "info": "Showing page _PAGE_ of _PAGES_",
+            "infoEmpty": "No records available",
+            "infoFiltered": "(filtered from _MAX_ total records)"
+          },
+      "processing": true,
+    });
 
         $('#request-sorting').on('change', function (){
                 let option = $("#request-sorting").find("option:selected").val();

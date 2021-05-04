@@ -308,11 +308,11 @@ Route::prefix('admin')->group(function () {
 
         //Service Reques Routes
         Route::resource('requests', RequestServiceController::class);
-        
+
         // Route::prefix('requests')->name('requests.')->group(function () {
         //     Route::view('/',            'admin.requests.index')->name('requests');
         // });
-        
+
     });
 });
 
@@ -349,7 +349,7 @@ Route::prefix('/client')->middleware('monitor.clientservice.request.changes')->g
         // *****************client wallet funding**********************//
         Route::get('wallet',                                [ClientController::class, 'wallet'])->name('wallet');
         Route::any('fund',                                  [ClientController::class, 'walletSubmit'])->name('wallet.submit');
-        
+
         Route::get('loyalty',                            [ClientController::class, 'loyalty'])->name('loyalty');
         Route::any('loyalty/submit',                     [ClientController::class, 'loyaltySubmit'])->name('loyalty.submit');
         Route::get('payments',                           [ClientController::class, 'payments'])->name('payments');
@@ -386,7 +386,7 @@ Route::prefix('/client')->middleware('monitor.clientservice.request.changes')->g
         Route::post('/ajax_contactForm',            [ClientController::class, 'ajax_contactForm'])->name('ajax_contactForm');
 
         Route::get('myContactList',                 [ClientController::class, 'myContactList'])->name('service.myContacts');
-        
+
         Route::post('/update_service_request',  [ClientController::class, 'update_client_service_rating'])->name('update_service_request');
         Route::post('/submit_ratings',  [ClientController::class, 'client_rating'])->name('handle.ratings');
 
@@ -486,8 +486,15 @@ Route::prefix('/quality-assurance')->group(function () {
         Route::patch('/update_password', [QualityAssuranceProfileController::class, 'update_password'])->name('update_password');
         Route::get('/requests', [ServiceRequestController::class, 'get_requests'])->name('requests');
         Route::get('/payments', [PaymentController::class, 'get_qa_disbursed_payments'])->name('payments');
-        Route::view('/messages/inbox', 'quality-assurance.messages.inbox')->name('messages.inbox');
         Route::view('/messages/sent', 'quality-assurance.messages.sent')->name('messages.sent');
+        Route::view('/messages/inbox', 'quality-assurance.messages.inbox')->name('messages.inbox');
+        Route::view('/requests/active', 'quality-assurance.requests.active')->name('requests.active');
+        Route::view('/requests/completed', 'quality-assurance.requests.completed')->name('requests.completed');
+        Route::view('/requests/warranty_claim', 'quality-assurance.requests.warranty_claim')->name('requests.warranty_claim');
+        Route::view('/consultations/pending', 'quality-assurance.consultations.pending')->name('consultations.pending');
+        Route::view('/consultations/ongoing', 'quality-assurance.consultations.ongoing')->name('consultations.ongoing');
+        Route::view('/consultations/completed', 'quality-assurance.consultations.completed')->name('consultations.completed');
+        Route::view('/requests/cancelled', 'quality-assurance.requests.cancelled')->name('requests.cancelled');
         Route::post('/disbursed_payments_sorting', [PaymentController::class, 'sortDisbursedPayments'])->name('disbursed_payments_sorting');
         Route::get('/get_chart_data', [ServiceRequestController::class, 'chat_data']);
         Route::get('/requests/details/{uuid}',  [ServiceRequestController::class, 'show'])->name('request_details');
