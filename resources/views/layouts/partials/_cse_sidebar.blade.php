@@ -10,15 +10,14 @@
   <div class="aside-body">
     <div class="aside-loggedin">
       <div class="d-flex align-items-center justify-content-start">
-        <a href="" class="avatar"><img src="{{!empty(Auth::user()->account->avatar) ? asset('assets/user-avatars/'.Auth::user()->account->avatar) : asset('assets/user-avatars/default-male-avatar.png')}}" class="rounded-circle" alt="Male Avatar"></a>
+        <a href="#loggedinMenu" data-toggle="collapse" class="avatar"><img src="{{!empty(Auth::user()->account->avatar) ? asset('assets/user-avatars/'.Auth::user()->account->avatar) : asset('assets/user-avatars/default-male-avatar.png')}}" class="rounded-circle" alt="Male Avatar"></a>
         <div class="aside-alert-link">
-        <a href="#" class="new" data-toggle="tooltip" title="You have 0 unread messages"><i data-feather="message-square"></i></a>
-          <a onclick="event.preventDefault();
-          document.getElementById('logout-form').submit();" href="{{ route('logout', app()->getLocale()) }}" data-toggle="tooltip" title="Sign out"><i data-feather="log-out"></i></a>
+          <a href="#" class="new" data-toggle="tooltip" title="You have 0 unread messages"><i data-feather="message-square"></i></a>
+          <a onclick="event.preventDefault();document.getElementById('logout-form').submit();" href="{{ route('logout', app()->getLocale()) }}" data-toggle="tooltip" title="Sign out"><i data-feather="log-out"></i></a>
           <form id="logout-form" action="{{ route('logout', app()->getLocale()) }}" method="POST" style="display: none;">
             @csrf
-        </form>
-    </div>
+          </form>
+        </div>
       </div>
       <div class="aside-loggedin-user">
         <a href="#loggedinMenu" class="d-flex align-items-center justify-content-between mg-b-2" data-toggle="collapse">
@@ -31,8 +30,21 @@
           <input type="checkbox" checked class="custom-control-input" id="cse-availability">
           <label class="custom-control-label font-weight-bold" for="cse-availability"></label>
         </div>
-        <p class="text-center tx-14 text-success tx-12 mt-1 mg-b-0">Available</p><br>
-
+        <p class="cse_availability text-center tx-14 text-success tx-12 mt-1 mg-b-0">{{ Str::title($cse_availability)}}</p>
+        @push('scripts')
+        <script>
+          // To be used once integrating CSE AVAILABILITY
+          $('#cse-availability').on('click', function(e) {
+            if (confirm('Are You sure you want to update your avalability?')) {
+              console.log($('.cse_availability').text());
+              // STEPS NEEDED FOR CSE AVALABILITY
+              // 1. AJAX CALL UPDATE CSE AVALABILITY
+              // 2. ON SUCCESSFULL UPDATE, HOT RELOAD PAGE 
+            }
+            e.preventDefault();
+          });
+        </script>
+        @endpush
       </div>
       <div class="collapse {{ Route::currentRouteNamed('cse.view_profile', 'cse.edit_profile') ? 'show' : '' }}" id="loggedinMenu">
         <ul class="nav nav-aside mg-b-0">
@@ -43,10 +55,19 @@
       </div>
     </div><!-- aside-loggedin -->
     <ul class="nav nav-aside">
-      <li class="nav-label">Components</li>
-      <li class="nav-item {{ Route::currentRouteNamed('cse.index') ? 'active' : '' }}"><a href="{{ route('cse.index', app()->getLocale()) }}" class="nav-link"><i data-feather="airplay"></i> <span>Home</span></a></li>
-
-      <li class="nav-item {{ Route::currentRouteNamed('cse.location_request') ? 'active' : '' }}"><a href="{{ route('cse.location_request', app()->getLocale()) }}" class="nav-link"><i data-feather="map-pin"></i> <span>Location Request</span></a></li>
+      <li class="nav-label">MENU</li>
+      <li class="nav-item {{ Route::currentRouteNamed('cse.index') ? 'active' : '' }}"><a href="{{ route('cse.index', app()->getLocale()) }}" class="nav-link"><i data-feather="airplay"></i> <span>Dashboard</span></a></li>
+      
+      <li class="nav-item with-sub {{ Route::currentRouteNamed('cse.requests.index', 'cse.request_details', 'cse.requests.show') ? 'active show' : '' }}">
+        <a href="" class="nav-link"><i data-feather="git-pull-request"></i> <span>Requests</span></a>
+        <ul>
+          <li class="{{ Route::currentRouteNamed('cse.requests.index') ? 'active' : '' }}"><a href="{{ route('cse.requests.index', app()->getLocale()) }}"> Pending </a></li>
+          <li class="{{ Route::currentRouteNamed('cse.requests.create') ? 'active' : '' }}"><a href="{{ route('cse.requests.index', app()->getLocale()) }}"> Active </a></li>
+          <li class="{{ Route::currentRouteNamed('cse.messages.sent') ? 'active' : '' }}"><a href="{{ route('cse.requests.index', app()->getLocale()) }}"> Completed </a></li>
+          <li class="{{ Route::currentRouteNamed('cse.messages.sent') ? 'active' : '' }}"><a href="{{ route('cse.requests.index', app()->getLocale()) }}"> Warranty Claims </a></li>
+          <li class="{{ Route::currentRouteNamed('cse.messages.sent') ? 'active' : '' }}"><a href="{{ route('cse.requests.index', app()->getLocale()) }}"> Cancelled </a></li>
+        </ul>
+      </li>
 
       <li class="nav-item with-sub {{ Route::currentRouteNamed('inbox_messages', 'outbox_messages') ? 'active show' : '' }}">
         <a href="" class="nav-link"><i data-feather="message-circle"></i> <span>Messages</span></a>
@@ -58,9 +79,6 @@
 
       <li class="nav-item {{ Route::currentRouteNamed('cse.payments') ? 'active show' : '' }}"><a href="{{ route('cse.payments', app()->getLocale()) }}" class="nav-link"><i data-feather="credit-card"></i> <span>Payments</span></a></li>
 
-      <li class="nav-item {{ Route::currentRouteNamed('cse.requests.index', 'cse.request_details', 'cse.requests.show') ? 'active show' : '' }}"><a href="{{ route('cse.requests.index', app()->getLocale()) }}" class="nav-link"><i data-feather="git-pull-request"></i> <span>Requests</span></a></li>
-
     </ul>
   </div>
 </aside>
-
