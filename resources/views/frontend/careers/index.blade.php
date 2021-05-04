@@ -146,7 +146,7 @@
                 <div class="card custom-form border-0">
                     <div class="card-body">
                         <h4 class="title mb-4"> {{__('CSE Application Form')}} </h4>
-                        
+                        @include('frontend.careers.cse_form')
                         <!--end form-->
                     </div>
                 </div>

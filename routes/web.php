@@ -45,6 +45,8 @@ use App\Http\Controllers\Admin\ToolsRequestController;
 use App\Http\Controllers\Admin\RfqController;
 use App\Http\Controllers\Supplier\RfqController as SupplierRfqController;
 use App\Http\Controllers\Admin\User\ClientController as AdministratorClientController;
+use App\Http\Controllers\Client\PaystackController;
+use App\Http\Controllers\Supplier\ProfileController as SupplierProfileController;
 
 /*
 |--------------------------------------------------------------------------
@@ -175,6 +177,7 @@ Route::prefix('admin')->group(function () {
             ->name('services.deactivate');
         Route::get('/services/reinstate/{service:uuid}',         [ServiceController::class, 'reinstate'])->name('services.reinstate');
         Route::get('/services/delete/{service:uuid}',            [ServiceController::class, 'destroy'])->name('services.delete');
+        Route::get('/services/sub-service/delete/{subService:uuid}',            [ServiceController::class, 'destroySubService'])->name('services.delete_sub_service');
         Route::resource('services',                         ServiceController::class);
 
         //  location request ajax_contactForm
@@ -440,14 +443,17 @@ Route::prefix('/supplier')->group(function () {
         Route::view('/payments',            'supplier.payments')->name('payments');
         Route::view('/requests',            'supplier.requests')->name('requests');
         Route::view('/requests/details',    'franchisee.request_details')->name('request_details');
-        Route::view('/profile',             'supplier.view_profile')->name('view_profile');
-        Route::view('/profile/edit',        'supplier.edit_profile')->name('edit_profile');
+        Route::get('/profile',             [SupplierProfileController::class, 'index'])->name('view_profile');
+        Route::get('/profile/edit',        [SupplierProfileController::class, 'show'])->name('edit_profile');
         Route::get('/rfqs',                               [SupplierRfqController::class, 'index'])->name('rfq');
         Route::get('/rfqs/details/{rfq:uuid}',            [SupplierRfqController::class, 'rfqDetails'])->name('rfq_details');
         Route::get('/rfqs/details/{rfq:uuid}',            [SupplierRfqController::class, 'sendInvoice'])->name('rfq_send_supplier_invoice');
         Route::post('/rfqs/store/',                       [SupplierRfqController::class, 'store'])->name('rfq_store_supplier_invoice');
         Route::get('/sent-invoices',                               [SupplierRfqController::class, 'sentInvoices'])->name('rfq_sent_invoices');
-        Route::get('/sent-invoices/details/{rfq:id}',            [SupplierRfqController::class, 'sentInvoiceDetails'])->name('rfq_details');
+        Route::get('/sent-invoices/details/{rfq:id}',            [SupplierRfqController::class, 'sentInvoiceDetails'])->name('sent_supplier_invoice_details');
+        Route::put('/profile/update-password',             [SupplierProfileController::class, 'updatePassword'])->name('update_profile_password');
+        Route::resource('profile-updates',                            SupplierProfileController::class);
+
     });
 });
 

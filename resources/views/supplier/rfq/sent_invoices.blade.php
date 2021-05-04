@@ -57,7 +57,7 @@
                       <a href="" class="dropdown-link" data-toggle="dropdown"><i data-feather="more-vertical"></i></a>
                       <div class="dropdown-menu dropdown-menu-right">
 
-                        {{-- <a href="#rfqDetails" data-toggle="modal" class="dropdown-item details text-primary" title="View {{ $rfq->rfqunique_id}} details" data-batch-number="{{ $rfq->rfq->unique_id}}" data-url="{{ route('supplier.rfq_sent_supplier_invoice', ['rfq'=>$rfq->id, 'locale'=>app()->getLocale()]) }}" id="rfq-details"><i class="far fa-clipboard"></i> Details</a> --}}
+                        <a href="#rfqDetails" data-toggle="modal" class="dropdown-item details text-primary" title="View {{ $rfq->rfqunique_id}} details" data-batch-number="{{ $rfq->rfq->unique_id}}" data-url="{{ route('supplier.sent_supplier_invoice_details', ['rfq'=>$rfq->id, 'locale'=>app()->getLocale()]) }}" id="rfq-details"><i class="far fa-clipboard"></i> Details</a>
                        
                       </div>
                     </div>
@@ -95,83 +95,18 @@
 
 
 @push('scripts')
+<script src="{{ asset('assets/dashboard/assets/js/a784c9e7-4015-44df-994d-50ffe4921458.js') }}"></script>
+
 <script>
   $(document).ready(function() {
-    $(document).on('click', '#rfq-details', function(event) {
-      event.preventDefault();
-      let route = $(this).attr('data-url');
-      let batchNumber = $(this).attr('data-batch-number');
-      
-      $.ajax({
-          url: route,
-          beforeSend: function() {
-            $("#spinner-icon").html('<div class="d-flex justify-content-center mt-4 mb-4"><span class="loadingspinner"></span></div>');
-          },
-          // return the result
-          success: function(result) {
-              $('#modal-body').modal("show");
-              $('#modal-body').html('');
-              $('#modal-body').html(result).show();
-          },
-          complete: function() {
-              $("#spinner-icon").hide();
-          },
-          error: function(jqXHR, testStatus, error) {
-              var message = error+ ' An error occured while trying to retireve '+ batchNumber +'  details.';
-              var type = 'error';
-              displayMessage(message, type);
-              $("#spinner-icon").hide();
-          },
-          timeout: 8000
-      })
-    });
 
     $('.close').click(function (){
       $(".modal-backdrop").remove();
     });
 
-
   });
-
-
-  function individualAmount(count)
-  {
-    var unitPrice = parseFloat(($('#unit-price-'+count).val().replace(/,/g , '')));
-    var quantity  = parseInt($('.quantity-'+count).text());
-    var totalAmount = (unitPrice * quantity);
-    $('#unit-amount-'+count).val(totalAmount);
-    $('.amount-'+count).text(numberWithCommas(totalAmount.toFixed(2)));
-    getTotalAmount();
-  }
-
-  function deliveryFee(){
-    // $('#delivery_fee').keyup(function(){
-    //     return $(this).val();
-    // });
-    $('.delivery-fee').text(numberWithCommas($('#delivery_fee').val()));
-    getTotalAmount();
-  }
-
-  function getTotalAmount()
-  {
-    var totalEachAmount = 0;
-    var totalAmount = 0;
-
-    $('.each-amount').each(function (){
-        var total  = parseInt($(this).val());
-        if(isNaN(total) == false){
-          totalEachAmount += total;
-          $('.total-amount').text('₦'+numberWithCommas(totalEachAmount.toFixed(2)));
-          $('#total_amount').val(totalEachAmount);
-          // return totalEachAmount;
-        }
-    });
-  }
-
-  function numberWithCommas(x) {
-    return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-  }
 </script>
+
 @endpush
 
 @endsection

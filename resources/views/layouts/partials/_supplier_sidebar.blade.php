@@ -39,7 +39,7 @@
         <li class="nav-label">Components</li>
         <li class="nav-item {{ Route::currentRouteNamed('supplier.index') ? 'active' : '' }}"><a href="{{ route('supplier.index', app()->getLocale()) }}" class="nav-link"><i data-feather="airplay"></i> <span>Home</span></a></li>
 
-        <li class="nav-item {{ Route::currentRouteNamed('supplier.rfq') ? 'active show' : '' }}"><a href="{{ route('supplier.rfq', app()->getLocale()) }}" class="nav-link"><i data-feather="git-pull-request"></i> <span>Issued RFQ's</span></a></li>
+        <li class="nav-item {{ Route::currentRouteNamed('supplier.rfq', 'supplier.rfq_send_supplier_invoice') ? 'active' : '' }}"><a href="{{ route('supplier.rfq', app()->getLocale()) }}" class="nav-link"><i data-feather="git-pull-request"></i> <span>Issued RFQ's</span></a></li>
 
         <li class="nav-item with-sub {{ Route::currentRouteNamed('inbox_messages', 'outbox_messages') ? 'active show' : '' }}">
           <a href="" class="nav-link"><i data-feather="message-circle"></i> <span>Messages</span></a>

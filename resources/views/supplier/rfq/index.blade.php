@@ -64,7 +64,7 @@
                       <div class="dropdown-menu dropdown-menu-right">
                         @if($rfq->status == 'Pending')
 
-                        <a href="#rfqDetails" data-toggle="modal" class="dropdown-item details text-primary" title="View {{ $rfq->unique_id}} details" data-batch-number="{{ $rfq->unique_id}}" data-url="{{ route('supplier.rfq_send_supplier_invoice', ['rfq'=>$rfq->uuid, 'locale'=>app()->getLocale()]) }}" id="rfq-details"><i class="far fa-clipboard"></i> Send Invoice</a>
+                        <a href="{{ route('supplier.rfq_send_supplier_invoice', ['rfq'=>$rfq->uuid, 'locale'=>app()->getLocale()]) }}" class="dropdown-item details text-primary" title="View {{ $rfq->unique_id}} details"><i class="far fa-clipboard"></i> Send Invoice</a>
                         @else
                         <a href="#rfqDetails" data-toggle="modal" class="dropdown-item details text-primary" title="View {{ $rfq->unique_id}} details" data-batch-number="{{ $rfq->unique_id}}" data-url="{{ route('supplier.rfq_details', ['rfq'=>$rfq->uuid, 'locale'=>app()->getLocale()]) }}" id="rfq-details"><i class="far fa-clipboard"></i> Details</a>
                         @endif
