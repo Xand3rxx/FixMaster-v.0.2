@@ -10,6 +10,7 @@
         <th>Payment Mode</th>
         <th>Comment</th>
         <th class="text-center">Payment Date</th>
+        <th>Action</th>
       </tr>
     </thead>
     <tbody>
@@ -25,7 +26,7 @@
           <td class="tx-medium">{{$result->mode->name}}</td>
           <td class="tx-medium">{{$result->comment}}</td>
           <td class="text-medium tx-center">{{ Carbon\Carbon::parse($result->created_at, 'UTC')->isoFormat('MMMM Do YYYY, h:mm:ssa') }}</td>
-
+          <td class="tx-medium"><button class="btn btn-sm" style="background-color: #E97D1F; color:#fff">Details</button></td>
         </tr>
       @endforeach
     </tbody>

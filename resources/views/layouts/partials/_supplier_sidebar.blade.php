@@ -7,10 +7,13 @@
       </a>
       <a href="" id="chatContentClose" class="burger-menu d-none"><i data-feather="arrow-left"></i></a>
     </div>
+
     <div class="aside-body">
       <div class="aside-loggedin">
         <div class="d-flex align-items-center justify-content-start">
-          <a href="" class="avatar"><img src="{{!empty(Auth::user()->account->avatar) ? asset('assets/user-avatars/'.Auth::user()->account->avatar) : asset('assets/user-avatars/default-male-avatar.png')}}" class="rounded-circle" alt="Male Avatar"></a>
+          <a href="" class="avatar">
+            @include('layouts.partials._profile_avatar')
+          </a>
           <div class="aside-alert-link">
           <a href="#" class="new" data-toggle="tooltip" title="You have 0 unread messages"><i data-feather="message-square"></i></a>
             <a onclick="event.preventDefault();
@@ -39,7 +42,16 @@
         <li class="nav-label">Components</li>
         <li class="nav-item {{ Route::currentRouteNamed('supplier.index') ? 'active' : '' }}"><a href="{{ route('supplier.index', app()->getLocale()) }}" class="nav-link"><i data-feather="airplay"></i> <span>Home</span></a></li>
 
-        <li class="nav-item {{ Route::currentRouteNamed('supplier.rfq') ? 'active show' : '' }}"><a href="{{ route('supplier.rfq', app()->getLocale()) }}" class="nav-link"><i data-feather="git-pull-request"></i> <span>Issued RFQ's</span></a></li>
+        <li class="nav-item with-sub {{ Route::currentRouteNamed('supplier.rfq', 'supplier.rfq_send_supplier_invoice', 'supplier.rfq_sent_invoices') ? 'active show' : '' }}">
+          <a href="" class="nav-link"><i data-feather="git-pull-request"></i> <span>Requests For Quote <span class="badge badge-primary">{{ $newQuotes }}</span></span></a>
+          <ul>
+            <li class="{{ Route::currentRouteNamed('supplier.rfq', 'supplier.rfq_send_supplier_invoice') ? 'active' : '' }}"><a href="{{ route('supplier.rfq', app()->getLocale()) }}">New Quotes <sup class="font-weight-bold text-primary">{{ $newQuotes }}</sup></a></li>
+            <li class="{{ Route::currentRouteNamed('supplier.rfq_sent_invoices') ? 'active' : '' }}"><a href="{{ route('supplier.rfq_sent_invoices', app()->getLocale()) }}">Sent Quotes</a></li>
+          </ul>
+        </li>
+
+        <li class="nav-item {{ Route::currentRouteNamed('supplier.dispatches') ? 'active' : '' }}"><a href="{{ route('supplier.dispatches', app()->getLocale()) }}" class="nav-link"><i data-feather="file-text"></i> <span>Materials Dispatched</span></a></li>
+
 
         <li class="nav-item with-sub {{ Route::currentRouteNamed('inbox_messages', 'outbox_messages') ? 'active show' : '' }}">
           <a href="" class="nav-link"><i data-feather="message-circle"></i> <span>Messages</span></a>
@@ -49,9 +61,7 @@
           </ul>
         </li>
 
-        <li class="nav-item {{ Route::currentRouteNamed('supplier.payments') ? 'active show' : '' }}"><a href="{{ route('supplier.payments', app()->getLocale()) }}" class="nav-link"><i data-feather="credit-card"></i> <span>Payments</span></a></li>
-
-        <li class="nav-item {{ Route::currentRouteNamed('supplier.rfq_sent_invoices') ? 'active show' : '' }}"><a href="{{ route('supplier.rfq_sent_invoices', app()->getLocale()) }}" class="nav-link"><i data-feather="file-text"></i> <span>Sent Invoices</span></a></li>
+        <li class="nav-item {{ Route::currentRouteNamed('supplier.payments') ? 'active' : '' }}"><a href="{{ route('supplier.payments', app()->getLocale()) }}" class="nav-link"><i data-feather="credit-card"></i> <span>Payments</span></a></li>
 
       </ul>
     </div>

@@ -1,11 +1,12 @@
 <?php
 
-use App\Http\Controllers\ServiceRequest\ClientDecisionController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\EstateController;
 use App\Http\Controllers\IncomeController;
+use App\Http\Controllers\RatingController;
 use App\Http\Controllers\EarningController;
 use App\Http\Controllers\InvoiceController;
+use App\Http\Controllers\Admin\RfqController;
 use App\Http\Controllers\Admin\TaxController;
 use App\Http\Controllers\SimulationController;
 use App\Http\Controllers\Admin\PriceController;
@@ -17,34 +18,38 @@ use App\Http\Controllers\Admin\GatewayController;
 use App\Http\Controllers\Admin\ServiceController;
 use App\Http\Controllers\Client\ClientController;
 use App\Http\Controllers\Admin\CategoryController;
-use App\Http\Controllers\Admin\ActivityLogController;
-use App\Http\Controllers\Admin\ToolInventoryController;
 use App\Http\Controllers\Admin\WarrantyController;
+use App\Http\Controllers\Admin\ActivityLogController;
+use App\Http\Controllers\Admin\AdminRatingController;
+use App\Http\Controllers\Admin\AdminReviewController;
+
+use App\Http\Controllers\Admin\ToolsRequestController;
+use App\Http\Controllers\Admin\ToolInventoryController;
 use App\Http\Controllers\Admin\User\SupplierController;
 use App\Http\Controllers\AdminLocationRequestController;
-
 use App\Http\Controllers\Admin\User\FranchiseeController;
 use App\Http\Controllers\Admin\User\AdministratorController;
 use App\Http\Controllers\QualityAssurance\PaymentController;
 use App\Http\Controllers\Admin\ServiceRequestSettingController;
 use App\Http\Controllers\Admin\User\QualityAssuranceController;
 use App\Http\Controllers\Admin\User\TechnicianArtisanController;
+
 use App\Http\Controllers\Technician\TechnicianProfileController;
+use App\Http\Controllers\ServiceRequest\ClientDecisionController;
 use App\Http\Controllers\ServiceRequest\ProjectProgressController;
 use App\Http\Controllers\QualityAssurance\ServiceRequestController;
 use App\Http\Controllers\ServiceRequest\AssignTechnicianController;
-
 use App\Http\Controllers\Admin\User\Administrator\SummaryController;
 use App\Http\Controllers\Admin\User\CustomerServiceExecutiveController;
-use App\Http\Controllers\QualityAssurance\QualityAssuranceProfileController;
-use App\Http\Controllers\RatingController;
-use App\Http\Controllers\Admin\AdminRatingController;
-use App\Http\Controllers\Admin\AdminReviewController;
-use App\Http\Controllers\CSE\CustomerServiceExecutiveController as CseController;
-use App\Http\Controllers\Admin\ToolsRequestController;
-use App\Http\Controllers\Admin\RfqController;
 use App\Http\Controllers\Supplier\RfqController as SupplierRfqController;
+use App\Http\Controllers\QualityAssurance\QualityAssuranceProfileController;
+use App\Http\Controllers\CSE\CustomerServiceExecutiveController as CseController;
+use App\Http\Controllers\Admin\ServiceRequestController as RequestServiceController;
 use App\Http\Controllers\Admin\User\ClientController as AdministratorClientController;
+use App\Http\Controllers\Client\PaystackController;
+use App\Http\Controllers\Supplier\ProfileController as SupplierProfileController;
+use App\Http\Controllers\CSE\CustomerServiceExecutiveController as UserCustomerServiceExecutiveController;
+use App\Http\Controllers\Supplier\DispatchController as SupplierDispatchController;
 
 /*
 |--------------------------------------------------------------------------
@@ -118,7 +123,7 @@ Route::prefix('admin')->group(function () {
         Route::get('/warranty/issued',      [WarrantyController::class, 'issuedWarranties'])->name('issued_warranty');
         Route::get('/warranty/issued/details/{warranty:uuid}',      [WarrantyController::class, 'issuedWarranties'])->name('issued_warranty_details');
         Route::get('/warranty/issued/resolved/{warranty:uuid}',      [WarrantyController::class, 'resolvedWarranty'])->name('mark_warranty_resolved');
-        
+
         //Routes for Simulation
         Route::get('/diagnostic', [SimulationController::class, 'diagnosticSimulation'])->name('diagnostic');
         Route::get('/end-service/{service_request:uuid}', [SimulationController::class, 'endService'])->name('end_service');
@@ -175,6 +180,7 @@ Route::prefix('admin')->group(function () {
             ->name('services.deactivate');
         Route::get('/services/reinstate/{service:uuid}',         [ServiceController::class, 'reinstate'])->name('services.reinstate');
         Route::get('/services/delete/{service:uuid}',            [ServiceController::class, 'destroy'])->name('services.delete');
+        Route::get('/services/sub-service/delete/{subService:uuid}',            [ServiceController::class, 'destroySubService'])->name('services.delete_sub_service');
         Route::resource('services',                         ServiceController::class);
 
         //  location request ajax_contactForm
@@ -306,7 +312,11 @@ Route::prefix('admin')->group(function () {
         Route::get('/supplier-invoices/accept/{rfq:uuid}',              [RfqController::class, 'acceptSupplierInvoice'])->name('supplier_invoices_acceptance');
 
         //Service Reques Routes
-        Route::view('/requests',            'admin.requests.index')->name('requests');
+        Route::resource('requests', RequestServiceController::class);
+
+        // Route::prefix('requests')->name('requests.')->group(function () {
+        //     Route::view('/',            'admin.requests.index')->name('requests');
+        // });
 
     });
 });
@@ -335,7 +345,7 @@ Route::prefix('/client')->middleware('monitor.clientservice.request.changes')->g
         Route::get('/requests/reinstate/{request:id}',          [ClientController::class, 'reinstateRequest'])->name('reinstate_request');
         Route::get('/requests/completed-request/{request:id}',          [ClientController::class, 'markCompletedRequest'])->name('completed_request');
 
-   
+
         // E-wallet Routes for clients
         //Profile and password update
 
@@ -344,7 +354,7 @@ Route::prefix('/client')->middleware('monitor.clientservice.request.changes')->g
         // *****************client wallet funding**********************//
         Route::get('wallet',                                [ClientController::class, 'wallet'])->name('wallet');
         Route::any('fund',                                  [ClientController::class, 'walletSubmit'])->name('wallet.submit');
-        
+
         Route::get('loyalty',                            [ClientController::class, 'loyalty'])->name('loyalty');
         Route::any('loyalty/submit',                     [ClientController::class, 'loyaltySubmit'])->name('loyalty.submit');
         Route::get('payments',                           [ClientController::class, 'payments'])->name('payments');
@@ -381,7 +391,7 @@ Route::prefix('/client')->middleware('monitor.clientservice.request.changes')->g
         Route::post('/ajax_contactForm',            [ClientController::class, 'ajax_contactForm'])->name('ajax_contactForm');
 
         Route::get('myContactList',                 [ClientController::class, 'myContactList'])->name('service.myContacts');
-        
+
         Route::post('/update_service_request',  [ClientController::class, 'update_client_service_rating'])->name('update_service_request');
         Route::post('/submit_ratings',  [ClientController::class, 'client_rating'])->name('handle.ratings');
 
@@ -394,10 +404,11 @@ Route::prefix('/client')->middleware('monitor.clientservice.request.changes')->g
 
 // Route::resource('cse', CseController::class);
 
-Route::prefix('/cse')->middleware('monitor.cseservice.request.changes')->group(function () {
+Route::prefix('/cse')->group(function () {
     Route::name('cse.')->group(function () {
         //All routes regarding CSE's should be in here
-        Route::view('/',                    'cse.index')->name('index'); //Take me to CSE Dashboard
+        // Route::view('/',                    'cse.index');
+        Route::get('/', [UserCustomerServiceExecutiveController::class, 'index'])->name('index'); //Take me to CSE Dashboard
         Route::view('/messages/inbox',      'cse.messages.inbox')->name('messages.inbox');
         Route::view('/messages/sent',       'cse.messages.sent')->name('messages.sent');
         Route::view('/payments',            'cse.payments')->name('payments');
@@ -434,20 +445,25 @@ Route::prefix('/cse')->middleware('monitor.cseservice.request.changes')->group(f
 Route::prefix('/supplier')->group(function () {
     Route::name('supplier.')->group(function () {
         //All routes regarding suppliers should be in here
-        Route::view('/',                    'supplier.index')->name('index'); //Take me to Supplier Dashboard
+        Route::get('/',                    [SupplierProfileController::class, 'dashboard'])->name('index'); //Take me to Supplier Dashboard
         Route::view('/messages/inbox',      'supplier.messages.inbox')->name('messages.inbox');
         Route::view('/messages/sent',       'supplier.messages.sent')->name('messages.sent');
         Route::view('/payments',            'supplier.payments')->name('payments');
-        Route::view('/requests',            'supplier.requests')->name('requests');
-        Route::view('/requests/details',    'franchisee.request_details')->name('request_details');
-        Route::view('/profile',             'supplier.view_profile')->name('view_profile');
-        Route::view('/profile/edit',        'supplier.edit_profile')->name('edit_profile');
+        Route::get('/profile',             [SupplierProfileController::class, 'index'])->name('view_profile');
+        Route::get('/profile/edit',        [SupplierProfileController::class, 'show'])->name('edit_profile');
         Route::get('/rfqs',                               [SupplierRfqController::class, 'index'])->name('rfq');
         Route::get('/rfqs/details/{rfq:uuid}',            [SupplierRfqController::class, 'rfqDetails'])->name('rfq_details');
-        Route::get('/rfqs/details/{rfq:uuid}',            [SupplierRfqController::class, 'sendInvoice'])->name('rfq_send_supplier_invoice');
+        Route::get('/rfqs/send-invoice/{rfq:uuid}',       [SupplierRfqController::class, 'sendInvoice'])->name('rfq_send_supplier_invoice');
         Route::post('/rfqs/store/',                       [SupplierRfqController::class, 'store'])->name('rfq_store_supplier_invoice');
-        Route::get('/sent-invoices',                               [SupplierRfqController::class, 'sentInvoices'])->name('rfq_sent_invoices');
-        Route::get('/sent-invoices/details/{rfq:id}',            [SupplierRfqController::class, 'sentInvoiceDetails'])->name('rfq_details');
+        Route::get('/sent-invoices',                      [SupplierRfqController::class, 'sentInvoices'])->name('rfq_sent_invoices');
+        Route::get('/sent-invoices/details/{rfq:id}',     [SupplierRfqController::class, 'sentInvoiceDetails'])->name('sent_supplier_invoice_details');
+        Route::put('/profile/update-password',            [SupplierProfileController::class, 'updatePassword'])->name('update_profile_password');
+        Route::resource('profile-updates',                            SupplierProfileController::class);
+        Route::get('/dispatch/',                          [SupplierDispatchController::class, 'index'])->name('dispatches');
+        Route::get('/dispatch/details/{dispatch:id}',     [SupplierDispatchController::class, 'dispatchDetails'])->name('dispatch_details');
+        Route::get('/dispatch/generate/',                 [SupplierDispatchController::class, 'generateDeliveryCode'])->name('generate_dispatch_code');
+        Route::post('/dispatch/store/',                   [SupplierDispatchController::class, 'store'])->name('store_dispatch');
+
     });
 });
 
@@ -481,8 +497,15 @@ Route::prefix('/quality-assurance')->group(function () {
         Route::patch('/update_password', [QualityAssuranceProfileController::class, 'update_password'])->name('update_password');
         Route::get('/requests', [ServiceRequestController::class, 'get_requests'])->name('requests');
         Route::get('/payments', [PaymentController::class, 'get_qa_disbursed_payments'])->name('payments');
-        Route::view('/messages/inbox', 'quality-assurance.messages.inbox')->name('messages.inbox');
         Route::view('/messages/sent', 'quality-assurance.messages.sent')->name('messages.sent');
+        Route::view('/messages/inbox', 'quality-assurance.messages.inbox')->name('messages.inbox');
+        Route::view('/requests/active', 'quality-assurance.requests.active')->name('requests.active');
+        Route::view('/requests/completed', 'quality-assurance.requests.completed')->name('requests.completed');
+        Route::view('/requests/warranty_claim', 'quality-assurance.requests.warranty_claim')->name('requests.warranty_claim');
+        Route::view('/consultations/pending', 'quality-assurance.consultations.pending')->name('consultations.pending');
+        Route::view('/consultations/ongoing', 'quality-assurance.consultations.ongoing')->name('consultations.ongoing');
+        Route::view('/consultations/completed', 'quality-assurance.consultations.completed')->name('consultations.completed');
+        Route::view('/requests/cancelled', 'quality-assurance.requests.cancelled')->name('requests.cancelled');
         Route::post('/disbursed_payments_sorting', [PaymentController::class, 'sortDisbursedPayments'])->name('disbursed_payments_sorting');
         Route::get('/get_chart_data', [ServiceRequestController::class, 'chat_data']);
         Route::get('/requests/details/{uuid}',  [ServiceRequestController::class, 'show'])->name('request_details');

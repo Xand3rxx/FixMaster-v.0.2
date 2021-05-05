@@ -10,7 +10,7 @@
     <div class="aside-body">
       <div class="aside-loggedin">
         <div class="d-flex align-items-center justify-content-start">
-          <a href="" class="avatar"><img src="{{ asset('assets/images/home-fix-logo-coloredd.png') }}" class="rounded-circle" alt="Male Avatar"></a>
+          <a href="" class="avatar"><img src="{{ asset('assets/images/home-fix-logo-coloredd.png') }}" class="rounded-circle" alt="Profile Avatar"></a>
           <div class="aside-alert-link">
             <a href="#" class="new" data-toggle="tooltip" title="You have 0 unread messages"><i data-feather="message-square"></i></a>
             <a href="#" data-toggle="tooltip" onclick="event.preventDefault();
@@ -45,12 +45,12 @@
 
         <li class="nav-item {{ Route::currentRouteNamed('admin.activity-log.index') ? 'active' : '' }}"><a href="{{ route('admin.activity-log.index', app()->getLocale()) }}" class="nav-link"><i data-feather="activity"></i> <span>Activity Log</span></a></li>
 
-        <li class="nav-item with-sub {{ Route::currentRouteNamed('admin.categories.index', 'admin.services.index', 'admin.booking-fees.index', 'admin.statuses.index', 'admin.serviceCriteria.index') ? 'active show' : '' }}">
+        <li class="nav-item with-sub {{ Route::currentRouteNamed('admin.categories.index', 'admin.services.index', 'admin.booking-fees.index', 'admin.statuses.index', 'admin.serviceCriteria.index', 'admin.services.create', 'admin.services.edit') ? 'active show' : '' }}">
           <a href="" class="nav-link"><i data-feather="aperture"></i> <span>Category & Service</span></a>
           <ul>
           <li class="{{ Route::currentRouteNamed('admin.booking-fees.index') ? 'active' : '' }}"><a href="{{ route('admin.booking-fees.index', app()->getLocale()) }}">Booking Fee</a></li>
             <li class="{{ Route::currentRouteNamed('admin.categories.index') ? 'active' : '' }}"><a href="{{ route('admin.categories.index', app()->getLocale()) }}">Categories</a></li>
-            <li class="{{ Route::currentRouteNamed('admin.services.index') ? 'active' : '' }}"><a href="{{ route('admin.services.index', app()->getLocale()) }}">Services</a></li>
+            <li class="{{ Route::currentRouteNamed('admin.services.index', 'admin.services.create', 'admin.services.edit') ? 'active' : '' }}"><a href="{{ route('admin.services.index', app()->getLocale()) }}">Services</a></li>
             {{-- <li class="{{ Route::currentRouteNamed('admin.services.index') ? 'active' : '' }}"><a href="{{ route('admin.services.index', app()->getLocale()) }}">Sub-Services</a></li> --}}
             <li class="{{ Route::currentRouteNamed('admin.statuses.index') ? 'active' : '' }}"><a href="{{ route('admin.statuses.index', app()->getLocale()) }}">Service Request Status</a></li>
           {{-- <li class="{{ Route::currentRouteNamed('admin.serviceCriteria.index') ? 'active' : '' }}"><a href="{{ route('admin.serviceCriteria.index', app()->getLocale()) }}">Settings</a></li> --}}
@@ -174,7 +174,7 @@
           </ul>
         </li>
         
-      <li class="nav-item {{ Route::currentRouteNamed('admin.requests') ? 'active show' : '' }}"><a href="{{ route('admin.requests', app()->getLocale()) }}" class="nav-link"><i data-feather="git-pull-request"></i> <span>Requests <sup class="font-weight-bold text-danger">{{ $pendingRequests }}</sup></span></a></li>
+      <li class="nav-item {{ Route::currentRouteNamed('admin.requests.index') ? 'active show' : '' }}"><a href="{{ route('admin.requests.index', app()->getLocale()) }}" class="nav-link"><i data-feather="git-pull-request"></i> <span>Requests <sup class="font-weight-bold text-danger">{{ $pendingRequests }}</sup></span></a></li>
 
         <li class="nav-item with-sub {{ Route::currentRouteNamed('admin.rfq', 'admin.supplier_invoices') ? 'active show' : '' }}">
           <a href="" class="nav-link"><i data-feather="file-text"></i> <span>RFQ's</span></a>
@@ -213,7 +213,6 @@
         <li class="nav-item with-sub {{ Route::currentRouteNamed('admin.warranty_list', 'admin.issued_warranty', 'admin.warranty_summary', 'admin.edit_warranty') ? 'active show' : '' }}">
           <a href="" class="nav-link"><i data-feather="award"></i> <span>Warranty Management <sup class="font-weight-bold text-danger">{{ $unresolvedWarranties }}</sup></span> </a>
           <ul>
-            <li class="{{ Route::currentRouteNamed('admin.warranty_list') ? 'active' : '' }}"><a href="{{route('admin.warranty_list', app()->getLocale())}}">Add</a></li>
             <li class="{{ Route::currentRouteNamed('admin.warranty_list', 'admin.warranty_summary', 'admin.edit_warranty') ? 'active' : '' }}"><a href="{{route('admin.warranty_list', app()->getLocale())}}">List</a></li>
             <li class="{{ Route::currentRouteNamed('admin.issued_warranty') ? 'active' : '' }}"><a href="{{route('admin.issued_warranty', app()->getLocale())}}">Issued <sup class="font-weight-bold text-danger">{{ $unresolvedWarranties }}</sup></a></li>
           </ul>

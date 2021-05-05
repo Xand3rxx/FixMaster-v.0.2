@@ -47,14 +47,14 @@
                     <tr>
 
                     <td class="tx-color-03 tx-center">{{$sn++}}</td>
-                    <td class="tx-medium">{{$rating->service->name ?? ''}}</td>
+                    <td class="tx-medium">{{$rating->service_request->service->name}}</td>
                       <td class="tx-medium text-center">{{$rating->id}}</td>
                       <td class="text-medium text-center">{{round($rating->starAvg)}}</td>
                       <td class=" text-center">
                         <div class="dropdown-file">
                             <a href="" class="dropdown-link" data-toggle="dropdown"><i data-feather="more-vertical"></i></a>
                             <div class="dropdown-menu dropdown-menu-right">
-                            <a href="javascript:void(0)" data-toggle="modal" data-number="{{$rating->service_id}}" class="dropdown-item details text-primary" title="View Computer & Laptops ratings"><i class="far fa-star"></i> Ratings</a>
+                            <a href="javascript:void(0)" data-toggle="modal" data-number="{{$rating->service_request_id}}" class="dropdown-item details text-primary" title="View Computer & Laptops ratings"><i class="far fa-star"></i> Ratings</a>
                             </div>
                         </div>
                       </td>
@@ -78,7 +78,7 @@
   <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
     <div class="modal-content tx-14">
       <div class="modal-header">
-        <h6 class="modal-title" id="exampleModalLabel2">Computer & Laptops Ratings</h6>
+        <h6 class="modal-title" id="exampleModalLabel2"></h6>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
@@ -111,7 +111,7 @@
 <script>
 $(document).ready(function(){
    $(document).on('click', ".dropdown-item", function() {
-       let service_id = $(this).data('number');
+       let service_request_id = $(this).data('number');
        //alert(id);
 
                     $.ajaxSetup({
@@ -123,7 +123,7 @@ $(document).ready(function(){
                         url: "{{ route('admin.get_ratings_by_service', app()->getLocale()) }}",
                         method: 'GET',
                         data: {
-                            "id": service_id
+                            "id": service_request_id
                         },
                         // return the result
                         success: function(data) {
@@ -131,20 +131,20 @@ $(document).ready(function(){
                             console.log(data);
                             var sn = 1;
                                 $.each(data, function(key, rating) { //+rating.service_request.unique_id+
+                                var date = new Date(rating.created_at);
                                 var rate_table = `
                                 <tr>
                                     <td class="tx-color-03 tx-center">`+ sn++ +`</td>
-                                    <td class="tx-medium">jou</td>
+                                    <td class="tx-medium">`+rating.service_request.unique_id+`</td>
                                     <td>`+ rating.client_account.first_name+" "+rating.client_account.last_name +`</td>
                                     <td class="text-medium text-center">`+ rating.star +`</td>
-                                    <td>`+ rating.created_at +`</td>
+                                    <td>`+ date.toDateString() +`</td>
                                 </tr>
                                 `;
+                                $("#exampleModalLabel2").append(rating.service_request.service);
                                 $("#tbody").append(rate_table);
                                 $("#serviceDetails").modal({show: true});
                                 });
-
-
 
                             }
                         }

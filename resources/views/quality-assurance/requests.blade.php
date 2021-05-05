@@ -50,7 +50,6 @@
                             </div>
                         </div><!-- card-body -->
                         <div class="table-responsive">
-
                             <table class="table table-hover mg-b-0" id="basicExample">
                                 <thead class="thead-primary">
                                     <tr>

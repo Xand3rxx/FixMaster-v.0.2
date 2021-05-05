@@ -4,9 +4,11 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Str;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class SubService extends Model
 {
+    use SoftDeletes;
 
     protected $fillable = [
         'user_id', 'service_id', 'name', 'first_hour_charge', 'subsequent_hour_charge'
@@ -18,7 +20,7 @@ class SubService extends Model
      * @var array
      */
     protected $hidden = [
-        'id'
+        // 'id'
     ];
 
     /**

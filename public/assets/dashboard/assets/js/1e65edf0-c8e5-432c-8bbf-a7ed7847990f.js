@@ -1,5 +1,7 @@
 $(document).ready(function() {
 
+    let count = 1;
+
     $(document).on('click', '#category-details', function(event) {
       event.preventDefault();
       let route = $(this).attr('data-url');
@@ -29,7 +31,7 @@ $(document).ready(function() {
       })
     });
 
-    $(document).on('click', '#service-edit', function(event) {
+    $(document).on('click', '#service-edit2', function(event) {
         event.preventDefault();
 
         let route = $(this).attr('data-url');
@@ -81,4 +83,17 @@ $(document).ready(function() {
 
     });
 
+    //Add new row for a new sub service form
+    $(document).on('click', '.add-sub-service', function() {
+        count++;
+        addSubService(count);
+    });
+    //Remove sub service row
+    $(document).on('click', '.remove-sub-service', function() {
+        count--;
+        $(this).closest(".remove-sub-service-row").remove();
+    });
+
 });
+
+

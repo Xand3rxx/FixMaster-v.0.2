@@ -20,7 +20,7 @@
 
       <div class="row row-xs">
         <div class="col-12 justify-content-center text-center align-items-center">
-          <a href="#addService" class="btn btn-primary float-right" data-toggle="modal"><i class="fas fa-plus"></i> Add New</a>
+        <a href="{{ route('admin.services.create', app()->getLocale()) }}" class="btn btn-primary float-right"><i class="fas fa-plus"></i> Add New</a>
         </div>
 
         <div class="col-lg-12 col-xl-12 mg-t-10">
@@ -133,7 +133,7 @@
 
 
 <div class="modal fade" id="serviceCategoryDetails" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel2" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+  <div class="modal-dialog modal-dialog-centered modal-xl" role="document">
     <div class="modal-content tx-14">
       <div class="modal-header">
         <h6 class="modal-title" id="exampleModalLabel2">Service Details</h6>

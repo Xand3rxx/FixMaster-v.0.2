@@ -58,6 +58,7 @@
                 </tr>
               </thead>
               <tbody>
+              
                 @foreach ($requests as $request)
                 <tr>
                   <td class="tx-color-03 tx-center">{{$loop->iteration}}</td>
