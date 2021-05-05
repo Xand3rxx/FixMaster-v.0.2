@@ -12,15 +12,9 @@
       <div class="d-flex align-items-center justify-content-start">
        
         <a href="" class="avatar">
-          @if(!empty($profile->avatar) && file_exists(public_path().'/assets/user-avatars/'.$profile->avatar))
-            <img src="{{ asset('assets/user-avatars/'.$profile->avatar) }}" class="rounded-circle" alt="Technician avatar" />
-        @else
-            @if($profile->gender == 'male')
-                <img src="{{ asset('assets/images/default-male-avatar.png') }}" alt="Default male profile avatar" class="rounded-circle" />
-            @else
-                <img src="{{ asset('assets/images/default-female-avatar.png') }}" alt="Default female profile avatar" class="rounded-circle" />
-            @endif
-        @endif
+          <a href="" class="avatar">
+            @include('layouts.partials._profile_avatar')
+          </a>
         </a>
 
         <div class="aside-alert-link">

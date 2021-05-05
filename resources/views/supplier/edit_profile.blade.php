@@ -40,13 +40,21 @@
                                     <div class="avatar avatar-xxl">
                                       <div class="user-img">
                                         @php 
-                                          if($profile['account']['avatar'] == 'male' || $profile['account']['avatar'] == 'others'){
+                                          if($profile['account']['gender'] == 'male' || $profile['account']['gender'] == 'others'){
                                               $genderAvatar = 'default-male-avatar.png';
                                           }else{
                                               $genderAvatar = 'default-female-avatar.png';
                                           }
                                         @endphp
-                                        <img class="rounded-circle wh-150p img-fluid image profile_image_preview" src="{{ !empty($profile['account']['avatar']) ? asset('assets/user-avatars/'.$profile['account']['avatar']) : asset('assets/user-avatars/'.$genderAvatar) }}" alt="Profile avatar">
+
+                                        @if(empty($profile['account']['avatar']))
+                                            <img src="{{ asset('assets/images/'.$genderAvatar) }}" class="rounded-circle wh-150p img-fluid image profile_image_preview" alt="Default avatar">
+                                        @elseif(!file_exists(public_path('assets/user-avatars/'.$profile['account']['avatar'])))
+                                            <img src="{{ asset('assets/images/'.$genderAvatar) }}" class="rounded-circle wh-150p img-fluid image profile_image_preview" alt="Profile avatar">
+                                        @else
+                                            <img src="{{ asset('assets/user-avatars/'.$profile['account']['avatar']) }}" class="rounded-circle wh-150p img-fluid image profile_image_preview" alt="Profile avatar">
+                                        @endif
+
                                       </div>
                                     </div>
                                   </a>
@@ -55,14 +63,14 @@
                         </div>
                         <div class="form-row">
                           <div class="form-group col-md-3">
-                            <label for="inputEmail4">First Name</label>
+                            <label for="first_name">First Name</label>
                             <input type="text" class="form-control @error('first_name') is-invalid @enderror" name="first_name" id="first_name" value="{{ old('first_name') ?? !empty($profile['account']['first_name']) ? $profile['account']['first_name'] : '' }}">
                             @error('first_name')
                               <x-alert :message="$message" />
                             @enderror
                         </div>
                         <div class="form-group col-md-3">
-                          <label for="inputEmail4">Middle Name</label>
+                          <label for="middle_name">Middle Name</label>
                           <input type="text" class="form-control @error('middle_name') is-invalid @enderror" id="middle_name" name="middle_name" value="{{ old('middle_name') ?? !empty($profile['account']['middle_name']) ? $profile['account']['middle_name'] : '' }}">
                           @error('middle_name')
                             <x-alert :message="$message" />
@@ -70,7 +78,7 @@
                       </div>
                             <!-- Last Name -->
                             <div class="form-group col-md-3">
-                              <label for="inputEmail4">Last Name</label>
+                              <label for="last_name">Last Name</label>
                               <input type="text" class="form-control @error('last_name') is-invalid @enderror" id="last_name" name="last_name" value="{{ old('last_name') ?? !empty($profile['account']['last_name']) ? $profile['account']['last_name'] : '' }}">
                               @error('last_name')
                                 <x-alert :message="$message" />
@@ -92,7 +100,7 @@
                           </div>
                             <!-- Email -->
                             <div class="form-group col-md-4">
-                              <label for="inputEmail4">Email</label>
+                              <label for="email">Email</label>
                               <input type="email" class="form-control @error('email') is-invalid @enderror" id="email" placeholder="{{ !empty($profile->email) ? $profile->email : '' }}" disabled>
                               @error('email')
                                 <x-alert :message="$message" />
@@ -100,7 +108,7 @@
                           </div>
                           <!-- Phone Number -->
                           <div class="form-group col-md-4">
-                            <label for="inputEmail4">Phone Number</label>
+                            <label for="phone_number">Phone Number</label>
                             <input type="tel" class="form-control @error('phone_number') is-invalid @enderror" id="phone_number" name="phone_number" maxlength="11" value="{{ old('phone_number') ?? !empty($profile['contact']['phone_number']) ? $profile['contact']['phone_number'] : '' }}" autocomplete="off">
                             @error('phone_number')
                               <x-alert :message="$message" />
@@ -133,7 +141,7 @@
                           </div>
 
                           <div class="form-group col-md-6">
-                            <label for="inputEmail4">Account Number</label>
+                            <label for="account_number">Account Number</label>
                             <input type="tel" class="form-control @error('account_number') is-invalid @enderror" id="account_number" name="account_number" maxlength="10" value="{{ old('account_number') ?? !empty($profile['account']['account_number']) ? $profile['account']['account_number'] : '' }}" required autocomplete="off">
                             @error('account_number')
                               <x-alert :message="$message" />
@@ -142,7 +150,7 @@
 
                             <!-- Full Address -->
                             <div class="form-group col-md-12">
-                              <label for="inputAddress2">Full Address</label>
+                              <label for="address">Full Address</label>
                               <textarea rows="3" class="user_address form-control @error('address') is-invalid @enderror" id="address" name="address">{{ old('address') ?? !empty($profile['contact']['address']) ? $profile['contact']['address'] : '' }}</textarea>
                               @error('address')
                                 <x-alert :message="$message" />
@@ -177,6 +185,7 @@
                         <div class="form-group col-md-4">
                           <label for="new_password">New Password</label>
                           <input type="password" class="form-control @error('new_password') is-invalid @enderror" id="new_password" name="new_password" autocomplete="off">
+                          <small class="text-muted">Password must be minimum of 6 characters</small>
                           @error('new_password')
                             <span class="invalid-feedback" role="alert">
                                 <strong>{{ $message }}</strong>
@@ -204,90 +213,11 @@
       </div>
     </div>
 </div>
-@endsection
+
 @push('scripts')
 <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDeDLVAiaU13p2O0d3jfcPjscsbVsCQUzc&v=3.exp&libraries=places"></script>
-
 <script src="{{ asset('assets/js/geolocation.js') }}"></script>
-
-{{-- <script>
-
-$(document).ready(function() {
-        "use strict";
-        let autocomplete;
-        initialize();
-
-
-
-        function initialize() {
-            // Create the autocomplete object, restricting the search to geographical location types.
-            autocomplete = new google.maps.places.Autocomplete((document.querySelector('.user_address')), {
-                types: ['geocode']
-            });
-           
-            // Chain request to html element on the page
-            google.maps.event.addDomListener(document.querySelector('.user_address'), 'focus');
-        }
-    });
-
-</script> --}}
-
-<script>
-
-  (function($){
-    "use scrict";
-    $(document).ready(function(){
-
-      $(document).on('change','#profile_image', function(){
-        readURL(this);
-      })
-
-      reader.readAsDataURL(input.files[0]);
-
-      function readURL(input){
-        if(input.files && input.files[0]){
-          var reader = new FileReader();
-          var res = isImage(input.files[0].name);
-
-          if(res==false){
-            var msg = 'Image should be png/PNG, jpg/JPG & jpeg/JPG';
-            Snackbar.show({text: msg, pos: 'bottom-right',backgroundColor:'#d32f2f', actionTextColor:'#fff' });
-            return false;
-          }
-
-          reader.onload = function(e){
-            $('.profile_image_preview').attr('src', e.target.result);
-            $("imagelabel").text((input.files[0].name));
-          }
-
-          reader.readAsDataURL(input.files[0]);
-        }
-      }
-
-      function getExtension(filename) {
-          var parts = filename.split('.');
-          return parts[parts.length - 1];
-      }
-
-      function isImage(filename) {
-          var ext = getExtension(filename);
-          switch (ext.toLowerCase()) {
-          case 'jpg':
-          case 'jpeg':
-          case 'png':
-          case 'gif':
-              return true;
-          }
-          return false;
-      }
-
-
-
-
-    });
-
- })(jQuery);
-
-
-</script>
+<script src="{{ asset('assets/dashboard/assets/js/184a93a1-ca37-44a3-839f-c75344933ed1.js') }}"></script>
 @endpush
+
+@endsection

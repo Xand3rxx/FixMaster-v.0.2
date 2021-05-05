@@ -31,31 +31,43 @@ class RfqController extends Controller
 
     public function index(){
 
-        $rfqs = Rfq::orderBy('created_at', 'DESC')->get();
-
         return view('supplier.rfq.index', [
-            'rfqs'   =>  $rfqs,
+            'rfqs'   =>  Rfq::orderBy('created_at', 'DESC')->get(),
         ])->with('i');
     }
 
+    /**
+     * Display the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
     public function rfqDetails($language, $uuid){
 
-        $rfqDetails = Rfq::where('uuid', $uuid)->firstOrFail();
-
         return view('supplier.rfq._details', [
-            'rfqDetails'    =>  $rfqDetails,
+            'rfqDetails'    =>  Rfq::where('uuid', $uuid)->firstOrFail(),
         ])->with('i');
     }
 
+    /**
+     * Display the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
     public function sendInvoice($language, $uuid){
 
-        $rfqDetails = Rfq::where('uuid', $uuid)->firstOrFail();
-
         return view('supplier.rfq.send_supplier_invoice', [
-            'rfqDetails'    =>  $rfqDetails,
+            'rfqDetails'    =>  Rfq::where('uuid', $uuid)->firstOrFail(),
         ]);
     }
 
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
     public function store(Request $request){
 
         //Validate user input fields

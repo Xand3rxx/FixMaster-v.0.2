@@ -21,6 +21,21 @@ class ProfileController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+    public function dashboard()
+    {
+        // return  \App\Models\User::with('account', 'contact', 'ratings', 'supplierSentInvoices')->findOrFail(Auth::id());
+        
+        return view('supplier.index', [
+            'profile'   =>  \App\Models\User::with('account', 'contact', 'ratings')->findOrFail(Auth::id()),
+            'rfqs'  =>  \App\Models\Rfq::where('status', 'Pending')->orderBy('created_at', 'DESC')->get()
+        ]);
+    }
+
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
     public function index()
     {
         // return  \App\Models\User::with('account', 'contact', 'ratings')->findOrFail(Auth::id());
@@ -117,14 +132,18 @@ class ProfileController extends Controller
             if($request->hasFile('image')){
 
                 //Validate and update image with ImageUpload Trait
-                $avatarName = $this->verifyAndStoreImage($request, $imageDirectory, $width = 250, $height = 250);
+                $avatarName = $this->verifyAndStoreImage($request, $imageDirectory, $width = 500, $height = 500);
 
                 //Delete old service image if new image name is given
                 if(!empty($avatarName) && ($avatarName != $oldAvatarName)){
-                    if(\File::exists($imageDirectory.$oldAvatarName)){
 
-                        \File::delete($imageDirectory.$oldAvatarName);
-                    }
+                    // if(strcasecmp($oldAvatarName, 'default-male-avatar.png') != 0 || strcasecmp($oldAvatarName, 'default-female-avatar.png') != 0){
+
+                        if(\File::exists($imageDirectory.$oldAvatarName)){
+
+                            \File::delete($imageDirectory.$oldAvatarName);
+                        }
+                    // }
                 }
 
             }else{
@@ -150,11 +169,9 @@ class ProfileController extends Controller
                 'address_latitude'  =>  $request->address_longitude
             ]);
 
-
             //Set variables as true to be validated outside the DB transaction
             $updateAccount  = true;
             $updateContact  = true;
-        // dd($updateContact);
 
         });
 

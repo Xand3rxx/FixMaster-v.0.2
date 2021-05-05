@@ -10,7 +10,7 @@
     <div class="aside-body">
       <div class="aside-loggedin">
         <div class="d-flex align-items-center justify-content-start">
-          <a href="" class="avatar"><img src="{{ asset('assets/images/home-fix-logo-coloredd.png') }}" class="rounded-circle" alt="Male Avatar"></a>
+          <a href="" class="avatar"><img src="{{ asset('assets/images/home-fix-logo-coloredd.png') }}" class="rounded-circle" alt="Profile Avatar"></a>
           <div class="aside-alert-link">
             <a href="#" class="new" data-toggle="tooltip" title="You have 0 unread messages"><i data-feather="message-square"></i></a>
             <a href="#" data-toggle="tooltip" onclick="event.preventDefault();

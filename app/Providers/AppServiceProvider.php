@@ -49,5 +49,11 @@ class AppServiceProvider extends ServiceProvider
                 'cse_availability' => (auth()->user()->cse->job_availability == \App\Models\Cse::JOB_AVALABILITY[0]) ? 'AVALIABLE' : 'UNAVALIABLE',
             ]);
         });
+
+        view()->composer('layouts.partials._supplier_sidebar', function ($view) {
+            $view->with([
+                'newQuotes' =>  \App\Models\Rfq::PendingQuotes()->get()->count(),
+            ]);
+        });
     }
 }

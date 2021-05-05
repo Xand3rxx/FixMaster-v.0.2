@@ -10,7 +10,9 @@
     <div class="aside-body">
       <div class="aside-loggedin">
         <div class="d-flex align-items-center justify-content-start">
-          <a href="" class="avatar"><img src="{{!empty(Auth::user()->account->avatar) ? asset('assets/user-avatars/'.Auth::user()->account->avatar) : asset('assets/user-avatars/default-male-avatar.png')}}" class="rounded-circle" alt="Male Avatar"></a>
+          <a href="" class="avatar">
+            @include('layouts.partials._profile_avatar')
+          </a>
           <div class="aside-alert-link">
           <a href="#" class="new" data-toggle="tooltip" title="You have 0 unread messages"><i data-feather="message-square"></i></a>
             <a onclick="event.preventDefault();

@@ -1,4 +1,5 @@
 $(document).ready(function() {
+    //Get sent invoice quote
     $(document).on('click', '#rfq-details', function(event) {
       event.preventDefault();
       let route = $(this).attr('data-url');
@@ -7,7 +8,7 @@ $(document).ready(function() {
       $.ajax({
           url: route,
           beforeSend: function() {
-            $("#spinner-icon").html('<div class="d-flex justify-content-center mt-4 mb-4"><span class="loadingspinner"></span></div>');
+            $("#modal-body").html('<div class="d-flex justify-content-center mt-4 mb-4"><span class="loadingspinner"></span></div>');
           },
           // return the result
           success: function(result) {
@@ -28,10 +29,50 @@ $(document).ready(function() {
       })
     });
 
-    $('.close').click(function (){
-      $(".modal-backdrop").remove();
+
+    $(document).on('click', '#dispatch', function(event) {
+      event.preventDefault();
+
+      //Get row attributes for id's
+      let rfq = $(this).attr('data-rfq');
+      let rfqId = $(this).attr('data-rfq-id');
+      let supplierRfqId = $(this).attr('data-supplier-invoice');
+
+      //Set row attbutes to hidden field in the modal
+      $('#dispatchModal').modal("show");
+      $('#rfq, #rfq-label').val(rfq);
+      $('#rfq-label').text(rfq);
+      $('#rfq_id').val(rfqId);
+      $('#supplier_rfq_id').val(supplierRfqId);
+
     });
 
+    //Generate Code for Dispatch
+    $(document).on('click', '.generate-new-code', function(event) {
+      event.preventDefault();
+      let route = $('#generate-dispatch-code').attr('data-url');
+      
+      $.ajax({
+          url: route,
+          beforeSend: function() {
+            $("#unique_id").html('<div class="d-flex justify-content-center mt-4 mb-4"><span class="loadingspinner"></span></div>');
+          },
+          // return the result
+          success: function(result) {
+              $('#unique_id').val(result);
+          },
+          complete: function() {
+              $("#spinner-icon").hide();
+          },
+          error: function(jqXHR, testStatus, error) {
+              var message = error+ ' An error occured while trying to retireve a new dispatch code';
+              var type = 'error';
+              displayMessage(message, type);
+              $("#spinner-icon").hide();
+          },
+          timeout: 8000
+      })
+    });
 
   });
 

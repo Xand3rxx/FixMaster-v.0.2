@@ -49,6 +49,7 @@ use App\Http\Controllers\Admin\User\ClientController as AdministratorClientContr
 use App\Http\Controllers\Client\PaystackController;
 use App\Http\Controllers\Supplier\ProfileController as SupplierProfileController;
 use App\Http\Controllers\CSE\CustomerServiceExecutiveController as UserCustomerServiceExecutiveController;
+use App\Http\Controllers\Supplier\DispatchController as SupplierDispatchController;
 
 /*
 |--------------------------------------------------------------------------
@@ -444,22 +445,24 @@ Route::prefix('/cse')->group(function () {
 Route::prefix('/supplier')->group(function () {
     Route::name('supplier.')->group(function () {
         //All routes regarding suppliers should be in here
-        Route::view('/',                    'supplier.index')->name('index'); //Take me to Supplier Dashboard
+        Route::get('/',                    [SupplierProfileController::class, 'dashboard'])->name('index'); //Take me to Supplier Dashboard
         Route::view('/messages/inbox',      'supplier.messages.inbox')->name('messages.inbox');
         Route::view('/messages/sent',       'supplier.messages.sent')->name('messages.sent');
         Route::view('/payments',            'supplier.payments')->name('payments');
-        Route::view('/requests',            'supplier.requests')->name('requests');
-        Route::view('/requests/details',    'franchisee.request_details')->name('request_details');
         Route::get('/profile',             [SupplierProfileController::class, 'index'])->name('view_profile');
         Route::get('/profile/edit',        [SupplierProfileController::class, 'show'])->name('edit_profile');
         Route::get('/rfqs',                               [SupplierRfqController::class, 'index'])->name('rfq');
         Route::get('/rfqs/details/{rfq:uuid}',            [SupplierRfqController::class, 'rfqDetails'])->name('rfq_details');
-        Route::get('/rfqs/details/{rfq:uuid}',            [SupplierRfqController::class, 'sendInvoice'])->name('rfq_send_supplier_invoice');
+        Route::get('/rfqs/send-invoice/{rfq:uuid}',       [SupplierRfqController::class, 'sendInvoice'])->name('rfq_send_supplier_invoice');
         Route::post('/rfqs/store/',                       [SupplierRfqController::class, 'store'])->name('rfq_store_supplier_invoice');
-        Route::get('/sent-invoices',                               [SupplierRfqController::class, 'sentInvoices'])->name('rfq_sent_invoices');
-        Route::get('/sent-invoices/details/{rfq:id}',            [SupplierRfqController::class, 'sentInvoiceDetails'])->name('sent_supplier_invoice_details');
-        Route::put('/profile/update-password',             [SupplierProfileController::class, 'updatePassword'])->name('update_profile_password');
+        Route::get('/sent-invoices',                      [SupplierRfqController::class, 'sentInvoices'])->name('rfq_sent_invoices');
+        Route::get('/sent-invoices/details/{rfq:id}',     [SupplierRfqController::class, 'sentInvoiceDetails'])->name('sent_supplier_invoice_details');
+        Route::put('/profile/update-password',            [SupplierProfileController::class, 'updatePassword'])->name('update_profile_password');
         Route::resource('profile-updates',                            SupplierProfileController::class);
+        Route::get('/dispatch/',                          [SupplierDispatchController::class, 'index'])->name('dispatches');
+        Route::get('/dispatch/details/{dispatch:id}',     [SupplierDispatchController::class, 'dispatchDetails'])->name('dispatch_details');
+        Route::get('/dispatch/generate/',                 [SupplierDispatchController::class, 'generateDeliveryCode'])->name('generate_dispatch_code');
+        Route::post('/dispatch/store/',                   [SupplierDispatchController::class, 'store'])->name('store_dispatch');
 
     });
 });
