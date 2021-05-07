@@ -63,6 +63,7 @@
               <div class="dropdown-menu dropdown-menu-right">
               <a href="{{ route('admin.issued_warranty_details', ['warranty'=>$warranty->uuid, 'locale'=>app()->getLocale()]) }}" class="dropdown-item details text-primary"><i class="far fa-clipboard"></i> Details</a>
               <a href="{{ route('admin.mark_warranty_resolved', ['warranty'=>$warranty->uuid, 'locale'=>app()->getLocale()]) }}" class="dropdown-item details text-success"><i class="fas fa-check"></i> Mark as Resolved</a>
+              <a href="{{ route('admin.mark_warranty_resolved', ['warranty'=>$warranty->uuid, 'locale'=>app()->getLocale()]) }}" class="dropdown-item details text-info"><i class="fas fa-clipboard"></i> Resolved Details</a>
                 
               </div>
             </div>

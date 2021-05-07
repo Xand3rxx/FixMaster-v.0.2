@@ -70,20 +70,18 @@
                   @endif
                   <td class="text-medium">{{ Carbon\Carbon::parse($dispatch->created_at, 'UTC')->isoFormat('MMMM Do YYYY, h:mm:ssa') }}</td>
                   <td class="text-center">
-                    @if($dispatch->supplier_status != 'Delivered')
-                    {{-- <a href="#" class="dropdown-item details text-success" title="Update {{ $dispatch->unique_id}} status"><i class="fas fa-upload"></i> Update Status</a> --}}
                     <div class="form-group col-md-12">
                       {{-- <label for="delivery_medium">Update Satus</label> --}}
-                      <select name="delivery_medium" id="delivery_medium" class="form-control @error('delivery_medium') is-invalid @enderror" required>
+                      <select name="supplier_status" id="supplier-status" class="form-control @error('supplier_status') is-invalid @enderror supplier-status" required data-url="{{ route('supplier.update_dispatch_status', ['dispatch'=>$dispatch->id, 'locale'=>app()->getLocale()]) }}" data-batch-number="{{ $dispatch->unique_id}}" @if($dispatch->supplier_status == 'Delivered') disabled @endif>
                         <option value="">Select...</option>
                         <option value="Processing">Processing</option>
                         <option value="In-Transit">In-Transit</option>
-                        <option value="Delivered">Delivered</option>
+                        <option value="Delivered" @if($dispatch->supplier_status == 'Delivered') selected @endif>Delivered</option>
                       </select>
                     </div>
-                  @endif
                   </td>
-                  <td class=" text-center">
+                  
+                  <td class="text-center">
                     <div class="dropdown-file">
                       <a href="" class="dropdown-link" data-toggle="dropdown"><i data-feather="more-vertical"></i></a>
                       <div class="dropdown-menu dropdown-menu-right">
@@ -158,6 +156,32 @@
           timeout: 8000
       })
     });
+
+    $(document).on('change', '.supplier-status', function(event) {
+      let route = $(this).attr('data-url');
+      let batchNumber = $(this).attr('data-batch-number');
+      
+      $.ajax({
+          url: route,
+          beforeSend: function() {
+            $("#modal-body").html('<div class="d-flex justify-content-center mt-4 mb-4"><span class="loadingspinner"></span></div>');
+          },
+          data: {"supplier_status":$(this).val(), "dispatch_code":batchNumber},
+          // return on error
+          // return the result
+          success: function(result) {
+              window.location.reload();
+          },
+          error: function(jqXHR, testStatus, error) {
+              var message = error+ ' An error occured while trying to retireve '+ batchNumber +'  details.';
+              var type = 'error';
+              displayMessage(message, type);
+              $("#spinner-icon").hide();
+          },
+          timeout: 8000
+      })
+    });
+
   });
 </script>
 

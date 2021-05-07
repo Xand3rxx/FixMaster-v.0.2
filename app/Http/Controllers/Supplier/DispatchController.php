@@ -48,8 +48,8 @@ class DispatchController extends Controller
      */
     public function store(Request $request)
     {
-        // return $request;
-
+        //Label and dispacth materials for a RFQ issued
+        //Validate user input fields
         $request->validate([
             'rfq'                   =>  'required',
             'rfq_id'                =>  'required',
@@ -66,7 +66,7 @@ class DispatchController extends Controller
 
         // Set DB to rollback DB transacations if error occurs
         DB::transaction(function () use ($request, &$createDispatch) {
-            $createDispatch = RfqSupplierDispatch::create([
+            RfqSupplierDispatch::create([
                 'rfq_id'                =>  $request->rfq_id,
                 'rfq_supplier_invoice'  =>  $request->rfq_supplier_invoice,
                 'supplier_id'           =>  Auth::id(),
@@ -82,6 +82,8 @@ class DispatchController extends Controller
         });
 
         if($createDispatch){
+
+            //Code to send mail to FixMaster, CSE and Supplier who sent the quote
 
             //Record crurrenlty logged in user activity
             $type = 'Request';
@@ -115,10 +117,67 @@ class DispatchController extends Controller
      */
     public function dispatchDetails($language, $id){
 
-        // return RfqSupplierDispatch::with('rfq', 'supplierInvoice')->findOrFail($id);
+        // dd (RfqSupplierDispatch::with('rfq', 'supplierInvoice')->findOrFail($id));
 
         return view('supplier.materials._details', [
             'dispatch'    =>  RfqSupplierDispatch::with('rfq', 'supplierInvoice')->findOrFail($id),
         ]);
+    }
+
+    /**
+     * Update the specified resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function updateDispatchStatus($language, $id, Request $request){
+
+        if($request->ajax()){
+
+            // return [$id, $request->supplier_status];
+            //Validate user input fields
+            $request->validate([
+                'supplier_status'   =>  'required',
+            ]);
+
+            //Set `updateDispatchStatus` to false before Db transaction and pass by reference
+            (bool) $updateDispatchStatus  = false;
+
+            // Set DB to rollback DB transacations if error occurs
+            DB::transaction(function () use ($id, $request, &$updateDispatchStatus) {
+
+                RfqSupplierDispatch::where('id', $id)->update([
+                    'supplier_status'   =>  $request->supplier_status
+                ]);
+
+                $updateDispatchStatus  = true;
+            });
+
+            if($updateDispatchStatus){
+
+                //Code to send mail to FixMaster, CSE and Supplier who sent the quote
+
+                //Record crurrenlty logged in user activity
+                $type = 'Request';
+                $severity = 'Informational';
+                $actionUrl = Route::currentRouteAction();
+                $message = Auth::user()->email.' updated the status of '.$request->dispatch_code.' dispatch code to '.$request->supplier_status;
+                $this->log($type, $severity, $actionUrl, $message);
+     
+                return redirect()->route('supplier.dispatches', app()->getLocale())->with('success', 'Your '.$request->dispatch_code.' dispatch status was updated'.$request->supplier_status);
+     
+            }else{
+     
+                //Record Unauthorized user activity
+                $type = 'Errors';
+                $severity = 'Error';
+                $actionUrl = Route::currentRouteAction();
+                $message = 'An error occurred while '.Auth::user()->email.' was trying to update '.$request->dispatch_code.' dispatch status.';
+                $this->log($type, $severity, $actionUrl, $message);
+     
+                return back()->with('error', 'An error occurred while trying to update dispatch code for '.$request->dispatch_code);
+            }
+        }
     }
 }
