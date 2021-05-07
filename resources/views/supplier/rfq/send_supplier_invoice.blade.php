@@ -11,10 +11,10 @@
           <ol class="breadcrumb breadcrumb-style1 mg-b-10">
           <li class="breadcrumb-item"><a href="{{ route('admin.index', app()->getLocale()) }}">Dashboard</a></li>
               <li class="breadcrumb-item"><a href="{{ route('supplier.rfq', app()->getLocale()) }}">RFQ's List</a></li>
-            <li class="breadcrumb-item active" aria-current="page">RFQ</li>
+            <li class="breadcrumb-item active" aria-current="page">Send Quote</li>
           </ol>
         </nav>
-        <h4 class="mg-b-0 tx-spacing--1">Request for Quotation(RFQ): {{ !empty($rfqDetails->unique_id) ? $rfqDetails->unique_id : 'UNAVAILABLE' }} </h4>
+        <h4 class="mg-b-0 tx-spacing--1">Send Quote for: {{ !empty($rfqDetails->unique_id) ? $rfqDetails->unique_id : 'UNAVAILABLE' }} RFQ</h4>
       </div>
     </div>
 
@@ -98,6 +98,7 @@
         </form>
         </div><!-- table-responsive -->
       </div><!-- col -->
+      <small class="text-danger">Please note, this is a one time process for this RFQ. Ensure to fill in the right details.</small>
     </div><!-- row -->
 
   </div><!-- container -->

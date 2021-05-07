@@ -70,6 +70,7 @@ class RfqController extends Controller
      */
     public function store(Request $request){
 
+        //Send Quote for a specific RFQ
         //Validate user input fields
         $this->validateRequest();
 
@@ -86,7 +87,7 @@ class RfqController extends Controller
 
         DB::transaction(function () use ($request, &$supplierinvoice, &$supplierInvoiceBatch) {
 
-            $supplierInvoice = $newRecord = RfqSupplierInvoice::create([
+            $newRecord = RfqSupplierInvoice::create([
                 'rfq_id'        =>  $request->rfq_id,
                 'supplier_id'   =>  Auth::id(),
                 'delivery_fee' =>  $request->delivery_fee,  
@@ -94,13 +95,12 @@ class RfqController extends Controller
                 'total_amount'  =>  $request->total_amount,
             ]);
 
-            $supplierInvoice = true;
 
             foreach ($request->rfq_batch_id as $item => $value){
 
                 $totalAmount = ($request->unit_price[$item] * $request->quantity[$item]);
 
-                $supplierInvoiceBatch = RfqSupplierInvoiceBatch::create([
+                RfqSupplierInvoiceBatch::create([
                     'rfq_supplier_invoice_id'   =>  $newRecord->id,
                     'rfq_batch_id'              =>  $request->rfq_batch_id[$item],
                     'quantity'                  =>  $request->quantity[$item],  
@@ -109,11 +109,15 @@ class RfqController extends Controller
                 ]);
             }
 
+            //Set variables as true to be validated outside the DB transaction
+            $supplierInvoice = true;
             $supplierInvoiceBatch = true;
 
         });
 
         if($supplierInvoiceBatch){
+
+            //Code to send mail to FixMaster, CSE and Supplier who sent the quote
 
             //Record crurrenlty logged in user activity
             $type = 'Others';

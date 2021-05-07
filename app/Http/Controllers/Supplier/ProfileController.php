@@ -120,7 +120,7 @@ class ProfileController extends Controller
         (bool) $updateContact  = false;
         
         // Set DB to rollback DB transacations if error occurs
-        DB::transaction(function () use ($request, $user, &$updateAccount, $updateContact) {
+        DB::transaction(function () use ($request, $user, &$updateAccount, &$updateContact) {
 
             //Image storage directory
             $imageDirectory = public_path('assets/user-avatars').'/';
@@ -151,7 +151,7 @@ class ProfileController extends Controller
             }
             
             //Update authenticated user Account record
-            $updateAccount = $user->account->update([
+            $user->account->update([
                 'first_name'        =>  $request->first_name,
                 'middle_name'       =>  $request->middle_name,
                 'last_name'         =>  $request->last_name,
@@ -162,7 +162,7 @@ class ProfileController extends Controller
             ]);
         
             //Update authenticated user Contact record
-            $updateContact = $user->contact->update([
+            $user->contact->update([
                 'phone_number'      =>  $request->phone_number,
                 'address'           =>  $request->address,
                 'address_longitude' =>  $request->address_longitude,
@@ -175,7 +175,7 @@ class ProfileController extends Controller
 
         });
 
-        if($updateAccount){
+        if($updateAccount AND $updateContact){
 
             //Record crurrenlty logged in user activity
             $type = 'Profile';

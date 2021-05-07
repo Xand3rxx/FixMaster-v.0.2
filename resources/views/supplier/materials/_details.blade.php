@@ -56,3 +56,43 @@
     </tbody>
     </table>
 </div>
+
+@if($dispatch->cse_status == 'Delivered')
+<div class="divider-text">Delivered Materials</div>
+
+<h5>Delivered Materials</h5>
+<div class="table-responsive mt-4">
+    <table class="table table-hover mg-b-0" id="basicExample">
+      <thead class="thead-primary">
+        <tr>
+          <th class="text-center">#</th>
+          <th>Component Name</th>
+          <th>Model Number</th>
+          <th class="text-center">Quantity</th>
+          <th class="text-center">Unit Price(₦)</th>
+          <th class="text-center">Amount(₦)</th>
+        </tr>
+      </thead>
+      <tbody>
+          @foreach ($dispatch['supplierInvoice']['supplierInvoiceBatches'] as $item)
+            <tr>
+                <td class="tx-color-03 tx-center">{{ ++$loop->iteration }}</td>
+                <td class="tx-medium">{{ $item->rfqBatch->component_name }}</td>
+                <td class="tx-medium">{{ $item->rfqBatch->model_number }}</td>
+                <td class="tx-medium text-center">{{ $item->quantity }}</td>
+                <td class="tx-medium text-center">₦{{ number_format($item->unit_price) }}</td>
+                <td class="tx-medium text-center">₦{{ number_format($item->total_amount) }}</td>
+            </tr>
+          @endforeach
+          <tr>
+            <td colspan="5" class="tx-medium">Delivery Fee</td>
+            <td class="tx-medium text-center">₦{{ number_format($dispatch['supplierInvoice']['delivery_fee']) ?? '0' }}</td>
+          </tr>
+          <tr>
+            <td colspan="5" class="tx-medium table-dark">Grand Total</td>
+            <td class="tx-medium text-center table-dark">₦{{ number_format($dispatch['supplierInvoice']['total_amount']) ?? 0 }}</td>
+          </tr>
+      </tbody>
+    </table>
+  </div><!-- table-responsive -->
+  @endif

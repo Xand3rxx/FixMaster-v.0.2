@@ -20,6 +20,6 @@ class RfqSupplierDispatch extends Model
 
     public function supplierInvoice()
     {
-        return $this->belongsTo(RfqSupplierInvoice::class, 'rfq_supplier_invoice');
+        return $this->belongsTo(RfqSupplierInvoice::class, 'rfq_supplier_invoice')->with('supplierInvoiceBatches');
     }
 }
