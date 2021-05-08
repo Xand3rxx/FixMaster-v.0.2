@@ -80,5 +80,12 @@ class Account extends Model
         return $this->belongsTo(Town::class);
     }
 
+    /**
+     * Get the Supplier associated with the user.
+     */
+    public function supplier()
+    {
+        return $this->hasOne(Supplier::class);
+    }
 }
 

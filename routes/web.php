@@ -50,6 +50,7 @@ use App\Http\Controllers\Client\PaystackController;
 use App\Http\Controllers\Supplier\ProfileController as SupplierProfileController;
 use App\Http\Controllers\CSE\CustomerServiceExecutiveController as UserCustomerServiceExecutiveController;
 use App\Http\Controllers\Supplier\DispatchController as SupplierDispatchController;
+use App\Http\Controllers\Admin\Report\CustomerServiceExecutiveReportController;
 
 /*
 |--------------------------------------------------------------------------
@@ -200,7 +201,7 @@ Route::prefix('admin')->group(function () {
         Route::resource('activity-log',                     ActivityLogController::class);
 
         //Routes for report management
-        Route::get('/reports/sorting',      [ReportController::class, 'cseReports'])->name('cse_reports');
+        // Route::get('/reports/sorting',      [ReportController::class, 'cseReports'])->name('cse_reports');
         Route::get('/reports/sort_cse_report',      [ReportController::class, 'sortCSEReports'])->name('sort_cse_reports');
         Route::get('/reports/cse_report_details/{activity_log}',      [ReportController::class, 'cseReportDetails'])->name('report_details');
         Route::get('/reports/details/{details:uuid}',                 [ReportController::class, 'cseSummary'])->name('cse_report_details');
@@ -317,6 +318,11 @@ Route::prefix('admin')->group(function () {
         // Route::prefix('requests')->name('requests.')->group(function () {
         //     Route::view('/',            'admin.requests.index')->name('requests');
         // });
+
+
+        //CSE Reporting Routes
+        Route::get('/reports/client-service-executive',      [CustomerServiceExecutiveReportController::class, 'index'])->name('cse_reports');
+        Route::post('/reports/client-service-executive/sorting',      [CustomerServiceExecutiveReportController::class, 'jobAssignedSorting'])->name('cse_report_first_sorting');
 
     });
 });
