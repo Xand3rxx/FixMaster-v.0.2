@@ -26,7 +26,7 @@
           <h6 class="tx-semibold mg-b-0">{{ Auth::user()->account->first_name.' '.Auth::user()->account->last_name }}</h6>
           <i data-feather="chevron-down"></i>
         </a>
-        <p class="tx-color-03 tx-12 mg-b-0">Supplier</p>
+        <p class="tx-color-03 tx-12 mg-b-0">Supplier({{ Auth::user()->account->supplier->unique_id }})</p>
       </div>
       <div class="collapse {{ Route::currentRouteNamed('supplier.view_profile', 'supplier.edit_profile') ? 'show' : '' }}" id="loggedinMenu">
         <ul class="nav nav-aside mg-b-0">
@@ -48,7 +48,15 @@
         </ul>
       </li>
 
-      <li class="nav-item {{ Route::currentRouteNamed('supplier.dispatches') ? 'active' : '' }}"><a href="{{ route('supplier.dispatches', app()->getLocale()) }}" class="nav-link"><i data-feather="file-text"></i> <span>Materials Dispatched</span></a></li>
+      {{-- <li class="nav-item {{ Route::currentRouteNamed('supplier.dispatches') ? 'active' : '' }}"><a href="{{ route('supplier.dispatches', app()->getLocale()) }}" class="nav-link"><i data-feather="file-text"></i> <span>Materials Dispatched</span></a></li> --}}
+
+      <li class="nav-item with-sub {{ Route::currentRouteNamed('supplier.dispatches') ? 'active show' : '' }}">
+        <a href="" class="nav-link"><i data-feather="file-text"></i> <span>Materials</span></a>
+        <ul>
+          <li class="{{ Route::currentRouteNamed('supplier.dispatches') ? 'active' : '' }}"><a href="{{ route('supplier.dispatches', app()->getLocale()) }}">Dispatched</a></li>
+          <li class="{{ Route::currentRouteNamed() ? 'active' : '' }}"><a href="#">Returned</a></li>
+        </ul>
+      </li>
 
 
       <li class="nav-item with-sub {{ Route::currentRouteNamed('inbox_messages', 'outbox_messages') ? 'active show' : '' }}">

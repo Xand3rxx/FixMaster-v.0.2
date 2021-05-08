@@ -38,10 +38,10 @@ class ProfileController extends Controller
      */
     public function index()
     {
-        // return  \App\Models\User::with('account', 'contact', 'ratings')->findOrFail(Auth::id());
+        // return  \App\Models\User::with('supplier', 'account', 'contact', 'ratings')->findOrFail(Auth::id());
         
         return view('supplier.view_profile', [
-            'profile'   =>  \App\Models\User::with('account', 'contact', 'ratings')->findOrFail(Auth::id())
+            'profile'   =>  \App\Models\User::with('supplier', 'account', 'contact', 'ratings')->findOrFail(Auth::id())
         ]);
     }
 
