@@ -24,7 +24,10 @@
                     </span>
                     <div class="media-body mg-sm-l-20">
                         <h4 class="tx-18 tx-sm-20 mg-b-2">Kelvin Adesanya</h4>
-                        <p class="tx-13 tx-color-03 mg-b-0">08173682832</p>
+                                        
+                        <p class="tx-13 tx-color-03 mg-b-0">08173682832 
+                            <a href="tel:08173682832" class="btn btn-primary btn-icon"><i class="fas fa-phone"></i> Call Client</a>
+                        </p>
                     </div>
                 </div><!-- media -->
             </div>
@@ -36,7 +39,7 @@
                 <div class="contact-content-header mt-4">
                     <nav class="nav">
                         <a href="#serviceRequestActions" class="nav-link active" data-toggle="tab">Service Request Actions</a>
-                        <a href="#description" class="nav-link" data-toggle="tab"><span>Description</a>
+                        <a href="#description" class="nav-link" data-toggle="tab"><span>Job Description</a>
                         <a href="#serviceRequestSummary" class="nav-link" data-toggle="tab"><span>Service Request Summary</a>
                     </nav>
                     {{-- <a href="" id="contactOptions" class="text-secondary mg-l-auto d-xl-none"><i data-feather="more-horizontal"></i></a> --}}
@@ -165,6 +168,34 @@
                         </div>
 
                         <div id="serviceRequestSummary" class="tab-pane pd-20 pd-xl-25">
+                            <div class="divider-text">Diagnostic Reports</div>
+                            <div class="card-group">
+                                <div class="card">
+                                    <div class="card-body shadow-none bd-primary overflow-hidden">
+                                        <div class="marker-primary marker-ribbon pos-absolute t-10 l-0">1</div>
+
+                                        <p class="card-text">After discussion with Mr Kelvin Adesanya, tentatively I beleive his laptop has overheating issues. On-premise diagnosis has to be carried out.</p>
+                                        <p class="card-text"><small class="text-muted">Date Created: {{ \Carbon\Carbon::now('UTC') }}</small></p>
+                                    </div>
+                                </div>
+                                <div class="card">
+                                    <div class="card-body shadow-none bd-primary overflow-hidden">
+                                        <div class="marker-primary marker-ribbon pos-absolute t-10 l-0">2</div>
+                                        <p class="card-text">After discussion with Mr Kelvin Adesanya, tentatively I beleive his laptop has overheating issues. On-premise diagnosis has to be carried out.</p>
+                                        <p class="card-text"><small class="text-muted">Date Created: {{ \Carbon\Carbon::now('UTC') }}</small></p>
+                                    </div>
+                                </div>
+                                <div class="card">
+                                    <div class="card-body shadow-none bd-primary overflow-hidden">
+                                        <div class="marker-primary marker-ribbon pos-absolute t-10 l-0">3</div>
+
+                                        <p class="card-text">After discussion with Mr Kelvin Adesanya, tentatively I beleive his laptop has overheating issues. On-premise diagnosis has to be carried out.</p>
+                                        <p class="card-text"><small class="text-muted">Date Created: {{ \Carbon\Carbon::now('UTC') }}</small></p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="divider-text">Service Request Progress</div>
                             <h5 class="mt-4 text-primary">Service Request Progress</h5>
                             <div class="table-responsive mb-4">
                                 <table class="table table-hover mg-b-0">
@@ -189,7 +220,8 @@
                                 </table>
                             </div><!-- table-responsive -->
 
-                            <h5 class="mt-4 text-primary">Tool Requests</h5>
+                            <div class="divider-text">Tools Request</div>
+                            <h5 class="mt-4 text-primary">Tools Requests</h5>
                             <div class="table-responsive mb-4">
                                 <table class="table table-hover mg-b-0">
                                     <thead class="">
@@ -224,7 +256,7 @@
                                 </table>
                             </div><!-- table-responsive -->
 
-
+                            <div class="divider-text">RFQ's</div>
                             <h5 class="mt-4 text-primary">Request For Quotation</h5>
                             <div class="table-responsive">
 
