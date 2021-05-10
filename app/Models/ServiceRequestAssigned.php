@@ -99,15 +99,21 @@ class ServiceRequestAssigned extends Model
      */
     public function scopejobAssignedSorting($query, $sortLevel, $dateFrom, $dateTo, $cses){
 
-        $query->when($cses, function ($query, $cses){
-            $query->whereBetween('user_id', [$cses]);
-        })->when($dateFrom, function ($query) use ($sortLevel, $dateFrom, $dateTo){
-            if($sortLevel == 'SortType2'){
-                $query->whereBetween('job_acceptance_time', [$dateFrom, $dateTo]);
-            }elseif($sortLevel == 'SortType3'){
-                $query->whereBetween('job_completed_date', [$dateFrom, $dateTo]);
-            }
-        });
+        if(!empty($cses)){
+            return $query->when($cses, function ($query, $cses){
+                $query->whereIn('user_id', $cses[0]);
+            });
+        }
+
+        if(!empty($dateFrom)){
+            return $query->when($dateFrom, function ($query) use ($sortLevel, $dateFrom, $dateTo){
+                if($sortLevel == 'SortType2'){
+                    $query->whereBetween('job_acceptance_time', [$dateFrom, $dateTo]);
+                }elseif($sortLevel == 'SortType3'){
+                    $query->whereBetween('job_completed_date', [$dateFrom, $dateTo]);
+                }
+            });
+        }
     }
 
     
