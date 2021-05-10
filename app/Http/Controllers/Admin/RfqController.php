@@ -23,7 +23,7 @@ class RfqController extends Controller
     /**
      * This method will redirect users back to the login page if not properly authenticated
      * @return void
-     */  
+     */
     public function __construct() {
         $this->middleware('auth:web');
     }
@@ -55,7 +55,7 @@ class RfqController extends Controller
     }
 
     public function supplierInvoiceDetails($language, $uuid){
-        
+
         $supplierInvoice = RfqSupplierInvoice::where('uuid', $uuid)->firstOrFail();
 
         return view('admin.rfq._supplier_invoice_details', [
@@ -66,7 +66,7 @@ class RfqController extends Controller
     }
 
     public function acceptSupplierInvoice($language, $uuid){
-        
+
         //Get supplier object with uuid
         $supplier = RfqSupplierInvoice::where('uuid', $uuid)->firstOrFail();
 

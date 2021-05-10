@@ -887,7 +887,8 @@ class ClientController extends Controller
 
     public function myServiceRequest(){
 
-        $myServiceRequests = Client::where('user_id', auth()->user()->id)->with('service_requests')->firstOrFail();
+        $myServiceRequests = Client::where('user_id', auth()->user()->id)->with('service_requests', 'service_requests.invoices')->firstOrFail();
+
         return view('client.services.list', [
             'myServiceRequests' =>  $myServiceRequests,
         ]);
@@ -1106,7 +1107,7 @@ class ClientController extends Controller
      //acitvity log
             return back()->with('error', 'An error occurred while trying to update a '.$requestExist->unique_id.' service request.');
         }
-       
+
         return back()->withInput();
     }
 
@@ -1114,14 +1115,14 @@ class ClientController extends Controller
     public function cancelRequest(Request $request, $language, $id){
 
         $requestExists = ServiceRequest::where('uuid', $id)->first();
-  
+
         //Validate user input fields
         $request->validate([
             'reason'       =>   'required',
         ]);
 
-    
-        //service_request_status_id = Pending(1), Ongoing(2), Completed(4), Cancelled(3) 
+
+        //service_request_status_id = Pending(1), Ongoing(2), Completed(4), Cancelled(3)
         $cancelRequest = ServiceRequest::where('uuid', $id)->update([
             'status_id' =>  '3',
         ]);
@@ -1130,20 +1131,20 @@ class ClientController extends Controller
 
         //Create record in `service_request_progress` table
         $recordServiceProgress = ServiceRequestProgress::create([
-            'user_id'                       =>  Auth::id(), 
-            'service_request_id'            =>  $requestExists->id, 
+            'user_id'                       =>  Auth::id(),
+            'service_request_id'            =>  $requestExists->id,
             'status_id'                     => '3',
             'sub_status_id'                 => '25'
         ]);
 
         $recordCancellation = ServiceRequestCancellation::create([
-            'user_id'                       =>  Auth::id(), 
-            'service_request_id'            =>  $requestExists->id, 
+            'user_id'                       =>  Auth::id(),
+            'service_request_id'            =>  $requestExists->id,
             'reason'                        =>  $request->reason,
         ]);
- 
 
-     
+
+
 
         if($cancelRequest AND $recordServiceProgress AND $recordCancellation){
 
@@ -1174,7 +1175,7 @@ class ClientController extends Controller
     public function warrantyInitiate(Request $request, $language, $id){
 
         $requestExists = ServiceRequest::where('uuid', $id)->first();
-    
+
         $account = Account::where('user_id', auth()->user()->id)->first();
         $accountAdmin = User::where('id', '1')->first();
 
@@ -1189,7 +1190,7 @@ class ClientController extends Controller
         'reason' => $request->reason
 
             ]);
-        
+
             $user = (object)[
                 'name' => $account->first_name,
                 'email' => auth()->user()->email,
@@ -1213,14 +1214,14 @@ class ClientController extends Controller
 
               }else{
                 return back()->with('error', 'An error occurred while trying to initiate warranty for'.  $requestExists->unique_id.' service request.');
- 
+
               }
     }
 
     public function reinstateRequest(Request $request, $language, $id){
 
         $requestExists = ServiceRequest::where('uuid', $id)->first();
-        //service_request_status_id = Pending(1), Ongoing(2), Completed(4), Cancelled(3) 
+        //service_request_status_id = Pending(1), Ongoing(2), Completed(4), Cancelled(3)
         $cancelRequest = ServiceRequest::where('uuid', $id)->update([
             'status_id' =>  '1',
         ]);
@@ -1238,7 +1239,7 @@ class ClientController extends Controller
         if($cancelRequest AND $recordServiceProgress AND $recordCancellation){
 
             $this->log('request', 'Informational', Route::currentRouteAction(), auth()->user()->account->last_name . ' ' . auth()->user()->account->first_name  . ') reinstated service request'. $jobReference);
-            
+
             return back()->with('success', $requestExists->unique_id.' was reinstated successfully.');
 
         }else{
@@ -1250,15 +1251,15 @@ class ClientController extends Controller
     }
 
     public function markCompletedRequest(Request $request, $language, $id){
-     
+
         $requestExists = ServiceRequest::where('uuid', $id)->first();
         $cancelRequest = ServiceRequest::where('uuid', $id)->update([
             'status_id' =>  '4',
         ]);
         $jobReference = $requestExists->unique_id;
         $recordServiceProgress = ServiceRequestProgress::create([
-            'user_id'                       =>  Auth::id(), 
-            'service_request_id'            =>  $requestExists->id, 
+            'user_id'                       =>  Auth::id(),
+            'service_request_id'            =>  $requestExists->id,
             'status_id'                     => '4',
             'sub_status_id'                 => '27'
         ]);
@@ -1266,7 +1267,7 @@ class ClientController extends Controller
             $this->log('request', 'Informational', Route::currentRouteAction(), auth()->user()->account->last_name . ' ' . auth()->user()->account->first_name  . ') marked as completed service request'. $jobReference);
             return redirect()->route('client.service.all', app()->getLocale())->with('success', $requestExists->unique_id.' was marked as completed successfully.');
         }else{
-           
+
          //activity log
             return back()->with('error', 'An error occurred while trying to complete '.$jobReference.' service request.');
         }
