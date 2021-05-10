@@ -1,45 +1,29 @@
-<aside class="aside aside-fixed" id="sidebarMenu">
+<aside class="aside aside-fixed">
   <div class="aside-header">
     <a href="#" class="aside-logo"></a>
     <a href="" class="aside-menu-link">
       <i data-feather="menu"></i>
       <i data-feather="x"></i>
     </a>
-    <a href="" id="chatContentClose" class="burger-menu d-none"><i data-feather="arrow-left"></i></a>
   </div>
   <div class="aside-body">
     <div class="aside-loggedin">
       <div class="d-flex align-items-center justify-content-start">
-       
         <a href="" class="avatar">
-          @if(!empty($profile->avatar) && file_exists(public_path().'/assets/user-avatars/'.$profile->avatar))
-            <img src="{{ asset('assets/user-avatars/'.$profile->avatar) }}" class="rounded-circle" alt="Technician avatar" />
-        @else
-            @if($profile->gender == 'male')
-                <img src="{{ asset('assets/images/default-male-avatar.png') }}" alt="Default male profile avatar" class="rounded-circle" />
-            @else
-                <img src="{{ asset('assets/images/default-female-avatar.png') }}" alt="Default female profile avatar" class="rounded-circle" />
-            @endif
-        @endif
+          @include('layouts.partials._profile_avatar')
         </a>
-
         <div class="aside-alert-link">
-          <a href="#" class="new" data-toggle="tooltip" title="You have 0 unread messages"><i data-feather="message-square"></i></a>
-          {{-- <a href="" class="new" data-toggle="tooltip" title="You have 4 new notifications"><i data-feather="bell"></i></a> --}}
-          <a href="#" data-toggle="tooltip" onclick="event.preventDefault();
-          document.getElementById('logout-form').submit();" href="{{ route('logout', app()->getLocale()) }}" title="Sign out"><i data-feather="log-out"></i></a>
-
-
-
+        <a href="#" class="new" data-toggle="tooltip" title="You have 0 unread messages"><i data-feather="message-square"></i></a>
+          <a onclick="event.preventDefault();
+          document.getElementById('logout-form').submit();" href="{{ route('logout', app()->getLocale()) }}" data-toggle="tooltip" title="Sign out"><i data-feather="log-out"></i></a>
           <form id="logout-form" action="{{ route('logout', app()->getLocale()) }}" method="POST" style="display: none;">
-              @csrf
-          </form>
-
-        </div>
+            @csrf
+        </form>
+    </div>
       </div>
       <div class="aside-loggedin-user">
         <a href="#loggedinMenu" class="d-flex align-items-center justify-content-between mg-b-2" data-toggle="collapse">
-        <h6 class="tx-semibold mg-b-0"> {{ !empty($profile->first_name || $profile->last_name) ? $profile->first_name.' '.$profile->last_name : 'UNAVAILABLE' }}</h6>
+          <h6 class="tx-semibold mg-b-0">{{ Auth::user()->account->first_name.' '.Auth::user()->account->last_name }}</h6>
           <i data-feather="chevron-down"></i>
         </a>
         <p class="tx-color-03 tx-12 mg-b-0">{{ Auth::user()->type->role->name ?? 'Technicians & Artisans' }}</p>
@@ -72,4 +56,6 @@
       <li class="nav-item {{ Route::currentRouteNamed('technician.requests', 'technician.request_details') ? 'active' : '' }}"><a href="{{ route('technician.requests', app()->getLocale()) }}" class="nav-link"><i data-feather="git-pull-request"></i> <span>Requests</span></a></li>
 
     </ul>
+  </div>
 </aside>
+

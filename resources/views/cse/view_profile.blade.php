@@ -49,27 +49,68 @@
                   <label class="tx-10 tx-medium tx-spacing-1 tx-color-03 tx-uppercase tx-sans mg-b-10">Mobile Phone</label>
                   <p class="tx-primary tx-rubik mg-b-0">{{ $user['contact']['phone_number'] }}</p>
                 </div>
-                <div class="col-6 col-sm-4 mg-t-20 mg-sm-t-0">
-                  <label class="tx-10 tx-medium tx-spacing-1 tx-color-03 tx-uppercase tx-sans mg-b-10">Franchisee ID</label>
-                  <p class="tx-primary mg-b-0">{{ $user['cse']['franchisee_id'] == null ? "Unavailable" : $user['cse']['franchisee']['unique_id'] }}</p>
+                <div class="col-6 col-sm-4">
+                  <label class="tx-10 tx-medium tx-spacing-1 tx-color-03 tx-uppercase tx-sans mg-b-10">CSE ID</label>
+                  <p class="tx-primary tx-rubik mg-b-0">UNAVAILABLE</p>
+                </div>
+                <div class="col-6 col-sm-4 mg-t-20 mg-sm-t-30">
+                  <label class="tx-10 tx-medium tx-spacing-1 tx-color-03 tx-uppercase tx-sans mg-b-10">Referral Code</label>
+                  <p class="tx-primary tx-rubik mg-b-0">UNAVAILABLE</p>
+                </div>
+                <div class="col-6 col-sm-4 mg-t-20 mg-sm-t-30">
+                  <label class="tx-10 tx-medium tx-spacing-1 tx-color-03 tx-uppercase tx-sans mg-b-10">Franchisee</label>
+                  <p class="mg-b-0">UNAVAILABLE</p>
                 </div>
 
-                <div class="col-sm-4 mg-t-20 mg-sm-t-30">
+                <div class="col-sm-6 mg-t-20 mg-sm-t-30">
                   <label class="tx-10 tx-medium tx-spacing-1 tx-color-03 tx-uppercase tx-sans mg-b-10">Address</label>
                   <p class="mg-b-0">{{ $user['contact']['address'] }}</p>
                 </div>
 
-                <div class="col-sm-4 mg-t-20 mg-sm-t-30">
+                <div class="col-sm-6 mg-t-20 mg-sm-t-30">
                     <label class="tx-10 tx-medium tx-spacing-1 tx-color-03 tx-uppercase tx-sans mg-b-10">Rating</label>
                     <p class="mg-b-0">
+
                         <div class="pd-t-10 pd-b-15 d-flex align-items-baseline">
-                            <h1 class="tx-normal tx-rubik mg-b-0 mg-r-5">4.2</h1>
+                            <h1 class="tx-normal tx-rubik mg-b-0 mg-r-5">{{round(Auth::user()->ratings->avg('star'))}}</h1>
                             <div class="tx-18">
-                              <i class="icon ion-md-star lh-0 tx-orange"></i>
-                              <i class="icon ion-md-star lh-0 tx-orange"></i>
-                              <i class="icon ion-md-star lh-0 tx-orange"></i>
+                            @if(round(Auth::user()->ratings->avg('star')) == 1)
                               <i class="icon ion-md-star lh-0 tx-orange"></i>
                               <i class="icon ion-md-star lh-0 tx-gray-300"></i>
+                              <i class="icon ion-md-star lh-0 tx-gray-300"></i>
+                              <i class="icon ion-md-star lh-0 tx-gray-300"></i>
+                              <i class="icon ion-md-star lh-0 tx-gray-300"></i>
+                            @elseif(round(Auth::user()->ratings->avg('star')) == 2)
+                            <i class="icon ion-md-star lh-0 tx-orange"></i>
+                            <i class="icon ion-md-star lh-0 tx-orange"></i>
+                            <i class="icon ion-md-star lh-0 tx-gray-300"></i>
+                            <i class="icon ion-md-star lh-0 tx-gray-300"></i>
+                            <i class="icon ion-md-star lh-0 tx-gray-300"></i>
+                            @elseif(round(Auth::user()->ratings->avg('star')) == 3)
+                            <i class="icon ion-md-star lh-0 tx-orange"></i>
+                            <i class="icon ion-md-star lh-0 tx-orange"></i>
+                            <i class="icon ion-md-star lh-0 tx-orange"></i>
+                            <i class="icon ion-md-star lh-0 tx-gray-300"></i>
+                            <i class="icon ion-md-star lh-0 tx-gray-300"></i>
+                            @elseif(round(Auth::user()->ratings->avg('star')) == 4)
+                            <i class="icon ion-md-star lh-0 tx-orange"></i>
+                            <i class="icon ion-md-star lh-0 tx-orange"></i>
+                            <i class="icon ion-md-star lh-0 tx-orange"></i>
+                            <i class="icon ion-md-star lh-0 tx-orange"></i>
+                            <i class="icon ion-md-star lh-0 tx-gray-300"></i>
+                            @elseif(round(Auth::user()->ratings->avg('star')) == 5)
+                            <i class="icon ion-md-star lh-0 tx-orange"></i>
+                            <i class="icon ion-md-star lh-0 tx-orange"></i>
+                            <i class="icon ion-md-star lh-0 tx-orange"></i>
+                            <i class="icon ion-md-star lh-0 tx-orange"></i>
+                            <i class="icon ion-md-star lh-0 tx-orange"></i>
+                            @else
+                            <i class="icon ion-md-star lh-0 tx-gray-300"></i>
+                            <i class="icon ion-md-star lh-0 tx-gray-300"></i>
+                            <i class="icon ion-md-star lh-0 tx-gray-300"></i>
+                            <i class="icon ion-md-star lh-0 tx-gray-300"></i>
+                            <i class="icon ion-md-star lh-0 tx-gray-300"></i>
+                            @endif
                             </div>
                       </div>
                     </p>

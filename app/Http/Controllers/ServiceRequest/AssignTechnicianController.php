@@ -45,7 +45,6 @@ class AssignTechnicianController extends Controller
     protected function assignTechnician(Request $request)
     {
         (bool) $registred = false;
-
         // 1. Find the Service Request ID from the UUID
         $serviceRequest = \App\Models\ServiceRequest::where('uuid', $request['service_request_uuid'])->with('users')->firstOrFail();
         // 2. Find the technician
@@ -57,16 +56,23 @@ class AssignTechnicianController extends Controller
             return back()->with('error', $technician['account']['last_name'] . ' ' . $technician['account']['first_name'] . ' is already assigned to this Service Request');
         }
         // 4. Find the status for Assigning technician record
-        $status = \App\Models\SubStatus::where('name', 'Assigned a Technician')->firstOrFail();
+        $status = \App\Models\SubStatus::where('uuid', '1faffcc3-7404-4fad-87a7-97161d3b8546')->firstOrFail();
 
         // Run DB Transaction to update all necessary records after confirmation Technician is not already on the Service Request
         DB::transaction(function () use ($request, $serviceRequest, $technician, $status, &$registred) {
+            // When preferred time is set
+            $request->whenFilled('preferred_time', function () use ($request, $serviceRequest) {
+                $serviceRequest->update(['preferred_time' => $request['preferred_time']]);
+                $status = \App\Models\SubStatus::where('uuid', 'd258667a-1953-4c66-b746-d0c40de7189d')->firstOrFail();
+                \App\Models\ServiceRequestProgress::storeProgress($request->user()->id, $serviceRequest->id, 2, $status->id);
+            });
+
             // 1. Update the Service Request Status to Ongoing
             $serviceRequest->update(['status_id' => $status->status_id]);
             // 2. store in the service_request_assigned
             \App\Models\ServiceRequestAssigned::assignUserOnServiceRequest($technician->id, $serviceRequest->id);
             // 3. store in the service_request_progresses
-            \App\Models\ServiceRequestProgress::storeProgress($technician->id, $serviceRequest->id, $status->id);
+            \App\Models\ServiceRequestProgress::storeProgress($request->user()->id, $serviceRequest->id, 2, $status->id);
             // 4. store in the activity log
             $this->log('request', 'Informational', Route::currentRouteAction(), $request->user()->account->last_name . ' ' . $request->user()->account->first_name . ' assigned ' . $technician['account']['last_name'] . ' ' . $technician['account']['first_name'] . ' (Technician) to ' . $serviceRequest->unique_id . ' Job.');
             // 5. notify the technicain in Email and In-app notification

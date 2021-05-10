@@ -38,4 +38,21 @@ class ServiceRequestProgress extends Model
             'sub_status_id'        => $sub_status_id,
         ]);
     }
+
+
+    /**
+     * Get the user that owns the Account.
+     */
+    public function user()
+    {
+        return $this->belongsTo(User::class)->with('account', 'roles');
+    }
+
+    /**
+     * Get the user that owns the Account.
+     */
+    public function substatus()
+    {
+        return $this->hasOne(SubStatus::class,'id', 'sub_status_id');
+    }
 }

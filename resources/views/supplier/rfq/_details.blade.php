@@ -4,7 +4,8 @@
                 <tbody>
                   <tr>
                     <td class="tx-medium">Supplier's Name</td>
-                    <td class="tx-color-03">{{ Str::title($rfqDetails['rfqSupplier']['supplier']['account']['first_name'] ." ". $rfqDetails['rfqSupplier']['supplier']['account']['last_name']) }}</td>
+                    <td class="tx-color-03">
+                      {{ !empty($rfqDetails['rfqSupplier']['supplier']['account']['first_name']) ? Str::title($rfqDetails['rfqSupplier']['supplier']['account']['first_name'] ." ". $rfqDetails['rfqSupplier']['supplier']['account']['last_name']) : 'UNAVAILABLE' }}</td>
                   </tr>
                   <tr>
                     <td class="tx-medium">Delivery Fee</td>
@@ -16,11 +17,11 @@
                   </tr>
                   <tr>
                     <td class="tx-medium">Issued By</td>
-                    <td class="tx-color-03">{{ Str::title($rfqDetails['issuer']['account']['first_name'] ." ". $rfqDetails['issuer']['account']['last_name']) }}</td>
+                    <td class="tx-color-03">{{ !empty($rfqDetails['issuer']['account']['first_name']) ? Str::title($rfqDetails['issuer']['account']['first_name'] ." ". $rfqDetails['issuer']['account']['last_name']) : 'UNAVAILABLE' }}</td>
                   </tr>
                   <tr>
                     <td class="tx-medium">Client Name</td>
-                    <td class="tx-color-03">{{ Str::title($rfqDetails['client']['account']['first_name'] ." ". $rfqDetails['client']['account']['last_name']) }}</td>
+                    <td class="tx-color-03">{{ !empty($rfqDetails['client']['account']['first_name']) ? Str::title($rfqDetails['client']['account']['first_name'] ." ". $rfqDetails['client']['account']['last_name']) : 'UNAVAILABLE' }}</td>
                   </tr>
                   
                   <tr>

@@ -101,7 +101,6 @@
                                 <div class="col-md-8">
                                     <img src="{{ asset('assets/images/home-fix-logo-colored.png') }}" class="l-dark" style="margin-top: 10px !important;" height="80" alt="FixMaster Logo">
                                     <div class="logo-invoice mb-2">
-
                                     </div>
                                     <a href="" class="text-primary h6"><i data-feather="link" class="fea icon-sm text-muted mr-2"></i>www.fixmaster.com.ng</a>
 

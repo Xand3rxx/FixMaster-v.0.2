@@ -50,7 +50,7 @@ class ProjectProgressController extends Controller
         //  2. Find the Substatus selected 
         $substatus = \App\Models\SubStatus::where('uuid', $request['sub_status_uuid'])->firstOrFail();
 
-        if ($substatus->phase === 6) {
+        if ($substatus->phase === 9) {
             return $this->handleCompletedDiagnosis($request, $serviceRequest, $substatus);
         }
 
@@ -62,6 +62,7 @@ class ProjectProgressController extends Controller
         if ($request['intiate_trf'] == 'yes') {
             $this->handleToolsRequest($request, $serviceRequest);
         }
+
 
         $request->whenFilled('accept_materials', function () use ($request, $serviceRequest) {
 
@@ -212,6 +213,6 @@ class ProjectProgressController extends Controller
      */
     protected function handleMaterialsAcceptance(Request $request, \App\Models\ServiceRequest $serviceRequest)
     {
-        return $serviceRequest['rfqs']->where('status', 'Awaiting')->where('accepted', 'No')->first()->update(['status' => 'Delivered', 'accepted' => $request['accept_materials']]);
+        return $serviceRequest['rfqs']->where('status', 'Awaiting')->where('accepted', 'No')->first()->update(['status' => $request['accept_materials'] == 'No' ? 'Rejected' : 'Delivered', 'accepted' => $request['accept_materials']]);
     }
 }

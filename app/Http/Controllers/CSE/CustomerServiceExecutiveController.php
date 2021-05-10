@@ -23,6 +23,7 @@ class CustomerServiceExecutiveController extends Controller
      */
     public function index()
     {
+        // dd(request()->user()->cse->job_availability, \App\Models\Cse::JOB_AVALABILITY[0]);
         return view('cse.index');
     }
 
@@ -119,6 +120,20 @@ class CustomerServiceExecutiveController extends Controller
     public function destroy($id)
     {
         //
+    }
+
+    public function user_rating(Request $request, RatingController $ratings)
+    {
+        return $ratings->handleRatings($request);
+    }
+
+     /**
+     *
+     *
+     */
+    public function update_cse_service_rating($language, Request $request, RatingController $updateRatings)
+    {
+        return $updateRatings->handleServiceRatings($request);
     }
 
     private function validateUpdateRequest()

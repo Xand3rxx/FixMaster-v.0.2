@@ -47,11 +47,11 @@ class Account extends Model
     }
     public function state()
     {
-        return $this->hasOne(State::class, 'id');
+        return $this->belongsTo(State::class);
     }
     public function lga()
     {
-        return $this->belongsTo(Lga::class, 'id');
+        return $this->belongsTo(Lga::class);
     }
     public function profession()
     {
@@ -77,8 +77,15 @@ class Account extends Model
 
     public function town()
     {
-        return $this->belongsTo(Town::class, 'id');
+        return $this->belongsTo(Town::class);
     }
 
+    /**
+     * Get the Supplier associated with the user.
+     */
+    public function supplier()
+    {
+        return $this->hasOne(Supplier::class);
+    }
 }
 

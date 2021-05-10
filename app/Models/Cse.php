@@ -8,6 +8,8 @@ use Illuminate\Database\Eloquent\Model;
 class Cse extends Model
 {
     use Generator;
+
+    const JOB_AVALABILITY = ['Yes', 'No'];
     /**
      * The attributes that are mass assignable.
      *

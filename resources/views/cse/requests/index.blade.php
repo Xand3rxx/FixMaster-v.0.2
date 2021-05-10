@@ -49,7 +49,6 @@
                   <th class="text-center">#</th>
                   <th>Job Ref.</th>
                   <th>Client</th>
-                  <th>Supervised By</th>
                   <th>Technician</th>
                   <th class="text-center">Amount</th>
                   <th>Status</th>
@@ -58,27 +57,22 @@
                 </tr>
               </thead>
               <tbody>
+              
                 @foreach ($requests as $request)
                 <tr>
                   <td class="tx-color-03 tx-center">{{$loop->iteration}}</td>
                   <td class="tx-medium">{{$request['service_request']['unique_id']}}</td>
-                  <td class="tx-medium"> {{Str::title($request['service_request']['client']['account']['last_name'] .' '. $request['service_request']['client']['account']['first_name'])}} </td>
-                  @foreach ($request['service_request']['users'] as $user)
-                    @if($user['roles'][0]['slug'] == 'admin-user')
-                    <td class="tx-medium">
-                      {{Str::title($user['account']['last_name'] .' '. $user['account']['first_name'])}}
-                    </td>
-                    @php break; @endphp
-                    @endif
-                  @endforeach
-                  @foreach ($request['service_request']['users'] as $user)
-                    @if($user['roles'][0]['slug'] == 'technician-artisans')
-                    <td class="tx-medium">
-                      {{Str::title($user['account']['last_name'] .' '. $user['account']['first_name'])}}
-                    </td>
-                    @php break; @endphp
-                    @endif
-                  @endforeach
+                  <td class="tx-medium"> {{ !empty($request['service_request']['client']['account']['first_name']) ? Str::title($request['service_request']['client']['account']['first_name'] .' '. $request['service_request']['client']['account']['last_name']) : 'UNAVAILABLE'}} </td>
+                
+                  <td class="tx-medium">
+                      @foreach ($request['service_request']['users'] as $user)
+                        @if($user['roles'][0]['slug'] == 'technician-artisans')
+                            {{ !empty($user['account']['first_name']) ? Str::title($user['account']['first_name'] .' '. $user['account']['last_name']) : 'UNAVAILABLE' }}
+                          @php break; @endphp
+                        @endif
+                      @endforeach
+                  </td>
+
                   <td class="text-medium text-center">₦{{number_format($request['service_request']['total_amount']) }}</td>
                   @if($request['service_request']['status']['name'] == 'Pending')
                     <td class="text-medium text-warning">{{$request['service_request']['status']['name']}}</td>
@@ -89,7 +83,7 @@
                   @else
                     <td class="text-medium text-success">{{$request['service_request']['status']['name']}}</td>
                   @endif
-                  <td class="text-medium">{{ Carbon\Carbon::parse($request['service_request']['created_at'] ?? '2020-12-28 16:58:54', 'UTC')->isoFormat('MMMM Do YYYY') }}</td>
+                  <td class="text-center text-medium">{{ Carbon\Carbon::parse($request['service_request']['created_at'] ?? '2020-12-28 16:58:54', 'UTC')->isoFormat('MMMM Do YYYY, h:mm:ssa') }}</td>
                   <td class=" text-center">
                     <div class="dropdown-file">
                       <a href="" class="dropdown-link" data-toggle="dropdown"><i data-feather="more-vertical"></i></a>

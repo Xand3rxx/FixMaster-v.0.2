@@ -33,7 +33,7 @@
           <div class="d-flex d-lg-block d-xl-flex align-items-end">
           <h5 class="tx-normal tx-rubik mg-b-0 mg-r-5 lh-1">10</h5>
           </div>
-          
+
         </div>
       </div>
       <div class="col-sm-6 col-lg-4">
@@ -42,7 +42,7 @@
           <div class="d-flex d-lg-block d-xl-flex align-items-end">
           <h5 class="tx-normal tx-rubik mg-b-0 mg-r-5 lh-1">12</h5>
           </div>
-          
+
         </div>
       </div>
       <div class="col-sm-6 col-lg-4">
@@ -70,7 +70,7 @@
         <div id="contactInformation" class="tab-pane show active pd-20 pd-xl-25">
           <div class="d-flex align-items-center justify-content-between mg-b-25">
             <h5 class="mg-b-0">Personal Details</h5>
-            
+
           </div>
 
           <div class="row row-sm">
@@ -130,11 +130,11 @@
           <div class="row row-sm">
             <div class="col-4 col-sm mg-t-20">
               <label class="tx-10 tx-medium tx-spacing-1 tx-color-03 tx-uppercase tx-sans mg-b-10">Phone Number</label>
-              <p class="tx-primary tx-rubik mg-b-0">001111111</p>
+              <p class="tx-primary tx-rubik mg-b-0">{{$user->contact->phone_number}}</p>
             </div>
             <div class="col-4 col-sm mg-t-20">
               <label class="tx-10 tx-medium tx-spacing-1 tx-color-03 tx-uppercase tx-sans mg-b-10">Email Address</label>
-              <p class="tx-primary mg-b-0">jd@test.com</p>
+              <p class="tx-primary mg-b-0">{{$user->contact->p}}</p>
             </div>
 
             <div class="col-4 col-sm mg-t-20">
@@ -173,7 +173,7 @@
               <p class="tx-primary tx-rubik mg-b-0">000111333</p>
             </div>
           </div>
-          
+
           <h5 class="mg-t-40 mg-b-20">Other Details</h5>
           <div class="table-responsive">
             <table class="table table-striped table-sm mg-b-0">
@@ -214,7 +214,7 @@
                   <td class="tx-medium">Tools Requested</td>
                   <td class="tx-color-03">4</td>
                 </tr>
-                
+
               </tbody>
             </table>
           </div>
@@ -240,8 +240,8 @@
                     </tr>
                   </thead>
                   <tbody>
-                    
-                    
+
+
                     <tr>
                       <td class="tx-color-03 tx-center">1</td>
                       <td class="tx-medium">REF-79A722D6</td>
@@ -251,7 +251,7 @@
                       <td class="tx-medium">Jamal Diwa</td>
                       <td>20,0000</td>
                       <td class="tx-medium text-center text-success">Completed</td>
-                      
+
                       <td class="text-center">March 23rd 2021, 12:00pm</td>
                       <td class=" text-center">
                         <div class="dropdown-file">
@@ -262,7 +262,7 @@
                         </div>
                       </td>
                     </tr>
-                    
+
                     <tr>
                       <td class="text-center" colspan="5">Total</td>
                       <td class="text-center tx-medium">₦{{ number_format(20000) }}</td>
@@ -271,7 +271,7 @@
                       <td></td>
                       <td></td>
                     </tr>
-    
+
                   </tbody>
                 </table>
               </div><!-- table-responsive -->
@@ -295,14 +295,14 @@
                             </select>
                         </div>
                     </div><!--end col-->
-        
+
                     <div class="col-md-4 specific-date d-none">
                         <div class="form-group position-relative">
                             <label>Specify Date <span class="text-danger">*</span></label>
                             <input name="name" id="name" type="date" class="form-control pl-5">
                         </div>
                     </div>
-        
+
                     <div class="col-md-4 sort-by-year d-none">
                         <div class="form-group position-relative">
                             <label>Specify Year <span class="text-danger">*</span></label>
@@ -314,7 +314,7 @@
                             </select>
                         </div>
                     </div>
-        
+
                     <div class="col-md-4 sort-by-year d-none">
                         <div class="form-group position-relative">
                             <label>Specify Month <span class="text-danger">*</span></label>
@@ -335,14 +335,14 @@
                             </select>
                         </div>
                     </div>
-        
+
                     <div class="col-md-4 date-range d-none">
                         <div class="form-group position-relative">
                             <label>From <span class="text-danger">*</span></label>
                             <input name="name" id="name" type="date" class="form-control pl-5">
                         </div>
                     </div>
-        
+
                     <div class="col-md-4 date-range d-none">
                         <div class="form-group position-relative">
                             <label>To <span class="text-danger">*</span></label>
@@ -364,13 +364,13 @@
                     </tr>
                   </thead>
                   <tbody>
-                    
+
                       <tr>
                         <td class="tx-color-03 tx-center">1</td>
                         <td class="tx-medium">abc123</td>
                         <td class="tx-medium">qwe123</td>
                         <td class="tx-medium">
-                          
+
                         </td>
                         <td class="tx-medium">Jane doe</td>
 
@@ -379,7 +379,7 @@
                         {{-- <td class="text-medium tx-center">12-12-2021 </td> --}}
                         <td class="text-medium tx-center">21-12-2021</td>
                       </tr>
-                    
+
                     <tr>
                       <td></td>
                       <td></td>
@@ -406,9 +406,9 @@
                     <h6 class="mg-b-5">Activity Log</h6>
                     <p class="tx-13 tx-color-03 mg-b-0">Use the select dropdowns to sort Activity Logs.</p>
                   </div>
-                  
+
                 </div><!-- card-header -->
-               
+
                 <div class="table-responsive">
                   <div class="row mt-1 mb-1 ml-1 mr-1">
                       <div class="col-md-3">
@@ -426,8 +426,8 @@
                             </select>
                         </div>
                       </div><!--end col-->
-        
-        
+
+
                       <div class="col-md-3">
                           <div class="form-group">
                               <label>Sort Date</label>
@@ -440,14 +440,14 @@
                               </select>
                           </div>
                       </div><!--end col-->
-          
+
                       <div class="col-md-3 specific-date d-none">
                           <div class="form-group position-relative">
                               <label>Specify Date <span class="text-danger">*</span></label>
                               <input name="name" id="specific_date" type="date" class="form-control pl-5">
                           </div>
                       </div>
-          
+
                       <div class="col-md-3 sort-by-year d-none">
                           <div class="form-group position-relative">
                               <label>Specify Year <span class="text-danger">*</span></label>
@@ -457,7 +457,7 @@
                               </select>
                           </div>
                       </div>
-          
+
                       <div class="col-md-3 sort-by-year d-none" id="sort-by-month">
                           <div class="form-group position-relative">
                               <label>Specify Month <span class="text-danger">*</span></label>
@@ -478,14 +478,14 @@
                               </select>
                           </div>
                       </div>
-          
+
                       <div class="col-md-3 date-range d-none">
                           <div class="form-group position-relative">
                               <label>From <span class="text-danger">*</span></label>
                               <input name="name" id="date_from" type="date" class="form-control pl-5">
                           </div>
                       </div>
-          
+
                       <div class="col-md-3 date-range d-none">
                           <div class="form-group position-relative">
                               <label>To <span class="text-danger">*</span></label>
@@ -493,7 +493,7 @@
                           </div>
                       </div>
                   </div>
-          
+
                   <table class="table table-dashboard mg-b-0" id="basicExample">
                   <thead>
                       <tr>
@@ -527,8 +527,8 @@
                   </tbody>
                   </table>
                 </div><!-- table-responsive -->
-    
-              
+
+
               </div><!-- card -->
           {{-- </div> --}}
         </div><!-- tab-pane -->

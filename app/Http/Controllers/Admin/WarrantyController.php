@@ -194,7 +194,7 @@ class WarrantyController extends Controller
 
     public function issuedWarranties()
     {
-        return ServiceRequestWarranty::with('user.account', 'service_request', 'warranty')->orderBy('has_been_attended_to', 'ASC')->latest()->get();
+        // return ServiceRequestWarranty::with('user.account', 'service_request', 'warranty')->orderBy('has_been_attended_to', 'ASC')->latest()->get();
 
         //Return all issued warranties bt clients
         return view('admin.warranty.issued_warranties', [
@@ -207,4 +207,8 @@ class WarrantyController extends Controller
         return view('admin.warranty._');
     }
 
+    public function resolvedWarranty($language, $uuid)
+    {
+        return $uuid;
+    }
 }

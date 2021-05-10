@@ -15,6 +15,11 @@ class SubStatus extends Model
         'user_id', 'status_id', 'name', 'phase', 'recurrence', 'status'
     ];
 
+    const Substatus = [
+        'Pending',
+        'FixMaster AI assigned a CSE',
+    ];
+
     /**
      * The "booted" method of the model.
      *
@@ -33,11 +38,12 @@ class SubStatus extends Model
      * 
      * @param \Illuminate\Database\Eloquent\Builder $query
      * @return \Illuminate\Database\Eloquent\Builder
-     */    
+     */
     //Scope to return all services  
-    public function scopeSubStatuses($query){
+    public function scopeSubStatuses($query)
+    {
         return $query->select('*')
-        ->orderBy('phase', 'ASC');
+            ->orderBy('id', 'ASC');
         // ->withTrashed();
     }
 
@@ -55,5 +61,4 @@ class SubStatus extends Model
     {
         return $this->belongsTo(Status::class, 'status_id');
     }
-
 }

@@ -31,40 +31,53 @@ class RfqController extends Controller
 
     public function index(){
 
-        $rfqs = Rfq::orderBy('created_at', 'DESC')->get();
-
         return view('supplier.rfq.index', [
-            'rfqs'   =>  $rfqs,
+            'rfqs'   =>  Rfq::orderBy('created_at', 'DESC')->get(),
         ])->with('i');
     }
 
+    /**
+     * Display the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
     public function rfqDetails($language, $uuid){
 
-        $rfqDetails = Rfq::where('uuid', $uuid)->firstOrFail();
-
         return view('supplier.rfq._details', [
-            'rfqDetails'    =>  $rfqDetails,
+            'rfqDetails'    =>  Rfq::where('uuid', $uuid)->firstOrFail(),
         ])->with('i');
     }
 
+    /**
+     * Display the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
     public function sendInvoice($language, $uuid){
 
-        $rfqDetails = Rfq::where('uuid', $uuid)->firstOrFail();
-
-        return view('supplier.rfq._send_supplier_invoice', [
-            'rfqDetails'    =>  $rfqDetails,
-        ])->with('i');
+        return view('supplier.rfq.send_supplier_invoice', [
+            'rfqDetails'    =>  Rfq::where('uuid', $uuid)->firstOrFail(),
+        ]);
     }
 
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
     public function store(Request $request){
 
+        //Send Quote for a specific RFQ
         //Validate user input fields
         $this->validateRequest();
 
         $supplierInvoiceExists = RfqSupplierInvoice::where('rfq_id', $request->rfq_id)->where('supplier_id', Auth::id())->count();
 
         if($supplierInvoiceExists > 0){
-            return back()->with('error', 'Sorry, you already sent an invoice for this RFQ');
+            return redirect()->route('supplier.rfq', app()->getLocale())->with('error', 'Sorry, you already sent an invoice for this RFQ');
         }
 
         $rfqUniqueId = Rfq::where('id', $request->rfq_id)->firstOrFail()->unique_id;
@@ -74,7 +87,7 @@ class RfqController extends Controller
 
         DB::transaction(function () use ($request, &$supplierinvoice, &$supplierInvoiceBatch) {
 
-            $supplierInvoice = $newRecord = RfqSupplierInvoice::create([
+            $newRecord = RfqSupplierInvoice::create([
                 'rfq_id'        =>  $request->rfq_id,
                 'supplier_id'   =>  Auth::id(),
                 'delivery_fee' =>  $request->delivery_fee,  
@@ -82,13 +95,12 @@ class RfqController extends Controller
                 'total_amount'  =>  $request->total_amount,
             ]);
 
-            $supplierInvoice = true;
 
             foreach ($request->rfq_batch_id as $item => $value){
 
                 $totalAmount = ($request->unit_price[$item] * $request->quantity[$item]);
 
-                $supplierInvoiceBatch = RfqSupplierInvoiceBatch::create([
+                RfqSupplierInvoiceBatch::create([
                     'rfq_supplier_invoice_id'   =>  $newRecord->id,
                     'rfq_batch_id'              =>  $request->rfq_batch_id[$item],
                     'quantity'                  =>  $request->quantity[$item],  
@@ -97,11 +109,15 @@ class RfqController extends Controller
                 ]);
             }
 
+            //Set variables as true to be validated outside the DB transaction
+            $supplierInvoice = true;
             $supplierInvoiceBatch = true;
 
         });
 
         if($supplierInvoiceBatch){
+
+            //Code to send mail to FixMaster, CSE and Supplier who sent the quote
 
             //Record crurrenlty logged in user activity
             $type = 'Others';
@@ -149,10 +165,12 @@ class RfqController extends Controller
 
     public function sentInvoiceDetails($language, $id){
 
-        $rfqDetails = Rfq::where('rfq_supplier_invoice_id', $id)->firstOrFail();
+        $rfqDetails =  RfqSupplierInvoice::where('id', $id)->firstOrFail();
+
+        // return $rfqDetails;
 
         return view('supplier.rfq._sent_invoice_details', [
-            'rfqDetails'    =>  $rfqDetails,
+            'rfqDetails'    =>  RfqSupplierInvoice::where('id', $id)->firstOrFail(),
         ])->with('i');
     }
 }

@@ -56,7 +56,7 @@
                           @enderror
                         </td>
                         <td>
-                          <input class="form-control @error('delivery_time') is-invalid @enderror" name="delivery_time" id="delivery_time" type="datetime-local" value="{{ old('delivery_time') }}">
+                          <input class="form-control @error('delivery_time') is-invalid @enderror" name="delivery_time" id="service-date-time" type="text" value="{{ old('delivery_time') }}" placeholder="Click to Enter Delivery Date & Time" readonly>
                           @error('delivery_time')
                             <x-alert :message="$message" />
                           @enderror

@@ -178,12 +178,12 @@
                 @foreach ($rating as $rate)
               @foreach($reviews as $review)
              <div class="media customer-testi m-2">
-                    <img src="{{ asset('assets/user-avatars/'.$review->clientAccount->avatar) }}" class="avatar avatar-small mr-3 rounded shadow" alt="Ifeoluwa Ajenifuja">
+                    <img src="{{ asset('assets/user-avatars/'.$review->clientAccount->avatar) }}" class="avatar avatar-small mr-3 rounded shadow" alt="">
                     <div class="media-body content p-3 shadow rounded bg-white position-relative">
                         <div class="rating-stars">
                         <ul class="list-unstyled mb-0">
 
-                            @if($rate->rater_id === $review->client_id)
+                            @if($rate->rater_id === $review->client_id && $rate->service_id === $review->service_id)
 
                                              @if($rate->star == 1)
                                             <li class="list-inline-item"><i class="mdi mdi-star text-warning"></i></li>

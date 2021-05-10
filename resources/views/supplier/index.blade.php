@@ -22,152 +22,94 @@
     <div class="row row-xs">
       <div class="col-lg-12 col-xl-12">
         <div class="card">
-          <div class="row mt-1 mb-1 ml-1 mr-1">
-            <div class="col-md-4">
-                <div class="form-group">
-                    <label>Sort</label>
-                    <select class="custom-select" id="request-sorting">
-                        <option value="None">Select...</option>
-                        <option value="Date">Date</option>
-                        <option value="Month">Month</option>
-                        <option value="Date Range">Date Range</option>
-                    </select>
-                </div>
-            </div><!--end col-->
+          <div class="card-header pd-t-20 pd-b-0 bd-b-0">
+            <h6 class="lh-5 mg-b-5">Overall Rating</h6>
+            <p class="tx-12 tx-color-03 mg-b-0">Ratings is based on {{ !empty($profile['ratings']) ? number_format($profile['ratings']->count()) : '0' }} total votes by CSE's and Customer reviews on the quality of service provided by you.</p>
 
-            <div class="col-md-4 specific-date d-none">
-                <div class="form-group position-relative">
-                    <label>Specify Date <span class="text-danger">*</span></label>
-                    <input name="name" id="name" type="date" class="form-control pl-5">
-                </div>
+          </div><!-- card-header -->
+          <div class="card-body pd-0">
+            <div class="pd-t-10 pd-b-15 pd-x-20 d-flex align-items-baseline">
+              <h1 class="tx-normal tx-rubik mg-b-0 mg-r-5">{{ !empty(round($profile['ratings']->avg('star'))) ? round($profile['ratings']->avg('star')) : '0' }}</h1>
+              <div class="tx-18">
+                @for ($i = 0; $i < round($profile['ratings']->avg('star')); $i++)
+                  <i class="icon ion-md-star lh-0 tx-orange"></i>
+                @endfor
+                @for ($x = 0; $x < (5 - round($profile['ratings']->avg('star'))); $x++)
+                    <i class="icon ion-md-star lh-0 tx-gray-300"></i>
+                @endfor
+              </div>
             </div>
-
-            <div class="col-md-4 sort-by-year d-none">
-                <div class="form-group position-relative">
-                    <label>Specify Year <span class="text-danger">*</span></label>
-                    <select class="form-control custom-select" id="Sortbylist-Shop">
-                        <option>Select...</option>
-                        <option>2018</option>
-                        <option>2019</option>
-                        <option>2020</option>
-                    </select>
-                </div>
-            </div>
-
-            <div class="col-md-4 sort-by-year d-none">
-                <div class="form-group position-relative">
-                    <label>Specify Month <span class="text-danger">*</span></label>
-                    <select class="form-control custom-select" id="Sortbylist-Shop">
-                        <option>Select...</option>
-                        <option>January</option>
-                        <option>February</option>
-                        <option>March</option>
-                        <option>April</option>
-                        <option>May</option>
-                        <option>June</option>
-                        <option>July</option>
-                        <option>August</option>
-                        <option>September</option>
-                        <option>October</option>
-                        <option>November</option>
-                        <option>December</option>
-                    </select>
-                </div>
-            </div>
-
-            <div class="col-md-4 date-range d-none">
-                <div class="form-group position-relative">
-                    <label>From <span class="text-danger">*</span></label>
-                    <input name="name" id="name" type="date" class="form-control pl-5">
-                </div>
-            </div>
-
-            <div class="col-md-4 date-range d-none">
-                <div class="form-group position-relative">
-                    <label>To <span class="text-danger">*</span></label>
-                    <input name="name" id="name" type="date" class="form-control pl-5">
-                </div>
+            
+          </div><!-- card-body -->
+        
+          <div class="card-body pd-lg-25">
+            <div class="row">
+            <x-card cardtitle="Sent Quotes" cardnumber="{{ !empty($profile['supplierSentInvoices']) ? number_format($profile['supplierSentInvoices']->count()) : '0' }}" />
+              <x-card cardtitle="Approved Quotes" cardnumber="{{ !empty($profile['supplierSentInvoices']) ? number_format($profile['supplierSentInvoices']->where('accepted', 'Yes')->count()) : '0' }}" />
+              <x-card cardtitle="Amount Earned" cardnumber="₦32,890" />
             </div>
           </div>
-
-
-          <div class="card-header bd-b-0 pd-t-20 pd-lg-t-25 pd-l-20 pd-lg-l-25 d-flex flex-column flex-sm-row align-items-sm-start justify-content-sm-between">
-            <div>
-              <h6 class="mg-b-5">Service Request Metrics</h6>
-              <p class="tx-12 tx-color-03 mg-b-0">Requests made since inception.</p>
-            </div>
-
-
-            <div class="btn-group mg-t-20 mg-sm-t-0">
-
-            </div><!-- btn-group -->
-          </div><!-- card-header -->
-          <div class="card-body pd-lg-25">
-            <div class="row align-items-sm-end">
-              <div class="col-lg-7 col-xl-8">
-                <div class="chart-six"><canvas id="chartBar1"></canvas></div>
-              </div>
-              <div class="col-lg-5 col-xl-4 mg-t-30 mg-lg-t-0">
-                <div class="row">
-                  <div class="col-sm-6 col-lg-12">
-                    <div class="d-flex align-items-center justify-content-between mg-b-5">
-                      <h6 class="tx-uppercase tx-10 tx-spacing-1 tx-color-02 tx-semibold mg-b-0">Total Requests</h6>
-                      {{-- <span class="tx-10 tx-color-04">65</span> --}}
-                    </div>
-                    <div class="d-flex align-items-end justify-content-between mg-b-5">
-                      <h5 class="tx-normal tx-rubik lh-2 mg-b-0">25</h5>
-                      {{-- <h6 class="tx-normal tx-rubik tx-color-03 lh-2 mg-b-0">20,000</h6> --}}
-                    </div>
-                    <div class="progress ht-4 mg-b-0 op-5">
-                      <div class="progress-bar bg-teal wd-25p" role="progressbar" aria-valuemin="0" aria-valuemax="100"></div>
-                    </div>
-                  </div>
-                  <div class="col-sm-6 col-lg-12 mg-t-30 mg-sm-t-0 mg-lg-t-30">
-                    <div class="d-flex align-items-center justify-content-between mg-b-5">
-                      <h6 class="tx-uppercase tx-10 tx-spacing-1 tx-color-02 tx-semibold mg-b-0">Completed Requests</h6>
-                    </div>
-                    <div class="d-flex justify-content-between mg-b-5">
-                      <h5 class="tx-normal tx-rubik mg-b-0">20</h5>
-                    </div>
-                    <div class="progress ht-4 mg-b-0 op-5">
-                      <div class="progress-bar bg-orange wd-20p" role="progressbar" aria-valuemin="0" aria-valuemax="100"></div>
-                    </div>
-                  </div>
-                  <div class="col-sm-6 col-lg-12 mg-t-30">
-                    <div class="d-flex align-items-center justify-content-between mg-b-5">
-                      <h6 class="tx-uppercase tx-10 tx-spacing-1 tx-color-02 tx-semibold mg-b-0">Canceled Requests</h6>
-                      {{-- <span class="tx-10 tx-color-04">20% goal reached</span> --}}
-                    </div>
-                    <div class="d-flex justify-content-between mg-b-5">
-                      <h5 class="tx-normal tx-rubik mg-b-0">5</h5>
-                      {{-- <h5 class="tx-normal tx-rubik tx-color-03 mg-b-0"><small>85,000</small></h5> --}}
-                    </div>
-                    <div class="progress ht-4 mg-b-0 op-5">
-                      <div class="progress-bar bg-pink wd-5p" role="progressbar" aria-valuenow="20" aria-valuemin="0" aria-valuemax="100"></div>
-                    </div>
-                  </div>
-                  <div class="col-sm-6 col-lg-12 mg-t-30">
-                    <div class="d-flex align-items-center justify-content-between mg-b-5">
-                      <h6 class="tx-uppercase tx-10 tx-spacing-1 tx-color-02 tx-semibold mg-b-0">Payments Received</h6>
-                      {{-- <span class="tx-10 tx-color-04">85% goal reached</span> --}}
-                    </div>
-                    <div class="d-flex justify-content-between mg-b-5">
-                      <h5 class="tx-normal tx-rubik mg-b-0">10</h5>
-                      {{-- <h5 class="tx-normal tx-rubik tx-color-03 mg-b-0"><small>30.50%</small></h5> --}}
-                    </div>
-                    <div class="progress ht-4 mg-b-0 op-5">
-                      <div class="progress-bar bg-primary wd-10p" role="progressbar" aria-valuenow="85" aria-valuemin="0" aria-valuemax="100"></div>
-                    </div>
-                  </div>
-                </div><!-- row -->
-
-              </div>
-            </div>
-          </div><!-- card-body -->
         </div><!-- card -->
       </div>
 
       <div class="col-md-12 col-xl-12 mg-t-10">
+        
+        <div class="card ht-100p">
+          <div class="card-header d-flex align-items-center justify-content-between">
+            <h6 class="mg-b-0">New Quotes</h6>
+          </div>
+          
+          <div class="table-responsive">
+            
+            <table class="table table-hover mg-b-0">
+              <thead class="thead-primary">
+                <tr>
+                  <th class="text-center">#</th>
+                  <th>Job Ref.</th>
+                  <th>Batch Number</th>
+                  <th>Issued By</th>
+                  <th>Status</th>
+                  <th>Date Created</th>
+                  <th>Action</th>
+                </tr>
+              </thead>
+              <tbody>
+                @foreach ($rfqs as $rfq)
+                <tr>
+                  <td class="tx-color-03 tx-center">{{ ++$i }}</td>
+                  <td class="tx-medium">{{ $rfq->serviceRequest->unique_id }}</td>
+                  <td class="tx-medium">{{ $rfq->unique_id }}</td>
+                  <td class="tx-medium">{{ Str::title($rfq['issuer']['account']['first_name'] ." ". $rfq['issuer']['account']['last_name']) }}</td>
+                  @if($rfq->status == 'Pending')
+                    <td class="text-medium text-success">Open</td>
+                  @else
+                    <td class="text-medium text-danger">Closed</td>
+                  @endif
+                  {{-- <td class="tx-medium text-center">₦{{ number_format($rfq->total_amount) ?? 'Null'}}</td> --}}
+                  <td class="text-medium">{{ Carbon\Carbon::parse($rfq->created_at, 'UTC')->isoFormat('MMMM Do YYYY, h:mm:ssa') }}</td>
+                  <td class=" text-center">
+                    <div class="dropdown-file">
+                      <a href="" class="dropdown-link" data-toggle="dropdown"><i data-feather="more-vertical"></i></a>
+                      <div class="dropdown-menu dropdown-menu-right">
+                        <a href="#rfqDetails" data-toggle="modal" class="dropdown-item details text-primary" title="View {{ $rfq->unique_id}} details" data-batch-number="{{ $rfq->unique_id}}" data-url="{{ route('supplier.rfq_details', ['rfq'=>$rfq->uuid, 'locale'=>app()->getLocale()]) }}" id="rfq-details"><i class="far fa-clipboard"></i> Details</a>
+
+                        @if($rfq->status == 'Pending')
+                          <a href="{{ route('supplier.rfq_send_supplier_invoice', ['rfq'=>$rfq->uuid, 'locale'=>app()->getLocale()]) }}" class="dropdown-item details text-success" title="Send {{ $rfq->unique_id}} invoice"><i class="fas fa-file-medical"></i> Send Invoice</a>
+                        @endif
+                      </div>
+                    </div>
+                  </td>
+                </tr>
+                @endforeach
+              </tbody>
+            </table>
+          </div><!-- table-responsive -->
+
+        </div><!-- card -->
+      </div>
+
+      <div class="col-md-12 col-xl-12 mg-t-10">
+        
         <div class="card ht-100p">
           <div class="card-header d-flex align-items-center justify-content-between">
             <h6 class="mg-b-0">Recent Payments</h6>
@@ -196,9 +138,9 @@
           <a href="{{ route('quality-assurance.payments',app()->getLocale()) }}" class="link-03">View All Transactions <i class="icon ion-md-arrow-down mg-l-5"></i></a>
           </div><!-- card-footer -->
           {{-- @else --}}
-          <div class="card-footer text-center tx-13">
+          {{-- <div class="card-footer text-center tx-13">
             <h6 class="text-center">No Recent Payments</h6>
-          </div>
+          </div> --}}
           {{-- @endif --}}
         </div><!-- card -->
       </div>
@@ -208,36 +150,7 @@
   </div><!-- container -->
 </div>
 
+@include('supplier.rfq._rfq_details_modal')
 
-@section('scripts')
-<script>
-    $(document).ready(function() {
-
-        $('#request-sorting').on('change', function (){
-                let option = $("#request-sorting").find("option:selected").val();
-
-                if(option === 'None'){
-                    $('.specific-date, .sort-by-year, .date-range').addClass('d-none');
-                }
-
-                if(option === 'Date'){
-                    $('.specific-date').removeClass('d-none');
-                    $('.sort-by-year, .date-range').addClass('d-none');
-                }
-
-                if(option === 'Month'){
-                    $('.sort-by-year').removeClass('d-none');
-                    $('.specific-date, .date-range').addClass('d-none');
-                }
-
-                if(option === 'Date Range'){
-                    $('.date-range').removeClass('d-none');
-                    $('.specific-date, .sort-by-year').addClass('d-none');
-                }
-        });
-    });
-
-</script>
-@endsection
 
 @endsection

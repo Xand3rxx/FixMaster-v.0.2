@@ -1,8 +1,8 @@
 @extends('layouts.dashboard')
 @section('title', 'Request Details')
 @include('layouts.partials._messages')
-
 @section('content')
+<link rel="stylesheet" href="{{ asset('assets/dashboard/assets/css/dashforge.filemgr.css') }}">
 
 <div class="content-body">
     <div class="container pd-x-0">
@@ -24,7 +24,10 @@
                     </span>
                     <div class="media-body mg-sm-l-20">
                         <h4 class="tx-18 tx-sm-20 mg-b-2">Kelvin Adesanya</h4>
-                        <p class="tx-13 tx-color-03 mg-b-0">08173682832</p>
+                                        
+                        <p class="tx-13 tx-color-03 mg-b-0">08173682832 
+                            <a href="tel:08173682832" class="btn btn-primary btn-icon"><i class="fas fa-phone"></i> Call Client</a>
+                        </p>
                     </div>
                 </div><!-- media -->
             </div>
@@ -36,22 +39,22 @@
                 <div class="contact-content-header mt-4">
                     <nav class="nav">
                         <a href="#serviceRequestActions" class="nav-link active" data-toggle="tab">Service Request Actions</a>
-                        <a href="#description" class="nav-link" data-toggle="tab"><span>Description</a>
+                        <a href="#description" class="nav-link" data-toggle="tab"><span>Job Description</a>
                         <a href="#serviceRequestSummary" class="nav-link" data-toggle="tab"><span>Service Request Summary</a>
                     </nav>
                     {{-- <a href="" id="contactOptions" class="text-secondary mg-l-auto d-xl-none"><i data-feather="more-horizontal"></i></a> --}}
-                  </div><!-- contact-content-header -->
+                </div><!-- contact-content-header -->
 
-                  <div class="contact-content-body">
+                <div class="contact-content-body">
                     <div class="tab-content">
                         <div id="serviceRequestActions" class="tab-pane show active pd-20 pd-xl-25">
                             <small class="text-danger">This tab is only visible once the Service request has an Ongoing status. Which logically is updated by the system or the CSE Coordinator by assigning a CSE to the request</small>
                             @if ($service_request->status_id == 1)
-                                @include('cse.requests.includes.assign_first_technician')
+                            @include('cse.requests.includes.assign_first_technician')
                             @elseif($service_request->status_id == 2)
-                                @include('cse.requests.includes.ongoing_service_request')
+                            @include('cse.requests.includes.ongoing_service_request')
                             @push('scripts')
-                                @include('cse.requests.includes.ongoing_service_request_script')
+                            @include('cse.requests.includes.ongoing_service_request_script')
                             @endpush
                             @else
                             <h4> Completed the Service Request </h4>
@@ -138,34 +141,111 @@
                                         </tbody>
                                     </table>
 
-                                    {{-- @if(!empty($requestDetail->serviceRequestDetail->media_file)) --}}
                                     <div class="divider-text">Media Files</div>
-                                    <div class="row">
-                                        <div class="pd-20 pd-lg-25 pd-xl-30">
-
-                                            <div class="row row-xs">
-                                                <div class="col-6 col-sm-6 col-md-6 col-xl mg-t-10 mg-sm-t-0">
-                                                    <div class="card card-file">
-
-
-                                                        {{-- Media file design will come in here afterwrds --}}
-                                                        <div class="placeholder-media wd-100p wd-sm-55p wd-md-45p">
-                                                            <div class="line"></div>
-                                                        </div>
-                                                    </div>
-                                                </div><!-- col -->
-
-                                            </div><!-- row -->
-
-                                        </div>
-                                    </div>
-                                    {{-- @endif --}}
+                                    <div class="row row-xs">
+                                        <div class="col-6 col-sm-4 col-md-3 col-xl">
+                                          <div class="card card-file">
+                                            <div class="dropdown-file">
+                                              <a href="" class="dropdown-link" data-toggle="dropdown"><i data-feather="more-vertical"></i></a>
+                                              <div class="dropdown-menu dropdown-menu-right">
+                                                <a href="#" class="dropdown-item download"><i data-feather="download"></i>Download</a>
+                                              </div>
+                                            </div><!-- dropdown -->
+                                            <div class="card-file-thumb tx-danger">
+                                              <i class="far fa-file-pdf"></i>
+                                            </div>
+                                            <div class="card-body">
+                                              <h6><a href="" class="link-02">{{ substr('54c2a6f3-8a9c-411a-bd68-96a3a37617b2', 0, 15) }}.pdf</a></h6>
+                                            </div>
+                                            <div class="card-footer"><span class="d-none d-sm-inline">Date Created: </span>{{ \Carbon\Carbon::now('UTC')->isoFormat('MMMM Do YYYY, h:mm:ssa') }}</div>
+                                          </div>
+                                        </div><!-- col -->
+                                        <div class="col-6 col-sm-4 col-md-3 col-xl">
+                                          <div class="card card-file">
+                                            <div class="dropdown-file">
+                                              <a href="" class="dropdown-link" data-toggle="dropdown"><i data-feather="more-vertical"></i></a>
+                                              <div class="dropdown-menu dropdown-menu-right">
+                                                <a href="#" class="dropdown-item download"><i data-feather="download"></i>Download</a>
+                                              </div>
+                                            </div><!-- dropdown -->
+                                            <div class="card-file-thumb tx-primary">
+                                              <i class="far fa-file-word"></i>
+                                            </div>
+                                            <div class="card-body">
+                                                <h6><a href="" class="link-02">{{ substr('1c160a9b-8f52-46f5-a687-1dd608da48b3', 0, 15) }}.docx</a></h6>
+                                            </div>
+                                            <div class="card-footer"><span class="d-none d-sm-inline">Date Created: </span>{{ \Carbon\Carbon::now('UTC')->isoFormat('MMMM Do YYYY, h:mm:ssa') }}</div>
+                                          </div>
+                                        </div><!-- col -->
+                                        <div class="col-6 col-sm-4 col-md-3 col-xl mg-t-10 mg-sm-t-0">
+                                          <div class="card card-file">
+                                            <div class="dropdown-file">
+                                              <a href="" class="dropdown-link" data-toggle="dropdown"><i data-feather="more-vertical"></i></a>
+                                              <div class="dropdown-menu dropdown-menu-right">
+                                                <a href="#" class="dropdown-item download"><i data-feather="download"></i>Download</a>
+                                              </div>
+                                            </div><!-- dropdown -->
+                                            <div class="card-file-thumb tx-indigo">
+                                              <i class="far fa-file-image"></i>
+                                            </div>
+                                            <div class="card-body">
+                                                <h6><a href="" class="link-02">{{ substr('ff9c0bfa-aeed-4724-a8e4-790cf04a9fdd', 0, 15) }}.jpg</a></h6>
+                                            </div>
+                                            <div class="card-footer"><span class="d-none d-sm-inline">Date Created: </span>{{ \Carbon\Carbon::now('UTC')->isoFormat('MMMM Do YYYY, h:mm:ssa') }}</div>
+                                          </div>
+                                        </div><!-- col -->
+                                        <div class="col-6 col-sm-4 col-md-3 col-xl mg-t-10 mg-md-t-0">
+                                          <div class="card card-file">
+                                            <div class="dropdown-file">
+                                              <a href="" class="dropdown-link" data-toggle="dropdown"><i data-feather="more-vertical"></i></a>
+                                              <div class="dropdown-menu dropdown-menu-right">
+                                                <a href="#" class="dropdown-item download"><i data-feather="download"></i>Download</a>
+                                              </div>
+                                            </div><!-- dropdown -->
+                                            <div class="card-file-thumb tx-info">
+                                              <i class="far fa-file-video"></i>
+                                            </div>
+                                            <div class="card-body">
+                                                <h6><a href="" class="link-02">{{ substr('d886204a-a376-4924-a83b-2d7a7f84df7d', 0, 15) }}.mp4</a></h6>
+                                            </div>
+                                            <div class="card-footer"><span class="d-none d-sm-inline">Date Created: </span>{{ \Carbon\Carbon::now('UTC')->isoFormat('MMMM Do YYYY, h:mm:ssa') }}</div>
+                                          </div>
+                                        </div><!-- col -->
+                                      </div><!-- row -->
                                 </div><!-- df-example -->
                             </div>
                         </div>
 
                         <div id="serviceRequestSummary" class="tab-pane pd-20 pd-xl-25">
-                            <h5 class="mt-4 text-primary">Service Request Progress</h5>
+                            <div class="divider-text">Diagnostic Reports</div>
+                            <div class="card-group">
+                                <div class="card">
+                                    <div class="card-body shadow-none bd-primary overflow-hidden">
+                                        <div class="marker-primary marker-ribbon pos-absolute t-10 l-0">1</div>
+
+                                        <p class="card-text">After discussion with Mr Kelvin Adesanya, tentatively I beleive his laptop has overheating issues. On-premise diagnosis has to be carried out.</p>
+                                        <p class="card-text"><small class="text-muted">Date Created: {{ \Carbon\Carbon::now('UTC') }}</small></p>
+                                    </div>
+                                </div>
+                                <div class="card">
+                                    <div class="card-body shadow-none bd-primary overflow-hidden">
+                                        <div class="marker-primary marker-ribbon pos-absolute t-10 l-0">2</div>
+                                        <p class="card-text">After discussion with Mr Kelvin Adesanya, tentatively I beleive his laptop has overheating issues. On-premise diagnosis has to be carried out.</p>
+                                        <p class="card-text"><small class="text-muted">Date Created: {{ \Carbon\Carbon::now('UTC') }}</small></p>
+                                    </div>
+                                </div>
+                                <div class="card">
+                                    <div class="card-body shadow-none bd-primary overflow-hidden">
+                                        <div class="marker-primary marker-ribbon pos-absolute t-10 l-0">3</div>
+
+                                        <p class="card-text">After discussion with Mr Kelvin Adesanya, tentatively I beleive his laptop has overheating issues. On-premise diagnosis has to be carried out.</p>
+                                        <p class="card-text"><small class="text-muted">Date Created: {{ \Carbon\Carbon::now('UTC') }}</small></p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="divider-text">Service Request Progress</div>
+                            <h5 class="mt-4">Service Request Progress</h5>
                             <div class="table-responsive mb-4">
                                 <table class="table table-hover mg-b-0">
                                     <thead class="">
@@ -177,18 +257,20 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-
+                                        @foreach($request_progress as $key => $progress)
                                         <tr>
-                                            <td class="tx-color-03 tx-center">1</td>
-                                            <td class="tx-medium">David Akinsola (CSE)</td>
-                                            <td class="tx-medium text-success">Enroute to Client's house</td>
-                                            <td class="text-center">{{ Carbon\Carbon::parse('2020-12-28 16:58:54', 'UTC')->isoFormat('MMMM Do YYYY, h:mm:ssa') }}</td>
+                                            <td class="tx-color-03 tx-center">{{ $loop->iteration }}</td>
+                                            <td class="tx-medium">{{ Str::title($progress['user']['account']['last_name'] . ' '.$progress['user']['account']['first_name'])  }} ({{$progress['user']['roles'][0]['name']}})</td>
+                                            <td class="tx-medium text-success"> {{$progress['substatus']['name']}} </td>
+                                            <td class="text-center">{{ Carbon\Carbon::parse($progress['created_at'], 'UTC')->isoFormat('MMMM Do YYYY, h:mm:ssa') }}</td>
                                         </tr>
+                                        @endforeach
                                     </tbody>
                                 </table>
                             </div><!-- table-responsive -->
 
-                            <h5 class="mt-4 text-primary">Tool Requests</h5>
+                            <div class="divider-text">Tools Request</div>
+                            <h5 class="mt-4">Tools Requests</h5>
                             <div class="table-responsive mb-4">
                                 <table class="table table-hover mg-b-0">
                                     <thead class="">
@@ -223,8 +305,8 @@
                                 </table>
                             </div><!-- table-responsive -->
 
-
-                            <h5 class="mt-4 text-primary">Request For Quotation</h5>
+                            <div class="divider-text">RFQ's</div>
+                            <h5 class="mt-4">Request For Quotation</h5>
                             <div class="table-responsive">
 
                                 <table class="table table-hover mg-b-0 mt-4">
@@ -260,7 +342,7 @@
                         </div>
 
                     </div>
-                  </div>
+                </div>
 
             </div>
         </div>
@@ -306,7 +388,6 @@
 <script>
     $(function() {
         'use strict'
-
         $('#wizard3').steps({
             headerTag: 'h3'
             , bodyTag: 'section'
@@ -327,81 +408,65 @@
             showFinishButtonAlways: false
             , onFinished: function(event, currentIndex) {
                 $('#update-progress').trigger('click');
-
             }
         , });
-
         let count = 1;
-
-
-
         //Add and Remove Request for
         $(document).on('click', '.add-rfq', function() {
             count++;
             addRFQ(count);
         });
-
         $(document).on('click', '.remove-rfq', function() {
             count--;
             $(this).closest(".remove-rfq-row").remove();
             // $(this).closest('tr').remove();
         });
-
         //Add and Remove Tools request form
         $(document).on('click', '.add-trf', function() {
             count++;
             addTRF(count);
         });
-
         $(document).on('click', '.remove-trf', function() {
             count--;
             $(this).closest(".remove-trf-row").remove();
         });
-
         //Hide and Unhide Work Experience form
         $('#work_experience_yes').change(function() {
             if ($(this).prop('checked')) {
                 $('.previous-employment').removeClass('d-none');
             }
         });
-
         $('#work_experience_no').change(function() {
             if ($(this).prop('checked')) {
                 $('.previous-employment').addClass('d-none');
             }
         });
-
         //Hide and Unhide RFQ
         $('#rfqYes').change(function() {
             if ($(this).prop('checked')) {
                 $('.d-rfq').removeClass('d-none');
             }
         });
-
         $('#rfqNo').change(function() {
             if ($(this).prop('checked')) {
                 $('.d-rfq').addClass('d-none');
             }
         });
-
         //Hide and Unhide TRF
         $('#trfYes').change(function() {
             if ($(this).prop('checked')) {
                 $('.d-trf').removeClass('d-none');
             }
         });
-
         $('#trfNo').change(function() {
             if ($(this).prop('checked')) {
                 $('.d-trf').addClass('d-none');
             }
         });
-
         $(document).on('click', '#tool-request-details', function(event) {
             event.preventDefault();
             let route = $(this).attr('data-url');
             let batchNumber = $(this).attr('data-batch-number');
-
             $.ajax({
                 url: route
                 , beforeSend: function() {
@@ -425,12 +490,10 @@
                 , timeout: 8000
             })
         });
-
         $(document).on('click', '#rfq-details', function(event) {
             event.preventDefault();
             let route = $(this).attr('data-url');
             let batchNumber = $(this).attr('data-batch-number');
-
             $.ajax({
                 url: route
                 , beforeSend: function() {
@@ -454,19 +517,15 @@
                 , timeout: 8000
             })
         });
-
         $('.close').click(function() {
             $(".modal-backdrop").remove();
         });
-
     });
-
     //Get available quantity of a particular tool.
     $(document).on('change', '.tool_id', function() {
         let toolId = $(this).find('option:selected').val();
         let toolName = $(this).children('option:selected').text();
         let quantityName = $(this).children('option:selected').data('id');
-
         $.ajax({
             url: "{{ route('available_quantity', app()->getLocale()) }}"
             , method: "POST"
@@ -477,12 +536,10 @@
             }
             , success: function(data) {
                 if (data) {
-
                     $('#' + quantityName + '').attr({
                         "value": data
                         , "max": data
                     , });
-
                 } else {
                     var message = 'Error occured while trying to get ' + toolName + ' available quantity';
                     var type = 'error';
@@ -491,7 +548,6 @@
             }
         , })
     });
-
 </script>
 @endpush
 

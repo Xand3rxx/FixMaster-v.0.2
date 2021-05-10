@@ -48,17 +48,22 @@
         <tr>
           <td class="tx-color-03 tx-center">{{ $loop->iteration }}</td>
           <td class="tx-medium">{{ $warranty['user']['account']['first_name'].' '.$warranty['user']['account']['last_name'] }}</td>
-          <td class="tx-medium">{{ $warranty['warranty']['name']}}</td>
-          <td class="tx-medium">{{ Carbon\Carbon::parse($warranty->start_date, 'UTC')->isoFormat('MMMM Do YYYY, h:mm:ssa') }}</td>
-          <td class="tx-medium">{{ Carbon\Carbon::parse($warranty->expiration_date, 'UTC')->isoFormat('MMMM Do YYYY, h:mm:ssa') }}</td>
-         
-          <td>{{ $warranty->status ?? '' }}</td>
+          <td class="tx-medium">{{ $warranty['warranty']['name'] }}</td>
+          <td class="tx-medium">{{ $warranty['service_request']['unique_id'] }}</td>
+          <td class="tx-medium">{{ Carbon\Carbon::parse($warranty->start_date ?? '2020-12-28 16:58:54', 'UTC')->isoFormat('MMMM Do YYYY, h:mm:ssa') }}</td>
+          <td class="tx-medium">{{ Carbon\Carbon::parse($warranty->expiration_date ?? '2020-12-28 16:58:54', 'UTC')->isoFormat('MMMM Do YYYY, h:mm:ssa') }}</td>
+          @if($warranty->status == 'used')
+            <td class="text-success">Used</td>
+          @else
+            <td class="text-danger">Unused</td>
+          @endif
           <td class=" text-center">
             <div class="dropdown-file">
               <a href="" class="dropdown-link" data-toggle="dropdown"><i data-feather="more-vertical"></i></a>
               <div class="dropdown-menu dropdown-menu-right">
               <a href="{{ route('admin.issued_warranty_details', ['warranty'=>$warranty->uuid, 'locale'=>app()->getLocale()]) }}" class="dropdown-item details text-primary"><i class="far fa-clipboard"></i> Details</a>
-              <a href="{{ route('admin.edit_warranty', ['details'=>$warranty->uuid, 'locale'=>app()->getLocale()]) }}" class="dropdown-item details text-info"><i class="far fa-check"></i> Done!</a>
+              <a href="{{ route('admin.mark_warranty_resolved', ['warranty'=>$warranty->uuid, 'locale'=>app()->getLocale()]) }}" class="dropdown-item details text-success"><i class="fas fa-check"></i> Mark as Resolved</a>
+              <a href="{{ route('admin.mark_warranty_resolved', ['warranty'=>$warranty->uuid, 'locale'=>app()->getLocale()]) }}" class="dropdown-item details text-info"><i class="fas fa-clipboard"></i> Resolved Details</a>
                 
               </div>
             </div>
