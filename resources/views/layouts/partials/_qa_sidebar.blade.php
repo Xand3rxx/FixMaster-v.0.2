@@ -38,7 +38,7 @@
         </div>
       </div><!-- aside-loggedin -->
       <ul class="nav nav-aside">
-        <li class="nav-label">Components</li>
+        <li class="nav-label">menu</li>
         <li class="nav-item {{ Route::currentRouteNamed('quality-assurance.index') ? 'active' : '' }}"><a href="{{ route('quality-assurance.index', app()->getLocale()) }}" class="nav-link"><i data-feather="airplay"></i> <span>Dashboard</span></a></li>
 
         <li class="nav-item with-sub {{ Route::currentRouteNamed('quality-assurance.requests.active', 'quality-assurance.requests.completed', 'quality-assurance.requests.warranty_claim', 'quality-assurance.requests.cancelled') ? 'active show' : '' }}">
@@ -51,10 +51,10 @@
             </ul>
           </li>
 
-          <li class="nav-item with-sub {{ Route::currentRouteNamed('quality-assurance.consultations.pending', 'quality-assurance.consultations.ongoing', 'quality-assurance.consultations.completed') ? 'active show' : '' }}">
+          <li class="nav-item with-sub {{ Route::currentRouteNamed('quality-assurance.consultations.pending', 'quality-assurance.consultations.ongoing', 'quality-assurance.consultations.completed','quality-assurance.consultations.pending_details') ? 'active show' : '' }}">
             <a href="" class="nav-link"><i data-feather="message-circle"></i> <span>Consultations</span></a>
             <ul>
-              <li class="{{ Route::currentRouteNamed('quality-assurance.consultations.pending') ? 'active' : '' }}"><a href="{{ route('quality-assurance.consultations.pending', app()->getLocale()) }}">Pending</a></li>
+              <li class="{{ Route::currentRouteNamed('quality-assurance.consultations.pending','quality-assurance.consultations.pending_details') ? 'active' : '' }}"><a href="{{ route('quality-assurance.consultations.pending', app()->getLocale()) }}">Pending</a></li>
               <li class="{{ Route::currentRouteNamed('quality-assurance.consultations.ongoing') ? 'active' : '' }}"><a href="{{ route('quality-assurance.consultations.ongoing', app()->getLocale()) }}">Ongoing</a></li>
               <li class="{{ Route::currentRouteNamed('quality-assurance.consultations.completed') ? 'active' : '' }}"><a href="{{ route('quality-assurance.consultations.completed', app()->getLocale()) }}">Completed</a></li>
             </ul>
@@ -71,7 +71,7 @@
 
         <li class="nav-item {{ Route::currentRouteNamed('quality-assurance.payments') ? 'active show' : '' }}"><a href="{{ route('quality-assurance.payments', app()->getLocale()) }}" class="nav-link"><i data-feather="credit-card"></i> <span>Payments</span></a></li>
 
-        {{-- <li class="nav-item {{ Route::currentRouteNamed('quality-assurance.requests', 'quality-assurance.request_details') ? 'active show' : '' }}"><a href="{{ route('quality-assurance.requests', app()->getLocale()) }}" class="nav-link"><i data-feather="git-pull-request"></i> <span>Requests</span></a></li> --}}
+        <li class="nav-item {{ Route::currentRouteNamed('quality-assurance.requests', 'quality-assurance.request_details') ? 'active show' : '' }}"><a href="{{ route('quality-assurance.requests', app()->getLocale()) }}" class="nav-link"><i data-feather="git-pull-request"></i> <span>Requests</span></a></li>
 
 
       </ul>

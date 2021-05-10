@@ -492,6 +492,7 @@ Route::prefix('/quality-assurance')->group(function () {
         Route::view('/requests/completed', 'quality-assurance.requests.completed')->name('requests.completed');
         Route::view('/requests/warranty_claim', 'quality-assurance.requests.warranty_claim')->name('requests.warranty_claim');
         Route::view('/consultations/pending', 'quality-assurance.consultations.pending')->name('consultations.pending');
+        Route::view('/consultations/pending_details', 'quality-assurance.consultations.pending_details')->name('consultations.pending_details');
         Route::view('/consultations/ongoing', 'quality-assurance.consultations.ongoing')->name('consultations.ongoing');
         Route::view('/consultations/completed', 'quality-assurance.consultations.completed')->name('consultations.completed');
         Route::view('/requests/cancelled', 'quality-assurance.requests.cancelled')->name('requests.cancelled');

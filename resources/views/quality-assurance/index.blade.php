@@ -45,7 +45,7 @@
 
               <div class="col-md-3">
                 <div class="text-center earn">
-                    <h5 class="p-earn">Earnings: N50,000</h5>
+                    <h5 class="p-earn">Earnings: N50,000,000</h5>
                     </div>
               </div><br><br><br>
           </div>
