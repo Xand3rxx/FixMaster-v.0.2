@@ -91,5 +91,25 @@ class ServiceRequestAssigned extends Model
         return $this->belongsTo(Account::class, 'user_id', 'service_id' );
     }
 
+    /**
+     * Scope a query to sort and filter service_request_assigned table
+     *
+     * @param \Illuminate\Database\Eloquent\Builder $query
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function scopejobAssignedSorting($query, $sortLevel, $dateFrom, $dateTo, $cses){
+
+        $query->when($cses, function ($query, $cses){
+            $query->whereBetween('user_id', [$cses]);
+        })->when($dateFrom, function ($query) use ($sortLevel, $dateFrom, $dateTo){
+            if($sortLevel == 'SortType2'){
+                $query->whereBetween('job_acceptance_time', [$dateFrom, $dateTo]);
+            }elseif($sortLevel == 'SortType3'){
+                $query->whereBetween('job_completed_date', [$dateFrom, $dateTo]);
+            }
+        });
+    }
+
+    
     
 }

@@ -40,60 +40,62 @@
                   <div class="card mg-b-10">
                     <div class="d-sm-flex mg-t-10""></div>
 
-                    <div class="table-responsive">
-                      <div class="row mt-1 mb-1 ml-1 mr-1 ">
-                        <div class="col-md-4">
-                        <input type="hidden" class="d-none" id="route" value="{{ route('admin.cse_report_first_sorting', app()->getLocale()) }}">
-                          <div class="form-group">
-                              <label>Sorting Parameters</label>
-                              <select class="custom-select" id="sorting-parameters">
-                                  <option value="None">Select...</option>
-                                  <option value="SortType1">CSE List</option>
-                                  <option value="SortType2">Job Acceptance Date</option>
-                                  <option value="SortType3">Job Completion Date</option>
-                                  <option value="SortType4">Job Status</option>
-                              </select>
-                          </div>
-                        </div><!--end col-->
-                        <div class="col-md-4 cse-list d-none">
-                            <div class="form-group position-relative">
-                                <label>{{ !empty($cses->name) ? $cses->name : 'CSE' }} List <span class="text-danger">*</span></label>
-                                <select class="form-control selectpicker" multiple id="cse-list">
-                                    <option value="">Select...</option>
-                                    @foreach ($cses['users'] as $cse)
-                                <option value="{{ $cse['account']['user_id'] }}">{{ !empty($cse['account']['first_name']) ? Str::title($cse['account']['first_name'] ." ". $cse['account']['last_name']) : 'UNAVAILABLE' }}</option>
-                                    @endforeach
-                                </select>
-                            </div>
+                    <div class="row mt-1 mb-1 ml-1 mr-1 ">
+                      <div class="col-md-4">
+                      <input type="hidden" class="d-none" id="route" value="{{ route('admin.cse_report_first_sorting', app()->getLocale()) }}">
+                        <div class="form-group">
+                            <label>Sorting Parameters</label>
+                            <select class="custom-select" id="sorting-parameters">
+                                <option value="None">Select...</option>
+                                <option value="SortType1">CSE List</option>
+                                <option value="SortType2">Job Acceptance Date</option>
+                                <option value="SortType3">Job Completion Date</option>
+                                <option value="SortType4">Job Status</option>
+                            </select>
                         </div>
-
-                        <div class="col-md-4 date-range d-none">
-                            <div class="form-group position-relative">
-                                <label>From <span class="text-danger">*</span></label>
-                                <input name=date_from" id="date-from" type="date" class="form-control pl-5">
-                            </div>
-                        </div>
-            
-                        <div class="col-md-4 date-range d-none">
-                            <div class="form-group position-relative">
-                                <label>To <span class="text-danger">*</span></label>
-                            <input name="date_to" id="date-to" type="date" class="form-control pl-5" max="{{ Carbon\Carbon::now('UTC') }}">
-                            </div>
-                        </div>
-
-                        <div class="col-md-4 job-status d-none">
+                      </div><!--end col-->
+                      <div class="col-md-4 cse-list d-none">
                           <div class="form-group position-relative">
-                              <label>Job Status <span class="text-danger">*</span></label>
-                              <select class="form-control" name="job_status" id="job-status">
-                                  <option value="">Select...</option>
-                                  <option value="1">Pending</option>
-                                  <option value="2">Ongoing</option>
-                                  <option value="3">Cancelled</option>
-                                  <option value="4">Completed</option>
+                              <label>{{ !empty($cses->name) ? $cses->name : 'CSE' }} List <span class="text-danger">*</span></label>
+                              <select class="form-control selectpicker" multiple id="cse-list">
+                                  <option value="" disabled>Select...</option>
+                                  @foreach ($cses['users'] as $cse)
+                                    <option value="{{ $cse['account']['user_id'] }}">{{ !empty($cse['account']['first_name']) ? Str::title($cse['account']['first_name'] ." ". $cse['account']['last_name']) : 'UNAVAILABLE' }}</option>
+                                  @endforeach
                               </select>
                           </div>
+                      </div>
+
+                      <div class="col-md-4 date-range d-none">
+                          <div class="form-group position-relative">
+                              <label>From <span class="text-danger">*</span></label>
+                              <input name=date_from" id="date-from" type="date" class="form-control pl-5">
+                          </div>
+                      </div>
+          
+                      <div class="col-md-4 date-range d-none">
+                          <div class="form-group position-relative">
+                              <label>To <span class="text-danger">*</span></label>
+                          <input name="date_to" id="date-to" type="date" class="form-control pl-5" max="{{ Carbon\Carbon::now('UTC') }}">
+                          </div>
+                      </div>
+
+                      <div class="col-md-4 job-status d-none">
+                        <div class="form-group position-relative">
+                            <label>Job Status <span class="text-danger">*</span></label>
+                            <select class="form-control" name="job_status" id="job-status">
+                                <option value="">Select...</option>
+                                <option value="1">Pending</option>
+                                <option value="2">Ongoing</option>
+                                <option value="3">Cancelled</option>
+                                <option value="4">Completed</option>
+                            </select>
                         </div>
                       </div>
+                    </div>
+
+                    <div class="table-responsive">
+                      
 
                       <div id="job-assigned-sorting">
                         @include('admin.reports.cse.tables._job_assigned')
@@ -160,16 +162,41 @@
     //SORT CSE REPORT BY CSE ID
     $('#cse-list').on('change', function (){
       //Get the User ID
-      $cseId = $('#user_id').val();
+      $cseIdList = [];
+      $cseId = $(this).val();
+      $cseIdList.push($cseId);
+
+      console.log($cseIdList);
 
       //Assign sorting level
       $sortLevel = 'SortType1';
 
-      sortJobAssignedTable($sortLevel, $cseId);
+      sortJobAssignedTable($sortLevel, $cseIdList);
 
-    });     
+    });
 
-    function sortJobAssignedTable($sortLevel, $cseId = null, $jobStatus, $dateFrom = null, $dateTo = null){
+    //SORT ACTIVITY LOG BY DATE RANGE
+    $('#date-to').change(function (){
+     
+      //Assign sorting level
+      $sortLevel = $('#sorting-parameters').val();
+      //Get date from to sort activity log
+      $dateFrom = $('#date-from').val();
+      //Get date to, to sort activity log
+      $dateTo = $('#date-to').val();
+    
+      if($.trim($dateFrom).length == 0){
+        var message = 'Kindly select a date to start From.';
+        var type = 'error';
+        displayMessage(message, type);
+
+      }else{
+        sortJobAssignedTable($sortLevel, $cseId = null, $jobStatus = null, $dateFrom, $dateTo);
+        // sortTableData($userId, $sortLevel, $type, $date='', $year='', $month='', $dateFrom, $dateTo);
+      }
+    });
+
+    function sortJobAssignedTable($sortLevel, $cseId = null, $jobStatus = null, $dateFrom = null, $dateTo = null){
     //Get sorting route
     $route = $('#route').val();
 

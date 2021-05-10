@@ -181,6 +181,7 @@
     </div><!-- modal-dialog -->
   </div><!-- modal -->
 </div>
+@include('supplier.rfq._rfq_details_modal')
 
 
 @push('scripts')

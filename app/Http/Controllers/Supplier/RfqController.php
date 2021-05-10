@@ -39,7 +39,7 @@ class RfqController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
+     * @param  string  $uuid
      * @return \Illuminate\Http\Response
      */
     public function rfqDetails($language, $uuid){
@@ -52,7 +52,7 @@ class RfqController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
+     * @param  string  $uuid
      * @return \Illuminate\Http\Response
      */
     public function sendInvoice($language, $uuid){
@@ -172,5 +172,17 @@ class RfqController extends Controller
         return view('supplier.rfq._sent_invoice_details', [
             'rfqDetails'    =>  RfqSupplierInvoice::where('id', $id)->firstOrFail(),
         ])->with('i');
+    }
+
+    /**
+     * Display the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function rfqDetailsImage($language, $id){
+        return view('supplier.rfq._details_image', [
+            'rfqDetails'    =>  \App\Models\RfqBatch::select('image')->where('id', $id)->firstOrFail(),
+        ]);
     }
 }

@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin\Report;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use App\Models\ServiceRequestAssigned;
 
 class CustomerServiceExecutiveReportController extends Controller
 {
@@ -32,12 +33,24 @@ class CustomerServiceExecutiveReportController extends Controller
         if($request->ajax()){
 
             //Get current job assigned sorting level
-            $sortingLevel =  $request->sort_level;
+            $sortLevel = $request->sort_level; 
+            //Get cse id's array
+            $cses = collect($request->cse_id);
+            //Get Date from
+            $dateFrom = $request->date_from;
+            //Get Date to
+            $dateTo = $request->date_to;
+            //Get Job status Id
+            $jobStatus = $request->job_status;
 
-            if($sortingLevel === 'SortType1'){
+            
+            // return [$sortLevel, $cses, $dateFrom, $dateTo];
+            return ServiceRequestAssigned::jobAssignedSorting($sortLevel, $dateFrom, $dateTo, $cses)->get();
+            
+            // if($sortingLevel === 'SortType1'){
 
-                return 'It is working';
-            }
+            //     return $request->cse_id;
+            // }
         }
     }
 }
