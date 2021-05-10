@@ -445,6 +445,12 @@ Route::prefix('/cse')->group(function () {
         Route::view('/location-request',    'cse.location_request')->name('location_request');
         Route::post('/submit_ratings',  [CseController::class, 'user_rating'])->name('handle.ratings');
         Route::post('/update_service_request',  [CseController::class, 'update_cse_service_rating'])->name('update_service_request');
+        Route::view('/warranty-claims',    'cse.warranties.index')->name('warranty_claims');
+        Route::view('/warranty-claims/details',    'cse.warranties.show', [
+            'technicians'    =>  \App\Models\Role::where('slug', 'technician-artisans')->with('users')->firstOrFail(),
+            
+        ])->name('warranty_claim_details');
+
     });
 });
 

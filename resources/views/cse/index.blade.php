@@ -20,12 +20,45 @@
             <li class="breadcrumb-item active">Dashboard</li>
           </ol>
         </nav>
-        <h4 class="mg-b-0 tx-spacing--1">Welcome to Fix<span style="color: #E97D1F;">Master</span> {{ Auth::user()->type->role->name ?? 'Quality Assurance' }} Dashboard</h4>
-        <p class="tx-13 tx-color-03 mg-b-0">Your current <span style="color: #E97D1F;"> <strong> Earnings is: ₦20,000 </strong> </span> </p>
+        <h4 class="mg-b-0 tx-spacing--1">Welcome to Fix<span style="color: #E97D1F;">Master</span> {{ Auth::user()->type->role->name ?? 'Customer Service Executive' }} Dashboard</h4>
       </div>
     </div>
 
     <div class="row row-xs">
+      <div class="col-lg-12 col-xl-12">
+        <div class="card">
+          <div class="form-row">
+            <div class="col-md-6">
+          <div class="card-header pd-t-20 pd-b-0 bd-b-0">
+            <h6 class="lh-5 mg-b-5">Overall Rating</h6>
+            <p class="tx-12 tx-color-03 mg-b-0">Ratings is based on 152 total votes by Customer reviews on the quality of service provided by you.</p>
+
+          </div><!-- card-header -->
+          
+              <div class="card-body pd-0">
+                <div class="pd-t-10 pd-b-15 pd-x-20 d-flex align-items-baseline">
+                  <h1 class="tx-normal tx-rubik mg-b-0 mg-r-5">4</h1>
+                  <div class="tx-18">
+                      <i class="icon ion-md-star lh-0 tx-orange"></i>
+                      <i class="icon ion-md-star lh-0 tx-orange"></i>
+                      <i class="icon ion-md-star lh-0 tx-orange"></i>
+                      <i class="icon ion-md-star lh-0 tx-orange"></i>
+                      <i class="icon ion-md-star lh-0 tx-gray-300"></i>
+                  </div>
+                </div>
+                
+              </div><!-- card-body -->
+            </div>
+            <div class="col-md-6">
+              <div class="card-body pd-t-10 pd-b-15 pd-x-20 mt-2">
+                <h6 class="lh-5 mg-b-5">Your current Earnings is:<h1 class="tx-normal tx-rubik mg-b-0 mg-r-5"> ₦20,000 </h1> </h6>
+              </div>
+            </div>
+          </div>
+
+        </div><!-- card -->
+      </div>
+
       <div class="col-lg-12 col-xl-12">
         <div class="card">
           <div class="card-body pd-lg-25">
@@ -54,7 +87,7 @@
               <tr>
                 <th class="text-center">#</th>
                 <th>Job ID</th>
-                <th>Service Category</th>
+                <th class="text-center">Service Category</th>
                 <th>Job Address </th>
                 <th class="text-center">Action</th>
               </tr>
@@ -63,20 +96,23 @@
               <tr>
                 <td class="tx-color-03 tx-center">1</td>
                 <td class="tx-medium">REF-79A722D6</td>
-                <td class="tx-medium">Unavailable</td>
-                <td class="tx-medium"> 31, FREEMANSTREET </td>
+                <td class="text-center tx-medium">Unavailable</td>
+                <td class="tx-medium"> 31, Freeman Street, Ikeja, Lagos. </td>
                 <td class="tx-medium tx-center">
-                  <button class="btn" style="background-color: #E97D1F; color:#fff">ACCEPT</button>
+                  <a href="#" class="btn btn-primary btn-sm" >Accept <i class="fas fa-check"></i></a>
                 </td>
               </tr>
 
               <tr>
-                <td class="tx-color-03 tx-center">2</td>
-                <td class="tx-medium">REF-79A722S5</td>
-                <td class="tx-medium">Unavailable</td>
-                <td class="tx-medium"> 36, FREEMANSTREET </td>
-                <td class="tx-medium tx-center"><button class="btn" style="background-color: #E97D1F; color:#fff">ACCEPT</button></td>
+                <td class="tx-color-03 tx-center">1</td>
+                <td class="tx-medium">REF-79A722D6</td>
+                <td class="text-center tx-medium">Unavailable</td>
+                <td class="tx-medium"> 12, Admiralty Way, Ikoyi, Lagos. </td>
+                <td class="tx-medium tx-center">
+                  <a href="#" class="btn btn-primary btn-sm" >Accept <i class="fas fa-check"></i></a>
+                </td>
               </tr>
+
             </tbody>
           </table>
         </div><!-- table-responsive -->
