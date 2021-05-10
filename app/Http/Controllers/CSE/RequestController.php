@@ -59,6 +59,7 @@ class RequestController extends Controller
         (array) $variables = [
             'service_request' => $service_request,
             'technicains' => \App\Models\UserService::where('service_id', $service_request->service_id)->where('role_id', $technicainsRole->id)->with('user')->get(),
+            'qaulity_assurances'    =>  \App\Models\Role::where('slug', 'quality-assurance-user')->with('users')->firstOrFail(),
             'request_progress' => $request_progress,
         ];
         if ($service_request->status_id == 2) {

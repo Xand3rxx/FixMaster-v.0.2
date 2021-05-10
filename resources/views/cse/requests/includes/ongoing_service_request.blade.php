@@ -118,18 +118,35 @@
 
                         <div class="form-row">
                             <div class="form-group col-md-4">
-                                <label for="component_name">Component Name</label>
-                                <input type="text" class="form-control" id="component_name" name="component_name[]" value="{{ $batch['component_name'] }}" readonly>
+                                <label for="manufacturer_name">Manufacturer Name</label>
+                                <input type="text" class="form-control" id="manufacturer_name" name="manufacturer_name[]" value="{{ $batch['manufacturer_name'] }}" readonly>
                             </div>
 
                             <div class="form-group col-md-3">
                                 <label for="model_number">Model Number</label>
                                 <input type="text" class="form-control" id="model_number" name="model_number[]" value="{{ $batch['model_number']}}" readonly>
                             </div>
+
+                            <div class="form-group col-md-4">
+                                <label for="component_name">Component Name</label>
+                                <input type="text" class="form-control" id="component_name" name="component_name[]" value="{{ $batch['component_name'] }}" readonly>
+                            </div>
+
                             <div class="form-group col-md-2">
                                 <label for="quantity">Quantity</label>
                                 <input type="number" class="form-control" id="quantity" name="quantity[]" value="{{ $batch['quantity'] }}" min="" max="" readonly>
                             </div>
+
+                            <div class="form-group col-md-2">
+                                <label for="size">Size</label>
+                                <input type="number" class="form-control" id="size" name="size[]" value="{{ $batch['size'] }}" min="" max="" readonly>
+                            </div>
+
+                            <div class="form-group col-md-4">
+                                <label for="unit_of_measurement">Unit of Measurement</label>
+                                <input type="text" class="form-control" id="unit_of_measurement" name="unit_of_measurement[]" value="{{ $batch['unit_of_measurement'] }}">
+                            </div>
+
                             <div class="form-group col-md-3">
                                 <label for="amount">Amount</label>
                                 <input type="tel" class="form-control amount" id="amount" placeholder="" value="{{ $batch['amount'] }}" name="amount[]" autocomplete="off" readonly>
@@ -326,27 +343,52 @@
                     </section>
                     @endif
 
+                    <h3>Request QA</h3>
+                    <section>
+                        <div class="form-row">
+                            <div class="form-group col-md-6">
+                                <label for="qa_user_uuid">Assign QA</label>
+                                <select required class="form-control custom-select @error('qa_user_uuid') is-invalid @enderror" name="qa_user_uuid">
+                                    <option selected disabled value="0" selected>Select...</option>
+                                    @foreach ($qaulity_assurances['users'] as $qaulity_assurance)
+                                        <option value="{{ $qaulity_assurance['account']['user_id'] }}">{{ !empty($qaulity_assurance['account']['first_name']) ? Str::title($qaulity_assurance['account']['first_name'] ." ". $qaulity_assurance['account']['last_name']) : 'UNAVAILABLE' }}</option>
+                                    @endforeach
+                                </select>
+                                @error('qa_user_uuid')
+                                <span class="invalid-feedback" role="alert">
+                                    <strong>{{ $message }}</strong>
+                                </span>
+                                @enderror
+                            </div>
+
+                            <div class="form-group col-md-6">
+                                <label for="assistive_role">Assitive Role</label>
+                                <select required class="form-control custom-select @error('assistive_role') is-invalid @enderror" name="assistive_role">
+                                    <option selected disabled value="0" selected>Select...</option>
+                                    <option value="Consultant">Consultant</option>
+                                    <option value="Technician">Technician</option>
+                                </select>
+                                @error('assistive_role')
+                                <span class="invalid-feedback" role="alert">
+                                    <strong>{{ $message }}</strong>
+                                </span>
+                                @enderror
+                            </div>
+                        </div>
+                    </section>
+
                     <h3>Assign New Technician</h3>
                     <section>
                         <div class="form-group col-md-12">
-                            {{-- <label for="name">Assign Technician</label>
-                            <select class="form-control custom-select @error('technician_user_uuid') is-invalid @enderror" name="technician_user_uuid">
-                                <option selected value="">Select...</option>
-                                @foreach ($technicains as $technicain)
-                                <option value="{{$technicain['user']['uuid']}}">{{$technicain['user']['account']['last_name'] .' '. $technicain['user']['account']['first_name']}}</option>
-                                @endforeach
-                            </select>
-                            @error('technician_user_uuid')
-                            <span class="invalid-feedback" role="alert">
-                                <strong>{{ $message }}</strong>
-                            </span>
-                            @enderror --}}
+                           
                             <ul class="list-group wd-md-100p">
                                 @foreach ($technicains as $technicain)
                                 <li class="list-group-item d-flex align-items-center">
-                                  <img src="{{ asset('assets/images/default-male-avatar.png') }}" class="wd-30 rounded-circle mg-r-15" alt="Technician Avatar">
                                   
-                                  <div>
+                                 <div class="form-row">
+                                    <img src="{{ asset('assets/images/default-male-avatar.png') }}" class="wd-30 rounded-circle mg-r-15" alt="Technician Avatar">
+                                  
+                                  <div class="col-md-6 col-sm-6">
                                     <h6 class="tx-13 tx-inverse tx-semibold mg-b-0">{{$technicain['user']['account']['first_name'] .' '. $technicain['user']['account']['last_name']}}</h6>
                                     
                                     <span class="d-block tx-11 text-muted">
@@ -356,22 +398,25 @@
                                         <span class="font-weight-bold ml-2">0.6km</span>
                                     </span>
                                   </div>
-                                  <div class="form-row d-flex align-items-end mt-3">
-                                    <div class="form-group col-md-1" style="margin-left: 3rem !important;">
-                                        <a href="tel:08124483438" class="btn btn-primary btn-icon"><i class="fas fa-phone"></i></a>
-                                    </div>
-                                    <div class="form-group col-md-1">
-                                        <div class="custom-control custom-radio mt-2">
-                                            <div class="custom-control custom-radio">
-                                                <input type="radio" class="custom-control-input" id="{{ $loop->iteration }}" name="technician_user_uuid" value="{{ $technicain['user']['uuid'] }}">
-                                                <label class="custom-control-label" for="{{ $loop->iteration }}"></label>
+                                  <div class="col-md-6 col-sm-6">
+                                    <div class="form-row">
+                                        <div class="form-group col-1 col-md-1 col-sm-1" style="margin-left: 3rem !important;">
+                                            <a href="tel:08124483438" class="btn btn-primary btn-icon"><i class="fas fa-phone"></i></a>
+                                        </div>
+                                        <div class="form-group col-1 col-md-1 col-sm-1">
+                                            <div class="custom-control custom-radio mt-2">
+                                                <div class="custom-control custom-radio">
+                                                    <input type="radio" class="custom-control-input" id="{{ $loop->iteration }}" name="technician_user_uuid" value="{{ $technicain['user']['uuid'] }}">
+                                                    <label class="custom-control-label" for="{{ $loop->iteration }}"></label>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
+                                  </div>
                                 </div>
                                 </li>
                                 @endforeach
-                              </ul>
+                            </ul>
                         </div>
                     </section>
 

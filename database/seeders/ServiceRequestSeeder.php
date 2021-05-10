@@ -201,7 +201,7 @@ class ServiceRequestSeeder extends Seeder
                 'job_declined_time'     =>  NULL,
                 'job_completed_date'    =>  NULL,
                 'status'                =>  NULL,
-                'assistive_role'        =>  'Quality Assurance',
+                'assistive_role'        =>  'Consultant',
                 'created_at'            => NULL, 
             ),
             // array(
@@ -249,7 +249,7 @@ class ServiceRequestSeeder extends Seeder
                 'job_declined_time'     =>  NULL, 
                 'job_completed_date'    =>  NULL,
                 'status'                =>  NULL,
-                'assistive_role'        =>  'Quality Assurance',
+                'assistive_role'        =>  'Consultant',
                 'created_at'            => NULL, 
             ),
             array(
@@ -298,7 +298,7 @@ class ServiceRequestSeeder extends Seeder
                 'job_declined_time'     =>  NULL, 
                 'job_completed_date'    =>  NULL,
                 'status'                =>  NULL,
-                'assistive_role'        =>  'Quality Assurance',
+                'assistive_role'        =>  'Technician',
                 'created_at'            => NULL, 
             ),
             array(
@@ -347,7 +347,7 @@ class ServiceRequestSeeder extends Seeder
                 'job_declined_time'     =>  NULL,
                 'job_completed_date'    =>  NULL, 
                 'status'                =>  NULL,
-                'assistive_role'        =>  'Quality Assurance',
+                'assistive_role'        =>  'Consultant',
                 'created_at'            => NULL, 
             ),
             array(
