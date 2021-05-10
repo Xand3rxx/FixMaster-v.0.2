@@ -35,7 +35,7 @@ class CustomerServiceExecutiveReportController extends Controller
             //Get current job assigned sorting level
             $sortLevel = $request->sort_level; 
             //Get cse id's array
-            $cses = collect($request->cse_id);
+            $cses = $request->cse_id;
             //Get Date from
             $dateFrom = $request->date_from;
             //Get Date to
@@ -43,6 +43,7 @@ class CustomerServiceExecutiveReportController extends Controller
             //Get Job status Id
             $jobStatus = $request->job_status;
 
+            // return $cses;
             
             // return [$sortLevel, $cses, $dateFrom, $dateTo];
             return ServiceRequestAssigned::jobAssignedSorting($sortLevel, $dateFrom, $dateTo, $cses)->get();
