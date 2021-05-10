@@ -51,7 +51,8 @@ Route::view('/register',                    'auth.register')->name('frontend.reg
 
 Route::post('customer-service-executive', [CSEFormController::class, '__invoke'])->name('frontend.customer-service-executive.store');
 
-Route::get('/invoice/{invoice:uuid}', [InvoiceController::class, 'invoice'])->name('invoice');
+//Route::get('/invoice/{invoice:uuid}', [InvoiceController::class, 'invoice'])->name('invoice');
+Route::get('/invoice/', [InvoiceController::class, 'invoice'])->name('invoice');
 
 Route::post('client-decision', [ClientDecisionController::class, '__invoke'])->name('client.decision');
 

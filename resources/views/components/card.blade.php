@@ -1,4 +1,4 @@
-<div {{ $attributes->merge(['class' => 'col-md-4']) }}>
+<div {{ $attributes->merge(['class' => 'mt-4 col-md-4']) }}>
     <div class="shadow bg-primary card-header">
         <div class="media-body content text-center">
             <h5 class="title mb-0 text-white">{{$cardtitle}}</h5>

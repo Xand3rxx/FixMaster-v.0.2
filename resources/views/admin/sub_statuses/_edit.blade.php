@@ -1,7 +1,7 @@
 
 <form method="POST" action="{{ route('admin.statuses.update', ['status'=>$subStatus->uuid, 'locale'=>app()->getLocale()]) }}">
     @csrf @method('PUT')
-    <h5 class="mg-b-2"><strong>Editing {{ !empty($subStatus->name) ? $subStatus->name : 'UNAVAILABLE' }} Sub-Status</strong></h5>
+    <h5 class="mg-b-2"><strong>Editing "{{ !empty($subStatus->name) ? $subStatus->name : 'UNAVAILABLE' }}" Sub-Status</strong></h5>
 
     <div class="form-row mt-4">
         <div class="form-group col-md-12">

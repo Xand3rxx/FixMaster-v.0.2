@@ -39,7 +39,7 @@
             <div class="form-group position-relative">
                 <label>Address <span class="text-danger">*</span></label>
                 <i data-feather="map-pin" class="fea icon-sm icons"></i>
-                <textarea name="address_cse" id="user_address" required rows="4" class="user_address form-control pl-5" placeholder="Your residential address :"></textarea>
+                <textarea name="address_cse" id="user_address" required rows="3" class="user_address form-control pl-5" placeholder="Your residential address :"></textarea>
             </div>
         </div>
 

@@ -49,12 +49,20 @@
                   <label class="tx-10 tx-medium tx-spacing-1 tx-color-03 tx-uppercase tx-sans mg-b-10">Mobile Phone</label>
                   <p class="tx-primary tx-rubik mg-b-0">{{ $user['contact']['phone_number'] }}</p>
                 </div>
-                <div class="col-6 col-sm-4 mg-t-20 mg-sm-t-0">
-                  <label class="tx-10 tx-medium tx-spacing-1 tx-color-03 tx-uppercase tx-sans mg-b-10">Franchisee ID</label>
-                  <p class="tx-primary mg-b-0">{{ $user['cse']['franchisee_id'] == null ? "Unavailable" : $user['cse']['franchisee']['unique_id'] }}</p>
+                <div class="col-6 col-sm-4">
+                  <label class="tx-10 tx-medium tx-spacing-1 tx-color-03 tx-uppercase tx-sans mg-b-10">CSE ID</label>
+                  <p class="tx-primary tx-rubik mg-b-0">UNAVAILABLE</p>
+                </div>
+                <div class="col-6 col-sm-4 mg-t-20 mg-sm-t-30">
+                  <label class="tx-10 tx-medium tx-spacing-1 tx-color-03 tx-uppercase tx-sans mg-b-10">Referral Code</label>
+                  <p class="tx-primary tx-rubik mg-b-0">UNAVAILABLE</p>
+                </div>
+                <div class="col-6 col-sm-4 mg-t-20 mg-sm-t-30">
+                  <label class="tx-10 tx-medium tx-spacing-1 tx-color-03 tx-uppercase tx-sans mg-b-10">Franchisee</label>
+                  <p class="mg-b-0">UNAVAILABLE</p>
                 </div>
 
-                <div class="col-sm-4 mg-t-20 mg-sm-t-30">
+                <div class="col-sm-6 mg-t-20 mg-sm-t-30">
                   <label class="tx-10 tx-medium tx-spacing-1 tx-color-03 tx-uppercase tx-sans mg-b-10">Address</label>
                   <p class="mg-b-0">{{ $user['contact']['address'] }}</p>
                 </div>

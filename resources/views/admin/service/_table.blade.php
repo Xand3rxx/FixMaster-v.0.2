@@ -37,7 +37,7 @@
               <div class="dropdown-menu dropdown-menu-right">
               <a href="#serviceCategoryDetails" data-toggle="modal" class="dropdown-item details text-primary" title="View {{ $service->name}} details" data-url="{{ route('admin.services.show', ['service'=>$service->uuid, 'locale'=>app()->getLocale()]) }}" data-category-name="{{ $service->name}}" id="category-details"><i class="far fa-clipboard"></i> Details</a>
 
-              <a href="#editService" data-toggle="modal" id="service-edit" title="Edit {{ $service->name }}" data-url="{{ route('admin.services.edit', ['service'=>$service->uuid, 'locale'=>app()->getLocale()]) }}" data-service-name="{{ $service->name }}" data-id="{{ $service->uuid }}" class="dropdown-item details text-info"><i class="far fa-edit"></i> Edit</a>
+              <a href="{{ route('admin.services.edit', ['service'=>$service->uuid, 'locale'=>app()->getLocale()]) }}" id="service-edit" title="Edit {{ $service->name }}" class="dropdown-item details text-info"><i class="far fa-edit"></i> Edit</a>
 
               @if($service->status == 1) 
                 <a data-url="{{ route('admin.services.deactivate', ['service'=>$service->uuid, 'locale'=>app()->getLocale()]) }}" class="dropdown-item details text-warning deactivate-entity" title="Deactivate {{ $service->name}}" style="cursor: pointer;"><i class="fas fa-ban"></i> Deactivate</a>
