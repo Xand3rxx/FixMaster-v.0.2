@@ -42,8 +42,8 @@
             <td class="tx-color-03" width="75%"3">{{ $dispatch->courier_name }}</td>
         </tr>
         <tr>
-            <td class="tx-medium" width="25%">Courier Phone Number</td>
-            <td class="tx-color-03" width="75%"3">{{ $dispatch->courier_phone_number }}</td>
+            <td class="tx-medium" width="35%">Courier Phone Number</td>
+            <td class="tx-color-03" width="65%"3">{{ $dispatch->courier_phone_number }}</td>
         </tr>
         <tr>
             <td class="tx-medium" width="25%">Delivery Medium</td>

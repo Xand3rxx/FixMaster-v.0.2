@@ -29,6 +29,36 @@ $(document).ready(function() {
       })
     });
 
+    //Get image associated with invoice quote
+    $(document).on('click', '#rfq-image-details', function(event) {
+      event.preventDefault();
+      let route = $(this).attr('data-url');
+      let batchNumber = $(this).attr('data-batch-number');
+      
+      $.ajax({
+          url: route,
+          beforeSend: function() {
+            $("#modal-image-body").html('<div class="d-flex justify-content-center mt-4 mb-4"><span class="loadingspinner"></span></div>');
+          },
+          // return the result
+          success: function(result) {
+              $('#modal-image-body').modal("show");
+              $('#modal-image-body').html('');
+              $('#modal-image-body').html(result).show();
+          },
+          complete: function() {
+              $("#spinner-icon").hide();
+          },
+          error: function(jqXHR, testStatus, error) {
+              var message = error+ ' An error occured while trying to retireve '+ batchNumber +'  details.';
+              var type = 'error';
+              displayMessage(message, type);
+              $("#spinner-icon").hide();
+          },
+          timeout: 8000
+      })
+    });
+
 
     $(document).on('click', '#dispatch', function(event) {
       event.preventDefault();

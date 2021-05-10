@@ -38,9 +38,13 @@
                   <thead class="thead-primary">
                     <tr>
                       <th class="text-center">#</th>
-                      <th>Component Name</th>
+                      <th>Manufacturer Name</th>
                       <th>Model Number</th>
+                      <th>Component Name</th>
                       <th class="text-center">Quantity</th>
+                      <th class="text-center">Size</th>
+                      <th>Unit of Measurement</th>
+                      <th class="text-center">Image</th>
                       <th class="text-center">Unit Price(₦)</th>
                       <th class="text-center">Amount(₦)</th>
                     </tr>
@@ -49,9 +53,19 @@
                       @foreach ($supplierInvoiceBatches as $item)
                         <tr>
                             <td class="tx-color-03 tx-center">{{ ++$i }}</td>
-                            <td class="tx-medium">{{ $item->rfqBatch->component_name }}</td>
-                            <td class="tx-medium">{{ $item->rfqBatch->model_number }}</td>
-                            <td class="tx-medium text-center">{{ $item->quantity }}</td>
+                            <td class="tx-medium">{{ !empty($item->rfqBatch->manufacturer_name) ? $item->rfqBatch->manufacturer_name : 'UNAVAILABLE' }}</td>
+                            <td class="tx-medium">{{ !empty($item->rfqBatch->model_number) ? $item->rfqBatch->model_number : 'UNAVAILABLE' }}</td>
+                            <td class="tx-medium">{{ !empty($item->rfqBatch->component_name) ? $item->rfqBatch->component_name : 'UNAVAILABLE' }}</td>
+                            <td class="tx-medium text-center">{{ !empty($item->rfqBatch->quantity) ? number_format($item->rfqBatch->quantity) : '0' }}</td>
+                            <td class="tx-medium text-center">{{ !empty($item->rfqBatch->size) ? number_format($item->rfqBatch->size) : '0' }}</td>
+                            <td class="tx-medium">{{ !empty($item->rfqBatch->unit_of_measurement) ? $item->rfqBatch->unit_of_measurement : 'UNAVAILABLE' }}</td>
+                            <td class="text-center">
+                              @if(!empty($item->rfqBatch->image))
+                              <a href="#rfqImageDetails" data-toggle="modal" class="text-info" title="View {{ $item->rfqBatch->component_name }} image" data-batch-number="{{ $item->rfqBatch->id }}" data-url="{{ route('admin.rfq_details_image', ['image'=>$item->rfqBatch->id, 'locale'=>app()->getLocale()]) }}" id="rfq-image-details"> View</a>
+                              @else
+                                    -
+                              @endif
+                            </td>
                             <td class="tx-medium text-center">₦{{ number_format($item->unit_price) }}</td>
                             <td class="tx-medium text-center">₦{{ number_format($item->total_amount) }}</td>
                         </tr>

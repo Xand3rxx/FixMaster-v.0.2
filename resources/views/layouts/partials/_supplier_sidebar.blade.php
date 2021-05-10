@@ -50,11 +50,11 @@
 
       {{-- <li class="nav-item {{ Route::currentRouteNamed('supplier.dispatches') ? 'active' : '' }}"><a href="{{ route('supplier.dispatches', app()->getLocale()) }}" class="nav-link"><i data-feather="file-text"></i> <span>Materials Dispatched</span></a></li> --}}
 
-      <li class="nav-item with-sub {{ Route::currentRouteNamed('supplier.dispatches') ? 'active show' : '' }}">
+      <li class="nav-item with-sub {{ Route::currentRouteNamed('supplier.dispatches', 'supplier.dispatches_returned') ? 'active show' : '' }}">
         <a href="" class="nav-link"><i data-feather="file-text"></i> <span>Materials</span></a>
         <ul>
           <li class="{{ Route::currentRouteNamed('supplier.dispatches') ? 'active' : '' }}"><a href="{{ route('supplier.dispatches', app()->getLocale()) }}">Dispatched</a></li>
-          <li class="{{ Route::currentRouteNamed() ? 'active' : '' }}"><a href="#">Returned</a></li>
+          <li class="{{ Route::currentRouteNamed('supplier.dispatches_returned') ? 'active' : '' }}"><a href="{{ route('supplier.dispatches_returned', app()->getLocale()) }}">Returned</a></li>
         </ul>
       </li>
 
