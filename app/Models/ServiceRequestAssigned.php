@@ -88,7 +88,7 @@ class ServiceRequestAssigned extends Model
 
     public function tech_account()
     {
-        return $this->belongsTo(Account::class, 'user_id', 'service_id' );
+        return $this->belongsTo(Account::class, 'user_id', 'service_id');
     }
 
     /**
@@ -97,25 +97,54 @@ class ServiceRequestAssigned extends Model
      * @param \Illuminate\Database\Eloquent\Builder $query
      * @return \Illuminate\Database\Eloquent\Builder
      */
-    public function scopejobAssignedSorting($query, $sortLevel, $dateFrom, $dateTo, $cses){
+    public function scopejobAssignedSorting($query, $sortLevel, $dateFrom, $dateTo, $cses)
+    {
 
-        if(!empty($cses)){
-            return $query->when($cses, function ($query, $cses){
+        if (!empty($cses)) {
+            return $query->when($cses, function ($query, $cses) {
                 $query->whereIn('user_id', $cses[0]);
             });
         }
 
-        if(!empty($dateFrom)){
-            return $query->when($dateFrom, function ($query) use ($sortLevel, $dateFrom, $dateTo){
-                if($sortLevel == 'SortType2'){
+        if (!empty($dateFrom)) {
+            return $query->when($dateFrom, function ($query) use ($sortLevel, $dateFrom, $dateTo) {
+                if ($sortLevel == 'SortType2') {
                     $query->whereBetween('job_acceptance_time', [$dateFrom, $dateTo]);
-                }elseif($sortLevel == 'SortType3'){
+                } elseif ($sortLevel == 'SortType3') {
                     $query->whereBetween('job_completed_date', [$dateFrom, $dateTo]);
                 }
             });
         }
     }
 
-    
-    
+    /**
+     * Scope a query to sort and filter service_request_assigned table
+     *
+     * @param \Illuminate\Database\Eloquent\Builder $query
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function scopeFilter($query, array $filters)
+    {
+        // Split all filter parameters from the array of filters
+        $query->when((string) $filters['sort_level'] ?? null, function ($query, $sortLevel) use ($filters) {
+            switch ($sortLevel) {
+                case 'SortType2':
+                        $query->whereBetween('job_acceptance_time', [$filters['date']['date_from'], $filters['date']['date_to']]);
+                    break;
+
+                case 'SortType3':
+                        $query->whereBetween('job_completed_date', [$filters['date']['date_from'], $filters['date']['date_to']]);
+                    break;
+
+                default:
+                    # code...
+                    break;
+            }
+        })
+        ->when((array)$filters['cse_id'] ?? null, function ($query, array $cses) {
+            $query->whereIn('user_id', $cses[0]);
+        })->when((string)$filters['job_status'] ?? null, function ($query, $job_status) {
+            // 
+        });
+    }
 }
