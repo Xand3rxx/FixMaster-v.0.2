@@ -114,7 +114,7 @@
 
 @push('scripts')
 <script src="{{ asset('assets/dashboard/assets/js/bootstrap-multiselect.js') }}"></script>
-<script src="{{ asset('assets/dashboard/assets/js/admin/sortable_search.js') }}"></script>
+{{-- <script src="{{ asset('assets/dashboard/assets/js/admin/sortable_search.js') }}"></script> --}}
 <script>
   $(document).ready(function() {
     //Initiate multiple dropdown select
