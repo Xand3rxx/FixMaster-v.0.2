@@ -448,7 +448,7 @@ Route::prefix('/cse')->group(function () {
         Route::view('/warranty-claims',    'cse.warranties.index')->name('warranty_claims');
         Route::view('/warranty-claims/details',    'cse.warranties.show', [
             'technicians'    =>  \App\Models\Role::where('slug', 'technician-artisans')->with('users')->firstOrFail(),
-            
+
         ])->name('warranty_claim_details');
 
     });

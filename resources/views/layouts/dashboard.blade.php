@@ -34,6 +34,7 @@
     <link rel="stylesheet" href="{{ asset('assets/client/css/jquery.datetimepicker.min.css') }}">
     <link rel="stylesheet" href="https://cdn.datatables.net/buttons/1.6.5/css/buttons.dataTables.min.css">
     @yield('css')
+    @yield('styles')
 
 </head>
 
