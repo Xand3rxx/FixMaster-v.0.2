@@ -126,22 +126,23 @@ class ServiceRequestAssigned extends Model
     public function scopeFilter($query, array $filters)
     {
         // Split all filter parameters from the array of filters
-        $query->when((string) $filters['sort_level'] ?? null, function ($query, $sortLevel) {
+        $query->when((string) $filters['sort_level'] ?? null, function ($query, $sortLevel) use ($filters) {
             switch ($sortLevel) {
                 case 'SortType2':
-                    # code...
+                        $query->whereBetween('job_acceptance_time', [$filters['date']['date_from'], $filters['date']['date_to']]);
                     break;
 
                 case 'SortType3':
-                    # code...
+                        $query->whereBetween('job_completed_date', [$filters['date']['date_from'], $filters['date']['date_to']]);
                     break;
 
                 default:
                     # code...
                     break;
             }
-        })->when((array)$filters['cse_id'][0] ?? null, function ($query, array $cses) {
-            $query->whereIn('user_id', $cses);
+        })
+        ->when((array)$filters['cse_id'] ?? null, function ($query, array $cses) {
+            $query->whereIn('user_id', $cses[0]);
         })->when((string)$filters['job_status'] ?? null, function ($query, $job_status) {
             // 
         });

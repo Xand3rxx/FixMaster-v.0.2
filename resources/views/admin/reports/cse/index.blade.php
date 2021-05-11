@@ -114,7 +114,7 @@
 
 @push('scripts')
 <script src="{{ asset('assets/dashboard/assets/js/bootstrap-multiselect.js') }}"></script>
-<script src="{{ asset('assets/dashboard/assets/js/admin/sortable_search.js') }}"></script>
+{{-- <script src="{{ asset('assets/dashboard/assets/js/admin/sortable_search.js') }}"></script> --}}
 <script>
   $(document).ready(function() {
     //Initiate multiple dropdown select
@@ -206,6 +206,10 @@
   function sortJobAssignedTable($sortLevel, $cseId = null, $jobStatus = null, $dateFrom = null, $dateTo = null) {
     //Get sorting route
     $route = $('#route').val();
+    const $date = {
+      "date_from": $dateFrom,
+      "date_to": $dateTo
+    }
 
     $.ajaxSetup({
       headers: {
@@ -220,8 +224,7 @@
         "sort_level": $sortLevel,
         "cse_id": $cseId,
         "job_status": $jobStatus,
-        "date_from": $dateFrom,
-        "date_to": $dateTo
+        "date": $date,
       },
       beforeSend: function() {
         $("#job-assigned-sorting").html('<div class="d-flex justify-content-center mt-4 mb-4"><span class="loadingspinner"></span></div>');

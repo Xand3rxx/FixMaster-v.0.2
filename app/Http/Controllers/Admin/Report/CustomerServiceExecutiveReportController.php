@@ -31,6 +31,7 @@ class CustomerServiceExecutiveReportController extends Controller
     {
         if ($request->ajax()) {
             (array) $filters = $request->only('cse_id', 'job_status', 'sort_level', 'date');
+            // return $filters['date']['date_from'];
             return ServiceRequestAssigned::filter($filters)->get();
 
             //Get current job assigned sorting level
