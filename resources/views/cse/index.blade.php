@@ -65,15 +65,12 @@
       </div>
 
       <div class="col-md-12 col-xl-12 mg-t-10">
-
         <div class="card-header pd-t-20 d-sm-flex align-items-start justify-content-between bd-b-0 pd-b-0">
           <div>
             <h6 class="mg-b-5">Pending Requests</h6>
             <p class="tx-13 tx-color-03 mg-b-0">This table displays a list of all <strong>Available Pending Request </strong> </p>
           </div>
-
         </div><!-- card-header -->
-
         <div class="table-responsive">
           <table class="table table-hover mg-b-0" id="dashboardTable">
             <thead class="thead-primary">

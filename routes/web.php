@@ -10,6 +10,7 @@ use App\Http\Controllers\Admin\RfqController;
 use App\Http\Controllers\Admin\TaxController;
 use App\Http\Controllers\SimulationController;
 use App\Http\Controllers\Admin\PriceController;
+use App\Http\Controllers\CSE\ProfileController;
 use App\Http\Controllers\CSE\RequestController;
 use App\Http\Controllers\Admin\ReportController;
 use App\Http\Controllers\Admin\StatusController;
@@ -19,10 +20,11 @@ use App\Http\Controllers\Admin\ServiceController;
 use App\Http\Controllers\Client\ClientController;
 use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\WarrantyController;
+use App\Http\Controllers\Client\PaystackController;
 use App\Http\Controllers\Admin\ActivityLogController;
+
 use App\Http\Controllers\Admin\AdminRatingController;
 use App\Http\Controllers\Admin\AdminReviewController;
-
 use App\Http\Controllers\Admin\ToolsRequestController;
 use App\Http\Controllers\Admin\ToolInventoryController;
 use App\Http\Controllers\Admin\User\SupplierController;
@@ -31,9 +33,9 @@ use App\Http\Controllers\Admin\User\FranchiseeController;
 use App\Http\Controllers\Admin\User\AdministratorController;
 use App\Http\Controllers\QualityAssurance\PaymentController;
 use App\Http\Controllers\Admin\ServiceRequestSettingController;
+
 use App\Http\Controllers\Admin\User\QualityAssuranceController;
 use App\Http\Controllers\Admin\User\TechnicianArtisanController;
-
 use App\Http\Controllers\Technician\TechnicianProfileController;
 use App\Http\Controllers\ServiceRequest\ClientDecisionController;
 use App\Http\Controllers\ServiceRequest\ProjectProgressController;
@@ -43,14 +45,12 @@ use App\Http\Controllers\Admin\User\Administrator\SummaryController;
 use App\Http\Controllers\Admin\User\CustomerServiceExecutiveController;
 use App\Http\Controllers\Supplier\RfqController as SupplierRfqController;
 use App\Http\Controllers\QualityAssurance\QualityAssuranceProfileController;
+use App\Http\Controllers\Admin\Report\CustomerServiceExecutiveReportController;
 use App\Http\Controllers\CSE\CustomerServiceExecutiveController as CseController;
+use App\Http\Controllers\Supplier\ProfileController as SupplierProfileController;
+use App\Http\Controllers\Supplier\DispatchController as SupplierDispatchController;
 use App\Http\Controllers\Admin\ServiceRequestController as RequestServiceController;
 use App\Http\Controllers\Admin\User\ClientController as AdministratorClientController;
-use App\Http\Controllers\Client\PaystackController;
-use App\Http\Controllers\Supplier\ProfileController as SupplierProfileController;
-use App\Http\Controllers\CSE\CustomerServiceExecutiveController as UserCustomerServiceExecutiveController;
-use App\Http\Controllers\Supplier\DispatchController as SupplierDispatchController;
-use App\Http\Controllers\Admin\Report\CustomerServiceExecutiveReportController;
 
 /*
 |--------------------------------------------------------------------------
@@ -325,7 +325,6 @@ Route::prefix('admin')->group(function () {
         //CSE Reporting Routes
         Route::get('/reports/client-service-executive',      [CustomerServiceExecutiveReportController::class, 'index'])->name('cse_reports');
         Route::post('/reports/client-service-executive/sorting',      [CustomerServiceExecutiveReportController::class, 'jobAssignedSorting'])->name('cse_report_first_sorting');
-
     });
 });
 
@@ -406,56 +405,50 @@ Route::prefix('/client')->middleware('monitor.clientservice.request.changes')->g
         // //Paystack Routes
         Route::get('/paystack/paystack/initiate',   [PaystackController::class, 'initiatePayment'])->name('payment.paystack-initiate');
         Route::get('/product/paystack/verify',      [PaystackController::class, 'verify'])->name('payment.paystack-verify');
-
     });
 });
 
-// Route::resource('cse', CseController::class);
+Route::prefix('cse')->name('cse.')->group(function () {
+    //All routes regarding CSE's should be in here
+    Route::get('/', [CseController::class, 'index'])->name('index'); //Take me to CSE Dashboard
+    Route::post('accept-service-request', [CseController::class, 'setJobAcceptance'])->name('accept-job');
+    Route::post('cse-availablity-request', [CseController::class, 'setAvailablity'])->name('availablity');
 
-Route::prefix('cse')->group(function () {
-    Route::name('cse.')->group(function () {
-        //All routes regarding CSE's should be in here
-        // Route::view('/',                    'cse.index');
-        Route::get('/', [UserCustomerServiceExecutiveController::class, 'index'])->name('index'); //Take me to CSE Dashboard
-        Route::post('accept-service-request', [UserCustomerServiceExecutiveController::class, 'acceptJob'])->name('accept-job');
-
-        Route::view('/messages/inbox',      'cse.messages.inbox')->name('messages.inbox');
-        Route::view('/messages/sent',       'cse.messages.sent')->name('messages.sent');
-        Route::view('/payments',            'cse.payments')->name('payments');
-        Route::resource('requests', RequestController::class);
-
-        Route::post('assign-technician', [AssignTechnicianController::class, '__invoke'])->name('assign.technician');
-        Route::post('project-progress', [ProjectProgressController::class, '__invoke'])->name('project.progress.update');
-
-        // Route::view('/requests',            'cse.requests')->name('requests');
-
-        Route::view(
-            '/request/details',
-            'cse.request_details',
-            [
-                // 'tools' => \App\Models\ToolInventory::all(),
-                // 'ongoingSubStatuses' => \App\Models\SubStatus::where('status_id', 2)->get(['id', 'name']),
-                // 'warranties' => \App\Models\Warranty::all(),
-            ]
-        )->name('request_details');
-        //        Route::view('/profile',             'cse.view_profile')->name('view_profile');
-        //        Route::view('/profile/edit',        'cse.edit_profile', [
-        //             'banks' => \App\Models\Bank::all(),
-        //
-        //        ])->name('edit_profile');
-        Route::get('/profile/{cse:uuid}', [CseController::class, 'show'])->name('view_profile');
-        Route::get('/profile/edit/{cse:uuid}', [CseController::class, 'edit'])->name('edit_profile');
-        Route::patch('update-profile/{cse:uuid}', [CseController::class, 'update'])->name('update_profile');
-        Route::view('/location-request',    'cse.location_request')->name('location_request');
-        Route::post('/submit_ratings',  [CseController::class, 'user_rating'])->name('handle.ratings');
-        Route::post('/update_service_request',  [CseController::class, 'update_cse_service_rating'])->name('update_service_request');
-        Route::view('/warranty-claims',    'cse.warranties.index')->name('warranty_claims');
-        Route::view('/warranty-claims/details',    'cse.warranties.show', [
-            // 'technicians'    =>  \App\Models\Role::where('slug', 'technician-artisans')->with('users')->firstOrFail(),
-
-        ])->name('warranty_claim_details');
-
+    Route::prefix('profile')->name('profile.')->group(function () {
+        Route::get('/', [ProfileController::class, 'index'])->name('index');
+        Route::get('edit', [ProfileController::class, 'edit'])->name('edit');
+        Route::patch('edit', [ProfileController::class, 'update'])->name('update');
+        Route::post('change-password', [ProfileController::class, 'change_password'])->name('change-password');
     });
+    
+    Route::view('/messages/inbox', 'cse.messages.inbox')->name('messages.inbox');
+    Route::view('/messages/sent', 'cse.messages.sent')->name('messages.sent');
+    Route::view('/payments', 'cse.payments')->name('payments');
+    Route::resource('requests', RequestController::class);
+
+    Route::post('assign-technician', [AssignTechnicianController::class, '__invoke'])->name('assign.technician');
+    Route::post('project-progress', [ProjectProgressController::class, '__invoke'])->name('project.progress.update');
+
+
+
+
+    Route::post('/submit_ratings',  [CseController::class, 'user_rating'])->name('handle.ratings');
+    Route::post('/update_service_request',  [CseController::class, 'update_cse_service_rating'])->name('update_service_request');
+
+    Route::view('/warranty-claims',    'cse.warranties.index')->name('warranty_claims');
+    Route::view('/warranty-claims/details',    'cse.warranties.show', [
+        // 'technicians'    =>  \App\Models\Role::where('slug', 'technician-artisans')->with('users')->firstOrFail(),
+    ])->name('warranty_claim_details');
+    Route::view('/location-request',    'cse.location_request')->name('location_request');
+    Route::view(
+        '/request/details',
+        'cse.request_details',
+        [
+            // 'tools' => \App\Models\ToolInventory::all(),
+            // 'ongoingSubStatuses' => \App\Models\SubStatus::where('status_id', 2)->get(['id', 'name']),
+            // 'warranties' => \App\Models\Warranty::all(),
+        ]
+    )->name('request_details');
 });
 
 Route::prefix('/supplier')->group(function () {
@@ -482,7 +475,6 @@ Route::prefix('/supplier')->group(function () {
         Route::get('/dispatch/update/{dispatch:id}',     [SupplierDispatchController::class, 'updateDispatchStatus'])->name('update_dispatch_status');
         Route::get('/dispatch/returned',                          [SupplierDispatchController::class, 'dispatchReturned'])->name('dispatches_returned');
         Route::get('/requests-for-quote/details/image/{image:id}',            [SupplierRfqController::class, 'rfqDetailsImage'])->name('rfq_details_image');
-
     });
 });
 

@@ -36,10 +36,7 @@ class ServiceRequest extends Model
         'has_cse_rated',
         'has_client_rated'
     ];
-    /**
-     * @var mixed
-     */
-
+   
     /**
      * The attributes that should be hidden for arrays.
      *
