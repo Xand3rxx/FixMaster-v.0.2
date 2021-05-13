@@ -7,6 +7,8 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\RatingController;
 use App\Models\Account;
 use App\Models\Contact;
+use App\Models\ServiceRequest;
+use App\Models\ServiceRequestAssigned;
 use App\Models\User;
 use Illuminate\Support\Facades\Route;
 
@@ -19,12 +21,48 @@ class CustomerServiceExecutiveController extends Controller
     /**
      * Display a listing of the resource.
      *
+     * @param  \Illuminate\Http\Request  $request
+     * 
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        // dd(request()->user()->cse->job_availability, \App\Models\Cse::JOB_AVALABILITY[0]);
-        return view('cse.index');
+        $cse = ServiceRequestAssigned::where('user_id', $request->user()->id)->with('service_request')->get();
+        // Data Needed on dashboard page
+        // 1. CSE Ratings
+
+        // 2. CSE Earnings
+        // 3. Completed Jobs, Ongoing Jobs, Canceled Requests
+
+        // 4. All Available Requests
+
+        return view('cse.index', [
+            // 'earnings'
+            // 'ratings'
+            'completed' => $cse->filter(function ($each) {
+                return $each['service_request']['status_id'] == ServiceRequest::SERVICE_REQUEST_STATUSES['Completed'];
+            })->count(),
+            'canceled' => $cse->filter(function ($each) {
+                return $each['service_request']['status_id'] == ServiceRequest::SERVICE_REQUEST_STATUSES['Canceled'];
+            })->count(),
+            'ongoing' => $cse->filter(function ($each) {
+                return $each['service_request']['status_id'] == ServiceRequest::SERVICE_REQUEST_STATUSES['Ongoing'];
+            })->count(),
+            'available_requests' => ServiceRequest::where('status_id', ServiceRequest::SERVICE_REQUEST_STATUSES['Pending'])->with('service', 'address')->get()
+        ]);
+    }
+
+    /**
+     * Accept Service Request Job
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function acceptJob(Request $request)
+    {
+        $request->validate(['service_request_uuid' => 'required|uuid']);
+        $acceptedJob = new \App\Http\Controllers\ServiceRequest\JobAcceptanceController(ServiceRequest::where('uuid', $request->service_request_uuid)->firstOrFail(), $request->user());
+        return $acceptedJob->cseJobAcceptance();
     }
 
     /**
@@ -127,7 +165,7 @@ class CustomerServiceExecutiveController extends Controller
         return $ratings->handleRatings($request);
     }
 
-     /**
+    /**
      *
      *
      */

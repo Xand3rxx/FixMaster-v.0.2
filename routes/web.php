@@ -412,11 +412,13 @@ Route::prefix('/client')->middleware('monitor.clientservice.request.changes')->g
 
 // Route::resource('cse', CseController::class);
 
-Route::prefix('/cse')->group(function () {
+Route::prefix('cse')->group(function () {
     Route::name('cse.')->group(function () {
         //All routes regarding CSE's should be in here
         // Route::view('/',                    'cse.index');
         Route::get('/', [UserCustomerServiceExecutiveController::class, 'index'])->name('index'); //Take me to CSE Dashboard
+        Route::post('accept-service-request', [UserCustomerServiceExecutiveController::class, 'acceptJob'])->name('accept-job');
+
         Route::view('/messages/inbox',      'cse.messages.inbox')->name('messages.inbox');
         Route::view('/messages/sent',       'cse.messages.sent')->name('messages.sent');
         Route::view('/payments',            'cse.payments')->name('payments');
@@ -449,7 +451,7 @@ Route::prefix('/cse')->group(function () {
         Route::post('/update_service_request',  [CseController::class, 'update_cse_service_rating'])->name('update_service_request');
         Route::view('/warranty-claims',    'cse.warranties.index')->name('warranty_claims');
         Route::view('/warranty-claims/details',    'cse.warranties.show', [
-            'technicians'    =>  \App\Models\Role::where('slug', 'technician-artisans')->with('users')->firstOrFail(),
+            // 'technicians'    =>  \App\Models\Role::where('slug', 'technician-artisans')->with('users')->firstOrFail(),
 
         ])->name('warranty_claim_details');
 

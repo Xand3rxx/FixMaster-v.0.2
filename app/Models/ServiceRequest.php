@@ -11,6 +11,13 @@ class ServiceRequest extends Model
 {
     use SoftDeletes, Generator;
 
+    const SERVICE_REQUEST_STATUSES = [
+        'Pending'   => 1,
+        'Ongoing'   => 2,
+        'Canceled' => 3,
+        'Completed' => 4
+    ];
+
     protected $fillable = [
         'client_id',
         'service_id',
@@ -105,7 +112,7 @@ class ServiceRequest extends Model
      */
     public function service()
     {
-        return $this->hasOne(Service::class, 'id', 'service_id')->with('category');
+        return $this->hasOne(Service::class, 'id', 'service_id')->with('category')->withDefault();
     }
 
 
@@ -118,7 +125,7 @@ class ServiceRequest extends Model
     {
         return $this->belongsToMany(User::class, 'service_request_assigned')->with('account', 'roles', 'contact');
     }
-    
+
     public function invoice()
     {
         return $this->hasOne(Invoice::class);
@@ -130,8 +137,9 @@ class ServiceRequest extends Model
     // public function service(){
     //    return $this->hasOne(Service::class, 'id', 'service_id')->with('user');
     // }
-    public function services(){
-            return $this->hasMany(Service::class, 'id', 'service_id');
+    public function services()
+    {
+        return $this->hasMany(Service::class, 'id', 'service_id');
     }
     public function rfq()
     {
@@ -160,7 +168,8 @@ class ServiceRequest extends Model
     {
         return $this->hasOne(Account::class, 'user_id', 'client_id');
     }
-    public function address(){
+    public function address()
+    {
         return $this->belongsTo(Contact::class, 'contact_id');
     }
 
@@ -169,20 +178,21 @@ class ServiceRequest extends Model
     {
         return $this->belongsTo(Account::class);
     }
-    
+
 
     public function technicians()
     {
 
-            return $this->hasOne(Price::class, 'user_id', 'service_id')->withDefault();
+        return $this->hasOne(Price::class, 'user_id', 'service_id')->withDefault();
     }
 
 
-    public function service_request_assignee(){
-        return $this->belongsTo(ServiceRequestAssigned::class, 'id' ,'service_request_id');
+    public function service_request_assignee()
+    {
+        return $this->belongsTo(ServiceRequestAssigned::class, 'id', 'service_request_id');
     }
-     
-  
+
+
     public function clientDiscount()
     {
         return $this->belongsTo(ClientDiscount::class, 'client_id');
@@ -199,11 +209,12 @@ class ServiceRequest extends Model
     }
 
 
-    public function cse_service_request(){
+    public function cse_service_request()
+    {
         return $this->belongsTo(ServiceRequestAssigned::class, 'service_request_id')->with('users', 'client');
     }
 
-  
+
     public function payment_statuses()
     {
         return $this->belongsTo(Payment::class, 'unique_id', 'unique_id');
@@ -212,18 +223,21 @@ class ServiceRequest extends Model
 
     public function service_request_cancellation()
     {
-        return $this->belongsTo(ServiceRequestCancellation::class, 'id' ,'service_request_id');
+        return $this->belongsTo(ServiceRequestCancellation::class, 'id', 'service_request_id');
     }
 
-    public function warranty(){
+    public function warranty()
+    {
         return $this->hasOne(ServiceRequestWarranty::class, 'service_request_id');
     }
 
-    public function bookingFee(){
+    public function bookingFee()
+    {
         return $this->hasOne(Price::class, 'id', 'price_id');
     }
 
-    public function service_request_assignees(){
+    public function service_request_assignees()
+    {
 
         return $this->hasMany(ServiceRequestAssigned::class, 'service_request_id')->with('user');
     }
@@ -238,6 +252,6 @@ class ServiceRequest extends Model
     public function scopePendingRequests($query)
     {
         return $query->select('*')
-        ->where('status_id', 1);
+            ->where('status_id', 1);
     }
 }

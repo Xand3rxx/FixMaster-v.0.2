@@ -3,14 +3,6 @@
 
 @include('layouts.partials._messages')
 @section('content')
-
-<style>
-  .qa-style {
-    background-color: #E97D1F;
-    border-radius: 15px;
-  }
-</style>
-
 <div class="content-body">
   <div class="container pd-x-0">
     <div class="d-sm-flex align-items-center justify-content-between mg-b-20 mg-lg-b-25 mg-xl-b-30">
@@ -29,29 +21,30 @@
         <div class="card">
           <div class="form-row">
             <div class="col-md-6">
-          <div class="card-header pd-t-20 pd-b-0 bd-b-0">
-            <h6 class="lh-5 mg-b-5">Overall Rating</h6>
-            <p class="tx-12 tx-color-03 mg-b-0">Ratings is based on 152 total votes by Customer reviews on the quality of service provided by you.</p>
+              <div class="card-header pd-t-20 pd-b-0 bd-b-0">
+                <h6 class="lh-5 mg-b-5">Overall Rating</h6>
+                <p class="tx-12 tx-color-03 mg-b-0">Ratings is based on 152 total votes by Customer reviews on the quality of service provided by you.</p>
 
-          </div><!-- card-header -->
-          
+              </div><!-- card-header -->
+
               <div class="card-body pd-0">
                 <div class="pd-t-10 pd-b-15 pd-x-20 d-flex align-items-baseline">
                   <h1 class="tx-normal tx-rubik mg-b-0 mg-r-5">4</h1>
                   <div class="tx-18">
-                      <i class="icon ion-md-star lh-0 tx-orange"></i>
-                      <i class="icon ion-md-star lh-0 tx-orange"></i>
-                      <i class="icon ion-md-star lh-0 tx-orange"></i>
-                      <i class="icon ion-md-star lh-0 tx-orange"></i>
-                      <i class="icon ion-md-star lh-0 tx-gray-300"></i>
+                    <i class="icon ion-md-star lh-0 tx-orange"></i>
+                    <i class="icon ion-md-star lh-0 tx-orange"></i>
+                    <i class="icon ion-md-star lh-0 tx-orange"></i>
+                    <i class="icon ion-md-star lh-0 tx-orange"></i>
+                    <i class="icon ion-md-star lh-0 tx-gray-300"></i>
                   </div>
                 </div>
-                
+
               </div><!-- card-body -->
             </div>
             <div class="col-md-6">
               <div class="card-body pd-t-10 pd-b-15 pd-x-20 mt-2">
-                <h6 class="lh-5 mg-b-5">Your current Earnings is:<h1 class="tx-normal tx-rubik mg-b-0 mg-r-5"> ₦20,000 </h1> </h6>
+                <h6 class="lh-5 mg-b-5">Your current Earnings is:<h1 class="tx-normal tx-rubik mg-b-0 mg-r-5"> ₦20,000 </h1>
+                </h6>
               </div>
             </div>
           </div>
@@ -63,9 +56,9 @@
         <div class="card">
           <div class="card-body pd-lg-25">
             <div class="row">
-              <x-card cardtitle="Completed Jobs" cardnumber="10" />
-              <x-card cardtitle="Ongoing Jobs" cardnumber="11" />
-              <x-card cardtitle="Pending Requests" cardnumber="17" />
+              <x-card cardtitle="Completed Jobs" :cardnumber="$completed" />
+              <x-card cardtitle="Ongoing Jobs" :cardnumber="$ongoing" />
+              <x-card cardtitle="Canceled Jobs" :cardnumber="$canceled" />
             </div>
           </div>
         </div><!-- card -->
@@ -87,45 +80,37 @@
               <tr>
                 <th class="text-center">#</th>
                 <th>Job ID</th>
-                <th class="text-center">Service Category</th>
+                <th class="text-left">Service Category</th>
                 <th>Job Address </th>
                 <th class="text-center">Action</th>
               </tr>
             </thead>
             <tbody>
+              @foreach ($available_requests as $service_request)
               <tr>
-                <td class="tx-color-03 tx-center">1</td>
-                <td class="tx-medium">REF-79A722D6</td>
-                <td class="text-center tx-medium">Unavailable</td>
-                <td class="tx-medium"> 31, Freeman Street, Ikeja, Lagos. </td>
+                <td class="tx-color-03 tx-center">{{$loop->iteration}}</td>
+                <td class="tx-medium">{{$service_request['unique_id']}}</td>
+                <td class="text-left tx-medium">{{$service_request['service']['category']['name'] ?? "UNAVAILABLE"}}</td>
+                <td class="tx-medium"> {{$service_request['address']['address']}} </td>
                 <td class="tx-medium tx-center">
-                  <a href="#" class="btn btn-primary btn-sm" >Accept <i class="fas fa-check"></i></a>
+                  <a href="javascript:void(0);" data-service="{{$service_request["uuid"]}}" class="btn btn-primary btn-sm btn-accept-service-request">Accept <i class="fas fa-check"></i></a>
                 </td>
               </tr>
-
-              <tr>
-                <td class="tx-color-03 tx-center">1</td>
-                <td class="tx-medium">REF-79A722D6</td>
-                <td class="text-center tx-medium">Unavailable</td>
-                <td class="tx-medium"> 12, Admiralty Way, Ikoyi, Lagos. </td>
-                <td class="tx-medium tx-center">
-                  <a href="#" class="btn btn-primary btn-sm" >Accept <i class="fas fa-check"></i></a>
-                </td>
-              </tr>
-
+              @endforeach
             </tbody>
           </table>
         </div><!-- table-responsive -->
-
       </div>
-
-
     </div><!-- row -->
   </div><!-- container -->
 </div>
+<form id="accept-service-request-form" action="{{ route('cse.accept-job', app()->getLocale()) }}" method="POST" style="display: none;">
+  @csrf
+  <input id="accepted_service_request" type="hidden" name="service_request_uuid" value="0">
+</form>
 
 
-@section('scripts')
+@push('scripts')
 <script>
   $(document).ready(function() {
 
@@ -142,30 +127,16 @@
       "processing": true,
     });
 
-    $('#request-sorting').on('change', function() {
-      let option = $("#request-sorting").find("option:selected").val();
-
-      if (option === 'None') {
-        $('.specific-date, .sort-by-year, .date-range').addClass('d-none');
+    $('.btn-accept-service-request').on('click', function(e) {
+      e.preventDefault()
+      if (confirm('Are you sure?')) {
+        $('#accepted_service_request').val($(this).data('service'))
+        $('#accept-service-request-form').submit();
       }
-
-      if (option === 'Date') {
-        $('.specific-date').removeClass('d-none');
-        $('.sort-by-year, .date-range').addClass('d-none');
-      }
-
-      if (option === 'Month') {
-        $('.sort-by-year').removeClass('d-none');
-        $('.specific-date, .date-range').addClass('d-none');
-      }
-
-      if (option === 'Date Range') {
-        $('.date-range').removeClass('d-none');
-        $('.specific-date, .sort-by-year').addClass('d-none');
-      }
+      return false;
     });
   });
 </script>
-@endsection
+@endpush('scripts')
 
 @endsection
