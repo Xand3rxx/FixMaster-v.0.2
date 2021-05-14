@@ -3,7 +3,6 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\EstateController;
 use App\Http\Controllers\IncomeController;
-use App\Http\Controllers\RatingController;
 use App\Http\Controllers\EarningController;
 use App\Http\Controllers\InvoiceController;
 use App\Http\Controllers\Admin\RfqController;
@@ -37,7 +36,6 @@ use App\Http\Controllers\Admin\ServiceRequestSettingController;
 use App\Http\Controllers\Admin\User\QualityAssuranceController;
 use App\Http\Controllers\Admin\User\TechnicianArtisanController;
 use App\Http\Controllers\Technician\TechnicianProfileController;
-use App\Http\Controllers\ServiceRequest\ClientDecisionController;
 use App\Http\Controllers\ServiceRequest\ProjectProgressController;
 use App\Http\Controllers\QualityAssurance\ServiceRequestController;
 use App\Http\Controllers\ServiceRequest\AssignTechnicianController;
@@ -152,9 +150,9 @@ Route::prefix('admin')->group(function () {
         Route::get('/invoice/{invoice:id}', [SimulationController::class, 'invoice'])->name('invoice');
 
 
-        Route::get('/rfq',                                  [SimulationController::class, 'rfqSimulation'])->name('rfq');
-        Route::get('/rfq/details/{serviceRequest:id}',    [SimulationController::class, 'rfqDetailsSimulation'])->name('rfq_details');
-        Route::post('/rfq/ongoing/update',                  [SimulationController::class, 'simulateOngoingProcess'])->name('rfq_update');
+        // Route::get('/rfq',                                  [SimulationController::class, 'rfqSimulation'])->name('rfq');
+        // Route::get('/rfq/details/{serviceRequest:id}',    [SimulationController::class, 'rfqDetailsSimulation'])->name('rfq_details');
+        // Route::post('/rfq/ongoing/update',                  [SimulationController::class, 'simulateOngoingProcess'])->name('rfq_update');
 
         //Routes for Income Management
         Route::get('/earnings', [EarningController::class, 'index'])->name('earnings');
