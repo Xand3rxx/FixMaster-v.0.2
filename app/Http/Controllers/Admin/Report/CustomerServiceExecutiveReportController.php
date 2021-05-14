@@ -15,7 +15,9 @@ class CustomerServiceExecutiveReportController extends Controller
      */
     public function index()
     {
+        // return ServiceRequestAssigned::with('service_request', 'user')->get();
         return view('admin.reports.cse.index', [
+            'results'   => ServiceRequestAssigned::with('service_request', 'user')->get(),
             'cses'  =>  \App\Models\Role::where('slug', 'cse-user')->with('users')->firstOrFail(),
         ]);
     }
@@ -24,29 +26,33 @@ class CustomerServiceExecutiveReportController extends Controller
      * @param Request $request
      * @return \Illuminate\Http\JsonResponse
      *
-     * This is an ajax call to sort all CSE's assigned to a service request
-     * present on change of Sortung Parameter select dropdown
+     * This is an ajax call to CSE Job Assigned Report
+     * present on change of sorting parameter select dropdown
      */
     public function jobAssignedSorting($language, Request $request)
     {
         if ($request->ajax()) {
             (array) $filters = $request->only('cse_id', 'job_status', 'sort_level', 'date');
-            // return $filters['date']['date_from'];
-            return ServiceRequestAssigned::filter($filters)->get();
 
-            //Get current job assigned sorting level
-            // $sortLevel = $request->sort_level;
-            // //Get cse id's array
-            // $cses = $request->cse_id;
-            // //Get Date from
-            // $dateFrom = $request->date_from;
-            // //Get Date to
-            // $dateTo = $request->date_to;
-            // //Get Job status Id
-            // $jobStatus = $request->job_status;
-            // return $cses;
-            // return [$sortLevel, $cses, $dateFrom, $dateTo];
-            // return ServiceRequestAssigned::jobAssignedSorting($sortLevel, $dateFrom, $dateTo, $cses)->get();
+            //Assign job status ID to a variable
+            $jobStatus = $filters['job_status'];
+
+            //IF job status id is sent as a parameter search `service_requests` table
+            // if(!empty($jobStatus)){
+
+            //      return view('admin.reports.cse.tables._job_assigned', [
+            //         'results'   =>  ServiceRequestAssigned::with(['service_request', 'user'])
+            //         ->whereHas('service_request', function ($query) use ($jobStatus) { 
+            //             $query->where('status_id', $jobStatus);
+            //          })->get()
+            //     ]);
+                 
+            // }else{
+                return view('admin.reports.cse.tables._job_assigned', [
+                    'results'   =>  ServiceRequestAssigned::jobAssignedSorting($filters)->with('service_request', 'user')->get()
+                ]);
+            // }
+            
         }
     }
 }

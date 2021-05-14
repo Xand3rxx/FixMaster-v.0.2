@@ -31,11 +31,13 @@
                 <div class="dropdown-file">
                     <a href="" class="dropdown-link" data-toggle="dropdown"><i data-feather="more-vertical"></i></a>
                     <div class="dropdown-menu dropdown-menu-right">
-                        <a href="#editService" data-toggle="modal" id="service-edit" title="Edit {{ $subStatus->name }}" data-url="{{ route('admin.statuses.edit',[app()->getLocale(), $subStatus->uuid] ) }}" data-service-name="{{ $subStatus->name }}" data-id="{{ $subStatus->uuid }}" class="dropdown-item details text-info"><i class="far fa-edit"></i> Edit</a>
+                        @if($subStatus->recurrence == 'Yes' )
+                            <a href="#editService" data-toggle="modal" id="service-edit" title="Edit {{ $subStatus->name }}" data-url="{{ route('admin.statuses.edit',[app()->getLocale(), $subStatus->uuid] ) }}" data-service-name="{{ $subStatus->name }}" data-id="{{ $subStatus->uuid }}" class="dropdown-item details text-info"><i class="far fa-edit"></i> Edit</a>
+                        @endif
                         @if($subStatus->status == 'active' )
-                        <a data-url="{{ route('admin.statuses.deactivate',[app()->getLocale(), $subStatus->uuid] ) }}" class="dropdown-item details text-warning deactivate-entity" title="Deactivate {{ $subStatus->name}}" style="cursor: pointer;"><i class="fas fa-ban"></i> Deactivate</a>
+                            <a data-url="{{ route('admin.statuses.deactivate',[app()->getLocale(), $subStatus->uuid] ) }}" class="dropdown-item details text-warning deactivate-entity" title="Deactivate {{ $subStatus->name}}" style="cursor: pointer;"><i class="fas fa-ban"></i> Deactivate</a>
                         @else
-                        <a href="{{ route('admin.statuses.reinstate', ['status'=>$subStatus->uuid, 'locale'=>app()->getLocale()]) }}" class="dropdown-item details text-success" title="Reinstate {{ $subStatus->name}}"><i class="fas fa-undo"></i> Reinstate</a>
+                            <a href="{{ route('admin.statuses.reinstate', ['status'=>$subStatus->uuid, 'locale'=>app()->getLocale()]) }}" class="dropdown-item details text-success" title="Reinstate {{ $subStatus->name}}"><i class="fas fa-undo"></i> Reinstate</a>
                         @endif
                         <a data-url="{{ route('admin.statuses.delete', [app()->getLocale(), $subStatus->uuid] ) }}" class="dropdown-item delete-entity text-danger" title="Delete {{ $subStatus->name}}" style="cursor: pointer;"><i class="fas fa-trash"></i> Delete</a>
                     </div>
