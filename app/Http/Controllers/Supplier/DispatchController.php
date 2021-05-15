@@ -26,10 +26,25 @@ class DispatchController extends Controller
         // return RfqSupplierDispatch::where('supplier_id', Auth::id())->with('rfq', 'supplierInvoice')->get();
 
         return view('supplier.materials.index', [
-            'dispatches'    =>  RfqSupplierDispatch::where('supplier_id', Auth::id())->with('rfq')->get()
+            'dispatches'    =>  RfqSupplierDispatch::where('supplier_id', Auth::id())->with('rfq')->orderBy('created_at', 'DESC')->get()
         ]);
     }
 
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function dispatchReturned()
+    {
+        // return RfqSupplierDispatch::where('supplier_id', Auth::id())->with('rfq', 'supplierInvoice')->get();
+
+        return view('supplier.materials.returned', [
+            'dispatches'    =>  RfqSupplierDispatch::where('supplier_id', Auth::id())->where('cse_status', 'No')->with('rfq')->get()
+        ]);
+    }
+
+    
     /**
      * Show the form for generating a new unique string.
      * 

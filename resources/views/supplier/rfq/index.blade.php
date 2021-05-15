@@ -1,5 +1,5 @@
 @extends('layouts.dashboard')
-@section('title', 'RFQ')
+@section('title', 'Supplier Requests For Qoute')
 @include('layouts.partials._messages')
 @section('content')
 
@@ -10,11 +10,11 @@
         <nav aria-label="breadcrumb">
           <ol class="breadcrumb breadcrumb-style1 mg-b-10">
           <li class="breadcrumb-item"><a href="{{ route('admin.index', app()->getLocale()) }}">Dashboard</a></li>
-            <li class="breadcrumb-item active" aria-current="page">RFQ</li>
-            <li class="breadcrumb-item active" aria-current="page">New Quotes</li>
+            {{-- <li class="breadcrumb-item active" aria-current="page">RFQ's</li> --}}
+            <li class="breadcrumb-item active" aria-current="page">New RFQ's</li>
           </ol>
         </nav>
-        <h4 class="mg-b-0 tx-spacing--1">New Request for Quotation(RFQ) </h4>
+        <h4 class="mg-b-0 tx-spacing--1">New Requests for Quotation(RFQ) </h4>
       </div>
     </div>
 
