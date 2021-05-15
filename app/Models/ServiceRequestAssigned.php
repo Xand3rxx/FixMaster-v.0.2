@@ -9,15 +9,16 @@ class ServiceRequestAssigned extends Model
 {
     protected $table = 'service_request_assigned';
 
+    const JOB_ACCEPTED = ['Yes', 'No'];
+    const STATUS = ['Active', 'Inactive'];
+
     /**
-     * The attributes that are mass assignable.
+     * The attributes that aren't mass assignable.
      *
      * @var array
      */
-    protected $fillable = [
-        'user_id', 'service_request_id', 'job_accepted', 'job_acceptance_time', 'job_diagnostic_date', 'job_declined_time', 'job_completed_date'
-    ];
-
+    protected $guarded = ['deleted_at', 'created_at', 'updated_at'];
+    
     /**
      * Get the authenticated user assigned to the request
      */
@@ -47,7 +48,7 @@ class ServiceRequestAssigned extends Model
      * 
      * @return \App\Models\ServiceRequestAssigned|Null
      */
-    public static function assignUserOnServiceRequest(int $user_id, int $service_request_id, string $job_accepted = null, string $job_acceptance_time = null, string $job_diagnostic_date = null, string $job_declined_time = null, string $job_completed_date = null)
+    public static function assignUserOnServiceRequest(int $user_id, int $service_request_id, string $job_accepted = null, string $job_acceptance_time = null, string $status = null, string $job_diagnostic_date = null, string $job_declined_time = null, string $job_completed_date = null)
     {
         return ServiceRequestAssigned::create([
             'user_id'                   => $user_id,
@@ -56,7 +57,8 @@ class ServiceRequestAssigned extends Model
             'job_acceptance_time '      => $job_acceptance_time,
             'job_diagnostic_date'       => $job_diagnostic_date,
             'job_declined_time'         => $job_declined_time,
-            'job_completed_date'        => $job_completed_date
+            'job_completed_date'        => $job_completed_date,
+            'status'                    => $status
         ]);
     }
 

@@ -46,7 +46,7 @@ class AppServiceProvider extends ServiceProvider
 
         view()->composer('layouts.partials._cse_sidebar', function ($view) {
             $view->with([
-                'cse_availability' => (auth()->user()->cse->job_availability == \App\Models\Cse::JOB_AVALABILITY[0]) ? 'AVALIABLE' : 'UNAVALIABLE',
+                'cse_availability' => \App\Models\CSE::isAvailable() ? ['Available', 'checked'] : ['Unavailable', ''],
             ]);
         });
 

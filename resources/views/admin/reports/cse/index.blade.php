@@ -120,7 +120,6 @@
     //Initiate multiple dropdown select
     $('.selectpicker').selectpicker();
 
-
     $('#sorting-parameters').on('change', function() {
       let option = $("#sorting-parameters").find("option:selected").val();
       switch (option) {
