@@ -113,7 +113,7 @@ class ServiceRequestAssigned extends Model
                     break;
 
                 default:
-                    # code...
+                        $query->latest('created_at');
                     break;
             }
         })->when((array)$filters['cse_id'] ?? null, function ($query, array $cses) {
@@ -122,7 +122,6 @@ class ServiceRequestAssigned extends Model
             $query->whereHas('service_request', function ($query) use ($filters) { 
                 $query->where('status_id', $filters['job_status']);
              });
-
         });
     }
 }

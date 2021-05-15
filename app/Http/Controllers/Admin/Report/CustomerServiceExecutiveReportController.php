@@ -34,24 +34,9 @@ class CustomerServiceExecutiveReportController extends Controller
         if ($request->ajax()) {
             (array) $filters = $request->only('cse_id', 'job_status', 'sort_level', 'date');
 
-            //Assign job status ID to a variable
-            $jobStatus = $filters['job_status'];
-
-            //IF job status id is sent as a parameter search `service_requests` table
-            // if(!empty($jobStatus)){
-
-            //      return view('admin.reports.cse.tables._job_assigned', [
-            //         'results'   =>  ServiceRequestAssigned::with(['service_request', 'user'])
-            //         ->whereHas('service_request', function ($query) use ($jobStatus) { 
-            //             $query->where('status_id', $jobStatus);
-            //          })->get()
-            //     ]);
-                 
-            // }else{
-                return view('admin.reports.cse.tables._job_assigned', [
-                    'results'   =>  ServiceRequestAssigned::jobAssignedSorting($filters)->with('service_request', 'user')->get()
-                ]);
-            // }
+            return view('admin.reports.cse.tables._job_assigned', [
+                'results'   =>  ServiceRequestAssigned::jobAssignedSorting($filters)->with('service_request', 'user')->get()
+            ]);
             
         }
     }
