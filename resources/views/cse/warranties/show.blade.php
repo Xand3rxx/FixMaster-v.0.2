@@ -11,8 +11,8 @@
                 <nav aria-label="breadcrumb">
                     <ol class="breadcrumb breadcrumb-style1 mg-b-10">
                         <li class="breadcrumb-item"><a href="{{ route('cse.index', app()->getLocale()) }}">Dashboard</a></li>
-                        <li class="breadcrumb-item"><a href="{{ route('cse.requests.index', app()->getLocale()) }}">Requests</a></li>
-                        <li class="breadcrumb-item active" aria-current="page">Request Details</li>
+                        <li class="breadcrumb-item"><a href="{{ route('cse.warranty_claims', app()->getLocale()) }}">Warranty Claims</a></li>
+                        <li class="breadcrumb-item active" aria-current="page">Warranty Claim Details</li>
                     </ol>
                 </nav>
                 <h4 class="mg-b-0 tx-spacing--1">Job: REF-234234723</h4>

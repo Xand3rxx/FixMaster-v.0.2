@@ -26,7 +26,7 @@ Auth::routes([
     'logout'   => true,
     'reset'    => false,   // for resetting passwords
     'confirm'  => false,  // for additional password confirmations
-    'verify'   => true,  // for email verification
+    'verify'   => false,  // for email verification
 ]);
 
 Route::post('/email/verification-notification', function (\Illuminate\Http\Request $request) {

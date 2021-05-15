@@ -46,7 +46,7 @@
                     <div class="form-group">
                       <label>Sorting Parameters</label>
                       <select class="custom-select" id="sorting-parameters">
-                        <option value="None">Select...</option>
+                        <option value="" disabled selected>Select...</option>
                         <option value="SortType1">CSE List</option>
                         <option value="SortType2">Job Acceptance Date</option>
                         <option value="SortType3">Job Completion Date</option>
@@ -104,6 +104,77 @@
             </div><!-- col -->
           </div><!-- row -->
         </div>
+
+        <div id="amount_earned" class="tab-pane pd-20 pd-xl-25">
+          <div class="row row-xs">
+            <div class="col-lg-12 col-xl-12 mg-t-10">
+              <div class="card mg-b-10">
+                <div class="d-sm-flex mg-t-10"></div>
+
+                <div class="row mt-1 mb-1 ml-1 mr-1">
+                  <div class="col-md-4">
+                    <input type="hidden" class="d-none" id="route" value="{{ route('admin.cse_report_first_sorting', app()->getLocale()) }}">
+                    <div class="form-group">
+                      <label>Sorting Parameters</label>
+                      <select class="custom-select" id="sorting-parameters">
+                        <option value="" disabled selected>Select...</option>
+                        <option value="SortType1">CSE List</option>
+                        <option value="SortType2">Job Acceptance Date</option>
+                        <option value="SortType3">Job Completion Date</option>
+                        <option value="SortType4">Job Status</option>
+                      </select>
+                    </div>
+                  </div>
+                  <div class="col-md-4 cse-list d-none">
+                    <div class="form-group position-relative">
+                      <label>{{ !empty($cses->name) ? $cses->name : 'CSE' }} List <span class="text-danger">*</span></label>
+                      <select class="form-control selectpicker" multiple id="cse-list">
+                        <option value="" disabled>Select...</option>
+                        @foreach ($cses['users'] as $cse)
+                        <option value="{{ $cse['account']['user_id'] }}">{{ !empty($cse['account']['first_name']) ? Str::title($cse['account']['first_name'] ." ". $cse['account']['last_name']) : 'UNAVAILABLE' }}</option>
+                        @endforeach
+                      </select>
+                    </div>
+                  </div>
+
+                  <div class="col-md-4 date-range d-none">
+                    <div class="form-group position-relative">
+                      <label>From <span class="text-danger">*</span></label>
+                      <input name=date_from" id="date-from" type="date" class="form-control pl-5">
+                    </div>
+                  </div>
+
+                  <div class="col-md-4 date-range d-none">
+                    <div class="form-group position-relative">
+                      <label>To <span class="text-danger">*</span></label>
+                      <input name="date_to" id="date-to" type="date" class="form-control pl-5" max="{{ Carbon\Carbon::now('UTC') }}">
+                    </div>
+                  </div>
+
+                  <div class="col-md-4 job-status d-none">
+                    <div class="form-group position-relative">
+                      <label>Job Status <span class="text-danger">*</span></label>
+                      <select class="form-control" name="job_status" id="job-status">
+                        <option value="">Select...</option>
+                        <option value="1">Pending</option>
+                        <option value="2">Ongoing</option>
+                        <option value="3">Cancelled</option>
+                        <option value="4">Completed</option>
+                      </select>
+                    </div>
+                  </div>
+
+                </div>
+
+                <div class=" table-responsive">
+                  <div id="job-assigned-sorting">
+                    @include('admin.reports.cse.tables._amount_earned')
+                  </div>
+                </div><!-- table-responsive -->
+              </div><!-- card -->
+            </div><!-- col -->
+          </div><!-- row -->
+        </div>
       </div>
     </div>
   </div>
@@ -119,7 +190,6 @@
   $(document).ready(function() {
     //Initiate multiple dropdown select
     $('.selectpicker').selectpicker();
-
 
     $('#sorting-parameters').on('change', function() {
       let option = $("#sorting-parameters").find("option:selected").val();

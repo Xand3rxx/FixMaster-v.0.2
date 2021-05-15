@@ -8,11 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class ServiceRequestProgress extends Model
 {
     protected $table = 'service_request_progresses';
-
-    protected $fillable = [
-        'user_id', 'service_request_id', 'status_id', 'sub_status_id'
-    ];
-
+    
     /**
      * The attributes that aren't mass assignable.
      *
@@ -53,6 +49,6 @@ class ServiceRequestProgress extends Model
      */
     public function substatus()
     {
-        return $this->hasOne(SubStatus::class,'id', 'sub_status_id');
+        return $this->hasOne(SubStatus::class, 'id', 'sub_status_id');
     }
 }

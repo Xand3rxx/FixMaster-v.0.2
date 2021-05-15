@@ -2,7 +2,6 @@
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 
 <head>
-
     <!-- Required meta tags -->
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -82,7 +81,7 @@
         }
 
     </style>
-<input type="hidden" id="path_admin" value="{{url('/')}}">
+    <input type="hidden" id="path_admin" value="{{url('/')}}">
     @include('layouts.partials._dashboard_sidebar')
 
     <div class="content ht-100v pd-0">
@@ -95,7 +94,8 @@
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
-                        <h4 class="text-center unique"></h4><hr>
+                        <h4 class="text-center unique"></h4>
+                        <hr>
                         <form action="{{ route('cse.handle.ratings', app()->getLocale()) }}" method="POST">
                             @csrf
                             <div class="row">
@@ -183,7 +183,7 @@
                                 </div>
                             </div>`;
         $('#ratings_users').append(ratings_row);
-        $('.unique').append('SERVICE REQUEST UNIQUEID - ' +uniqueId);
+        $('.unique').append('SERVICE REQUEST UNIQUEID - ' + uniqueId);
         // end of client
         $.each(data, function(key, user) {
             //console.log(key);
@@ -223,12 +223,12 @@
 
         $(".btn-danger").on('click', function() {
             Swal.fire({
-                title: 'Are you sure you want to skip this rating?',
-                icon: 'warning',
-                showCancelButton: true,
-                confirmButtonColor: '#3085d6',
-                cancelButtonColor: '#d33',
-                confirmButtonText: 'Yes'
+                title: 'Are you sure you want to skip this rating?'
+                , icon: 'warning'
+                , showCancelButton: true
+                , confirmButtonColor: '#3085d6'
+                , cancelButtonColor: '#d33'
+                , confirmButtonText: 'Yes'
             }).then((result) => {
                 if (result.isConfirmed) {
                     Swal.fire(
@@ -241,9 +241,9 @@
                         }
                     });
                     $.ajax({
-                        url: "{{ route('cse.update_service_request', app()->getLocale()) }}",
-                        method: 'POST',
-                        data: {
+                        url: "{{ route('cse.update_service_request', app()->getLocale()) }}"
+                        , method: 'POST'
+                        , data: {
                             "id": serviceRequestId
                         },
                         // return the result
@@ -260,6 +260,7 @@
                 }
             });
         });
+
     </script>
     @endif
 
