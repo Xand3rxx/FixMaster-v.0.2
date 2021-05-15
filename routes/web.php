@@ -51,6 +51,8 @@ use App\Http\Controllers\Supplier\ProfileController as SupplierProfileController
 use App\Http\Controllers\CSE\CustomerServiceExecutiveController as UserCustomerServiceExecutiveController;
 use App\Http\Controllers\Supplier\DispatchController as SupplierDispatchController;
 use App\Http\Controllers\Admin\Report\CustomerServiceExecutiveReportController;
+use App\Http\Controllers\Admin\Report\SupplierReportController;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -324,6 +326,8 @@ Route::prefix('admin')->group(function () {
         Route::get('/reports/client-service-executive',      [CustomerServiceExecutiveReportController::class, 'index'])->name('cse_reports');
         Route::post('/reports/client-service-executive/sorting',      [CustomerServiceExecutiveReportController::class, 'jobAssignedSorting'])->name('cse_report_first_sorting');
 
+        Route::get('/reports/supplier',             [SupplierReportController::class, 'index'])->name('supplier_reports');
+
     });
 });
 
@@ -448,7 +452,7 @@ Route::prefix('/cse')->group(function () {
         Route::view('/warranty-claims',    'cse.warranties.index')->name('warranty_claims');
         Route::view('/warranty-claims/details',    'cse.warranties.show', [
             'technicians'    =>  \App\Models\Role::where('slug', 'technician-artisans')->with('users')->firstOrFail(),
-            
+
         ])->name('warranty_claim_details');
 
     });
