@@ -16,7 +16,6 @@
     <tbody>
       @php $sn = 1; @endphp
       @foreach ($payments as $result)
-
         <tr>
         <td class="tx-color-03 tx-center">{{ $sn++ }}</td>
         <td class="tx-medium">{{$result->service_request->unique_id}}</td>
@@ -26,7 +25,7 @@
           <td class="tx-medium">{{$result->mode->name}}</td>
           <td class="tx-medium">{{$result->comment}}</td>
           <td class="text-medium tx-center">{{ Carbon\Carbon::parse($result->created_at, 'UTC')->isoFormat('MMMM Do YYYY, h:mm:ssa') }}</td>
-          <td class="tx-medium"><button class="btn btn-sm" style="background-color: #E97D1F; color:#fff">Details</button></td>
+          <td><a href="#" data-toggle="modal" data-target="#transactionDetails" data-payment-ref="{{ $result->unique_id }}" data-url="{{ route('quality-assurance.payment_details', ['payment' => $result->id, 'locale' => app()->getLocale()]) }}" id="payment-details" class="btn btn-primary btn-sm ">Details</a></td>
         </tr>
       @endforeach
     </tbody>

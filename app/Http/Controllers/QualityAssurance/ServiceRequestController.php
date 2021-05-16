@@ -2,11 +2,12 @@
 
 namespace App\Http\Controllers\QualityAssurance;
 
-use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use App\Models\ServiceRequest;
+use App\Models\PaymentDisbursed;
+use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use App\Models\ServiceRequestAssigned;
-use App\Models\ServiceRequest;
 
 class ServiceRequestController extends Controller
 {
@@ -17,9 +18,43 @@ class ServiceRequestController extends Controller
      */
     public function index(Request $request)
     {
-        $allRequests = ServiceRequestAssigned::where('user_id', Auth::id())->get();
+        $completedJobs = ServiceRequestAssigned::whereHas('service_request',function ($query) {
+            $query->where('status_id', 4);
+        })
+        ->where('user_id', Auth::id())
+        ->where('assistive_role', 'Technician')
+        ->get()->count();
 
-        return view('quality-assurance.index', compact('allRequests'));
+        $ongoingJobs = ServiceRequestAssigned::whereHas('service_request',function ($query) {
+            $query->where('status_id', 2);
+        })
+        ->where('user_id', Auth::id())
+        ->where('assistive_role', 'Technician')
+        ->get()->count();
+
+        $ongoingConsultations = ServiceRequestAssigned::whereHas('service_request',function ($query) {
+            $query->where('status_id', 2);
+        })
+        ->where('user_id', Auth::id())
+        ->where('assistive_role', 'Consultant')
+        ->get()->count();
+
+        $pendingConsultations = ServiceRequestAssigned::whereHas('service_request',function ($query) {
+            $query->where('status_id', 1);
+        })
+        ->where('user_id', Auth::id())
+        ->where('assistive_role', 'Consultant')->get();
+
+        $completedConsultations = ServiceRequestAssigned::whereHas('service_request',function ($query) {
+            $query->where('status_id', 4);
+        })
+        ->where('user_id', Auth::id())
+        ->where('assistive_role', 'Consultant')
+        ->get()->count();
+
+        $QApayments = PaymentDisbursed::where('recipient_id',Auth::id())->get()->sum('amount');
+
+        return view('quality-assurance.index', compact('completedJobs', 'ongoingJobs','ongoingConsultations','pendingConsultations','completedConsultations','QApayments'));
     }
 
 
@@ -33,7 +68,6 @@ class ServiceRequestController extends Controller
     {
         $results = ServiceRequestAssigned::where('user_id', Auth::id())->with('users', 'service_request')
                  ->orderBy('created_at', 'DESC')->get();
-                //  dd($results);
         return view('quality-assurance.requests', compact('results'));
     }
 
@@ -61,11 +95,97 @@ class ServiceRequestController extends Controller
      */
     public function show($language, $uuid)
     {
+        $result = ServiceRequest::where('uuid', $uuid)->first();
+        $sRequest = ServiceRequestAssigned::where('user_id', Auth::id())
+        ->where('service_request_id', $result->id)->first();
 
-        $result = ServiceRequest::where('uuid', $uuid)
-                  ->orderBy('created_at', 'DESC')->first();
+        // return view('quality-assurance.request_details', compact('result'));
+        return view('quality-assurance.consultations.pending_details', compact('result', 'sRequest'));
+    }
 
-        return view('quality-assurance.request_details', compact('result'));
+    public function acceptedJobDetails($language, $uuid){
+        $output = ServiceRequest::where('uuid', $uuid)->first();
+         $activeDetails = ServiceRequestAssigned::where('user_id', Auth::id())
+        ->where('service_request_id', $output->id)->first();
+        return view('quality-assurance.requests.active_details', compact('activeDetails'));
+    }
+
+    public function QaJobAccept($language, $uuid){
+        $request = ServiceRequest::where('uuid', $uuid)->first();
+        ServiceRequestAssigned::where('user_id', Auth::id())->where('service_request_id', $request->id)->update([
+            'qa_job_accepted' => 'Yes',
+            'qa_job_acceptance_time' => now()
+        ]);
+
+        return redirect()->back()->with('success', 'Job Accepted');
+    }
+
+    public function getActiveJobs(Request $request){
+
+        $activeJobs = ServiceRequestAssigned::whereHas('service_request', function ($query) {
+            $query->where('status_id', 2);
+        })
+        ->where('user_id', Auth::id())
+        ->where('assistive_role', 'Technician')
+        ->get();
+        return view('quality-assurance.requests.active', compact('activeJobs'));
+    }
+
+    public function getCompletedJobs(Request $request){
+
+        $completedJobs = ServiceRequestAssigned::whereHas('service_request', function ($query) {
+            $query->where('status_id', 4);
+        })
+        ->where('user_id', Auth::id())
+        ->where('assistive_role', 'Technician')
+        ->get();
+        return view('quality-assurance.requests.completed', compact('completedJobs'));
+    }
+
+    public function getCancelledJobs(Request $request){
+
+        $cancelledJobs = ServiceRequestAssigned::whereHas('service_request', function ($query) {
+            $query->where('status_id', 3);
+        })
+        ->where('user_id', Auth::id())
+        ->where('assistive_role', 'Technician')
+        ->get();
+        return view('quality-assurance.requests.cancelled', compact('cancelledJobs'));
+    }
+
+    public function getPendingConsultations(Request $request){
+        $pendingConsults = ServiceRequestAssigned::whereHas('service_request',function ($query) {
+            $query->where('status_id', 1);
+        })
+        ->where('user_id', Auth::id())
+        ->where('assistive_role', 'Consultant')->get();
+        return view('quality-assurance.consultations.pending', compact('pendingConsults'));
+    }
+
+    public function getOngoingConsultationDetails($language, $uuid)
+    {
+        $result = ServiceRequest::where('uuid', $uuid)->first();
+        $output = ServiceRequestAssigned::where('user_id', Auth::id())
+        ->where('service_request_id', $result->id)->first();
+        return view('quality-assurance.consultations.ongoing_details', compact('output'));
+    }
+
+    public function getOngoingConsultations(Request $request){
+        $ongoingConsults = ServiceRequestAssigned::whereHas('service_request',function ($query) {
+            $query->where('status_id', 2);
+        })
+        ->where('user_id', Auth::id())
+        ->where('assistive_role', 'Consultant')->get();
+        return view('quality-assurance.consultations.ongoing', compact('ongoingConsults'));
+    }
+
+    public function getCompletedConsultations(Request $request){
+        $completedConsults = ServiceRequestAssigned::whereHas('service_request',function ($query) {
+            $query->where('status_id', 4);
+        })
+        ->where('user_id', Auth::id())
+        ->where('assistive_role', 'Consultant')->get();
+        return view('quality-assurance.consultations.completed', compact('completedConsults'));
     }
 
     /**

@@ -448,7 +448,7 @@ Route::prefix('/cse')->group(function () {
         Route::view('/warranty-claims',    'cse.warranties.index')->name('warranty_claims');
         Route::view('/warranty-claims/details',    'cse.warranties.show', [
             'technicians'    =>  \App\Models\Role::where('slug', 'technician-artisans')->with('users')->firstOrFail(),
-            
+
         ])->name('warranty_claim_details');
 
     });
@@ -510,19 +510,25 @@ Route::prefix('/quality-assurance')->group(function () {
         Route::patch('/update_password', [QualityAssuranceProfileController::class, 'update_password'])->name('update_password');
         Route::get('/requests', [ServiceRequestController::class, 'get_requests'])->name('requests');
         Route::get('/payments', [PaymentController::class, 'get_qa_disbursed_payments'])->name('payments');
+        Route::get('payment_details/{payment:id}',   [PaymentController::class, 'paymentDetails'])->name('payment_details');
+
+        Route::get('/accept_job/{uuid}',  [ServiceRequestController::class, 'QaJobAccept'])->name('accept_job');
         Route::view('/messages/sent', 'quality-assurance.messages.sent')->name('messages.sent');
         Route::view('/messages/inbox', 'quality-assurance.messages.inbox')->name('messages.inbox');
-        Route::view('/requests/active', 'quality-assurance.requests.active')->name('requests.active');
-        Route::view('/requests/completed', 'quality-assurance.requests.completed')->name('requests.completed');
+        Route::get('/requests/active', [ServiceRequestController::class, 'getActiveJobs'])->name('requests.active');
+        Route::get('/requests/completed', [ServiceRequestController::class, 'getCompletedJobs'])->name('requests.completed');
+        Route::get('/requests/cancelled', [ServiceRequestController::class, 'getCancelledJobs'])->name('requests.cancelled');
+        Route::get('/requests/active_details/{uuid}', [ServiceRequestController::class, 'acceptedJobDetails'])->name('requests.active_details');
         Route::view('/requests/warranty_claim', 'quality-assurance.requests.warranty_claim')->name('requests.warranty_claim');
-        Route::view('/consultations/pending', 'quality-assurance.consultations.pending')->name('consultations.pending');
-        Route::view('/consultations/pending_details', 'quality-assurance.consultations.pending_details')->name('consultations.pending_details');
-        Route::view('/consultations/ongoing', 'quality-assurance.consultations.ongoing')->name('consultations.ongoing');
-        Route::view('/consultations/completed', 'quality-assurance.consultations.completed')->name('consultations.completed');
-        Route::view('/requests/cancelled', 'quality-assurance.requests.cancelled')->name('requests.cancelled');
+        Route::view('/requests/warranty_claim_details', 'quality-assurance.requests.warranty_claim_details')->name('requests.warranty_claim_details');
+        Route::get('/consultations/pending', [ServiceRequestController::class, 'getPendingConsultations'])->name('consultations.pending');
+        Route::get('/consultations/ongoing', [ServiceRequestController::class, 'getOngoingConsultations'])->name('consultations.ongoing');
+        Route::get('/consultations/ongoing_details/{uuid}', [ServiceRequestController::class, 'getOngoingConsultationDetails'])->name('consultations.ongoing_details');
+        Route::get('/consultations/completed', [ServiceRequestController::class, 'getCompletedConsultations'])->name('consultations.completed');
         Route::post('/disbursed_payments_sorting', [PaymentController::class, 'sortDisbursedPayments'])->name('disbursed_payments_sorting');
         Route::get('/get_chart_data', [ServiceRequestController::class, 'chat_data']);
-        Route::get('/requests/details/{uuid}',  [ServiceRequestController::class, 'show'])->name('request_details');
+        //Route::get('/requests/details/{uuid}',  [ServiceRequestController::class, 'show'])->name('request_details');
+        Route::get('/consultations/pending_details/{uuid}',  [ServiceRequestController::class, 'show'])->name('consultations.pending_details');
     });
 });
 

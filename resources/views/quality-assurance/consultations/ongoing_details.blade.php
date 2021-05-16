@@ -11,12 +11,12 @@
           <ol class="breadcrumb breadcrumb-style1 mg-b-10">
           <li class="breadcrumb-item"><a href="{{ route('quality-assurance.index',app()->getLocale()) }}">Dashboard</a></li>
           <li class="breadcrumb-item" aria-current="page">Consultation</li>
-            <li class="breadcrumb-item" aria-current="page">Pending</li>
+            <li class="breadcrumb-item" aria-current="page">Ongoing</li>
             <li class="breadcrumb-item active" aria-current="page">details</li>
           </ol>
 
         </nav>
-        <h4 class="mg-b-0 tx-spacing--1">Pending Consultation</h4>
+        <h4 class="mg-b-0 tx-spacing--1">Ongoing Consultation</h4>
       </div>
     </div>
 
@@ -29,35 +29,32 @@
             </div>
 
             <div class="col-md-3">
-                @if($sRequest->qa_job_accepted == null)
-                <a href="{{ route('quality-assurance.accept_job', [$result->uuid, 'locale' => app()->getLocale()]) }}" class="btn btn-primary btn-icon">Accept</a>
-                @else
-                <a href="javascript:void(0)" class="btn btn-primary btn-icon">Accepted</a>
-                @endif
-                <a href="#" class="btn btn-primary btn-icon">Go Back</a>
+
+                <a href="tel:08173682832" class="btn btn-primary btn-icon"><i class="fas fa-phone"></i> Call CSE</a> <button class="btn btn-sm" style="background-color: #E97D1F; color:#fff;">Go Back</button>
             </div>
         </div>
         <div class="divider-text">Service Request Description</div>
 <br>
-        <table class="table table-striped table-sm mg-b-0">
-            <tbody>
-              <tr>
-                <td class="">Job Reference</td>
-                <td class="">{{$result->unique_id}}</td>
-              </tr>
-              <tr>
-                <td class="">Service Required</td>
-                <td class="">{{$result->service->category->name}} ({{$result->service->name}})</td>
-              </tr>
-              <tr>
-                <td class="">Service Description</td>
-                <td class="">{{$result->service->description}}</td>
-              </tr>
-            </tbody>
-          </table>
+<table class="table table-striped table-sm mg-b-0">
+    <tbody>
+      <tr>
+        <td class="">Job Reference</td>
+        <td class="">{{$output->service_request->unique_id}}</td>
+      </tr>
+      <tr>
+        <td class="">Service Required</td>
+        <td class="">{{$output->service_request->service->category->name}} ({{$output->service_request->service->name}})</td>
+      </tr>
+      <tr>
+        <td class="">Service Description</td>
+        <td class="">{{$output->service_request->service->description}}</td>
+      </tr>
+    </tbody>
+  </table>
 
           <br>
           <div class="divider-text">Service Request Media Files</div>
+
           <div class="row row-xs">
             <div class="col-6 col-sm-4 col-md-3 col-xl">
               <div class="card card-file">

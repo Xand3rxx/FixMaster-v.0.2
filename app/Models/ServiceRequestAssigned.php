@@ -36,7 +36,7 @@ class ServiceRequestAssigned extends Model
 
     /**
      * Store record of a Assigned User on the Service Request Assigned Table
-     * 
+     *
      * @param  int      $user_id
      * @param  int      $service_request_id
      * @param  string   $job_accepted
@@ -44,7 +44,7 @@ class ServiceRequestAssigned extends Model
      * @param  string   $job_diagnostic_date
      * @param  string   $job_declined_time
      * @param  string   $job_completed_date
-     * 
+     *
      * @return \App\Models\ServiceRequestAssigned|Null
      */
     public static function assignUserOnServiceRequest(int $user_id, int $service_request_id, string $job_accepted = null, string $job_acceptance_time = null, string $job_diagnostic_date = null, string $job_declined_time = null, string $job_completed_date = null)
@@ -91,5 +91,5 @@ class ServiceRequestAssigned extends Model
         return $this->belongsTo(Account::class, 'user_id', 'service_id' );
     }
 
-    
+
 }

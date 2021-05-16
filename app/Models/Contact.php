@@ -11,7 +11,7 @@ class Contact extends Model
      * The attributes that aren't mass assignable.
      *
      * @var array
-     * 
+     *
      */
     protected $guarded = ['created_at', 'updated_at'];
 
@@ -47,7 +47,7 @@ class Contact extends Model
 
     /**
      * Store Contact Information of a User
-     * 
+     *
      * @param  string   $user_id
      * @param  string   $account_id
      * @param  int      $country_id
@@ -55,7 +55,7 @@ class Contact extends Model
      * @param  string   $address
      * @param  string   $address_longitude
      * @param  string   $address_latitude
-     * 
+     *
      * @return \App\Model\Contact|Null
      */
     public static function attemptToStore(string $user_id, string $account_id, int $country_id, string $phone_number, string $address, string $address_longitude, string $address_latitude)
@@ -65,7 +65,7 @@ class Contact extends Model
 
     /**
      * Save contact details of a user
-     * 
+     *
      * @param  string   $user_id
      * @param  string   $account_id
      * @param  int      $country_id
@@ -73,7 +73,7 @@ class Contact extends Model
      * @param  string   $address
      * @param  string   $address_longitude
      * @param  string   $address_latitude
-     * 
+     *
      * @return \App\Model\Contact|Null
      */
     protected static function saveContactDetails(string $user_id, string $account_id, int $country_id, string $phone_number, string $address, string $address_longitude, string $address_latitude)
@@ -95,6 +95,16 @@ class Contact extends Model
     public function useraccount()
     {
         return $this->belongsTo(Account::class);
+    }
+
+    public function lga()
+    {
+        return $this->belongsTo(Lga::class);
+    }
+
+    public function town()
+    {
+        return $this->belongsTo(Lga::class);
     }
 
 }
