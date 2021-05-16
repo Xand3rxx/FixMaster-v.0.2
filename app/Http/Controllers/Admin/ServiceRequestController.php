@@ -2,11 +2,18 @@
 
 namespace App\Http\Controllers\Admin;
 
+use Auth;
+use Route;
+use Session;
+use Carbon\Carbon;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use App\Traits\Utility;
+use App\Traits\Loggable;
 
 class ServiceRequestController extends Controller
 {
+    use Utility, Loggable;
     /**
      * Display a listing of the resource.
      *
@@ -84,4 +91,25 @@ class ServiceRequestController extends Controller
     {
         //
     }
+
+
+    public function markCompletedRequest(Request $request, $language, $id){
+   
+        $requestExists =  \App\Models\ServiceRequest::where('uuid', $id)->firstOrFail();
+
+         $updateMarkasCompleted = $this->markCompletedRequestTrait(Auth::id(), $id);
+
+        if($updateMarkasCompleted ){
+
+            $this->log('request', 'Informational', Route::currentRouteAction(), auth()->user()->account->last_name . ' ' . auth()->user()->account->first_name  . ') marked '.$requestExists->unique_id.' service request as completed.');
+
+            return redirect()->route('admin.requests.index', app()->getLocale())->with('success', $requestExists->unique_id.' was marked as completed successfully.');
+        }else{
+           
+         //activity log
+            return back()->with('error', 'An error occurred while trying to mark '.$requestExists->unique_id.' service request as completed.');
+        }
+    }
+
+
 }
