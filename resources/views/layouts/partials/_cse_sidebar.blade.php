@@ -62,7 +62,7 @@
       <li class="nav-label">MENU</li>
       <li class="nav-item {{ Route::currentRouteNamed('cse.index') ? 'active' : '' }}"><a href="{{ route('cse.index', app()->getLocale()) }}" class="nav-link"><i data-feather="airplay"></i> <span>Dashboard</span></a></li>
       
-      <li class="nav-item with-sub {{ Route::currentRouteNamed('cse.requests.index', 'cse.request_details', 'cse.requests.show', 'cse.warranty_claims_list') ? 'active show' : '' }}">
+      <li class="nav-item with-sub {{ Route::currentRouteNamed('cse.requests.index', 'cse.request_details', 'cse.requests.show', 'cse.warranty_details','cse.warranty_claims_list') ? 'active show' : '' }}">
         <a href="" class="nav-link"><i data-feather="git-pull-request"></i> <span>Requests</span></a>
         <ul>
           <li class="{{ Route::currentRouteNamed('cse.requests.index') ? 'active' : '' }}"><a href="{{ route('cse.requests.index', app()->getLocale()) }}"> Pending </a></li>
@@ -84,7 +84,7 @@
             <li class="nav-label">MENU</li>
             <li class="nav-item {{ Route::currentRouteNamed('cse.index') ? 'active' : '' }}"><a href="{{ route('cse.index', app()->getLocale()) }}" class="nav-link"><i data-feather="airplay"></i> <span>Dashboard</span></a></li>
 
-            <li class="nav-item with-sub {{ Route::currentRouteNamed('cse.requests.index', 'cse.request_details', 'cse.requests.show', 'cse.warranty_claims_list','cse.warranty_claims', 'cse.warranty_claim_details') ? 'active show' : '' }}">
+            <li class="nav-item with-sub {{ Route::currentRouteNamed('cse.requests.index', 'cse.request_details', 'cse.warranty_details','cse.requests.show', 'cse.warranty_claims_list','cse.warranty_claims', 'cse.warranty_claim_details') ? 'active show' : '' }}">
                 <a href="" class="nav-link"><i data-feather="git-pull-request"></i> <span>Requests</span></a>
                 <ul>
                     <li class="{{ Route::currentRouteNamed('cse.requests.create') ? 'active' : '' }}"><a href="{{ route('cse.requests.index', app()->getLocale()) }}"> Active </a></li>

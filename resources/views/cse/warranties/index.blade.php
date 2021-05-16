@@ -72,7 +72,7 @@
               <a href="" class="dropdown-link" data-toggle="dropdown"><i data-feather="more-vertical"></i></a>
               <div class="dropdown-menu dropdown-menu-right">
             
-              <a href="{{ route('cse.issued_warranty_details', ['warranty'=> $warranty->service_request->uuid, 'locale'=>app()->getLocale()]) }}" class="dropdown-item details text-primary"><i class="far fa-clipboard"></i> Details</a>
+              <a href="{{ route('cse.warranty_details', ['warranty'=> $warranty->service_request->uuid, 'locale'=>app()->getLocale()]) }}" class="dropdown-item details text-primary"><i class="far fa-clipboard"></i> Details</a>
               
               @if($warranty->service_request_warranty->has_been_attended_to == 'Yes')
 
