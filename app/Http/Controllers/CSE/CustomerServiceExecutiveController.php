@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\CSE;
 
+use Auth;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Account;
@@ -9,7 +10,7 @@ use App\Models\Contact;
 use App\Models\ServiceRequest;
 use App\Models\ServiceRequestAssigned;
 use App\Models\User;
-use App\Models\CSE;
+use App\Models\Cse;
 use Illuminate\Support\Facades\Route;
 
 use App\Traits\Loggable;
@@ -44,7 +45,7 @@ class CustomerServiceExecutiveController extends Controller
             'ongoing' => $cse->filter(function ($each) {
                 return $each['service_request']['status_id'] == ServiceRequest::SERVICE_REQUEST_STATUSES['Ongoing'];
             })->count(),
-            'available_requests' => CSE::isAvailable() ? ServiceRequest::where('status_id', ServiceRequest::SERVICE_REQUEST_STATUSES['Pending'])->with('service', 'address')->get() : []
+            'available_requests' => Cse::isAvailable() ? ServiceRequest::where('status_id', ServiceRequest::SERVICE_REQUEST_STATUSES['Pending'])->with('service', 'address')->get() : []
         ]);
     }
 
@@ -103,4 +104,37 @@ class CustomerServiceExecutiveController extends Controller
     {
         return $updateRatings->handleServiceRatings($request);
     }
+
+    private function validateUpdateRequest()
+    {
+        return request()->validate([
+            'first_name'         => 'required|string',
+            'middle_name'        => 'string',
+            'last_name'          => 'required|string',
+            'gender'             => 'required',
+            'phone_number'       => 'required|numeric|min:11',
+            'profile_avatar'     => 'file',
+            'bank_id'            => 'required',
+            'account_number'     => 'numeric',
+            'full_address'       => 'required',
+        ]);
+    }
+
+
+    public function warranty_claims_list(){
+    
+        $warranties = \App\Models\ServiceRequestAssigned::with('service_request_warranty', 'user.account', 'service_request')
+        ->where(['user_id' => Auth::id(), 'status'=> 'Active'])
+        ->get();
+       
+            return view('cse.warranties.index', [
+                'issuedWarranties' =>  $warranties
+            ]);
+    
+    }
+
+    public function warranty_claims(){
+        return view('cse.warranties.index');
+    }
+   
 }

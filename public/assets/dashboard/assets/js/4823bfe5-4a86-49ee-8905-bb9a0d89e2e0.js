@@ -68,4 +68,50 @@ $(document).ready(function (){
   
     });
 
+
+    $(document).on('click', '#markas-resolved', function(event) {
+        event.preventDefault();
+        let route = $(this).attr('data-url');
+    
+        $('#markas-resolved-form').attr('action', route);
+    });
+
+
+    let count = 1;
+
+    $(document).on('click', '#resolved-details', function(event) {
+      event.preventDefault();
+      let route = $(this).attr('data-url');
+      let job_reference = $(this).attr('data-job');
+      
+      $.ajax({
+          url: route,
+          beforeSend: function() {
+            $("#modal-body").html('<div class="d-flex justify-content-center mt-4 mb-4"><span class="loadingspinner"></span></div>');
+          },
+          // return the result
+          success: function(result) {
+              $('#job').text(job_reference);
+              $('#modal-body').html('');
+              $('#modal-body').modal("show");
+              $('#modal-body').html(result).show();
+          },
+          complete: function() {
+              $("#spinner-icon").hide();
+          },
+          error: function(jqXHR, testStatus, error) {
+              var message = error+ ' An error occured while trying to retireve '+ ' ' +' service details.';
+              var type = 'error';
+              displayMessage(message, type);
+              $("#spinner-icon").hide();
+          },
+          timeout: 8000
+      })
+    });
+    
+
   });
+
+
+
+

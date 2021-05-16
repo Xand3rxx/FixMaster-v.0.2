@@ -120,8 +120,10 @@ Route::prefix('admin')->group(function () {
         Route::put('/warranty/update/{details:uuid}',  [WarrantyController::class, 'update'])->name('update_warranty');
         Route::get('/warranty/delete/{details:uuid}',  [WarrantyController::class, 'deleteWarranty'])->name('delete_warranty');
         Route::get('/warranty/issued',      [WarrantyController::class, 'issuedWarranties'])->name('issued_warranty');
-        Route::get('/warranty/issued/details/{warranty:uuid}',      [WarrantyController::class, 'issuedWarranties'])->name('issued_warranty_details');
         Route::get('/warranty/issued/resolved/{warranty:uuid}',      [WarrantyController::class, 'resolvedWarranty'])->name('mark_warranty_resolved');
+        Route::get('/warranty/issued/details/{warranty:uuid}',      [App\Http\Controllers\CSE\RequestController::class, 'show'])->name('issued_warranty_details');
+        Route::get('/resolved/warranty/details/{warranty:id}',          [WarrantyController::class, 'warranty_resolved_details'])->name('warranty_resolved_details');
+
 
         //Routes for Simulation
         Route::get('/diagnostic', [SimulationController::class, 'diagnosticSimulation'])->name('diagnostic');
@@ -255,9 +257,7 @@ Route::prefix('admin')->group(function () {
         Route::get('/loyalty/history',                    [App\Http\Controllers\LoyaltyManagementController::class, 'history'])->name('loyalty_history');
 
 
-
-
-
+    
 
         //Admin payment Routes
         Route::get('/payment-gateway/list',                 [GatewayController::class, 'index'])->name('list_payment_gateway');
@@ -314,6 +314,12 @@ Route::prefix('admin')->group(function () {
 
         //Service Reques Routes
         Route::resource('requests', RequestServiceController::class);
+        Route::get('/requests/completed-request/{request:id}',          [RequestServiceController::class, 'markCompletedRequest'])->name('completed_request');
+       
+ 
+
+
+
 
         // Route::prefix('requests')->name('requests.')->group(function () {
         //     Route::view('/',            'admin.requests.index')->name('requests');
@@ -322,13 +328,14 @@ Route::prefix('admin')->group(function () {
 
         //CSE Reporting Routes
         Route::get('/reports/client-service-executive',      [CustomerServiceExecutiveReportController::class, 'index'])->name('cse_reports');
-        Route::post('/reports/client-service-executive/sorting',      [CustomerServiceExecutiveReportController::class, 'jobAssignedSorting'])->name('cse_report_first_sorting');
+        Route::post('/reports/client-service-executive/sorting',      [CustomerServiceExecutiveReportController::class, 'jobAssignedSorting'])->name('cse_report_first_sorting');    
     });
 });
 
 // Route::resource('client', ClientController::class);
 
 //All routes regarding clients should be in here
+
 Route::prefix('/client')->middleware('monitor.clientservice.request.changes')->group(function () {
     Route::name('client.')->group(function () {
         //All routes regarding clients should be in here
@@ -406,48 +413,68 @@ Route::prefix('/client')->middleware('monitor.clientservice.request.changes')->g
     });
 });
 
-Route::prefix('cse')->name('cse.')->group(function () {
-    //All routes regarding CSE's should be in here
-    Route::get('/', [CseController::class, 'index'])->name('index'); //Take me to CSE Dashboard
-    Route::post('accept-service-request', [CseController::class, 'setJobAcceptance'])->name('accept-job');
-    Route::post('cse-availablity-request', [CseController::class, 'setAvailablity'])->name('availablity');
 
-    Route::prefix('profile')->name('profile.')->group(function () {
-        Route::get('/', [ProfileController::class, 'index'])->name('index');
-        Route::get('edit', [ProfileController::class, 'edit'])->name('edit');
-        Route::patch('edit', [ProfileController::class, 'update'])->name('update');
-        Route::post('change-password', [ProfileController::class, 'change_password'])->name('change-password');
-    });
+
+Route::prefix('/cse')->group(function () {
+    Route::name('cse.')->group(function () {
+        //All routes regarding CSE's should be in here
+        // Route::view('/',                    'cse.index');
+        Route::get('/', [CseController::class, 'index'])->name('index'); //Take me to CSE Dashboard
+        Route::post('accept-service-request', [CseController::class, 'setJobAcceptance'])->name('accept-job');
+        Route::post('cse-availablity-request', [CseController::class, 'setAvailablity'])->name('availablity');
     
-    Route::view('/messages/inbox', 'cse.messages.inbox')->name('messages.inbox');
-    Route::view('/messages/sent', 'cse.messages.sent')->name('messages.sent');
-    Route::view('/payments', 'cse.payments')->name('payments');
-    Route::resource('requests', RequestController::class);
+        Route::prefix('profile')->name('profile.')->group(function () {
+            Route::get('/', [ProfileController::class, 'index'])->name('index');
+            Route::get('edit', [ProfileController::class, 'edit'])->name('edit');
+            Route::patch('edit', [ProfileController::class, 'update'])->name('update');
+            Route::post('change-password', [ProfileController::class, 'change_password'])->name('change-password');
+        });
 
-    Route::post('assign-technician', [AssignTechnicianController::class, '__invoke'])->name('assign.technician');
-    Route::post('project-progress', [ProjectProgressController::class, '__invoke'])->name('project.progress.update');
+        Route::get('/profile/{cse:uuid}', [CseController::class, 'show'])->name('view_profile');
+        Route::get('/profile/edit/{cse:uuid}', [CseController::class, 'edit'])->name('edit_profile');
+        Route::patch('update-profile/{cse:uuid}', [CseController::class, 'update'])->name('update_profile');
+
+        // Route::get('/', [UserCustomerServiceExecutiveController::class, 'index'])->name('index'); //Take me to CSE Dashboard
+    
+        Route::view('/location-request',    'cse.location_request')->name('location_request');
+
+        Route::view('/messages/inbox', 'cse.messages.inbox')->name('messages.inbox');
+        Route::view('/messages/sent', 'cse.messages.sent')->name('messages.sent');
+        Route::view('/payments', 'cse.payments')->name('payments');
+        Route::resource('requests', RequestController::class);
+
+        Route::post('assign-technician', [AssignTechnicianController::class, '__invoke'])->name('assign.technician');
+        Route::post('project-progress', [ProjectProgressController::class, '__invoke'])->name('project.progress.update');
+        Route::post('/submit_ratings',  [CseController::class, 'user_rating'])->name('handle.ratings');
+        Route::post('/update_service_request',  [CseController::class, 'update_cse_service_rating'])->name('update_service_request');
+
+        // Route::view('/warranty-claims',    'cse.warranties.index')->name('warranty_claims');
+        Route::view('/warranty-claims/details',    'cse.warranties.show', [
+            'technicians'    =>  \App\Models\Role::where('slug', 'technician-artisans')->with('users')->firstOrFail(),
+        ])->name('warranty_claim_details');
+        Route::view('/location-request',    'cse.location_request')->name('location_request');
+        Route::view(
+            '/request/details',
+            'cse.request_details',
+            [
+                // 'tools' => \App\Models\ToolInventory::all(),
+                // 'ongoingSubStatuses' => \App\Models\SubStatus::where('status_id', 2)->get(['id', 'name']),
+                // 'warranties' => \App\Models\Warranty::all(),
+            ]
+        )->name('request_details');
 
 
+    Route::get('/warranty-claims', [CseController::class, 'warranty_claims_list'])->name('warranty_claims_list');
+    Route::get('/warranty-claims/details', [CseController::class, 'warranty_claims'])->name('warranty_claims');
+    Route::get('/resolved/warranty/details/{warranty:id}',          [WarrantyController::class, 'warranty_resolved_details'])->name('warranty_resolved_details');
 
+    Route::get('/warranty/issued/details/{warranty:uuid}',      [App\Http\Controllers\CSE\RequestController::class, 'show'])->name('issued_warranty_details');
+    Route::get('/warranty/issued/resolved/{warranty:uuid}',      [WarrantyController::class, 'resolvedWarranty'])->name('mark_warranty_resolved');
 
-    Route::post('/submit_ratings',  [CseController::class, 'user_rating'])->name('handle.ratings');
-    Route::post('/update_service_request',  [CseController::class, 'update_cse_service_rating'])->name('update_service_request');
-
-    Route::view('/warranty-claims',    'cse.warranties.index')->name('warranty_claims');
-    Route::view('/warranty-claims/details',    'cse.warranties.show', [
-        'technicians'    =>  \App\Models\Role::where('slug', 'technician-artisans')->with('users')->firstOrFail(),
-    ])->name('warranty_claim_details');
-    Route::view('/location-request',    'cse.location_request')->name('location_request');
-    Route::view(
-        '/request/details',
-        'cse.request_details',
-        [
-            // 'tools' => \App\Models\ToolInventory::all(),
-            // 'ongoingSubStatuses' => \App\Models\SubStatus::where('status_id', 2)->get(['id', 'name']),
-            // 'warranties' => \App\Models\Warranty::all(),
-        ]
-    )->name('request_details');
 });
+});
+
+
 
 Route::prefix('/supplier')->group(function () {
     Route::name('supplier.')->group(function () {

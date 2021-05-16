@@ -45,13 +45,12 @@ use App\Http\Controllers\Client\PaystackController;
 
 use Illuminate\Support\Facades\Route;
 use App\Models\ClientLoyaltyWithdrawal;
-
 use App\Http\Controllers\RatingController;
-
 use App\Traits\RegisterPaymentTransaction;
 use App\Traits\GenerateUniqueIdentity as Generator;
 use App\Http\Controllers\Messaging\MessageController;
 use Illuminate\Support\Facades\Validator;
+use App\Models\Warranty;
 
 
 class ClientController extends Controller
@@ -1202,51 +1201,58 @@ class ClientController extends Controller
         return back()->withInput();
     }
 
+ 
+
+
     public function warrantyInitiate(Request $request, $language, $id){
+
+        $request->validate([
+            'reason'       =>   'required',
+        ]);
 
         $requestExists = ServiceRequest::where('uuid', $id)->first();
     
         $account = Account::where('user_id', auth()->user()->id)->first();
         $accountAdmin = User::where('id', '1')->first();
 
-        //Validate user input fields
-        $request->validate([
-            'reason'       =>   'required',
+        $initateWarranty = ServiceRequestWarranty::where('client_id', auth()->user()->id)->update([
+            'status'            => 'used',
+            'initiated'         => 'Yes',
+            'reason'            => $request->reason,
+            'date_initiated'    =>  \Carbon\Carbon::now('UTC'),
         ]);
+            
+        // $user = (object)[
+        //     'name' => $account->first_name,
+        //     'email' => auth()->user()->email,
+        //     'type' => 'client',
+        //     'service_request_unique' => $requestExists->unique_id,
+        //   ];
 
-      $initateWarranty = ServiceRequestWarranty::where('client_id', auth()->user()->id)->update([
-        'status'            => 'used',
-        'initiated'         => 'Yes',
-        'reason'            => $request->reason,
-        'date_initiated'    =>  \Carbon\Carbon::now('UTC'),
-      ]);
+
+        //   $admin = (object)[
+        //     'name' => 'Admin',
+        //     'email' =>  $accountAdmin->email,
+        //     'client'=> $account->first_name . ' ' .$account->last_name ,
+        //     'client_email' => auth()->user()->email,
+        //     'type' => 'admin',
+        //     'service_request_unique' => $requestExists->unique_id
+        //   ];
+        //   $clientEmail = $this->sendWarrantyInitiationMail($user, 'client');
+        //   $adminEmail = $this->sendWarrantyInitiationMail($admin, 'client');
+
+        //send mail 1, admin, 2, client, 3 cse
         
-            $user = (object)[
-                'name' => $account->first_name,
-                'email' => auth()->user()->email,
-                'type' => 'client',
-                'service_request_unique' => $requestExists->unique_id,
-              ];
+        if($initateWarranty){
+         
+            return redirect()->route('client.service.all', app()->getLocale())->with('success', $requestExists->unique_id.' warranty was successfully initiated.');
 
+          }else{
+            return back()->with('error', 'An error occurred while trying to initiate warranty for'.  $requestExists->unique_id.' service request.');
 
-              $admin = (object)[
-                'name' => 'Admin',
-                'email' =>  $accountAdmin->email,
-                'client'=> $account->first_name . ' ' .$account->last_name ,
-                'client_email' => auth()->user()->email,
-                'type' => 'admin',
-                'service_request_unique' => $requestExists->unique_id
-              ];
-              if($initateWarranty){
-                $clientEmail = $this->sendWarrantyInitiationMail($user, 'client');
-                $adminEmail = $this->sendWarrantyInitiationMail($admin, 'client');
-                return redirect()->route('client.service.all', app()->getLocale())->with('success', $requestExists->unique_id.' warranty was successfully initiated.');
-
-              }else{
-                return back()->with('error', 'An error occurred while trying to initiate warranty for'.  $requestExists->unique_id.' service request.');
- 
-              }
+          }
     }
+
 
     public function reinstateRequest(Request $request, $language, $id){
 
@@ -1282,31 +1288,20 @@ class ClientController extends Controller
     }
 
     public function markCompletedRequest(Request $request, $language, $id){
-     
+      
         $requestExists = ServiceRequest::where('uuid', $id)->firstOrFail();
 
-        $updateRequest = ServiceRequest::where('uuid', $id)->update([
-            'status_id' =>  '4',
-        ]);
+        $updateMarkasCompleted =  $this->markCompletedRequestTrait(Auth::id(), $id);
+     
+        if($updateMarkasCompleted ){
 
-        $jobReference = $requestExists->unique_id;
-
-        $recordServiceProgress = ServiceRequestProgress::create([
-            'user_id'                       =>  Auth::id(), 
-            'service_request_id'            =>  $requestExists->id, 
-            'status_id'                     => '4',
-            'sub_status_id'                 => '35'
-        ]);
-
-        if($updateRequest AND $recordServiceProgress){
-
-            $this->log('request', 'Informational', Route::currentRouteAction(), auth()->user()->account->last_name . ' ' . auth()->user()->account->first_name  . ') marked '.$jobReference.' service request as completed.');
+            $this->log('request', 'Informational', Route::currentRouteAction(), auth()->user()->account->last_name . ' ' . auth()->user()->account->first_name  . ') marked '.$requestExists->unique_id.' service request as completed.');
 
             return redirect()->route('client.service.all', app()->getLocale())->with('success', $requestExists->unique_id.' was marked as completed successfully.');
         }else{
            
          //activity log
-            return back()->with('error', 'An error occurred while trying to mark '.$jobReference.' service request as completed.');
+            return back()->with('error', 'An error occurred while trying to mark '.$requestExists->unique_id.' service request as completed.');
         }
     }
 

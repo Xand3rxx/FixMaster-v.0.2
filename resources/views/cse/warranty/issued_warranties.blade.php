@@ -1,5 +1,5 @@
 @extends('layouts.dashboard')
-@section('title', 'Warranty List')
+@section('title', 'CSE Warranty Claims')
 @include('layouts.partials._messages')
 @section('content')
 <input class="d-none" id="locale" type="hidden" value="{{ app()->getLocale() }}">
@@ -45,20 +45,23 @@
       </tr>
     </thead>
     <tbody>
+    
       @foreach ($issuedWarranties as $warranty)
+      @if(!empty($warranty->service_request_warranty))
+    
         <tr>
           <td class="tx-color-03 tx-center">{{ $loop->iteration }}</td>
           <td class="tx-medium">{{ $warranty['user']['account']['first_name'].' '.$warranty['user']['account']['last_name'] }}</td>
-          <td class="tx-medium">{{ $warranty['warranty']['name'] }}</td>
+          <td class="tx-medium">{{ $warranty['service_request_warranty']['warranty']['name'] }}</td>
           <td class="tx-medium">{{ $warranty['service_request']['unique_id'] }}</td>
-          <td class="tx-medium">{{ Carbon\Carbon::parse($warranty->start_date ?? '2020-12-28 16:58:54', 'UTC')->isoFormat('MMMM Do YYYY, h:mm:ssa') }}</td>
-          <td class="tx-medium">{{ Carbon\Carbon::parse($warranty->expiration_date ?? '2020-12-28 16:58:54', 'UTC')->isoFormat('MMMM Do YYYY, h:mm:ssa') }}</td>
-          @if($warranty->status == 'used')
+          <td class="tx-medium">{{ Carbon\Carbon::parse($warranty->service_request_warranty->start_date ?? '2020-12-28 16:58:54', 'UTC')->isoFormat('MMMM Do YYYY, h:mm:ssa') }}</td>
+          <td class="tx-medium">{{ Carbon\Carbon::parse($warranty->service_request_warranty->expiration_date ?? '2020-12-28 16:58:54', 'UTC')->isoFormat('MMMM Do YYYY, h:mm:ssa') }}</td>
+          @if($warranty->service_request_warranty->status == 'used')
             <td class="text-success">Used</td>
           @else
             <td class="text-danger">Unused</td>
           @endif
-          @if($warranty->has_been_attended_to == 'Yes')
+          @if($warranty->service_request_warranty->has_been_attended_to == 'Yes')
           <td class="text-success">Resolved</td>
           @else
           <td class="text-danger">Unresolved</td>
@@ -68,18 +71,15 @@
               <a href="" class="dropdown-link" data-toggle="dropdown"><i data-feather="more-vertical"></i></a>
               <div class="dropdown-menu dropdown-menu-right">
             
-              <a href="{{ route('admin.issued_warranty_details', ['warranty'=>$warranty->service_request->uuid, 'locale'=>app()->getLocale()]) }}" class="dropdown-item details text-primary"><i class="far fa-clipboard"></i> Details</a>
-
-              @if($warranty->has_been_attended_to == 'Yes')
-            
-               <a href="#resolvedDetails" data-toggle="modal" class="dropdown-item details text-primary" 
-                data-url="{{ route('admin.warranty_resolved_details', ['warranty'=>$warranty->uuid, 'locale'=>app()->getLocale()]) }}" 
-                id="resolved-details" data-job="{{ $warranty['service_request']['unique_id']}}">
-               <i class="far fa-clipboard"></i> Resolved Details</a>
+              <a href="{{ route('cse.issued_warranty_details', ['warranty'=> $warranty->service_request->uuid, 'locale'=>app()->getLocale()]) }}" class="dropdown-item details text-primary"><i class="far fa-clipboard"></i> Details</a>
+             <a href="{{ route('cse.mark_warranty_resolved', ['warranty'=>$warranty->service_request_warranty->uuid, 'locale'=>app()->getLocale()]) }}" class="dropdown-item details text-info"><i class="fas fa-clipboard"></i> Resolved Details</a> 
+              
+              @if($warranty->service_request_warranty->has_been_attended_to == 'Yes')
+              <a href="#" class="dropdown-item details text-success"><i class="fas fa-check"></i> Resolved Warranty</a>
           @else
           <a href="#markAsResolved" id="markas-resolved"
               data-toggle="modal"
-              data-url="{{ route('admin.mark_warranty_resolved', ['warranty'=>$warranty->uuid, 'locale'=>app()->getLocale() ]) }}"
+              data-url="{{ route('cse.mark_warranty_resolved', ['warranty'=>$warranty->service_request_warranty->uuid, 'locale'=>app()->getLocale() ]) }}"
               class="dropdown-item details text-success"><i class="fas fa-check"></i>  Mark as Resolved</a>
           @endif
               
@@ -88,6 +88,7 @@
             </div>
           </td>
         </tr>
+        @endif
       @endforeach
     </tbody>
   </table>
@@ -129,27 +130,6 @@
                     </div><!--end col-->
                 </div><!--end row-->
             </form><!--end form-->
-        </div>
-        </div><!-- modal-body -->
-      </div><!-- modal-content -->
-    </div><!-- modal-dialog -->
-
-</div><!-- modal -->
-
-
-
-<div class="modal fade" id="resolvedDetails" tabindex="-1" role="dialog" aria-hidden="true" data-keyboard="false" data-backdrop="static">
-    <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
-      <div class="modal-content rounded shadow border-0">
-        <div class="modal-header">
-            <h5 class="modal-title" id="exampleModalCenterTitle">Resolved Details For <span id="job">
-            </span></h5>
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-        </div>
-        <div class="modal-body" id="modal-body">
-     
         </div>
         </div><!-- modal-body -->
       </div><!-- modal-content -->

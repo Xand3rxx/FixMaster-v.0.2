@@ -93,6 +93,11 @@ class ServiceRequestAssigned extends Model
         return $this->belongsTo(Account::class, 'user_id', 'service_id');
     }
 
+    public function service_request_warranty()
+    {
+        return $this->belongsTo(ServiceRequestWarranty::class, 'service_request_id', 'service_request_id' );
+    }
+
     /**
      * Scope a query to sort and filter service_request_assigned table
      *
