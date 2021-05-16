@@ -30,27 +30,22 @@ class RfqController extends Controller
 
     public function index(){
 
-        $rfqs = Rfq::orderBy('created_at', 'DESC')->get();
-
         return view('admin.rfq.index', [
-            'rfqs'   =>  $rfqs,
+            'rfqs'   =>  Rfq::orderBy('created_at', 'DESC')->get(),
         ])->with('i');
     }
 
     public function rfqDetails($language, $uuid){
 
-        $rfqDetails = Rfq::where('uuid', $uuid)->firstOrFail();
-
         return view('admin.rfq._details', [
-            'rfqDetails'    =>  $rfqDetails,
+            'rfqDetails'    =>  Rfq::where('uuid', $uuid)->firstOrFail(),
         ])->with('i');
     }
 
     public function supplierInvoices(){
-        $supplierInvoices = RfqSupplierInvoice::orderBy('created_at', 'DESC')->get();
 
         return view('admin.rfq.supplier_invoices', [
-            'rfqs'   =>  $supplierInvoices,
+            'rfqs'   =>  RfqSupplierInvoice::orderBy('created_at', 'DESC')->get(),
         ])->with('i');
     }
 
@@ -90,12 +85,11 @@ class RfqController extends Controller
         $supplierInvoiceBatches =  RfqSupplierInvoiceBatch::where('rfq_supplier_invoice_id', $supplierInvoiceId)->get();
 
         (bool) $supplierUpdate = false;
-        (bool) $rfqBatchUpdate = false;
         $grandTotalAmount = 0;
 
-        DB::transaction(function () use ($supplier, $supplierId, $supplierInvoiceBatches, $supplierRfqId, $grandTotalAmount, &$supplierUpdate, &$rfqBatchUpdate) {
+        DB::transaction(function () use ($supplier, $supplierId, $supplierInvoiceBatches, $supplierRfqId, $grandTotalAmount, &$supplierUpdate) {
 
-            $supplierUpdate = RfqSupplier::create([
+            RfqSupplier::create([
                 'rfq_id'        =>  $supplierRfqId,
                 'supplier_id'   =>  $supplierId,
                 'devlivery_fee' =>  $supplier->delivery_fee,
@@ -104,7 +98,7 @@ class RfqController extends Controller
 
             foreach ($supplierInvoiceBatches as $item => $value){
 
-                $rfqBatchUpdate = RfqBatch::where('id', $value->rfq_batch_id)->update([
+                RfqBatch::where('id', $value->rfq_batch_id)->update([
                     'amount'    => $value->total_amount,
                 ]);
 
@@ -126,5 +120,17 @@ class RfqController extends Controller
             return back()->with('success', $supplier['supplier']['account']['first_name'] ." ". $supplier['supplier']['account']['last_name'].' invoice has been selected for '.$supplier->rfq->unique_id.' RFQ');
         }
 
+    }
+
+    /**
+     * Display the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function rfqDetailsImage($language, $id){
+        return view('admin.rfq._details_image', [
+            'rfqDetails'    =>  \App\Models\RfqBatch::select('image')->where('id', $id)->firstOrFail(),
+        ]);
     }
 }

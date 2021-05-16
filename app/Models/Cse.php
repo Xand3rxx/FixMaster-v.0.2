@@ -10,12 +10,20 @@ class Cse extends Model
     use Generator;
 
     const JOB_AVALABILITY = ['Yes', 'No'];
+
     /**
-     * The attributes that are mass assignable.
+     * The attributes that aren't mass assignable.
      *
      * @var array
      */
-    protected $fillable = ['user_id', 'account_id',  'referral_id', 'bank_id', 'firsttime', 'franchisee_id'];
+    protected $guarded = ['deleted_at', 'created_at', 'updated_at', 'unique_id'];
+
+    /**
+     * The attributes that should be hidden for arrays.
+     *
+     * @var array
+     */
+    protected $hidden = ['user_id'];
 
     /**
      * The "booted" method of the model.
@@ -43,6 +51,17 @@ class Cse extends Model
             ? $referral->id : 0;
     }
 
+    /**
+     * Check if Authenticated User(CSE) is available
+     *
+     * @return bool 
+     */
+    public static function isAvailable()
+    {
+        return auth()->user()->cse->job_availability == CSE::JOB_AVALABILITY[0]
+            ? true : false;
+    }
+
     public function serviceRequest()
     {
         return $this->belongsTo(User::class)->with(['account', 'contact']);
@@ -54,6 +73,22 @@ class Cse extends Model
     public function user()
     {
         return $this->belongsTo(User::class)->with(['account', 'contact']);
+    }
+
+    /**
+     * Get the user referral Account.
+     */
+    public function referral()
+    {
+        return $this->hasOne(Referral::class, 'id', 'referral_id')->withDefault(['referral_code' => 'UNAVAILABLE']);
+    }
+
+    /**
+     * Get the user referral Account.
+     */
+    public function franchisee()
+    {
+        return $this->hasOne(Franchisee::class, 'id', 'referral_id')->withDefault(['name' => 'UNAVAILABLE']);
     }
 
     /**

@@ -1,5 +1,5 @@
 @extends('layouts.dashboard')
-@section('title', 'Dispatched RFQ\'s')
+@section('title', 'Returned Dispatched RFQ\'s')
 @include('layouts.partials._messages')
 @section('content')
 
@@ -9,12 +9,12 @@
       <div>
         <nav aria-label="breadcrumb">
           <ol class="breadcrumb breadcrumb-style1 mg-b-10">
-            <li class="breadcrumb-item"><a href="{{ route('admin.index', app()->getLocale()) }}">Dashboard</a></li>
+          <li class="breadcrumb-item"><a href="{{ route('admin.index', app()->getLocale()) }}">Dashboard</a></li>
             <li class="breadcrumb-item active" aria-current="page">Materials</li>
-            <li class="breadcrumb-item active" aria-current="page">Dispatched RFQ's</li>
+            <li class="breadcrumb-item active" aria-current="page">Returned Dispatched RFQ's</li>
           </ol>
         </nav>
-        <h4 class="mg-b-0 tx-spacing--1">Dispatched RFQ's </h4>
+        <h4 class="mg-b-0 tx-spacing--1">Returned Dispatched RFQ's </h4>
       </div>
     </div>
 
@@ -23,8 +23,8 @@
         <div class="card mg-b-10">
           <div class="card-header pd-t-20 d-sm-flex align-items-start justify-content-between bd-b-0 pd-b-0">
             <div>
-              <h6 class="mg-b-5">Dispatched RFQ's as of {{ date('M, d Y') }}</h6>
-              <p class="tx-13 tx-color-03 mg-b-0">This table displays a list of all Dispatched RFQ's initiated by you.</p>
+              <h6 class="mg-b-5">Returned Dispatched RFQ's as of {{ date('M, d Y') }}</h6>
+              <p class="tx-13 tx-color-03 mg-b-0">This table displays a list of all Returned Dispatched RFQ's declined by a CSE.</p>
             </div>
             
           </div><!-- card-header -->
@@ -38,14 +38,11 @@
                   <th>Job Ref.</th>
                   <th>RFQ Batch Number</th>
                   <th>Dispatch Code</th>
-                  {{-- <th>CSE Status</th> --}}
-                  <th>Delivery Status</th>
+                  <th>Status</th>
                   <th>Date Dispatched</th>
-                  <th class="text-center">Update Status</th>
                   <th>Action</th>
                 </tr>
               </thead>
-              {{-- Status: 0 => Awaiting total amount, 1 => Awaiting Client's payment, 2 => Payment received --}}
               <tbody>
                 @foreach ($dispatches as $dispatch)
                 <tr>
@@ -54,33 +51,15 @@
                   <td class="tx-medium">{{ $dispatch['rfq']['serviceRequest']['unique_id'] }}</td>
                   <td class="tx-medium">{{ $dispatch['rfq']['unique_id'] }}</td>
                   <td class="tx-medium">{{ $dispatch->unique_id }}</td>
-                  {{-- @if($dispatch->cse_status == 'Pending')
+                  @if($dispatch->cse_status == 'Pending')
                     <td class="text-medium text-warning">Pending</td>
                   @elseif($dispatch->cse_status == 'Accepted')
                     <td class="text-medium text-success">Accepted</td>
                   @else
                     <td class="text-medium text-danger">Declined</td>
-                  @endif --}}
-
-                  @if($dispatch->supplier_status == 'Processing')
-                    <td class="text-medium text-warning">Processing</td>
-                  @elseif($dispatch->supplier_status == 'Delivered')
-                    <td class="text-medium text-success">Delivered</td>
-                  @else
-                    <td class="text-medium text-info">In-Transit</td>
                   @endif
+
                   <td class="text-medium">{{ Carbon\Carbon::parse($dispatch->created_at, 'UTC')->isoFormat('MMMM Do YYYY, h:mm:ssa') }}</td>
-                  <td class="text-center">
-                    <div class="form-group col-md-12">
-                      {{-- <label for="delivery_medium">Update Satus</label> --}}
-                      <select name="supplier_status" id="supplier-status" class="form-control @error('supplier_status') is-invalid @enderror supplier-status" required data-url="{{ route('supplier.update_dispatch_status', ['dispatch'=>$dispatch->id, 'locale'=>app()->getLocale()]) }}" data-batch-number="{{ $dispatch->unique_id}}" @if($dispatch->supplier_status == 'Delivered') disabled @endif>
-                        <option value="">Select...</option>
-                        <option value="Processing">Processing</option>
-                        <option value="In-Transit">In-Transit</option>
-                        <option value="Delivered" @if($dispatch->supplier_status == 'Delivered') selected @endif>Delivered</option>
-                      </select>
-                    </div>
-                  </td>
                   
                   <td class="text-center">
                     <div class="dropdown-file">
@@ -112,7 +91,7 @@
   <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
     <div class="modal-content tx-14">
       <div class="modal-header">
-        <h6 class="modal-title" id="exampleModalLabel2"> Dispatch Details</h6>
+        <h6 class="modal-title" id="exampleModalLabel2"> Returned Dispatch Details</h6>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>

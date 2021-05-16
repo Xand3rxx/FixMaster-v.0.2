@@ -82,7 +82,7 @@ class ProjectProgressController extends Controller
      * 
      * @return \Illuminate\Http\Response
      */
-    protected function handleCompletedDiagnosis(Request  $request, \App\Models\ServiceRequest $serviceRequest, \App\Models\SubStatus $substatus)
+    protected function handleCompletedDiagnosis(Request $request, \App\Models\ServiceRequest $serviceRequest, \App\Models\SubStatus $substatus)
     {
         $completedDiagnosis =  new HandleCompletedDiagnosisController();
         return $completedDiagnosis->generateDiagnosisInvoice($request, $serviceRequest, $substatus);

@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin\Report;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use App\Models\ServiceRequestAssigned;
 
 class CustomerServiceExecutiveReportController extends Controller
 {
@@ -14,9 +15,9 @@ class CustomerServiceExecutiveReportController extends Controller
      */
     public function index()
     {
-        // return \App\Models\Role::where('slug', 'cse-user')->with('users')->firstOrFail();
-
+        // return ServiceRequestAssigned::with('service_request', 'user')->get();
         return view('admin.reports.cse.index', [
+            'results'   => ServiceRequestAssigned::with('service_request', 'user')->get(),
             'cses'  =>  \App\Models\Role::where('slug', 'cse-user')->with('users')->firstOrFail(),
         ]);
     }
@@ -25,19 +26,18 @@ class CustomerServiceExecutiveReportController extends Controller
      * @param Request $request
      * @return \Illuminate\Http\JsonResponse
      *
-     * This is an ajax call to sort all CSE's assigned to a service request 
-     * present on change of Sortung Parameter select dropdown
+     * This is an ajax call to CSE Job Assigned Report
+     * present on change of sorting parameter select dropdown
      */
-    public function jobAssignedSorting($language, Request $request){
-        if($request->ajax()){
+    public function jobAssignedSorting($language, Request $request)
+    {
+        if ($request->ajax()) {
+            (array) $filters = $request->only('cse_id', 'job_status', 'sort_level', 'date');
 
-            //Get current job assigned sorting level
-            $sortingLevel =  $request->sort_level;
-
-            if($sortingLevel === 'SortType1'){
-
-                return 'It is working';
-            }
+            return view('admin.reports.cse.tables._job_assigned', [
+                'results'   =>  ServiceRequestAssigned::jobAssignedSorting($filters)->with('service_request', 'user')->get()
+            ]);
+            
         }
     }
 }
