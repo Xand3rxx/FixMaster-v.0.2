@@ -5,6 +5,10 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Messaging\Template;
 use App\Http\Controllers\Messaging\MessageController;
 use App\Http\Controllers\Messaging\Message;
+use App\Http\Controllers\CSE\RequestController;
+use Illuminate\Support\Facades\DB;
+use App\Models\User;
+
 
 
 /*
@@ -95,6 +99,33 @@ Route::get('messaging/roles', function() {
  
  });
 
+ Route::post('messaging/save_group_email', function(Request $request) {
+   $messageController = new MessageController();
+    return $messageController->saveGroupEmail($request);
+ 
+ });
+
+ Route::get('messaging/recipients', function(Request $request) {
+   $messageController = new MessageController();
+    return $messageController->getRecipients($request);
+ 
+ });
+
+
+ Route::get('requests/ongoing_jobs_technician', function(Request $request) {
+   $requestController = new RequestController();
+   return $requestController->getServiceRequestsByTechnician($request);
+ });
+
+ Route::get('requests/ongoing_jobs_cse', function(Request $request) {
+   $requestController = new RequestController();
+   return $requestController->getServiceRequestsByCse($request);
+ });
+
+ Route::get('requests/involved_users', function(Request $request) {
+   $requestController = new RequestController();
+   return $requestController->getUsersByReferenceID($request);
+ });
 
 Route::get('/',      [\App\Http\Controllers\EstateController::class, 'showEstates'])->name('list_estate');
 
