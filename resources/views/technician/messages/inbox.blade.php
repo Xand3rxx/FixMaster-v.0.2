@@ -105,6 +105,67 @@
 
     });
 
+
+    $('#Send-Message').click(function(){
+            
+            var subject = $('#subject').val();
+            var recipients = $('#users').val();
+      
+            var content = $('#messageBody').val();
+            var sender = '<?php echo Auth::user()->id; ?>';
+
+            var url = window.location.origin;
+
+            if(!subject){
+              Swal.fire( '', 'Please enter message subject!', 'error' )
+              return false;
+            }
+
+            if(recipients.length===0 && $('#recipient_id').val()!=4){
+              Swal.fire( '', 'Please select recipient!', 'error' )
+              return false;
+            }else if($('#recipient_id').val()===4){
+              recipients = $('#recipient_id').val();
+            }
+
+            if(!content){
+              Swal.fire( '', 'Please enter message!', 'error' )
+              return false;
+            }
+              Swal.showLoading();
+              let receivers = [];
+              let receiver = {};
+              $.each(recipients, function(ind, val){
+                  receiver = {
+                    "id":ind,
+                    "value":val
+                  }
+                receivers.push(receiver);
+              });
+            var jqxhr = $.post(url+"/api/messaging/save_email",
+            {
+               subject:subject,
+               recipients:receivers,
+               mail_content:content,
+               sender:sender
+            },
+            function(data, status){
+                //TODO change display message to sweet alert
+                Swal.close();
+                console.log(data);
+                displayMessage(data.message, 'success');
+            })
+            .fail(function(data, status) {
+                displayMessage(data.responseJSON.message, 'error');
+            })
+            
+
+
+          
+
+         });
+
+
     //Get list of users by a particular designation
     $('#user-type').on('change',function () {
         let user = $(this).find('option:selected').val();
@@ -179,6 +240,52 @@
 
 
   });
+  //call the api for getting ongoing job requests made to the technician
+function ongoingJobsEvent(currentValue){
+
+//  when ongoing jobs option is selected, the 'hidden' attribute of the 'div' is falsified
+//  and the select element toggles to be visible 
+ 
+if(currentValue === "jobs"){
+  document.getElementById("ongoingJobs").hidden = false;
+  document.getElementById("assoc_users").hidden = false;
+  
+  var options="";
+  var cnt = 0;
+  var url = window.location.origin;
+  var technicianid = document.getElementById("currentuser").value;
+        $.get( url+"/api/requests/ongoing_jobs_technician?userid="+technicianid, function( data ) {
+            $.each(data.data, function(key, val){
+            cnt++;
+            if(cnt===1){
+                getInvolvedUsers(val.unique_id, technicianid)
+              }
+            options ='<option value = "'+val.unique_id+'">'+val.unique_id+'</option>';
+            $('#jobsId').append(options);
+  })
+});
+
+} else if(currentValue != "jobs"){
+  document.getElementById("ongoingJobs").hidden = true;
+  document.getElementById("assoc_users").hidden = true;
+}
+}
+
+//call the api for getting users involved with the requests made to technicians(**returns an empty array**)
+function getInvolvedUsers(currentValue, technicianid){
+    var options="";
+    var cnt;
+    var url = window.location.origin;
+    $.get( url+"/api/requests/involved_users?reqid="+currentValue+"&userid="+technicianid, function( data ) {
+
+              $('#users').empty()
+              $.each(data.data, function(key, val){
+              cnt++;
+              options ='<option value="'+val.user_id+'">'+val.first_name+' ' +val.last_name+'</option>';
+              $('#users').append(options);
+    })
+    })
+}
 </script>
 
 @endpush
