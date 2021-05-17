@@ -15,9 +15,15 @@ class CustomerServiceExecutiveReportController extends Controller
      */
     public function index()
     {
-        // return ServiceRequestAssigned::with('service_request', 'user')->get();
+        // return ServiceRequestAssigned::with('service_request', 'user')
+            // ->whereHas('user.roles', function ($query){
+            //     $query->where('slug', 'cse-user');
+            // })->latest('created_at')->get(),
+
         return view('admin.reports.cse.index', [
-            'results'   => ServiceRequestAssigned::with('service_request', 'user')->get(),
+            
+            'results'   => [],
+
             'cses'  =>  \App\Models\Role::where('slug', 'cse-user')->with('users')->firstOrFail(),
         ]);
     }
@@ -35,7 +41,35 @@ class CustomerServiceExecutiveReportController extends Controller
             (array) $filters = $request->only('cse_id', 'job_status', 'sort_level', 'date');
 
             return view('admin.reports.cse.tables._job_assigned', [
-                'results'   =>  ServiceRequestAssigned::jobAssignedSorting($filters)->with('service_request', 'user')->get()
+                'results'   =>  ServiceRequestAssigned::jobAssignedSorting($filters)->with('service_request', 'user')
+                ->whereHas('user.roles', function ($query){
+                    $query->where('slug', 'cse-user');
+                })->latest('created_at')->get()
+            ]);
+            
+        }
+    }
+
+    /**
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     *
+     * This is an ajax call to CSE Job Assigned Report
+     * present on change of sorting parameter select dropdown
+     */
+    public function amountEarnedSorting($language, Request $request)
+    {
+        if ($request->ajax()) {
+
+            // return $request;
+
+            (array) $filters = $request->only('cse_id', 'job_status', 'sort_level', 'date');
+
+            return view('admin.reports.cse.tables._amount_earned', [
+                'results'   =>  ServiceRequestAssigned::amountEarnedSorting($filters)->with('service_request', 'user')
+                ->whereHas('user.roles', function ($query){
+                    $query->where('slug', 'cse-user');
+                })->latest('created_at')->get()
             ]);
             
         }

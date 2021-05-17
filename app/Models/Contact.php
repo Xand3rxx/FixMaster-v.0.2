@@ -28,7 +28,7 @@ class Contact extends Model
      */
     public function account()
     {
-        return $this->belongsTo(Account::class);
+        return $this->belongsTo(Account::class, 'user_id', 'user_id');
     }
 
     /**
@@ -97,14 +97,6 @@ class Contact extends Model
         return $this->belongsTo(Account::class);
     }
 
-    public function lga()
-    {
-        return $this->belongsTo(Lga::class);
-    }
 
-    public function town()
-    {
-        return $this->belongsTo(Lga::class);
-    }
 
 }

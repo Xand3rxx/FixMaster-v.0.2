@@ -50,8 +50,11 @@ class RequestController extends Controller
      */
     public function show($language, $uuid)
     {
+     
+
         // find the service reqquest using the uuid and relations
         $service_request = \App\Models\ServiceRequest::where('uuid', $uuid)->with(['price', 'service', 'service.subServices'])->firstOrFail();
+        
         $request_progress = \App\Models\ServiceRequestProgress::where('service_request_id', $service_request->id)->with('user', 'substatus')->latest('created_at')->get();
 
         // find the technician role CACHE THIS DURING PRODUCTION

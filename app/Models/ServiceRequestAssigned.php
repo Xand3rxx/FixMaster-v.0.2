@@ -93,6 +93,11 @@ class ServiceRequestAssigned extends Model
         return $this->belongsTo(Account::class, 'user_id', 'service_id');
     }
 
+    public function service_request_warranty()
+    {
+        return $this->belongsTo(ServiceRequestWarranty::class, 'service_request_id', 'service_request_id' );
+    }
+
     /**
      * Scope a query to sort and filter service_request_assigned table
      *
@@ -120,6 +125,38 @@ class ServiceRequestAssigned extends Model
             $query->whereIn('user_id', $cses[0]);
         })->when((string)$filters['job_status'] ?? null, function ($query) use ($filters) {
             $query->whereHas('service_request', function ($query) use ($filters) {
+                $query->where('status_id', $filters['job_status']);
+             });
+        });
+    }
+
+    /**
+     * Scope a query to sort and filter service_request_assigned table
+     *
+     * @param \Illuminate\Database\Eloquent\Builder $query
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function scopeAmountEarnedSorting($query, array $filters)
+    {
+        // Split all filter parameters from the array of filters
+        $query->when((string) $filters['sort_level'] ?? null, function ($query, $sortLevel) use ($filters) {
+            switch ($sortLevel) {
+                case 'SortType2':
+                        $query->whereBetween('job_acceptance_time', [$filters['date']['date_from'], $filters['date']['date_to']]);
+                    break;
+
+                case 'SortType3':
+                        $query->whereBetween('job_completed_date', [$filters['date']['date_from'], $filters['date']['date_to']]);
+                    break;
+
+                default:
+                        $query->latest('created_at');
+                    break;
+            }
+        })->when((array)$filters['cse_id'] ?? null, function ($query, array $cses) {
+            $query->whereIn('user_id', $cses[0]);
+        })->when((string)$filters['job_status'] ?? null, function ($query) use ($filters) {
+            $query->whereHas('service_request', function ($query) use ($filters) { 
                 $query->where('status_id', $filters['job_status']);
              });
         });
