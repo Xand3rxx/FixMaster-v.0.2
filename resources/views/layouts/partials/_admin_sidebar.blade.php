@@ -171,7 +171,16 @@
         </ul>
       </li>
       
-    <li class="nav-item {{ Route::currentRouteNamed('admin.requests.index') ? 'active show' : '' }}"><a href="{{ route('admin.requests.index', app()->getLocale()) }}" class="nav-link"><i data-feather="git-pull-request"></i> <span>Requests <sup class="font-weight-bold text-danger">{{ $pendingRequests }}</sup></span></a></li>
+    <li class="nav-item with-sub {{ Route::currentRouteNamed('admin.requests.index', 'admin.requests.show') ? 'active show' : '' }}">
+      <a href="" class="nav-link"><i data-feather="git-pull-request"></i> <span>Requests</span><span class="badge badge-primary">{{ $pendingRequests }}</suspan></span></a>
+      <ul>
+        <li class="{{ Route::currentRouteNamed('admin.requests.index', 'admin.requests.show') ? 'active' : '' }}"><a href="{{ route('admin.requests.index', app()->getLocale()) }}">Pending <sup class="font-weight-bold text-primary">{{ $pendingRequests }}</sup></a></li>
+        <li class=""><a href="#">Ongoing</a></li>
+        <li class=""><a href="#">Completed</a></li>
+        <li class=""><a href="#">Cancelled</a></li>
+
+      </ul>
+    </li>
 
       <li class="nav-item with-sub {{ Route::currentRouteNamed('admin.rfq', 'admin.supplier_invoices') ? 'active show' : '' }}">
         <a href="" class="nav-link"><i data-feather="file-text"></i> <span>RFQ's</span></a>

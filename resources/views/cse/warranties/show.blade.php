@@ -331,14 +331,14 @@
                             <div class="form-row mt-4">
                                 <div class="form-group col-md-12">
                                     <ul class="list-group wd-md-100p">
-                                        @foreach ($technicians as $technician)
+                                        @foreach ($technicians['users'] as $technician)
                                         <li class="list-group-item d-flex align-items-center">
                                             
                                             <div class="form-row">
                                             <img src="{{ asset('assets/images/default-male-avatar.png') }}" class="wd-30 rounded-circle mg-r-15" alt="Technician Avatar">
                                             
                                             <div class="col-md-6 col-sm-6">
-                                            <h6 class="tx-13 tx-inverse tx-semibold mg-b-0">{{ !empty($technician['user']['account']['first_name']) ? $technician['user']['account']['first_name'] .' '. $technician['user']['account']['last_name'] : 'UNAVAILABLE'}}</h6>
+                                            <h6 class="tx-13 tx-inverse tx-semibold mg-b-0">{{ !empty($technician['account']['first_name']) ? $technician['account']['first_name'] .' '. $technician['account']['last_name'] : 'UNAVAILABLE'}}</h6>
                                             
                                             <span class="d-block tx-11 text-muted">
                                                 @foreach ($technicians as $item)

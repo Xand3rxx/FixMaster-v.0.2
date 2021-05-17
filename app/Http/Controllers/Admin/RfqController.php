@@ -77,6 +77,8 @@ class RfqController extends Controller
         //Check if the selcted supplier has already been chosen
         $supplierAcceptanceExists = RfqSupplier::where('rfq_id', $supplierRfqId)->where('supplier_id', Auth::id())->count();
 
+        $otherSuppliers = RfqSupplierInvoice::where('rfq_id', $supplierRfqId)->where('uuid', '!=', $uuid)->get();
+
         if($supplierAcceptanceExists > 0){
             return back()->with('error', 'Sorry, you already accepted '.$supplier['supplier']['account']['first_name'] ." ". $supplier['supplier']['account']['last_name'].' invoice for this '.$supplier->rfq->unique_id);
         }
@@ -87,7 +89,7 @@ class RfqController extends Controller
         (bool) $supplierUpdate = false;
         $grandTotalAmount = 0;
 
-        DB::transaction(function () use ($supplier, $supplierId, $supplierInvoiceBatches, $supplierRfqId, $grandTotalAmount, &$supplierUpdate) {
+        DB::transaction(function () use ($uuid, $supplier, $supplierId, $supplierInvoiceBatches, $supplierRfqId, $grandTotalAmount, $otherSuppliers, &$supplierUpdate) {
 
             RfqSupplier::create([
                 'rfq_id'        =>  $supplierRfqId,
@@ -110,6 +112,19 @@ class RfqController extends Controller
                 'accepted'      =>   'No',
                 'total_amount'  =>   $grandTotalAmount + $supplier->delivery_fee,
             ]);
+
+            // Approve the Supplier invoice
+            RfqSupplierInvoice::where('uuid', $uuid)->update([
+                'accepted'  => 'Yes'
+            ]);
+
+            // Decline other supplier invoices
+            foreach($otherSuppliers as $item){
+                RfqSupplierInvoice::where('rfq_id', $supplierRfqId)->where('uuid', '!=', $uuid)->update([
+                    'accepted'  => 'No'
+                ]);
+            }
+            
 
             $supplierUpdate = true;
 

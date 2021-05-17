@@ -21,6 +21,6 @@ const ROLE_SLUG_ADMIN = 'admin-user';
      */
     public function users()
     {
-        return $this->belongsToMany(User::class,'users_roles')->with('account');
+        return $this->belongsToMany(User::class,'users_roles')->with('account', 'ratings', 'contact');
     }
 }

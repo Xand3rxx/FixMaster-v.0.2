@@ -45,6 +45,7 @@
         <ul>
           <li class="{{ Route::currentRouteNamed('supplier.rfq', 'supplier.rfq_send_supplier_invoice') ? 'active' : '' }}"><a href="{{ route('supplier.rfq', app()->getLocale()) }}">New Quotes <sup class="font-weight-bold text-primary">{{ $newQuotes }}</sup></a></li>
           <li class="{{ Route::currentRouteNamed('supplier.rfq_sent_invoices') ? 'active' : '' }}"><a href="{{ route('supplier.rfq_sent_invoices', app()->getLocale()) }}">Sent Quotes</a></li>
+          <li class="{{ Route::currentRouteNamed('supplier.rfq_sent_invoices') ? 'active' : '' }}"><a href="{{ route('supplier.rfq_sent_invoices', app()->getLocale()) }}">Won Quotes</a></li>
         </ul>
       </li>
 
@@ -54,6 +55,7 @@
         <a href="" class="nav-link"><i data-feather="file-text"></i> <span>Materials</span></a>
         <ul>
           <li class="{{ Route::currentRouteNamed('supplier.dispatches') ? 'active' : '' }}"><a href="{{ route('supplier.dispatches', app()->getLocale()) }}">Dispatched</a></li>
+          <li class="{{ Route::currentRouteNamed('supplier.dispatches') ? 'active' : '' }}"><a href="{{ route('supplier.dispatches', app()->getLocale()) }}">Delivered</a></li>
           <li class="{{ Route::currentRouteNamed('supplier.dispatches_returned') ? 'active' : '' }}"><a href="{{ route('supplier.dispatches_returned', app()->getLocale()) }}">Returned</a></li>
         </ul>
       </li>
