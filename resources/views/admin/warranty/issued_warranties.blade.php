@@ -39,6 +39,7 @@
         <th>Job Reference</th>  
         <th>Start Date</th>  
         <th>End Date</th>  
+        <th>Warrant Status</th>
         <th>Status</th>
         <th class="text-center">Action</th>
       </tr>
@@ -57,14 +58,32 @@
           @else
             <td class="text-danger">Unused</td>
           @endif
+          @if($warranty->has_been_attended_to == 'Yes')
+          <td class="text-success">Resolved</td>
+          @else
+          <td class="text-danger">Unresolved</td>
+          @endif
           <td class=" text-center">
             <div class="dropdown-file">
               <a href="" class="dropdown-link" data-toggle="dropdown"><i data-feather="more-vertical"></i></a>
               <div class="dropdown-menu dropdown-menu-right">
-              <a href="{{ route('admin.issued_warranty_details', ['warranty'=>$warranty->uuid, 'locale'=>app()->getLocale()]) }}" class="dropdown-item details text-primary"><i class="far fa-clipboard"></i> Details</a>
-              <a href="{{ route('admin.mark_warranty_resolved', ['warranty'=>$warranty->uuid, 'locale'=>app()->getLocale()]) }}" class="dropdown-item details text-success"><i class="fas fa-check"></i> Mark as Resolved</a>
-              <a href="{{ route('admin.mark_warranty_resolved', ['warranty'=>$warranty->uuid, 'locale'=>app()->getLocale()]) }}" class="dropdown-item details text-info"><i class="fas fa-clipboard"></i> Resolved Details</a>
-                
+            
+              <a href="{{ route('admin.warranty_details', ['warranty'=>$warranty->service_request->uuid, 'locale'=>app()->getLocale()]) }}" class="dropdown-item details text-primary"><i class="far fa-clipboard"></i> Details</a>
+
+              @if($warranty->has_been_attended_to == 'Yes')
+            
+               <a href="#resolvedDetails" data-toggle="modal" class="dropdown-item details text-primary" 
+                data-url="{{ route('admin.warranty_resolved_details', ['warranty'=>$warranty->uuid, 'locale'=>app()->getLocale()]) }}" 
+                id="resolved-details" data-job="{{ $warranty['service_request']['unique_id']}}">
+               <i class="far fa-clipboard"></i> Resolved Details</a>
+          @else
+          <a href="#markAsResolved" id="markas-resolved"
+              data-toggle="modal"
+              data-url="{{ route('admin.mark_warranty_resolved', ['warranty'=>$warranty->uuid, 'locale'=>app()->getLocale() ]) }}"
+              class="dropdown-item details text-success"><i class="fas fa-check"></i>  Mark as Resolved</a>
+          @endif
+              
+
               </div>
             </div>
           </td>
@@ -76,7 +95,67 @@
 
 
 
+  <div class="modal fade" id="markAsResolved" tabindex="-1" role="dialog" aria-hidden="true" data-keyboard="false" data-backdrop="static">
+    <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+      <div class="modal-content rounded shadow border-0">
+        <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalCenterTitle">Kindly state your comment</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        <div class="modal-body" id="modal-cancel-request">
+            <form class="p-4" method="GET" id="markas-resolved-form">
+                @csrf
+                <div class="row">
 
+                    <div class="col-md-12">
+                        <div class="form-group position-relative">
+                            <label>Comments (optional)</label>
+                            <i data-feather="info" class="fea icon-sm icons"></i>
+                            <textarea name="comment" id="reason" rows="3" class="form-control pl-5 @error('reason') is-invalid @enderror" placeholder="">{{ old('reason')  }}</textarea>
+                            @error('reason')
+                                <span class="invalid-feedback" role="alert">
+                                    <strong>{{ $message }}</strong>
+                                </span>
+                            @enderror
+                        </div>
+                    </div><!--end col-->
+
+                {{-- </div><!--end row--> --}}
+
+                    <div class="col-sm-12">
+                    <button type="submit" class="submitBnt btn btn-primary">Initiate</button>
+                    </div><!--end col-->
+                </div><!--end row-->
+            </form><!--end form-->
+        </div>
+        </div><!-- modal-body -->
+      </div><!-- modal-content -->
+    </div><!-- modal-dialog -->
+
+</div><!-- modal -->
+
+
+
+<div class="modal fade" id="resolvedDetails" tabindex="-1" role="dialog" aria-hidden="true" data-keyboard="false" data-backdrop="static">
+    <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+      <div class="modal-content rounded shadow border-0">
+        <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalCenterTitle">Resolved Details For <span id="job">
+            </span></h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+        </div>
+        <div class="modal-body" id="modal-body">
+     
+        </div>
+        </div><!-- modal-body -->
+      </div><!-- modal-content -->
+    </div><!-- modal-dialog -->
+
+</div><!-- modal -->
 
 @push('scripts')
   <script src="{{ asset('assets/dashboard/assets/js/4823bfe5-4a86-49ee-8905-bb9a0d89e2e0.js') }}"></script>

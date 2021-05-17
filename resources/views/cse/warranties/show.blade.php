@@ -11,11 +11,11 @@
                 <nav aria-label="breadcrumb">
                     <ol class="breadcrumb breadcrumb-style1 mg-b-10">
                         <li class="breadcrumb-item"><a href="{{ route('cse.index', app()->getLocale()) }}">Dashboard</a></li>
-                        <li class="breadcrumb-item"><a href="{{ route('cse.requests.index', app()->getLocale()) }}">Requests</a></li>
-                        <li class="breadcrumb-item active" aria-current="page">Request Details</li>
+                        <li class="breadcrumb-item"><a href="{{ route('cse.warranty_claims', app()->getLocale()) }}">Warranty Claims</a></li>
+                        <li class="breadcrumb-item active" aria-current="page">Warranty Claim Details</li>
                     </ol>
                 </nav>
-                <h4 class="mg-b-0 tx-spacing--1">Job: REF-234234723</h4>
+                <h4 class="mg-b-0 tx-spacing--1">Job: {{$service_request->unique_id}}</h4>
                 <hr>
                 <div class="media align-items-center">
                     <span class="tx-color-03 d-none d-sm-block">
@@ -23,10 +23,11 @@
                         <img src="{{ asset('assets/images/default-male-avatar.png') }}" class="avatar rounded-circle" alt="Male Avatar">
                     </span>
                     <div class="media-body mg-sm-l-20">
-                        <h4 class="tx-18 tx-sm-20 mg-b-2">Kelvin Adesanya</h4>
+                    <h4 class="tx-18 tx-sm-20 mg-b-2">{{ucfirst($service_request->client->account->first_name)}}
+                        {{ucfirst($service_request->client->account->last_name)}}</h4>
                                         
-                        <p class="tx-13 tx-color-03 mg-b-0">08173682832 
-                            <a href="tel:08173682832" class="btn btn-primary btn-icon"><i class="fas fa-phone"></i> Call Client</a>
+                        <p class="tx-13 tx-color-03 mg-b-0">{{$service_request->client->account->contact->phone_number}}
+                            <a href="tel:{{$service_request->client->account->contact->phone_number}}" class="btn btn-primary btn-icon"><i class="fas fa-phone"></i> Call Client</a>
                         </p>
                     </div>
                 </div><!-- media -->
@@ -38,7 +39,11 @@
 
                 <div class="contact-content-header mt-4">
                     <nav class="nav">
+                    @if($service_request->service_request_warranty->has_been_attended_to == 'No')
+                    @if(Auth::user()->type->url != 'admin')                    
                         <a href="#serviceRequestActions" class="nav-link active" data-toggle="tab">Actions</a>
+                        @endif
+                        @endif
                         <a href="#description" class="nav-link" data-toggle="tab"><span> Description</a>
                         <a href="#serviceRequestSummary" class="nav-link" data-toggle="tab"><span>Summary</a>
                     </nav>
@@ -47,7 +52,13 @@
 
                 <div class="contact-content-body">
                     <div class="tab-content">
-                        <div id="serviceRequestActions" class="tab-pane show active pd-20 pd-xl-25">
+   
+                    @if(Auth::user()->type->url != 'admin' && $service_request->service_request_warranty->has_been_attended_to == 'No')                    
+                    <div id="serviceRequestActions" class="tab-pane show active pd-20 pd-xl-25">
+                        @else                                     
+                    <div id="serviceRequestActions" class="tab-pane pd-20 pd-xl-25">
+                        @endif
+
                             <small class="text-danger">This tab is only visible once if a Warranty claim has not been marked as resolved or is still ongoing.</small>
                            {{-- {{  dd($technicians) }} --}}
         <form class="form-data" method="POST" action="{{route('cse.assign.technician', [app()->getLocale()])}}">
@@ -56,21 +67,24 @@
                 <div class="tx-13 mg-b-25">
                     <div id="wizard3">
 
-                        <h3>Contact Collaborators</h3>
+                        <h3>Contact Collaborators </h3>
                         <section>
                             <div class="form-row mt-4">
                                 <div class="form-group col-md-12">
                                     This show's a list of all FixMaster Collaborators that worked on the clients service request initially.
-                                    <div class="divider-text">Technicians </div>
+                                    <div class="divider-text">Technicians  </div>
 
                                     <ul class="list-group wd-md-100p">
+                                    @foreach ($technicians as $item)
+                                   
+                                              
                                         <li class="list-group-item d-flex align-items-center">
                                             
                                             <div class="form-row">
-                                            <img src="{{ asset('assets/images/default-male-avatar.png') }}" class="wd-30 rounded-circle mg-r-15" alt="Technician Avatar">
+                                            <img src="{{ asset('assets/images/'.$item->user->account->avatar??'default-male-avatar.png') }}" class="wd-30 rounded-circle mg-r-15" alt="Technician Avatar">
                                             
                                             <div class="col-md-6 col-sm-6">
-                                            <h6 class="tx-13 tx-inverse tx-semibold mg-b-0">Jamal Diwa</h6>
+                                            <h6 class="tx-13 tx-inverse tx-semibold mg-b-0">{{ ucfirst($item->user->account->first_name)}} {{  ucfirst($item->user->account->last_name)}}</h6>
                                             
                                             <span class="d-block tx-11 text-muted">
                                                     <i class="icon ion-md-star lh-0 tx-orange"></i>
@@ -82,25 +96,29 @@
                                             <div class="col-md-6 col-sm-6">
                                             <div class="form-row">
                                                 <div class="form-group col-1 col-md-1 col-sm-1" style="margin-left: 3rem !important;">
-                                                    <a href="tel:08124483438" class="btn btn-primary btn-icon"><i class="fas fa-phone"></i></a>
+                                                    <a href="tel:{{$item->user->account->contact->phone_number}}" class="btn btn-primary btn-icon"><i class="fas fa-phone"></i></a>
                                                 </div>
                                             </div>
                                             </div>
                                         </div>
                                         </li>
+                                     
+                                        @endforeach
                                     </ul>
 
                                     <div class="divider-text">Quality Assurance Managers </div>
 
                                     <ul class="list-group wd-md-100p">
+                                
                                         <li class="list-group-item d-flex align-items-center">
                                             
                                             <div class="form-row">
                                             <img src="{{ asset('assets/images/default-male-avatar.png') }}" class="wd-30 rounded-circle mg-r-15" alt="Technician Avatar">
                                             
                                             <div class="col-md-6 col-sm-6">
-                                            <h6 class="tx-13 tx-inverse tx-semibold mg-b-0">Desmond John</h6>
-                                            
+                                           
+                                            <h6 class="tx-13 tx-inverse tx-semibold mg-b-0">{{ ucfirst($qaulity_assurances->user)}} {{  ucfirst($qaulity_assurances->user)}}</h6>
+
                                             <span class="d-block tx-11 text-muted">
                                                     <i class="icon ion-md-star lh-0 tx-orange"></i>
                                                     <i class="icon ion-md-star lh-0 tx-orange"></i>
@@ -111,12 +129,13 @@
                                             <div class="col-md-6 col-sm-6">
                                             <div class="form-row">
                                                 <div class="form-group col-1 col-md-1 col-sm-1" style="margin-left: 3rem !important;">
-                                                    <a href="tel:08124483438" class="btn btn-primary btn-icon"><i class="fas fa-phone"></i></a>
+                                                    <a href="tel: {{$item->user->account->contact->phone_number}}" class="btn btn-primary btn-icon"><i class="fas fa-phone"></i></a>
                                                 </div>
                                             </div>
                                             </div>
                                         </div>
                                         </li>
+                                      
                                     </ul>
 
                                     <div class="divider-text">Suppliers </div>
@@ -365,70 +384,93 @@
                             <small class="text-danger">This tab is only visible once a Warranty claim has been marked as resolved.</small>
                             <h4> This Warranty Claim has been resolved. </h4>
                         </div>
-
+                        @if(Auth::user()->type->url == 'admin' || $service_request->service_request_warranty->has_been_attended_to == 'Yes')                    
+                    <div id="description" class="tab-pane show active pd-20 pd-xl-25">
+                        @else                                     
                         <div id="description" class="tab-pane pd-20 pd-xl-25">
+
+                        @endif
+
                             <div class="divider-text">Warranty Claim  Description</div>
 
                             <h6>Warranty Claim Description</h6>
                             <div class="row row-xs mt-4">
                                 <div class="col-lg-12 col-xl-12">
                                     <table class="table table-striped table-sm mg-b-0">
-                                        <tbody>
+                                       
+                                            <tbody>
                                             <tr>
                                                 <td class="tx-medium">Job Reference</td>
-                                                <td class="tx-color-03">REF-234234723</td>
+                                                <td class="tx-color-03"> {{$service_request->unique_id}}</td>
                                             </tr>
                                             <tr>
                                                 <td class="tx-medium">Service Required</td>
-                                                <td class="tx-color-03">Eletronics (Computer & Laptops)</td>
+                                                <td class="tx-color-03"> {{$service_request->service->name}}</td>
                                             </tr>
                                             <tr>
-                                                <td class="tx-medium">Warranty Scheduled Date & Timr</td>
-                                                <td class="tx-color-03">To be updated by the CSE</td>
+                                                <td class="tx-medium">Scheduled Date & Time </td>
+                                     <td class="tx-color-03">{{ !empty($service_request->preferred_time) ? Carbon\Carbon::parse($service_request->preferred_time, 'UTC')->isoFormat('MMMM Do YYYY, h:mm:ssa') : 'Not Scheduled yet'}} </td>
                                             </tr>
                                             <tr>
-                                                <td class="tx-medium">Warranty Start Date</td>
-                                                <td class="tx-color-03">{{ Carbon\Carbon::now('UTC')->isoFormat('MMMM Do YYYY, h:mm:ssa') }}</td>
-                                            </tr>
-
-                                            <tr>
-                                                <td class="tx-medium">Warranty End Date</td>
-                                                <td class="tx-color-03">{{ Carbon\Carbon::now('UTC')->addDays(7)->isoFormat('MMMM Do YYYY, h:mm:ssa') }}</td>
+                                                <td class="tx-medium">Payment Status </td>
+                                                <td class="tx-color-03"><span class="text-success">{{ucfirst($service_request->payment_statuses->status)}}</span>({{ ucfirst($service_request->payment_statuses->payment_channel)}})</td>
                                             </tr>
                                             <tr>
-                                                <td class="tx-medium">Warranty Issued Date</td>
-                                                <td class="tx-color-03">{{ Carbon\Carbon::now('UTC')->isoFormat('MMMM Do YYYY, h:mm:ssa') }}</td>
+                                                <td class="tx-medium">Initial Service Charge</td>
+                                                <td class="tx-color-03">₦{{ number_format($service_request->price->amount) }} Standard Price</td>
                                             </tr>
                                             <tr>
-                                                <td class="tx-medium">Amount</td>
-                                                <td class="tx-color-03">₦{{ number_format(1000) }}</td>
-                                            </tr>
-                                            <tr>
-                                                <td class="tx-medium">Status</td>
-                                                <td class="text-success">Used</td>
+                                                <td class="tx-medium">Total Service Charge</td>
+                                                <td class="tx-color-03">₦{{ number_format($service_request->total_amount) }}</td>
                                             </tr>
                                             <tr>
                                                 <td class="tx-medium">Security Code</td>
-                                                <td class="tx-color-03">SEC-27AEC73E</td>
-                                            </tr>
-                                            
-                                            <tr>
-                                                <td class="tx-medium">Initial Technicians Assigned</td>
-                                                <td class="tx-color-03">List all Technicians's assigned</td>
+                                                <td class="tx-color-03">{{$service_request->client_security_code}}</td>
                                             </tr>
                                             <tr>
-                                                <td class="tx-medium">Initial Quality Assurance Managers Assigned</td>
-                                                <td class="tx-color-03">List all QA's assigned</td>
+                                                <td class="tx-medium">Supervised By</td>
+                                                <td class="tx-color-03">David Akinsola</td>
                                             </tr>
-                                           
                                             <tr>
-                                                <td class="tx-medium">Initial Request Address</td>
-                                                <td class="tx-color-03">27B, Bourdillon Road off Falomo, Ikoyi-Lagos.</td>
+                                                <td class="tx-medium">CSE's Assigned</td>
+                                                <td class="tx-color-03">{{CustomHelpers::arrayToList($service_request->service_request_assignees, 'cse-user')}}</td>
+                                            </tr>
+                                            <tr>
+                                                <td class="tx-medium">Technicians Assigned</td>
+                                                <td class="tx-color-03">{{CustomHelpers::arrayToList($service_request->service_request_assignees, 'technician-artisans')}}</td>
+                                            </tr>
+                                            <tr>
+                                                <td class="tx-medium">Quality Assurance Managers Assigned</td>
+                                                <td class="tx-color-03">{{CustomHelpers::arrayToList($service_request->service_request_assignees, 'quality-assurance-user')}}</td>
+                                                
+                                            </tr>
+                                            <tr>
+                                                <td class="tx-medium">State</td>
+                                                <td class="tx-color-03">{{$service_request->client->account->state->name??'UNAVAILABLE'}}</td>
+                                            </tr>
+                                            <tr>
+                                                <td class="tx-medium">L.G.A</td>
+                                                <td class="tx-color-03">{{$service_request->client->account->lga->name?? 'UNAVAILABLE'}}</td>
+                                            </tr>
+                                            <tr>
+                                                <td class="tx-medium">Town/City</td>
+                                                <td class="tx-color-03">{{$service_request->client->account->town->name?? 'UNAVAIALABLE'}}</td>
+                                            </tr>
+                                            <tr>
+                                                <td class="tx-medium">Request Address</td>
+                                                <td class="tx-color-03">{{$service_request->client->account->contact == null ? '': $service_request->client->account->contact->address}}.</td>
                                             </tr>
                                             <tr>
                                                 <td class="tx-medium">Request Description</td>
-                                                <td class="tx-color-03">My pc no longer comes on even when plugged into a power source.</td>
+                                                <td class="tx-color-03">{{$service_request->description}}.</td>
                                             </tr>
+                                           
+                                            @if(!empty($service_request_cancellation->reason))
+                                            <tr>
+                                                <td class="tx-medium">Reason for Cancellation </td>
+                                                <td class="tx-color-03">I'm no longer interested. <span class="text-danger">(Only visible if the request was cancelled)</span></td>
+                                            </tr>
+                                            @endif
 
                                         </tbody>
                                     </table>

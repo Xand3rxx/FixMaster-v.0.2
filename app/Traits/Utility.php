@@ -2,18 +2,22 @@
 
 namespace App\Traits;
 
+
+use DB;
+use Session;
+use Auth;
 use App\Models\User;
 use App\Models\Client;
 use App\Models\Cse;
 use App\Models\Account;
 use App\Models\Referral;
+use App\Models\ServiceRequest;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\MailNotify;
 use App\Mail\WarrantyNotify;
 use App\Traits\GenerateUniqueIdentity as Generator;
-use Session;
-use Auth;
-use DB;
+use App\Models\Warranty;
+use Carbon\Carbon;
 
 trait Utility
 {
@@ -320,6 +324,56 @@ trait Utility
   {
     $name = ucfirst($user->name);
     Mail::to($user->email)->send(new WarrantyNotify($user));
+    if ($type == 'client') {
+      Session::flash('success', "Welcome $name, your refferal link has been sent to your mail");
+    }
+    if ($type == 'cse') {
+      Session::flash('success', "Welcome $name, your refferal code has been sent to your mail");
+    } else {
+      return '1';
+    }
   }
+
+  public function markCompletedRequestTrait($user, $id){
+
+    $requestExists = ServiceRequest::where('uuid', $id)->firstOrFail();
+    $ifWarrantyExists =  \App\Models\ServiceRequestWarranty::where(['service_request_id'=> $requestExists->id])
+     ->first();
+
+    $newDateTime = Carbon::now()->addDay((int)$ifWarrantyExists->warranty->duration);
+    //ask for how warranties are assigned to client
+
+       $updateServiceRequestWarranty = \App\Models\ServiceRequestWarranty::where(['client_id'=> $requestExists->client_id, 'service_request_id'=> $requestExists->id])
+       ->update([
+            'start_date'                    =>  Carbon::now()->toDateTimeString(),
+            'expiration_date'               => $newDateTime->toDateTimeString(),
+             'amount'                      =>   $requestExists->total_amount
+          
+         ]);
+
+  
+        $updateRequest = ServiceRequest::where('uuid', $id)->update([
+             'status_id' =>  '4',
+        ]);
+
+        $recordServiceProgress = \App\Models\ServiceRequestProgress::create([
+          'user_id'                       =>  $requestExists->client_id, 
+          'service_request_id'            =>  $requestExists->id, 
+          'status_id'                     => '4',
+          'sub_status_id'                 =>  Auth::user()->type == 'admin'? '36':'35'
+      ]);
+      
+
+         if( $updateRequest AND $recordServiceProgress AND $updateServiceRequestWarranty){
+
+           //send mails to 1.admin, 2.client, 3.cse for mark as completed;
+          return $requestExists ;
+         }else{
+           return false;
+         }
+
+   
+  }
+
 
 }

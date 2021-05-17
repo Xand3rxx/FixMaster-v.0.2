@@ -2,12 +2,15 @@
 
 namespace App\Http\Controllers\CSE;
 
+use Auth;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use App\Http\Controllers\RatingController;
 use App\Models\Account;
 use App\Models\Contact;
+use App\Models\ServiceRequest;
+use App\Models\ServiceRequestAssigned;
 use App\Models\User;
+use App\Models\Cse;
 use Illuminate\Support\Facades\Route;
 
 use App\Traits\Loggable;
@@ -16,122 +19,88 @@ use App\Traits\Loggable;
 class CustomerServiceExecutiveController extends Controller
 {
     use Loggable;
+
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
-    {
-        // dd(request()->user()->cse->job_availability, \App\Models\Cse::JOB_AVALABILITY[0]);
-        return view('cse.index');
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     *
      * @param  \Illuminate\Http\Request  $request
+     * 
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function index(Request $request)
     {
-        //
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Contracts\View\View
-     */
-    public function show($language, $cse)
-    {
-        $user = User::where('uuid', $cse)->first();
-        return view('cse.view_profile', [
-            'user' => $user,
+        $cse = ServiceRequestAssigned::where('user_id', $request->user()->id)->with('service_request')->get();
+        // Data Needed on dashboard page
+        // 1. CSE Ratings
+        // 2. CSE Earnings
+        return view('cse.index', [
+            // 'earnings'
+            // 'ratings'
+            'completed' => $cse->filter(function ($each) {
+                return $each['service_request']['status_id'] == ServiceRequest::SERVICE_REQUEST_STATUSES['Completed'];
+            })->count(),
+            'canceled' => $cse->filter(function ($each) {
+                return $each['service_request']['status_id'] == ServiceRequest::SERVICE_REQUEST_STATUSES['Canceled'];
+            })->count(),
+            'ongoing' => $cse->filter(function ($each) {
+                return $each['service_request']['status_id'] == ServiceRequest::SERVICE_REQUEST_STATUSES['Ongoing'];
+            })->count(),
+            'available_requests' => Cse::isAvailable() ? ServiceRequest::where('status_id', ServiceRequest::SERVICE_REQUEST_STATUSES['Pending'])->with('service', 'address')->get() : []
         ]);
     }
 
     /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Contracts\View\View
-     */
-    public function edit($language, $cse)
-    {
-        $user = User::where('uuid', $cse)->first();
-        return view('cse.edit_profile', [
-            'user' => $user,
-            'banks' => \App\Models\Bank::all()
-        ]);
-    }
-
-    /**
-     * Update the specified resource in storage.
+     * Accept Service Request Job
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\RedirectResponse
+     * @return \Illuminate\Http\Response
      */
-    public function update($language, Request $request, $cse)
+    public function setJobAcceptance(Request $request)
     {
-        $this->validateUpdateRequest();
-        $accountExists = Account::where('user_id', auth()->user()->id)->first();
-        $contactExists = Contact::where('user_id', auth()->user()->id)->first();
-
-        \Illuminate\Support\Facades\DB::transaction(function () use ($request, $accountExists, $contactExists) {
-            // Update CSE Accounts Records table
-            $accountExists->update([
-                'first_name'        => $request->input('first_name'),
-                'middle_name'       => $request->input('middle_name'),
-                'last_name'         => $request->input('last_name'),
-                'gender'            => $request->input('gender'),
-                'bank_id'           => $request->input('bank_id'),
-                'account_number'    => $request->input('account_number'),
-            ]);
-
-            // Update CSE Contacts Records table
-            $contactExists->update([
-                'full_address'      => $request->input('full_address'),
-            ]);
-            $this->log('request', 'Informational', Route::currentRouteAction(), auth()->user()->account->last_name . ' ' . auth()->user()->account->first_name  . ') Job.');
-        });
-
-        return redirect()->route('cse.view_profile', [app()->getLocale(), $cse])->with('success', 'Account Updated Successfully');
+        $request->validate(['service_request_uuid' => 'required|uuid']);
+        $acceptedJob = new \App\Http\Controllers\ServiceRequest\JobAcceptanceController(ServiceRequest::where('uuid', $request->service_request_uuid)->firstOrFail(), $request->user());
+        return $acceptedJob->cseJobAcceptance();
     }
 
     /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
+     * Accept Service Request Job
+     * @param  \Illuminate\Http\Request  $request
+     * 
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function setAvailablity(Request $request)
     {
-        //
+        return ($request->user()
+            ? (($request->user()->cse->job_availability == CSE::JOB_AVALABILITY[0]
+                ? $request->user()->cse->update(['job_availability' => CSE::JOB_AVALABILITY[1]])
+                : $request->user()->cse->update(['job_availability' => CSE::JOB_AVALABILITY[0]]))
+                ? back()->with('success', 'Availability updated successfully!')
+                : back()->with('error', 'Error occured updating availability'))
+            : redirect()->route('login'));
     }
 
-    public function user_rating(Request $request, RatingController $ratings)
+    /**
+     * Accept CSE Ratings from view and transfer to Ratings Controller for handling
+     * 
+     * @param  \Illuminate\Http\Request  $request
+     * @param  \App\Http\Controllers\RatingController $ratings
+     * 
+     * @return \Illuminate\Http\Response
+     */
+    public function user_rating(Request $request, \App\Http\Controllers\RatingController $ratings)
     {
         return $ratings->handleRatings($request);
     }
 
-     /**
-     *
-     *
+    /**
+     * Accept CSE Ratings Update from view and transfer to Ratings Controller for handling
+     * 
+     * @param  \Illuminate\Http\Request  $request
+     * @param  \App\Http\Controllers\RatingController $ratings
+     * 
+     * @return \Illuminate\Http\Response
      */
-    public function update_cse_service_rating($language, Request $request, RatingController $updateRatings)
+    public function update_cse_service_rating(Request $request, \App\Http\Controllers\RatingController $updateRatings)
     {
         return $updateRatings->handleServiceRatings($request);
     }
@@ -150,4 +119,64 @@ class CustomerServiceExecutiveController extends Controller
             'full_address'       => 'required',
         ]);
     }
+
+
+    public function warranty_claims_list(){
+    
+        $warranties = \App\Models\ServiceRequestAssigned::with('service_request_warranty', 'user.account', 'service_request')
+        ->where(['user_id' => Auth::id(), 'status'=> 'Active'])
+        ->get();
+       
+            return view('cse.warranties.index', [
+                'issuedWarranties' =>  $warranties
+            ]);
+    
+    }
+
+    public function warranty_claims(){
+        return view('cse.warranties.index');
+    }
+
+    public function warranty_details($language, $uuid){
+
+
+        // find the service reqquest using the uuid and relations
+        $service_request = \App\Models\ServiceRequest::where('uuid', $uuid)->with(['price', 'service', 'service.subServices'])->firstOrFail();
+        
+        $request_progress = \App\Models\ServiceRequestProgress::where('service_request_id', $service_request->id)->with('user', 'substatus')->latest('created_at')->get();
+
+        // find the technician role CACHE THIS DURING PRODUCTION
+        $technicainsRole = \App\Models\Role::where('slug', 'technician-artisans')->first();
+    
+  
+        (array) $variables = [
+            'service_request' => $service_request,
+            'technicians' => \App\Models\UserService::where('service_id', $service_request->service_id)->where('role_id', $technicainsRole->id)->with('user')->get(),
+            'qaulity_assurances'    =>  \App\Models\Role::where('slug', 'quality-assurance-user')->with('users')->firstOrFail(),
+            'request_progress' => $request_progress,
+        ];
+        if ($service_request->status_id == 2) {
+            $service_request_progresses = \App\Models\ServiceRequestProgress::where('user_id', auth()->user()->id)->latest('created_at')->first();
+            // Determine Ongoing Status List
+            $variables = array_merge($variables, [
+                'tools' => \App\Models\ToolInventory::all(),
+                'latest_service_request_progress' => $service_request_progresses,
+                'ongoingSubStatuses' => \App\Models\SubStatus::where('status_id', 2)
+                    ->when($service_request_progresses->sub_status_id <= 13, function ($query, $sub_status) {
+                        return $query->whereBetween('phase', [4, 9]);
+                    }, function ($query) {
+                        return $query->whereBetween('phase', [20, 27]);
+                    })->get(['id', 'uuid', 'name']),
+            ]);
+            if ($service_request_progresses->sub_status_id >= 13) {
+                // find the Issued RFQ
+                $service_request->load(['rfqs' => function ($query) {
+                    $query->where('status', 'Awaiting')->where('accepted', 'No')->with('rfqBatches', 'rfqSupplier', 'rfqSupplier.supplier')->first();
+                }]);
+            }
+        }
+
+        return view('cse.warranties.show', $variables);
+    }
+   
 }

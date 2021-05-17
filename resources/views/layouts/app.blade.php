@@ -32,7 +32,7 @@
     <link href="{{ asset('assets/frontend/css/unicons.css') }}" rel="stylesheet" id="color-opt">
     <link rel="stylesheet" href="https://unicons.iconscout.com/release/v2.1.9/css/unicons.css">
     <link href="{{ asset('assets/client/css/sweetalert2.min.css') }}" rel="stylesheet" type="text/css" />
-
+    @stack('css')
     {{-- <link href="{{ asset('css/googlemap.css') }}" rel="stylesheet"> --}}
 </head>
 

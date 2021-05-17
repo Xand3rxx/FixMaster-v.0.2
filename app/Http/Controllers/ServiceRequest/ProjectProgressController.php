@@ -82,7 +82,7 @@ class ProjectProgressController extends Controller
      * 
      * @return \Illuminate\Http\Response
      */
-    protected function handleCompletedDiagnosis(Request  $request, \App\Models\ServiceRequest $serviceRequest, \App\Models\SubStatus $substatus)
+    protected function handleCompletedDiagnosis(Request $request, \App\Models\ServiceRequest $serviceRequest, \App\Models\SubStatus $substatus)
     {
         $completedDiagnosis =  new HandleCompletedDiagnosisController();
         return $completedDiagnosis->generateDiagnosisInvoice($request, $serviceRequest, $substatus);
@@ -154,7 +154,8 @@ class ProjectProgressController extends Controller
                     'component_name'    => $component_name,
                     'model_number'      => $valid['model_number'][$key],
                     'quantity'          => $valid['quantity'][$key],
-                    'amount'            => 0.00
+                    'amount'            => 0.00,
+                    'manufacturer_name' => 'ten'
                 ]);
             }
             $this->rfqInvoice($serviceRequest->id, $rfq->id);
