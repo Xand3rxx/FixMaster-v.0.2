@@ -24,6 +24,7 @@ class CreateServiceRequestWarrantiesIssuedTable extends Migration
             $table->foreignId('service_request_warranty_id');
             $table->foreignId('cse_id')->nullable();
             $table->foreignId('technician_id')->nullable();
+            $table->dateTime('scheduled_datetime')->nullable();
             $table->foreignId('completed_by')->nullable();
             $table->string('admin_comment')->nullable();
             $table->string('cse_comment')->nullable();

@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateServiceRequestWarrantyImagesTable extends Migration
+class CreateServiceRequestWarrantyReportsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,19 +13,16 @@ class CreateServiceRequestWarrantyImagesTable extends Migration
      */
     public function up()
     {
-        Schema::create('service_request_warranty_images', function (Blueprint $table) {
+        Schema::create('service_request_warranty_reports', function (Blueprint $table) {
             $table->engine = 'InnoDB';
             $table->charset = 'utf8mb4';
             $table->collation = 'utf8mb4_unicode_ci';
 
-          
             $table->id();
             $table->foreignId('user_id');
             $table->foreignId('service_request_warranties_issued_id');
-            $table->string('name')->unique();
+            $table->text('report');
             $table->timestamps();
-            $table->softDeletes();
-
         });
     }
 
@@ -36,6 +33,6 @@ class CreateServiceRequestWarrantyImagesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('service_request_warranty_images');
+        Schema::dropIfExists('service_request_warranty_reports');
     }
 }
