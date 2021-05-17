@@ -128,31 +128,10 @@
 @section('scripts')
 <script src="{{ asset('assets/dashboard/assets/js/qa-payments-sortings.js') }}"></script>
  <script>
-    //$(document).ready(function() {
+    $(document).ready(function() {
 
-//         $('#request-sorting').on('change', function (){
-//                 let option = $("#request-sorting").find("option:selected").val();
 
-//                 if(option === 'None'){
-//                     $('.specific-date, .sort-by-year, .date-range').addClass('d-none');
-//                 }
-
-//                 if(option === 'Date'){
-//                     $('.specific-date').removeClass('d-none');
-//                     $('.sort-by-year, .date-range').addClass('d-none');
-//                 }
-
-//                 if(option === 'Month'){
-//                     $('.sort-by-year').removeClass('d-none');
-//                     $('.specific-date, .date-range').addClass('d-none');
-//                 }
-
-//                 if(option === 'Date Range'){
-//                     $('.date-range').removeClass('d-none');
-//                     $('.specific-date, .sort-by-year').addClass('d-none');
-//                 }
-//         });
-//     });
+    });
 
 </script>
 @endsection

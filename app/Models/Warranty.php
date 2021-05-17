@@ -82,4 +82,9 @@ class Warranty extends Model
     {
         return $this->belongsTo(User::class);
     }
+
+    public function serviceRequestWarranty()
+    {
+        return $this->belongsTo(ServiceRequestWarranty::class, 'warranty_id', 'id');
+    }
 }

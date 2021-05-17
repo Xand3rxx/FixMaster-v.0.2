@@ -20,9 +20,13 @@ class CreateRfqBatchesTable extends Migration
 
             $table->id();
             $table->foreignId('rfq_id');
-            $table->string('component_name');
+            $table->string('manufacturer_name');
             $table->string('model_number')->nullable();
+            $table->string('component_name');
             $table->unsignedInteger('quantity');
+            $table->unsignedInteger('size')->nullable();
+            $table->string('unit_of_measurement')->nullable();
+            $table->string('image')->unique()->nullable();
             $table->unsignedInteger('amount')->default(0);
         });
     }

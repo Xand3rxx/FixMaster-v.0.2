@@ -11,9 +11,12 @@ use Illuminate\Support\Str;
 use Auth;
 use Route;
 use Image;
-
+use DB;
 use App\Models\Category;
 use App\Models\Service;
+use App\Models\SubService;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\Rule;
 
 class ServiceController extends Controller
 {
@@ -55,7 +58,10 @@ class ServiceController extends Controller
      */
     public function create()
     {
-        //
+        return view('admin.service.create', [
+            'categories'  =>  Category::ActiveCategories()->get()
+        ]);
+        
     }
 
     /**
@@ -66,27 +72,53 @@ class ServiceController extends Controller
      */
     public function store(Request $request)
     {
+        // return($request->sub_service_name);
+
         //Validate user input fields
         $this->validateRequest();
 
-        //Image storage directory
-        $imageDirectory = public_path('assets/service-images').'/';
+        //Set `createService`  and `createSubService` to false before Db transaction
+        (bool) $createService  = false;
+        (bool) $createSubService  = false;
+        
+        // Set DB to rollback DB transacations if error occurs
+        DB::transaction(function () use ($request, &$createService, &$createSubService) {
 
-        //Validate if an image file was selected
-        $imageName = $this->verifyAndStoreImage($request, $imageDirectory, $width = 350, $height = 259);
+            //Image storage directory
+            $imageDirectory = public_path('assets/service-images').'/';
 
-        //Create record for a new service
-        $createService = Service::create([
-           'user_id'        =>  Auth::id(),
-           'category_id'    =>  $request->category_id,
-           'name'           =>  ucwords($request->name),
-           'service_charge' =>  $request->service_charge,
-           'description'    =>  $request->description,
-           'image'          =>  $imageName,
-           'updated_at'     =>  null,
-        ]);
+             //Validate if an image file was selected
+            $imageName = $this->verifyAndStoreImage($request, $imageDirectory, $width = 350, $height = 259);
+            //Create record for a new service
+            $createService = Service::create([
+                'user_id'        =>  Auth::id(),
+                'category_id'    =>  $request->category_id,
+                'name'           =>  ucwords($request->name),
+                'service_charge' =>  $request->service_charge,
+                'description'    =>  $request->description,
+                'image'          =>  $imageName,
+                'updated_at'     =>  null,
+            ]);
 
-       if($createService){
+            //Create each record for sub service
+            if(count($request->sub_service_name) > 0){
+                foreach($request->sub_service_name as $item => $value){
+                    $createSubService = SubService::create([
+                        'user_id'                   =>  Auth::id(), 
+                        'service_id'                =>  $createService->id, 
+                        'name'                      =>  $request->sub_service_name[$item], 
+                        'first_hour_charge'         =>  $request->first_hour_charge[$item], 
+                        'subsequent_hour_charge'    =>  $request->subsequent_hour_charge[$item],
+                    ]);
+                }
+            }
+
+            $createService  = true;
+            $createSubService  = true;
+
+        });
+
+       if($createService AND $createSubService){
 
            //Record crurrenlty logged in user activity
            $type = 'Others';
@@ -122,11 +154,17 @@ class ServiceController extends Controller
      */
     private function validateRequest(){
         return request()->validate([
-            'name'              =>   'required|unique:services,name',
-            'category_id'       =>   'required',
-            'service_charge'    =>   'required|numeric',
-            'image'             =>   'required|mimes:jpg,png,jpeg,gif,svg|max:1014',
-            'description'       =>   'required',
+            'name'                      =>   'required|unique:services,name',
+            'category_id'               =>   'required',
+            'service_charge'            =>   'required|numeric',
+            'image'                     =>   'required|mimes:jpg,png,jpeg,gif,svg|max:512',
+            'description'               =>   'required',
+            'sub_service_name'          =>   'required|array|min:1', 
+            'sub_service_name.*'        =>   'required|distinct|unique:sub_services,name', 
+            'first_hour_charge'         =>   'required|array|min:1', 
+            'first_hour_charge.*'       =>   'required|numeric', 
+            'subsequent_hour_charge'    =>   'required|array|min:1', 
+            'subsequent_hour_charge.*'  =>   'required|numeric', 
         ]);
     }
 
@@ -138,13 +176,9 @@ class ServiceController extends Controller
      */
     public function show($language, $uuid)
     {
-        $service = Service::where('uuid', $uuid)->firstOrFail();
-
-        $data = [
-            'category'    =>  $service,
-        ];
-
-        return view('admin.service._show', $data);
+        return view('admin.service._show', [
+            'category'    =>  Service::where('uuid', $uuid)->firstOrFail()
+        ]);
     }
 
     /**
@@ -155,17 +189,11 @@ class ServiceController extends Controller
      */
     public function edit($language, $uuid)
     {
-        // $service = Service::findOrFail($uuid);
-        $service = Service::where('uuid', $uuid)->firstOrFail();
 
-        $categories = Category::ActiveCategories()->get();
-
-        $data = [
-            'categories'    =>  $categories,
-            'category'      =>  $service,
-        ];
-
-        return view('admin.service._edit', $data);
+        return view('admin.service.edit', [
+            'service'       =>  Service::where('uuid', $uuid)->with('subServices')->firstOrFail(),
+            'categories'    =>  Category::ActiveCategories()->get()
+        ]);
     }
 
     /**
@@ -177,46 +205,89 @@ class ServiceController extends Controller
      */
     public function update($language, Request $request, $uuid)
     {
+        // return $request;
+        $service = Service::where('uuid', $uuid)->firstOrFail();
+        
         //Validate user input fields
-        $request->validate([
-            'name'              =>   'required',
-            'category_id'       =>   'required',
-            'service_charge'    =>   'required|numeric',
-            'description'       =>   'required',
+        $validate = $request->validate([
+            'name'                      =>   'required|unique:services,name,'.$service->id.',id',
+            'category_id'               =>   'required',
+            'service_charge'            =>   'required|numeric',
+            'image'                     =>   'sometimes|mimes:jpg,png,jpeg,gif,svg|max:512',
+            'description'               =>   'required',
+            'sub_service_name'          =>   'required|array', 
+            'sub_service_name.*'        =>   'required|string', 
+            //     'sub_service_name.*'          =>   Rule::unique('sub_services', 'name')->ignore($request->sub_service_id), 
         ]);
 
-        //Image storage directory
-        $imageDirectory = public_path('assets/service-images').'/';
-
-        //Get old service image name
-        $oldImageName = $request->old_post_image;
-
-         //Validate if an image file was selected
-         if($request->hasFile('image')){
-            //Validate and update image with ImageUpload Trait
-            $imageName = $this->verifyAndStoreImage($request, $imageDirectory, $width = 350, $height = 259);
-
-            //Delete old service image if new image name is given
-            if(!empty($imageName) && ($imageName != $oldImageName)){
-                if(\File::exists($imageDirectory.$oldImageName)){
-
-                    \File::delete($imageDirectory.$oldImageName);
-                }
-            }
-
-        }else{
-            $imageName = $oldImageName;
+        //Validate if  name is unique updating and creating of record
+        if(!empty(SubService::where('name', ucwords(end($validate['sub_service_name'])))->withTrashed()->exists())){
+            return back()->with('error', 'Sub Service name has already been taken.');
         }
 
-         $updateCategory = Service::where('uuid', $uuid)->update([
-            'category_id'   =>  $request->input('category_id'),
-            'name'          =>  ucwords($request->input('name')),
-           'service_charge' =>  $request->service_charge,
-            'description'   =>  $request->input('description'),
-            'image'         =>  $imageName,
-        ]);
+        //Set `updateService`  and `updateSubService` to false before Db transaction
+        (bool) $updateService  = false;
+        (bool) $updateSubService  = false;
+        
+        DB::transaction(function () use ($request, $validate, $uuid, $service, &$updateService, &$updateSubService) {
 
-        if($updateCategory){
+            //Image storage directory
+            $imageDirectory = public_path('assets/service-images').'/';
+
+            //Get old service image name
+            $oldImageName = $request->old_post_image;
+
+            //Validate if an image file was selected
+            if($request->hasFile('image')){
+                //Validate and update image with ImageUpload Trait
+                $imageName = $this->verifyAndStoreImage($request, $imageDirectory, $width = 350, $height = 259);
+
+                //Delete old service image if new image name is given
+                if(!empty($imageName) && ($imageName != $oldImageName)){
+                    if(\File::exists($imageDirectory.$oldImageName)){
+
+                        \File::delete($imageDirectory.$oldImageName);
+                    }
+                }
+
+            }else{
+                $imageName = $oldImageName;
+            }
+
+            //Update Service record
+            $updateService = Service::where('uuid', $uuid)->update([
+                'category_id'    =>  $request->category_id,
+                'name'           =>  ucwords($request->name),
+                'service_charge' =>  $request->service_charge,
+                'description'    =>  $request->description,
+                'image'          =>  $imageName,
+            ]);
+
+            //Update each sub service records or create a record for a new sub service added
+            foreach($validate['sub_service_name'] as $item => $value){
+
+                $updateSubService = $service->subServices()->updateOrCreate(
+                [
+                    'id'    => $request->sub_service_id[$item] ?? $service->id,
+                    // 'name'  =>  $value
+                ],
+                [
+                    'user_id'                   =>  Auth::id(), 
+                    'service_id'                =>  $service->id, 
+                    'name'                      =>  $request->sub_service_name[$item], 
+                    'first_hour_charge'         =>  $request->first_hour_charge[$item], 
+                    'subsequent_hour_charge'    =>  $request->subsequent_hour_charge[$item],
+                ]);
+            }
+
+            //Set variables as true to be validated outside the DB transaction
+            $updateService  = true;
+            $updateSubService  = true;
+
+        });
+
+
+        if($updateService AND $updateSubService){
 
             //Record crurrenlty logged in user activity
             $type = 'Others';
@@ -338,6 +409,44 @@ class ServiceController extends Controller
             $this->log($type, $severity, $actionUrl, $message);
 
             return back()->with('error', 'An error occurred while trying to reinstate service.');
+        }
+    }
+
+    /**
+     * Remove the specified resource from storage.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function destroySubService($language, $uuid)
+    {
+        //Verify if uuid exists
+        $subService = SubService::where('uuid', $uuid)->firstOrFail();
+
+        // return $subService;
+
+        $deleteSubService = $subService->delete();
+
+        if($deleteSubService){
+            //Record crurrenlty logged in user activity
+            $type = 'Others';
+            $severity = 'Informational';
+            $actionUrl = Route::currentRouteAction();
+            $message = Auth::user()->email.' deleted '.$subService->name.' sub service';
+            $this->log($type, $severity, $actionUrl, $message);
+
+            return back()->with('success', $subService->name. ' sub service has been deleted.');;
+
+
+        }else{
+            //Record crurrenlty logged in user activity
+            $type = 'Errors';
+            $severity = 'Error';
+            $actionUrl = Route::currentRouteAction();
+            $message = 'An error occurred while '.Auth::user()->email.' was trying to delete '.$service->name.' sub service.';
+            $this->log($type, $severity, $actionUrl, $message);
+
+            return back()->with('error', 'An error occurred while trying to delete '.$subService->name);
         }
     }
 }

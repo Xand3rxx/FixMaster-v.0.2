@@ -18,6 +18,13 @@ class UserType extends Model
     protected $fillable = ['user_id', 'role_id',  'url'];
 
     /**
+     * The attributes that should be hidden for arrays.
+     *
+     * @var array
+     */
+    protected $hidden = ['id', 'user_id',];
+
+    /**
      * The roles relationship.
      * @return mixed
      */

@@ -1,8 +1,8 @@
 @extends('layouts.dashboard')
 @section('title', 'Request Details')
 @include('layouts.partials._messages')
-
 @section('content')
+<link rel="stylesheet" href="{{ asset('assets/dashboard/assets/css/dashforge.filemgr.css') }}">
 
 <div class="content-body">
     <div class="container pd-x-0">
@@ -15,7 +15,7 @@
                         <li class="breadcrumb-item active" aria-current="page">Request Details</li>
                     </ol>
                 </nav>
-                <h4 class="mg-b-0 tx-spacing--1">Job: REF-234234723</h4>
+                <h4 class="mg-b-0 tx-spacing--1">Job: {{$service_request->unique_id}}</h4>
                 <hr>
                 <div class="media align-items-center">
                     <span class="tx-color-03 d-none d-sm-block">
@@ -23,8 +23,12 @@
                         <img src="{{ asset('assets/images/default-male-avatar.png') }}" class="avatar rounded-circle" alt="Male Avatar">
                     </span>
                     <div class="media-body mg-sm-l-20">
-                        <h4 class="tx-18 tx-sm-20 mg-b-2">Kelvin Adesanya</h4>
-                        <p class="tx-13 tx-color-03 mg-b-0">08173682832</p>
+                        <h4 class="tx-18 tx-sm-20 mg-b-2">{{ucfirst($service_request->client->account->first_name)}}
+                        {{ucfirst($service_request->client->account->last_name)}}</h4>
+                                        
+                        <p class="tx-13 tx-color-03 mg-b-0">{{$service_request->client->account->contact->phone_number}}
+                            <a href="tel:{{$service_request->client->account->contact->phone_number}}" class="btn btn-primary btn-icon"><i class="fas fa-phone"></i> Call Client</a>
+                        </p>
                     </div>
                 </div><!-- media -->
             </div>
@@ -35,8 +39,10 @@
 
                 <div class="contact-content-header mt-4">
                     <nav class="nav">
+                
                         <a href="#serviceRequestActions" class="nav-link active" data-toggle="tab">Service Request Actions</a>
-                        <a href="#description" class="nav-link" data-toggle="tab"><span>Description</a>
+                      
+                        <a href="#description" class="nav-link" data-toggle="tab"><span>Job Description</a>
                         <a href="#serviceRequestSummary" class="nav-link" data-toggle="tab"><span>Service Request Summary</a>
                     </nav>
                     {{-- <a href="" id="contactOptions" class="text-secondary mg-l-auto d-xl-none"><i data-feather="more-horizontal"></i></a> --}}
@@ -44,6 +50,7 @@
 
                 <div class="contact-content-body">
                     <div class="tab-content">
+                  
                         <div id="serviceRequestActions" class="tab-pane show active pd-20 pd-xl-25">
                             <small class="text-danger">This tab is only visible once the Service request has an Ongoing status. Which logically is updated by the system or the CSE Coordinator by assigning a CSE to the request</small>
                             @if ($service_request->status_id == 1)
@@ -57,6 +64,7 @@
                             <h4> Completed the Service Request </h4>
                             @endif
                         </div>
+                      
 
                         <div id="description" class="tab-pane pd-20 pd-xl-25">
                             <div class="divider-text">Service Request Description</div>
@@ -68,31 +76,31 @@
                                         <tbody>
                                             <tr>
                                                 <td class="tx-medium">Job Reference</td>
-                                                <td class="tx-color-03">REF-234234723</td>
+                                                <td class="tx-color-03"> {{$service_request->unique_id}}</td>
                                             </tr>
                                             <tr>
                                                 <td class="tx-medium">Service Required</td>
-                                                <td class="tx-color-03">Eletronics (Computer & Laptops)</td>
+                                                <td class="tx-color-03"> {{$service_request->service->name}}</td>
                                             </tr>
                                             <tr>
-                                                <td class="tx-medium">Scheduled Date & Time</td>
-                                                <td class="tx-color-03">{{ Carbon\Carbon::parse('2020-12-28 16:58:54', 'UTC')->isoFormat('MMMM Do YYYY, h:mm:a') }}</td>
+                                                <td class="tx-medium">Scheduled Date & Time </td>
+                                     <td class="tx-color-03">{{ !empty($service_request->preferred_time) ? Carbon\Carbon::parse($service_request->preferred_time, 'UTC')->isoFormat('MMMM Do YYYY, h:mm:ssa') : 'Not Scheduled yet'}} </td>
                                             </tr>
                                             <tr>
-                                                <td class="tx-medium">Payment Status</td>
-                                                <td class="tx-color-03"><span class="text-success">Success</span>(Paystack or Flutterwave or E-Wallet or Offline)</td>
+                                                <td class="tx-medium">Payment Status </td>
+                                                <td class="tx-color-03"><span class="text-success">{{ucfirst($service_request->payment_statuses->status)}}</span>({{ ucfirst($service_request->payment_statuses->payment_channel)}})</td>
                                             </tr>
                                             <tr>
                                                 <td class="tx-medium">Initial Service Charge</td>
-                                                <td class="tx-color-03">₦{{ number_format(10000) }} Standard Price</td>
+                                                <td class="tx-color-03">₦{{ number_format($service_request->price->amount) }} Standard Price</td>
                                             </tr>
                                             <tr>
                                                 <td class="tx-medium">Total Service Charge</td>
-                                                <td class="tx-color-03">₦{{ number_format(15000) }}</td>
+                                                <td class="tx-color-03">₦{{ number_format($service_request->total_amount) }}</td>
                                             </tr>
                                             <tr>
                                                 <td class="tx-medium">Security Code</td>
-                                                <td class="tx-color-03">SEC-27AEC73E</td>
+                                                <td class="tx-color-03">{{$service_request->client_security_code}}</td>
                                             </tr>
                                             <tr>
                                                 <td class="tx-medium">Supervised By</td>
@@ -100,72 +108,152 @@
                                             </tr>
                                             <tr>
                                                 <td class="tx-medium">CSE's Assigned</td>
-                                                <td class="tx-color-03">List all CSE's assigned</td>
+                                                <td class="tx-color-03">{{CustomHelpers::arrayToList($service_request->service_request_assignees, 'cse-user')}}</td>
                                             </tr>
                                             <tr>
                                                 <td class="tx-medium">Technicians Assigned</td>
-                                                <td class="tx-color-03">List all Technicians's assigned</td>
+                                                <td class="tx-color-03">{{CustomHelpers::arrayToList($service_request->service_request_assignees, 'technician-artisans')}}</td>
                                             </tr>
                                             <tr>
                                                 <td class="tx-medium">Quality Assurance Managers Assigned</td>
-                                                <td class="tx-color-03">List all QA's assigned</td>
+                                                <td class="tx-color-03">{{CustomHelpers::arrayToList($service_request->service_request_assignees, 'quality-assurance-user')}}</td>
+                                                
                                             </tr>
                                             <tr>
                                                 <td class="tx-medium">State</td>
-                                                <td class="tx-color-03">Lagos</td>
+                                                <td class="tx-color-03">{{$service_request->client->account->state->name??'UNAVAILABLE'}}</td>
                                             </tr>
                                             <tr>
                                                 <td class="tx-medium">L.G.A</td>
-                                                <td class="tx-color-03">Eti-Osa</td>
+                                                <td class="tx-color-03">{{$service_request->client->account->lga->name?? 'UNAVAILABLE'}}</td>
                                             </tr>
                                             <tr>
                                                 <td class="tx-medium">Town/City</td>
-                                                <td class="tx-color-03">Ikoyi</td>
+                                                <td class="tx-color-03">{{$service_request->client->account->town->name?? 'UNAVAIALABLE'}}</td>
                                             </tr>
                                             <tr>
                                                 <td class="tx-medium">Request Address</td>
-                                                <td class="tx-color-03">27B, Bourdillon Road off Falomo, Ikoyi-Lagos.</td>
+                                                <td class="tx-color-03">{{$service_request->client->account->contact == null ? '': $service_request->client->account->contact->address}}.</td>
                                             </tr>
                                             <tr>
                                                 <td class="tx-medium">Request Description</td>
-                                                <td class="tx-color-03">My pc no longer comes on even when plugged into a power source.</td>
+                                                <td class="tx-color-03">{{$service_request->description}}.</td>
                                             </tr>
-
+                                           
+                                            @if(!empty($service_request_cancellation->reason))
                                             <tr>
                                                 <td class="tx-medium">Reason for Cancellation </td>
                                                 <td class="tx-color-03">I'm no longer interested. <span class="text-danger">(Only visible if the request was cancelled)</span></td>
                                             </tr>
+                                            @endif
                                         </tbody>
                                     </table>
 
-                                    {{-- @if(!empty($requestDetail->serviceRequestDetail->media_file)) --}}
                                     <div class="divider-text">Media Files</div>
-                                    <div class="row">
-                                        <div class="pd-20 pd-lg-25 pd-xl-30">
-
-                                            <div class="row row-xs">
-                                                <div class="col-6 col-sm-6 col-md-6 col-xl mg-t-10 mg-sm-t-0">
-                                                    <div class="card card-file">
-
-
-                                                        {{-- Media file design will come in here afterwrds --}}
-                                                        <div class="placeholder-media wd-100p wd-sm-55p wd-md-45p">
-                                                            <div class="line"></div>
-                                                        </div>
-                                                    </div>
-                                                </div><!-- col -->
-
-                                            </div><!-- row -->
-
-                                        </div>
-                                    </div>
-                                    {{-- @endif --}}
+                                    <div class="row row-xs">
+                                        <div class="col-6 col-sm-4 col-md-3 col-xl">
+                                          <div class="card card-file">
+                                            <div class="dropdown-file">
+                                              <a href="" class="dropdown-link" data-toggle="dropdown"><i data-feather="more-vertical"></i></a>
+                                              <div class="dropdown-menu dropdown-menu-right">
+                                                <a href="#" class="dropdown-item download"><i data-feather="download"></i>Download</a>
+                                              </div>
+                                            </div><!-- dropdown -->
+                                            <div class="card-file-thumb tx-danger">
+                                              <i class="far fa-file-pdf"></i>
+                                            </div>
+                                            <div class="card-body">
+                                              <h6><a href="" class="link-02">{{ substr('54c2a6f3-8a9c-411a-bd68-96a3a37617b2', 0, 15) }}.pdf</a></h6>
+                                            </div>
+                                            <div class="card-footer"><span class="d-none d-sm-inline">Date Created: </span>{{ \Carbon\Carbon::now('UTC')->isoFormat('MMMM Do YYYY, h:mm:ssa') }}</div>
+                                          </div>
+                                        </div><!-- col -->
+                                        <div class="col-6 col-sm-4 col-md-3 col-xl">
+                                          <div class="card card-file">
+                                            <div class="dropdown-file">
+                                              <a href="" class="dropdown-link" data-toggle="dropdown"><i data-feather="more-vertical"></i></a>
+                                              <div class="dropdown-menu dropdown-menu-right">
+                                                <a href="#" class="dropdown-item download"><i data-feather="download"></i>Download</a>
+                                              </div>
+                                            </div><!-- dropdown -->
+                                            <div class="card-file-thumb tx-primary">
+                                              <i class="far fa-file-word"></i>
+                                            </div>
+                                            <div class="card-body">
+                                                <h6><a href="" class="link-02">{{ substr('1c160a9b-8f52-46f5-a687-1dd608da48b3', 0, 15) }}.docx</a></h6>
+                                            </div>
+                                            <div class="card-footer"><span class="d-none d-sm-inline">Date Created: </span>{{ \Carbon\Carbon::now('UTC')->isoFormat('MMMM Do YYYY, h:mm:ssa') }}</div>
+                                          </div>
+                                        </div><!-- col -->
+                                        <div class="col-6 col-sm-4 col-md-3 col-xl mg-t-10 mg-sm-t-0">
+                                          <div class="card card-file">
+                                            <div class="dropdown-file">
+                                              <a href="" class="dropdown-link" data-toggle="dropdown"><i data-feather="more-vertical"></i></a>
+                                              <div class="dropdown-menu dropdown-menu-right">
+                                                <a href="#" class="dropdown-item download"><i data-feather="download"></i>Download</a>
+                                              </div>
+                                            </div><!-- dropdown -->
+                                            <div class="card-file-thumb tx-indigo">
+                                              <i class="far fa-file-image"></i>
+                                            </div>
+                                            <div class="card-body">
+                                                <h6><a href="" class="link-02">{{ substr('ff9c0bfa-aeed-4724-a8e4-790cf04a9fdd', 0, 15) }}.jpg</a></h6>
+                                            </div>
+                                            <div class="card-footer"><span class="d-none d-sm-inline">Date Created: </span>{{ \Carbon\Carbon::now('UTC')->isoFormat('MMMM Do YYYY, h:mm:ssa') }}</div>
+                                          </div>
+                                        </div><!-- col -->
+                                        <div class="col-6 col-sm-4 col-md-3 col-xl mg-t-10 mg-md-t-0">
+                                          <div class="card card-file">
+                                            <div class="dropdown-file">
+                                              <a href="" class="dropdown-link" data-toggle="dropdown"><i data-feather="more-vertical"></i></a>
+                                              <div class="dropdown-menu dropdown-menu-right">
+                                                <a href="#" class="dropdown-item download"><i data-feather="download"></i>Download</a>
+                                              </div>
+                                            </div><!-- dropdown -->
+                                            <div class="card-file-thumb tx-info">
+                                              <i class="far fa-file-video"></i>
+                                            </div>
+                                            <div class="card-body">
+                                                <h6><a href="" class="link-02">{{ substr('d886204a-a376-4924-a83b-2d7a7f84df7d', 0, 15) }}.mp4</a></h6>
+                                            </div>
+                                            <div class="card-footer"><span class="d-none d-sm-inline">Date Created: </span>{{ \Carbon\Carbon::now('UTC')->isoFormat('MMMM Do YYYY, h:mm:ssa') }}</div>
+                                          </div>
+                                        </div><!-- col -->
+                                      </div><!-- row -->
                                 </div><!-- df-example -->
                             </div>
                         </div>
 
                         <div id="serviceRequestSummary" class="tab-pane pd-20 pd-xl-25">
-                            <h5 class="mt-4 text-primary">Service Request Progress</h5>
+                            <div class="divider-text">Diagnostic Reports</div>
+                            <div class="card-group">
+                                <div class="card">
+                                    <div class="card-body shadow-none bd-primary overflow-hidden">
+                                        <div class="marker-primary marker-ribbon pos-absolute t-10 l-0">1</div>
+
+                                        <p class="card-text">After discussion with Mr Kelvin Adesanya, tentatively I beleive his laptop has overheating issues. On-premise diagnosis has to be carried out.</p>
+                                        <p class="card-text"><small class="text-muted">Date Created: {{ \Carbon\Carbon::now('UTC') }}</small></p>
+                                    </div>
+                                </div>
+                                <div class="card">
+                                    <div class="card-body shadow-none bd-primary overflow-hidden">
+                                        <div class="marker-primary marker-ribbon pos-absolute t-10 l-0">2</div>
+                                        <p class="card-text">After discussion with Mr Kelvin Adesanya, tentatively I beleive his laptop has overheating issues. On-premise diagnosis has to be carried out.</p>
+                                        <p class="card-text"><small class="text-muted">Date Created: {{ \Carbon\Carbon::now('UTC') }}</small></p>
+                                    </div>
+                                </div>
+                                <div class="card">
+                                    <div class="card-body shadow-none bd-primary overflow-hidden">
+                                        <div class="marker-primary marker-ribbon pos-absolute t-10 l-0">3</div>
+
+                                        <p class="card-text">After discussion with Mr Kelvin Adesanya, tentatively I beleive his laptop has overheating issues. On-premise diagnosis has to be carried out.</p>
+                                        <p class="card-text"><small class="text-muted">Date Created: {{ \Carbon\Carbon::now('UTC') }}</small></p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="divider-text">Service Request Progress</div>
+                            <h5 class="mt-4">Service Request Progress</h5>
                             <div class="table-responsive mb-4">
                                 <table class="table table-hover mg-b-0">
                                     <thead class="">
@@ -189,7 +277,8 @@
                                 </table>
                             </div><!-- table-responsive -->
 
-                            <h5 class="mt-4 text-primary">Tool Requests</h5>
+                            <div class="divider-text">Tools Request</div>
+                            <h5 class="mt-4">Tools Requests</h5>
                             <div class="table-responsive mb-4">
                                 <table class="table table-hover mg-b-0">
                                     <thead class="">
@@ -202,6 +291,7 @@
                                             <th>Status</th>
                                             <th>Date Requested</th>
                                             <th>Action</th>
+                                         
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -219,13 +309,14 @@
                                             <td class=" text-center">
                                                 <a href="#toolsRequestDetails" data-toggle="modal" class="btn btn-sm btn-primary" title="View TRF-C85BEA04 details" data-batch-number="TRF-C85BEA04" data-url="#" id="tool-request-details">Details</a>
                                             </td>
+                                            
                                         </tr>
                                     </tbody>
                                 </table>
                             </div><!-- table-responsive -->
 
-
-                            <h5 class="mt-4 text-primary">Request For Quotation</h5>
+                            <div class="divider-text">RFQ's</div>
+                            <h5 class="mt-4">Request For Quotation</h5>
                             <div class="table-responsive">
 
                                 <table class="table table-hover mg-b-0 mt-4">
@@ -238,7 +329,9 @@
                                             <th>Status</th>
                                             <th class="text-center">Total Amount</th>
                                             <th>Date Created</th>
+                                            @if(Auth::user()->type->url != 'admin')
                                             <th>Action</th>
+                                            @endif
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -251,9 +344,11 @@
                                             <td class="text-medium text-success">Payment received</td>
                                             <td class="tx-medium text-center">₦{{ number_format(5000) ?? 'Null'}}</td>
                                             <td class="text-medium">{{ Carbon\Carbon::parse('2020-12-28 16:58:54', 'UTC')->isoFormat('MMMM Do YYYY, h:mm:ssa') }}</td>
+                                          
                                             <td class=" text-center">
                                                 <a href="#rfqDetails" data-toggle="modal" class="btn btn-sm btn-primary" title="View RFQ-C85BEA04 details" data-batch-number="RFQ-C85BEA04" data-url="#" id="rfq-details"></i> Details</a>
                                             </td>
+                                            
                                         </tr>
                                     </tbody>
                                 </table>

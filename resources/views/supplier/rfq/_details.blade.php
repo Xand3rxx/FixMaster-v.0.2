@@ -4,7 +4,8 @@
                 <tbody>
                   <tr>
                     <td class="tx-medium">Supplier's Name</td>
-                    <td class="tx-color-03">{{ Str::title($rfqDetails['rfqSupplier']['supplier']['account']['first_name'] ." ". $rfqDetails['rfqSupplier']['supplier']['account']['last_name']) }}</td>
+                    <td class="tx-color-03">
+                      {{ !empty($rfqDetails['rfqSupplier']['supplier']['account']['first_name']) ? Str::title($rfqDetails['rfqSupplier']['supplier']['account']['first_name'] ." ". $rfqDetails['rfqSupplier']['supplier']['account']['last_name']) : 'UNAVAILABLE' }}</td>
                   </tr>
                   <tr>
                     <td class="tx-medium">Delivery Fee</td>
@@ -16,11 +17,11 @@
                   </tr>
                   <tr>
                     <td class="tx-medium">Issued By</td>
-                    <td class="tx-color-03">{{ Str::title($rfqDetails['issuer']['account']['first_name'] ." ". $rfqDetails['issuer']['account']['last_name']) }}</td>
+                    <td class="tx-color-03">{{ !empty($rfqDetails['issuer']['account']['first_name']) ? Str::title($rfqDetails['issuer']['account']['first_name'] ." ". $rfqDetails['issuer']['account']['last_name']) : 'UNAVAILABLE' }}</td>
                   </tr>
                   <tr>
                     <td class="tx-medium">Client Name</td>
-                    <td class="tx-color-03">{{ Str::title($rfqDetails['client']['account']['first_name'] ." ". $rfqDetails['client']['account']['last_name']) }}</td>
+                    <td class="tx-color-03">{{ !empty($rfqDetails['client']['account']['first_name']) ? Str::title($rfqDetails['client']['account']['first_name'] ." ". $rfqDetails['client']['account']['last_name']) : 'UNAVAILABLE' }}</td>
                   </tr>
                   
                   <tr>
@@ -49,20 +50,34 @@
                   <thead class="thead-primary">
                     <tr>
                       <th class="text-center">#</th>
-                      <th>Component Name</th>
+                      <th>Manufacturer Name</th>
                       <th>Model Number</th>
+                      <th>Component Name</th>
                       <th class="text-center">Quantity</th>
-                      <th class="text-center">Amount</th>
+                      <th class="text-center">Size</th>
+                      <th>Unit of Measurement</th>
+                      <th class="text-center">Image</th>
+                      <th class="text-center">Amount(₦)</th>
                     </tr>
                   </thead>
                   <tbody>
                       @foreach ($rfqDetails->rfqBatches as $item)
                         <tr>
                             <td class="tx-color-03 tx-center">{{ ++$i }}</td>
-                            <td class="tx-medium">{{ $item->component_name }}</td>
-                            <td class="tx-medium">{{ $item->model_number }}</td>
-                            <td class="tx-medium text-center">{{ $item->quantity }}</td>
-                            <td class="tx-medium text-center">₦{{ number_format($item->amount) }}</td>
+                            <td class="tx-medium">{{ !empty($item->manufacturer_name) ? $item->manufacturer_name : 'UNAVAILABLE' }}</td>
+                            <td class="tx-medium">{{ !empty($item->model_number) ? $item->model_number : 'UNAVAILABLE' }}</td>
+                            <td class="tx-medium">{{ !empty($item->component_name) ? $item->component_name : 'UNAVAILABLE' }}</td>
+                            <td class="tx-medium text-center">{{ !empty($item->quantity) ? number_format($item->quantity) : '0' }}</td>
+                            <td class="tx-medium text-center">{{ !empty($item->size) ? number_format($item->size) : '0' }}</td>
+                            <td class="tx-medium">{{ !empty($item->unit_of_measurement) ? $item->unit_of_measurement : 'UNAVAILABLE' }}</td>
+                            <td class="text-center">
+                              @if(!empty($item->image))
+                              <a href="#rfqImageDetails" data-toggle="modal" class="text-info" title="View {{ $item->component_name }} image" data-batch-number="{{ $item->id }}" data-url="{{ route('supplier.rfq_details_image', ['image'=>$item->id, 'locale'=>app()->getLocale()]) }}" id="rfq-image-details"> View</a>
+                              @else
+                                    -
+                              @endif
+                            </td>
+                            <td class="tx-medium text-center">{{ !empty($item->amount) ? number_format($item->amount) : '0' }}</td>
                         </tr>
                       @endforeach
                   </tbody>

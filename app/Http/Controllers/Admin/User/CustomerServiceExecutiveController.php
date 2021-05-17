@@ -66,7 +66,7 @@ class CustomerServiceExecutiveController extends Controller
     public function show($language, $uuid)
     {
         $user = \App\Models\User::where('uuid', $uuid)->with('account', 'cse', 'permissions', 'contact')->firstOrFail();
-        dd($user);
+        //dd($user);
         return view('admin.users.cse.show', [
             'user' => $user,
             'last_seen' => $user->load(['logs' => function ($query) {

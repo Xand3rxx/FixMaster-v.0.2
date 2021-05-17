@@ -72,13 +72,35 @@ class Account extends Model
      */
     public function usercontact()
     {
-        return $this->hasOne(Contact::class, 'user_id');
+        return $this->hasOne(Contact::class, 'user_id', 'user_id');
     }
 
     public function town()
     {
         return $this->belongsTo(Town::class);
     }
+
+    /**
+     * Get the Supplier associated with the user.
+     */
+    public function supplier()
+    {
+        return $this->hasOne(Supplier::class);
+    }
+
+    public function contact()
+    {
+        return $this->hasOne(Contact::class, 'user_id', 'user_id');
+    }
+
+    public function service_request_warranty_issued(){
+        return $this->hasOne(ServiceRequestWarrantyIssued::class, 'cse_id', 'user_id');
+    }
+
+    public function warranty_issued(){
+        return $this->hasOne(ServiceRequestWarrantyIssued::class, 'completed_by', 'user_id');
+    }
+
 
 }
 

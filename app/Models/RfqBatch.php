@@ -14,7 +14,7 @@ class RfqBatch extends Model
     public $timestamps = false;
 
     protected $fillable = [
-        'rfq_id', 'component_name', 'model_number', 'quantity', 'amount'
+        'rfq_id', 'manufacturer_name', 'model_number', 'component_name', 'quantity', 'size', 'unit_of_measurement', 'image', 'amount'
     ];
 
     public function rfq()

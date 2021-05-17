@@ -26,7 +26,7 @@ Auth::routes([
     'logout'   => true,
     'reset'    => false,   // for resetting passwords
     'confirm'  => false,  // for additional password confirmations
-    'verify'   => true,  // for email verification
+    'verify'   => false,  // for email verification
 ]);
 
 Route::post('/email/verification-notification', function (\Illuminate\Http\Request $request) {
@@ -51,7 +51,8 @@ Route::view('/register',                    'auth.register')->name('frontend.reg
 
 Route::post('customer-service-executive', [CSEFormController::class, '__invoke'])->name('frontend.customer-service-executive.store');
 
-Route::get('/invoice/{invoice:uuid}', [InvoiceController::class, 'invoice'])->name('invoice');
+//Route::get('/invoice/{invoice:uuid}', [InvoiceController::class, 'invoice'])->name('invoice');
+Route::get('/invoice/', [InvoiceController::class, 'invoice'])->name('invoice');
 
 Route::post('client-decision', [ClientDecisionController::class, '__invoke'])->name('client.decision');
 
