@@ -329,7 +329,9 @@ Route::prefix('admin')->group(function () {
 
         //CSE Reporting Routes
         Route::get('/reports/client-service-executive',      [CustomerServiceExecutiveReportController::class, 'index'])->name('cse_reports');
-        Route::post('/reports/client-service-executive/sorting',      [CustomerServiceExecutiveReportController::class, 'jobAssignedSorting'])->name('cse_report_first_sorting');    
+        Route::post('/reports/client-service-executive/job-assigned-sorting',      [CustomerServiceExecutiveReportController::class, 'jobAssignedSorting'])->name('cse_report_first_sorting');    
+        Route::post('/reports/client-service-executive/amount-earned-sorting',      [CustomerServiceExecutiveReportController::class, 'amountEarnedSorting'])->name('cse_report_second_sorting');    
+
     });
 });
 
