@@ -8,6 +8,7 @@ use App\Models\PaymentDisbursed;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use App\Models\ServiceRequestAssigned;
+use App\Models\ServiceRequestWarranty;
 
 class ServiceRequestController extends Controller
 {
@@ -186,6 +187,21 @@ class ServiceRequestController extends Controller
         ->where('user_id', Auth::id())
         ->where('assistive_role', 'Consultant')->get();
         return view('quality-assurance.consultations.completed', compact('completedConsults'));
+    }
+
+    public function getWarranties(Request $request){
+        $warranties = ServiceRequestWarranty::with('service_request_assignees', 'service_request')
+                ->whereHas('service_request_assignees', function ($query){
+                    $query->where('user_id', Auth::id());
+                })->latest('created_at')->get();
+        return view('quality-assurance.requests.warranty_claim', compact('warranties'));
+    }
+
+    public function warrantyDetails($language, $uuid)
+    {
+        $respond = ServiceRequest::where('uuid', $uuid)->first();
+        $output = ServiceRequestWarranty::where('service_request_id', $respond->id)->first();
+        return view('quality-assurance.requests.warranty', compact('output'));
     }
 
     /**

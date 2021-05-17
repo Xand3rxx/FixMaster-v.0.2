@@ -14,6 +14,8 @@ class ServiceRequestWarranty extends Model
         'client_id', 'warranty_id', 'service_request_id', 'start_date', 'expiration_date', 'amount', 'status', 'initiated', 'has_been_attended_to', 'reason',
     ];
 
+
+
     /**
      * The "booted" method of the model.
      *
@@ -51,13 +53,22 @@ class ServiceRequestWarranty extends Model
         return $this->hasOne(ServiceRequest::class, 'id', 'service_request_id');
     }
 
-    /** 
+    public function service_request_warranty_issued(){
+        return $this->hasOne(ServiceRequestWarrantyIssued::class, 'service_request_warranty_id', 'id');
+    }
+
+    public function service_request_assignees(){
+
+        return $this->hasOne(ServiceRequestAssigned::class, 'service_request_id')->with('user');
+    }
+
+    /**
      * Scope a query to only include all pending requests
-     * 
+     *
      * @param \Illuminate\Database\Eloquent\Builder $query
      * @return \Illuminate\Database\Eloquent\Builder
      */
-    //Scope to return all services  
+    //Scope to return all services
     public function scopeUnresolvedWarranties($query)
     {
         return $query->select('*')

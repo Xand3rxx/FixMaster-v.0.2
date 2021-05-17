@@ -29,12 +29,18 @@
             </div>
 
             <div class="col-md-3">
+                @foreach($activeDetails->service_request->users as $res)
+                  @if ($res->type->role->name === 'Customer Service Executive')
+                  <a href="{{{$res->contact->phone_number}}}" class="btn btn-primary btn-icon"><i class="fas fa-phone"></i> Call CSE</a>
+                  @endif
+                  @endforeach
 
-                <a href="tel:08173682832" class="btn btn-primary btn-icon"><i class="fas fa-phone"></i> Call CSE</a> <button class="btn btn-sm" style="background-color: #E97D1F; color:#fff;">Go Back</button>
+
+                 <button class="btn btn-sm" style="background-color: #E97D1F; color:#fff;">Go Back</button>
             </div>
         </div>
         <div class="divider-text">Service Request Description</div>
-<br>
+        <br>
         <table class="table table-striped table-sm mg-b-0">
             <tbody>
               <tr>

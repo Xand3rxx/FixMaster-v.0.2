@@ -515,8 +515,8 @@ Route::prefix('/quality-assurance')->group(function () {
         Route::get('/requests/completed', [ServiceRequestController::class, 'getCompletedJobs'])->name('requests.completed');
         Route::get('/requests/cancelled', [ServiceRequestController::class, 'getCancelledJobs'])->name('requests.cancelled');
         Route::get('/requests/active_details/{uuid}', [ServiceRequestController::class, 'acceptedJobDetails'])->name('requests.active_details');
-        Route::view('/requests/warranty_claim', 'quality-assurance.requests.warranty_claim')->name('requests.warranty_claim');
-        Route::view('/requests/warranty_claim_details', 'quality-assurance.requests.warranty_claim_details')->name('requests.warranty_claim_details');
+        Route::get('/requests/warranty_claim', [ServiceRequestController::class, 'getWarranties'])->name('requests.warranty_claim');
+        Route::get('/requests/warranty/{uuid}', [ServiceRequestController::class, 'warrantyDetails'])->name('requests.warranty');
         Route::get('/consultations/pending', [ServiceRequestController::class, 'getPendingConsultations'])->name('consultations.pending');
         Route::get('/consultations/ongoing', [ServiceRequestController::class, 'getOngoingConsultations'])->name('consultations.ongoing');
         Route::get('/consultations/ongoing_details/{uuid}', [ServiceRequestController::class, 'getOngoingConsultationDetails'])->name('consultations.ongoing_details');

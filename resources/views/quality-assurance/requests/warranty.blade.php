@@ -17,6 +17,7 @@
 
         </nav>
         <h4 class="mg-b-0 tx-spacing--1">Warranty Claims</h4>
+
       </div>
     </div>
 
@@ -34,40 +35,41 @@
             </div>
         </div>
         <div class="divider-text">Service Request Description</div>
+
 <br>
         <table class="table table-striped table-sm mg-b-0">
             <tbody>
               <tr>
                 <td class="">Job Reference</td>
-                <td class="">REF-234234723</td>
+                <td class="">{{$output->service_request->unique_id}}</td>
               </tr>
               <tr>
                 <td class="">Service Required</td>
-                <td class="">Eletronics (Computer & Laptops)</td>
+                <td class="">{{$output->service_request->service->category->name}} ({{$output->service_request->service->name}})</td>
               </tr>
               <tr>
                 <td class="tx-medium">Scheduled Date & Time</td>
-                <td class="tx-color-03">{{ Carbon\Carbon::parse('2020-12-28 16:58:54', 'UTC')->isoFormat('MMMM Do YYYY, h:mm:a') }}</td>
+                <td class="tx-color-03">{{ Carbon\Carbon::parse($output->service_request->preferred_time, 'UTC')->isoFormat('MMMM Do YYYY, h:mm:a') }}</td>
             </tr>
             <tr>
                 <td class="tx-medium">Request Address</td>
-                <td class="tx-color-03">27B, Bourdillon Road off Falomo, Ikoyi-Lagos.</td>
+                <td class="tx-color-03">{{$output->service_request->address->address}}</td>
             </tr>
             <tr>
                 <td class="tx-medium">Town/City</td>
-                <td class="tx-color-03">Ikoyi</td>
+                <td class="tx-color-03">{{$output->service_request->address->town->name}}</td>
             </tr>
             <tr>
                 <td class="tx-medium">L.G.A</td>
-                <td class="tx-color-03">Eti-Osa</td>
+                <td class="tx-color-03">{{$output->service_request->address->lga->name}}</td>
             </tr>
               <tr>
                 <td class="">Service Description</td>
-                <td class="">{{ Carbon\Carbon::parse('2020-12-28 16:58:54', 'UTC')->isoFormat('MMMM Do YYYY, h:mm:a') }}</td>
+                <td class="">{{$output->service_request->service->description}}</td>
               </tr>
               <tr>
                 <td class="">Warranty Claim Reason</td>
-                <td class="">{{'The PC Fan stopped coolling'}}</td>
+                <td class="">{{$output->reason}}</td>
               </tr>
             </tbody>
           </table>
