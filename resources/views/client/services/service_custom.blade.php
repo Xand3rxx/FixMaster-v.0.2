@@ -310,7 +310,6 @@ tbody td, thead th {
             <label class="custom-control-label" for="payment_gateway_option">Pay Online</label>
         </div>
     </div>
-
  
     <input type="hidden" value="{{!empty($balance->closing_balance) ? $balance->closing_balance : '0'}}" name="balance" />
 

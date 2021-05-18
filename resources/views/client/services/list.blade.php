@@ -38,7 +38,7 @@
                                 <tr>
 
                                 <td class="tx-color-03 tx-center">{{ $loop->iteration }}</td>
-                                <td>{{ $myServiceRequest['service']['name'] }}</td>
+                                <td>{{ $myServiceRequest['service']['name'] ?? 'Custom Request' }} </td>
                                 <td class="text-center font-weight-bold">{{ $myServiceRequest->bookingFee->amount }}</td>
                                 <td class="tx-medium">
                                 @if($myServiceRequest->status_id == 1)

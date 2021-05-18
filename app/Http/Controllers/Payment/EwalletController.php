@@ -32,7 +32,7 @@ class EwalletController extends Controller
 
         $client_controller = new ClientController;
         
-
+            
         if($request->balance > $request->booking_fee){
             // $SavedRequest = $this->saveRequest($request);
             $SavedRequest = $client_controller->saveRequest( $request);
@@ -47,13 +47,12 @@ class EwalletController extends Controller
             // call the payment Trait and submit record on the
             $payment = $this->payment($SavedRequest->total_amount, 'wallet', 'service-request', $client['unique_id'], 'success', $generatedVal);
             // save the reference_id as track in session
-            Session::put('Track', $generatedVal);
+            // Session::put('Track', $generatedVal);
                 if ($payment) {
                     //   new starts here
                     $user_id = auth()->user()->id;
                     // $track = Session::get('Track');
-                    $track = Session::get('Track');
-                    $pay =  Payment::where('reference_id', $track)->orderBy('id', 'DESC')->first();
+                    $pay =  Payment::where('reference_id', $generatedVal)->orderBy('id', 'DESC')->first();
                     //save to the wallet transaction table
                     if ($pay) {
                         $wallet_transaction = new WalletTransaction;
@@ -62,8 +61,8 @@ class EwalletController extends Controller
                         $wallet_transaction->amount = $pay->amount;
                         $wallet_transaction->payment_type = $pay->payment_for;
                         $wallet_transaction->unique_id = $pay->unique_id;
-                        $wallet_transaction->transaction_type = 'credit';
-                        $wallet_transaction->opening_balance = $request->balance;
+                        $wallet_transaction->transaction_type = 'debit';
+                        $wallet_transaction->opening_balance = $request->balance ;
                         $wallet_transaction->closing_balance = $request->balance - $pay->amount;
                         $wallet_transaction->status = 'success';
                         $wallet_transaction->save();

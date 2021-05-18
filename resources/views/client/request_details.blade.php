@@ -26,7 +26,7 @@
                     <img src="{{ asset('assets/images/job/Eslint.svg') }}" class="avatar avatar-ex-sm" alt="" />
                     <div class="media-body content ml-3">
                         <h4 class="title mb-0">Service</h4>
-                        <p class="text-muted mb-0">{{ $requestDetail->service->name }}</p>
+                        <p class="text-muted mb-0">{{ $requestDetail->service->name ?? 'Custom Request' }}</p>
                     </div>
                 </div>
             </div>
@@ -37,7 +37,7 @@
                     <div class="media-body content ml-3">
                         <h4 class="title mb-0">Category</h4>
                       
-                        <p class="text-muted mb-0">{{ $requestDetail->service->category->name }}</p>
+                        <p class="text-muted mb-0">{{ $requestDetail->service->category->name ?? 'Custom Request'}}</p>
                     </div>
                 </div>
             </div>

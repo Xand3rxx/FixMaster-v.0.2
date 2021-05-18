@@ -776,6 +776,7 @@ class ClientController extends Controller
         $data['discounts']    = $this->clientDiscounts();
         $data['gateways']     = PaymentGateway::whereStatus(1)->orderBy('id', 'DESC')->get();
         $data['states'] = State::select('id', 'name')->orderBy('name', 'ASC')->get();
+        $data['balance']      = WalletTransaction::where('user_id', auth()->user()->id)->orderBy('id', 'DESC')->first();
         
         return view('client.services.service_custom', $data);
     }
