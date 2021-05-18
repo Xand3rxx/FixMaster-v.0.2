@@ -73,6 +73,7 @@ class PaystackController extends Controller
     {
                 if(auth()->user()){
                     $payment = Payment::find($paymentId);
+                    // return dd($payment);
                     // $curl = curl_init();
 
                     // curl_setopt_array($curl, array(
@@ -95,8 +96,8 @@ class PaystackController extends Controller
                     $fields = [
                       'email' => auth()->user()->email,
                       'amount' => $payment->amount * 100,
-                      'callback_url' => route('paystack-verify', app()->getLocale()),
-                       'reference' => $payment->reference_id
+                      'reference' => $payment->reference_id,
+                      'callback_url' => route('paystack-verify', app()->getLocale()),                       
                     ];
                     $fields_string = http_build_query($fields);
                     //open connection
@@ -123,7 +124,7 @@ class PaystackController extends Controller
                     if (!$tranx['status']) {
                         return back()->with('error', $tranx['message']);
                     }
-                    return redirect($tranx['data']['authorization_url']);
+                    return redirect($tranx['data']['authorization_url'])->with('trans',$tranx);
 
                 }else{
                     return back()->with('error', 'Error occured while making payment');
@@ -135,9 +136,6 @@ class PaystackController extends Controller
     {        
         $input_data = $request->all();  
 
-        return dd($input_data);
-
-        // $reference = isset($_GET['reference']) ? $_GET['reference'] : '';
         $reference = $request->get('reference', '');
         
         if (!$reference) {
@@ -179,8 +177,8 @@ class PaystackController extends Controller
                 die('Api returned Error ' . $resp->message);
             }
 
-            if(($resp->status ?? '') == "success"){
-               $paymentDetails['transaction_id'] = rawurlencode($reference)?? '';
+            if($resp->data->status == 'success'){
+               $paymentDetails['transaction_id'] = $resp->data->id;
                $paymentDetails['status']         = 'success';                
                 //if the payment was updated to success
                 
