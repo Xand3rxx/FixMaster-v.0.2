@@ -98,18 +98,20 @@
                                                 <a href="{{ route('invoice', ['locale' => app()->getLocale(), 'invoice' => $invoice['uuid']]) }}" class="dropdown-item details text-info"><i data-feather="file-text" class="fea icon-sm"></i> {{ $invoice['invoice_type'] }}</a>
                                             @endforeach
 
-
+                                           
                                             @if($myServiceRequest->status_id == 4 && !empty($myServiceRequest['warranty']))
+                                            @if(!CustomHelpers::ifDateIsPast($myServiceRequest['warranty']['expiration_date']))
                                                 <div class="dropdown-divider"></div>
-
+                                                
                                                 @if($myServiceRequest['warranty']['initiated'] != 'Yes')
+                
                                                 <a href="#warrantyInitiate" id="warranty-initiate"
                                                 data-toggle="modal"
                                                 data-url="{{ route('client.warranty_initiate', [ 'request'=> $myServiceRequest->uuid, 'locale'=>app()->getLocale() ]) }}"
-                                                 data-job-reference="{{ $myServiceRequest->unique_id  }}" class="dropdown-item text-success"><i data-feather="award" class="fea icon-sm"></i> Initiate Warranty</a>
-                                                @else
-                                                <a href="#" class="dropdown-item text-success"><i data-feather="award" class="fea icon-sm"></i> Pending Warranty</a>
+                                                 data-job-reference="{{ $myServiceRequest->unique_id  }}" class="dropdown-item text-success"><i data-feather="award" class="fea icon-sm"></i> Pending Warranty</a>
+                                                
                                                  @endif
+                                            @endif
                                             @endif
                                         </div>
                                     </div>

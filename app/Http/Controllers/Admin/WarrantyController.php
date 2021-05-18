@@ -8,6 +8,7 @@ use App\Http\Controllers\Controller;
 use App\Traits\Utility;
 use App\Models\Warranty;
 use App\Models\ServiceRequestWarranty;
+use App\Models\ServiceRequestWarrantyIssued;
 use Illuminate\Support\Facades\URL;
 use App\Traits\Loggable;
 use App\Models\PaymentDisbursed;
@@ -207,8 +208,79 @@ class WarrantyController extends Controller
         return view('admin.warranty._');
     }
 
-    public function resolvedWarranty($language, $uuid)
+    public function resolvedWarranty(Request $request, $language, $uuid)
     {
-        return $uuid;
+     
+        $serviceRequest = ServiceRequestWarranty::where('uuid', $uuid)->with('user.account', 'service_request', 'warranty')->first();
+        $warrantyExist = Warranty::where('id',  $serviceRequest->warranty_id)->first();
+   
+           //Set 'createWarranty` to false
+           (bool) $updateWarranty = false;
+           (bool) $createWarranty  = false;
+
+           //Update ServiceRequestWarranty
+           DB::transaction(function () use ($request, &$updateWarranty, $uuid) {
+               $updateWarranty= ServiceRequestWarranty::where('uuid', $uuid)->update([
+                   'has_been_attended_to'          =>  'Yes',
+               ]);
+   
+               $updateWarranty = true;
+           });
+           DB::transaction(function () use ($request, &$createWarranty, $serviceRequest) {
+            $createWarranty = ServiceRequestWarrantyIssued::create([
+                'service_request_warranty_id'        =>   $serviceRequest->id,
+                'cse_id'             =>  $serviceRequest->service_request->cses[0]->account->user_id,
+                'technician_id'     =>   NULL,
+                'completed_by'      =>   Auth::id(),
+                'admin_comment'       =>   Auth::user()->type->url == 'admin'? $request->comment: 'TEST', 
+                'cse_comment'       =>  Auth::user()->type->url != 'admin'? $request->comment: '',
+                'date_resolved'       =>  \Carbon\Carbon::now('UTC'),
+            ]);
+            $createWarranty = true;
+        });
+
+     
+        if ($createWarranty){
+            $type = 'Others';
+            $severity = 'Informational';
+            $actionUrl = Route::currentRouteAction();
+            $message = Auth::user()->email.' mark as resolved '.$warrantyExist->name;
+            $this->log($type, $severity, $actionUrl, $message);
+            if(Auth::user()->type->url == 'admin'){
+                return redirect()->route('admin.issued_warranty', app()->getLocale())->with('success', $warrantyExist->name.' warranty has been resolved successfully.');
+
+            }else{
+                return redirect()->route('cse.warranty_claims_list', app()->getLocale())->with('success', $warrantyExist->name.' warranty has been resolved successfully.');
+
+            }
+        }
+        else {
+            $type = 'Errors';
+            $severity = 'Error';
+            $actionUrl = Route::currentRouteAction();
+            $message = 'An Error Occured while '. Auth::user()->email. ' was trying to mark as resolved '.$warrantyExist->name;
+            $this->log($type, $severity, $actionUrl, $message);
+            return back()->with('error', 'An error occurred while trying to delete '.$warrantyExist->name);
+        }
+
+         
+    }
+
+    public function issuedWarrantiesDetails(Request $request){
+        
+        return view('cse.requests.show');
+    }
+
+    public function warranty_resolved_details(Request $request, $language, $uuid){
+
+        $serviceRequest = ServiceRequestWarranty::where('uuid', $uuid)->with('user.account', 'service_request', 'warranty')->first();
+        $warrantyExist = Warranty::where('id',  $serviceRequest->warranty_id)->first();
+
+         //dd( $serviceRequest->service_request_warranty_issued->admin_comment );
+        return view('admin.warranty._resolved_details', [
+            'serviceRequest'    =>   $serviceRequest,
+            'warrantyExist' => $warrantyExist 
+        ]);
+
     }
 }

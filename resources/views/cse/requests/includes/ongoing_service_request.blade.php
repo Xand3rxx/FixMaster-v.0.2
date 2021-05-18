@@ -1,6 +1,6 @@
 <form class="form-data" method="POST" action="{{route('cse.project.progress.update', [app()->getLocale()])}}">
     @csrf
-    <div class="form-row mt-4">
+    <div class="mt-4">
         <div class="tx-13 mg-b-25">
             <div id="wizard3">
                 @if($latest_service_request_progress->sub_status_id > 12)
@@ -33,7 +33,36 @@
                             </div>
 
                             <div class="form-group col-md-6">
-                                <label for="estimated_hours">{{$service_request['service']['name']}}</label>
+                                <label for="estimated_hours">Category</label>
+                                <select class="form-control custom-select @error('sub_service_uuid') is-invalid @enderror" name="sub_service_uuid">
+                                    <option selected disabled value="0" selected>Select a category</option>
+                                    @foreach($service_request['service']['subServices'] as $key => $sub_service)
+                                    <option value="{{$sub_service['uuid']}}">{{$sub_service['name']}} </option>
+                                    @endforeach
+                                </select>
+                                @error('sub_service_uuid')
+                                <span class="invalid-feedback" role="alert">
+                                    <strong>{{ $message }}</strong>
+                                </span>
+                                @enderror
+                            </div>
+
+                            <div class="form-group col-md-6">
+                                <label for="estimated_hours">Service</label>
+                                <select class="form-control custom-select @error('sub_service_uuid') is-invalid @enderror" name="sub_service_uuid">
+                                    <option selected disabled value="0" selected>Select a service</option>
+                                    @foreach($service_request['service']['subServices'] as $key => $sub_service)
+                                    <option value="{{$sub_service['uuid']}}">{{$sub_service['name']}} </option>
+                                    @endforeach
+                                </select>
+                                @error('sub_service_uuid')
+                                <span class="invalid-feedback" role="alert">
+                                    <strong>{{ $message }}</strong>
+                                </span>
+                                @enderror
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label for="estimated_hours">Sub Service</label>
                                 <select class="form-control custom-select @error('sub_service_uuid') is-invalid @enderror" name="sub_service_uuid">
                                     <option selected disabled value="0" selected>Select a sub service</option>
                                     @foreach($service_request['service']['subServices'] as $key => $sub_service)
@@ -89,18 +118,35 @@
 
                         <div class="form-row">
                             <div class="form-group col-md-4">
-                                <label for="component_name">Component Name</label>
-                                <input type="text" class="form-control" id="component_name" name="component_name[]" value="{{ $batch['component_name'] }}" readonly>
+                                <label for="manufacturer_name">Manufacturer Name</label>
+                                <input type="text" class="form-control" id="manufacturer_name" name="manufacturer_name[]" value="{{ $batch['manufacturer_name'] }}" readonly>
                             </div>
 
                             <div class="form-group col-md-3">
                                 <label for="model_number">Model Number</label>
                                 <input type="text" class="form-control" id="model_number" name="model_number[]" value="{{ $batch['model_number']}}" readonly>
                             </div>
+
+                            <div class="form-group col-md-4">
+                                <label for="component_name">Component Name</label>
+                                <input type="text" class="form-control" id="component_name" name="component_name[]" value="{{ $batch['component_name'] }}" readonly>
+                            </div>
+
                             <div class="form-group col-md-2">
                                 <label for="quantity">Quantity</label>
                                 <input type="number" class="form-control" id="quantity" name="quantity[]" value="{{ $batch['quantity'] }}" min="" max="" readonly>
                             </div>
+
+                            <div class="form-group col-md-2">
+                                <label for="size">Size</label>
+                                <input type="number" class="form-control" id="size" name="size[]" value="{{ $batch['size'] }}" min="" max="" readonly>
+                            </div>
+
+                            <div class="form-group col-md-4">
+                                <label for="unit_of_measurement">Unit of Measurement</label>
+                                <input type="text" class="form-control" id="unit_of_measurement" name="unit_of_measurement[]" value="{{ $batch['unit_of_measurement'] }}">
+                            </div>
+
                             <div class="form-group col-md-3">
                                 <label for="amount">Amount</label>
                                 <input type="tel" class="form-control amount" id="amount" placeholder="" value="{{ $batch['amount'] }}" name="amount[]" autocomplete="off" readonly>
@@ -157,10 +203,11 @@
                         <div class="d-none d-rfq">
                             <h4 id="section1" class="mt-4 mb-2">Make Request</h4>
                             <div class="form-row">
+
                                 <div class="form-group col-md-4">
-                                    <label for="component_name">Component Name</label>
-                                    <input type="text" class="form-control @error('component_name') is-invalid @enderror" id="component_name" name="component_name[]" value="{{ old('component_name[0]') }}">
-                                    @error('component_name[0]')
+                                    <label for="manufacturer_name">Manufacturer Name</label>
+                                    <input type="text" class="form-control @error('manufacturer_name') is-invalid @enderror" id="manufacturer_name" name="manufacturer_name[]" value="{{ old('manufacturer_name[0]') }}">
+                                    @error('manufacturer_name[0]')
                                     <span class="invalid-feedback" role="alert">
                                         <strong>{{ $message }}</strong>
                                     </span>
@@ -177,6 +224,16 @@
                                     @enderror
                                 </div>
 
+                                <div class="form-group col-md-4">
+                                    <label for="component_name">Component Name</label>
+                                    <input type="text" class="form-control @error('component_name') is-invalid @enderror" id="component_name" name="component_name[]" value="{{ old('component_name[0]') }}">
+                                    @error('component_name[0]')
+                                    <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $message }}</strong>
+                                    </span>
+                                    @enderror
+                                </div>
+
                                 <div class="form-group col-md-2">
                                     <label for="quantity">Quantity</label>
                                     <input type="number" class="form-control @error('quantity') is-invalid @enderror" id="quantity" name="quantity[]" min="1" pattern="\d*" maxlength="2" value="{{ old('quantity[0]') }}">
@@ -185,6 +242,39 @@
                                         <strong>{{ $message }}</strong>
                                     </span>
                                     @enderror
+                                </div>
+
+                                <div class="form-group col-md-2">
+                                    <label for="size">Size</label>
+                                    <input type="number" class="form-control @error('size') is-invalid @enderror" id="size" name="size[]" min="1" pattern="\d*" maxlength="2" value="{{ old('size[0]') }}">
+                                    @error('size[0]')
+                                    <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $message }}</strong>
+                                    </span>
+                                    @enderror
+                                </div>
+
+                                <div class="form-group col-md-4">
+                                    <label for="unit_of_measurement">Unit of Measurement</label>
+                                    <input type="text" class="form-control @error('unit_of_measurement') is-invalid @enderror" id="unit_of_measurement" name="unit_of_measurement[]" value="{{ old('unit_of_measurement[0]') }}">
+                                    @error('unit_of_measurement[0]')
+                                    <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $message }}</strong>
+                                    </span>
+                                    @enderror
+                                </div>
+
+                                <div class="form-group col-md-3">
+                                    <label>Image</label>
+                                    <div class="custom-file">
+                                        <input type="file" accept="image/*" class="custom-file-input @error('image') is-invalid @enderror" name="image" id="image">
+                                        <label class="custom-file-label" for="image">Component Image</label>
+                                        @error('image')
+                                        <span class="invalid-feedback" role="alert">
+                                            <strong>{{ $message }}</strong>
+                                        </span>
+                                        @enderror
+                                    </div>
                                 </div>
 
                                 <div class="form-group col-md-1 mt-1">
@@ -253,21 +343,80 @@
                     </section>
                     @endif
 
+                    <h3>Request QA</h3>
+                    <section>
+                        <div class="form-row">
+                            <div class="form-group col-md-6">
+                                <label for="qa_user_uuid">Assign QA</label>
+                                <select required class="form-control custom-select @error('qa_user_uuid') is-invalid @enderror" name="qa_user_uuid">
+                                    <option selected disabled value="0" selected>Select...</option>
+                                    @foreach ($qaulity_assurances['users'] as $qaulity_assurance)
+                                        <option value="{{ $qaulity_assurance['account']['user_id'] }}">{{ !empty($qaulity_assurance['account']['first_name']) ? Str::title($qaulity_assurance['account']['first_name'] ." ". $qaulity_assurance['account']['last_name']) : 'UNAVAILABLE' }}</option>
+                                    @endforeach
+                                </select>
+                                @error('qa_user_uuid')
+                                <span class="invalid-feedback" role="alert">
+                                    <strong>{{ $message }}</strong>
+                                </span>
+                                @enderror
+                            </div>
+
+                            <div class="form-group col-md-6">
+                                <label for="assistive_role">Assitive Role</label>
+                                <select required class="form-control custom-select @error('assistive_role') is-invalid @enderror" name="assistive_role">
+                                    <option selected disabled value="0" selected>Select...</option>
+                                    <option value="Consultant">Consultant</option>
+                                    <option value="Technician">Technician</option>
+                                </select>
+                                @error('assistive_role')
+                                <span class="invalid-feedback" role="alert">
+                                    <strong>{{ $message }}</strong>
+                                </span>
+                                @enderror
+                            </div>
+                        </div>
+                    </section>
+
                     <h3>Assign New Technician</h3>
                     <section>
                         <div class="form-group col-md-12">
-                            <label for="name">Assign Technician</label>
-                            <select class="form-control custom-select @error('technician_user_uuid') is-invalid @enderror" name="technician_user_uuid">
-                                <option selected value="">Select...</option>
+                           
+                            <ul class="list-group wd-md-100p">
                                 @foreach ($technicains as $technicain)
-                                <option value="{{$technicain['user']['uuid']}}">{{$technicain['user']['account']['last_name'] .' '. $technicain['user']['account']['first_name']}}</option>
+                                <li class="list-group-item d-flex align-items-center">
+                                  
+                                 <div class="form-row">
+                                    <img src="{{ asset('assets/images/default-male-avatar.png') }}" class="wd-30 rounded-circle mg-r-15" alt="Technician Avatar">
+                                  
+                                  <div class="col-md-6 col-sm-6">
+                                    <h6 class="tx-13 tx-inverse tx-semibold mg-b-0">{{$technicain['user']['account']['first_name'] .' '. $technicain['user']['account']['last_name']}}</h6>
+                                    
+                                    <span class="d-block tx-11 text-muted">
+                                        @foreach ($technicains as $technicain)
+                                            <i class="icon ion-md-star lh-0 tx-orange"></i>
+                                        @endforeach
+                                        <span class="font-weight-bold ml-2">0.6km</span>
+                                    </span>
+                                  </div>
+                                  <div class="col-md-6 col-sm-6">
+                                    <div class="form-row">
+                                        <div class="form-group col-1 col-md-1 col-sm-1" style="margin-left: 3rem !important;">
+                                            <a href="tel:08124483438" class="btn btn-primary btn-icon"><i class="fas fa-phone"></i></a>
+                                        </div>
+                                        <div class="form-group col-1 col-md-1 col-sm-1">
+                                            <div class="custom-control custom-radio mt-2">
+                                                <div class="custom-control custom-radio">
+                                                    <input type="radio" class="custom-control-input" id="{{ $loop->iteration }}" name="technician_user_uuid" value="{{ $technicain['user']['uuid'] }}">
+                                                    <label class="custom-control-label" for="{{ $loop->iteration }}"></label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                  </div>
+                                </div>
+                                </li>
                                 @endforeach
-                            </select>
-                            @error('technician_user_uuid')
-                            <span class="invalid-feedback" role="alert">
-                                <strong>{{ $message }}</strong>
-                            </span>
-                            @enderror
+                            </ul>
                         </div>
                     </section>
 

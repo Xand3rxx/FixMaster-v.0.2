@@ -87,7 +87,7 @@ class MessageController extends Controller
             ->orWhere('accounts.first_name', 'LIKE', "%{$searchVal}%")
             ->orWhere('accounts.middle_name', 'LIKE', "%{$searchVal}%")
             ->orWhere('accounts.last_name', 'LIKE', "%{$searchVal}%")
-            ->select('accounts.first_name',  'accounts.last_name', 'accounts.middle_name', 'users.email')
+            ->select('accounts.user_id','accounts.first_name',  'accounts.last_name', 'accounts.middle_name', 'users.email')
             ->get();
         Log::debug($recipients);
        
@@ -110,7 +110,52 @@ class MessageController extends Controller
         $receiverDetails = [];
 
         $senderDetails = $this->getUser($sender);
+        Log::debug($recipients);
+        foreach($recipients as $recipient){
+            array_push($receivers, $recipient['value']);
+        }
 
+        $users = DB::table('users')
+        ->join('accounts', 'users.id', '=', 'accounts.user_id')
+        ->whereIn('users.id', $receivers )
+        ->select('users.id','users.email', 'accounts.first_name',  'accounts.last_name', 'accounts.middle_name')
+        ->get();
+         
+
+      
+        foreach($users as $user){
+            $mail_objects[] = [
+                'title'=>$subject, 
+                'content'=>$mail_content, 
+                'recipient'=>$user->id, 
+                'sender'=>$sender,
+                'uuid'=>Str::uuid()->toString(),
+                'created_at'        => Carbon::now(),
+                'updated_at'        => Carbon::now(),
+                'mail_status'=>'Not Sent',
+            ];
+            $this->sendNewMessage("mail",$subject, $senderDetails->email, $user->email, $mail_content, "");
+        }
+      //  Message::insert($mail_objects);
+        return response()->json([
+            "message" => "Messages sent successfully!"], 201);
+    }
+
+
+
+    public function saveGroupEmail(Request $request)
+    {
+        $subject = $request->input('subject');
+        $recipients = $request->input('recipients');
+        $sender =  $request->input('sender');
+        $mail_content = $request->input('mail_content');
+        $mail_objects = [];
+        $userIds = [];
+        $receivers = [];
+        $receiverDetails = [];
+
+        $senderDetails = $this->getUser($sender);
+        Log::debug($recipients);
         foreach($recipients as $recipient){
             array_push($receivers, $recipient['value']);
         }
@@ -133,13 +178,15 @@ class MessageController extends Controller
                 'uuid'=>Str::uuid()->toString(),
                 'created_at'        => Carbon::now(),
                 'updated_at'        => Carbon::now(),
+                'mail_status'=>'Not Sent',
             ];
             $this->sendNewMessage("mail",$subject, $senderDetails->email, $user->email, $mail_content, "");
         }
-        //Message::insert($mail_objects);
+       // Message::insert($mail_objects);
         return response()->json([
             "message" => "Messages sent successfully!"], 201);
     }
+
 
     public function sendMessage(Request $request)
     {
@@ -188,6 +235,7 @@ class MessageController extends Controller
                 'uuid'=>Str::uuid()->toString(),
                 'created_at'        => Carbon::now(),
                 'updated_at'        => Carbon::now(),
+                'mail_status'=>'Not Sent',
             ];
         
         Message::insert($mail_objects);

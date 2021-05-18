@@ -18,7 +18,7 @@ class SummaryController extends Controller
         return view(
             'admin.users.administrator.summary.show',
             [
-                'user' => $user->load('administrator', 'phones', 'account', 'roles'),
+                'user' => $user->load('administrator', 'contact', 'account', 'roles'),
                 'last_seen' => $user->load(['logs' => function ($query) {
                     $query->where('type', 'logout')->orderBy('created_at', 'asc');}]),
                 'logs' => $user->loadCount(['logs' => function ($query) {

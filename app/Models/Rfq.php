@@ -11,7 +11,7 @@ class Rfq extends Model
     use Generator;
 
     protected $fillable = [
-        'uuid', 'unique_id', 'issued_by', 'client_id', 'invoice_id', 'service_request_id', 'invoice_number', 'status', 'accepted', 'total_amount', 'created_at', 'updated_at'
+        'uuid', 'unique_id', 'issued_by', 'client_id', 'invoice_id', 'service_request_id', 'type', 'status', 'accepted', 'total_amount', 'created_at', 'updated_at'
     ];
 
     /**
@@ -89,6 +89,17 @@ class Rfq extends Model
     }
 
 
-    
+    /** 
+     * Scope a query to only include all pending requests
+     * 
+     * @param \Illuminate\Database\Eloquent\Builder $query
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    //Scope to return all services  
+    public function scopePendingQuotes($query)
+    {
+        return $query->select('*')
+        ->where('status', 'Pending');
+    }
     
 }

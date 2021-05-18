@@ -5,6 +5,11 @@ namespace App\Http\Controllers\CSE;
 use App\Models\Cse;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
+use App\Models\User;
+use Illuminate\Support\Facades\Log;
+
 
 class RequestController extends Controller
 {
@@ -50,8 +55,11 @@ class RequestController extends Controller
      */
     public function show($language, $uuid)
     {
+     
+
         // find the service reqquest using the uuid and relations
         $service_request = \App\Models\ServiceRequest::where('uuid', $uuid)->with(['price', 'service', 'service.subServices'])->firstOrFail();
+        
         $request_progress = \App\Models\ServiceRequestProgress::where('service_request_id', $service_request->id)->with('user', 'substatus')->latest('created_at')->get();
 
         // find the technician role CACHE THIS DURING PRODUCTION
@@ -59,6 +67,7 @@ class RequestController extends Controller
         (array) $variables = [
             'service_request' => $service_request,
             'technicains' => \App\Models\UserService::where('service_id', $service_request->service_id)->where('role_id', $technicainsRole->id)->with('user')->get(),
+            'qaulity_assurances'    =>  \App\Models\Role::where('slug', 'quality-assurance-user')->with('users')->firstOrFail(),
             'request_progress' => $request_progress,
         ];
         if ($service_request->status_id == 2) {
@@ -116,5 +125,61 @@ class RequestController extends Controller
     public function destroy($id)
     {
         //
+    }
+
+    public function getServiceRequestsByTechnician(Request $request)
+    {
+       $technicianServices = DB::table('service_request_assigned')
+       ->join('service_requests', 'service_request_assigned.service_request_id', '=', 'service_requests.id')
+       ->orderBy('service_request_assigned.created_at', 'DESC')
+       ->select('service_requests.unique_id')
+       ->where('service_request_assigned.user_id', $request->userid)
+       ->where('service_request_assigned.status', 'Active')
+       ->get();
+
+
+       if(!empty($technicianServices)){
+        return response()->json(["data" => $technicianServices], 200);
+        }
+        return response()->json(["message" => "No ongoing jobs available"], 404);
+   
+    }
+
+    public function getServiceRequestsByCse(Request $request)
+    {
+       $cseServices = DB::table('service_request_assigned')
+       ->join('service_requests', 'service_request_assigned.service_request_id', '=', 'service_requests.id')
+       ->orderBy('service_request_assigned.created_at', 'DESC')
+       ->select('service_requests.unique_id')
+       ->where('service_request_assigned.user_id', $request->userid)
+       ->where('service_request_assigned.status', 'Active')
+       ->get();
+
+
+       if(!empty($cseServices)){
+        return response()->json(["data" => $cseServices], 200);
+        }
+        return response()->json(["message" => "No ongoing jobs available"], 404);
+   
+    }
+
+
+    public function getUsersByReferenceID(Request $request)
+    {
+       $users = DB::table('service_request_assigned')
+       ->join('users', 'service_request_assigned.user_id', '=', 'users.id')
+       ->join('accounts', 'accounts.user_id', '=', 'service_request_assigned.user_id')
+       ->join('service_requests', 'service_requests.id', '=', 'service_request_assigned.service_request_id')
+       ->orderBy('service_request_assigned.created_at', 'DESC')
+       ->select('service_request_assigned.user_id', 'users.email' ,'accounts.first_name', 'accounts.last_name')
+       ->where('service_requests.unique_id', $request->reqid)
+       ->where('service_request_assigned.status', 'Active')
+       ->get();
+
+       if(!empty($users)){
+        return response()->json(["data" => $users], 200);
+        }
+        return response()->json(["message" => "No Users"], 404);
+
     }
 }

@@ -33,12 +33,10 @@ class Payment extends Model
         });
     }
 
-    /**
-     * Get the user that owns the Account.
-     */
-    public function user()
+    public function service_request()
     {
-        return $this->belongsTo(User::class)->with(['account', 'contact']);
+        return $this->hasOne(ServiceRequest::class, 'unique_id', 'unique_id');
     }
+
 
 }

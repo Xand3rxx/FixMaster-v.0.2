@@ -4,7 +4,6 @@ namespace App\Providers;
 
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\ServiceProvider;
-use Auth;
 use App\Models\WalletTransaction;
 
 class AppServiceProvider extends ServiceProvider
@@ -28,23 +27,38 @@ class AppServiceProvider extends ServiceProvider
     {
         Schema::defaultStringLength(191);
 
-        view()->composer('layouts.client', function($view){
+        view()->composer('layouts.client', function ($view) {
 
             $view->with([
                 'myWallet'  =>  WalletTransaction::where('user_id', auth()->user()->id)->orderBy('id', 'DESC')->get(),
-                'profile'   =>  Auth::user()->account,
+                'profile'   =>  auth()->user()->account,
             ]);
         });
 
-        view()->composer('layouts.dashboard', function($view){
+        view()->composer('layouts.dashboard', function ($view) {
 
             $view->with([
-                'profile'   =>  Auth::user()->account,
+                'profile'   =>  auth()->user()->account,
                 'pendingRequests'   => \App\Models\ServiceRequest::PendingRequests()->get()->count(),
                 'unresolvedWarranties'  =>  \App\Models\ServiceRequestWarranty::UnresolvedWarranties()->get()->count(),
             ]);
         });
 
+        view()->composer('layouts.partials._cse_sidebar', function ($view) {
+            $view->with([
+                'cse_availability' => \App\Models\Cse::isAvailable() ? ['Available', 'checked'] : ['Unavailable', ''],
+                'cse_availability' => (auth()->user()->cse->job_availability == \App\Models\Cse::JOB_AVALABILITY[0]) ? 'AVALIABLE' : 'UNAVALIABLE',
+                'unresolvedWarranties'  => \App\Models\ServiceRequestAssigned::with('service_request_warranty', 'user.account', 'service_request')
+                ->where(['user_id' => auth()->user()->id, 'status'=> 'Active'])
+                ->get(),
 
+            ]);
+        });
+
+        view()->composer('layouts.partials._supplier_sidebar', function ($view) {
+            $view->with([
+                'newQuotes' =>  \App\Models\Rfq::PendingQuotes()->get()->count(),
+            ]);
+        });
     }
 }
