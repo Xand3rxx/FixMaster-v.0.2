@@ -214,9 +214,6 @@ class WarrantyController extends Controller
         $serviceRequest = ServiceRequestWarranty::where('uuid', $uuid)->with('user.account', 'service_request', 'warranty')->first();
         $warrantyExist = Warranty::where('id',  $serviceRequest->warranty_id)->first();
    
-           //Set 'createWarranty` to false
-           (bool) $updateWarranty = false;
-           (bool) $createWarranty  = false;
 
            //Update ServiceRequestWarranty
            DB::transaction(function () use ($request, &$updateWarranty, $uuid) {
@@ -226,21 +223,33 @@ class WarrantyController extends Controller
    
                $updateWarranty = true;
            });
-           DB::transaction(function () use ($request, &$createWarranty, $serviceRequest) {
-            $createWarranty = ServiceRequestWarrantyIssued::create([
+
+           $serviceRequestIssued = \App\Models\ServiceRequestWarrantyIssued::where('service_request_warranty_id', $serviceRequest->id)->first();
+           if( $serviceRequestIssued ){
+            $update = \App\Models\ServiceRequestWarrantyIssued::where('service_request_warranty_id', $serviceRequest->id)->update([
                 'service_request_warranty_id'        =>   $serviceRequest->id,
                 'cse_id'             =>  $serviceRequest->service_request->cses[0]->account->user_id,
-                'technician_id'     =>   NULL,
                 'completed_by'      =>   Auth::id(),
-                'admin_comment'       =>   Auth::user()->type->url == 'admin'? $request->comment: 'TEST', 
+                'admin_comment'       =>   Auth::user()->type->url == 'admin'? $request->comment: '', 
                 'cse_comment'       =>  Auth::user()->type->url != 'admin'? $request->comment: '',
                 'date_resolved'       =>  \Carbon\Carbon::now('UTC'),
             ]);
-            $createWarranty = true;
-        });
 
+           }else{
+                $createWarranty = ServiceRequestWarrantyIssued::create([
+                    'service_request_warranty_id'        =>   $serviceRequest->id,
+                    'cse_id'             =>  $serviceRequest->service_request->cses[0]->account->user_id,
+                    'completed_by'      =>   Auth::id(),
+                    'admin_comment'       =>   Auth::user()->type->url == 'admin'? $request->comment: '', 
+                    'cse_comment'       =>  Auth::user()->type->url != 'admin'? $request->comment: '',
+                    'date_resolved'       =>  \Carbon\Carbon::now('UTC'),
+                ]);
+        
+    
+           }
+        
      
-        if ($createWarranty){
+        if ($update OR $createWarranty){
             $type = 'Others';
             $severity = 'Informational';
             $actionUrl = Route::currentRouteAction();
@@ -283,4 +292,21 @@ class WarrantyController extends Controller
         ]);
 
     }
+
+
+    public function download(Request $request, $lang, $file){
+    
+
+        $filePath = public_path('/assets/warranty-images/'.$file);
+   
+
+        $headers = ['Content-Disposition' => 'inline'];
+
+        $fileName = $file;
+
+        return response()->download($filePath, $fileName, $headers);
+       
+     
+    }
+
 }

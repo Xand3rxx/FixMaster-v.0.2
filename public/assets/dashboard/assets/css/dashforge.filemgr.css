@@ -213,7 +213,7 @@
       font-size: 40px; } }
   @media (min-width: 992px) {
     .card-file-thumb {
-      height: 120px;
+      height: 220px;
       font-size: 48px; } }
 
 .media-folder {
@@ -247,3 +247,4 @@
 @media (min-width: 992px) {
   .aside-filemgr + .content {
     margin-left: 60px; } }
+

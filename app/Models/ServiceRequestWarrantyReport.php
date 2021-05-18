@@ -12,4 +12,12 @@ class ServiceRequestWarrantyReport extends Model
     protected $fillable = [
         'user_id', 'service_request_warranties_issued_id', 'report'
     ];
+
+
+    public function service_request_warranty_issued()
+    {
+        return $this->belongsTo(ServiceRequestWarrantyIssued::class);
+    }
+
+   
 }

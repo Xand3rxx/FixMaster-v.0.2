@@ -453,7 +453,7 @@ Route::prefix('/cse')->group(function () {
 
         // Route::view('/warranty-claims',    'cse.warranties.index')->name('warranty_claims');
         Route::view('/warranty-claims/details',    'cse.warranties.show', [
-            'technicians'    =>  \App\Models\Role::where('slug', 'technician-artisans')->with('users')->firstOrFail(),
+        'technicians'    =>  \App\Models\Role::where('slug', 'technician-artisans')->with('users')->firstOrFail(),
         ])->name('warranty_claim_details');
         Route::view('/location-request',    'cse.location_request')->name('location_request');
         Route::view(
@@ -472,6 +472,8 @@ Route::prefix('/cse')->group(function () {
     Route::get('/warranty/resolved/claims/details/{warranty:id}',          [WarrantyController::class, 'warranty_resolved_details'])->name('warranty_resolved_details');
     Route::get('/warranty/claims/details/{warranty:uuid}',      [CseController::class,  'warranty_details'])->name('warranty_details');
     Route::get('/mark/warrant/claims/resolved/{warranty:uuid}',      [WarrantyController::class, 'resolvedWarranty'])->name('mark_warranty_resolved');
+    Route::post('warrant/cliams/assign/technician', [AssignTechnicianController::class, 'assignWarrantyTechnician'])->name('assign.technician');
+    Route::get('/download/{file:id}',                      [WarrantyController::class, 'download'])->name('download');
 
 });
 });
