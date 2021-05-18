@@ -910,7 +910,7 @@ class ClientController extends Controller
         // $service_request->unique_id             = 'REF-'.$this->generateReference();
         $service_request->price_id              = $request['price_id'];
         $service_request->contact_id              = $request['myContact_id'];
-        $service_request->client_discount_id    = $request['client_discount_id'];
+        // $service_request->client_discount_id    = $request['client_discount_id'];
         // $service_request->client_security_code  = 'SEC-'.strtoupper(substr(md5(time()), 0, 8));
         $service_request->status_id             = '2';
         $service_request->description           = $request['description'];
@@ -918,8 +918,25 @@ class ClientController extends Controller
         $service_request->preferred_time        = Carbon::parse($request['timestamp'], 'UTC'); 
         $service_request->has_client_rated      = 'No'; 
         $service_request->has_cse_rated         = 'No';
-        $service_request->created_at         = Carbon::now()->toDateTimeString();
+        $service_request->created_at            = Carbon::now()->toDateTimeString();
         // $service_request->updated_at         = Carbon::now()->toDateTimeString();
+
+
+        // if($request->hasFile('media_file')){
+        //     $docs = $request->file('media_file');
+        //     $documentName = sha1(time()) .'.'.$docs->getClientOriginalExtension();
+        //     $imagePath = public_path('assets/service-request').'/'.$documentName;
+        //     //Delete old document
+        //     if(\File::exists(public_path('assets/service-request/'.$request->input('media_file')))){
+        //         $done = \File::delete(public_path('assets/service-request/'.$request->input('media_file')));
+        //         if($done){
+        //             // echo 'File has been deleted';
+        //         }
+        //     }
+        //     //Move new image to `client-avatars` folder
+        //     Image::make($docs->getRealPath())->resize(220, 220)->save($imagePath);
+        // }
+
         if ($service_request->save()) {
                     //Temporary Assign a CSE to a client's request for demo purposes
         //List of CSE's Id's on the DB

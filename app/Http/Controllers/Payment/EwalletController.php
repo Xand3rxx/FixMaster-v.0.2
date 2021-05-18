@@ -14,6 +14,7 @@ use App\Traits\GenerateUniqueIdentity as Generator;
 
 use App\Http\Controllers\Client\ClientController;
 use Session;
+use Image;
 
 
 class EwalletController extends Controller
@@ -79,19 +80,19 @@ class EwalletController extends Controller
                         $service_reqPayment->payment_type = $pay->payment_for;
                         $service_reqPayment->status = 'success';
     
-                        if($request->hasFile('profile_avater')){
-                            $image = $request->file('profile_avater');
-                            $imageName = sha1(time()) .'.'.$image->getClientOriginalExtension();
-                            $imagePath = public_path('assets/user-avatars').'/'.$imageName;
-                            //Delete old image
-                            if(\File::exists(public_path('assets/user-avatars/'.$request->input('old_avatar')))){
-                                $done = \File::delete(public_path('assets/user-avatars/'.$request->input('old_avatar')));
+                        if($request->hasFile('media_file')){
+                            $docs = $request->file('media_file');
+                            $documentName = sha1(time()) .'.'.$docs->getClientOriginalExtension();
+                            $imagePath = public_path('assets/service-request').'/'.$documentName;
+                            //Delete old document
+                            if(\File::exists(public_path('assets/service-request/'.$request->input('media_file')))){
+                                $done = \File::delete(public_path('assets/service-request/'.$request->input('media_file')));
                                 if($done){
                                     // echo 'File has been deleted';
                                 }
                             }
                             //Move new image to `client-avatars` folder
-                            Image::make($image->getRealPath())->resize(220, 220)->save($imagePath);
+                            Image::make($docs->getRealPath())->resize(220, 220)->save($imagePath);
                             $service_reqPayment->avatar = $imageName;
                         }
     

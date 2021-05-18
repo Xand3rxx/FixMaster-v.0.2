@@ -125,11 +125,9 @@ class FlutterwaveController extends Controller
                 if($res->status == 'success')
                 {                    
                     return redirect($res->data->link);
-                }
-
-                else
+                }else
                 {
-                    return redirect($cancel_url)->with('error', 'We can not process your payment: Curl returned error: ' . $err);
+                    return back()->with('error', 'We can not process your payment: Curl returned error: ');
                 }
 
     }
