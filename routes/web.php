@@ -46,6 +46,7 @@ use App\Http\Controllers\Admin\RfqController;
 use App\Http\Controllers\Supplier\RfqController as SupplierRfqController;
 use App\Http\Controllers\Admin\User\ClientController as AdministratorClientController;
 
+use App\Http\Controllers\Payment\FlutterwaveController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes ONLY AUTHENTICATED USERS HAVE ACCESS TO THIS ROUTE
@@ -386,8 +387,20 @@ Route::prefix('/client')->middleware('monitor.clientservice.request.changes')->g
         Route::post('/submit_ratings',  [ClientController::class, 'client_rating'])->name('handle.ratings');
 
         // //Paystack Routes
-        Route::get('/paystack/paystack/initiate',   [PaystackController::class, 'initiatePayment'])->name('payment.paystack-initiate');
-        Route::get('/product/paystack/verify',      [PaystackController::class, 'verify'])->name('payment.paystack-verify');
+        // Route::get('/paystack/paystack/initiate',   [PaystackController::class, 'initiatePayment'])->name('payment.paystack-initiate');
+        // Route::get('/product/paystack/verify',      [PaystackController::class, 'verify'])->name('payment.paystack-verify');
+
+        // /** Flutterwave Payment Gateway */
+        // Route::get('/payment/flutterwave',        [FlutterwaveController::class, 'index'])->name('payment-flutterwave-start');
+
+        // Route::get('/payment/flutterwave/{type}', [FlutterwaveController::class, 'complete'])->name('payment-flutterwave-complete');
+        // /** Flutterwave Payment Gateway End */
+
+        
+
+
+
+
 
     });
 });

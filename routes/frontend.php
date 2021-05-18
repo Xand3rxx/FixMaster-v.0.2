@@ -78,6 +78,20 @@ Route::get("/editCriteria",   [App\Http\Controllers\EssentialsController::class,
 // Route::get('/rfq/details/{id}',                     [App\Http\Controllers\RFQController::class, 'rfqDetails'])->name('rfq_details');
 
 
+//Paystack Routes
+Route::post('/payment/paystack/submit',                [App\Http\Controllers\Payment\PaystackController::class, 'store'])->name('paystack-submit');
+Route::get('/payment/paystack/{paymentId}/initiate',   [App\Http\Controllers\Payment\PaystackController::class, 'initiate'])->name('paystack-start');
+Route::get('/payment/paystack/verify',                 [App\Http\Controllers\Payment\PaystackController::class, 'verify'])->name('paystack-verify');
+
+//Flutterwave Routes
+Route::post('/payment/flutterwave/submit',                [App\Http\Controllers\Payment\FlutterwaveController::class, 'store'])->name('flutterwave-submit');
+Route::get('/payment/flutterwave/{paymentId}/initiate',   [App\Http\Controllers\Payment\FlutterwaveController::class, 'initiate'])->name('flutterwave-start');
+Route::get('/payment/flutterwave/verify',                 [App\Http\Controllers\Payment\FlutterwaveController::class, 'verify'])->name('flutterwave-verify');
+
+//E-wallet Routes
+Route::post('/payment/ewallet/submit',                [App\Http\Controllers\Payment\EwalletController::class, 'store'])->name('wallet-submit');
+
+
 //All frontend routes for Services
 Route::prefix('/services')->group(function () {
     Route::name('services.')->group(function () {

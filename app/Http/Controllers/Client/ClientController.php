@@ -33,7 +33,6 @@ use App\Models\WalletTransaction;
 use PHPMailer\PHPMailer\Exception;
 use PHPMailer\PHPMailer\PHPMailer;
 use App\Http\Controllers\Controller;
-use App\Models\ServiceRequestPayment;
 use App\Models\ServiceRequestProgress;
 use App\Models\ServiceRequestCancellation;
 use App\Models\ServiceRequestWarranty;
@@ -321,9 +320,13 @@ class ClientController extends Controller
                     $flutter['amount'] = $paymentRecord->amount;
                     $flutter['track'] = Session::get('Track');
                     $client = User::find(auth()->user()->id);
+
+                    // return redirect()->route('client.payment-flutterwave-start', app()->getLocale());
                     // dd($flutter);
                     // return view('client.payment.flutter', compact('flutter', 'client'));
+
                     $return = $paystack_controller->initiatePayment($request, $generatedVal, $paymentRecord, $user);
+                   
                     // $return = redirect()->route('client.ipn.flutter', app()->getLocale());
 
                   break;
@@ -590,168 +593,50 @@ class ClientController extends Controller
 
     }
 
-    // $serviceRequests = ServiceRequestAssigned::where('user_id', Auth::id())->with('service_request')->get();
+            // public function initiatePayment(){
+            //     $track  = Session::get('Track');
+            //     // dd($track);
+            //     $data = Payment::where('reference_id', $track)->orderBy('id', 'DESC')->first();
+            //     //  dd($data);
+            //     $user = User::find($data->user_id);
+            //     if($user){
 
-    // return $serviceRequests;
+            //         $curl = curl_init();
 
-    public function serviceRequest(Request $request){
+            //         curl_setopt_array($curl, array(
+            //             CURLOPT_URL => "https://api.paystack.co/transaction/initialize",
+            //             CURLOPT_RETURNTRANSFER => true,
+            //             CURLOPT_CUSTOMREQUEST => "POST",
+            //             CURLOPT_POSTFIELDS => json_encode([
+            //                 'amount' => $data->amount * 100,
+            //                 'email' => $user->email,
+            //                 'callback_url' => route('client.serviceRequest.verifyPayment', app()->getLocale())
+            //             ]),
+            //             CURLOPT_HTTPHEADER => [
+            //                 "authorization: Bearer sk_test_b612f25bd992c4d84760e312175c7515336b77fc",
+            //                 "content-type: application/json",
+            //                 "cache-control: no-cache"
+            //             ],
+            //         ));
 
-            $validatedData = $request->validate([
-            'balance'                   =>   'required',
-            'booking_fee'               =>   'required',
-            'description'               =>   'required', 
-            'payment_method'            =>   'required',          
-            'myContact_id'              =>   'required',         
-          ]);
+            //         $response = curl_exec($curl);
+            //         $err = curl_error($curl);
+            //         if ($err) {
+            //             return back()->with('error', $err);
+            //         }
 
-            // if payment method is wallet
-            if($request->payment_method == 'Wallet'){
+            //         $tranx = json_decode($response, true);
 
-                // if wallet balance is less than the service fee
-                if($request->balance > $request->booking_fee){
-                    $SavedRequest = $this->saveRequest($request);
-                    
-                    // dd($service_request);
-                    if ($SavedRequest) {
+            //         if (!$tranx['status']) {
+            //             return back()->with('error', $tranx['message']);
+            //         }
+            //         return redirect($tranx['data']['authorization_url']);
 
-                    // fetch the Client Table Record
-                    $client = \App\Models\Client::where('user_id', $request->user()->id)->with('user')->firstOrFail();
-                    // generate reference string for this transaction
-                    $generatedVal = $this->generateReference();
-                    // call the payment Trait and submit record on the
-                    $payment = $this->payment($SavedRequest->total_amount, 'wallet', 'service-request', $client['unique_id'], 'success', $generatedVal);
-                    // save the reference_id as track in session
-                    Session::put('Track', $generatedVal);
-                        if ($payment) {
-                            //   new starts here
-                            $user_id = auth()->user()->id;
-                            $track = Session::get('Track');
-                            $pay =  Payment::where('reference_id', $track)->orderBy('id', 'DESC')->first();
-                            //save to the wallet transaction table
-                            if ($pay) {
-                                $wallet_transaction = new WalletTransaction;
-                                $wallet_transaction->user_id = auth()->user()->id;
-                                $wallet_transaction->payment_id = $pay->id;
-                                $wallet_transaction->amount = $pay->amount;
-                                $wallet_transaction->payment_type = $pay->payment_for;
-                                $wallet_transaction->unique_id = $pay->unique_id;
-                                $wallet_transaction->transaction_type = 'credit';
-                                $wallet_transaction->opening_balance = $request->balance;
-                                $wallet_transaction->closing_balance = $request->balance - $pay->amount;
-                                $wallet_transaction->status = 'success';
-                                $wallet_transaction->save();
-                                // $this->getDistanceDifference();
-                                // return back()->with('success', 'Success! Transaction was successful and your request has been placed.');
+            //     }else{
+            //         return back()->with('error', 'Error occured while making payment');
+            //     }
 
-                                // save to ServiceRequestPayment table
-                                $service_reqPayment = new ServiceRequestPayment;
-                                $service_reqPayment->user_id = auth()->user()->id;
-                                $service_reqPayment->payment_id = $pay->id;
-                                $service_reqPayment->service_request_id = $SavedRequest->id;
-                                $service_reqPayment->amount = $pay->amount;
-                                $service_reqPayment->unique_id = $pay->unique_id;
-                                $service_reqPayment->payment_type = $pay->payment_for;
-                                $service_reqPayment->status = 'success';
-                            }
-                        }
-                        return redirect()->route('client.service.all', app()->getLocale())->with('success', 'Service Request was successful!');
-                    } else{
-                        return back()->with('error', 'sorry!, your service request is not successful');
-                    }
-
-                }else{
-                    return back()->with('error', 'sorry!, booking fee is greater than wallet balance');
-                    }
-                }
-
-
-
-            // online method
-            if ($request->payment_method == 'Online') {
-                //  $all = $request->all();
-                // dd($all);
-                $valid = $this->validate($request, [
-                    // List of things needed from the request like
-                    'booking_fee'           => 'required',
-                    'payment_channel'  => 'required',
-                ]);
-                // fetch the Client Table Record
-                $client = Client::where('user_id', $request->user()->id)->with('user')->firstOrFail();
-                // save the reference_id as track in session
-                $generatedVal = $this->generateReference();
-
-            $payment = $this->payment($valid['booking_fee'], $valid['payment_channel'], 'service-request', $client['unique_id'], 'pending', $generatedVal);
-                Session::put('Track', $generatedVal);
-            if ($payment) {
-                // paystack
-                if($request->payment_channel == 'paystack'){
-                    // if($this->initiatePayment()){
-                            
-                        $SavedRequest = $this->saveRequest($request);
-
-                        // $this->initiatePayment();
-                        return redirect()->route('client.serviceRequest.initiatePayment', app()->getLocale());
-
-                    // }
-                 // flutter
-                }elseif ($request->payment_channel == 'flutter') {
-                    # flutter...
-                    // if($this->initiatePayment()){
-                        $this->initiatePayment();
-                    // }
-                }
-            }
-
-            } else{
-                return back()->with('error', 'Sorry!, an error occured please try again');
-                }
-
-           }
-
-            public function initiatePayment(){
-                $track  = Session::get('Track');
-                // dd($track);
-                $data = Payment::where('reference_id', $track)->orderBy('id', 'DESC')->first();
-            //    dd($data);
-                $user = User::find($data->user_id);
-                if($user){
-
-                    $curl = curl_init();
-
-                    curl_setopt_array($curl, array(
-                        CURLOPT_URL => "https://api.paystack.co/transaction/initialize",
-                        CURLOPT_RETURNTRANSFER => true,
-                        CURLOPT_CUSTOMREQUEST => "POST",
-                        CURLOPT_POSTFIELDS => json_encode([
-                            'amount' => $data->amount * 100,
-                            'email' => $user->email,
-                            'callback_url' => route('client.serviceRequest.verifyPayment', app()->getLocale())
-                        ]),
-                        CURLOPT_HTTPHEADER => [
-                            "authorization: Bearer sk_test_b612f25bd992c4d84760e312175c7515336b77fc",
-                            "content-type: application/json",
-                            "cache-control: no-cache"
-                        ],
-                    ));
-
-                    $response = curl_exec($curl);
-                    $err = curl_error($curl);
-                    if ($err) {
-                        return back()->with('error', $err);
-                    }
-
-                    $tranx = json_decode($response, true);
-
-                    if (!$tranx['status']) {
-                        return back()->with('error', $tranx['message']);
-                    }
-                    return redirect($tranx['data']['authorization_url']);
-
-                }else{
-                    return back()->with('error', 'Error occured while making payment');
-                }
-
-            }
+            // }
 
 
 
@@ -1016,24 +901,24 @@ class ClientController extends Controller
     }
 
     public function update_client_service_rating($language, Request $request, RatingController $updateClientRatings)
-    {
-
+    {   
         return $updateClientRatings->handleUpdateServiceRatings($request);
     }
 
-    private function saveRequest($request){
+    public function saveRequest($request){
+        // return dd($request);
         $service_request                        = new ServiceRequest();
         $service_request->client_id             = auth()->user()->id;
-        $service_request->service_id            = $request->service_id;
+        $service_request->service_id            = $request['service_id'];
         // $service_request->unique_id             = 'REF-'.$this->generateReference();
-        $service_request->price_id              = $request->price_id;
-        $service_request->contact_id              = $request->myContact_id;
-        $service_request->client_discount_id    = $request->client_discount_id;
+        $service_request->price_id              = $request['price_id'];
+        $service_request->contact_id              = $request['myContact_id'];
+        $service_request->client_discount_id    = $request['client_discount_id'];
         // $service_request->client_security_code  = 'SEC-'.strtoupper(substr(md5(time()), 0, 8));
         $service_request->status_id             = '2';
-        $service_request->description           = $request->description;
-        $service_request->total_amount          = $request->booking_fee;
-        $service_request->preferred_time        = Carbon::parse($request->preferred_time, 'UTC'); 
+        $service_request->description           = $request['description'];
+        $service_request->total_amount          = $request['booking_fee'];
+        $service_request->preferred_time        = Carbon::parse($request['timestamp'], 'UTC'); 
         $service_request->has_client_rated      = 'No'; 
         $service_request->has_cse_rated         = 'No';
         $service_request->created_at         = Carbon::now()->toDateTimeString();

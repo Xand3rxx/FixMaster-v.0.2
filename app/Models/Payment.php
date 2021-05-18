@@ -33,4 +33,12 @@ class Payment extends Model
         });
     }
 
+    /**
+     * Get the user that owns the Account.
+     */
+    public function user()
+    {
+        return $this->belongsTo(User::class)->with(['account', 'contact']);
+    }
+
 }
