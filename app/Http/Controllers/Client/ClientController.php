@@ -780,7 +780,13 @@ class ClientController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function customService(){
-
+        $data['bookingFees']  = $this->bookingFees();
+        $data['myContacts'] = Contact::where('user_id', auth()->user()->id)->latest('created_at')->get();
+        $data['discounts']    = $this->clientDiscounts();
+        $data['gateways']     = PaymentGateway::whereStatus(1)->orderBy('id', 'DESC')->get();
+        $data['states'] = State::select('id', 'name')->orderBy('name', 'ASC')->get();
+        
+        return view('client.services.service_custom', $data);
     }
 
 
