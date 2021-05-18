@@ -22,21 +22,12 @@ class ServiceRequestWarrantyImage extends Model
      *
      * @return void
      */
-    protected static function booted()
-    {
-        // Create a uuid when a new serivce uuid is to be created
-        static::creating(function ($service) {
-            $service->uuid = (string) Str::uuid();
-        });
-    }
-
+  
  
 
-    public function service_request_warranty_issued(){
-        return $this->belongsTo(ServiceRequestWarrantyIssued::class, 'service_request_warranties_issued_id', 'id');
+    public function service_request_warranty_issued()
+    {
+        return $this->belongsTo(ServiceRequestWarrantyIssued::class);
     }
-
-
-
 
 }
