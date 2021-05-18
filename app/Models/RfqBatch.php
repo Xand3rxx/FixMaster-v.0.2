@@ -17,6 +17,7 @@ class RfqBatch extends Model
         'rfq_id', 'manufacturer_name', 'model_number', 'component_name', 'quantity', 'size', 'unit_of_measurement', 'image', 'amount'
     ];
 
+
     public function rfq()
     {
         return $this->belongsTo(Rfq::class, 'id', 'rfq_id');

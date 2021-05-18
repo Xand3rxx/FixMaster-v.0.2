@@ -98,8 +98,6 @@ class ProfileController extends Controller
      */
     public function update($language, Request $request, $uuid)
     {
-        // return $request;
-
         //Get authenticated user object
         $user = Auth::user();
 
@@ -113,9 +111,8 @@ class ProfileController extends Controller
             (string) $genderPreposition = 'her';
         }
 
-        //Set `updateAccount` and `updateContact` to false before Db transaction and pass by reference
+        //Set `updateAccount` to false before Db transaction and pass by reference
         (bool) $updateAccount  = false;
-        (bool) $updateContact  = false;
         
         // Set DB to rollback DB transacations if error occurs
         DB::transaction(function () use ($request, $user, &$updateAccount, &$updateContact) {
@@ -135,13 +132,10 @@ class ProfileController extends Controller
                 //Delete old service image if new image name is given
                 if(!empty($avatarName) && ($avatarName != $oldAvatarName)){
 
-                    // if(strcasecmp($oldAvatarName, 'default-male-avatar.png') != 0 || strcasecmp($oldAvatarName, 'default-female-avatar.png') != 0){
+                    if(\File::exists($imageDirectory.$oldAvatarName)){
 
-                        if(\File::exists($imageDirectory.$oldAvatarName)){
-
-                            \File::delete($imageDirectory.$oldAvatarName);
-                        }
-                    // }
+                        \File::delete($imageDirectory.$oldAvatarName);
+                    }
                 }
 
             }else{
@@ -169,11 +163,9 @@ class ProfileController extends Controller
 
             //Set variables as true to be validated outside the DB transaction
             $updateAccount  = true;
-            $updateContact  = true;
-
         });
 
-        if($updateAccount AND $updateContact){
+        if($updateAccount){
 
             //Record crurrenlty logged in user activity
             $type = 'Profile';
