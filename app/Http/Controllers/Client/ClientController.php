@@ -704,15 +704,7 @@ class ClientController extends Controller
 
 
             public function getDistanceDifference(Request $request){
-                // $the_message = new MessageController;
-                //         $type = 'email';
-                //         $subject = 'new job notice';
-                //         $from = 'client@fix-master.com';
-                //         $to = 'cse@fix-master.com';
-                //         $mail_data = ["firstname"=>"Olaoluwa", "url"=>"www.google.com"];
-                //         $feature = 'NEW_JOB_NOTIFICATION';
-                // // $the_message->sendMessage( $type, $subject, $from, $to, $mail_data, $feature);
-                // $the_message->sendNewMessage( $type, $subject, $from, $to, $mail_data, $feature);
+
                 $client = Client::where('user_id', $request->user()->id)->with('user')->orderBy('id','DESC')->firstOrFail();
 
                 // $latitude  = '3.921007';
@@ -741,9 +733,8 @@ class ClientController extends Controller
                         // dd($cses->distance);
                 }
 
-
             }
-            }
+        }
 
     /**
      * Display a more details about a FixMaster service.

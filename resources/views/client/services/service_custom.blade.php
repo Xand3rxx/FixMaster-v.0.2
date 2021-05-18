@@ -180,7 +180,7 @@ tbody td, thead th {
         
             <h5><span class="font-weight-bold"> Custom Service Request </h5> 
            
-            <small class="text-danger">Kindly state your request in a detailed mannaer and a CSE will be assigned to you in the shortest possible time.</small>
+            <!-- <small class="text-danger">Kindly state your request in a detailed mannaer and a CSE will be assigned to you in the shortest possible time.</small> -->
 
             <form class="rounded p-4" action="" method="POST" id="payment" enctype="multipart/form-data">
                 @csrf
