@@ -17,7 +17,7 @@
             <td class="tx-medium" width="25%">CSE Status</td>
             @if($dispatch->cse_status == 'Pending')
                 <td width="75%" class="text-medium text-warning">Pending</td>
-            @elseif($dispatch->cse_status == 'Accepted')
+            @elseif($dispatch->cse_status == 'Yes')
                 <td width="75%" class="text-medium text-success">Accepted</td>
             @else
                 <td width="75%" class="text-medium text-danger">Declined</td>
@@ -50,7 +50,7 @@
             <td class="tx-color-03" width="75%">{{ $dispatch->delivery_medium }}</td>
         </tr>
         <tr>
-            <td class="tx-medium" width="25%">Comment</td>
+            <td class="tx-medium" width="25%">Supplier Comment</td>
             <td class="tx-color-03" width="75%">{{ $dispatch->comment }}</td>
         </tr>
     </tbody>

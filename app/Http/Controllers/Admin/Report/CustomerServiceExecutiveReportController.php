@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin\Report;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\ServiceRequestAssigned;
+use Auth;
 
 class CustomerServiceExecutiveReportController extends Controller
 {
@@ -60,8 +61,6 @@ class CustomerServiceExecutiveReportController extends Controller
     public function amountEarnedSorting($language, Request $request)
     {
         if ($request->ajax()) {
-
-            // return $request;
 
             (array) $filters = $request->only('cse_id', 'job_status', 'sort_level', 'date');
 
