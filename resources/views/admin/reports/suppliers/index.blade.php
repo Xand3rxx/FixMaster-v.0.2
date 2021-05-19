@@ -42,7 +42,7 @@
                                 <div class="table-responsive">
                                     <div class="row mt-1 mb-1 ml-1 mr-1 ">
                                         <div class="col-md-4">
-                                            <input type="hidden" class="d-none" id="route" value="{{ route('admin.cse_report_first_sorting', app()->getLocale()) }}">
+                                            <input type="hidden" class="d-none" id="route" value="{{ route('admin.supplier_report_first_sorting', app()->getLocale()) }}">
                                             <div class="form-group">
                                                 <label>Sorting Parameters</label>
                                                 <select class="custom-select" id="sorting-parameters">
@@ -51,8 +51,8 @@
                                                     <option value="SortType2">Order Date</option>
                                                     <option value="SortType3">Delivery Date</option>
                                                     <option value="SortType4">Job Status</option>
-                                                    <option value="SortType5">Summary</option>
-                                                    <option value="SortType6">CSE/Customer List</option>
+{{--                                                    <option value="SortType5">Summary</option>--}}
+                                                    <option value="SortType5">CSE/Customer List</option>
                                                 </select>
                                             </div>
                                         </div><!--end col-->
@@ -94,6 +94,19 @@
                                                 </select>
                                             </div>
                                         </div>
+
+                                        <div class="col-md-4 cse-list d-none">
+                                            <div class="form-group position-relative">
+                                                <label>{{ !empty($cses->name) ? $cses->name : 'CSE' }} List <span class="text-danger">*</span></label>
+                                                <select class="form-control selectpicker" multiple id="supplier-list">
+                                                    <option value="">Select...</option>
+                                                    @foreach ($cses['users'] as $cse)
+                                                        <option value="{{ $cse['account']['user_id'] }}">{{ !empty($cse['account']['first_name']) ? Str::title($cse['account']['first_name'] ." ". $cse['account']['last_name']) : 'UNAVAILABLE' }}</option>
+                                                    @endforeach
+                                                </select>
+                                            </div>
+                                        </div>
+
                                     </div>
 
                                     <div id="items-delivered-sorting">
@@ -114,7 +127,7 @@
                                     <div class="table-responsive">
                                         <div class="row mt-1 mb-1 ml-1 mr-1 ">
                                             <div class="col-md-4">
-                                                <input type="hidden" class="d-none" id="route" value="{{ route('admin.cse_report_first_sorting', app()->getLocale()) }}">
+                                                <input type="hidden" class="d-none" id="route" value="{{ route('admin.supplier_report_first_sorting', app()->getLocale()) }}">
                                                 <div class="form-group">
                                                     <label>Sorting Parameters</label>
                                                     <select class="custom-select" id="sorting-parameters">
@@ -187,110 +200,7 @@
 
     @push('scripts')
         <script src="{{ asset('assets/dashboard/assets/js/bootstrap-multiselect.js') }}"></script>
-
-        <script>
-            $(document).ready(function() {
-                //Initiate multiple dropdown select
-                $('.selectpicker').selectpicker();
-
-
-                $('#sorting-parameters').on('change', function() {
-                    let option = $("#sorting-parameters").find("option:selected").val();
-                    switch (option) {
-                        case 'SortType1':
-                            $('.supplier-list').removeClass('d-none');
-                            $('.date-range, .job-status').addClass('d-none');
-                            $("#job-status").prop('selectedIndex', 0);
-                            $('#date-from, #date-to').val('');
-                            break
-                        case 'SortType2':
-                            $('.date-range').removeClass('d-none');
-                            $('.cse-list, .job-status').addClass('d-none');
-                            $("#supplier-list, #job-status").prop('selectedIndex', 0);
-                            $('#date-from, #date-to').val('');
-                            break
-                        case 'SortType3':
-                            $('.date-range').removeClass('d-none');
-                            $('.supplier-list, .job-status').addClass('d-none');
-                            $("#supplier-list, #job-status").prop('selectedIndex', 0);
-                            $('#date-from, #date-to').val('');
-                            break
-                        case 'SortType4':
-                            $('.job-status').removeClass('d-none');
-                            $('.supplier-list, .date-range').addClass('d-none');
-                            $("#supplier-list").prop('selectedIndex', 0);
-                            $('#date-from, #date-to').val('');
-                            break
-                        default:
-                            $('.supplier-list, .date-range, .job-status').addClass('d-none');
-                            break;
-                    }
-                });
-
-            });
-
-            //SORT CSE REPORT BY CSE ID
-            $('#cse-list').on('change', function (){
-                //Get the User ID
-                $cseId = $('#user_id').val();
-
-                //Assign sorting level
-                $sortLevel = 'SortType1';
-
-                sortJobAssignedTable($sortLevel, $cseId);
-
-            });
-
-            function sortJobAssignedTable($sortLevel, $cseId = null, $jobStatus, $dateFrom = null, $dateTo = null){
-                //Get sorting route
-                $route = $('#route').val();
-
-                $.ajaxSetup({
-                    headers: {
-                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                    }
-                });
-
-                $.ajax({
-                    url: $route,
-                    method: 'POST',
-                    data: {"sort_level": $sortLevel, "cse_id": $cseId, "job_status": $jobStatus, "date_from": $dateFrom, "date_to": $dateTo},
-                    beforeSend : function(){
-                        $("#items-delivered-sorting").html('<div class="d-flex justify-content-center mt-4 mb-4"><span class="loadingspinner"></span></div>');
-                    },
-                    success: function (data){
-                        if(data){
-                            //Replace table with new sorted records
-                            $('#items-delivered-sorting').html('');
-                            $('#items-delivered-sorting').html(data);
-
-                            //Add sorting class for jQuery datatable
-                            $('#basicExample').addClass('basicExample');
-
-                            //Attach JQuery datatable to current sorting
-                            if($('#basicExample').hasClass('basicExample')){
-                                jQuerySort();
-                            }
-                        }else {
-                            var message = 'Error occured while trying to sort this table.';
-                            var type = 'error';
-                            displayMessage(message, type);
-                        }
-                    }
-                });
-            }
-
-            function jQuerySort(){
-                $('.basicExample').DataTable({
-                    'iDisplayLength': 10,
-                    language: {
-                        searchPlaceholder: 'Search...',
-                        sSearch: '',
-                        lengthMenu: '_MENU_ items/page',
-                    }
-                })
-            }
-        </script>
+        <script src="{{ asset('assets/dashboard/assets/js/admin/reports/supplier/item_delivered_filter.js') }}"></script>
     @endpush
 
 @endsection

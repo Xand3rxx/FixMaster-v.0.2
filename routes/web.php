@@ -338,6 +338,7 @@ Route::prefix('admin')->group(function () {
         Route::post('/reports/client-service-executive/amount-earned-sorting',      [CustomerServiceExecutiveReportController::class, 'amountEarnedSorting'])->name('cse_report_second_sorting');
 
         Route::get('/reports/supplier',             [SupplierReportController::class, 'index'])->name('supplier_reports');
+        Route::post('/reports/supplier/item-delivered-sorting', [SupplierReportController::class, 'itemDeliveredSorting'])->name('supplier_report_first_sorting');
 
     });
 });

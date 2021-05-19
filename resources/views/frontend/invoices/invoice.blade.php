@@ -131,7 +131,7 @@
                                 </div><!--end col-->
                             </div><!--end row-->
                             <div class="d-flex justify-content-center">
-                                <h2 style="border: 2px solid grey; padding: 5px"></h2>
+                                <h2 style="border: 2px solid grey; padding: 5px">Diagnosis Invoice</h2>
                             </div>
                         </div>
 
@@ -168,11 +168,11 @@
                                     </dl>
                                     <dl class="row mb-0">
                                         <dt class="col-md-6 col-5 font-weight-normal">Visit Date. :</dt>
-                                        <dd class="col-md-6 col-7 text-muted">Friday 7th May, 2021</dd>
+                                        <dd class="col-md-6 col-7 text-muted">Friday 10th May, 2021</dd>
                                     </dl>
                                     <dl class="row mb-0">
                                         <dt class="col-md-6 col-5 font-weight-normal">Report Issuance Date :</dt>
-                                        <dd class="col-md-6 col-7 text-muted">Friday 7th May, 2021</dd>
+                                        <dd class="col-md-6 col-7 text-muted">Monday 10th May, 2021</dd>
                                     </dl>
                                 </div>
                             </div>
@@ -284,6 +284,13 @@
                                     </ul>
                                 </div><!--end col-->
                             </div>
+                    </div>
+
+                    <div class="d-flex justify-content-center py-3">
+                        <div>
+                        <button class="btn btn-outline-primary" name="client_choice" value="accepted">Client Accept</button>
+                        <button href="#" data-toggle="modal" data-target="#clientDecline" data-payment-ref="" data-url="" id="payment-details" class="btn btn-outline-primary ">Client Decline</button>
+                        </div>
                     </div>
 
                     <form method="POST" action="">
