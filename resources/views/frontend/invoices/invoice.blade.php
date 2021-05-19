@@ -130,6 +130,11 @@
                                     </dl>
                                 </div><!--end col-->
                             </div><!--end row-->
+                            @if($invoice['status'] === '2' && $invoice['phase'] == '2')
+                            <div class="d-flex justify-content-start">
+                                <h3 style="border: 2px solid red; padding: 5px; color: red;">PAID</h3>
+                            </div>
+                            @endif
                             <div class="d-flex justify-content-center">
                                 <h2 style="border: 2px solid grey; padding: 5px">{{$invoice['invoice_type']}}</h2>
                             </div>
@@ -319,12 +324,18 @@
                         @if($invoice->status == '1' && $invoice['phase'] == '1')
                         <div id="client-decision">
                             <input id="decision-route" type="hidden" name="route" value="{{ route('client.decline', app()->getLocale()) }}">
+                            <input id="client-accept" type="hidden" name="route" value="{{ route('client.accept', app()->getLocale()) }}">
                             <input id="invoice_uuid" type="hidden" name="invoiceUUID" value="{{ $invoice['uuid'] }}">
                             <button class="btn btn-outline-primary" id="client_accept" name="client_choice">Client Accept</button>
                             <button class="btn btn-outline-primary" id="client_decline" name="client_choice">Client Decline</button>
                             <div id="msg"></div>
                         </div>
                         @elseif($invoice->status == '1' && $invoice['phase'] == '2')
+                            @if($invoice['invoice_type'] === 'Diagnosis Invoice')
+                                <input id="invoice_uuid" type="hidden" name="invoiceUUID" value="{{ $invoice['uuid'] }}">
+                                <input id="client-return" type="hidden" name="route" value="{{ route('client.return', app()->getLocale()) }}">
+                                <button id="return-btn" href="{{route('client.service.all', app()->getLocale())}}" class="btn btn-outline-primary mr-2">Go Back</button>
+                            @endif
                             <form method="POST" action="{{ route('client.invoice.payment', app()->getLocale()) }}">
                                 @csrf
                                 {{-- REQUIREMENTS FOR PAYMENT GATWAYS  --}}
@@ -340,33 +351,10 @@
 
                                 <button type="submit" id="paystack_option"  class="btn btn-outline-success">Pay Now</button>
                             </form>
+                            @elseif($invoice['status'] === '2' && $invoice['phase'] == '2')
+                            <a href="{{route('client.service.all', app()->getLocale())}}" class="btn btn-outline-primary">Go Back</a>
                         @endif
                     </div>
-
-                    <form method="POST" action="">
-                        @csrf
-                        {{-- REQUIREMENTS FOR PAYMENT GATWAYS  --}}
-                        <input type="hidden" class="d-none" value="" id="email" name="email">
-                        <input type="hidden" class="d-none" value="" id="client_discount" name="client_discount">
-                        <input type="hidden" class="d-none" value="" id="client_phone_number" name="client_phone_number">
-
-                        {{-- Values are to be provided by the payment gateway using jQuery or Vanilla JS --}}
-                        <input type="hidden" class="d-none" value="" id="payment_response_message" name="payment_response_message">
-                        <input type="hidden" class="d-none" value="" id="payment_reference" name="payment_reference">
-
-                        <input type="hidden" class="d-none" value="" id="serviceFee" name="service_fee">
-
-
-                        <input type="hidden" class="d-none" value="" id="service_request_id" name="service_request_id">
-
-                        <input type="hidden" class="d-none" value="" id="rfq_id" name="rfq_id">
-
-                        <input type="hidden" class="d-none" value="" id="invoice" name="invoice">
-
-                        <button type="submit" class="submitBnt btn btn-primary d-none">Submit</button>
-
-
-                    </form>
 
                     <div class="invoice-footer border-top py-3 px-3">
                         <div class="row">

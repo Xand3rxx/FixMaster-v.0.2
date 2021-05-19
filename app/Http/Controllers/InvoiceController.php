@@ -266,7 +266,7 @@ class InvoiceController extends Controller
             /** Finally return the callback view for the end user */
             return redirect()->route('invoice', [app()->getLocale(), $invoiceUUID])->with('success', 'Invoice payment was successful!');
         }
-        else if($invoice['invoice_type'] == "Completion Invoice"){
+        else if($invoice['invoice_type'] == "Final Invoice"){
             if($invoice['status'] == '1')
             {
                 $invoice['status'] = '2';

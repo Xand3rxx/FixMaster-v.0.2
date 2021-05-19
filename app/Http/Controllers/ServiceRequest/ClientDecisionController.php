@@ -147,6 +147,32 @@ class ClientDecisionController extends Controller
         ]);
 
         return response()->json($invoiceExists);
+    }
 
+    public function clientAccept($language, Request $request)
+    {
+        $invoiceUUID = $request->invoiceUUID;
+
+        $invoiceExists = Invoice::where('uuid', $invoiceUUID)->firstOrFail();
+
+        $invoiceExists->update([
+            'phase' => '2'
+        ]);
+
+        return response()->json($invoiceExists);
+    }
+
+    public function clientReturn($language, Request $request)
+    {
+        $invoiceUUID = $request->invoiceUUID;
+
+        $invoiceExists = Invoice::where('uuid', $invoiceUUID)->firstOrFail();
+
+        $invoiceExists->update([
+            'invoice_type' => 'Final Invoice',
+            'phase' => '1'
+        ]);
+
+        return response()->json($invoiceExists);
     }
 }

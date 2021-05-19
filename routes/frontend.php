@@ -56,6 +56,8 @@ Route::get('/invoice/{invoice:uuid}', [InvoiceController::class, 'invoice'])->na
 
 Route::post('/client-decision', [ClientDecisionController::class, '__invoke'])->name('client.decision');
 Route::post('/client-decline', [ClientDecisionController::class, 'clientDecline'])->name('client.decline');
+Route::post('/client-accept', [ClientDecisionController::class, 'clientAccept'])->name('client.accept');
+Route::post('/client-return', [ClientDecisionController::class, 'clientReturn'])->name('client.return');
 
 Route::get('/contact-us',                   [App\Http\Controllers\PageController::class, 'contactUs'])->name('frontend.contact');
 Route::post('/contact-us',                  [App\Http\Controllers\PageController::class, 'sendContactMail'])->name('frontend.send_contact_mail');
