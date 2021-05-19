@@ -129,25 +129,10 @@ Route::prefix('admin')->group(function () {
         Route::get('/warranty/issued/details/{warranty:uuid}',       [CseController::class,  'warranty_details'])->name('warranty_details');
         Route::get('/resolved/warranty/details/{warranty:id}',          [WarrantyController::class, 'warranty_resolved_details'])->name('warranty_resolved_details');
 
-
-
-        //Routes for Simulation
-        Route::get('/diagnostic', [SimulationController::class, 'diagnosticSimulation'])->name('diagnostic');
-        Route::get('/end-service/{service_request:uuid}', [SimulationController::class, 'endService'])->name('end_service');
-        Route::get('/complete-service/{service_request:uuid}', [SimulationController::class, 'completeService'])->name('complete_service');
-        Route::get('/invoice/{invoice:id}', [SimulationController::class, 'invoice'])->name('invoice');
-
-
         //Routes for Invoice Management
         Route::get('/invoices',      [InvoiceController::class, 'index'])->name('invoices');
         Route::get('/invoice/{invoice:uuid}', [InvoiceController::class, 'invoice'])->name('invoice');
 
-        //Routes for Simulation
-        Route::get('/diagnostic', [SimulationController::class, 'diagnosticSimulation'])->name('diagnostic');
-        Route::get('/end-service/{service_request:uuid}', [SimulationController::class, 'endService'])->name('end_service');
-        Route::get('/complete-service/{service_request:uuid}', [SimulationController::class, 'completeService'])->name('complete_service');
-
-
         //Routes for Invoice Management
         Route::get('/invoices',      [InvoiceController::class, 'index'])->name('invoices');
 
@@ -156,9 +141,8 @@ Route::prefix('admin')->group(function () {
         Route::get('/end-service/{service_request:uuid}', [SimulationController::class, 'endService'])->name('end_service');
         Route::get('/complete-service/{service_request:uuid}', [SimulationController::class, 'completeService'])->name('complete_service');
         Route::get('/invoice/{invoice:id}', [SimulationController::class, 'invoice'])->name('invoice');
+        Route::get('/rfq-simulation', [SimulationController::class, 'rfqSimulation'])->name('rfq_simulation');
 
-
-        // Route::get('/rfq',                                  [SimulationController::class, 'rfqSimulation'])->name('rfq');
         // Route::get('/rfq/details/{serviceRequest:id}',    [SimulationController::class, 'rfqDetailsSimulation'])->name('rfq_details');
         // Route::post('/rfq/ongoing/update',                  [SimulationController::class, 'simulateOngoingProcess'])->name('rfq_update');
 

@@ -41,69 +41,75 @@ class InvoiceController extends Controller
     public function invoice($language, Invoice $invoice)
     {
         // Get the values for calculation
-//        $get_fixMaster_royalty = Income::select('amount', 'percentage')->where('income_name', 'FixMaster Royalty')->first();
-//        $get_logistics = Income::select('amount', 'percentage')->where('income_name', 'Logistics Cost')->first();
-//        $get_taxes = Tax::select('percentage')->where('name', 'VAT')->first();
-//        $serviceCharge = $invoice->serviceRequest->service->service_charge;
-//
-//        $tax = $get_taxes->percentage / 100;
-//        $fixMaster_royalty_value = $get_fixMaster_royalty->percentage;
-//        $logistics_cost = $get_logistics->amount;
-//        $materials_cost = $invoice->materials_cost == null ? 0 : $invoice->materials_cost;
-//        $sub_total = $materials_cost + $invoice->labour_cost;
-//        // End here
-//
-//        $fixMasterRoyalty = '';
-//        $subTotal = '';
-//        $bookingCost = '';
-//        $tax_cost = '';
-//        $discount = '';
-//        $discountValue = 5/100;
-//        $total_cost = '';
-//        $warranty = Warranty::where('name', 'Free Warranty')->first();
-//        $ActiveWarranties = Warranty::ActiveExtendedWarranties()->get();
-//        $WarrantyAmount = ServiceRequestWarranty::where('service_request_id', $invoice->serviceRequest->id)->first();
-//
-//        if ($invoice->invoice_type == 'Diagnosis Invoice') {
-//            $subTotal = $serviceCharge;
-//            $fixMasterRoyalty = $fixMaster_royalty_value * ($subTotal);
-//            $bookingCost = $invoice->serviceRequest->price->amount;
-//            $discount = $discountValue * $bookingCost;
-//            $tax_cost = $tax * ($subTotal + $logistics_cost + $fixMasterRoyalty);
-//            $total_cost = $serviceCharge + $fixMasterRoyalty + $tax_cost + $logistics_cost - $bookingCost;
-//        } else {
-//            $warrantyCost = 0.1 * ($invoice->labour_cost + $materials_cost);
-//            $bookingCost = $invoice->serviceRequest->price->amount;
-//            $discount = $discountValue * $bookingCost;
-//            $fixMasterRoyalty = $fixMaster_royalty_value * ($invoice->labour_cost + $materials_cost + $logistics_cost);
-//            $tax_cost = $tax * $sub_total;
-//            $total_cost = $materials_cost + $invoice->labour_cost + $fixMasterRoyalty + $WarrantyAmount->amount + $logistics_cost - $bookingCost - $discount + $tax_cost;
-////            dd($fixMasterRoyalty);
-//        }
+        $get_fixMaster_royalty = Income::select('amount', 'percentage')->where('income_name', 'FixMaster Royalty')->first();
+        $get_logistics = Income::select('amount', 'percentage')->where('income_name', 'Logistics Cost')->first();
+        $get_taxes = Tax::select('percentage')->where('name', 'VAT')->first();
+        $serviceCharge = $invoice->serviceRequest->service->service_charge;
 
-//        dd($total_cost);
+        $tax = $get_taxes->percentage / 100;
+        $fixMaster_royalty_value = $get_fixMaster_royalty->percentage;
+        $logistics_cost = $get_logistics->amount;
+        $materials_cost = $invoice->materials_cost == null ? 0 : $invoice->materials_cost;
+        $sub_total = $materials_cost + $invoice->labour_cost;
+        // End here
 
-//        return view('frontend.invoices.invoice')->with([
-//            'invoice' => $invoice,
-//            'rfqExists' => $invoice->rfq_id,
-//            'serviceRequestID' => $invoice->serviceRequest->id,
-//            'serviceRequestUUID' => $invoice->serviceRequest->uuid,
-//            'client_id' => $invoice->serviceRequest->client_id,
-//            'get_fixMaster_royalty' => $get_fixMaster_royalty,
-//            'fixmaster_royalty_value' => $fixMaster_royalty_value,
-//            'subTotal' => $subTotal,
-//            'bookingCost' => $bookingCost,
-//            'fixmasterRoyalty' => $fixMasterRoyalty,
-//            'tax' => $tax_cost,
-//            'discount' => $discount,
-//            'tax_value' => $tax,
-//            'logistics' => $logistics_cost,
-//            'warranty' => $warranty,
-//            'ActiveWarranties' => $ActiveWarranties,
-//            'WarrantyAmount' => $WarrantyAmount,
-//            'total_cost' => $total_cost
-//        ]);
-        return view('frontend.invoices.invoice');
+        $fixMasterRoyalty = '';
+        $subTotal = '';
+        $bookingCost = '';
+        $tax_cost = '';
+        $discount = '';
+        $discountValue = 5/100;
+        $total_cost = '';
+        $warranty = Warranty::where('name', 'Free Warranty')->first();
+        $ActiveWarranties = Warranty::ActiveExtendedWarranties()->get();
+        $WarrantyAmount = ServiceRequestWarranty::where('service_request_id', $invoice->serviceRequest->id)->first();
+        $fixedAmount = '';
+
+
+        if ($invoice->invoice_type == 'Diagnosis Invoice') {
+            $fixedAmount = 10000;
+            $subTotal = $serviceCharge;
+            $fixMasterRoyalty = $fixMaster_royalty_value * ($subTotal);
+            $bookingCost = $invoice->serviceRequest->price->amount;
+            $discount = $discountValue * $bookingCost;
+            $tax_cost = $tax * ($subTotal + $logistics_cost + $fixMasterRoyalty);
+//            $total_cost = 10000;
+            $total_cost = $serviceCharge + $fixMasterRoyalty + $tax_cost + $logistics_cost - $bookingCost;
+
+        } else if($invoice->invoice_type == 'Final Invoice') {
+            $fixedAmount = 15000;
+            $warrantyCost = 0.1 * ($invoice->labour_cost + $materials_cost);
+            $bookingCost = $invoice->serviceRequest->price->amount;
+            $discount = $discountValue * $bookingCost;
+            $fixMasterRoyalty = $fixMaster_royalty_value * ($invoice->labour_cost + $materials_cost + $logistics_cost);
+            $tax_cost = $tax * $sub_total;
+//            $total_cost = 30000;
+            $total_cost = $materials_cost + $invoice->labour_cost + $fixMasterRoyalty + $WarrantyAmount->amount + $logistics_cost - $bookingCost - $discount + $tax_cost;
+//            dd($fixMasterRoyalty);
+        }
+
+        return view('frontend.invoices.invoice')->with([
+            'invoice' => $invoice,
+            'rfqExists' => $invoice->rfq_id,
+            'serviceRequestID' => $invoice->serviceRequest->id,
+            'serviceRequestUUID' => $invoice->serviceRequest->uuid,
+            'client_id' => $invoice->serviceRequest->client_id,
+            'get_fixMaster_royalty' => $get_fixMaster_royalty,
+            'fixmaster_royalty_value' => $fixMaster_royalty_value,
+            'subTotal' => $subTotal,
+            'bookingCost' => $bookingCost,
+            'fixmasterRoyalty' => $fixMasterRoyalty,
+            'tax' => $tax_cost,
+            'discount' => $discount,
+            'tax_value' => $tax,
+            'logistics' => $logistics_cost,
+            'warranty' => $warranty,
+            'ActiveWarranties' => $ActiveWarranties,
+            'WarrantyAmount' => $WarrantyAmount,
+            'total_cost' => $total_cost,
+            'fixedAmount' => $fixedAmount
+        ]);
+//        return view('frontend.invoices.invoice');
     }
 
     public function savePayment(Request $request)

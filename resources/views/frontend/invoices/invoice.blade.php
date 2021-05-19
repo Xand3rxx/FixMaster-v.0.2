@@ -131,7 +131,7 @@
                                 </div><!--end col-->
                             </div><!--end row-->
                             <div class="d-flex justify-content-center">
-                                <h2 style="border: 2px solid grey; padding: 5px">Diagnosis Invoice</h2>
+                                <h2 style="border: 2px solid grey; padding: 5px">{{$invoice['invoice_type']}}</h2>
                             </div>
                         </div>
 
@@ -140,31 +140,31 @@
                                 <div class="col-md-6 order-md-1">
                                     <dl class="row mb-0">
                                         <dt class="col-md-4 col-5 font-weight-normal">Report To. :</dt>
-                                        <dd class="col-md-8 col-7 text-muted">Folashade Martins</dd>
+                                        <dd class="col-md-8 col-7 text-muted">{{ $invoice['client']->account->first_name }} {{ $invoice['client']->account->last_name }}</dd>
 
                                         <dt class="col-md-4 col-5 font-weight-normal">Customer No. :</dt>
-                                        <dd class="col-md-8 col-7 text-muted">090843521345</dd>
+                                        <dd class="col-md-8 col-7 text-muted">{{ $invoice['client']['contact']['phone_number'] }}</dd>
 
                                         <dt class="col-md-4 col-5 font-weight-normal">Customer Email :</dt>
-                                        <dd class="col-md-8 col-7 text-muted">folashadem@gmail.com</dd>
+                                        <dd class="col-md-8 col-7 text-muted">{{ $invoice['client']['email'] }}</dd>
 
                                         <dt class="col-md-4 col-5 font-weight-normal">Service Location :</dt>
-                                        <dd class="col-md-8 col-7 text-muted">23 Ajose Adeogun Street, Victoria Island</dd>
+                                        <dd class="col-md-8 col-7 text-muted">{{ $invoice['client']['contact']['address'] }}</dd>
                                     </dl>
                                 </div>
 
                                 <div class="col-md-6 order-md-2 mt-2">
                                     <dl class="row mb-0">
                                         <dt class="col-md-6 col-5 font-weight-normal">Order No. :</dt>
-                                        <dd class="col-md-6 col-7 text-muted">INV-123592</dd>
+                                        <dd class="col-md-6 col-7 text-muted">{{ $invoice['unique_id'] }}</dd>
                                     </dl>
                                     <dl class="row mb-0">
                                         <dt class="col-md-6 col-5 font-weight-normal">Order Date. :</dt>
-                                        <dd class="col-md-6 col-7 text-muted">Friday 7th May, 2021</dd>
+                                        <dd class="col-md-6 col-7 text-muted">{{ Carbon\Carbon::parse($invoice['serviceRequest']['created_at'], 'UTC')->isoFormat('MMMM Do, YYYY') }}</dd>
                                     </dl>
                                     <dl class="row mb-0">
                                         <dt class="col-md-6 col-5 font-weight-normal">Assigned CSE. :</dt>
-                                        <dd class="col-md-6 col-7 text-muted">Joyce Grant</dd>
+                                        <dd class="col-md-6 col-7 text-muted">{{ $invoice['serviceRequest']['service_request_assignee']['user']['account']['first_name'].' '. $invoice['serviceRequest']['service_request_assignee']['user']['account']['last_name'] }}</dd>
                                     </dl>
                                     <dl class="row mb-0">
                                         <dt class="col-md-6 col-5 font-weight-normal">Visit Date. :</dt>
@@ -205,6 +205,7 @@
                         <div class="py-3">
                             <span class="font-weight-bold text-uppercase">Quotation  Schedule:</span>
                         </div>
+                        @if($invoice['invoice_type'] === 'Final Invoice')
                             <div class="table-responsive bg-white shadow rounded">
                                 <table class="table mb-0 table-center invoice-tb">
                                     <thead class="bg-light">
@@ -215,28 +216,19 @@
                                         <th scope="col" class="text-left">Unit of Measurement</th>
                                         <th scope="col" class="text-left">Unit Price</th>
                                         <th scope="col" class="text-left">Total Price</th>
-                                        <th scope="col" class="text-left">Sub Totals</th>
                                     </tr>
                                     </thead>
                                     <tbody>
-                                    <tr>
-                                        <td class="text-left">1</td>
-                                        <td class="text-left">Item 1</td>
-                                        <td class="text-left">2</td>
-                                        <td class="text-left">Each</td>
-                                        <td class="text-left">₦ 2000</td>
-                                        <td class="text-left">₦ 4000</td>
-                                        <td class="text-left"></td>
-                                    </tr>
-                                    <tr>
-                                        <td class="text-left">2</td>
-                                        <td class="text-left">Item 2</td>
-                                        <td class="text-left">10</td>
-                                        <td class="text-left">Meters</td>
-                                        <td class="text-left">₦ 500</td>
-                                        <td class="text-left">₦ 5000</td>
-                                        <td class="text-left">₦ 9000</td>
-                                    </tr>
+                                    @foreach($invoice['rfqs']['rfqBatches'] as $item)
+                                        <tr>
+                                            <td class="text-left">{{ $loop->iteration }}</td>
+                                            <td class="text-left">{{ $item->component_name }}</td>
+                                            <td class="text-left">{{ $item->quantity }}</td>
+                                            <td class="text-left">{{ $item->unit_of_measurement }}</td>
+                                            <td class="text-left">{{ $item->amount }}</td>
+                                            <td class="text-left">{{ $item->quantity* $item->amount }}</td>
+                                        </tr>
+                                    @endforeach
                                     </tbody>
                                 </table>
                             </div>
@@ -257,7 +249,7 @@
                                             <td class="text-left">1</td>
                                             <td class="text-left">Activity 1</td>
                                             <td class="text-left">₦ 2000</td>
-                                            <td class="text-left">₦</td>
+                                            <td class="text-left"></td>
                                         </tr>
                                         <tr>
                                             <td class="text-left">2</td>
@@ -268,29 +260,87 @@
                                         </tbody>
                                     </table>
                                 </div>
+                        @elseif($invoice['invoice_type'] === 'Diagnosis Invoice')
+                            <div class="table-responsive bg-white shadow rounded mt-4">
+                                <table class="table mb-0 table-center invoice-tb">
+                                    <thead class="bg-light">
+                                    <tr>
+                                        <th scope="col" class="text-left">S/N</th>
+                                        <th scope="col" class="text-left">Name</th>
+                                        <th scope="col" class="text-left">Total Price</th>
+                                        <th scope="col" class="text-left">Sub Totals</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr>
+                                        <td class="text-left">1</td>
+                                        <td class="text-left">Service Charge</td>
+                                        <td class="text-left">₦ {{ number_format($invoice['serviceRequest']['service']['service_charge']) }}</td>
+                                        <td class="text-left">₦ {{ number_format($invoice['serviceRequest']['service']['service_charge']) }}</td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        @endif
 
                             <div class="row my-4">
                                 <div class="col-lg-6 col-md-6 ml-auto">
                                     <ul class="list-unstyled h5 font-weight-normal mt-4 mb-0">
-                                        <li class="test-muted d-flex justify-content-between">Logistics :<span>₦ 2,000.00</span></li>
-                                        <li class="text-muted d-flex justify-content-between">FixMaster Royalty :<span>₦ 2,600.00</span></li>
-                                        <li class="text-muted d-flex justify-content-between">Total Charges :<span> ₦ 17,600.00</span></li>
-                                        <li class="text-muted d-flex justify-content-between mt-2">Discounts :</li>
-                                        <li class="text-muted d-flex justify-content-between">Multiple Labour Discount :<span> ₦ 400.00</span></li>
-                                        <li class="text-muted d-flex justify-content-between mb-2">First Booking Discount :<span> ₦ 1,260.00</span></li>
-                                        <li class="text-muted d-flex justify-content-between">Total Job Quotation :<span> ₦ 16,340.00</span></li>
-                                        <li class="d-flex justify-content-between text-danger">Booking Fee :<span> - ₦ 3,000.00</span></li>
-                                        <li class="d-flex justify-content-between">Total Amount Due :<span>₦ 13,340.00</span></li>
+                                        {!!
+    $invoice['invoice_type'] == 'Final Invoice'
+    ?
+    "
+    <li class='test-muted d-flex justify-content-between'>Subtotal :<span>₦". number_format($invoice['rfqs']['total_amount']+4000, 2) ."</span></li>
+    <li class='test-muted d-flex justify-content-between'>Logistics :<span>₦".  number_format($logistics, 2) ."</span></li>
+    <li class='text-muted d-flex justify-content-between'>FixMaster Royalty :<span>₦". number_format($fixmasterRoyalty, 2)."</span></li>
+    <li class='text-muted d-flex justify-content-between mt-2'>Discounts :</li>
+    <li class='d-flex justify-content-between text-danger mb-2'>First Booking Discount :<span> - ₦ 1,500.00</span></li>
+    <li class='text-muted d-flex justify-content-between'>Total Job Quotation :<span> ₦ ".number_format(($invoice['rfqs']['total_amount']+4000) + $logistics + $fixmasterRoyalty - 1500, 2)." </span></li>
+    <li class='d-flex justify-content-between text-danger'>Less Booking Fee :<span> - ₦ 1,500.00</span></li>
+    <li class='d-flex justify-content-between mt-2'>Total Amount Due :<span>₦ ".number_format(($invoice['rfqs']['total_amount']+4000) + $logistics + $fixmasterRoyalty - 1500 - 1500, 2)."</span></li>
+    "
+    :
+    "
+    <li class='test-muted d-flex justify-content-between'>Subtotal :<span>₦ ". number_format($subTotal, 2) ."</span></li>
+    <li class='test-muted d-flex justify-content-between'>Logistics :<span>₦ ". number_format($logistics, 2) ."</span></li>
+    <li class='text-muted d-flex justify-content-between'>FixMaster Royalty :<span>₦ ". number_format($fixmasterRoyalty, 2)."</span></li>
+    <li class='text-muted d-flex justify-content-between'>Taxes :<span> ₦ ". number_format($tax, 2)."</span></li>
+    <li class='d-flex justify-content-between text-danger'>Less Booking Fee :<span> - ₦ 1,500.00</span></li>
+    <li class='d-flex justify-content-between'>Total Amount Due :<span>₦ ". number_format($subTotal + $logistics + $fixmasterRoyalty + $tax - 1500, 2)."</span></li>
+    "
+    !!}
+
                                     </ul>
                                 </div><!--end col-->
                             </div>
                     </div>
 
                     <div class="d-flex justify-content-center py-3">
-                        <div>
-                        <button class="btn btn-outline-primary" name="client_choice" value="accepted">Client Accept</button>
-                        <button href="#" data-toggle="modal" data-target="#clientDecline" data-payment-ref="" data-url="" id="payment-details" class="btn btn-outline-primary ">Client Decline</button>
+                        @if($invoice->status == '1' && $invoice['phase'] == '1')
+                        <div id="client-decision">
+                            <input id="decision-route" type="hidden" name="route" value="{{ route('client.decline', app()->getLocale()) }}">
+                            <input id="invoice_uuid" type="hidden" name="invoiceUUID" value="{{ $invoice['uuid'] }}">
+                            <button class="btn btn-outline-primary" id="client_accept" name="client_choice">Client Accept</button>
+                            <button class="btn btn-outline-primary" id="client_decline" name="client_choice">Client Decline</button>
+                            <div id="msg"></div>
                         </div>
+                        @elseif($invoice->status == '1' && $invoice['phase'] == '2')
+                            <form method="POST" action="{{ route('client.invoice.payment', app()->getLocale()) }}">
+                                @csrf
+                                {{-- REQUIREMENTS FOR PAYMENT GATWAYS  --}}
+                                <input type="hidden" class="d-none" value={{ $total_cost }} name="booking_fee">
+
+                                <input type="hidden" class="d-none" value="paystack" id="payment_channel" name="payment_channel">
+
+                                <input type="hidden" class="d-none" value="{{ $invoice['unique_id'] }}" id="unique_id" name="unique_id">
+
+                                <input type="hidden" class="d-none" value="{{ $invoice['invoice_type'] }}" id="invoice_type" name="invoice_type">
+
+                                <input type="hidden" class="d-none" value="{{ $invoice['uuid'] }}" id="uuid" name="uuid">
+
+                                <button type="submit" id="paystack_option"  class="btn btn-outline-success">Pay Now</button>
+                            </form>
+                        @endif
                     </div>
 
                     <form method="POST" action="">
@@ -340,9 +390,7 @@
     </div><!--end container-->
 </section>
 
-
-<script src="{{asset('assets/frontend/js/jquery-3.5.1.min.js')}}"></script>
-{{-- <script src="{{asset('assets/client/js/jquery.min.js')}}"></script> --}}
+<script src="{{ asset('assets/dashboard/lib/jquery/jquery.min.js') }}"></script>
 <script src="{{asset('assets/frontend/js/bootstrap.bundle.min.js')}}"></script>
 <script src="{{asset('assets/frontend/js/jquery.easing.min.js')}}"></script>
 <script src="{{asset('assets/frontend/js/scrollspy.min.js')}}"></script>
@@ -370,8 +418,8 @@
 <script src="{{ asset('assets/dashboard/assets/js/jquery.tinymce.min.js') }}"></script>
 </body>
 
+    <script src="{{asset('assets/frontend/js/invoice/client_decision.js')}}"></script>
 
-@section('scripts')
     <script>
         $(document).ready(function() {
 
@@ -403,4 +451,3 @@
         });
 
     </script>
-@endsection
