@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin\Report;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\ServiceRequestAssigned;
+use Auth;
 
 class CustomerServiceExecutiveReportController extends Controller
 {
@@ -15,7 +16,15 @@ class CustomerServiceExecutiveReportController extends Controller
      */
     public function index()
     {
+        // return ServiceRequestAssigned::with('service_request', 'user')
+            // ->whereHas('user.roles', function ($query){
+            //     $query->where('slug', 'cse-user');
+            // })->latest('created_at')->get(),
+
         return view('admin.reports.cse.index', [
+            
+            'results'   => [],
+
             'cses'  =>  \App\Models\Role::where('slug', 'cse-user')->with('users')->firstOrFail(),
         ]);
     }
@@ -24,28 +33,44 @@ class CustomerServiceExecutiveReportController extends Controller
      * @param Request $request
      * @return \Illuminate\Http\JsonResponse
      *
-     * This is an ajax call to sort all CSE's assigned to a service request
-     * present on change of Sortung Parameter select dropdown
+     * This is an ajax call to CSE Job Assigned Report
+     * present on change of sorting parameter select dropdown
      */
     public function jobAssignedSorting($language, Request $request)
     {
         if ($request->ajax()) {
             (array) $filters = $request->only('cse_id', 'job_status', 'sort_level', 'date');
-            return ServiceRequestAssigned::filter($filters)->get();
 
-            //Get current job assigned sorting level
-            // $sortLevel = $request->sort_level;
-            // //Get cse id's array
-            // $cses = $request->cse_id;
-            // //Get Date from
-            // $dateFrom = $request->date_from;
-            // //Get Date to
-            // $dateTo = $request->date_to;
-            // //Get Job status Id
-            // $jobStatus = $request->job_status;
-            // return $cses;
-            // return [$sortLevel, $cses, $dateFrom, $dateTo];
-            // return ServiceRequestAssigned::jobAssignedSorting($sortLevel, $dateFrom, $dateTo, $cses)->get();
+            return view('admin.reports.cse.tables._job_assigned', [
+                'results'   =>  ServiceRequestAssigned::jobAssignedSorting($filters)->with('service_request', 'user')
+                ->whereHas('user.roles', function ($query){
+                    $query->where('slug', 'cse-user');
+                })->latest('created_at')->get()
+            ]);
+            
+        }
+    }
+
+    /**
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     *
+     * This is an ajax call to CSE Job Assigned Report
+     * present on change of sorting parameter select dropdown
+     */
+    public function amountEarnedSorting($language, Request $request)
+    {
+        if ($request->ajax()) {
+
+            (array) $filters = $request->only('cse_id', 'job_status', 'sort_level', 'date');
+
+            return view('admin.reports.cse.tables._amount_earned', [
+                'results'   =>  ServiceRequestAssigned::amountEarnedSorting($filters)->with('service_request', 'user')
+                ->whereHas('user.roles', function ($query){
+                    $query->where('slug', 'cse-user');
+                })->latest('created_at')->get()
+            ]);
+            
         }
     }
 }

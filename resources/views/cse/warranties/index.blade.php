@@ -11,7 +11,7 @@
           <nav aria-label="breadcrumb">
             <ol class="breadcrumb breadcrumb-style1 mg-b-10">
                 <li class="breadcrumb-item"><a href="{{ route('admin.index', app()->getLocale()) }}">Dashboard</a></li>
-                <li class="breadcrumb-item"><a href="{{ route('cse.requests.index', app()->getLocale()) }}">Requests</a></li>
+                {{-- <li class="breadcrumb-item"><a href="{{ route('cse.requests.index', app()->getLocale()) }}">Requests</a></li> --}}
                 <li class="breadcrumb-item active" aria-current="page">Warranty Claims</li>
             </ol>
           </nav>
@@ -40,60 +40,133 @@
         <th>Job Reference</th>  
         <th>Start Date</th>  
         <th>End Date</th>  
+        <th>Warrant Status</th>
         <th>Status</th>
         <th class="text-center">Action</th>
       </tr>
     </thead>
     <tbody>
-      {{-- @foreach ($issuedWarranties as $warranty)
+     
+    @foreach ($issuedWarranties as $warranty)
+      @if(!empty($warranty->service_request_warranty))
+    
         <tr>
           <td class="tx-color-03 tx-center">{{ $loop->iteration }}</td>
           <td class="tx-medium">{{ $warranty['user']['account']['first_name'].' '.$warranty['user']['account']['last_name'] }}</td>
-          <td class="tx-medium">{{ $warranty['warranty']['name'] }}</td>
+          <td class="tx-medium">{{ $warranty['service_request_warranty']['warranty']['name'] }}</td>
           <td class="tx-medium">{{ $warranty['service_request']['unique_id'] }}</td>
-          <td class="tx-medium">{{ Carbon\Carbon::parse($warranty->start_date ?? '2020-12-28 16:58:54', 'UTC')->isoFormat('MMMM Do YYYY, h:mm:ssa') }}</td>
-          <td class="tx-medium">{{ Carbon\Carbon::parse($warranty->expiration_date ?? '2020-12-28 16:58:54', 'UTC')->isoFormat('MMMM Do YYYY, h:mm:ssa') }}</td>
-          @if($warranty->status == 'used')
+          <td class="tx-medium">{{ Carbon\Carbon::parse($warranty->service_request_warranty->start_date ?? '2020-12-28 16:58:54', 'UTC')->isoFormat('MMMM Do YYYY, h:mm:ssa') }}</td>
+          <td class="tx-medium">{{ Carbon\Carbon::parse($warranty->service_request_warranty->expiration_date ?? '2020-12-28 16:58:54', 'UTC')->isoFormat('MMMM Do YYYY, h:mm:ssa') }}</td>
+          @if($warranty->service_request_warranty->status == 'used')
             <td class="text-success">Used</td>
           @else
             <td class="text-danger">Unused</td>
+          @endif
+          @if($warranty->service_request_warranty->has_been_attended_to == 'Yes')
+          <td class="text-success">Resolved</td>
+          @else
+          <td class="text-danger">Unresolved</td>
           @endif
           <td class=" text-center">
             <div class="dropdown-file">
               <a href="" class="dropdown-link" data-toggle="dropdown"><i data-feather="more-vertical"></i></a>
               <div class="dropdown-menu dropdown-menu-right">
-              <a href="{{ route('admin.issued_warranty_details', ['warranty'=>$warranty->uuid, 'locale'=>app()->getLocale()]) }}" class="dropdown-item details text-primary"><i class="far fa-clipboard"></i> Details</a>
-              <a href="{{ route('admin.mark_warranty_resolved', ['warranty'=>$warranty->uuid, 'locale'=>app()->getLocale()]) }}" class="dropdown-item details text-success"><i class="fas fa-check"></i> Mark as Resolved</a>
-              <a href="{{ route('admin.mark_warranty_resolved', ['warranty'=>$warranty->uuid, 'locale'=>app()->getLocale()]) }}" class="dropdown-item details text-info"><i class="fas fa-clipboard"></i> Resolved Details</a>
-                
+            
+              <a href="{{ route('cse.warranty_details', ['warranty'=> $warranty->service_request->uuid, 'locale'=>app()->getLocale()]) }}" class="dropdown-item details text-primary"><i class="far fa-clipboard"></i> Details</a>
+              
+              @if($warranty->service_request_warranty->has_been_attended_to == 'Yes')
+
+
+              <a href="#resolvedDetails" data-toggle="modal" class="dropdown-item details text-primary" 
+                data-url="{{ route('cse.warranty_resolved_details',  ['warranty'=> $warranty->service_request_warranty->uuid, 'locale'=>app()->getLocale()]) }}" 
+                id="resolved-details" data-job="{{ $warranty->service_request->unique_id}}">
+               <i class="far fa-clipboard"></i> Resolved Details</a>
+              <!-- <a href="#" class="dropdown-item details text-success"> Resolved Warranty</a> -->
+
+          @else
+          <a href="#markAsResolved" id="markas-resolved"
+              data-toggle="modal"
+              data-url="{{ route('cse.mark_warranty_resolved', ['warranty'=>$warranty->service_request_warranty->uuid, 'locale'=>app()->getLocale() ]) }}"
+              class="dropdown-item details text-success"><i class="fas fa-check"></i>  Mark as Resolved</a>
+          @endif
+              
+
               </div>
             </div>
           </td>
         </tr>
-      @endforeach --}}
-
-        <tr>
-            <td class="tx-color-03 tx-center">1</td>
-            <td class="tx-medium">Kelvin Adesanya</td>
-            <td class="tx-medium">Free Warranty</td>
-            <td class="tx-medium">REF-234234723</td>
-            <td class="tx-medium">{{ Carbon\Carbon::now('UTC')->isoFormat('MMMM Do YYYY, h:mm:ssa') }}</td>
-            <td class="tx-medium">{{ Carbon\Carbon::now('UTC')->addDays(7)->isoFormat('MMMM Do YYYY, h:mm:ssa') }}</td>
-            <td class="text-success">Used</td>
-            <td class=" text-center">
-              <div class="dropdown-file">
-                <a href="" class="dropdown-link" data-toggle="dropdown"><i data-feather="more-vertical"></i></a>
-                <div class="dropdown-menu dropdown-menu-right">
-                    <a href="{{ route('cse.warranty_claim_details', app()->getLocale()) }}" class="dropdown-item details text-primary"><i class="far fa-clipboard"></i> Details</a>
-                    <a href="#" class="dropdown-item details text-success"><i class="fas fa-check"></i> Mark as Resolved</a>
-                    <a href="#" class="dropdown-item details text-info"><i class="fas fa-clipboard"></i> Resolved Details</a>
-                  
-                </div>
-              </div>
-            </td>
-          </tr>
+        @endif
+      @endforeach
     </tbody>
   </table>
 
+
+
+  <div class="modal fade" id="markAsResolved" tabindex="-1" role="dialog" aria-hidden="true" data-keyboard="false" data-backdrop="static">
+    <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+      <div class="modal-content rounded shadow border-0">
+        <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalCenterTitle">Kindly state your comment</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        <div class="modal-body" id="modal-cancel-request">
+            <form class="p-4" method="GET" id="markas-resolved-form">
+                @csrf
+                <div class="row">
+
+                    <div class="col-md-12">
+                        <div class="form-group position-relative">
+                            <label>Comments (optional)</label>
+                            <i data-feather="info" class="fea icon-sm icons"></i>
+                            <textarea name="comment" id="reason" rows="3" class="form-control pl-5 @error('reason') is-invalid @enderror" placeholder="">{{ old('reason')  }}</textarea>
+                            @error('reason')
+                                <span class="invalid-feedback" role="alert">
+                                    <strong>{{ $message }}</strong>
+                                </span>
+                            @enderror
+                        </div>
+                    </div><!--end col-->
+
+                {{-- </div><!--end row--> --}}
+
+                    <div class="col-sm-12">
+                    <button type="submit" class="submitBnt btn btn-primary">Initiate</button>
+                    </div><!--end col-->
+                </div><!--end row-->
+            </form><!--end form-->
+        </div>
+        </div><!-- modal-body -->
+      </div><!-- modal-content -->
+    </div><!-- modal-dialog -->
+
+</div><!-- modal -->
+
+
+
+<div class="modal fade" id="resolvedDetails" tabindex="-1" role="dialog" aria-hidden="true" data-keyboard="false" data-backdrop="static">
+    <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+      <div class="modal-content rounded shadow border-0">
+        <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalCenterTitle">Resolved Details For <span id="job">
+            </span></h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+        </div>
+        <div class="modal-body" id="modal-body">
+     
+        </div>
+        </div><!-- modal-body -->
+      </div><!-- modal-content -->
+    </div><!-- modal-dialog -->
+
+</div><!-- modal -->
+
+
+@push('scripts')
+  <script src="{{ asset('assets/dashboard/assets/js/4823bfe5-4a86-49ee-8905-bb9a0d89e2e0.js') }}"></script>
+@endpush
 
 @endsection

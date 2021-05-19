@@ -49,7 +49,7 @@
                                     <th class="text-center">#</th>
                                     <th>Job Ref.</th>
                                     <th>Client</th>
-                                    <th>Supervised By</th>
+                                    <th>CSE</th>
                                     <th>Technician</th>
                                     <th class="text-center">Amount</th>
                                     <th>Status</th>
@@ -63,8 +63,8 @@
                                     <td class="tx-color-03 tx-center"> {{$loop->iteration}} </td>
                                     <td class="tx-medium"> {{$request['unique_id']}} </td>
                                     <td class="tx-medium"> {{Str::title($request['client']['account']['last_name'] .' '. $request['client']['account']['first_name'])}} </td>
-                                    @foreach ($request['users'] as $user)
-                                    @if($user['roles'][0]['slug'] == 'admin-user')
+                                     <!-- @foreach ($request['users'] as $user)
+                                    @if($user['roles'][0]['slug'] == 'cse-user')
                                     <td class="tx-medium">
                                         {{ !empty($user) ? Str::title($user['account']['last_name'] .' '. $user['account']['first_name']) : 'UNAVAILABLE'}}
                                     </td>
@@ -81,12 +81,27 @@
                                     @php break; @endphp
 
                                     @endif
-                                    @endforeach
+                                    @endforeach -->
 
-                                    {{-- <td class="tx-medium">Taofeek Adedokun</td>
-                                    <td class="tx-medium">Jamal Diwa</td> --}}
+                                 <!-- <td class="tx-medium">Taofeek Adedokun</td>
+                                    <td class="tx-medium">Jamal Diwa</td>  -->
+                                    <td class="tx-medium">Taofeek Adedokun</td>
+                                    <td class="tx-medium">Jamal Diwa</td>
                                     <td class="text-medium text-center">₦{{number_format($request['total_amount']) }}</td>
-                                    <td class="text-medium text-info">Ongoing</td>
+                                   
+                                    <td class="tx-medium text-info">
+                                    @if($request['status']['name'] == 'Pending')
+                                    <span class="text-warning">{{$request['status']['name']}}</span>
+                                    @elseif($request['status']['name'] == 'Ongoing')
+                                    <span class=" text-info">{{$request['status']['name']}}</span>
+                                    @elseif($request['status']['name'] == 'Cancelled')
+                                    <span class="text-danger">{{$request['status']['name']}}</span>
+                                    @else
+                                    <span class="text-success">
+                                    {{$request['status']['name']}}
+                                    </span>
+                                @endif
+                                </td>
 
                                     {{-- @if($request['status']['name'] == 'Pending')
                     <td class="text-medium text-warning">{{$request['service_request']['status']['name']}}</td>
@@ -103,9 +118,15 @@
                                             <a href="" class="dropdown-link" data-toggle="dropdown"><i data-feather="more-vertical"></i></a>
                                             <div class="dropdown-menu dropdown-menu-right">
                                                 <a href="#" class="dropdown-item text-primary"><i class="far fa-clipboard"></i> Details</a>
-                                                <a href="#" class="dropdown-item text-success"><i class="fas fa-check"></i> Mark as Completed</a>
                                                 <a href="#" class="dropdown-item text-danger"><i class="fas fa-times"></i> Mark as Cancelled</a>
-                                            </div>
+                                                @if($request->status_id == 2)
+                                                <a href="#"  id="completed" 
+                                                data-url="{{ route('admin.completed_request', [ 'request'=>$request->uuid, 'locale'=>app()->getLocale() ]) }}"
+                                                class="dropdown-item text-success"><i class="fas fa-check"></i> Mark as Completed</a>
+                                                @endif
+                                        
+
+                                                </div>
                                         </div>
                                     </td>
                                 </tr>
@@ -122,4 +143,11 @@
     </div><!-- container -->
 </div>
 
+
+
+
+@push('scripts')
+
+<script src="{{ asset('assets/client/js/requests/4c676ab8-78c9-4a00-8466-a10220785892.js') }}"></script>
+@endpush
 @endsection

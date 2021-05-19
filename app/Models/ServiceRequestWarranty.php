@@ -14,6 +14,8 @@ class ServiceRequestWarranty extends Model
         'client_id', 'warranty_id', 'service_request_id', 'start_date', 'expiration_date', 'amount', 'status', 'initiated', 'has_been_attended_to', 'reason',
     ];
 
+
+
     /**
      * The "booted" method of the model.
      *
@@ -49,6 +51,15 @@ class ServiceRequestWarranty extends Model
     public function payment()
     {
         return $this->hasOne(ServiceRequest::class, 'id', 'service_request_id');
+    }
+
+    public function service_request_warranty_issued(){
+        return $this->hasOne(ServiceRequestWarrantyIssued::class, 'service_request_warranty_id', 'id');
+    }
+
+    public function service_request_assignees(){
+
+        return $this->hasMany(ServiceRequestAssigned::class, 'service_request_id')->with('user');
     }
 
     /** 

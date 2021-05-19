@@ -2,6 +2,11 @@
 @section('title', 'Warranty Claim Details')
 @include('layouts.partials._messages')
 @section('content')
+<style>
+.card-groups > .card {
+    margin-bottom: 15px !important;
+}
+</style>
 <link rel="stylesheet" href="{{ asset('assets/dashboard/assets/css/dashforge.filemgr.css') }}">
 
 <div class="content-body">
@@ -11,11 +16,12 @@
                 <nav aria-label="breadcrumb">
                     <ol class="breadcrumb breadcrumb-style1 mg-b-10">
                         <li class="breadcrumb-item"><a href="{{ route('cse.index', app()->getLocale()) }}">Dashboard</a></li>
-                        <li class="breadcrumb-item"><a href="{{ route('cse.requests.index', app()->getLocale()) }}">Requests</a></li>
-                        <li class="breadcrumb-item active" aria-current="page">Request Details</li>
+                        <li class="breadcrumb-item"><a href="{{ route('cse.warranty_claims', app()->getLocale()) }}">Warranty Claims</a></li>
+                        <li class="breadcrumb-item active" aria-current="page">Warranty Claim Details</li>
                     </ol>
                 </nav>
-                <h4 class="mg-b-0 tx-spacing--1">Job: REF-234234723</h4>
+       
+                <h4 class="mg-b-0 tx-spacing--1">Job: {{$service_request->unique_id}}</h4>
                 <hr>
                 <div class="media align-items-center">
                     <span class="tx-color-03 d-none d-sm-block">
@@ -23,10 +29,11 @@
                         <img src="{{ asset('assets/images/default-male-avatar.png') }}" class="avatar rounded-circle" alt="Male Avatar">
                     </span>
                     <div class="media-body mg-sm-l-20">
-                        <h4 class="tx-18 tx-sm-20 mg-b-2">Kelvin Adesanya</h4>
+                    <h4 class="tx-18 tx-sm-20 mg-b-2">{{ucfirst($service_request->client->account->first_name)}}
+                        {{ucfirst($service_request->client->account->last_name)}}</h4>
                                         
-                        <p class="tx-13 tx-color-03 mg-b-0">08173682832 
-                            <a href="tel:08173682832" class="btn btn-primary btn-icon"><i class="fas fa-phone"></i> Call Client</a>
+                        <p class="tx-13 tx-color-03 mg-b-0">{{$service_request->client->account->contact->phone_number}}
+                            <a href="tel:{{$service_request->client->account->contact->phone_number}}" class="btn btn-primary btn-icon"><i class="fas fa-phone"></i> Call Client</a>
                         </p>
                     </div>
                 </div><!-- media -->
@@ -38,7 +45,23 @@
 
                 <div class="contact-content-header mt-4">
                     <nav class="nav">
+                    @if($service_request->service_request_warranty->has_been_attended_to == 'No')
+                    @if(Auth::user()->type->url != 'admin')                    
                         <a href="#serviceRequestActions" class="nav-link active" data-toggle="tab">Actions</a>
+                        @endif
+                        @endif
+
+                        @if($service_request->service_request_warranty->has_been_attended_to == 'Yes')     
+                    <a href="#contactCollaborators" class="nav-link active" data-toggle="tab"><span>Contact Collaborators</a>
+                    @elseif(Auth::user()->type->url == 'admin') 
+                         <a href="#contactCollaborators" class="nav-link active" data-toggle="tab"><span>Contact Collaborators</a>
+                        @else
+                    <a href="#contactCollaborators" class="nav-link" data-toggle="tab"><span>Contact Collaborators</a>
+
+                        @endif
+
+                       
+                      
                         <a href="#description" class="nav-link" data-toggle="tab"><span> Description</a>
                         <a href="#serviceRequestSummary" class="nav-link" data-toggle="tab"><span>Summary</a>
                     </nav>
@@ -47,108 +70,22 @@
 
                 <div class="contact-content-body">
                     <div class="tab-content">
-                        <div id="serviceRequestActions" class="tab-pane show active pd-20 pd-xl-25">
+   
+                    @if(Auth::user()->type->url != 'admin' && $service_request->service_request_warranty->has_been_attended_to == 'No')                    
+                    <div id="serviceRequestActions" class="tab-pane show active pd-20 pd-xl-25">
+                        @else                                     
+                    <div id="serviceRequestActions" class="tab-pane pd-20 pd-xl-25">
+                        @endif
+
                             <small class="text-danger">This tab is only visible once if a Warranty claim has not been marked as resolved or is still ongoing.</small>
                            {{-- {{  dd($technicians) }} --}}
-        <form class="form-data" method="POST" action="{{route('cse.assign.technician', [app()->getLocale()])}}">
+        <form class="form-data" method="POST" action="{{route('cse.assign.technician', [app()->getLocale()])}}"  enctype="multipart/form-data">
             @csrf
             <div class="mt-4">
                 <div class="tx-13 mg-b-25">
                     <div id="wizard3">
 
-                        <h3>Contact Collaborators</h3>
-                        <section>
-                            <div class="form-row mt-4">
-                                <div class="form-group col-md-12">
-                                    This show's a list of all FixMaster Collaborators that worked on the clients service request initially.
-                                    <div class="divider-text">Technicians </div>
-
-                                    <ul class="list-group wd-md-100p">
-                                        <li class="list-group-item d-flex align-items-center">
-                                            
-                                            <div class="form-row">
-                                            <img src="{{ asset('assets/images/default-male-avatar.png') }}" class="wd-30 rounded-circle mg-r-15" alt="Technician Avatar">
-                                            
-                                            <div class="col-md-6 col-sm-6">
-                                            <h6 class="tx-13 tx-inverse tx-semibold mg-b-0">Jamal Diwa</h6>
-                                            
-                                            <span class="d-block tx-11 text-muted">
-                                                    <i class="icon ion-md-star lh-0 tx-orange"></i>
-                                                    <i class="icon ion-md-star lh-0 tx-orange"></i>
-                                                    <i class="icon ion-md-star lh-0 tx-orange"></i>
-                                                <span class="font-weight-bold ml-2">0.6km</span>
-                                            </span>
-                                            </div>
-                                            <div class="col-md-6 col-sm-6">
-                                            <div class="form-row">
-                                                <div class="form-group col-1 col-md-1 col-sm-1" style="margin-left: 3rem !important;">
-                                                    <a href="tel:08124483438" class="btn btn-primary btn-icon"><i class="fas fa-phone"></i></a>
-                                                </div>
-                                            </div>
-                                            </div>
-                                        </div>
-                                        </li>
-                                    </ul>
-
-                                    <div class="divider-text">Quality Assurance Managers </div>
-
-                                    <ul class="list-group wd-md-100p">
-                                        <li class="list-group-item d-flex align-items-center">
-                                            
-                                            <div class="form-row">
-                                            <img src="{{ asset('assets/images/default-male-avatar.png') }}" class="wd-30 rounded-circle mg-r-15" alt="Technician Avatar">
-                                            
-                                            <div class="col-md-6 col-sm-6">
-                                            <h6 class="tx-13 tx-inverse tx-semibold mg-b-0">Desmond John</h6>
-                                            
-                                            <span class="d-block tx-11 text-muted">
-                                                    <i class="icon ion-md-star lh-0 tx-orange"></i>
-                                                    <i class="icon ion-md-star lh-0 tx-orange"></i>
-                                                    <i class="icon ion-md-star lh-0 tx-orange"></i>
-                                                <span class="font-weight-bold ml-2">0.6km</span>
-                                            </span>
-                                            </div>
-                                            <div class="col-md-6 col-sm-6">
-                                            <div class="form-row">
-                                                <div class="form-group col-1 col-md-1 col-sm-1" style="margin-left: 3rem !important;">
-                                                    <a href="tel:08124483438" class="btn btn-primary btn-icon"><i class="fas fa-phone"></i></a>
-                                                </div>
-                                            </div>
-                                            </div>
-                                        </div>
-                                        </li>
-                                    </ul>
-
-                                    <div class="divider-text">Suppliers </div>
-                                    <ul class="list-group wd-md-100p">
-                                        <li class="list-group-item d-flex align-items-center">
-                                            
-                                            <div class="form-row">
-                                            <img src="{{ asset('assets/images/default-male-avatar.png') }}" class="wd-30 rounded-circle mg-r-15" alt="Technician Avatar">
-                                            
-                                            <div class="col-md-6 col-sm-6">
-                                            <h6 class="tx-13 tx-inverse tx-semibold mg-b-0">Henry Efe</h6>
-                                            
-                                            <span class="d-block tx-11 text-muted">
-                                                    <i class="icon ion-md-star lh-0 tx-orange"></i>
-                                                    <i class="icon ion-md-star lh-0 tx-orange"></i>
-                                                    <i class="icon ion-md-star lh-0 tx-orange"></i>
-                                                <span class="font-weight-bold ml-2">0.6km</span>
-                                            </span>
-                                            </div>
-                                            <div class="col-md-6 col-sm-6">
-                                            <div class="form-row">
-                                                <div class="form-group col-1 col-md-1 col-sm-1" style="margin-left: 3rem !important;">
-                                                    <a href="tel:08124483438" class="btn btn-primary btn-icon"><i class="fas fa-phone"></i></a>
-                                                </div>
-                                            </div>
-                                            </div>
-                                        </div>
-                                        </li>
-                                    </ul>
-                                </div>
-                            </div>
-                        </section>
+                
 
                         <h3>Report</h3>
                         <section>
@@ -163,7 +100,7 @@
                                 <div class="form-group col-md-11">
                                     <label>Faulty Image</label>
                                     <div class="custom-file">
-                                        <input type="file" accept="image/*" class="custom-file-input @error('image[0]') is-invalid @enderror" name="image[]" id="image">
+                                        <input type="file" accept="image/*" class="custom-file-input @error('image[0]') is-invalid @enderror" name="upload_image[]" id="image">
                                         <label class="custom-file-label" for="image">Upload faulty parts image</label>
                                         @error('image[0]')
                                         <span class="invalid-feedback" role="alert">
@@ -181,14 +118,17 @@
                             <span class="add-image-row"></span>
 
                         </section>
-                        {{-- @if(is_null($service_request['preferred_time'])) --}}
+                   
+                        @if(is_null($service_request->service_request_warranty->service_request_warranty_issued->scheduled_datetime))
                         <h3>Scheduled Fix Date</h3>
                         <section>
                         
                             <div class="mt-4 form-row">
                                 <div class="form-group col-md-12">
                                     <label for="preferred_time">Scheduled Fix Date & Time</label>
-                                    <input id="service-date-time" type="text" readonly min="{{ \Carbon\Carbon::now()->isoFormat('2021-04-13 00:00:00') }}" class="form-control @error('preferred_time') is-invalid @enderror" name="preferred_time" placeholder="Click to Enter Scheduled Date & Time" value="{{ old('preferred_time') }}">
+                                    <input id="service-date-time" type="text" readonly min="{{ \Carbon\Carbon::now()->isoFormat('2021-04-13 00:00:00') }}" class="form-control @error('preferred_time') is-invalid @enderror"
+                                     name="preferred_time"
+                                      placeholder="Click to Enter Scheduled Date & Time" value="{{ old('preferred_time') }}">
                                     
                                     @error('preferred_time')
                                     <span class="invalid-feedback" role="alert">
@@ -198,7 +138,7 @@
                                 </div>
                             </div>
                         </section>
-                        {{-- @endif --}}
+                         @endif 
 
                         <h3>New RFQ</h3>
                     <section>
@@ -208,13 +148,13 @@
                         <div class="form-row mt-4">
                             <div class="form-group col-md-4">
                                 <div class="custom-control custom-radio">
-                                    <input type="radio" class="custom-control-input" id="rfqYes" name="intiate_rfq" value="yes">
+                                    <input type="radio" class="custom-control-input" id="rfqYes" name="intiate_rfq" value="yes" >
                                     <label class="custom-control-label" for="rfqYes">Yes</label><br>
                                 </div>
                             </div>
                             <div class="form-group col-md-4 d-flex align-items-end">
                                 <div class="custom-control custom-radio">
-                                    <input type="radio" class="custom-control-input" id="rfqNo" name="intiate_rfq" value="no">
+                                    <input type="radio" class="custom-control-input" id="rfqNo" name="intiate_rfq" value="no" checked>
                                     <label class="custom-control-label" for="rfqNo">No</label><br>
                                 </div>
                             </div>
@@ -312,14 +252,14 @@
                             <div class="form-row mt-4">
                                 <div class="form-group col-md-12">
                                     <ul class="list-group wd-md-100p">
-                                        @foreach ($technicians as $technician)
+                                        @foreach ($technicians['users'] as $technician)
                                         <li class="list-group-item d-flex align-items-center">
                                             
                                             <div class="form-row">
                                             <img src="{{ asset('assets/images/default-male-avatar.png') }}" class="wd-30 rounded-circle mg-r-15" alt="Technician Avatar">
                                             
                                             <div class="col-md-6 col-sm-6">
-                                            <h6 class="tx-13 tx-inverse tx-semibold mg-b-0">{{ !empty($technician['user']['account']['first_name']) ? $technician['user']['account']['first_name'] .' '. $technician['user']['account']['last_name'] : 'UNAVAILABLE'}}</h6>
+                                            <h6 class="tx-13 tx-inverse tx-semibold mg-b-0">{{ !empty($technician['account']['first_name']) ? $technician['account']['first_name'] .' '. $technician['account']['last_name'] : 'UNAVAILABLE'}}</h6>
                                             
                                             <span class="d-block tx-11 text-muted">
                                                 @foreach ($technicians as $item)
@@ -336,7 +276,7 @@
                                                 <div class="form-group col-1 col-md-1 col-sm-1">
                                                     <div class="custom-control custom-radio mt-2">
                                                         <div class="custom-control custom-radio">
-                                                            <input type="radio" class="custom-control-input" id="{{ $loop->iteration }}" name="technician_user_uuid" value="">
+                                                            <input type="radio" class="custom-control-input" id="{{ $loop->iteration }}" name="technician_user_uuid" value="{{$technician['user']['id']}}">
                                                             <label class="custom-control-label" for="{{ $loop->iteration }}"></label>
                                                         </div>
                                                     </div>
@@ -356,8 +296,12 @@
                 </div>
             </div><!-- df-example -->
         
-            {{-- <input type="hidden" value="{{$service_request->uuid}}" name="service_request_uuid"> --}}
-        
+            <input type="hidden" value="{{$service_request->service_request_warranty->service_request_warranty_issued->scheduled_datetime}}" 
+            name="service_request_warrant_issued_schedule_date">
+            <input type="hidden" value="{{$service_request->uuid}}" name="service_request_uuid">
+            <input type="hidden" value="{{$service_request->service_request_warranty->uuid}}" name="service_request_warranty_uuid">
+            <input type="hidden" value="{{$service_request->service_request_warranty->id}}" name="service_request_warranty_id">
+
             <button type="submit" class="btn btn-primary d-none" id="update-progress">Update Progress</button>
         
         </form>
@@ -366,125 +310,346 @@
                             <h4> This Warranty Claim has been resolved. </h4>
                         </div>
 
+                       
+                        @if(Auth::user()->type->url == 'admin' || $service_request->service_request_warranty->has_been_attended_to == 'Yes')                    
+                    <div id="contactCollaborators" class="tab-pane show active pd-20 pd-xl-25">
+                        @else                                     
+                        <div id="contactCollaborators" class="tab-pane pd-20 pd-xl-25">
+
+                        @endif
+                      
+                        This show's a list of all FixMaster Collaborators that worked on the clients service request initially.
+                                
+                            <div class="row row-xs mt-4">
+                                <div class="col-lg-12 col-xl-12">
+                                <div class="divider-text">Technicians  </div>
+                                <ul class="list-group wd-md-100p">
+                                    @foreach ($technicians as $item)
+                                   
+                                              
+                                        <li class="list-group-item d-flex align-items-center">
+                                            
+                                            <div class="form-row">
+                                            <img src="{{ asset('assets/images/'.$item->user->account->avatar??'default-male-avatar.png') }}" class="wd-30 rounded-circle mg-r-15" alt="Technician Avatar">
+                                            
+                                            <div class="col-md-6 col-sm-6">
+                                            <h6 class="tx-13 tx-inverse tx-semibold mg-b-0">{{ ucfirst($item->user->account->first_name)}} {{  ucfirst($item->user->account->last_name)}}</h6>
+                                            
+                                            <span class="d-block tx-11 text-muted">
+                                                    <i class="icon ion-md-star lh-0 tx-orange"></i>
+                                                    <i class="icon ion-md-star lh-0 tx-orange"></i>
+                                                    <i class="icon ion-md-star lh-0 tx-orange"></i>
+                                                <span class="font-weight-bold ml-2">0.6km</span>
+                                            </span>
+                                            </div>
+                                            <div class="col-md-6 col-sm-6">
+                                            <div class="form-row">
+                                                <div class="form-group col-1 col-md-1 col-sm-1" style="margin-left: 3rem !important;">
+                                                    <a href="tel:{{$item->user->account->contact->phone_number}}" class="btn btn-primary btn-icon"><i class="fas fa-phone"></i></a>
+                                                </div>
+                                            </div>
+                                            </div>
+                                        </div>
+                                        </li>
+                                     
+                                        @endforeach
+                                    </ul>
+
+                                    <div class="divider-text">Quality Assurance Managers </div>
+
+                                    <ul class="list-group wd-md-100p">
+                                
+                                        <li class="list-group-item d-flex align-items-center">
+                                            
+                                            <div class="form-row">
+                                            <img src="{{ asset('assets/images/default-male-avatar.png') }}" class="wd-30 rounded-circle mg-r-15" alt="Technician Avatar">
+                                            
+                                            <div class="col-md-6 col-sm-6">
+                                           
+                                            <h6 class="tx-13 tx-inverse tx-semibold mg-b-0">{{ ucfirst($qaulity_assurances->user)}} {{  ucfirst($qaulity_assurances->user)}}</h6>
+
+                                            <span class="d-block tx-11 text-muted">
+                                                    <i class="icon ion-md-star lh-0 tx-orange"></i>
+                                                    <i class="icon ion-md-star lh-0 tx-orange"></i>
+                                                    <i class="icon ion-md-star lh-0 tx-orange"></i>
+                                                <span class="font-weight-bold ml-2">0.6km</span>
+                                            </span>
+                                            </div>
+                                            <div class="col-md-6 col-sm-6">
+                                            <div class="form-row">
+                                                <div class="form-group col-1 col-md-1 col-sm-1" style="margin-left: 3rem !important;">
+                                                    <a href="tel: {{$item->user->account->contact->phone_number}}" class="btn btn-primary btn-icon"><i class="fas fa-phone"></i></a>
+                                                </div>
+                                            </div>
+                                            </div>
+                                        </div>
+                                        </li>
+                                      
+                                    </ul>
+
+                                    <div class="divider-text">Suppliers </div>
+
+                                    <ul class="list-group wd-md-100p">
+                                        <li class="list-group-item d-flex align-items-center">
+                                            
+                                            <div class="form-row">
+                                            <img src="{{ asset('assets/images/default-male-avatar.png') }}" class="wd-30 rounded-circle mg-r-15" alt="Technician Avatar">
+                                            
+                                            <div class="col-md-6 col-sm-6">
+                                            <h6 class="tx-13 tx-inverse tx-semibold mg-b-0">Henry Efe</h6>
+                                            
+                                            <span class="d-block tx-11 text-muted">
+                                                    <i class="icon ion-md-star lh-0 tx-orange"></i>
+                                                    <i class="icon ion-md-star lh-0 tx-orange"></i>
+                                                    <i class="icon ion-md-star lh-0 tx-orange"></i>
+                                                <span class="font-weight-bold ml-2">0.6km</span>
+                                            </span>
+                                            </div>
+                                            <div class="col-md-6 col-sm-6">
+                                            <div class="form-row">
+                                                <div class="form-group col-1 col-md-1 col-sm-1" style="margin-left: 3rem !important;">
+                                                    <a href="tel:08124483438" class="btn btn-primary btn-icon"><i class="fas fa-phone"></i></a>
+                                                </div>
+                                            </div>
+                                            </div>
+                                        </div>
+                                        </li>
+                                    </ul>
+                                </div><!-- df-example -->
+                            </div>
+                        </div>
+
+
+
+
+
+                                                   
                         <div id="description" class="tab-pane pd-20 pd-xl-25">
+
                             <div class="divider-text">Warranty Claim  Description</div>
 
                             <h6>Warranty Claim Description</h6>
                             <div class="row row-xs mt-4">
                                 <div class="col-lg-12 col-xl-12">
                                     <table class="table table-striped table-sm mg-b-0">
-                                        <tbody>
+                                       
+                                            <tbody>
                                             <tr>
                                                 <td class="tx-medium">Job Reference</td>
-                                                <td class="tx-color-03">REF-234234723</td>
+                                                <td class="tx-color-03"> {{$service_request->unique_id}}</td>
                                             </tr>
                                             <tr>
                                                 <td class="tx-medium">Service Required</td>
-                                                <td class="tx-color-03">Eletronics (Computer & Laptops)</td>
+                                                <td class="tx-color-03"> {{$service_request->service->name}}</td>
                                             </tr>
                                             <tr>
-                                                <td class="tx-medium">Warranty Scheduled Date & Timr</td>
-                                                <td class="tx-color-03">To be updated by the CSE</td>
+                                                <td class="tx-medium">Scheduled Date & Time </td>
+                                     <td class="tx-color-03">{{ !empty($service_request->preferred_time) ? Carbon\Carbon::parse($service_request->preferred_time, 'UTC')->isoFormat('MMMM Do YYYY, h:mm:ssa') : 'Not Scheduled yet'}} </td>
                                             </tr>
                                             <tr>
-                                                <td class="tx-medium">Warranty Start Date</td>
-                                                <td class="tx-color-03">{{ Carbon\Carbon::now('UTC')->isoFormat('MMMM Do YYYY, h:mm:ssa') }}</td>
-                                            </tr>
-
-                                            <tr>
-                                                <td class="tx-medium">Warranty End Date</td>
-                                                <td class="tx-color-03">{{ Carbon\Carbon::now('UTC')->addDays(7)->isoFormat('MMMM Do YYYY, h:mm:ssa') }}</td>
+                                                <td class="tx-medium">Payment Status </td>
+                                                <td class="tx-color-03"><span class="text-success">{{ucfirst($service_request->payment_statuses->status)}}</span>({{ ucfirst($service_request->payment_statuses->payment_channel)}})</td>
                                             </tr>
                                             <tr>
-                                                <td class="tx-medium">Warranty Issued Date</td>
-                                                <td class="tx-color-03">{{ Carbon\Carbon::now('UTC')->isoFormat('MMMM Do YYYY, h:mm:ssa') }}</td>
+                                                <td class="tx-medium">Initial Service Charge</td>
+                                                <td class="tx-color-03">₦{{ number_format($service_request->price->amount) }} Standard Price</td>
                                             </tr>
                                             <tr>
-                                                <td class="tx-medium">Amount</td>
-                                                <td class="tx-color-03">₦{{ number_format(1000) }}</td>
-                                            </tr>
-                                            <tr>
-                                                <td class="tx-medium">Status</td>
-                                                <td class="text-success">Used</td>
+                                                <td class="tx-medium">Total Service Charge</td>
+                                                <td class="tx-color-03">₦{{ number_format($service_request->total_amount) }}</td>
                                             </tr>
                                             <tr>
                                                 <td class="tx-medium">Security Code</td>
-                                                <td class="tx-color-03">SEC-27AEC73E</td>
-                                            </tr>
-                                            
-                                            <tr>
-                                                <td class="tx-medium">Initial Technicians Assigned</td>
-                                                <td class="tx-color-03">List all Technicians's assigned</td>
+                                                <td class="tx-color-03">{{$service_request->client_security_code}}</td>
                                             </tr>
                                             <tr>
-                                                <td class="tx-medium">Initial Quality Assurance Managers Assigned</td>
-                                                <td class="tx-color-03">List all QA's assigned</td>
+                                                <td class="tx-medium">Supervised By</td>
+                                                <td class="tx-color-03">David Akinsola</td>
                                             </tr>
-                                           
                                             <tr>
-                                                <td class="tx-medium">Initial Request Address</td>
-                                                <td class="tx-color-03">27B, Bourdillon Road off Falomo, Ikoyi-Lagos.</td>
+                                                <td class="tx-medium">CSE's Assigned</td>
+                                                <td class="tx-color-03">{{CustomHelpers::arrayToList($service_request->service_request_assignees, 'cse-user')}}</td>
+                                            </tr>
+                                            <tr>
+                                                <td class="tx-medium">Technicians Assigned</td>
+                                                <td class="tx-color-03">
+                                                    {{CustomHelpers::arrayToList($service_request->service_request_assignees, 'technician-artisans') == 'UNAVAILABLE'? 
+                                                        CustomHelpers::getWarrantTechnician($service_request->service_request_warranty->service_request_warranty_issued->technician_id) 
+                                                        : 
+                                                    CustomHelpers::arrayToList($service_request->service_request_assignees, 'technician-artisans') 
+                                                    }}
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td class="tx-medium">Quality Assurance Managers Assigned</td>
+                                                <td class="tx-color-03">{{CustomHelpers::arrayToList($service_request->service_request_assignees, 'quality-assurance-user')}}</td>
+                                                
+                                            </tr>
+                                            <tr>
+                                                <td class="tx-medium">State</td>
+                                                <td class="tx-color-03">{{$service_request->client->account->state->name??'UNAVAILABLE'}}</td>
+                                            </tr>
+                                            <tr>
+                                                <td class="tx-medium">L.G.A</td>
+                                                <td class="tx-color-03">{{$service_request->client->account->lga->name?? 'UNAVAILABLE'}}</td>
+                                            </tr>
+                                            <tr>
+                                                <td class="tx-medium">Town/City</td>
+                                                <td class="tx-color-03">{{$service_request->client->account->town->name?? 'UNAVAIALABLE'}}</td>
+                                            </tr>
+                                            <tr>
+                                                <td class="tx-medium">Request Address</td>
+                                                <td class="tx-color-03">{{$service_request->client->account->contact == null ? '': $service_request->client->account->contact->address}}.</td>
                                             </tr>
                                             <tr>
                                                 <td class="tx-medium">Request Description</td>
-                                                <td class="tx-color-03">My pc no longer comes on even when plugged into a power source.</td>
+                                                <td class="tx-color-03">{{$service_request->description}}.</td>
                                             </tr>
+                                           
+                                            @if(!empty($service_request_cancellation->reason))
+                                            <tr>
+                                                <td class="tx-medium">Reason for Cancellation </td>
+                                                <td class="tx-color-03">I'm no longer interested. <span class="text-danger">(Only visible if the request was cancelled)</span></td>
+                                            </tr>
+                                            @endif
 
                                         </tbody>
                                     </table>
 
                                     
+                          
+
+
+
+                                <div class="divider-text">Media Files</div>
+                                    <div class="row row-xs">
+                                        <div class="col-6 col-sm-4 col-md-3 col-xl">
+                                          <div class="card card-file">
+                                            <div class="dropdown-file">
+                                              <a href="" class="dropdown-link" data-toggle="dropdown"><i data-feather="more-vertical"></i></a>
+                                              <div class="dropdown-menu dropdown-menu-right">
+                                                <a href="#" class="dropdown-item download"><i data-feather="download"></i>Download</a>
+                                              </div>
+                                            </div><!-- dropdown -->
+                                            <div class="card-file-thumb tx-danger">
+                                              <i class="far fa-file-pdf"></i>
+                                            </div>
+                                            <div class="card-body">
+                                              <h6><a href="" class="link-02">{{ substr('54c2a6f3-8a9c-411a-bd68-96a3a37617b2', 0, 15) }}.pdf</a></h6>
+                                            </div>
+                                            <div class="card-footer"><span class="d-none d-sm-inline">Date Created: </span>{{ \Carbon\Carbon::now('UTC')->isoFormat('MMMM Do YYYY, h:mm:ssa') }}</div>
+                                          </div>
+                                        </div><!-- col -->
+                                        <div class="col-6 col-sm-4 col-md-3 col-xl">
+                                          <div class="card card-file">
+                                            <div class="dropdown-file">
+                                              <a href="" class="dropdown-link" data-toggle="dropdown"><i data-feather="more-vertical"></i></a>
+                                              <div class="dropdown-menu dropdown-menu-right">
+                                                <a href="#" class="dropdown-item download"><i data-feather="download"></i>Download</a>
+                                              </div>
+                                            </div><!-- dropdown -->
+                                            <div class="card-file-thumb tx-primary">
+                                              <i class="far fa-file-word"></i>
+                                            </div>
+                                            <div class="card-body">
+                                                <h6><a href="" class="link-02">{{ substr('1c160a9b-8f52-46f5-a687-1dd608da48b3', 0, 15) }}.docx</a></h6>
+                                            </div>
+                                            <div class="card-footer"><span class="d-none d-sm-inline">Date Created: </span>{{ \Carbon\Carbon::now('UTC')->isoFormat('MMMM Do YYYY, h:mm:ssa') }}</div>
+                                          </div>
+                                        </div><!-- col -->
+                                        <div class="col-6 col-sm-4 col-md-3 col-xl mg-t-10 mg-sm-t-0">
+                                          <div class="card card-file">
+                                            <div class="dropdown-file">
+                                              <a href="" class="dropdown-link" data-toggle="dropdown"><i data-feather="more-vertical"></i></a>
+                                              <div class="dropdown-menu dropdown-menu-right">
+                                                <a href="#" class="dropdown-item download"><i data-feather="download"></i>Download</a>
+                                              </div>
+                                            </div><!-- dropdown -->
+                                            <div class="card-file-thumb tx-indigo">
+                                              <i class="far fa-file-image"></i>
+                                            </div>
+                                            <div class="card-body">
+                                                <h6><a href="" class="link-02">{{ substr('ff9c0bfa-aeed-4724-a8e4-790cf04a9fdd', 0, 15) }}.jpg</a></h6>
+                                            </div>
+                                            <div class="card-footer"><span class="d-none d-sm-inline">Date Created: </span>{{ \Carbon\Carbon::now('UTC')->isoFormat('MMMM Do YYYY, h:mm:ssa') }}</div>
+                                          </div>
+                                        </div><!-- col -->
+                                        <div class="col-6 col-sm-4 col-md-3 col-xl mg-t-10 mg-md-t-0">
+                                          <div class="card card-file">
+                                            <div class="dropdown-file">
+                                              <a href="" class="dropdown-link" data-toggle="dropdown"><i data-feather="more-vertical"></i></a>
+                                              <div class="dropdown-menu dropdown-menu-right">
+                                                <a href="#" class="dropdown-item download"><i data-feather="download"></i>Download</a>
+                                              </div>
+                                            </div><!-- dropdown -->
+                                            <div class="card-file-thumb tx-info">
+                                              <i class="far fa-file-video"></i>
+                                            </div>
+                                            <div class="card-body">
+                                                <h6><a href="" class="link-02">{{ substr('d886204a-a376-4924-a83b-2d7a7f84df7d', 0, 15) }}.mp4</a></h6>
+                                            </div>
+                                            <div class="card-footer"><span class="d-none d-sm-inline">Date Created: </span>{{ \Carbon\Carbon::now('UTC')->isoFormat('MMMM Do YYYY, h:mm:ssa') }}</div>
+                                          </div>
+                                        </div><!-- col -->
+                                      </div><!-- row -->
                                 </div><!-- df-example -->
                             </div>
                         </div>
 
+
                         <div id="serviceRequestSummary" class="tab-pane pd-20 pd-xl-25">
                             <div class="divider-text">Diagnostic Reports</div>
-                            <div class="card-group">
+                            @if(!empty($service_request->service_request_warranty->service_request_warranty_issued->warrantReport))
+
+                            <div class="card-groups">
+                          @foreach($service_request->service_request_warranty->service_request_warranty_issued->warrantReport as $item)
                                 <div class="card">
                                     <div class="card-body shadow-none bd-primary overflow-hidden">
                                         <div class="marker-primary marker-ribbon pos-absolute t-10 l-0">1</div>
 
-                                        <p class="card-text">After discussion with Mr Kelvin Adesanya, tentatively I beleive his laptop has overheating issues. On-premise diagnosis has to be carried out.</p>
-                                        <p class="card-text"><small class="text-muted">Date Created: {{ \Carbon\Carbon::now('UTC') }}</small></p>
+                                        <p class="card-text">{{ucfirst($item->report)}}</p>
+                                        <p class="card-text"><small class="text-muted">Date Created: {{ Carbon\Carbon::parse($item->created_at, 'UTC')->isoFormat('MMMM Do YYYY, h:mm:ssa')}}
+                                        </small></p>
                                     </div>
                                 </div>
-                                <div class="card">
-                                    <div class="card-body shadow-none bd-primary overflow-hidden">
-                                        <div class="marker-primary marker-ribbon pos-absolute t-10 l-0">2</div>
-                                        <p class="card-text">After discussion with Mr Kelvin Adesanya, tentatively I beleive his laptop has overheating issues. On-premise diagnosis has to be carried out.</p>
-                                        <p class="card-text"><small class="text-muted">Date Created: {{ \Carbon\Carbon::now('UTC') }}</small></p>
-                                    </div>
-                                </div>
-                                <div class="card">
-                                    <div class="card-body shadow-none bd-primary overflow-hidden">
-                                        <div class="marker-primary marker-ribbon pos-absolute t-10 l-0">3</div>
-
-                                        <p class="card-text">After discussion with Mr Kelvin Adesanya, tentatively I beleive his laptop has overheating issues. On-premise diagnosis has to be carried out.</p>
-                                        <p class="card-text"><small class="text-muted">Date Created: {{ \Carbon\Carbon::now('UTC') }}</small></p>
-                                    </div>
-                                </div>
+                                @endforeach
+                    
+                                
+                          
                             </div>
+                            @endif
 
                             <div class="divider-text">Faulty Part Images</div>
                             <div class="row row-xs">
+                            @if(!empty($service_request->service_request_warranty->service_request_warranty_issued->warrantyImage))
+                            @foreach($service_request->service_request_warranty->service_request_warranty_issued->warrantyImage as $item)
+
                                 <div class="col-6 col-sm-4 col-md-3 col-xl">
                                     <div class="card card-file">
                                     <div class="dropdown-file">
                                         <a href="" class="dropdown-link" data-toggle="dropdown"><i data-feather="more-vertical"></i></a>
                                         <div class="dropdown-menu dropdown-menu-right">
-                                        <a href="#" class="dropdown-item download"><i data-feather="download"></i>Download</a>
+                                        <a href="{{ route('cse.download', ['file'=> $item->name, 'locale'=>app()->getLocale()]) }}" class="dropdown-item download"><i data-feather="download"></i>Download</a>
                                         </div>
                                     </div><!-- dropdown -->
-                                    <div class="card-file-thumb tx-danger">
+                                    <div class="card-file-thumb tx-danger" 
+                                    style="background-image: url('{{ asset('assets/warranty-images/'.$item->name)}}');"
+                                    >
                                         <i class="far fa-file-pdf"></i>
                                     </div>
                                     <div class="card-body">
-                                        <h6><a href="" class="link-02">{{ substr('54c2a6f3-8a9c-411a-bd68-96a3a37617b2', 0, 15) }}.pdf</a></h6>
+                                  
+
+                                        <h6><a href="" class="link-02">{{ substr($item->name, 0, 15).'.'.CustomHelpers::getExtention($item->name)}}
+                                    
+                                        </a></h6>
                                     </div>
                                     <div class="card-footer"><span class="d-none d-sm-inline">Date Created: </span>{{ \Carbon\Carbon::now('UTC')->isoFormat('MMMM Do YYYY, h:mm:ssa') }}</div>
                                     </div>
                                 </div><!-- col -->
+                                @endforeach
+                    
+                                @endif
                             </div><!-- row -->
 
                             <div class="divider-text">RFQ's</div>
@@ -605,11 +770,20 @@
     }
 
     function newImageRow(count){
-        let html = '<div class="form-row remove-image-row"><div class="form-group col-md-11"> <label>Faulty Image</label><div class="custom-file"> <input type="file" accept="image/*" class="custom-file-input @error('image[]') is-invalid @enderror" name="image[]" id="image"> <label class="custom-file-label" for="image">Upload faulty parts image</label> @error('image[]') <span class="invalid-feedback" role="alert"> <strong>{{ $message }}</strong> </span> @enderror</div></div><div class="form-group col-md-1 mt-1"> <button class="btn btn-sm pd-x-15 btn-danger btn-uppercase mg-l-5 mt-4 remove-image" type="button"><i class="fas fa-times" class="wd-10 mg-r-5"></i></button></div></div>';
+        let html = '<div class="form-row remove-image-row"><div class="form-group col-md-11"> <label>Faulty Image</label><div class="custom-file"> <input type="file" accept="image/*" class="custom-file-input @error('image[]') is-invalid @enderror" name="upload_image[]" id="image"> <label class="custom-file-label imgx" for="image">Upload faulty parts image</label> @error('image[]') <span class="invalid-feedback" role="alert"> <strong>{{ $message }}</strong> </span> @enderror</div></div><div class="form-group col-md-1 mt-1"> <button class="btn btn-sm pd-x-15 btn-danger btn-uppercase mg-l-5 mt-4 remove-image" type="button"><i class="fas fa-times" class="wd-10 mg-r-5"></i></button></div></div>';
 
         $('.add-image-row').append(html);
 
     }
+
+    $(document).on('change', '.custom-file-input', function() {
+                var photo = $(this)[0].files[0];
+               if(photo){
+                $(this).parent().find('.custom-file-label').text(photo.name);
+               }   
+                        
+    });
+
     
 </script>
 

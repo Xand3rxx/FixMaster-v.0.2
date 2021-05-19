@@ -337,6 +337,7 @@ Route::prefix('admin')->name('admin.')->group(function () {
 // Route::resource('client', ClientController::class);
 
 //All routes regarding clients should be in here
+
 Route::prefix('/client')->middleware('monitor.clientservice.request.changes')->group(function () {
     Route::name('client.')->group(function () {
         //All routes regarding clients should be in here
@@ -457,6 +458,8 @@ Route::prefix('cse')->name('cse.')->group(function () {
     )->name('request_details');
 });
 
+
+
 Route::prefix('/supplier')->group(function () {
     Route::name('supplier.')->group(function () {
         //All routes regarding suppliers should be in here
@@ -468,9 +471,12 @@ Route::prefix('/supplier')->group(function () {
         Route::get('/profile/edit',        [SupplierProfileController::class, 'show'])->name('edit_profile');
         Route::get('/requests-for-quote',                               [SupplierRfqController::class, 'index'])->name('rfq');
         Route::get('/requests-for-quote/details/{rfq:uuid}',            [SupplierRfqController::class, 'rfqDetails'])->name('rfq_details');
+        Route::get('/request-for-quotes/details/{rfq:uuid}',            [SupplierRfqController::class, 'linkRfqDetails'])->name('rfq_link_details');
         Route::get('/requests-for-quote/send-invoice/{rfq:uuid}',       [SupplierRfqController::class, 'sendInvoice'])->name('rfq_send_supplier_invoice');
         Route::post('/rfqs/store/',                       [SupplierRfqController::class, 'store'])->name('rfq_store_supplier_invoice');
-        Route::get('/sent-invoices',                      [SupplierRfqController::class, 'sentInvoices'])->name('rfq_sent_invoices');
+        Route::get('/invoices/sent',                      [SupplierRfqController::class, 'sentInvoices'])->name('rfq_sent_invoices');
+        Route::get('/invoices/approved',                  [SupplierRfqController::class, 'approvedInvoices'])->name('rfq_approved_invoices');
+        Route::get('/invoices/declined',                  [SupplierRfqController::class, 'declinedInvoices'])->name('rfq_declined_invoices');
         Route::get('/sent-invoices/details/{rfq:id}',     [SupplierRfqController::class, 'sentInvoiceDetails'])->name('sent_supplier_invoice_details');
         Route::put('/profile/update-password',            [SupplierProfileController::class, 'updatePassword'])->name('update_profile_password');
         Route::resource('profile-updates',                SupplierProfileController::class);
@@ -479,6 +485,7 @@ Route::prefix('/supplier')->group(function () {
         Route::get('/dispatch/generate/',                 [SupplierDispatchController::class, 'generateDeliveryCode'])->name('generate_dispatch_code');
         Route::post('/dispatch/store/',                   [SupplierDispatchController::class, 'store'])->name('store_dispatch');
         Route::get('/dispatch/update/{dispatch:id}',     [SupplierDispatchController::class, 'updateDispatchStatus'])->name('update_dispatch_status');
+        Route::get('/dispatch/delivered',                          [SupplierDispatchController::class, 'dispatchDelivered'])->name('dispatches_delivered');
         Route::get('/dispatch/returned',                          [SupplierDispatchController::class, 'dispatchReturned'])->name('dispatches_returned');
         Route::get('/requests-for-quote/details/image/{image:id}',            [SupplierRfqController::class, 'rfqDetailsImage'])->name('rfq_details_image');
     });

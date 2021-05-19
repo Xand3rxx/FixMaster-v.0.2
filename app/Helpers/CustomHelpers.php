@@ -60,7 +60,50 @@ class CustomHelpers
        
     }
 
+   static function ifDateIsPast($date){
+     if(strtotime($date) < time())
+       return  true;
+    else
+      return false;
+   }
 
+   static function arrayToList($array, $title){
+       $arr = [];
+    foreach ($array as $assignee){
+        if($assignee['user']['roles'][0]['slug'] == $title ){
+            $arr[] =  $assignee['user']['account']['first_name'].' '.$assignee['user']['account']['last_name'];
+
+        }  
+        
+    }
+    if(empty($arr)){
+        return 'UNAVAILABLE';
+    }else{
+        return implode(", ",$arr);
+    }
+
+   }
+
+   static function cse_warranty_claims($array){
+    $arr = [];
+    foreach ($array as $warranty){
+    if(!empty($warranty->service_request_warranty)){
+    $arr []= $warranty->service_request_warranty;
+    }
+    }
+  return count($arr);
+   }
+
+   static function getWarrantTechnician($str){
+       $name =  \App\Models\Account::where('user_id', $str)->first();
+       return ucfirst($name->first_name). ' '.ucfirst($name->last_name);
+   }
+
+   static function getExtention($str){
+    $string = $str;
+    $output = explode(".",$string);
+    return $output[count($output)-1];
+   }
     
 }
 ?>

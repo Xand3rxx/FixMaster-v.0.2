@@ -2,11 +2,19 @@
 
 namespace App\Http\Controllers\Admin;
 
+use Auth;
+use Route;
+use Session;
+use Carbon\Carbon;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use App\Traits\Utility;
+use App\Traits\Loggable;
+use App\Models\ServiceRequest;
 
 class ServiceRequestController extends Controller
 {
+    use Utility, Loggable;
     /**
      * Display a listing of the resource.
      *
@@ -14,9 +22,24 @@ class ServiceRequestController extends Controller
      */
     public function index()
     {
-        return view('admin.requests.index', [
-            'requests' => \App\Models\ServiceRequest::with('users', 'client')->get()
+
+        // return  ServiceRequest::with('users', 'client', 'price')->where('status_id', 1)->get();
+
+        return view('admin.requests.pending.index', [
+            'requests'  =>  ServiceRequest::with('users', 'client', 'price')->where('status_id', 1)->latest('created_at')->get()
         ]);
+    }
+
+
+    /**
+     * Display the selected pending service request detail.
+     *
+     * @param  int  $uuid
+     * @return \Illuminate\Http\Response
+     */
+    public function pendingRequestDetails($language, $uuid)
+    {
+        //
     }
 
     /**
@@ -41,14 +64,19 @@ class ServiceRequestController extends Controller
     }
 
     /**
-     * Display the specified resource.
+     * Display the selected pending service request detail.
      *
-     * @param  int  $id
+     * @param  int  $uuid
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show($language, $uuid)
     {
-        //
+        // return $uuid;
+        // return \App\Models\Role::where('slug', 'cse-user')->with('users')->firstOrFail();
+
+        return view('admin.requests.pending.show', [
+            'cses'    =>  \App\Models\Role::where('slug', 'cse-user')->with('users')->firstOrFail(),
+        ]);
     }
 
     /**
@@ -84,4 +112,25 @@ class ServiceRequestController extends Controller
     {
         //
     }
+
+
+    public function markCompletedRequest(Request $request, $language, $id){
+   
+        $requestExists =  \App\Models\ServiceRequest::where('uuid', $id)->firstOrFail();
+
+         $updateMarkasCompleted = $this->markCompletedRequestTrait(Auth::id(), $id);
+
+        if($updateMarkasCompleted ){
+
+            $this->log('request', 'Informational', Route::currentRouteAction(), auth()->user()->account->last_name . ' ' . auth()->user()->account->first_name  . ') marked '.$requestExists->unique_id.' service request as completed.');
+
+            return redirect()->route('admin.requests.index', app()->getLocale())->with('success', $requestExists->unique_id.' was marked as completed successfully.');
+        }else{
+           
+         //activity log
+            return back()->with('error', 'An error occurred while trying to mark '.$requestExists->unique_id.' service request as completed.');
+        }
+    }
+
+
 }

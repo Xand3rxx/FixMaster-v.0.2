@@ -154,7 +154,7 @@ class ProjectProgressController extends Controller
                     'component_name'    => $component_name,
                     'model_number'      => $valid['model_number'][$key],
                     'quantity'          => $valid['quantity'][$key],
-                    'amount'            => 0.00
+                    'amount'            => 0.00,
                 ]);
             }
             $this->rfqInvoice($serviceRequest->id, $rfq->id);

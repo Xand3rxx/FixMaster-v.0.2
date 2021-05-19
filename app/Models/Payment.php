@@ -33,4 +33,10 @@ class Payment extends Model
         });
     }
 
+    public function service_request()
+    {
+        return $this->hasOne(ServiceRequest::class, 'unique_id', 'unique_id');
+    }
+
+
 }

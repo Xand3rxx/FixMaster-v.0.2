@@ -1,6 +1,8 @@
+
 <?php
-// use App\Models\User;
-// use App\Models\Technician;
+use Illuminate\Support\Facades\DB;
+use App\Models\User;
+use App\Models\Technician;
 
 //     $technician = Technician::where('user_id', Auth::id())->first();
 //     $serviceRequests = $technician->requests;
@@ -28,39 +30,42 @@
           <div class="form-row">
             <div class="col-md-12">
                 <div class="form-group">
-                    <label>Select User</label>
-                    <select class="custom-select" name="recipient_id" onchange="updateReciever(this.value)">
+                    <label>Select User </label>
+                    <input type="hidden" id="currentuser" value="{{ Auth::id() }}" />
+
+                    <select class="custom-select"  id="recipient_id" name="recipient_id" onchange="ongoingJobsEvent(this.value)">
                       <option value="" selected>Select...</option>
                       <option value="4">Fix Master</option>
-                      <option value="" >Ongoing Jobs</option>
+                      <option value="jobs" >Ongoing Jobs</option>
                     </select>
                 </div>
             </div><!--end col-->
 
-            <div class="col-md-12 specific-date hideDiv" id="job-ref" >
-                <div class="form-group position-relative ">
-                    <label>Ongoing Jobs List</label>
-                    <select class="custom-select" id="jobReference" name="jobReference" onchange="updateRecieverListTech(this.value)">
-                      <option value="" selected>Select Job Reference</option>
-                      {{-- @foreach ($ongoingJobs as $item) --}}
-                        <option value="">My Reference</option>
-                      {{-- @endforeach --}}
-                   </select>                  
-                </div>
-            </div>
+              <div class="col-md-12" id = "ongoingJobs" hidden>
+                  <div class="form-group">
+                      <label>Ongoing Jobs</label>
+                      <select id = "jobsId" class="custom-select" name="" onchange="getInvolvedUsers(this.value, $('#currentuser').val())">
 
-            <div class="col-md-12 specific-date hideDiv" id="Recipient">
-              <div class="form-group position-relative ">
-                  <label>Select Recipient</label>
-                  <select class="custom-select" name="selectedReciever" id="assigned">
-                      <option value="" selected>Select...</option>
-                  </select>
-              </div>
-            </div>
+
+                      </select>
+                  </div>
+              </div><!--end col-->
+
+
+              <div class="col-md-12" id = "assoc_users" hidden>
+                <div class="form-group">
+                    <label>Recipients</label>
+                    <select id = "users" class="custom-select" name="" multiple>
+
+
+                    </select>
+                </div>
+            </div><!--end col-->
+  
 
             <div class="form-group col-md-12">
                 <label for="inputEmail4">Subject</label>
-                <input type="text" class="form-control" id="inputEmail4" name="subject">
+                <input type="text" class="form-control" id="subject" name="subject">
             </div>
 
             <div class="form-group col-md-12">
@@ -77,5 +82,12 @@
       </div><!-- modal-content -->
     </div><!-- modal-dialog -->
 </div><!-- modal -->
+
+<script>
+  $(document).ready(function(){
+    $('#messageBody').val(data);
+  })
+  
+</script>
 
 
