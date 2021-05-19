@@ -189,24 +189,25 @@ class ClientController extends Controller
         // $all = $request->all();
         // dd($all);
         // return;
-        $img = $request->file('profile_avater');
-        $allowedExts = array('jpg', 'png', 'jpeg');
+
+        // $img = $request->file('profile_avater');
+        // $allowedExts = array('jpg', 'png', 'jpeg');
 
         $validatedData = $request->validate([
             'first_name'  => 'required|max:255',
             'gender'   => 'required',
             'phone_number'   => 'required|max:255',
             'email'       => 'required|email|max:255',
-            'profile_avater' => [
-                function ($attribute, $value, $fail) use ($request, $img, $allowedExts) {
-                    if ($request->hasFile('old_avatar')) {
-                        $ext = $img->getClientOriginalExtension();
-                        if (!in_array($ext, $allowedExts)) {
-                            return $fail("Only png, jpg, jpeg image is allowed");
-                        }
-                    }
-                },
-            ],
+            // 'profile_avater' => [
+            //     function ($attribute, $value, $fail) use ($request, $img, $allowedExts) {
+            //         if ($request->hasFile('old_avatar')) {
+            //             $ext = $img->getClientOriginalExtension();
+            //             if (!in_array($ext, $allowedExts)) {
+            //                 return $fail("Only png, jpg, jpeg image is allowed");
+            //             }
+            //         }
+            //     },
+            // ],
             'state_id'   => 'required|max:255',
             'lga_id'   => 'required|max:255',
             'full_address'   => 'required|max:255',
@@ -236,11 +237,28 @@ class ClientController extends Controller
         $account->last_name = $request->last_name;
         $account->gender = $request->gender;
         // $account->avatar = $request->input('old_avatar');
-        if($request->hasFile('old_avatar')){
-            $image = $request->file('old_avatar');
-            $imageName = sha1(time()) .'.'.$image->getClientOriginalExtension();
-            $imagePath = public_path('assets/user-avatars').'/'.$imageName;
-            //Delete old image
+
+
+        // if($request->hasFile('old_avatar')){
+        //     $image = $request->file('old_avatar');
+        //     $imageName = sha1(time()) .'.'.$image->getClientOriginalExtension();
+        //     $imagePath = public_path('assets/user-avatars').'/'.$imageName;
+        //     //Delete old image
+        //     if(\File::exists(public_path('assets/user-avatars/'.$request->input('old_avatar')))){
+        //         $done = \File::delete(public_path('assets/user-avatars/'.$request->input('old_avatar')));
+        //         if($done){
+        //             // echo 'File has been deleted';
+        //         }
+        //     }
+        //     //Move new image to `client-avatars` folder
+        //     Image::make($image->getRealPath())->resize(220, 220)->save($imagePath);
+        //     $account->avatar = $imageName;
+        // }
+
+        if($request->hasFile('image')) {
+            $image = $request->file('profile_avater');
+            $imageName = sha1(time()) . '.'.$image->getClientOriginalExtension();
+            $imagePath = public('assets/user-avatars').'/'.$imageName;
             if(\File::exists(public_path('assets/user-avatars/'.$request->input('old_avatar')))){
                 $done = \File::delete(public_path('assets/user-avatars/'.$request->input('old_avatar')));
                 if($done){
@@ -249,8 +267,8 @@ class ClientController extends Controller
             }
             //Move new image to `client-avatars` folder
             Image::make($image->getRealPath())->resize(220, 220)->save($imagePath);
-            $account->avatar = $imageName;
         }
+
         $account->update();
 
         Session::flash('success', 'Profile updated successfully!');
