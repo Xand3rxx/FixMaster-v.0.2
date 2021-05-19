@@ -159,7 +159,7 @@
                                     <div class="form-group position-relative">
                                         <label>Residential Address <span class="text-danger">* <span style="font-size: 10px;">Use auto complete feature after typing to select your address</span></span></label>
                                         <i data-feather="map-pin" class="fea icon-sm icons"></i>
-                                        <textarea name="address_cse" id="user_address" required rows="3" class="user_address form-control pl-5" placeholder="Your residential address :"></textarea>
+                                        <textarea required name="address_cse" id="user_address"  rows="3" class="user_address form-control pl-5" placeholder="Your residential address :"></textarea>
                                     </div>
                                 </div>
                             </div>
@@ -167,7 +167,7 @@
                             <div class="row">
                                 <div class="col-md-6">
                                     <div class="form-group position-relative">
-                                        <label>Upload Your Cv(DOC, DOCX or PDF) : <span class="text-danger">*</span></label>
+                                        <label>Upload Your Cv(DOC, DOCX or PDF) : <span class="text-danger">* <span style="font-size: 10px;">Maximum size of 3mb</span></span> </label>
                                         <input name="cv_cse" type="file" accept="application/pdf,application/vnd.openxmlformats-officedocument.wordprocessingml.document" class="form-control-file" id="fileupload">
                                     </div>
                                 </div>
