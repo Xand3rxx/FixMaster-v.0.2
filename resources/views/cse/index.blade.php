@@ -128,6 +128,7 @@
       e.preventDefault()
       if (confirm('Are you sure?')) {
         $('#accepted_service_request').val($(this).data('service'))
+        {{-- console.log($(this).data('service')); return false; --}}
         $('#accept-service-request-form').submit();
       }
       return false;
