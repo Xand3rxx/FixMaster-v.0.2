@@ -30,12 +30,12 @@ class RfqSupplierInvoice extends Model
 
     public function rfq()
     {
-        return $this->belongsTo(Rfq::class);
+        return $this->belongsTo(Rfq::class)->with('serviceRequest');
     }
 
     public function supplier()
     {
-        return $this->belongsTo(User::class, 'supplier_id')->with('account', 'supplier');
+        return $this->belongsTo(User::class, 'supplier_id')->with('account', 'supplier', 'contact');
     }
 
     public function supplierInvoiceBatches()
