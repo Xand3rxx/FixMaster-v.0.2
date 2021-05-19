@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Frontend\ApplicantsForm;
 
 use App\Http\Controllers\Controller;
+use App\Models\Applicant;
 use Illuminate\Http\Request;
 
 class CSEFormController extends Controller
@@ -30,6 +31,12 @@ class CSEFormController extends Controller
             'referral_code_cse'      => 'sometimes|string',
 
         ]);
-        dd($valid);
+        $application = Applicant::create([
+            'user_type' => Applicant::USER_TYPES[0],
+            'form_data' => $valid
+        ]);
+        return collect($application)->isNotEmpty()
+            ? back()->with('success', 'Application Submitted Successfully!!')
+            : back()->with('error', 'Error Submitting Application, Retry!!');
     }
 }
