@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Role extends Model
 {
-const ROLE_SLUG_ADMIN = 'admin-user';
+// const ROLE_SLUG_ADMIN = 'admin-user';
      /**
      * The permissions that belong to the role.
      */
@@ -21,6 +21,6 @@ const ROLE_SLUG_ADMIN = 'admin-user';
      */
     public function users()
     {
-        return $this->belongsToMany(User::class,'users_roles')->with('account');
+        return $this->belongsToMany(User::class,'users_roles')->with('account', 'ratings', 'contact');
     }
 }

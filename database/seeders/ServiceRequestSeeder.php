@@ -133,8 +133,8 @@ class ServiceRequestSeeder extends Seeder
                 'status_id'             => 1, 
                 'description'           => 'I cannot really explain what my dilemma is at the moment, just send someone over.', 
                 'total_amount'          => 2000, 
-                'preferred_time'        => \Carbon\Carbon::now('UTC'),
-                'created_at'            =>  '2021-01-05 18:53:37',
+                'preferred_time'        =>  '2021-01-06 18:19:11',
+                'created_at'            =>  '2021-01-05 15:53:37',
             ),
             array(
                 'uuid'                  => Str::uuid('uuid'),      
@@ -151,8 +151,8 @@ class ServiceRequestSeeder extends Seeder
                 'status_id'             => 1, 
                 'description'           => 'My generator refuses to come on after several attempts.', 
                 'total_amount'          => 1500, 
-                'preferred_time'        => \Carbon\Carbon::now('UTC'),
-                'created_at'            =>  '2021-01-05 18:54:18',
+                'preferred_time'        => '2021-01-08 17:05:43',
+                'created_at'            =>  '2021-01-05 16:54:18',
             ),
 
         );
@@ -161,7 +161,7 @@ class ServiceRequestSeeder extends Seeder
             array(
                 'user_id'               =>  6, 
                 'service_request_id'    =>  4, 
-                'reason'                =>  'Performed a hard restart and computer works fine now.',
+                'reason'                =>  'Performed a hard restart on the computer. So it works fine now. Thanks.',
             ),
         );
 

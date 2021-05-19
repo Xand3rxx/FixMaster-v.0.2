@@ -49,7 +49,7 @@
                                     <th class="text-center">#</th>
                                     <th>Job Ref.</th>
                                     <th>Client</th>
-                                    <th>Supervised By</th>
+                                    <th>CSE</th>
                                     <th>Technician</th>
                                     <th class="text-center">Amount</th>
                                     <th>Status</th>
@@ -64,7 +64,7 @@
                                     <td class="tx-medium"> {{$request['unique_id']}} </td>
                                     <td class="tx-medium"> {{Str::title($request['client']['account']['last_name'] .' '. $request['client']['account']['first_name'])}} </td>
                                      <!-- @foreach ($request['users'] as $user)
-                                    @if($user['roles'][0]['slug'] == 'admin-user')
+                                    @if($user['roles'][0]['slug'] == 'cse-user')
                                     <td class="tx-medium">
                                         {{ !empty($user) ? Str::title($user['account']['last_name'] .' '. $user['account']['first_name']) : 'UNAVAILABLE'}}
                                     </td>

@@ -1,5 +1,5 @@
 @extends('layouts.dashboard')
-@section('title', 'Returned Dispatched RFQ\'s')
+@section('title', 'Delivered Dispatched RFQ\'s')
 @include('layouts.partials._messages')
 @section('content')
 
@@ -11,10 +11,10 @@
           <ol class="breadcrumb breadcrumb-style1 mg-b-10">
           <li class="breadcrumb-item"><a href="{{ route('admin.index', app()->getLocale()) }}">Dashboard</a></li>
             <li class="breadcrumb-item" aria-current="page">Materials</li>
-            <li class="breadcrumb-item active" aria-current="page">Returned Dispatched RFQ's</li>
+            <li class="breadcrumb-item active" aria-current="page">Delivered Dispatched RFQ's</li>
           </ol>
         </nav>
-        <h4 class="mg-b-0 tx-spacing--1">Returned Dispatched RFQ's </h4>
+        <h4 class="mg-b-0 tx-spacing--1">Delivered Dispatched RFQ's </h4>
       </div>
     </div>
 
@@ -23,8 +23,8 @@
         <div class="card mg-b-10">
           <div class="card-header pd-t-20 d-sm-flex align-items-start justify-content-between bd-b-0 pd-b-0">
             <div>
-              <h6 class="mg-b-5">Returned Dispatched RFQ's as of {{ date('M, d Y') }}</h6>
-              <p class="tx-13 tx-color-03 mg-b-0">This table displays a list of all Returned Dispatched RFQ's declined by a CSE.</p>
+              <h6 class="mg-b-5">Delivered Dispatched RFQ's as of {{ date('M, d Y') }}</h6>
+              <p class="tx-13 tx-color-03 mg-b-0">This table displays a list of all Delivered Dispatched RFQ's declined by a CSE.</p>
             </div>
             
           </div><!-- card-header -->
@@ -91,7 +91,7 @@
   <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
     <div class="modal-content tx-14">
       <div class="modal-header">
-        <h6 class="modal-title" id="exampleModalLabel2"> Returned Dispatch Details</h6>
+        <h6 class="modal-title" id="exampleModalLabel2"> Delivered Dispatch Details</h6>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>

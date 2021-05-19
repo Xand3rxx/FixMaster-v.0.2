@@ -22,33 +22,36 @@
     <div class="row row-xs">
       <div class="col-lg-12 col-xl-12">
         <div class="card">
-          <div class="card-header pd-t-20 pd-b-0 bd-b-0">
-            <h6 class="lh-5 mg-b-5">Overall Rating</h6>
-            <p class="tx-12 tx-color-03 mg-b-0">Ratings is based on {{ !empty($profile['ratings']) ? number_format($profile['ratings']->count()) : '0' }} total votes by CSE's and Customer reviews on the quality of service provided by you.</p>
+          <div class="form-row">
+            <div class="col-md-6">
+              <div class="card-header pd-t-20 pd-b-0 bd-b-0">
+                <h6 class="lh-5 mg-b-5">Overall Rating</h6>
+                <p class="tx-12 tx-color-03 mg-b-0">Ratings is based on 152 total votes by Customer reviews on the quality of service provided by you.</p>
 
-          </div><!-- card-header -->
-          <div class="card-body pd-0">
-            <div class="pd-t-10 pd-b-15 pd-x-20 d-flex align-items-baseline">
-              <h1 class="tx-normal tx-rubik mg-b-0 mg-r-5">{{ !empty(round($profile['ratings']->avg('star'))) ? round($profile['ratings']->avg('star')) : '0' }}</h1>
-              <div class="tx-18">
-                @for ($i = 0; $i < round($profile['ratings']->avg('star')); $i++)
-                  <i class="icon ion-md-star lh-0 tx-orange"></i>
-                @endfor
-                @for ($x = 0; $x < (5 - round($profile['ratings']->avg('star'))); $x++)
-                    <i class="icon ion-md-star lh-0 tx-gray-300"></i>
-                @endfor
+              </div><!-- card-header -->
+
+              <div class="card-body pd-0">
+                <div class="pd-t-10 pd-b-15 pd-x-20 d-flex align-items-baseline">
+                  <h1 class="tx-normal tx-rubik mg-b-0 mg-r-5">{{ !empty(round($profile['ratings']->avg('star'))) ? round($profile['ratings']->avg('star')) : '0' }}</h1>
+                  <div class="tx-18">
+                    @for ($i = 0; $i < round($profile['ratings']->avg('star')); $i++)
+                      <i class="icon ion-md-star lh-0 tx-orange"></i>
+                    @endfor
+                    @for ($x = 0; $x < (5 - round($profile['ratings']->avg('star'))); $x++)
+                        <i class="icon ion-md-star lh-0 tx-gray-300"></i>
+                    @endfor
+                  </div>
+                </div>
+              </div><!-- card-body -->
+            </div>
+            <div class="col-md-6">
+              <div class="card-body pd-t-10 pd-b-15 pd-x-20 mt-2">
+                <h6 class="lh-5 mg-b-5">Your ID:<h1 class="tx-normal tx-rubik mg-b-0 mg-r-5"> {{ $profile['supplier']['unique_id'] }} </h1>
+                </h6>
               </div>
             </div>
-            
-          </div><!-- card-body -->
-        
-          <div class="card-body pd-lg-25">
-            <div class="row">
-            <x-card cardtitle="Sent Quotes" cardnumber="{{ !empty($profile['supplierSentInvoices']) ? number_format($profile['supplierSentInvoices']->count()) : '0' }}" />
-              <x-card cardtitle="Approved Quotes" cardnumber="{{ !empty($profile['supplierSentInvoices']) ? number_format($profile['supplierSentInvoices']->where('accepted', 'Yes')->count()) : '0' }}" />
-              <x-card cardtitle="Amount Earned" cardnumber="₦32,890" />
-            </div>
           </div>
+
         </div><!-- card -->
       </div>
 

@@ -1,6 +1,6 @@
 
 {{-- {{ dd($results)}} --}}
-<table class="table table-hover mg-b-0 basicExample" id="basicExample">
+<table class="table table-hover mg-b-0" id="basicExample">
     <thead class="thead-primary">
       <tr>
         <th class="text-center">#</th>

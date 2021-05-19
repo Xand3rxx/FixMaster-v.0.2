@@ -93,6 +93,17 @@ class CustomHelpers
     }
   return count($arr);
    }
+
+   static function getWarrantTechnician($str){
+       $name =  \App\Models\Account::where('user_id', $str)->first();
+       return ucfirst($name->first_name). ' '.ucfirst($name->last_name);
+   }
+
+   static function getExtention($str){
+    $string = $str;
+    $output = explode(".",$string);
+    return $output[count($output)-1];
+   }
     
 }
 ?>

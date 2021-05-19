@@ -39,10 +39,17 @@ class ServiceRequestWarrantyIssued extends Model
     }
 
     public function service_request_warranty_image(){
-        return $this->hasOne(ServiceRequestWarrantyImage::class, 'service_request_warranties_issued_id', 'id');
+        return $this->hasMany(ServiceRequestWarrantyImage::class, 'service_request_warranties_issued_id');
     }
 
- 
+    public function warrantyImage(){
+        return $this->hasMany(ServiceRequestWarrantyImage::class, 'service_request_warranties_issued_id');
+    }
+
+    public function warrantReport()
+    {
+        return $this->hasMany(ServiceRequestWarrantyReport::class, 'service_request_warranties_issued_id');
+    }
 
     public function account()
     {
