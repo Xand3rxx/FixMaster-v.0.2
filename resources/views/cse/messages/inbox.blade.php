@@ -98,7 +98,6 @@ function getInvolvedUsers(currentValue, cseid){
     var options="";
     var cnt;
     var url = window.location.origin;
-    console.log(url+"/api/requests/involved_users?reqid="+currentValue+"&userid="+cseid);
 
     $.get( url+"/api/requests/involved_users?reqid="+currentValue+"&userid="+cseid, function( data ) {
 
