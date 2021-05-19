@@ -48,7 +48,8 @@ class Applicant extends Model
             //     'firstname' => $applicant->form_data['first_name_cse'],
             // ]);
             $mail_data = "<h1> Hello, " . $applicant->form_data['last_name_cse'] . " " . $applicant->form_data['first_name_cse'] . "</h1> <br> <p> Thank you for registering with us, we would review your application and respond as soon as possible. </p>";
-            $messanger->sendNewMessage('email', 'Customer Service Executive Applicant Registration', 'dev@fix-master.com', $applicant->form_data['email_cse'], $mail_data);
+            $jsonResponse = $messanger->sendNewMessage('email', 'Customer Service Executive Applicant Registration', 'dev@fix-master.com', $applicant->form_data['email_cse'], $mail_data);
+            // report($jsonResponse);
             // This is when i need to send a mail to the applicant that his application is submitted successfully!
         });
     }
