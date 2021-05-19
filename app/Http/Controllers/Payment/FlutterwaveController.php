@@ -90,11 +90,11 @@ class FlutterwaveController extends Controller
                     'meta' => [
                         'price' => $payment->amount
                     ],
-                    'customizations' => [
-                        'title' => 'Paying for a sample product',
-                        'description' => 'sample',
-                        'logo' => 'https://assets.piedpiper.com/logo.png'
-                    ]
+                    // 'customizations' => [
+                    //     'title' => 'Paying for a sample product',
+                    //     'description' => 'sample',
+                    //     'logo' => 'https://assets.piedpiper.com/logo.png'
+                    // ]
                 ];
 
                 //* Call fluterwave initiate payment endpoint

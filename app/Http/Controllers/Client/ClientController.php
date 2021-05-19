@@ -199,7 +199,7 @@ class ClientController extends Controller
             'email'       => 'required|email|max:255',
             'profile_avater' => [
                 function ($attribute, $value, $fail) use ($request, $img, $allowedExts) {
-                    if ($request->hasFile('profile_avater')) {
+                    if ($request->hasFile('old_avatar')) {
                         $ext = $img->getClientOriginalExtension();
                         if (!in_array($ext, $allowedExts)) {
                             return $fail("Only png, jpg, jpeg image is allowed");
@@ -236,8 +236,8 @@ class ClientController extends Controller
         $account->last_name = $request->last_name;
         $account->gender = $request->gender;
         // $account->avatar = $request->input('old_avatar');
-        if($request->hasFile('profile_avater')){
-            $image = $request->file('profile_avater');
+        if($request->hasFile('old_avatar')){
+            $image = $request->file('old_avatar');
             $imageName = sha1(time()) .'.'.$image->getClientOriginalExtension();
             $imagePath = public_path('assets/user-avatars').'/'.$imageName;
             //Delete old image
@@ -540,7 +540,7 @@ class ClientController extends Controller
         // $data['lgas'] = Lga::select('id', 'name')->orderBy('name', 'ASC')->get();
 
         //Return Service details
-        $data['myContacts'] = Contact::where('user_id', auth()->user()->id)->latest('created_at')->get();
+        $data['myContacts'] = Contact::where('user_id', auth()->user()->id)->orderBy('created_at', 'DESC')->get();
         //Return Service details
         // $data['myContacts'] = Contact::where('user_id', auth()->user()->id)->get();
         // dd($data['myContacts']);
@@ -767,9 +767,9 @@ class ClientController extends Controller
 
     /**
      * Request for a Custom Service frpm FixMaster.
-     * Save custom request
+     * Save custom request ['service_requests']
      * @return \Illuminate\Http\Response
-     */
+     */ 
     public function customService(){
         $data['bookingFees']  = $this->bookingFees();
         $data['myContacts'] = Contact::where('user_id', auth()->user()->id)->latest('created_at')->get();
@@ -784,9 +784,19 @@ class ClientController extends Controller
 
     public function myServiceRequest(){
 
-        $myServiceRequests = Client::where('user_id', auth()->user()->id)->with(['service_requests.invoices' => function ($query) {
-            $query->latest('created_at');
-        }])->firstOrFail();
+        // $myServiceRequests = Client::where('user_id', auth()->user()->id)->with(['service_requests.invoices' => function ($query) {
+        //     $query->orderBy('created_at', 'DESC');
+        // }])->firstOrFail();
+
+        $myServiceRequests = Client::where('user_id', auth()->user()->id)
+            ->with('service_requests.invoices')
+            ->whereHas('service_requests', function ($query) {
+                        $query->orderBy('created_at', 'ASC');
+            })->firstOrFail();
+        
+
+        // $sortRequestByDate = $myServiceRequests::orderBy('created_at','DESC')->get();
+        // return dd($myServiceRequests['service_requests']);
         
        
         return view('client.services.list', [
@@ -906,7 +916,9 @@ class ClientController extends Controller
         // return dd($request);
         $service_request                        = new ServiceRequest();
         $service_request->client_id             = auth()->user()->id;
-        $service_request->service_id            = $request['service_id'];
+        if ( $request['service_id'] ) {
+            $service_request->service_id            = $request['service_id'];
+        }        
         // $service_request->unique_id             = 'REF-'.$this->generateReference();
         $service_request->price_id              = $request['price_id'];
         $service_request->contact_id              = $request['myContact_id'];
@@ -1073,6 +1085,34 @@ class ClientController extends Controller
 
         if($cancelRequest AND $recordServiceProgress AND $recordCancellation){
 
+            /**************************************************************/
+            /*******************REFUND MONEY TO WALLET STARTS**************/
+            /**************************************************************/
+            $client = Client::where('user_id', auth()->user()->id)->firstOrFail();
+
+            // get last payment details
+            $lastPayment  = Payment::where('unique_id', $client->unique_id)->orderBy('id', 'DESC')->first();            
+
+                $walTrans = new WalletTransaction;
+                $walTrans['user_id']          = auth()->user()->id;
+                $walTrans['payment_id']       = $lastPayment->id;
+                $walTrans['amount']           = $request->amountToRefund;
+                $walTrans['payment_type']     = 'refund';
+                $walTrans['unique_id']        = $lastPayment->unique_id;
+                $walTrans['transaction_type'] = 'credit';
+                // if the user has not used this wallet for any transaction
+                if (!WalletTransaction::where('unique_id', '=', $client['unique_id'])->exists()) {
+                $walTrans['opening_balance'] = '0';
+                $walTrans['closing_balance'] = $request->amountToRefund;
+                }else{
+                    $previousWallet = WalletTransaction::where('user_id', auth()->user()->id)->orderBy('id', 'DESC')->first();
+                    $walTrans['opening_balance'] = $previousWallet->closing_balance;
+                    $walTrans['closing_balance'] = $previousWallet->closing_balance + $request->amountToRefund;
+                }
+                // save record
+                $walTrans->save();
+
+
             /*
             * Code to send email goes here...
             */
@@ -1098,6 +1138,45 @@ class ClientController extends Controller
     }
 
  
+
+
+    // public function addToWallet(){
+
+    //     /** If the transaction status are successful send to DB */
+    //     // if ($data->status == 'pending') {
+    //     //     $data['status'] = 'success';
+    //     //     $data['transaction_id'] = rawurlencode($reference);
+    //     //     $data->update();
+    //     //     $track = Session::get('Track');
+
+    //         // client
+    //         $client = Client::where('user_id', auth()->user()->id)->firstOrFail();
+
+    //         // get last payment details
+    //         $lastPayment  = Payment::where('unique_id', $client->unique_id)->orderBy('id', 'DESC')->first();            
+
+    //         // if (!WalletTransaction::where('unique_id', '=', $client['unique_id'])->exists()) {
+    //             $walTrans = new WalletTransaction;
+    //             $walTrans['user_id'] = auth()->user()->id;
+    //             $walTrans['payment_id'] = $lastPayment->id;
+    //             $walTrans['amount'] = $data->amount;
+    //             $walTrans['payment_type'] = 'funding';
+    //             $walTrans['unique_id'] = $data->unique_id;
+    //             $walTrans['transaction_type'] = 'debit';
+    //             // if the user has not used this wallet for any transaction
+    //             if (!WalletTransaction::where('unique_id', '=', $client['unique_id'])->exists()) {
+    //             $walTrans['opening_balance'] = '0';
+    //             $walTrans['closing_balance'] = $data->amount;
+    //             }else{
+    //                 $previousWallet = WalletTransaction::where('user_id', auth()->user()->id)->orderBy('id', 'DESC')->first();
+    //                 $walTrans['opening_balance'] = $previousWallet->closing_balance;
+    //                 $walTrans['closing_balance'] = $previousWallet->closing_balance + $data->amount;
+    //             }
+    //             // dd($walTrans);
+    //             $walTrans->save();
+
+    //     }
+
 
 
     public function warrantyInitiate(Request $request, $language, $id){

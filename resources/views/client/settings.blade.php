@@ -69,6 +69,8 @@
                           <div class="form-group col-md-4">
                               <label>Profile Avatar</label>
                               <div class="custom-file change-picture">
+                                <input type="hidden" id="old_avatar" name="old_avatar" value="{{ $client->avatar }}">
+                                <!-- <input type="file" accept="image/*" class="d-none" name="avatar" id="avatar"> -->
                                 <input type="file" accept="image/*" class="custom-file-input @error('image') is-invalid @enderror" name="profile_avater" id="profile_image" value="{{$client->user->account->avatar}}">
                                 <label class="custom-file-label" id="imagelabel" for="profile_image">Upload Profile Avatar</label>
                                

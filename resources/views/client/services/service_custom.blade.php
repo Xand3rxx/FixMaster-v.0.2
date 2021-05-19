@@ -299,7 +299,7 @@ tbody td, thead th {
 
     <div class="col-md-6 form-group">
         <div class="custom-control custom-radio form-group position-relative">
-            <input type="radio" id="wallet_payment_option" name="payment_channel" class="custom-control-input input-check" onclick="displayPaymentGateways('1')" checked value="Wallet" data-tabid="flutterwave" data-action="{{route('wallet-submit', app()->getLocale()) }}"/>
+            <input type="radio" id="wallet_payment_option" name="payment_channel" class="custom-control-input input-check" onclick="displayPaymentGateways('1')" checked value="Wallet" data-tabid="ewallet" data-action="{{route('wallet-submit', app()->getLocale()) }}"/>
             <label class="custom-control-label" for="wallet_payment_option">E-Wallet</label>
         </div>
     </div>
