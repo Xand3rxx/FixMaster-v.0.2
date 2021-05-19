@@ -219,6 +219,8 @@ class MessageController extends Controller
             $message = $this->replacePlaceHolders($mail_data, $template->content);
         }
 
+    
+
         $recipient = DB::table('users')
         ->where('users.email', $to )
         ->first();
@@ -227,6 +229,7 @@ class MessageController extends Controller
         ->where('users.email', $from )
         ->first();
       
+         if(is_object($recipient)){
             $mail_objects[] = [
                 'title'=>$subject, 
                 'content'=>$message, 
@@ -239,6 +242,8 @@ class MessageController extends Controller
             ];
         
         Message::insert($mail_objects);
+         }
+            
 
         $message_array = ['to'=>$to, 'from'=>$from, 'subject'=>$subject, 'content'=>$message];
         if($type=='mail')

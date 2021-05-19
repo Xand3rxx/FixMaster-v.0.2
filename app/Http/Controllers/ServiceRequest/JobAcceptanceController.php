@@ -50,7 +50,6 @@ class JobAcceptanceController extends Controller
     protected function can_cse_accept_job()
     {
         (array)$response = [true, 'CSE Can accept Job'];
-        // dd(ServiceRequest::SERVICE_REQUEST_STATUSES['Pending'], $this->service_request->status_id, $this->user->cse->service_request_assgined->count(), ServiceRequestSetting::latest('updated_at')->value('max_ongoing_jobs'));
         // throw new RuntimeException('This CSE cannot accept new job at this moment');
 
         // Check if Job is available, 

@@ -121,34 +121,35 @@ class CustomerServiceExecutiveController extends Controller
     }
 
 
-    public function warranty_claims_list(){
-    
+    public function warranty_claims_list()
+    {
         $warranties = \App\Models\ServiceRequestAssigned::with('service_request_warranty', 'user.account', 'service_request')
-        ->where(['user_id' => Auth::id(), 'status'=> 'Active'])
-        ->get();
-       
-            return view('cse.warranties.index', [
-                'issuedWarranties' =>  $warranties
-            ]);
-    
+            ->where(['user_id' => auth()->user()->id, 'status' => 'Active'])
+            ->get();
+
+        return view('cse.warranties.index', [
+            'issuedWarranties' =>  $warranties
+        ]);
     }
 
-    public function warranty_claims(){
+    public function warranty_claims()
+    {
         return view('cse.warranties.index');
     }
 
-    public function warranty_details($language, $uuid){
+    public function warranty_details($language, $uuid)
+    {
 
 
         // find the service reqquest using the uuid and relations
         $service_request = \App\Models\ServiceRequest::where('uuid', $uuid)->with(['price', 'service', 'service.subServices'])->firstOrFail();
-        
+
         $request_progress = \App\Models\ServiceRequestProgress::where('service_request_id', $service_request->id)->with('user', 'substatus')->latest('created_at')->get();
 
         // find the technician role CACHE THIS DURING PRODUCTION
         $technicainsRole = \App\Models\Role::where('slug', 'technician-artisans')->first();
-    
-  
+
+
         (array) $variables = [
             'service_request' => $service_request,
             'technicians' => \App\Models\UserService::where('service_id', $service_request->service_id)->where('role_id', $technicainsRole->id)->with('user')->get(),
@@ -178,5 +179,4 @@ class CustomerServiceExecutiveController extends Controller
 
         return view('cse.warranties.show', $variables);
     }
-   
 }

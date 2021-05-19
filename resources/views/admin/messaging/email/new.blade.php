@@ -162,9 +162,7 @@
              xters = $(this).val().length;
             search_val = $(this).val();
              if(xters >= 3){
-                // console.log(search_val);
                 $.get( url+"/api/messaging/recipients?search_val="+search_val, function( data ) {
-                    console.log(data);
                 if(data!=[]){
                     $('.transfer-double-list-ul').empty();
                     $.each(data.data, function(key, val){
@@ -207,9 +205,11 @@
                         }
                         selected_users.push(user);
                     });
+                    if(user_role!=1){
+                        recipients = [{name: "Super Admin", value: "1"}]
+                        }
 
-                    console.log(selected_users);
-            if(selected_users!=[]){
+            if(selected_users.length!==0){
                 
                 var jqxhr = $.post(url+"/api/messaging/save_email",
                 {
@@ -227,12 +227,8 @@
                         displayMessage(data.responseJSON.message, 'error');
                     })
             }
-           
-
-                
-                    if(user_role!=1){
-                        recipients = [{name: "Super Admin", value: "1"}]
-                        }
+               
+                if(recipients.length!==0){
                     var jqxhr = $.post(url+"/api/messaging/save_group_email",
                     {
                     subject:subject,
@@ -248,6 +244,9 @@
                     .fail(function(data, status) {
                         displayMessage(data.responseJSON.message, 'error');
                     })
+                }
+                    
+                   
                 });
         $('body').on('click','.chk-users', function(){
             var chk = false;
