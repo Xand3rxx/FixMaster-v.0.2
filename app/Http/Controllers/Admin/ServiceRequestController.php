@@ -37,9 +37,11 @@ class ServiceRequestController extends Controller
      * @param  int  $uuid
      * @return \Illuminate\Http\Response
      */
-    public function pendingRequestDetails($language, $uuid)
+    public function ongoingRequestDetails($language, $uuid)
     {
-        //
+        return view('admin.requests.pending.show', [
+            'cses'    =>  \App\Models\Role::where('slug', 'cse-user')->with('users')->firstOrFail(),
+        ]);
     }
 
     /**
@@ -71,10 +73,11 @@ class ServiceRequestController extends Controller
      */
     public function show($language, $uuid)
     {
-        // return $uuid;
-        // return \App\Models\Role::where('slug', 'cse-user')->with('users')->firstOrFail();
+
+        // return ServiceRequest::where('uuid', $uuid)->with(['price', 'service', 'service.subServices'])->firstOrFail();
 
         return view('admin.requests.pending.show', [
+            'serviceRequest'    =>  ServiceRequest::where('uuid', $uuid)->with(['price', 'service', 'service.subServices'])->firstOrFail(),
             'cses'    =>  \App\Models\Role::where('slug', 'cse-user')->with('users')->firstOrFail(),
         ]);
     }
