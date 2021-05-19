@@ -97,16 +97,9 @@
                                     <div class="form-group position-relative">
                                         <label> {{__('First Name')}} <span class="text-danger">*</span></label>
                                         <i data-feather="user" class="fea icon-sm icons"></i>
-                                        <input name="first_name_cse" id="first_name_cse" type="text" class="form-control pl-5">
+                                        <input name="first_name_cse" value="{{old('first_name_cse')}}" id="first_name_cse" type="text" class="form-control pl-5">
                                     </div>
                                 </div>
-                                <!-- <div class="col-md-6">
-                                    <div class="form-group position-relative">
-                                        <label>Middle Name</label>
-                                        <i data-feather="user" class="fea icon-sm icons"></i>
-                                        <input name="middle_name_cse" id="middle_name_cse" type="text" class="form-control pl-5">
-                                    </div>
-                                </div> -->
                                 <div class="col-md-6">
                                     <div class="form-group position-relative">
                                         <label>Last Name <span class="text-danger">*</span></label>
@@ -159,7 +152,7 @@
                                     <div class="form-group position-relative">
                                         <label>Residential Address <span class="text-danger">* <span style="font-size: 10px;">Use auto complete feature after typing to select your address</span></span></label>
                                         <i data-feather="map-pin" class="fea icon-sm icons"></i>
-                                        <textarea required name="address_cse" id="user_address"  rows="3" class="user_address form-control pl-5" placeholder="Your residential address :"></textarea>
+                                        <textarea required name="address_cse" id="user_address" rows="3" class="user_address form-control pl-5" placeholder="Your residential address :"></textarea>
                                     </div>
                                 </div>
                             </div>
