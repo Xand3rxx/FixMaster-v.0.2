@@ -92,7 +92,7 @@
           <a href="{{ route('admin.invoices', app()->getLocale()) }}" class="nav-link"><i data-feather="file-text"></i> <span>Invoice Management</span></a>
       </li>
 
-      
+
 
       <li class="nav-item {{ Route::currentRouteNamed('admin.location_request') ? 'active' : '' }}"><a href="{{ route('admin.location_request', app()->getLocale()) }}" class="nav-link"><i data-feather="map-pin"></i> <span>Location Request</span></a></li>
 
@@ -158,19 +158,19 @@
         </ul>
       </li>
 
-      <li class="nav-item with-sub {{ Route::currentRouteNamed('admin.cse_reports') ? 'active show' : '' }}">
+      <li class="nav-item with-sub {{ Route::currentRouteNamed('admin.cse_reports', 'admin.supplier_reports') ? 'active show' : '' }}">
         <a href="" class="nav-link"><i data-feather="bar-chart-2"></i> <span>Reports</span></a>
         <ul>
-          
+
         <li class="nav-item {{ Route::currentRouteNamed('admin.cse_reports') ? 'active' : '' }}"><a href="{{ route('admin.cse_reports', app()->getLocale()) }}">CSE</a></li>
           <li class=""><a href="#">Customer</a></li>
           <li class=""><a href="#">Job Management</a></li>
           <li class=""><a href="#">Marketing</a></li>
-          <li class=""><a href="#">Supplier</a></li>
+          <li class="nav-item {{ Route::currentRouteNamed('admin.supplier_reports') ? 'active' : '' }}"><a href="{{ route('admin.supplier_reports', app()->getLocale()) }}">Supplier</a></li>
           <li class=""><a href="#">Technician</a></li>
         </ul>
       </li>
-      
+
     <li class="nav-item with-sub {{ Route::currentRouteNamed('admin.requests.index', 'admin.requests.show') ? 'active show' : '' }}">
       <a href="" class="nav-link"><i data-feather="git-pull-request"></i> <span>Requests</span><span class="badge badge-primary">{{ $pendingRequests }}</suspan></span></a>
       <ul>
@@ -274,10 +274,10 @@
         </ul>
       </li>
 
-      <li class="nav-label mg-t-25">Prospective FixMaster Users</li>
-      <li class="nav-item"><a href="{{route('admin.prospective.cse.index', app()->getLocale())}}" class="nav-link"><i data-feather="wind"></i> <span>CSE</span></a></li>
-      <li class="nav-item"><a href="{{route('admin.prospective.supplier.index', app()->getLocale())}}" class="nav-link"><i data-feather="hard-drive"></i> <span>Supplier</span></a></li>
-      <li class="nav-item"><a href="{{route('admin.prospective.technician-artisan.index', app()->getLocale())}}" class="nav-link"><i data-feather="zap"></i> <span>Technicians</span></a></li>
+{{--      <li class="nav-label mg-t-25">Prospective FixMaster Users</li>--}}
+{{--      <li class="nav-item"><a href="{{route('admin.prospective.cse.index', app()->getLocale())}}" class="nav-link"><i data-feather="wind"></i> <span>CSE</span></a></li>--}}
+{{--      <li class="nav-item"><a href="{{route('admin.prospective.supplier.index', app()->getLocale())}}" class="nav-link"><i data-feather="hard-drive"></i> <span>Supplier</span></a></li>--}}
+{{--      <li class="nav-item"><a href="{{route('admin.prospective.technician-artisan.index', app()->getLocale())}}" class="nav-link"><i data-feather="zap"></i> <span>Technicians</span></a></li>--}}
 
 
     </ul>
