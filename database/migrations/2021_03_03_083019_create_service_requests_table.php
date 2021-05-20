@@ -22,7 +22,7 @@ class CreateServiceRequestsTable extends Migration
             $table->id();
             $table->uuid('uuid')->unique();
 		    $table->foreignId('client_id');
-            $table->foreignId('service_id');
+            $table->foreignId('service_id')->nullable();
             $table->string('unique_id')->unique();
             // $table->foreignId('state_id');
             // $table->foreignId('lga_id');

@@ -40,24 +40,24 @@
         </div>
       </div><!-- aside-loggedin -->
       <ul class="nav nav-aside">
-        <li class="nav-label">Components</li>
+        <li class="nav-label">menu</li>
         <li class="nav-item {{ Route::currentRouteNamed('quality-assurance.index') ? 'active' : '' }}"><a href="{{ route('quality-assurance.index', app()->getLocale()) }}" class="nav-link"><i data-feather="airplay"></i> <span>Dashboard</span></a></li>
 
-        <li class="nav-item with-sub {{ Route::currentRouteNamed('quality-assurance.requests.active', 'quality-assurance.requests.completed', 'quality-assurance.requests.warranty_claim', 'quality-assurance.requests.cancelled') ? 'active show' : '' }}">
+        <li class="nav-item with-sub {{ Route::currentRouteNamed('quality-assurance.requests.active', 'quality-assurance.requests.completed', 'quality-assurance.requests.warranty', 'quality-assurance.requests.cancelled','quality-assurance.requests.active_details','quality-assurance.requests.warranty') ? 'active show' : '' }}">
             <a href="" class="nav-link"><i data-feather="git-pull-request"></i> <span>Requests</span></a>
             <ul>
-              <li class="{{ Route::currentRouteNamed('quality-assurance.requests.active') ? 'active' : '' }}"><a href="{{ route('quality-assurance.requests.active', app()->getLocale()) }}">Active</a></li>
+              <li class="{{ Route::currentRouteNamed('quality-assurance.requests.active','quality-assurance.requests.active_details') ? 'active' : '' }}"><a href="{{ route('quality-assurance.requests.active', app()->getLocale()) }}">Active</a></li>
               <li class="{{ Route::currentRouteNamed('quality-assurance.requests.completed') ? 'active' : '' }}"><a href="{{ route('quality-assurance.requests.completed', app()->getLocale()) }}">Completed</a></li>
-              <li class="{{ Route::currentRouteNamed('quality-assurance.requests.warranty_claim') ? 'active' : '' }}"><a href="{{ route('quality-assurance.requests.warranty_claim', app()->getLocale()) }}">Warranty Claims</a></li>
+              <li class="{{ Route::currentRouteNamed('quality-assurance.requests.warranty_claim','quality-assurance.requests.warranty') ? 'active' : '' }}"><a href="{{ route('quality-assurance.requests.warranty_claim', app()->getLocale()) }}">Warranty Claims</a></li>
               <li class="{{ Route::currentRouteNamed('quality-assurance.requests.cancelled') ? 'active' : '' }}"><a href="{{ route('quality-assurance.requests.cancelled', app()->getLocale()) }}">Cancelled</a></li>
             </ul>
           </li>
 
-          <li class="nav-item with-sub {{ Route::currentRouteNamed('quality-assurance.consultations.pending', 'quality-assurance.consultations.ongoing', 'quality-assurance.consultations.completed') ? 'active show' : '' }}">
+          <li class="nav-item with-sub {{ Route::currentRouteNamed('quality-assurance.consultations.pending', 'quality-assurance.consultations.ongoing', 'quality-assurance.consultations.completed','quality-assurance.consultations.pending_details','quality-assurance.consultations.ongoing_details') ? 'active show' : '' }}">
             <a href="" class="nav-link"><i data-feather="message-circle"></i> <span>Consultations</span></a>
             <ul>
-              <li class="{{ Route::currentRouteNamed('quality-assurance.consultations.pending') ? 'active' : '' }}"><a href="{{ route('quality-assurance.consultations.pending', app()->getLocale()) }}">Pending</a></li>
-              <li class="{{ Route::currentRouteNamed('quality-assurance.consultations.ongoing') ? 'active' : '' }}"><a href="{{ route('quality-assurance.consultations.ongoing', app()->getLocale()) }}">Ongoing</a></li>
+              <li class="{{ Route::currentRouteNamed('quality-assurance.consultations.pending','quality-assurance.consultations.pending_details') ? 'active' : '' }}"><a href="{{ route('quality-assurance.consultations.pending', app()->getLocale()) }}">Pending</a></li>
+              <li class="{{ Route::currentRouteNamed('quality-assurance.consultations.ongoing','quality-assurance.consultations.ongoing_details') ? 'active' : '' }}"><a href="{{ route('quality-assurance.consultations.ongoing', app()->getLocale()) }}">Ongoing</a></li>
               <li class="{{ Route::currentRouteNamed('quality-assurance.consultations.completed') ? 'active' : '' }}"><a href="{{ route('quality-assurance.consultations.completed', app()->getLocale()) }}">Completed</a></li>
             </ul>
           </li>
