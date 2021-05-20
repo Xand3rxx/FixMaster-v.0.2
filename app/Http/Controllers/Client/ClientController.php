@@ -238,27 +238,10 @@ class ClientController extends Controller
         $account->gender = $request->gender;
         // $account->avatar = $request->input('old_avatar');
 
-
-        // if($request->hasFile('old_avatar')){
-        //     $image = $request->file('old_avatar');
-        //     $imageName = sha1(time()) .'.'.$image->getClientOriginalExtension();
-        //     $imagePath = public_path('assets/user-avatars').'/'.$imageName;
-        //     //Delete old image
-        //     if(\File::exists(public_path('assets/user-avatars/'.$request->input('old_avatar')))){
-        //         $done = \File::delete(public_path('assets/user-avatars/'.$request->input('old_avatar')));
-        //         if($done){
-        //             // echo 'File has been deleted';
-        //         }
-        //     }
-        //     //Move new image to `client-avatars` folder
-        //     Image::make($image->getRealPath())->resize(220, 220)->save($imagePath);
-        //     $account->avatar = $imageName;
-        // }
-
-        if($request->hasFile('image')) {
+        if($request->hasFile('profile_avater')) {
             $image = $request->file('profile_avater');
             $imageName = sha1(time()) . '.'.$image->getClientOriginalExtension();
-            $imagePath = public('assets/user-avatars').'/'.$imageName;
+            $imagePath = public_path('assets/user-avatars').'/'.$imageName;
             if(\File::exists(public_path('assets/user-avatars/'.$request->input('old_avatar')))){
                 $done = \File::delete(public_path('assets/user-avatars/'.$request->input('old_avatar')));
                 if($done){
@@ -267,6 +250,7 @@ class ClientController extends Controller
             }
             //Move new image to `client-avatars` folder
             Image::make($image->getRealPath())->resize(220, 220)->save($imagePath);
+            $account->avatar = $imageName;
         }
 
         $account->update();
@@ -279,8 +263,10 @@ class ClientController extends Controller
     public function wallet()
     {
         $data['gateways']     = PaymentGateway::whereStatus(1)->orderBy('id', 'DESC')->get();
-        $data['mytransactions']    = Payment::where('user_id', auth()->user()->id)->orderBy('id', 'DESC')->get();
+        $data['mytransactions']   = Payment::where('user_id', auth()->user()->id)->orderBy('id', 'DESC')->with('wallettransactions')->get();
         $myWallet    = WalletTransaction::where('user_id', auth()->user()->id)->orderBy('id', 'DESC')->get();
+        // return $data['mytransactions'][0]->wallettransactions->transaction_type;
+        // return view('client.wallet', $data);
         return view('client.wallet', compact('myWallet')+$data);
     }
 
