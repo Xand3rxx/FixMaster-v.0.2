@@ -332,6 +332,10 @@ Route::prefix('admin')->group(function () {
         Route::post('/reports/client-service-executive/job-assigned-sorting',      [CustomerServiceExecutiveReportController::class, 'jobAssignedSorting'])->name('cse_report_first_sorting');
         Route::post('/reports/client-service-executive/amount-earned-sorting',      [CustomerServiceExecutiveReportController::class, 'amountEarnedSorting'])->name('cse_report_second_sorting');
 
+
+        //Technician Reporting Routes
+        Route::view('/reports/technician',    'admin.reports.technician.index')->name('technician_reports');
+
     });
 });
 
