@@ -73,24 +73,6 @@ class PaystackController extends Controller
     {
                 if(auth()->user()){
                     $payment = Payment::find($paymentId);
-                    // return dd($payment);
-                    // $curl = curl_init();
-
-                    // curl_setopt_array($curl, array(
-                    //     CURLOPT_URL => "https://api.paystack.co/transaction/initialize",
-                    //     CURLOPT_RETURNTRANSFER => true,
-                    //     CURLOPT_CUSTOMREQUEST => "POST",
-                    //     CURLOPT_POSTFIELDS => json_encode([
-                    //         'amount' => $payment->amount * 100,
-                    //         'email' => auth()->user()->email,
-                    //         'callback_url' => route('paystack-verify', app()->getLocale())
-                    //     ]),
-                    //     CURLOPT_HTTPHEADER => [
-                    //         "authorization: Bearer ".$this->private_key,
-                    //         "content-type: application/json",
-                    //         "cache-control: no-cache"
-                    //     ],
-                    // ));
                     
                     $url = "https://api.paystack.co/transaction/initialize";
                     $fields = [

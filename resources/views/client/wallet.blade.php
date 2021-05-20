@@ -333,7 +333,6 @@
 
     </div>
 
-
     <div class="modal fade" id="transactionDetails" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel2" aria-hidden="true" data-keyboard="false" data-backdrop="static">
         <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
           <div class="modal-content tx-14">
@@ -349,44 +348,44 @@
                     <tbody>
                         <tr>
                             <td class="tx-medium" width="25%">Unique ID</td>
-                            <td class="tx-color-03" width="75%">WAL-23782382</td>
+                            <td class="tx-color-03" width="75%">{{$val->unique_id}}</td>
                         </tr>
                         <tr>
                             <td class="tx-medium" width="25%">Reference No.</td>
-                            <td class="tx-color-03" width="75%">32e3lh2e23083h432b</td>
+                            <td class="tx-color-03" width="75%">{{$val->reference_id}}</td>
                         </tr>
                         <tr>
-                            <td class="tx-medium" width="25%">Transaction ID.</td>
-                            <td class="tx-color-03" width="75%">Transaction ID returned on success should be displayed here only if payment gateway was used or UNAVAILABLE</td>
+                            <td class="tx-medium" width="25%">Transaction ID.</td> 
+                            <td class="tx-color-03" width="75%">{{$val->transaction_id}}</td>
                         </tr>
                         <tr>
                             <td class="tx-medium" width="25%">Transaction Type</td>
-                            <td class="tx-color-03" width="75%">Credit</td>
+                            <td class="tx-color-03" width="75%">{{$val->wallettransactions[0]->transaction_type ?? 'Not Available'}}</td>
                         </tr>
                         <tr>
-                            <td class="tx-medium" width="25%">Payment Type</td>
-                            <td class="tx-color-03" width="75%"3">Funding</td>
+                            <td class="tx-medium" width="25%">Payment Type</td> 
+                            <td class="tx-color-03" width="75%">{{$val->wallettransactions[0]->transaction_type ?? 'Not Available'}}</td>
                         </tr>
                         <tr>
-                            <td class="tx-medium" width="25%">Payment Channel</td>
-                            <td class="tx-color-03" width="75%"3">Paystack or Flutterwave or Offline or Wallet</td>
+                            <td class="tx-medium" width="25%">Payment Channel</td> 
+                            <td class="tx-color-03" width="75%">{{$val->payment_channel}}</td>
                         </tr>
                         <tr>
                             <td class="tx-medium" width="25%">Payment For</td>
-                            <td class="tx-color-03" width="75%"3">Wallet</td>
+                            <td class="tx-color-03" width="75%">{{$val->payment_for}}</td>
                         </tr>
                         <tr>
                             <td class="tx-medium" width="25%">Amount</td>
-                            <td class="tx-color-03" width="75%">₦{{ number_format(10000) }}</td>
+                            <td class="tx-color-03" width="75%">₦{{ number_format($val->amount) }}</td>
                         </tr>
                         <tr>
                             <td class="tx-medium" width="25%">Status</td>
-                            <td class="text-warning" width="75%">Pending</td>
+                            <td class="text-warning" width="75%">{{$val->status}}</td>
                         </tr>
-                        <tr>
+                        <!-- <tr>
                             <td class="tx-medium" width="25%">Refund Reason</td>
                             <td class="tx-color-03" width="75%">This section should only be visible in a case of refund, the reason should be displayed here or UNAVAILABLE</td>
-                        </tr>
+                        </tr> -->
                     </tbody>
                     </table>
                 </div>
