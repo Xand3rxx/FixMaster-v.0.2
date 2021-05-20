@@ -19,9 +19,9 @@ class ClientDecisionController extends Controller
 {
     use Loggable, Invoices;
 
-    public function __construct() {
-        $this->middleware('auth:web');
-    }
+//    public function __construct() {
+//        $this->middleware('auth:web');
+//    }
     /**
      * Handle the incoming request.
      *
@@ -133,5 +133,46 @@ class ClientDecisionController extends Controller
                 return redirect()->route('invoice', [app()->getLocale(), $invoice->uuid])->with('success', 'Diagnosis Invoice Accepted');
             }
         }
+    }
+
+    public function clientDecline($language, Request $request)
+    {
+        $invoiceUUID = $request->invoiceUUID;
+
+        $invoiceExists = Invoice::where('uuid', $invoiceUUID)->firstOrFail();
+
+        $invoiceExists->update([
+           'invoice_type' => 'Diagnosis Invoice',
+           'phase' => '2'
+        ]);
+
+        return response()->json($invoiceExists);
+    }
+
+    public function clientAccept($language, Request $request)
+    {
+        $invoiceUUID = $request->invoiceUUID;
+
+        $invoiceExists = Invoice::where('uuid', $invoiceUUID)->firstOrFail();
+
+        $invoiceExists->update([
+            'phase' => '2'
+        ]);
+
+        return response()->json($invoiceExists);
+    }
+
+    public function clientReturn($language, Request $request)
+    {
+        $invoiceUUID = $request->invoiceUUID;
+
+        $invoiceExists = Invoice::where('uuid', $invoiceUUID)->firstOrFail();
+
+        $invoiceExists->update([
+            'invoice_type' => 'Final Invoice',
+            'phase' => '1'
+        ]);
+
+        return response()->json($invoiceExists);
     }
 }

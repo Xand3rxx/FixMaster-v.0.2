@@ -4,7 +4,8 @@ namespace App\Models;
 
 use Illuminate\Support\Str;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Factories\HasFactory; 
+use App\Models\WalletTransaction;
 
 class Payment extends Model
 {
@@ -38,5 +39,9 @@ class Payment extends Model
         return $this->hasOne(ServiceRequest::class, 'unique_id', 'unique_id');
     }
 
-
+    public function wallettransactions()
+    {
+        return $this->hasOne(WalletTransaction::class, 'payment_id');
+    }
+    
 }

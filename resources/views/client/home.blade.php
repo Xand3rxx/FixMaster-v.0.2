@@ -113,7 +113,7 @@
                         <div class="media key-feature align-items-center p-3 rounded shadow mt-4">
                             <img src="{{ asset('assets/images/job/Webhooks.svg')}}" class="avatar avatar-ex-sm" alt="">
                             <div class="media-body content ml-3">
-                                <h4 class="title mb-0">{{ $userServiceRequest['service']['name'] }}({{ $userServiceRequest['service']['category']['name'] }})</h4>
+                                <h4 class="title mb-0">{{ $userServiceRequest['service']['name'] }}({{ $userServiceRequest['service']['category']['name'] ?? 'Custom Request'}})</h4>
                             
                                 @if(!empty($userServiceRequest->clientDiscounts[0]->discount->rate) && ($userServiceRequest->clientDiscounts[0]->availability == 'unused') )
                                 <p class="text-muted mb-0"><span>Amount:</span> 

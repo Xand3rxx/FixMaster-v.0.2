@@ -259,7 +259,7 @@
                           </tr>
                           <tr>
                             <td class="tx-medium">State</td>
-                            <td class="tx-color-03">{{$result->state->name}}</td>
+                            <td class="tx-color-03">{{dd($result->address)}}</td>
                           </tr>
                           <tr>
                             <td class="tx-medium">L.G.A</td>

@@ -59,10 +59,13 @@ Route::view('/register',                    'auth.register')->name('frontend.reg
 
 Route::post('customer-service-executive', [CSEFormController::class, '__invoke'])->name('frontend.customer-service-executive.store');
 
-//Route::get('/invoice/{invoice:uuid}', [InvoiceController::class, 'invoice'])->name('invoice');
-Route::get('/invoice/', [InvoiceController::class, 'invoice'])->name('invoice');
+Route::get('/invoice/{invoice:uuid}', [InvoiceController::class, 'invoice'])->name('invoice');
+//Route::get('/invoice/', [InvoiceController::class, 'invoice'])->name('invoice');
 
-Route::post('client-decision', [ClientDecisionController::class, '__invoke'])->name('client.decision');
+Route::post('/client-decision', [ClientDecisionController::class, '__invoke'])->name('client.decision');
+Route::post('/client-decline', [ClientDecisionController::class, 'clientDecline'])->name('client.decline');
+Route::post('/client-accept', [ClientDecisionController::class, 'clientAccept'])->name('client.accept');
+Route::post('/client-return', [ClientDecisionController::class, 'clientReturn'])->name('client.return');
 
 Route::get('/contact-us',                   [App\Http\Controllers\PageController::class, 'contactUs'])->name('frontend.contact');
 Route::post('/contact-us',                  [App\Http\Controllers\PageController::class, 'sendContactMail'])->name('frontend.send_contact_mail');
@@ -85,6 +88,20 @@ Route::get("/editCriteria",   [App\Http\Controllers\EssentialsController::class,
 
 // Route::get('/tools-request/details/{id}',           [App\Http\Controllers\ToolsRequestController::class, 'toolRequestDetails'])->name('tool_request_details');
 // Route::get('/rfq/details/{id}',                     [App\Http\Controllers\RFQController::class, 'rfqDetails'])->name('rfq_details');
+
+
+//Paystack Routes
+Route::post('/payment/paystack/submit',                [App\Http\Controllers\Payment\PaystackController::class, 'store'])->name('paystack-submit');
+Route::get('/payment/paystack/{paymentId}/initiate',   [App\Http\Controllers\Payment\PaystackController::class, 'initiate'])->name('paystack-start');
+Route::get('/payment/paystack/verify',                 [App\Http\Controllers\Payment\PaystackController::class, 'verify'])->name('paystack-verify');
+
+//Flutterwave Routes
+Route::post('/payment/flutterwave/submit',                [App\Http\Controllers\Payment\FlutterwaveController::class, 'store'])->name('flutterwave-submit');
+Route::get('/payment/flutterwave/{paymentId}/initiate',   [App\Http\Controllers\Payment\FlutterwaveController::class, 'initiate'])->name('flutterwave-start');
+Route::get('/payment/flutterwave/verify',                 [App\Http\Controllers\Payment\FlutterwaveController::class, 'verify'])->name('flutterwave-verify');
+
+//E-wallet Routes
+Route::post('/payment/ewallet/submit',                [App\Http\Controllers\Payment\EwalletController::class, 'store'])->name('wallet-submit');
 
 
 //All frontend routes for Services

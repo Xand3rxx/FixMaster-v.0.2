@@ -175,7 +175,7 @@ trait Invoices
 
     protected static function getServiceRequestDetails($service_request_id, $rfq_id, $warranty_id, $sub_service_id, $hours_spent)
     {
-        $invoice_type = 'Completion Invoice';
+        $invoice_type = 'Final Invoice';
         $status = '1';
         $amount_paid = 0.00;
         $serviceRequest = ServiceRequest::where('id', $service_request_id)->first();
@@ -259,7 +259,7 @@ trait Invoices
             $tax_cost = $tax * ( $total_amount + $logistics_cost + $fixMasterRoyalty );
             $total_cost = $total_amount + $fixMasterRoyalty + $tax_cost + $logistics_cost - $bookingCost;
         }
-        elseif ($invoice->invoice_type == 'Completion Invoice')
+        elseif ($invoice->invoice_type == 'Final Invoice')
         {
             $warrantyCost = 0.1 * ( $invoice->labour_cost + $materials_cost );
             $bookingCost = $invoice->serviceRequest->price->amount;

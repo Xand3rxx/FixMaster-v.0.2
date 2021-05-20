@@ -52,6 +52,14 @@
             </div>
           </div>
 
+          <div class="card-body pd-lg-25">
+            <div class="row">
+            <x-card cardtitle="Sent Quotes" cardnumber="{{ !empty($profile['supplierSentInvoices']) ? number_format($profile['supplierSentInvoices']->count()) : '0' }}" />
+              <x-card cardtitle="Approved Quotes" cardnumber="{{ !empty($profile['supplierSentInvoices']) ? number_format($profile['supplierSentInvoices']->where('accepted', 'Yes')->count()) : '0' }}" />
+              <x-card cardtitle="Amount Earned" cardnumber="₦32,890" />
+            </div>
+          </div>
+          
         </div><!-- card -->
       </div>
 

@@ -16,7 +16,7 @@ class PaymentController extends Controller
 
         // $user = Auth::user();
         // $payments = $user->payments();
-        $years =  $this->getDistinctYears($tableName = 'payments_disbursed'); 
+        $years =  $this->getDistinctYears($tableName = 'payments_disbursed');
 
         $payments = PaymentDisbursed::where('recipient_id',Auth::id())
         ->orderBy('created_at', 'DESC')->get();
@@ -26,7 +26,6 @@ class PaymentController extends Controller
     public function sortDisbursedPayments(Request $request){
         if($request->ajax()){
 
-            // return $request;
             //Get current activity sorting level
             $level =  $request->get('sort_level');
             //Get the activity sorting type
@@ -107,5 +106,12 @@ class PaymentController extends Controller
                  return view('quality-assurance._disbursed_table', compact('payments','message'));
             }
         }
+    }
+
+    public function paymentDetails($language, PaymentDisbursed $payment)
+    {
+        return view('quality-assurance._payment_details')->with([
+            'payment' => $payment
+        ]);
     }
 }
