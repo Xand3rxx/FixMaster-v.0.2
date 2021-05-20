@@ -22,12 +22,7 @@
       <div class="col-lg-12 col-xl-12 mg-t-10">
         <div class="card mg-b-10">
           <div class="card-header pd-t-20 d-sm-flex align-items-start justify-content-between bd-b-0 pd-b-0">
-            {{-- <div>
-              <h6 class="mg-b-5">Your Most Recent Requests</h6>
-            <p class="tx-13 tx-color-03 mg-b-0">This table displays a list of all <strong>Service Requests</strong> assigned to you by Fixmaster Administrator or Customer Service Executive after careful understudy of each request and with assumed initial payments made by the clients</p>
-            </div> --}}
-
-          </div><!-- card-header -->
+          </div>
           <div class="card-body pd-y-30">
             <div class="d-sm-flex">
               <div class="media">
@@ -36,7 +31,7 @@
                 </div>
                 <div class="media-body">
                   <h6 class="tx-sans tx-uppercase tx-10 tx-spacing-1 tx-color-03 tx-semibold tx-nowrap mg-b-5 mg-md-b-8">Total Request</h6>
-                  <h4 class="tx-20 tx-sm-18 tx-md-20 tx-normal tx-rubik mg-b-0">2</h4>
+                  <h4 class="tx-20 tx-sm-18 tx-md-20 tx-normal tx-rubik mg-b-0">{{$pendingConsults->count()}}</h4>
                 </div>
               </div>
 
@@ -55,21 +50,23 @@
                     </tr>
                   </thead>
                   <tbody>
+                    @php $sn = 1; @endphp
+                    @foreach($pendingConsults as $data)
                     <tr>
-                        <td class="tx-color-03 tx-center">1</td>
-                        <td class="tx-medium">REF-79A722D6</td>
-                        <td class="tx-medium">Unavailable</td>
-                        <td class="tx-medium">kenneth</td>
-                        <td class="tx-medium"><button class="btn btn-sm" style="background-color: #E97D1F; color:#fff">Details</button></td>
-                    </tr>
+                        <td class="tx-color-03 tx-center">{{$sn++}}</td>
+                        <td class="tx-medium">{{$data->service_request->unique_id}}</td>
+                        <td class="tx-medium">{{$data->service_request->service->category->name}}</td>
+                         @foreach($data->service_request->users as $res)
+                            @if ($res->type->role->name === 'Customer Service Executive')
+                            <td class="tx-medium">{{ $res->account->first_name.' '.$res->account->last_name }}</td>
+                            @endif
+                         @endforeach
 
-                    <tr>
-                        <td class="tx-color-03 tx-center">2</td>
-                        <td class="tx-medium">REF-79A722S5</td>
-                        <td class="tx-medium">Unavailable</td>
-                        <td class="tx-medium">Samuel</td>
-                        <td class="tx-medium"><button class="btn btn-sm" style="background-color: #E97D1F; color:#fff">Details</button></td>
+                        <td>
+                            <a href="{{ route('quality-assurance.consultations.pending_details', [$data->service_request->uuid, 'locale' => app()->getLocale()]) }}" class="btn btn-primary btn-sm">Details</a>
+                        </td>
                     </tr>
+                    @endforeach
                   </tbody>
                 </table>
 

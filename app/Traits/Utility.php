@@ -53,7 +53,7 @@ trait Utility
 
   public function updateVerifiedUsers($user, $user_type = '')
   {
-  
+
     if ($user->email_verified_at == NULL) {
        return false;
     }
@@ -67,7 +67,7 @@ trait Utility
     switch ($type) {
       case 'client':
 
-        
+
         $referral = '';
         $client = Client::select('firsttime')->where('account_id', $user->id)
           ->first();
@@ -137,7 +137,7 @@ trait Utility
           }
         }
 
-      
+
         break;
       case 'cse':
         $referral = '';
@@ -291,7 +291,7 @@ trait Utility
     return $results;
   }
 
-  /* Return distinct year from a particulat table's created at
+  /* Return distinct year from a particular table's created at
   *  string  $tableName
   *  return array
   */
@@ -311,7 +311,7 @@ trait Utility
                 $yearNumber = $date->format('y');
 
                 $yearName = $date->format('Y');
-                
+
                 array_push($yearList, $yearName);
             }
         }

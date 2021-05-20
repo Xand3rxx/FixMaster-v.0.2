@@ -14,7 +14,7 @@
             <li class="breadcrumb-item active" aria-current="page">warranty claims</li>
           </ol>
         </nav>
-        <h4 class="mg-b-0 tx-spacing--1">Warranty Claims</h4>
+        <h4 class="mg-b-0 tx-spacing--1">Warranty Claims </h4>
       </div>
     </div>
 
@@ -36,7 +36,7 @@
                 </div>
                 <div class="media-body">
                   <h6 class="tx-sans tx-uppercase tx-10 tx-spacing-1 tx-color-03 tx-semibold tx-nowrap mg-b-5 mg-md-b-8">Total Claims</h6>
-                  <h4 class="tx-20 tx-sm-18 tx-md-20 tx-normal tx-rubik mg-b-0">2</h4>
+                  <h4 class="tx-20 tx-sm-18 tx-md-20 tx-normal tx-rubik mg-b-0">{{$warranties->count()}}</h4>
                 </div>
               </div>
 
@@ -54,22 +54,23 @@
                       <th>Action</th>
                     </tr>
                   </thead>
+                  @php $sn = 1; @endphp
                   <tbody>
+                @foreach($warranties as $data)
                     <tr>
-                        <td class="tx-color-03 tx-center">1</td>
-                        <td class="tx-medium">REF-79A722D6</td>
-                        <td class="tx-medium">Unavailable</td>
-                        <td class="tx-medium">kenneth</td>
-                        <td class="tx-medium"><button class="btn btn-sm" style="background-color: #E97D1F; color:#fff">Details</button></td>
+                        <td class="tx-color-03 tx-center">{{$sn++}}</td>
+                        <td class="tx-medium">{{$data->service_request->unique_id}}</td>
+                        <td class="tx-medium">{{$data->service_request->service->category->name}}</td>
+                         @foreach($data->service_request->users as $res)
+                            @if ($res->type->role->name === 'Customer Service Executive')
+                            <td class="tx-medium">{{ $res->account->first_name.' '.$res->account->last_name }}</td>
+                            @endif
+                         @endforeach
+                        <td>
+                            <a href="{{ route('quality-assurance.requests.warranty', [$data->service_request->uuid, 'locale' => app()->getLocale()]) }}" class="btn btn-primary btn-sm">Details</a>
+                        </td>
                     </tr>
-
-                    <tr>
-                        <td class="tx-color-03 tx-center">2</td>
-                        <td class="tx-medium">REF-79A722S5</td>
-                        <td class="tx-medium">Unavailable</td>
-                        <td class="tx-medium">Samuel</td>
-                        <td class="tx-medium"><button class="btn btn-sm" style="background-color: #E97D1F; color:#fff">Details</button></td>
-                    </tr>
+                @endforeach
                   </tbody>
                 </table>
 

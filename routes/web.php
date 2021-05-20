@@ -414,14 +414,15 @@ Route::prefix('/client')->middleware('monitor.clientservice.request.changes')->g
 });
 
 
-Route::prefix('/cse')->group(function () {
+
+Route::prefix('/cse')->middleware('monitor.cseservice.request.changes')->group(function () {
     Route::name('cse.')->group(function () {
         //All routes regarding CSE's should be in here
         // Route::view('/',                    'cse.index');
         Route::get('/', [CseController::class, 'index'])->name('index'); //Take me to CSE Dashboard
         Route::post('accept-service-request', [CseController::class, 'setJobAcceptance'])->name('accept-job');
         Route::post('cse-availablity-request', [CseController::class, 'setAvailablity'])->name('availablity');
-    
+
         Route::prefix('profile')->name('profile.')->group(function () {
             Route::get('/', [ProfileController::class, 'index'])->name('index');
             Route::get('edit', [ProfileController::class, 'edit'])->name('edit');
@@ -434,7 +435,7 @@ Route::prefix('/cse')->group(function () {
         Route::patch('update-profile/{cse:uuid}', [CseController::class, 'update'])->name('update_profile');
 
         // Route::get('/', [UserCustomerServiceExecutiveController::class, 'index'])->name('index'); //Take me to CSE Dashboard
-    
+
         Route::view('/location-request',    'cse.location_request')->name('location_request');
 
         Route::view('/messages/inbox', 'cse.messages.inbox')->name('messages.inbox');
@@ -535,18 +536,25 @@ Route::prefix('/quality-assurance')->group(function () {
         Route::patch('/update_password', [QualityAssuranceProfileController::class, 'update_password'])->name('update_password');
         Route::get('/requests', [ServiceRequestController::class, 'get_requests'])->name('requests');
         Route::get('/payments', [PaymentController::class, 'get_qa_disbursed_payments'])->name('payments');
+        Route::get('payment_details/{payment:id}',   [PaymentController::class, 'paymentDetails'])->name('payment_details');
+
+        Route::get('/accept_job/{uuid}',  [ServiceRequestController::class, 'QaJobAccept'])->name('accept_job');
         Route::view('/messages/sent', 'quality-assurance.messages.sent')->name('messages.sent');
         Route::view('/messages/inbox', 'quality-assurance.messages.inbox')->name('messages.inbox');
-        Route::view('/requests/active', 'quality-assurance.requests.active')->name('requests.active');
-        Route::view('/requests/completed', 'quality-assurance.requests.completed')->name('requests.completed');
-        Route::view('/requests/warranty_claim', 'quality-assurance.requests.warranty_claim')->name('requests.warranty_claim');
-        Route::view('/consultations/pending', 'quality-assurance.consultations.pending')->name('consultations.pending');
-        Route::view('/consultations/ongoing', 'quality-assurance.consultations.ongoing')->name('consultations.ongoing');
-        Route::view('/consultations/completed', 'quality-assurance.consultations.completed')->name('consultations.completed');
-        Route::view('/requests/cancelled', 'quality-assurance.requests.cancelled')->name('requests.cancelled');
+        Route::get('/requests/active', [ServiceRequestController::class, 'getActiveJobs'])->name('requests.active');
+        Route::get('/requests/completed', [ServiceRequestController::class, 'getCompletedJobs'])->name('requests.completed');
+        Route::get('/requests/cancelled', [ServiceRequestController::class, 'getCancelledJobs'])->name('requests.cancelled');
+        Route::get('/requests/active_details/{uuid}', [ServiceRequestController::class, 'acceptedJobDetails'])->name('requests.active_details');
+        Route::get('/requests/warranty_claim', [ServiceRequestController::class, 'getWarranties'])->name('requests.warranty_claim');
+        Route::get('/requests/warranty/{uuid}', [ServiceRequestController::class, 'warrantyDetails'])->name('requests.warranty');
+        Route::get('/consultations/pending', [ServiceRequestController::class, 'getPendingConsultations'])->name('consultations.pending');
+        Route::get('/consultations/ongoing', [ServiceRequestController::class, 'getOngoingConsultations'])->name('consultations.ongoing');
+        Route::get('/consultations/ongoing_details/{uuid}', [ServiceRequestController::class, 'getOngoingConsultationDetails'])->name('consultations.ongoing_details');
+        Route::get('/consultations/completed', [ServiceRequestController::class, 'getCompletedConsultations'])->name('consultations.completed');
         Route::post('/disbursed_payments_sorting', [PaymentController::class, 'sortDisbursedPayments'])->name('disbursed_payments_sorting');
         Route::get('/get_chart_data', [ServiceRequestController::class, 'chat_data']);
-        Route::get('/requests/details/{uuid}',  [ServiceRequestController::class, 'show'])->name('request_details');
+        //Route::get('/requests/details/{uuid}',  [ServiceRequestController::class, 'show'])->name('request_details');
+        Route::get('/consultations/pending_details/{uuid}',  [ServiceRequestController::class, 'show'])->name('consultations.pending_details');
     });
 });
 
