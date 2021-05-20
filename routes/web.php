@@ -497,6 +497,14 @@ Route::prefix('/technician')->group(function () {
         Route::post('/disbursed_payments_sorting', [TechnicianProfileController::class, 'sortDisbursedPayments'])->name('disbursed_payments_sorting');
         Route::view('/messages/inbox', 'technician.messages.inbox')->name('messages.inbox');
         Route::view('/messages/sent', 'technician.messages.outbox')->name('messages.outbox');
+        Route::view('/requests/active', 'technician.requests.active')->name('requests.active');
+
+        Route::view('/requests/completed', 'technician.requests.completed')->name('requests.completed');
+        Route::view('/requests/warranty-claim', 'technician.requests.warranty_claim')->name('requests.warranty_claim');
+        Route::view('/consultations/pending', 'technician.consultations.pending')->name('consultations.pending');
+        Route::view('/consultations/ongoing', 'technician.consultations.ongoing')->name('consultations.ongoing');
+        Route::view('/consultations/completed', 'technician.consultations.completed')->name('consultations.completed');
+        Route::view('/requests/cancelled', 'technician.requests.cancelled')->name('requests.cancelled');
     });
 });
 
