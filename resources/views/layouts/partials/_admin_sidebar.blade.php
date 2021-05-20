@@ -158,7 +158,7 @@
         </ul>
       </li>
 
-      <li class="nav-item with-sub {{ Route::currentRouteNamed('admin.cse_reports','admin.technician_reports') ? 'active show' : '' }}">
+      <li class="nav-item with-sub {{ Route::currentRouteNamed('admin.cse_reports',admin.technician_reports,admin.supplier_reports) ? 'active show' : '' }}">
         <a href="" class="nav-link"><i data-feather="bar-chart-2"></i> <span>Reports</span></a>
         <ul>
 

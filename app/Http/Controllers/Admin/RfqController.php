@@ -23,7 +23,7 @@ class RfqController extends Controller
     /**
      * This method will redirect users back to the login page if not properly authenticated
      * @return void
-     */  
+     */
     public function __construct() {
         $this->middleware('auth:web');
     }
@@ -44,13 +44,26 @@ class RfqController extends Controller
 
     public function supplierInvoices(){
 
+        // return RfqSupplierInvoice::with('rfq', 'supplier')->get()
+        // ->groupBy(function($query) {
+        //     return $query->rfq_id;
+        // });
+
         return view('admin.rfq.supplier_invoices', [
-            'rfqs'   =>  RfqSupplierInvoice::orderBy('created_at', 'DESC')->get(),
-        ])->with('i');
+            'rfqs'   =>  RfqSupplierInvoice::with('rfq', 'supplier')
+            ->orderBy('total_amount', 'ASC')
+            ->orderBy('delivery_time', 'ASC')
+            ->orderBy('created_at', 'DESC')
+            ->get()
+            ->groupBy(function($query) {
+                return $query->rfq_id;
+            }),
+
+        ]);
     }
 
     public function supplierInvoiceDetails($language, $uuid){
-        
+
         $supplierInvoice = RfqSupplierInvoice::where('uuid', $uuid)->firstOrFail();
 
         return view('admin.rfq._supplier_invoice_details', [
@@ -61,7 +74,7 @@ class RfqController extends Controller
     }
 
     public function acceptSupplierInvoice($language, $uuid){
-        
+
         //Get supplier object with uuid
         $supplier = RfqSupplierInvoice::where('uuid', $uuid)->firstOrFail();
 
@@ -77,6 +90,8 @@ class RfqController extends Controller
         //Check if the selcted supplier has already been chosen
         $supplierAcceptanceExists = RfqSupplier::where('rfq_id', $supplierRfqId)->where('supplier_id', Auth::id())->count();
 
+        $otherSuppliers = RfqSupplierInvoice::where('rfq_id', $supplierRfqId)->where('uuid', '!=', $uuid)->get();
+
         if($supplierAcceptanceExists > 0){
             return back()->with('error', 'Sorry, you already accepted '.$supplier['supplier']['account']['first_name'] ." ". $supplier['supplier']['account']['last_name'].' invoice for this '.$supplier->rfq->unique_id);
         }
@@ -87,7 +102,7 @@ class RfqController extends Controller
         (bool) $supplierUpdate = false;
         $grandTotalAmount = 0;
 
-        DB::transaction(function () use ($supplier, $supplierId, $supplierInvoiceBatches, $supplierRfqId, $grandTotalAmount, &$supplierUpdate) {
+        DB::transaction(function () use ($uuid, $supplier, $supplierId, $supplierInvoiceBatches, $supplierRfqId, $grandTotalAmount, $otherSuppliers, &$supplierUpdate) {
 
             RfqSupplier::create([
                 'rfq_id'        =>  $supplierRfqId,
@@ -111,6 +126,19 @@ class RfqController extends Controller
                 'total_amount'  =>   $grandTotalAmount + $supplier->delivery_fee,
             ]);
 
+            // Approve the Supplier invoice
+            RfqSupplierInvoice::where('uuid', $uuid)->update([
+                'accepted'  => 'Yes'
+            ]);
+
+            // Decline other supplier invoices
+            foreach($otherSuppliers as $item){
+                RfqSupplierInvoice::where('rfq_id', $supplierRfqId)->where('uuid', '!=', $uuid)->update([
+                    'accepted'  => 'No'
+                ]);
+            }
+            
+
             $supplierUpdate = true;
 
         });
@@ -133,4 +161,32 @@ class RfqController extends Controller
             'rfqDetails'    =>  \App\Models\RfqBatch::select('image')->where('id', $id)->firstOrFail(),
         ]);
     }
+
+
+    /**
+     * Calculates the distance between two points, given their 
+     * latitude and longitude, and returns an array of values 
+     * of the most common distance units
+     *
+     * @param  {coord} $lat1 Latitude of the first point
+     * @param  {coord} $lon1 Longitude of the first point
+     * @param  {coord} $lat2 Latitude of the second point
+     * @param  {coord} $lon2 Longitude of the second point
+     * @return {array}       Array of values in many distance units
+     */
+    public  static function getDistanceBetweenPoints($lat1, $lon1, $lat2, $lon2) {
+        $theta = $lon1 - $lon2;
+        $miles = (sin(deg2rad($lat1)) * sin(deg2rad($lat2))) + (cos(deg2rad($lat1)) * cos(deg2rad($lat2)) * cos(deg2rad($theta)));
+        $miles = acos($miles);
+        $miles = rad2deg($miles);
+        $miles = $miles * 60 * 1.1515;
+        $feet = $miles * 5280;
+        $yards = $feet / 3;
+        $kilometers = $miles * 1.609344;
+        $meters = $kilometers * 1000;
+
+        // return compact('miles','feet','yards','kilometers','meters'); 
+        return round($kilometers, 2); 
+    }
+
 }

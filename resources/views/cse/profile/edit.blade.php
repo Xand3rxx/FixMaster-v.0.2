@@ -38,7 +38,7 @@
                                             <div class="pos-relative d-inline-block mg-b-20">
                                                 <div class="avatar avatar-xxl">
                                                     <div class="user-img">
-                                                        <img class="rounded-circle wh-150p img-fluid image profile_image_preview" src="{{ asset('assets/user-avatars/'.$user['account']['avatar']) ?: asset('assets/user-avatars/default-male-avatar.png') }}" alt="user-image">
+                                                        <img class="rounded-circle wh-150p img-fluid image profile_image_preview" src="{{ asset('storage/'.$user['account']['avatar']) ?: asset('assets/user-avatars/default-male-avatar.png') }}" alt="user-image">
                                                     </div>
                                                 </div>
                                             </div>
@@ -114,7 +114,7 @@
                                         <div class="form-group col-md-4">
                                             <label> Change Profile Avatar</label>
                                             <div class="custom-file">
-                                                <input type="file" accept="image/*" class="custom-file-input @error('image') is-invalid @enderror" name="profile_avater" id="profile_image">
+                                                <input type="file" accept="image/*" class="custom-file-input @error('image') is-invalid @enderror" name="profile_avatar" id="profile_image">
                                                 <label class="custom-file-label" id="imagelabel" for="profile_image">Upload Profile Avatar</label>
                                                 @error('image')
                                                 <span class="invalid-feedback" role="alert">

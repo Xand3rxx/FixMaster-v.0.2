@@ -37,12 +37,26 @@ class DispatchController extends Controller
      */
     public function dispatchReturned()
     {
-        // return RfqSupplierDispatch::where('supplier_id', Auth::id())->with('rfq', 'supplierInvoice')->get();
-
+        
         return view('supplier.materials.returned', [
             'dispatches'    =>  RfqSupplierDispatch::where('supplier_id', Auth::id())->where('cse_status', 'No')->with('rfq')->get()
         ]);
     }
+
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function dispatchDelivered()
+    {
+
+        return view('supplier.materials.delivered', [
+            'dispatches'    =>  RfqSupplierDispatch::where('supplier_id', Auth::id())->where('cse_status', 'Yes')->with('rfq')->get()
+        ]);
+    }
+
+    
 
     
     /**

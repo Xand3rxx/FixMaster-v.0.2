@@ -39,21 +39,21 @@ class ReportController extends Controller
        $serviceRequests = ServiceRequest::orderBy('created_at', 'DESC')->with('cse_service_request')->get();
        $users = Cse::with('user', 'user.account', 'user.contact', 'user.roles', 'user.cse_jobs')->get();
         // 'requests' => \App\Models\ServiceRequestAssigned::where('user_id', auth()->user()->id)->withCount('service_request')
-   
+
 
        return view('admin.reports.cse_reports', compact('serviceRequests', 'users'));
     }
 
     public function cseSummary($language, $details)
     {
-    
+
         $serviceRequests = ServiceRequest::where('uuid', $details)->first();
-        
+
        return view('admin.reports.report_details', compact('serviceRequests'));
-    
+
     }
-  
-     
+
+
     public function sortCSEReports($language, Request $request){
 
         // return $request->user;
@@ -64,7 +64,7 @@ class ReportController extends Controller
             $userId = $request->get('user');
             //Get current activity sorting level
             $level =  $request->get('sort_level');
-          
+
             //Get activity log for a specific date
             $specificDate =  $request->get('date');
             //Get activity log for a specific year
@@ -77,13 +77,13 @@ class ReportController extends Controller
             $dateFrom =  $request->get('date_from');
             $dateTo =  $request->get('date_to');
 
-        
+
             if($level === 'Level One'){
 
                 $activityLogs = ServiceRequest::where('type', $type)
                 ->orderBy('created_at', 'DESC')->get();
-                
-                
+
+
                 $requestAssigned = ServiceRequestAssigned::orderBy('created_at', 'DESC')->get();
 
                 $message = 'Showing Report of "'.$type.'"';
@@ -108,7 +108,7 @@ class ReportController extends Controller
 
                     $message = 'Showing Report of "'.$type.'" report for '.\Carbon\Carbon::parse($specificDate, 'UTC')->isoFormat('LL');
                 }
-                
+
                 if(($type == 'None') && !empty($specificDate)){
                     $activityLogs = ServiceRequest::whereDate('created_at', $specificDate)
                     ->orderBy('created_at', 'DESC')->get();
@@ -133,7 +133,7 @@ class ReportController extends Controller
 
                     $message = 'Showing Report of "'.$type.'" report for year '.$specificYear;
                 }
-                
+
                 if(($type == 'None') && !empty($specificYear)){
                     $activityLogs = ServiceRequest::whereYear('created_at', $specificYear)
                     ->orderBy('created_at', 'DESC')->get();
@@ -150,7 +150,7 @@ class ReportController extends Controller
             }
 
             if($level === 'Level Four'){
-                
+
                 if(($type !== 'None') && !empty($specificYear) && !empty($specificMonth)){
                     $activityLogs = ServiceRequest::where('type', $type)
                     ->whereYear('created_at', $specificYear)
@@ -159,7 +159,7 @@ class ReportController extends Controller
 
                     $message = 'Showing Report of "'.$type.'" report for "'.$specificMonthName.'" in year '.$specificYear;
                 }
-                
+
                 if(($type == 'None') && !empty($specificYear) && !empty($specificMonth)){
                     $activityLogs = ServiceRequest::whereYear('created_at', $specificYear)
                     ->whereMonth('created_at', $specificMonth)
@@ -175,7 +175,7 @@ class ReportController extends Controller
 
                 return view('admin.reports.report_table', compact('data'));
             }
-            
+
             if($level === 'Level Five'){
 
                 if(($type !== 'None') && !empty($dateFrom) && !empty($dateTo)){
@@ -185,7 +185,7 @@ class ReportController extends Controller
 
                     $message = 'Showing Report of "'.$type.'" report type from "'.\Carbon\Carbon::parse($dateFrom, 'UTC')->isoFormat('LL').'" to "'.\Carbon\Carbon::parse($dateTo, 'UTC')->isoFormat('LL').'"';
                 }
-                
+
                 if(($type == 'None') && !empty($dateFrom) && !empty($dateTo)){
                     $activityLogs = ServiceRequest::whereBetween('created_at', [$dateFrom, $dateTo])
                     ->orderBy('created_at', 'DESC')->get();
@@ -210,10 +210,10 @@ class ReportController extends Controller
         $activityLogDetails = ServiceRequest::findOrFail($id);
 
         //Get first name
-        $firstName = $activityLogDetails->account->first_name ?? 'UNAVAILABLE'; 
+        $firstName = $activityLogDetails->account->first_name ?? 'UNAVAILABLE';
 
         //Get last name
-        $lastName = $activityLogDetails->account->last_name ?? ''; 
+        $lastName = $activityLogDetails->account->last_name ?? '';
 
         //Concatenate first name and last name to create full name
         $fullName = $firstName.' '.$lastName;

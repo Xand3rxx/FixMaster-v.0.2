@@ -178,14 +178,16 @@ tbody td, thead th {
     <div class="card custom-form border-0">
         <div class="card-body mt-4">
             {{--
-            <h5><span class="font-weight-bold">{{ $service->name }}</span> Service Request</h5>
+            <h5><span class="font-weight-bold">{{ $service->name }}</span> Service Request</h5> 
             --}}
             <div class="card bg-primary">
                 <h4 class="text-white ml-2 user d-block"><i class="mdi mdi-bookmark"></i> Service: {{ !empty($service->name) ? $service->name : 'UNAVAILABLE' }}</h4>
                 <small class="text-white ml-2 date"><i class="mdi mdi-star_rate"></i> Total Requests: {{ $service->serviceRequests()->count() ?? '0' }}</small>
             </div>
 
-            <form class="rounded p-4" method="POST" action="{{ route('client.services.serviceRequest', app()->getLocale()) }}" enctype="multipart/form-data">
+            <!-- <form class="rounded p-4" method="POST" action="{{ route('client.services.serviceRequest', app()->getLocale()) }}" enctype="multipart/form-data"> -->
+            <!-- <form class="rounded p-4" method="POST" action="{{ route('client.services.serviceRequest', app()->getLocale()) }}" enctype="multipart/form-data"> -->
+            <form class="rounded p-4" action="" method="POST" id="payment" enctype="multipart/form-data">
                 @csrf
                 <small class="text-danger">A Booking Fee deposit is required to validate this order and enable our AI assign a Customer Service Executice(CSE) to your Job.</small>
 
@@ -271,6 +273,14 @@ tbody td, thead th {
     </div>
     <!--end col-->
 
+
+    <div class="col-md-6">
+        <div class="form-group position-relative">
+            <input name="payment_for" type="hidden" readonly value="service-request" />
+        </div>
+    </div>
+
+
     @if($discounts->count() > 0)
     <div class="col-md-12 form-group">
         <h5><span class="font-weight-bold">Available Discounts</span></h5>
@@ -296,14 +306,14 @@ tbody td, thead th {
 
     <div class="col-md-6 form-group">
         <div class="custom-control custom-radio form-group position-relative">
-            <input type="radio" id="wallet_payment_option" name="payment_method" class="custom-control-input" onclick="displayPaymentGateways('1')" value="Wallet" />
+            <input type="radio" id="wallet_payment_option" name="payment_channel" class="custom-control-input input-check" onclick="displayPaymentGateways('1')" checked value="Wallet" data-tabid="wallet" data-action="{{route('wallet-submit', app()->getLocale()) }}"/>
             <label class="custom-control-label" for="wallet_payment_option">E-Wallet</label>
         </div>
     </div>
 
     <div class="col-md-6 form-group">
         <div class="custom-control custom-radio form-group position-relative">
-            <input type="radio" id="payment_gateway_option" name="payment_method" class="custom-control-input" onclick="displayPaymentGateways('2')" value="Online" />
+            <input type="radio" id="payment_gateway_option" name="payment_channel" class="custom-control-input" onclick="displayPaymentGateways('2')" value="Online" />
             <label class="custom-control-label" for="payment_gateway_option">Pay Online</label>
         </div>
     </div>
@@ -317,14 +327,17 @@ tbody td, thead th {
     <div class="row mx-auto p-4 cc-selector d-none payment-options">   
         <div class="col-md-6 payment-radio-container">
         <!-- <div class="col-md-6 payment-radio-container media key-feature align-items-center p-3 rounded shadow mt-4"> -->
-            <input type="radio" id="flutter" name="payment_channel" value="flutter" checked>
+            
+            <!-- <input type="radio" id="flutter" name="payment_channel" value="flutterwave" checked> -->
+            <input type="radio" id="flutter" name="payment_channel" class="input-check" value="flutterwave" data-tabid="flutterwave" data-action="{{route('flutterwave-submit', app()->getLocale()) }}" > 
             <label for="flutter" class="pplogo-container">
             <img class="img-fluid" alt="flutter"src="{{ asset('assets/images') }}/flutter.png">              
             </label>
         </div>
         
         <div class="col-md-6 payment-radio-container">
-            <input type="radio" id="paystack" name="payment_channel" value="paystack">
+            <!-- <input type="radio" id="paystack" name="payment_channel" value="paystack"> -->
+            <input type="radio" id="paystack" name="payment_channel" class="input-check" value="paystack" data-tabid="paystack" data-action="{{route('paystack-submit', app()->getLocale()) }}" > 
             <label for="paystack" class="pplogo-container">
             <img class="img-fluid" alt="paystack"src="{{ asset('assets/images') }}/paystack.png">             
             </label>
@@ -577,15 +590,27 @@ tbody td, thead th {
     $("#editAddress").addClass("address-hide");
 
     function address() {
-        // if ($("#address").hasClass('address-show')) {
-        //     $("#editAddress").removeClass("address-hide");
-        //     $("#editAddress").addClass("address-show");
-        //     $("#address").removeClass("address-show");
-        //     $("#address").addClass("address-hide");
-        // } else {
         $("#address").addClass("address-hide");
         $("#editAddress").removeClass("address-hide");
     }
+
+    $(document).ready(function() {
+       // always check the first payment gateway
+       $(".input-check").first().attr('checked', true);
+        // change form action, show form for checked 'gateway'
+        let tabid = $(".input-check:checked").data('tabid');
+       $('#payment').attr('action', $(".input-check:checked").data('action'));
+    });
+
+     // on gateway change...
+     $(document).on('change', '.input-check', function() {
+        // change form action
+        let tabid = $(this).data('tabid');
+        $('#payment').attr('action', $(this).data('action'));
+        $('#paymentGatewaysForm').attr('action', $(".input-check:checked").data('action'));
+
+    });
+
 </script>
 
 

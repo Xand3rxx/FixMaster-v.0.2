@@ -202,6 +202,27 @@
 <script>
   $(document).ready(function(){
     $('.selectpicker').selectpicker(); //Initiate multiple dropdown select
+
+    $('#basicExample2, #basicExample3 #basicExample4').DataTable({
+        "iDisplayLength": 10,
+        "language": {
+            "searchPlaceholder": 'Search...',
+            "sSearch": '',
+            "lengthMenu": '_MENU_ items/page',
+            // "lengthMenu": "Display _MENU_ records per page",
+            "zeroRecords": "No matching records found",
+            // "info": "Showing page _PAGE_ of _PAGES_",
+            "infoEmpty": "No records available",
+            "infoFiltered": "(filtered from _MAX_ total records)"
+        },
+        "dom": 'Bfrtip',
+        "buttons": [
+            'copy', 'csv', 'excel', 'pdf', 'print'
+        ],
+        "processing": true,
+        // "scrollY":        "200px",
+        // "scrollCollapse": true,
+    });
   });
 </script>
 

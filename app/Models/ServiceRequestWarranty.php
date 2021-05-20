@@ -59,7 +59,7 @@ class ServiceRequestWarranty extends Model
 
     public function service_request_assignees(){
 
-        return $this->hasOne(ServiceRequestAssigned::class, 'service_request_id')->with('user');
+        return $this->hasMany(ServiceRequestAssigned::class, 'service_request_id')->with('user');
     }
 
     /**

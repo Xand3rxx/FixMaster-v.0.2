@@ -83,7 +83,7 @@ class ServiceRequest extends Model
 
     public function client()
     {
-        return $this->belongsTo(User::class, 'client_id');
+        return $this->belongsTo(User::class, 'client_id')->with('account', 'contact');
     }
 
     public function account()
@@ -246,6 +246,10 @@ class ServiceRequest extends Model
         return $this->hasOne(ServiceRequestWarranty::class, 'service_request_id', 'id');
     }
 
+    public function serviceRequestMedias()
+    {
+        return $this->belongsToMany(Media::class, 'service_request_medias');
+    }
 
     /**
      * Scope a query to only include all pending requests
