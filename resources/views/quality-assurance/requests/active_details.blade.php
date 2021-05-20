@@ -29,14 +29,7 @@
             </div>
 
             <div class="col-md-3">
-                @foreach($activeDetails->service_request->users as $res)
-                  @if ($res->type->role->name === 'Customer Service Executive')
-                  <a href="{{{$res->contact->phone_number}}}" class="btn btn-primary btn-icon"><i class="fas fa-phone"></i> Call CSE</a>
-                  @endif
-                  @endforeach
-
-
-                 <button class="btn btn-sm" style="background-color: #E97D1F; color:#fff;">Go Back</button>
+              <a href="tel:{{$phone}}" class="btn btn-primary btn-icon"><i class="fas fa-phone"></i> Call CSE</a> <button class="btn btn-sm" style="background-color: #E97D1F; color:#fff;">Go Back</button>
             </div>
         </div>
         <div class="divider-text">Service Request Description</div>
@@ -78,74 +71,13 @@
           <div class="divider-text">Service Request Media Files</div>
 
           <div class="row row-xs">
-            <div class="col-6 col-sm-4 col-md-3 col-xl">
+      @foreach($activeDetails->service_request->service_request_medias as $media)
+            <div class="col-6 col-sm-4 col-md-3">
               <div class="card card-file">
-                <div class="dropdown-file">
-                  <a href="" class="dropdown-link" data-toggle="dropdown"><i data-feather="more-vertical"></i></a>
-                  <div class="dropdown-menu dropdown-menu-right">
-                    <a href="#" class="dropdown-item download"><i data-feather="download"></i>Download</a>
-                  </div>
-                </div><!-- dropdown -->
-                <div class="card-file-thumb tx-danger">
-                  <i class="far fa-file-pdf"></i>
-                </div>
-                <div class="card-body">
-                  <h6><a href="" class="link-02">{{ substr('54c2a6f3-8a9c-411a-bd68-96a3a37617b2', 0, 15) }}.pdf</a></h6>
-                </div>
-                <div class="card-footer"><span class="d-none d-sm-inline">Date Created: </span>{{ \Carbon\Carbon::now('UTC')->isoFormat('MMMM Do YYYY, h:mm:ssa') }}</div>
+                 <img data-magnify="gallery" data-src="{{ asset('assets/service-request-images/'.$media->media_files->original_name) }}" src="{{ asset('assets/service-request-images/'.$media->media_files->original_name) }}" height="250" class="img-fluid h-100" alt="Profile avatar">
               </div>
-            </div><!-- col -->
-            <div class="col-6 col-sm-4 col-md-3 col-xl">
-              <div class="card card-file">
-                <div class="dropdown-file">
-                  <a href="" class="dropdown-link" data-toggle="dropdown"><i data-feather="more-vertical"></i></a>
-                  <div class="dropdown-menu dropdown-menu-right">
-                    <a href="#" class="dropdown-item download"><i data-feather="download"></i>Download</a>
-                  </div>
-                </div><!-- dropdown -->
-                <div class="card-file-thumb tx-primary">
-                  <i class="far fa-file-word"></i>
-                </div>
-                <div class="card-body">
-                    <h6><a href="" class="link-02">{{ substr('1c160a9b-8f52-46f5-a687-1dd608da48b3', 0, 15) }}.docx</a></h6>
-                </div>
-                <div class="card-footer"><span class="d-none d-sm-inline">Date Created: </span>{{ \Carbon\Carbon::now('UTC')->isoFormat('MMMM Do YYYY, h:mm:ssa') }}</div>
-              </div>
-            </div><!-- col -->
-            <div class="col-6 col-sm-4 col-md-3 col-xl mg-t-10 mg-sm-t-0">
-              <div class="card card-file">
-                <div class="dropdown-file">
-                  <a href="" class="dropdown-link" data-toggle="dropdown"><i data-feather="more-vertical"></i></a>
-                  <div class="dropdown-menu dropdown-menu-right">
-                    <a href="#" class="dropdown-item download"><i data-feather="download"></i>Download</a>
-                  </div>
-                </div><!-- dropdown -->
-                <div class="card-file-thumb tx-indigo">
-                  <i class="far fa-file-image"></i>
-                </div>
-                <div class="card-body">
-                    <h6><a href="" class="link-02">{{ substr('ff9c0bfa-aeed-4724-a8e4-790cf04a9fdd', 0, 15) }}.jpg</a></h6>
-                </div>
-                <div class="card-footer"><span class="d-none d-sm-inline">Date Created: </span>{{ \Carbon\Carbon::now('UTC')->isoFormat('MMMM Do YYYY, h:mm:ssa') }}</div>
-              </div>
-            </div><!-- col -->
-            <div class="col-6 col-sm-4 col-md-3 col-xl mg-t-10 mg-md-t-0">
-              <div class="card card-file">
-                <div class="dropdown-file">
-                  <a href="" class="dropdown-link" data-toggle="dropdown"><i data-feather="more-vertical"></i></a>
-                  <div class="dropdown-menu dropdown-menu-right">
-                    <a href="#" class="dropdown-item download"><i data-feather="download"></i>Download</a>
-                  </div>
-                </div><!-- dropdown -->
-                <div class="card-file-thumb tx-info">
-                  <i class="far fa-file-video"></i>
-                </div>
-                <div class="card-body">
-                    <h6><a href="" class="link-02">{{ substr('d886204a-a376-4924-a83b-2d7a7f84df7d', 0, 15) }}.mp4</a></h6>
-                </div>
-                <div class="card-footer"><span class="d-none d-sm-inline">Date Created: </span>{{ \Carbon\Carbon::now('UTC')->isoFormat('MMMM Do YYYY, h:mm:ssa') }}</div>
-              </div>
-            </div><!-- col -->
+            </div>
+      @endforeach
           </div><!-- row -->
 
       </div>

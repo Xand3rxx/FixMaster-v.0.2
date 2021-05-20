@@ -156,7 +156,7 @@ class ServiceRequestAssigned extends Model
         })->when((array)$filters['cse_id'] ?? null, function ($query, array $cses) {
             $query->whereIn('user_id', $cses[0]);
         })->when((string)$filters['job_status'] ?? null, function ($query) use ($filters) {
-            $query->whereHas('service_request', function ($query) use ($filters) { 
+            $query->whereHas('service_request', function ($query) use ($filters) {
                 $query->where('status_id', $filters['job_status']);
              });
         });

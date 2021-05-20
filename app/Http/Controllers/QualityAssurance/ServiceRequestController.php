@@ -108,7 +108,13 @@ class ServiceRequestController extends Controller
         $output = ServiceRequest::where('uuid', $uuid)->first();
          $activeDetails = ServiceRequestAssigned::where('user_id', Auth::id())
         ->where('service_request_id', $output->id)->first();
-        return view('quality-assurance.requests.active_details', compact('activeDetails'));
+
+        foreach($activeDetails->service_request->users as $res){
+            if($res->type->role->name === 'Customer Service Executive'){
+                $phone = $res->contact->phone_number;
+            }
+        }
+        return view('quality-assurance.requests.active_details', compact('activeDetails','phone'));
     }
 
     public function QaJobAccept($language, $uuid){

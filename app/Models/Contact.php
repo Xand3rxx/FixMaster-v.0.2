@@ -31,6 +31,16 @@ class Contact extends Model
         return $this->belongsTo(Account::class, 'user_id', 'user_id');
     }
 
+    public function lga()
+    {
+        return $this->belongsTo(Lga::class);
+    }
+
+    public function town()
+    {
+        return $this->belongsTo(Town::class);
+    }
+
     /**
      * The "booted" method of the model.
      * To be used during production for integrity reasons

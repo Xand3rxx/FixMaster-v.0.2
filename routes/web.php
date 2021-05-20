@@ -418,7 +418,7 @@ Route::prefix('/client')->middleware('monitor.clientservice.request.changes')->g
 
 
 
-Route::prefix('/cse')->group(function () {
+Route::prefix('/cse')->middleware('monitor.cseservice.request.changes')->group(function () {
     Route::name('cse.')->group(function () {
         //All routes regarding CSE's should be in here
         // Route::view('/',                    'cse.index');

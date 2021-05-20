@@ -23,7 +23,7 @@
         </tr>
         <tr>
             <td class="tx-medium" width="25%">Status</td>
-            @if($payment->status=='success')
+            {{-- @if($payment->status=='success')
                 <td class="text-success" width="75%">Success</td>
             @elseif($payment->status=='pending')
                 <td class="text-danger" width="75%">Pending</td>
@@ -31,7 +31,8 @@
                 <td class="text-warning" width="75%">Failed</td>
             @elseif($payment->status=='timeout')
                 <td class="text-info" width="75%">Timeout</td>
-            @endif
+            @endif --}}
+            <td class="tx-color-03"><span class="text-success">Success</td>
         </tr>
 
     </tbody>
