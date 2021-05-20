@@ -448,10 +448,6 @@ Route::prefix('/cse')->middleware('monitor.cseservice.request.changes')->group(f
         Route::post('/submit_ratings',  [CseController::class, 'user_rating'])->name('handle.ratings');
         Route::post('/update_service_request',  [CseController::class, 'update_cse_service_rating'])->name('update_service_request');
 
-        // Route::view('/warranty-claims',    'cse.warranties.index')->name('warranty_claims');
-        Route::view('/warranty-claims/details',    'cse.warranties.show', [
-            // 'technicians'    =>  \App\Models\Role::where('slug', 'technician-artisans')->with('users')->firstOrFail(),
-        ])->name('warranty_claim_details');
         Route::view('/location-request',    'cse.location_request')->name('location_request');
         Route::view(
             '/request/details',
@@ -464,11 +460,11 @@ Route::prefix('/cse')->middleware('monitor.cseservice.request.changes')->group(f
         )->name('request_details');
     
 
-    Route::get('/warranty/claims/list', [CseController::class, 'warranty_claims_list'])->name('warranty_claims_list');
-    Route::get('/warranty-claims/details', [CseController::class, 'warranty_claims'])->name('warranty_claims');
-    Route::get('/warranty/resolved/claims/details/{warranty:id}',          [WarrantyController::class, 'warranty_resolved_details'])->name('warranty_resolved_details');
-    Route::get('/warranty/claims/details/{warranty:uuid}',      [CseController::class,  'warranty_details'])->name('warranty_details');
-    Route::get('/mark/warrant/claims/resolved/{warranty:uuid}',      [WarrantyController::class, 'resolvedWarranty'])->name('mark_warranty_resolved');
+        Route::get('/warranty/claims/list', [CseController::class, 'warranty_claims_list'])->name('warranty_claims_list');
+        Route::get('/warranty-claims/details', [CseController::class, 'warranty_claims'])->name('warranty_claims');
+        Route::get('/warranty/resolved/claims/details/{warranty:id}',          [WarrantyController::class, 'warranty_resolved_details'])->name('warranty_resolved_details');
+        Route::get('/warranty/claims/details/{warranty:uuid}',      [CseController::class,  'warranty_details'])->name('warranty_details');
+        Route::get('/mark/warrant/claims/resolved/{warranty:uuid}',      [WarrantyController::class, 'resolvedWarranty'])->name('mark_warranty_resolved');
 
   });
 });
