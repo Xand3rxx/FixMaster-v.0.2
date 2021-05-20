@@ -54,7 +54,7 @@
           </li>
 
           <li class="nav-item with-sub {{ Route::currentRouteNamed('quality-assurance.consultations.pending', 'quality-assurance.consultations.ongoing', 'quality-assurance.consultations.completed','quality-assurance.consultations.pending_details','quality-assurance.consultations.ongoing_details') ? 'active show' : '' }}">
-            <a href="" class="nav-link"><i data-feather="message-circle"></i> <span>Consultations</span></a>
+            <a href="" class="nav-link"><i data-feather="layout"></i> <span>Consultations</span></a>
             <ul>
               <li class="{{ Route::currentRouteNamed('quality-assurance.consultations.pending','quality-assurance.consultations.pending_details') ? 'active' : '' }}"><a href="{{ route('quality-assurance.consultations.pending', app()->getLocale()) }}">Pending</a></li>
               <li class="{{ Route::currentRouteNamed('quality-assurance.consultations.ongoing','quality-assurance.consultations.ongoing_details') ? 'active' : '' }}"><a href="{{ route('quality-assurance.consultations.ongoing', app()->getLocale()) }}">Ongoing</a></li>
