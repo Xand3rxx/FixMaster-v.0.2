@@ -40,22 +40,23 @@
       <li class="nav-label">Components</li>
       <li class="nav-item {{ Route::currentRouteNamed('supplier.index') ? 'active' : '' }}"><a href="{{ route('supplier.index', app()->getLocale()) }}" class="nav-link"><i data-feather="airplay"></i> <span>Home</span></a></li>
 
-      <li class="nav-item with-sub {{ Route::currentRouteNamed('supplier.rfq', 'supplier.rfq_send_supplier_invoice', 'supplier.rfq_sent_invoices') ? 'active show' : '' }}">
+      <li class="nav-item with-sub {{ Route::currentRouteNamed('supplier.rfq', 'supplier.rfq_send_supplier_invoice', 'supplier.rfq_sent_invoices', 'supplier.rfq_approved_invoices', 'supplier.rfq_declined_invoices', 'supplier.rfq_link_details') ? 'active show' : '' }}">
         <a href="" class="nav-link"><i data-feather="git-pull-request"></i> <span>Requests For Quote <span class="badge badge-primary">{{ $newQuotes }}</span></span></a>
         <ul>
-          <li class="{{ Route::currentRouteNamed('supplier.rfq', 'supplier.rfq_send_supplier_invoice') ? 'active' : '' }}"><a href="{{ route('supplier.rfq', app()->getLocale()) }}">New Quotes <sup class="font-weight-bold text-primary">{{ $newQuotes }}</sup></a></li>
+          <li class="{{ Route::currentRouteNamed('supplier.rfq', 'supplier.rfq_send_supplier_invoice', 'supplier.rfq_link_details') ? 'active' : '' }}"><a href="{{ route('supplier.rfq', app()->getLocale()) }}">New Quotes <sup class="font-weight-bold text-primary">{{ $newQuotes }}</sup></a></li>
           <li class="{{ Route::currentRouteNamed('supplier.rfq_sent_invoices') ? 'active' : '' }}"><a href="{{ route('supplier.rfq_sent_invoices', app()->getLocale()) }}">Sent Quotes</a></li>
-          <li class="{{ Route::currentRouteNamed('supplier.rfq_sent_invoices') ? 'active' : '' }}"><a href="{{ route('supplier.rfq_sent_invoices', app()->getLocale()) }}">Won Quotes</a></li>
+          <li class="{{ Route::currentRouteNamed('supplier.rfq_declined_invoices') ? 'active' : '' }}"><a href="{{ route('supplier.rfq_declined_invoices', app()->getLocale()) }}">Declined Quotes</a></li>
+          <li class="{{ Route::currentRouteNamed('supplier.rfq_approved_invoices') ? 'active' : '' }}"><a href="{{ route('supplier.rfq_approved_invoices', app()->getLocale()) }}">Won Quotes</a></li>
         </ul>
       </li>
 
       {{-- <li class="nav-item {{ Route::currentRouteNamed('supplier.dispatches') ? 'active' : '' }}"><a href="{{ route('supplier.dispatches', app()->getLocale()) }}" class="nav-link"><i data-feather="file-text"></i> <span>Materials Dispatched</span></a></li> --}}
 
-      <li class="nav-item with-sub {{ Route::currentRouteNamed('supplier.dispatches', 'supplier.dispatches_returned') ? 'active show' : '' }}">
+      <li class="nav-item with-sub {{ Route::currentRouteNamed('supplier.dispatches', 'supplier.dispatches_returned', 'supplier.dispatches_delivered') ? 'active show' : '' }}">
         <a href="" class="nav-link"><i data-feather="file-text"></i> <span>Materials</span></a>
         <ul>
           <li class="{{ Route::currentRouteNamed('supplier.dispatches') ? 'active' : '' }}"><a href="{{ route('supplier.dispatches', app()->getLocale()) }}">Dispatched</a></li>
-          <li class="{{ Route::currentRouteNamed('supplier.dispatches') ? 'active' : '' }}"><a href="{{ route('supplier.dispatches', app()->getLocale()) }}">Delivered</a></li>
+          <li class="{{ Route::currentRouteNamed('supplier.dispatches_delivered') ? 'active' : '' }}"><a href="{{ route('supplier.dispatches_delivered', app()->getLocale()) }}">Delivered</a></li>
           <li class="{{ Route::currentRouteNamed('supplier.dispatches_returned') ? 'active' : '' }}"><a href="{{ route('supplier.dispatches_returned', app()->getLocale()) }}">Returned</a></li>
         </ul>
       </li>

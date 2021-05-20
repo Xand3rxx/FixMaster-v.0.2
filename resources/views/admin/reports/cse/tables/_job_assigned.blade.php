@@ -40,7 +40,7 @@
         <td class="text-medium text-center">{{ !empty($result['job_completed_date']) ? Carbon\Carbon::parse($result['job_acceptance_time'], 'UTC')->diffInDays(Carbon\Carbon::parse($result['job_completed_date'], 'UTC')) : '0'}}day(s)</td>
       </tr>
       @endforeach
-      
+
 
       {{-- <tr>
         <td class="tx-color-03 tx-center">2</td>

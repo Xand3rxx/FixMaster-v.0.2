@@ -25,6 +25,7 @@
     <link rel="stylesheet" href="{{ asset('assets/dashboard/assets/css/dashforge.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/dashboard/assets/css/dashforge.demo.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/dashboard/assets/css/dashforge.dashboard.css') }}">
+    <link rel="stylesheet" href="{{ asset('assets/dashboard/assets/css/jquery.magnify.css') }}">
 
     <link rel="stylesheet" href="{{ asset('assets/dashboard/assets/datatables/dataTables.bs4.css') }}" />
     <link rel="stylesheet" href="{{ asset('assets/dashboard/assets/datatables/dataTables.bs4-custom.css') }}" />
@@ -33,6 +34,7 @@
     <link rel="stylesheet" href="{{ asset('assets/client/css/jquery.datetimepicker.min.css') }}">
     <link rel="stylesheet" href="https://cdn.datatables.net/buttons/1.6.5/css/buttons.dataTables.min.css">
     @yield('css')
+    @yield('styles')
 
 </head>
 
@@ -127,6 +129,7 @@
     <script src="{{ asset('assets/dashboard/lib/feather-icons/feather.min.js') }}"></script>
 
     <script src="{{ asset('assets/dashboard/lib/jquery.flot/jquery.flot.js') }}"></script>
+    <script src="{{ asset('assets/dashboard/lib/jquery/jquery.magnify.js') }}"></script>
     <script src="{{ asset('assets/dashboard/lib/jquery.flot/jquery.flot.stack.js') }}"></script>
     <script src="{{ asset('assets/dashboard/lib/jquery.flot/jquery.flot.resize.js') }}"></script>
     <script src="{{ asset('assets/dashboard/lib/chart.js/Chart.bundle.min.js') }}"></script>

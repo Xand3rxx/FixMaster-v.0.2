@@ -18,7 +18,7 @@ class ServiceRequestAssigned extends Model
      * @var array
      */
     protected $guarded = ['deleted_at', 'created_at', 'updated_at'];
-    
+
     /**
      * Get the authenticated user assigned to the request
      */
@@ -37,7 +37,7 @@ class ServiceRequestAssigned extends Model
 
     /**
      * Store record of a Assigned User on the Service Request Assigned Table
-     * 
+     *
      * @param  int      $user_id
      * @param  int      $service_request_id
      * @param  string   $job_accepted
@@ -45,7 +45,7 @@ class ServiceRequestAssigned extends Model
      * @param  string   $job_diagnostic_date
      * @param  string   $job_declined_time
      * @param  string   $job_completed_date
-     * 
+     *
      * @return \App\Models\ServiceRequestAssigned|Null
      */
     public static function assignUserOnServiceRequest(int $user_id, int $service_request_id, string $job_accepted = null, string $job_acceptance_time = null, string $status = null, string $job_diagnostic_date = null, string $job_declined_time = null, string $job_completed_date = null)
@@ -124,7 +124,7 @@ class ServiceRequestAssigned extends Model
         })->when((array)$filters['cse_id'] ?? null, function ($query, array $cses) {
             $query->whereIn('user_id', $cses[0]);
         })->when((string)$filters['job_status'] ?? null, function ($query) use ($filters) {
-            $query->whereHas('service_request', function ($query) use ($filters) { 
+            $query->whereHas('service_request', function ($query) use ($filters) {
                 $query->where('status_id', $filters['job_status']);
              });
         });
@@ -156,7 +156,7 @@ class ServiceRequestAssigned extends Model
         })->when((array)$filters['cse_id'] ?? null, function ($query, array $cses) {
             $query->whereIn('user_id', $cses[0]);
         })->when((string)$filters['job_status'] ?? null, function ($query) use ($filters) {
-            $query->whereHas('service_request', function ($query) use ($filters) { 
+            $query->whereHas('service_request', function ($query) use ($filters) {
                 $query->where('status_id', $filters['job_status']);
              });
         });

@@ -2,16 +2,21 @@
 
 namespace App\Http\Controllers\ServiceRequest;
 
+use Auth;
 use App\Traits\Loggable;
 use Illuminate\Http\Request;
 use App\Traits\findRecordWithUUID;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Str;
+use App\Traits\Utility;
+use Image;
+
 
 class AssignTechnicianController extends Controller
 {
-    use findRecordWithUUID, Loggable;
+    use findRecordWithUUID, Loggable, Utility;
     /**
      * Handle the incoming request.
      *
@@ -82,4 +87,116 @@ class AssignTechnicianController extends Controller
         });
         return $registred;
     }
+
+    public function assignWarrantyTechnician(Request $request){
+       
+    
+        $this->validate(
+            $request, 
+           
+            ['preferred_time' => 'required_if:service_request_warrant_issued_schedule_date,==,null'],
+            ['required_if' => 'This scheduled fix date is required'],
+            [ 'intiate_rfq'               => 'bail|string|in:yes,no',]
+        );
+   
+ 
+    
+        $service_request_warranty_id = $request['service_request_warranty_id'];
+        $serviceRequest = \App\Models\ServiceRequestWarrantyIssued::where('service_request_warranty_id', $request['service_request_warranty_id'])->first();
+     
+        if($request->intiate_rfq == 'no'){
+       $done = $this->save($serviceRequest, $service_request_warranty_id,$request);
+
+        if (  $done){
+            $type = 'Others';
+            $severity = 'Informational';
+            $actionUrl = Route::currentRouteAction();
+            $message = Auth::user()->email.' assigned new technician successfully ';
+            $this->log($type, $severity, $actionUrl, $message);
+            return back()->with('success','Assigned new technician successfully');
+
+        }
+        else {
+            $type = 'Errors';
+            $severity = 'Error';
+            $actionUrl = Route::currentRouteAction();
+            $message = 'An Error Occured while '. Auth::user()->email. ' was trying to assigned new technician ';
+            $this->log($type, $severity, $actionUrl, $message);
+            return back()->with('error', 'An error occurred while trying to assigned new technician ');
+        }
+    }
+    }
+
+
+    protected function save($serviceRequest, $service_request_warranty_id,$request ){
+
+        if($serviceRequest){
+            $updateWarranty = \App\Models\ServiceRequestWarrantyIssued::where('service_request_warranty_id', $service_request_warranty_id)->update([
+                    'service_request_warranty_id'     =>   $request['service_request_warranty_id'],
+                    'cse_id'             =>  Auth::id(),
+                    'technician_id'     =>   $request['technician_user_uuid'],
+                    'scheduled_datetime' => $request->preferred_time
+                ]);
+
+        }else{
+            $createWarranty = \App\Models\ServiceRequestWarrantyIssued::create([
+                    'service_request_warranty_id'        =>   $request['service_request_warranty_id'],
+                    'cse_id'             =>  Auth::id(),
+                    'technician_id'     =>   $request['technician_user_uuid'],
+                    'scheduled_datetime' => $request->preferred_time
+                ]);
+        }
+        $serviceRequestIssued = $serviceRequest??  $createWarranty;
+    
+
+        if($request->hasFile('upload_image')) {
+            $upload = $this->upload_image($request,$serviceRequestIssued);
+        }
+
+        if($request->cse_comment) {
+       $comment =  $this->diagnosticWarrantReport($request,$serviceRequestIssued);
+        }
+      
+        if($upload  AND $comment){
+            return true;
+
+        }else{
+            return false; 
+        }
+        
+    }
+
+    protected function upload_image($request,$serviceRequesIssued){
+        foreach ($request->file('upload_image') as $file) {
+            $image = $file;
+            $imageName = (string) Str::uuid() .'.'.$file->getClientOriginalExtension();
+            $imageDirectory = public_path('assets/warranty-images').'/';
+            $width = 350; $height = 259;
+            Image::make($image->getRealPath())->resize($width, $height)->save($imageDirectory.$imageName);
+
+            $createWarranty = \App\Models\ServiceRequestWarrantyImage::create([
+                'user_id'                                         =>  Auth::id(),
+                'service_request_warranties_issued_id'             =>  $serviceRequesIssued->id,
+                'name'                                             =>   $imageName,
+                
+            ]);
+    
+        }
+        return  $createWarranty ;
+    }
+
+
+    protected function diagnosticWarrantReport($request,$serviceRequesIssued){
+        $createWarranty = \App\Models\ServiceRequestWarrantyReport::create([
+            'user_id'                                         =>  Auth::id(),
+            'service_request_warranties_issued_id'             =>  $serviceRequesIssued->id,
+            'report'                                             =>   $request->cse_comment,
+            
+        ]);
+
+        return  $createWarranty ;
+    }
+
+
 }
+

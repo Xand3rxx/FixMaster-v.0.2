@@ -36,7 +36,7 @@ class ServiceRequest extends Model
         'has_cse_rated',
         'has_client_rated'
     ];
-   
+
     /**
      * The attributes that should be hidden for arrays.
      *
@@ -83,7 +83,7 @@ class ServiceRequest extends Model
 
     public function client()
     {
-        return $this->belongsTo(User::class, 'client_id');
+        return $this->belongsTo(User::class, 'client_id')->with('account', 'contact');
     }
 
     public function account()
@@ -170,6 +170,9 @@ class ServiceRequest extends Model
         return $this->belongsTo(Contact::class, 'contact_id');
     }
 
+    public function service_request_medias(){
+        return $this->hasMany(serviceRequestMedia::class);
+    }
 
     public function technician()
     {
@@ -243,14 +246,18 @@ class ServiceRequest extends Model
         return $this->hasOne(ServiceRequestWarranty::class, 'service_request_id', 'id');
     }
 
+    public function serviceRequestMedias()
+    {
+        return $this->belongsToMany(Media::class, 'service_request_medias');
+    }
 
-    /** 
+    /**
      * Scope a query to only include all pending requests
-     * 
+     *
      * @param \Illuminate\Database\Eloquent\Builder $query
      * @return \Illuminate\Database\Eloquent\Builder
      */
-    //Scope to return all services  
+    //Scope to return all services
     public function scopePendingRequests($query)
     {
         return $query->select('*')

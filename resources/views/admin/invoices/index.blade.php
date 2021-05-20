@@ -17,7 +17,7 @@
                 </div>
                 <div class="d-md-block">
                     <a href="" class="btn btn-primary">Invoices</a>
-                    <a href="{{ route('admin.rfq', app()->getLocale()) }}" class="btn btn-primary"><i class="fas fa-plus"></i> Simulation</a>
+                    <a href="{{ route('admin.rfq_simulation', app()->getLocale()) }}" class="btn btn-primary"><i class="fas fa-plus"></i> Simulation</a>
                 </div>
             </div>
 

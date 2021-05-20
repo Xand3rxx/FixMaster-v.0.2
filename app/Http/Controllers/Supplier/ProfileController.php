@@ -23,7 +23,7 @@ class ProfileController extends Controller
      */
     public function dashboard()
     {
-        // return  \App\Models\User::with('account', 'contact', 'ratings', 'supplierSentInvoices')->findOrFail(Auth::id());
+        // return  \App\Models\User::with('account', 'supplier', 'contact', 'ratings', 'supplierSentInvoices')->findOrFail(Auth::id());
         
         return view('supplier.index', [
             'profile'   =>  \App\Models\User::with('account', 'contact', 'ratings')->findOrFail(Auth::id()),
