@@ -20,7 +20,7 @@ use Illuminate\Support\Facades\Validator;
 
 class TechnicianProfileController extends Controller
 {
-    use Loggable, PasswordUpdator, Utility; 
+    use Loggable, PasswordUpdator, Utility;
 
      /* This method will redirect users back to the login page if not properly authenticated
      * @return void
@@ -39,8 +39,14 @@ class TechnicianProfileController extends Controller
         return view('technician.index')->with('i');
     }
 
+    public function newIndex()
+    {
+
+        return view('technician.newIndex')->with('i');
+    }
+
     /**
-     * Return Location Request Page 
+     * Return Location Request Page
      */
     public function locationRequest()
     {
@@ -49,7 +55,7 @@ class TechnicianProfileController extends Controller
     }
 
     /**
-     * Return Payments Page 
+     * Return Payments Page
      */
     public function payments()
     {
@@ -58,12 +64,12 @@ class TechnicianProfileController extends Controller
     }
 
     /**
-     * Return Service Requests Page 
+     * Return Service Requests Page
      */
     public function serviceRequests($language, ServiceRequestAssigned $serviceRequest)
     {
 
-    
+
         $serviceRequests = ServiceRequestAssigned::where('user_id', Auth::id())->with('service_request')->get();
 
         return view('technician.requests', compact('serviceRequests'));
@@ -71,16 +77,16 @@ class TechnicianProfileController extends Controller
 
     public function serviceRequestDetails($language, $details)
     {
-       
+
         $serviceRequests = ServiceRequest::where('uuid', $details)->first();
 
         return view('technician.request_details', compact('serviceRequests'));
-        
+
     }
 
 
     /**
-     * Return View Profile Page 
+     * Return View Profile Page
      */
     public function viewProfile(Request $request)
     {
@@ -92,13 +98,13 @@ class TechnicianProfileController extends Controller
     }
 
     /**
-     * Return Account Settings Page 
+     * Return Account Settings Page
      */
     public function editProfile(Request $request)
     {
 
         $result = User::findOrFail(Auth::id());
-        
+
         $banks = Bank::get(['id', 'name']);
 
         return view('technician.edit_profile', compact('result', 'banks'));
@@ -108,7 +114,7 @@ class TechnicianProfileController extends Controller
     public function updateProfile(Request $request)
     {
         $user = User::where('id', Auth::id())->first();
-      
+
         if ($user->account->gender == "male") {
             $res = "his";
         } else {
@@ -128,7 +134,7 @@ class TechnicianProfileController extends Controller
             'phone_number' => 'required',
             'profile_avater' => 'mimes:jpeg,jpg,png,gif',
             'full_address' => 'required',
-            
+
 
         ];
 
@@ -178,8 +184,8 @@ class TechnicianProfileController extends Controller
                 'address' => $request->full_address,
             ]);
 
-           
-            
+
+
             $this->log($type, $severity, $actionUrl, $message);
 
             return redirect()->back()->with('success', 'Your profile has been updated successfully');
@@ -191,19 +197,19 @@ class TechnicianProfileController extends Controller
 
     /**
      * Update password of the current request user
-     * 
+     *
      * PLEASE INCLUDE IN FORM REQUEST THE NAME:
-     * 
+     *
      * 1: current_password
-     * 
+     *
      * 2: new_password
-     * 
-     * 3: new_confirm_password 
-     * 
-     * 
+     *
+     * 3: new_confirm_password
+     *
+     *
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\RedirectResponse
-     * 
+     *
      * @throws \Illuminate\Validation\ValidationException
      */
     public function updatePassword(Request $request)
@@ -213,7 +219,7 @@ class TechnicianProfileController extends Controller
 
     public function get_technician_disbursed_payments(Request $request){
 
-        $years =  $this->getDistinctYears($tableName = 'payments_disbursed'); 
+        $years =  $this->getDistinctYears($tableName = 'payments_disbursed');
 
         $payments = PaymentDisbursed::where('recipient_id', Auth::id())->with('user')->get();
        // $payments = PaymentDisbursed::where('recipient_id',Auth::id())
