@@ -78,8 +78,7 @@ use App\Http\Controllers\Admin\Prospective\TechnicianArtisanController as Prospe
 */
 
 
-Route::prefix('admin')->group(function () {
-    Route::name('admin.')->group(function () {
+Route::prefix('admin')->name('admin.')->group(function () {
         Route::view('/', 'admin.index')->name('index'); //Take me to Admin Dashboard
 
         // Route::view('/ratings/cse-diagnosis', 'admin.ratings.cse_diagnosis_rating')->name('category');
@@ -318,7 +317,6 @@ Route::prefix('admin')->group(function () {
         Route::get('/reports/supplier',             [SupplierReportController::class, 'index'])->name('supplier_reports');
         Route::post('/reports/supplier/item-delivered-sorting', [SupplierReportController::class, 'itemDeliveredSorting'])->name('supplier_report_first_sorting');
 
-    });
 });
 
 //All routes regarding clients should be in here
@@ -410,7 +408,7 @@ Route::prefix('/client')->middleware('monitor.clientservice.request.changes')->g
 
 
 
-    });
+});
 });
 
 
@@ -471,8 +469,7 @@ Route::prefix('/cse')->middleware('monitor.cseservice.request.changes')->group(f
 
 
 
-Route::prefix('/supplier')->group(function () {
-    Route::name('supplier.')->group(function () {
+Route::prefix('/supplier')->name('supplier.')->group(function () {
         //All routes regarding suppliers should be in here
         Route::get('/',                    [SupplierProfileController::class, 'dashboard'])->name('index'); //Take me to Supplier Dashboard
         Route::view('/messages/inbox',      'supplier.messages.inbox')->name('messages.inbox');
@@ -499,11 +496,9 @@ Route::prefix('/supplier')->group(function () {
         Route::get('/dispatch/delivered',                          [SupplierDispatchController::class, 'dispatchDelivered'])->name('dispatches_delivered');
         Route::get('/dispatch/returned',                          [SupplierDispatchController::class, 'dispatchReturned'])->name('dispatches_returned');
         Route::get('/requests-for-quote/details/image/{image:id}',            [SupplierRfqController::class, 'rfqDetailsImage'])->name('rfq_details_image');
-    });
 });
 
-Route::prefix('/technician')->group(function () {
-    Route::name('technician.')->group(function () {
+Route::prefix('/technician')->name('technician.')->group(function () {
         //All routes regarding technicians should be in here
         Route::get('/',                                 [TechnicianProfileController::class, 'index'])->name('index');    //Take me to Technician Dashboard
         Route::get('/location-request',                 [TechnicianProfileController::class, 'locationRequest'])->name('location_request');
@@ -527,11 +522,9 @@ Route::prefix('/technician')->group(function () {
         Route::view('/consultations/ongoing', 'technician.consultations.ongoing')->name('consultations.ongoing');
         Route::view('/consultations/completed', 'technician.consultations.completed')->name('consultations.completed');
         Route::view('/requests/cancelled', 'technician.requests.cancelled')->name('requests.cancelled');
-    });
 });
 
-Route::prefix('/quality-assurance')->group(function () {
-    Route::name('quality-assurance.')->group(function () {
+Route::prefix('/quality-assurance')->name('quality-assurance.')->group(function () {
         //All routes regarding quality_assurance should be in here
         Route::get('/', [ServiceRequestController::class, 'index'])->name('index');
         Route::get('/profile',    [QualityAssuranceProfileController::class, 'view_profile'])->name('view_profile');
@@ -559,12 +552,10 @@ Route::prefix('/quality-assurance')->group(function () {
         Route::get('/get_chart_data', [ServiceRequestController::class, 'chat_data']);
         //Route::get('/requests/details/{uuid}',  [ServiceRequestController::class, 'show'])->name('request_details');
         Route::get('/consultations/pending_details/{uuid}',  [ServiceRequestController::class, 'show'])->name('consultations.pending_details');
-    });
 });
 
 
-Route::prefix('/franchisee')->group(function () {
-    Route::name('franchisee.')->group(function () {
+Route::prefix('/franchisee')->name('franchisee.')->group(function () {
         Route::view('/',                'franchisee.index')->name('index'); //Take me to frnahisee Dashboard
         Route::view('/messages/inbox',      'franchisee.messages.inbox')->name('messages.inbox');
         Route::view('/messages/sent',       'franchisee.messages.sent')->name('messages.sent');
@@ -574,5 +565,4 @@ Route::prefix('/franchisee')->group(function () {
         Route::view('/profile',             'franchisee.view_profile')->name('view_profile');
         Route::view('/profile/edit',        'franchisee.edit_profile')->name('edit_profile');
         Route::view('/location-request',    'franchisee.location_request')->name('location_request');
-    });
 });
