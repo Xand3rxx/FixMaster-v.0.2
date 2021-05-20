@@ -75,11 +75,12 @@ trait RegisterClient
                 'address_longitude'     =>  $valid['address_longitude'],
                 'address_latitude'      =>  $valid['address_latitude'],
             ]);
-            
-            // register new client event
-            // event(new Registered($user));
 
-            // Log the User into the Application
+            // register new client event
+             event(new Registered($user));
+            // Send Email
+
+            // Log the User into the Application as Basic User
             $this->guard()->login($user);
 
             // update registered to be true

@@ -61,7 +61,7 @@ class ClientRegistrationController extends Controller
         }
         // If registered, redirect to client url
         return ($this->register($valid) == true)
-            ? redirect()->route('client.index', app()->getLocale())->with('success', "User Account Created Successfully!!")
+            ? redirect()->route('verification.notice', app()->getLocale())->with('success', "Email Verification Sent!")
             : back()->with('error', "An error occurred while creating User Account!!");
     }
 

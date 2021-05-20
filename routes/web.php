@@ -5,6 +5,7 @@ use App\Http\Controllers\EstateController;
 use App\Http\Controllers\IncomeController;
 use App\Http\Controllers\EarningController;
 use App\Http\Controllers\InvoiceController;
+use App\Http\Middleware\EmailMustBeVerified;
 use App\Http\Controllers\Admin\RfqController;
 use App\Http\Controllers\Admin\TaxController;
 use App\Http\Controllers\SimulationController;
@@ -20,8 +21,8 @@ use App\Http\Controllers\Client\ClientController;
 use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\WarrantyController;
 use App\Http\Controllers\Client\PaystackController;
-use App\Http\Controllers\Admin\ActivityLogController;
 
+use App\Http\Controllers\Admin\ActivityLogController;
 use App\Http\Controllers\Admin\AdminRatingController;
 use App\Http\Controllers\Admin\AdminReviewController;
 use App\Http\Controllers\Admin\ToolsRequestController;
@@ -32,8 +33,8 @@ use App\Http\Controllers\Admin\User\FranchiseeController;
 use App\Http\Controllers\Admin\User\AdministratorController;
 use App\Http\Controllers\QualityAssurance\PaymentController;
 use App\Http\Controllers\Admin\ServiceRequestSettingController;
-use App\Http\Controllers\Admin\User\QualityAssuranceController;
 
+use App\Http\Controllers\Admin\User\QualityAssuranceController;
 use App\Http\Controllers\Admin\User\TechnicianArtisanController;
 use App\Http\Controllers\Technician\TechnicianProfileController;
 use App\Http\Controllers\ServiceRequest\ProjectProgressController;
@@ -338,7 +339,7 @@ Route::prefix('admin')->name('admin.')->group(function () {
 
 //All routes regarding clients should be in here
 
-Route::prefix('/client')->middleware('monitor.clientservice.request.changes')->group(function () {
+Route::prefix('client')->middleware('verified','monitor.clientservice.request.changes')->group(function () {
     Route::name('client.')->group(function () {
         //All routes regarding clients should be in here
         Route::get('/',                                      [ClientController::class, 'index'])->name('index'); //Take me to Supplier Dashboard
@@ -357,7 +358,7 @@ Route::prefix('/client')->middleware('monitor.clientservice.request.changes')->g
         Route::post('/requests/technician_profile',          [ClientController::class, 'technicianProfile'])->name('technician_profile');
         Route::get('/requests/warranty/{request:id}',          [ClientController::class, 'warrantyInitiate'])->name('warranty_initiate');
         Route::get('/requests/reinstate/{request:id}',          [ClientController::class, 'reinstateRequest'])->name('reinstate_request');
-        Route::get('/requests/completed-request/{request:id}',          [ClientController::class, 'markCompletedRequest'])->name('completed_request');
+        Route::get('/requests/completed-request/{request:id}',  [ClientController::class, 'markCompletedRequest'])->name('completed_request');
 
 
         // E-wallet Routes for clients
