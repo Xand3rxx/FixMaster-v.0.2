@@ -18,6 +18,8 @@ use App\Mail\WarrantyNotify;
 use App\Traits\GenerateUniqueIdentity as Generator;
 use App\Models\Warranty;
 use Carbon\Carbon;
+use App\Jobs\PushEmails;
+use Illuminate\Support\Str;
 
 trait Utility
 {
@@ -375,5 +377,61 @@ trait Utility
    
   }
 
+  public function addDiscountToFirstTimeUserTrait($user){
+   
+    $users =  \App\Models\User::where(['id'=> $user])->first();
+    $userDetails =  \App\Models\Account::where(['user_id'=> $user])->first();
+    $discountDetails =  \App\Models\Discount::where(['id'=> '1'])->first();
+ 
+  $client =  \App\Models\ClientDiscount::create([
+                'discount_id' => '1',
+                'client_id' => $user,
+                    ]);
+            
+
+   $discountHistory = \App\Models\DiscountHistory::create([
+            'discount_id' => '1',
+            'client_name' =>   $userDetails->first_name.' '.  $userDetails->last_name,
+            'client_id' => $userDetails->user_id,
+         ]);
+      if($client AND $discountHistory){
+        
+        $data = (object)[
+            'subject' => 'Discount For First Time Client',
+            'recipient' =>  $users->email,
+            'content'  => '<p>Dear, '. $userDetails->first_name.' </p> <p>You have received a '.$discountDetails->rate.'% as a nwly registered client. Thank you</p>',
+            'sender'=>'test@ninthbinary.com',
+         
+           ];
+      $mail = $this->insertMail($data);
+      if($mail){
+        Session::flash('success', "Welcome $userDetails->first_name, a discount has been sent to your email");
+      }
+      }
+
+  }
+
+  public function insertMail($data){
+        $mail_objects[] = [
+          'title'=>$data->subject, 
+          'content'=>  $data->content, 
+          'recipient'=>  $data->recipient, 
+          'sender'=>  $data->sender,
+          'created_at'        => Carbon::now(),
+          'updated_at'        => Carbon::now(),
+          'uuid'=>Str::uuid()->toString()
+      ];
+
+      $insertMail  = \App\Models\Message::insert($mail_objects);
+      $message_array = ['to'=>$data->recipient, 'from'=>$data->sender, 'subject'=>$data->subject, 'content'=>$data->content];
+      // dd( $message_array);
+      if($insertMail){
+            $this->dispatch(new PushEmails($message_array));
+            return true;
+      }
+  }
 
 }
+
+
+
