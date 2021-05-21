@@ -147,7 +147,6 @@ class CustomerServiceExecutiveController extends Controller
 
         // find the technician role CACHE THIS DURING PRODUCTION
         $technicainsRole = \App\Models\Role::where('slug', 'technician-artisans')->first();
-    
       
         (array) $variables = [
             'service_request' => $service_request,
