@@ -86,6 +86,8 @@
     var url = window.location.origin
     var selected_recipients = {};
     var user_role = '<?php  echo Auth::user()->type->role_id ?>';
+    var settings = {};
+    var newrecipients;
         $(document).ready(function (){
             
             $("#message-box").summernote({
@@ -107,7 +109,7 @@
                     }
                 ];
          
-                var settings = {
+                settings = {
                     // data item name
                     itemName: "name",
                     // group data item name
@@ -131,7 +133,7 @@
                 };
                 if(user_role=="1"){
                     $(".recipients").html("")
-                    var newrecipients = $(".recipients").transfer(settings);
+                    newrecipients = $(".recipients").transfer(settings);
                     newrecipients.getSelectedItems();
                 }else{
                     $(".recipients").html("Administrator (admin@fixmaster.com)")
@@ -155,23 +157,27 @@
          var xters = 0;
          var search_val = "";
          var elm = "";
+         var id = "";
          $('body').on('keyup','.transfer-double-list-search-input', function(){
              xters = $(this).val().length;
             search_val = $(this).val();
              if(xters >= 3){
-                // console.log(search_val);
                 $.get( url+"/api/messaging/recipients?search_val="+search_val, function( data ) {
-                var roles = [];
-                $.each(data, function(key, val){
-                    console.log(val);
-                  elm = '<li class="transfer-double-list-li transfer-double-list-li-1f29cb00b1ih913jsc712nsc080  ">';
-                  elm += '<div class="checkbox-group" data-children-count="1">';
-                  elm += '<input type="checkbox" value="'+val[0].email+'" class="checkbox-normal checkbox-item-1f29cb00b1ih913jsc712nsc080" id="itemCheckbox_1_1f29cb00b1ih913jsc712nsc080">';
-                  elm += '<label class="checkbox-name-1f29cb00b1ih913jsc712nsc080" for="itemCheckbox_1_1f29cb00b1ih913jsc712nsc080">'+val[0].first_name+' '+val[0].last_name+'</label></div></li>'
-                  $('.transfer-double-list-ul').append(elm);
-                });
+                if(data!=[]){
+                    $('.transfer-double-list-ul').empty();
+                    $.each(data.data, function(key, val){
+                        id = makeid(20);
+                        elm = '<li class="transfer-double-list-li transfer-double-list-li-'+id+'">';
+                        elm += '<div class="checkbox-group" data-children-count="1">';
+                        elm += '<input type="checkbox" value="'+val.user_id+'" data-user="'+val.first_name+' '+val.middle_name+' '+val.last_name+'"  class="checkbox-normal chk-users checkbox-item-'+id+'" id="itemCheckbox_1_'+id+'">';
+                        elm += '<label class="checkbox-name-'+id+'" for="itemCheckbox_1_'+id+'">'+val.first_name+' '+val.middle_name+' '+val.last_name+'</label></div></li>'
+                        $('.transfer-double-list-ul').append(elm);
+                    });
+                }
                
                 });
+             }else{
+                   // newrecipients.getSelectedItems();
              }
          })
       
@@ -182,40 +188,127 @@
 <script src="{{ asset('assets/dashboard/lib/jquery/jquery.min.js') }}"></script>
 <script>
   $(document).ready(function (){
-
+    var sender = '<?php echo Auth::user()->id; ?>';
     var user_role = '<?php  echo Auth::user()->type->role_id ?>';
-   $('#btnSendMessage').click(function(){
-            Swal.showLoading();
-            var subject = $('#subject').val();
-            var recipients = selected_recipients;
-           
-            if(user_role!=1){
-                recipients = [{name: "Super Admin", value: "1"}]
+        $('#btnSendMessage').click(function(){
+                    Swal.showLoading();
+                    var subject = $('#subject').val();
+                    var recipients = selected_recipients;
+                    var  user=  {};
+                    var selected_users = [];
+                    var content = $('#message-box').val();
+
+                    $('.selected-users').each(function(){
+                        user =  {
+                            'name': $(this).data('user'),
+                            'value': $(this).val()
+                        }
+                        selected_users.push(user);
+                    });
+                    if(user_role!=1){
+                        recipients = [{name: "Super Admin", value: "1"}]
+                        }
+
+            if(selected_users.length!==0){
+                
+                var jqxhr = $.post(url+"/api/messaging/save_email",
+                {
+                subject:subject,
+                recipients:selected_users,
+                mail_content:content,
+                sender:sender
+                },
+                function(data, status){
+                        //TODO change display message to sweet alert
+                        displayMessage(data.message, 'success');
+                        swal.close();
+                    })
+                    .fail(function(data, status) {
+                        displayMessage(data.responseJSON.message, 'error');
+                    })
+            }
+               
+                if(recipients.length!==0){
+                    var jqxhr = $.post(url+"/api/messaging/save_group_email",
+                    {
+                    subject:subject,
+                    recipients:recipients,
+                    mail_content:content,
+                    sender:sender
+                    },
+                    function(data, status){
+                        //TODO change display message to sweet alert
+                        displayMessage(data.message, 'success');
+                        swal.close();
+                    })
+                    .fail(function(data, status) {
+                        displayMessage(data.responseJSON.message, 'error');
+                    })
                 }
-            var content = $('#message-box').val();
-            var sender = '<?php echo Auth::user()->id; ?>';
-            var jqxhr = $.post(url+"/api/messaging/save_email",
-            {
-               subject:subject,
-               recipients:recipients,
-               mail_content:content,
-               sender:sender
-            },
-            function(data, status){
-                //TODO change display message to sweet alert
-                displayMessage(data.message, 'success');
-                swal.close();
+                    
+                   
+                });
+        $('body').on('click','.chk-users', function(){
+            var chk = false;
+            $('.chk-users').each(function(){
+                if($(this).is(':checked')){
+                    chk = true;
+                }
             })
-            .fail(function(data, status) {
-                displayMessage(data.responseJSON.message, 'error');
-            })
+
+            if(chk){
+                $('.btn-select-arrow:first').addClass('btn-arrow-active');
+                $('.icon-forward').addClass('addUser');
+            }else{
+                $('.btn-select-arrow:first').removeClass('btn-arrow-active');
+                $('.icon-forward').removeClass('addUser');
+            }
             
+        })
 
 
-          
+        $('body').on('click','.selected-users', function(){
+            var chk = false;
+            $('.selected-users').each(function(){
+                if($(this).is(':checked')){
+                    chk = true;
+                }
+            })
 
-         });
+            if(chk){
+                $('.btn-select-arrow:not(:first)').addClass('btn-arrow-active');
+                $('.icon-back').addClass('xUser');
+            }else{
+                $('.btn-select-arrow:not(:first)').removeClass('btn-arrow-active');
+                $('.icon-back').removeClass('xUser');
+            }
+           
+        })
+
+        $('body').on('click','.addUser', function(){
+            var listbody = "";
+            $('.chk-users').each(function(){
+                if($(this).is(':checked')){
+                    chk = true;
+                    listbody = $(this).parent();
+                    $('.transfer-double-selected-list-ul').append(listbody);
+                    $(this).addClass('selected-users');
+                    $(this).removeClass('chk-users');
+                    $('.btn-select-arrow:first').removeClass('btn-arrow-active');
+                }
+            })
         });
 
+    });
 
+    function makeid(length) {
+        var result           = [];
+        var characters       = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+        var charactersLength = characters.length;
+        for ( var i = 0; i < length; i++ ) {
+        result.push(characters.charAt(Math.floor(Math.random() * 
+        charactersLength)));
+        }
+        return result.join('');
+    }
 </script>

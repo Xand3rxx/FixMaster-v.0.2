@@ -10,7 +10,7 @@
         <nav aria-label="breadcrumb">
           <ol class="breadcrumb breadcrumb-style1 mg-b-10">
           <li class="breadcrumb-item"><a href="{{ route('admin.index', app()->getLocale()) }}">Dashboard</a></li>
-            <li class="breadcrumb-item active" aria-current="page">RFQ</li>
+            <li class="breadcrumb-item" aria-current="page">RFQ</li>
             <li class="breadcrumb-item active" aria-current="page">Sent Invoices</li>
           </ol>
         </nav>
@@ -47,7 +47,7 @@
               <tbody>
                 @foreach ($rfqs as $rfq)
                 <tr>
-                  <td class="tx-color-03 tx-center">{{ ++$i }}</td>
+                  <td class="tx-color-03 tx-center">{{ $loop->iteration }}</td>
                   <td class="tx-medium">{{ $rfq->rfq->serviceRequest->unique_id }}</td>
                   <td class="tx-medium">{{ $rfq->rfq->unique_id }}</td>
                   <td class="tx-medium tx-center">{{ $rfq->delivery_fee }}</td>

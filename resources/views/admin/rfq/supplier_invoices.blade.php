@@ -42,35 +42,38 @@
                   {{-- <th>Delivery Fee(₦)</th> --}}
                   <th class="tx-center">Total Amount(₦)</th>
                   <th>Delivery Time</th>
+                  <th class="tx-center">Distance</th>
                   <th>Action</th>
                 </tr>
               </thead>
               <tbody>
-                @foreach ($rfqs as $rfq)
-                <tr>
-                  <td class="tx-color-03 tx-center">{{ ++$i }}</td>
-                  <td class="tx-medium">{{ $rfq->rfq->serviceRequest->unique_id }}</td>
-                  <td class="tx-medium">{{ $rfq->rfq->unique_id }}</td>
-                  <td class="tx-medium">{{ Str::title($rfq['rfq']['issuer']['account']['first_name'] ." ". $rfq['rfq']['issuer']['account']['last_name']) }}</td>
-                  <td class="tx-medium">{{ Str::title($rfq['supplier']['account']['first_name'] ." ". $rfq['supplier']['account']['last_name']) }}</td>
-                  {{-- <td class="tx-medium tx-center">{{ $rfq->delivery_fee }}</td> --}}
-                  <td class="tx-medium tx-center">{{ $rfq->total_amount }}</td>
-                  <td class="text-medium">{{ Carbon\Carbon::parse($rfq->delivery_time, 'UTC')->isoFormat('MMMM Do YYYY, h:mm:ssa') }}</td>
+                @foreach ($rfqs as $items)
+                  @foreach ($items as $rfq)
+                    <tr>
+                      <td class="tx-color-03 tx-center">{{ $loop->iteration }}</td>
+                      <td class="tx-medium">{{ $rfq['rfq']['serviceRequest']['unique_id'] }}</td>
+                      <td class="tx-medium">{{ $rfq['rfq']['unique_id'] }}</td>
+                      <td class="tx-medium">{{ Str::title($rfq['rfq']['issuer']['account']['first_name'] ." ". $rfq['rfq']['issuer']['account']['last_name']) }}</td>
+                      <td class="tx-medium">{{ Str::title($rfq['supplier']['account']['first_name'] ." ". $rfq['supplier']['account']['last_name']) }}</td>
+                      {{-- <td class="tx-medium tx-center">{{ $rfq->delivery_fee }}</td> --}}
+                      <td class="tx-medium tx-center">{{ $rfq->total_amount }}</td>
+                      <td class="text-medium">{{ Carbon\Carbon::parse($rfq->delivery_time, 'UTC')->isoFormat('MMMM Do YYYY, h:mm:ssa') }}</td>
+                      <td class="text-center text-success">{{ App\Http\Controllers\Admin\RfqController::getDistanceBetweenPoints($rfq['rfq']['serviceRequest']['client']['contact']['address_latitude'], $rfq['rfq']['serviceRequest']['client']['contact']['address_longitude'], $rfq['supplier']['contact']['address_latitude'], $rfq['supplier']['contact']['address_longitude']) }}km</td>
+                      <td class="text-center">
+                        <div class="dropdown-file">
+                          <a href="" class="dropdown-link" data-toggle="dropdown"><i data-feather="more-vertical"></i></a>
+                          <div class="dropdown-menu dropdown-menu-right">
 
-                  <td class=" text-center">
-                    <div class="dropdown-file">
-                      <a href="" class="dropdown-link" data-toggle="dropdown"><i data-feather="more-vertical"></i></a>
-                      <div class="dropdown-menu dropdown-menu-right">
-
-                        <a href="#rfqDetails" data-toggle="modal" class="dropdown-item details text-primary" title="View {{ $rfq->rfq->unique_id}} details" data-batch-number="{{ $rfq->rfq->unique_id}}" data-url="{{ route('admin.supplier_invoices_details', ['rfq'=>$rfq->uuid, 'locale'=>app()->getLocale()]) }}" id="rfq-details"><i class="far fa-clipboard"></i> Details</a>
-                       
-                        @if($rfq->rfq->status == 'Pending')
-                          <a href="{{ route('admin.supplier_invoices_acceptance', ['rfq'=>$rfq->uuid, 'locale'=>app()->getLocale()]) }}" class="dropdown-item details text-success" title="Accept {{ $rfq->rfq->unique_id}} invoice"><i class="fas fa-check"></i> Accept</a>
-                        @endif
-                      </div>
-                    </div>
-                  </td>
-                </tr>
+                            <a href="#rfqDetails" data-toggle="modal" class="dropdown-item details text-primary" title="View {{ $rfq->rfq->unique_id}} details" data-batch-number="{{ $rfq->rfq->unique_id}}" data-url="{{ route('admin.supplier_invoices_details', ['rfq'=>$rfq->uuid, 'locale'=>app()->getLocale()]) }}" id="rfq-details"><i class="far fa-clipboard"></i> Details</a>
+                          
+                            @if($rfq->rfq->status == 'Pending')
+                              <a href="{{ route('admin.supplier_invoices_acceptance', ['rfq'=>$rfq->uuid, 'locale'=>app()->getLocale()]) }}" class="dropdown-item details text-success" title="Accept {{ $rfq->rfq->unique_id}} invoice"><i class="fas fa-check"></i> Accept</a>
+                            @endif
+                          </div>
+                        </div>
+                      </td>
+                    </tr>
+                  @endforeach
                 @endforeach
               </tbody>
             </table>

@@ -10,7 +10,7 @@
         <nav aria-label="breadcrumb">
           <ol class="breadcrumb breadcrumb-style1 mg-b-10">
           <li class="breadcrumb-item"><a href="{{ route('admin.index', app()->getLocale()) }}">Dashboard</a></li>
-            <li class="breadcrumb-item active" aria-current="page">Materials</li>
+            <li class="breadcrumb-item" aria-current="page">Materials</li>
             <li class="breadcrumb-item active" aria-current="page">Returned Dispatched RFQ's</li>
           </ol>
         </nav>
@@ -53,7 +53,7 @@
                   <td class="tx-medium">{{ $dispatch->unique_id }}</td>
                   @if($dispatch->cse_status == 'Pending')
                     <td class="text-medium text-warning">Pending</td>
-                  @elseif($dispatch->cse_status == 'Accepted')
+                  @elseif($dispatch->cse_status == 'Yes')
                     <td class="text-medium text-success">Accepted</td>
                   @else
                     <td class="text-medium text-danger">Declined</td>

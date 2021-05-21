@@ -46,7 +46,20 @@ class RfqController extends Controller
 
         return view('supplier.rfq._details', [
             'rfqDetails'    =>  Rfq::where('uuid', $uuid)->firstOrFail(),
-        ])->with('i');
+        ]);
+    }
+
+    /**
+     * Display the specified resource.
+     *
+     * @param  string  $uuid
+     * @return \Illuminate\Http\Response
+     */
+    public function linkRfqDetails($language, $uuid){
+
+        return view('supplier.rfq.show', [
+            'rfqDetails'    =>  Rfq::where('uuid', $uuid)->firstOrFail(),
+        ]);
     }
 
     /**
@@ -156,11 +169,10 @@ class RfqController extends Controller
     }
 
     public function sentInvoices(){
-        // return Auth::user()->supplierSentInvoices()->get();
 
         return view('supplier.rfq.sent_invoices', [
             'rfqs'  =>  Auth::user()->supplierSentInvoices()->get(),
-        ])->with('i');
+        ]);
     }
 
     public function sentInvoiceDetails($language, $id){
@@ -174,6 +186,21 @@ class RfqController extends Controller
         ])->with('i');
     }
 
+    public function approvedInvoices(){
+
+        return view('supplier.rfq.approved_invoices', [
+            'rfqs'  =>  Auth::user()->supplierSentInvoices()->where('accepted', 'Yes')->get(),
+        ]);
+    }
+
+    public function declinedInvoices(){
+
+        return view('supplier.rfq.declined_invoices', [
+            'rfqs'  =>  Auth::user()->supplierSentInvoices()->where('accepted', 'No')->get(),
+        ]);
+    }
+
+    
     /**
      * Display the specified resource.
      *

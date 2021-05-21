@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Http\Controllers\Client;
+namespace App\Http\Controllers\Admin\Prospective;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
-class FlutterwaveController extends Controller
+class TechnicianArtisanController extends Controller
 {
     /**
      * Display a listing of the resource.

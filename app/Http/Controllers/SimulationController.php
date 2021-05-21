@@ -32,9 +32,13 @@ class SimulationController extends Controller
     public function endService($language, ServiceRequest $serviceRequest)
     {
         $service_request_id = $serviceRequest->id;
+        $rfq_id = isset($serviceRequest->rfq->id) ? $serviceRequest->rfq->id : null;
+        $warranty_id = 1;
+        $sub_service_id = 1;
+        $hours_spent = '2';
 
-        $this->diagnosticInvoice($service_request_id);
-        return redirect()->route('admin.rfq', app()->getLocale());
+        $this->completedServiceInvoice($service_request_id, $rfq_id, $warranty_id, $sub_service_id, $hours_spent);
+        return redirect()->route('admin.invoices', app()->getLocale());
     }
 
     public function completeService($language, ServiceRequest $serviceRequest)

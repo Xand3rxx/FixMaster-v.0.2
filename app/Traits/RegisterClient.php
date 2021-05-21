@@ -75,6 +75,7 @@ trait RegisterClient
                 'address_longitude'     =>  $valid['address_longitude'],
                 'address_latitude'      =>  $valid['address_latitude'],
             ]);
+            
             // register new client event
             // event(new Registered($user));
 

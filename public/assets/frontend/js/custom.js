@@ -57,7 +57,7 @@ $(document).ready(function(){
         $('.estate-registration').removeClass('d-none');
         $('.cse-registration, .technician-registration, .supplier-registration').addClass('d-none');
         $('html, body').animate({
-            scrollTop: $(".down-2").offset().top
+            scrollTop: $(".down-3").offset().top
         }, 1500);
     });
 

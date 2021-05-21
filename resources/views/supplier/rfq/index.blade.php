@@ -48,7 +48,7 @@
               <tbody>
                 @foreach ($rfqs as $rfq)
                 <tr>
-                  <td class="tx-color-03 tx-center">{{ ++$i }}</td>
+                  <td class="tx-color-03 tx-center">{{ $loop->iteration }}</td>
                   <td class="tx-medium">{{ $rfq->serviceRequest->unique_id }}</td>
                   <td class="tx-medium">{{ $rfq->unique_id }}</td>
                   <td class="tx-medium">{{ Str::title($rfq['issuer']['account']['first_name'] ." ". $rfq['issuer']['account']['last_name']) }}</td>

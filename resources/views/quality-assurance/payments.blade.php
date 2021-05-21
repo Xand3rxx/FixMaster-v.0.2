@@ -120,19 +120,63 @@
 
       </div><!-- col -->
     </div><!-- row -->
+    <div class="modal fade" id="transactionDetails" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel2" aria-hidden="true" data-keyboard="true" data-backdrop="static">
+        <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+          <div class="modal-content tx-14">
+            <div class="modal-header">
+              <h6 class="modal-title" id="exampleModalLabel2">Payment Details</h6>
+                <a href="" role="button" class="close pos-absolute t-15 r-15" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </a>
+            </div>
+                <div class="modal-body pd-x-25 pd-sm-x-30 pd-t-40 pd-sm-t-20 pd-b-15 pd-sm-b-20" id="modal-body">
 
-
+                    <div id="spinner-icon"></div>
+              </div><!-- modal-body -->
+            <div class="modal-footer"></div>
+          </div>
+        </div>
+    </div>
   </div><!-- container -->
 </div>
 @endsection
 @section('scripts')
 <script src="{{ asset('assets/dashboard/assets/js/qa-payments-sortings.js') }}"></script>
- <script>
+
+<script>
     $(document).ready(function() {
+        $(document).on('click', '#payment-details', function(event) {
+            event.preventDefault();
+            let route = $(this).attr('data-url');
+            let paymentRef = $(this).attr('data-payment-ref');
 
-
+            $.ajax({
+                url: route,
+                beforeSend: function() {
+                    $("#modal-body").html('<div class="d-flex justify-content-center mt-4 mb-4"><span class="loadingspinner"></span></div>');
+                },
+                // return the result
+                success: function(result) {
+                    $('#modal-body').modal("show");
+                    $('#modal-body').html('');
+                    $('#modal-body').html(result).show();
+                },
+                complete: function() {
+                    $("#spinner-icon").hide();
+                },
+                error: function(jqXHR, testStatus, error) {
+                    var message = error+ ' An error occured while trying to retireve '+ paymentRef +' record.';
+                    var type = 'error';
+                    displayMessage(message, type);
+                    $("#spinner-icon").hide();
+                },
+                timeout: 8000
+            })
+        });
+        $('.close').click(function (){
+            $(".modal-backdrop").remove();
+        });
     });
-
 </script>
 @endsection
 

@@ -120,10 +120,10 @@ function sortAmountEarnedTable($sortLevel, $cseId = null, $jobStatus = null, $da
           $('#amount-earned-sorting').html(data);
 
           //Add sorting class for jQuery datatable
-          $('#basicExample').addClass('basicExample2');
+          $('#basicExample2').addClass('basicExample2');
 
           //Attach JQuery datatable to current sorting
-          if ($('#basicExample').hasClass('basicExample2')) {
+          if ($('#basicExample2').hasClass('basicExample2')) {
             jQuerySort();
           }
         } else {
@@ -142,11 +142,21 @@ function sortAmountEarnedTable($sortLevel, $cseId = null, $jobStatus = null, $da
 
   function jQuerySort() {
     $('.basicExample2').DataTable({
-      'iDisplayLength': 10,
-      language: {
-        searchPlaceholder: 'Search...',
-        sSearch: '',
-        lengthMenu: '_MENU_ items/page',
-      }
+      "iDisplayLength": 10,
+        "language": {
+            "searchPlaceholder": 'Search...',
+            "sSearch": '',
+            "lengthMenu": '_MENU_ items/page',
+            // "lengthMenu": "Display _MENU_ records per page",
+            "zeroRecords": "No matching records found",
+            // "info": "Showing page _PAGE_ of _PAGES_",
+            "infoEmpty": "No records available",
+            "infoFiltered": "(filtered from _MAX_ total records)"
+        },
+      "dom": 'Bfrtip',
+      "buttons": [
+          'copy', 'csv', 'excel', 'pdf', 'print'
+      ],
+      "processing": true,
     })
   }
