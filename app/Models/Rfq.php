@@ -40,7 +40,7 @@ class Rfq extends Model
 
     public function serviceRequest()
     {
-        return $this->belongsTo(ServiceRequest::class, 'service_request_id');
+        return $this->belongsTo(ServiceRequest::class, 'service_request_id')->with('client');
     }
 
     public function serviceRequests()

@@ -51,7 +51,7 @@
                             </div>
                                 <div class="form-group col-md-12 @if($income['income_type'] != 'amount') d-none @endif d-amount">
                                     <label for="amount">Amount</label>
-                                    <input type="text" class="form-control @error('amount') is-invalid @enderror" id="amount" name="amount" placeholder="Amount" value="{{ $income['amount'] }}">
+                                    <input type="number" class="form-control @error('amount') is-invalid @enderror" id="amount" name="amount" placeholder="Amount" value="{{ $income['amount'] }}">
                                     @error('amount')
                                     <span class="invalid-feedback" role="alert">
                                                 <strong>{{ $message }}</strong>
@@ -60,7 +60,7 @@
                                 </div>
                                 <div class="form-group col-md-12 @if($income['income_type'] != 'percentage') d-none @endif d-percentage">
                                     <label for="percentage">Percentage <strong>(%)</strong> </label>
-                                    <input type="text" class="form-control @error('percentage') is-invalid @enderror" id="percentage" name="percentage" placeholder="Percentage" value="{{ $income['percentage']*100 }}">
+                                    <input type="number" class="form-control @error('percentage') is-invalid @enderror" id="percentage" name="percentage" placeholder="Percentage" value="{{ $income['percentage']*100 }}">
                                     @error('percentage')
                                     <span class="invalid-feedback" role="alert">
                                                 <strong>{{ $message }}</strong>

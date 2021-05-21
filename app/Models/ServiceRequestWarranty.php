@@ -59,16 +59,16 @@ class ServiceRequestWarranty extends Model
 
     public function service_request_assignees(){
 
-        return $this->hasOne(ServiceRequestAssigned::class, 'service_request_id')->with('user');
+        return $this->hasMany(ServiceRequestAssigned::class, 'service_request_id')->with('user');
     }
 
-    /** 
+    /**
      * Scope a query to only include all pending requests
-     * 
+     *
      * @param \Illuminate\Database\Eloquent\Builder $query
      * @return \Illuminate\Database\Eloquent\Builder
      */
-    //Scope to return all services  
+    //Scope to return all services
     public function scopeUnresolvedWarranties($query)
     {
         return $query->select('*')

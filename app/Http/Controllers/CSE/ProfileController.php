@@ -58,7 +58,7 @@ class ProfileController extends Controller
                 'gender'            => $valid['gender'],
                 'bank_id'           => $valid['bank_id'],
                 'account_number'    => $valid['account_number'],
-                'avatar'            => !empty($valid['profile_avatar']) ?  $valid['profile_avatar']->store('user-avatar') : $request->user()->account->avatar
+                'avatar'            => !empty($valid['profile_avatar']) ?  $valid['profile_avatar']->store('assets/user-avatars', 'public') : $request->user()->account->avatar
             ]);
             $request->user()->contact()->update([
                 'phone_number'          =>  $valid['phone_number'],

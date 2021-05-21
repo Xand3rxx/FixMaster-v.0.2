@@ -44,6 +44,8 @@ class ServiceRequestSeeder extends Seeder
                 'description'           => 'My PC no longer comes on even when plugged into a power source.', 
                 'total_amount'          => 1500, 
                 'preferred_time'        => NULL,
+                'has_client_rated'      => 'No',
+                'has_cse_rated'         => 'No',
                 'created_at'            => '2020-12-14 13:39:55',
             ),
             array(
@@ -62,6 +64,8 @@ class ServiceRequestSeeder extends Seeder
                 'description'           => 'Hello FixMaster, my dish washer pipe broke an hour ago, now water is spilling profusely, please send help quickly. Thanks', 
                 'total_amount'          => 2000, 
                 'preferred_time'        => \Carbon\Carbon::now('UTC'),
+                'has_client_rated'      => 'No',
+                'has_cse_rated'         => 'No',
                 'created_at'            => '2020-12-15 10:51:29',
             ),
             array(
@@ -80,6 +84,8 @@ class ServiceRequestSeeder extends Seeder
                 'description'           => 'Washing machine plug is sparking. the cable appears melted. Thermocool washing machine.', 
                 'total_amount'          => 1000, 
                 'preferred_time'        => \Carbon\Carbon::now('UTC'),
+                'has_client_rated'      => 'No',
+                'has_cse_rated'         => 'No',
                 'created_at'            =>  '2021-01-05 15:04:48',
             ),
             array(
@@ -98,6 +104,8 @@ class ServiceRequestSeeder extends Seeder
                 'description'           => 'Please I urgently need a repair for my computer, It goes off saying overheating. I think the fan is faulty. You know it\'s New Year, so I\'ll need as swift response, thanks.', 
                 'total_amount'          => 2000, 
                 'preferred_time'        => \Carbon\Carbon::now('UTC'),
+                'has_client_rated'      => 'No',
+                'has_cse_rated'         => 'No',
                 'created_at'            =>  '2021-01-14 15:53:45',
             ),
             array(
@@ -116,6 +124,8 @@ class ServiceRequestSeeder extends Seeder
                 'description'           => 'System crash error message displayed on screen.', 
                 'total_amount'          => 2000, 
                 'preferred_time'        => \Carbon\Carbon::now('UTC'),
+                'has_client_rated'      => 'Yes',
+                'has_cse_rated'         => 'Yes',
                 'created_at'            =>  '2020-01-05 18:53:37',
             ),
             array(
@@ -133,8 +143,10 @@ class ServiceRequestSeeder extends Seeder
                 'status_id'             => 1, 
                 'description'           => 'I cannot really explain what my dilemma is at the moment, just send someone over.', 
                 'total_amount'          => 2000, 
-                'preferred_time'        => \Carbon\Carbon::now('UTC'),
-                'created_at'            =>  '2021-01-05 18:53:37',
+                'preferred_time'        =>  '2021-01-06 18:19:11',
+                'has_client_rated'      => 'No',
+                'has_cse_rated'         => 'No',
+                'created_at'            =>  '2021-01-05 15:53:37',
             ),
             array(
                 'uuid'                  => Str::uuid('uuid'),      
@@ -151,8 +163,10 @@ class ServiceRequestSeeder extends Seeder
                 'status_id'             => 1, 
                 'description'           => 'My generator refuses to come on after several attempts.', 
                 'total_amount'          => 1500, 
-                'preferred_time'        => \Carbon\Carbon::now('UTC'),
-                'created_at'            =>  '2021-01-05 18:54:18',
+                'preferred_time'        => '2021-01-08 17:05:43',
+                'has_client_rated'      => 'No',
+                'has_cse_rated'         => 'No',
+                'created_at'            =>  '2021-01-05 16:54:18',
             ),
 
         );
@@ -161,7 +175,7 @@ class ServiceRequestSeeder extends Seeder
             array(
                 'user_id'               =>  6, 
                 'service_request_id'    =>  4, 
-                'reason'                =>  'Performed a hard restart and computer works fine now.',
+                'reason'                =>  'Performed a hard restart on the computer. So it works fine now. Thanks.',
             ),
         );
 

@@ -47,11 +47,7 @@ class AppServiceProvider extends ServiceProvider
         view()->composer('layouts.partials._cse_sidebar', function ($view) {
             $view->with([
                 'cse_availability' => \App\Models\Cse::isAvailable() ? ['Available', 'checked'] : ['Unavailable', ''],
-                'cse_availability' => (auth()->user()->cse->job_availability == \App\Models\Cse::JOB_AVALABILITY[0]) ? 'AVALIABLE' : 'UNAVALIABLE',
-                'unresolvedWarranties'  => \App\Models\ServiceRequestAssigned::with('service_request_warranty', 'user.account', 'service_request')
-                ->where(['user_id' => auth()->user()->id, 'status'=> 'Active'])
-                ->get(),
-
+                'unresolvedWarranties'  => \App\Models\ServiceRequestAssigned::with('service_request_warranty', 'user.account', 'service_request')->where(['user_id' => auth()->user()->id, 'status' => 'Active'])->get(),
             ]);
         });
 

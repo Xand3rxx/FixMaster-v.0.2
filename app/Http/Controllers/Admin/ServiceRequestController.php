@@ -10,6 +10,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Traits\Utility;
 use App\Traits\Loggable;
+use App\Models\ServiceRequest;
 
 class ServiceRequestController extends Controller
 {
@@ -21,8 +22,25 @@ class ServiceRequestController extends Controller
      */
     public function index()
     {
-        return view('admin.requests.index', [
-            'requests' => \App\Models\ServiceRequest::with('users', 'client')->get()
+
+        // return  ServiceRequest::with('users', 'client', 'price')->where('status_id', 1)->get();
+
+        return view('admin.requests.pending.index', [
+            'requests'  =>  ServiceRequest::with('users', 'client', 'price')->where('status_id', 1)->latest('created_at')->get()
+        ]);
+    }
+
+
+    /**
+     * Display the selected pending service request detail.
+     *
+     * @param  int  $uuid
+     * @return \Illuminate\Http\Response
+     */
+    public function ongoingRequestDetails($language, $uuid)
+    {
+        return view('admin.requests.pending.show', [
+            'cses'    =>  \App\Models\Role::where('slug', 'cse-user')->with('users')->firstOrFail(),
         ]);
     }
 
@@ -48,14 +66,20 @@ class ServiceRequestController extends Controller
     }
 
     /**
-     * Display the specified resource.
+     * Display the selected pending service request detail.
      *
-     * @param  int  $id
+     * @param  int  $uuid
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show($language, $uuid)
     {
-        //
+
+        // return ServiceRequest::where('uuid', $uuid)->with(['price', 'service', 'service.subServices'])->firstOrFail();
+
+        return view('admin.requests.pending.show', [
+            'serviceRequest'    =>  ServiceRequest::where('uuid', $uuid)->with(['price', 'service', 'service.subServices'])->firstOrFail(),
+            'cses'    =>  \App\Models\Role::where('slug', 'cse-user')->with('users')->firstOrFail(),
+        ]);
     }
 
     /**

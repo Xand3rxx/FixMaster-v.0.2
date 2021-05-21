@@ -1,6 +1,6 @@
 
 {{-- {{ dd($results)}} --}}
-<table class="table table-hover mg-b-0 basicExample" id="basicExample">
+<table class="table table-hover mg-b-0" id="basicExample">
     <thead class="thead-primary">
       <tr>
         <th class="text-center">#</th>
@@ -40,7 +40,7 @@
         <td class="text-medium text-center">{{ !empty($result['job_completed_date']) ? Carbon\Carbon::parse($result['job_acceptance_time'], 'UTC')->diffInDays(Carbon\Carbon::parse($result['job_completed_date'], 'UTC')) : '0'}}day(s)</td>
       </tr>
       @endforeach
-      
+
 
       {{-- <tr>
         <td class="tx-color-03 tx-center">2</td>

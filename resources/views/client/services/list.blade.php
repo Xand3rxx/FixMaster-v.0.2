@@ -34,11 +34,10 @@
                                 <tbody>
 
                                 @foreach ($myServiceRequests['service_requests'] as $myServiceRequest)
-
                                 <tr>
 
                                 <td class="tx-color-03 tx-center">{{ $loop->iteration }}</td>
-                                <td>{{ $myServiceRequest['service']['name'] }}</td>
+                                <td>{{ $myServiceRequest['service']['name'] ?? 'Custom Request' }} </td>
                                 <td class="text-center font-weight-bold">{{ $myServiceRequest->bookingFee->amount }}</td>
                                 <td class="tx-medium">
                                 @if($myServiceRequest->status_id == 1)
@@ -202,7 +201,7 @@
             <form class="p-4" method="GET" id="cancel-request-form">
                 @csrf
                 <div class="row">
-
+                <input type="hidden" value="{{$myServiceRequest->bookingFee->amount}}" name="amountToRefund"/>
                     <div class="col-md-12">
                         <div class="form-group position-relative">
                             <label>Reason</label>
@@ -271,7 +270,7 @@
 
 </div><!-- modal -->
 
-
+  
 
 <div class="modal fade" id="editRequest" tabindex="-1" role="dialog" aria-hidden="true" data-keyboard="false" data-backdrop="static">
     <div class="modal-dialog modal-dialog-centered modal-lg" role="document">

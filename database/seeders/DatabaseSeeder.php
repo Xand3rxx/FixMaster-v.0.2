@@ -51,6 +51,7 @@ class DatabaseSeeder extends Seeder
             AdminRatingSeeder::class,
             AdminReviewSeeder::class,
             ServiceRequestSettingSeeder::class,
+            MediaSeeder::class,
         ]);
     }
 }

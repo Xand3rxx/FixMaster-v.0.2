@@ -38,15 +38,15 @@
             <!-- Logo container-->
             <div>
                 {{-- <a class="logo" href="{{ route('frontend.index') }}">
-                <img src="{{ asset('assets/images/home-fix-logo.png') }}" class="l-dark" height="70" alt="">
-                <img src="{{ asset('assets/images/home-fix-logo-new.png') }}" class="l-light" height="70" alt="">
+                <img src="https://fixmaster.com.ng/wp-content/uploads/2020/11/fix-master-logo-straight.png" class="l-dark" height="70" alt="">
+                <img src="https://fixmaster.com.ng/wp-content/uploads/2020/11/fix-master-logo-straight.png" class="l-light" height="70" alt="">
                 </a> --}}
                 <a class="logo" href="{{ route('frontend.index', app()->getLocale()) }}">
                     {{-- <img src="{{ asset('assets/images/home-fix-logo.png') }}" class="l-dark" height="160" style="margin-top: -38px !important; margin-bottom: -38px !important;" alt="FixMaster Logo"> --}}
 
-                    <img src="{{ asset('assets/images/home-fix-logo-new.png') }}" style="margin-top: -90px !important; margin-bottom: -38px !important;" class="l-light" height="250" alt="FixMaster Logo">
+                    <img src="https://fixmaster.com.ng/wp-content/uploads/2020/11/fix-master-logo-straight.png" style="margin-top: -90px !important; margin-bottom: -38px !important;" class="l-light" height="250" alt="FixMaster Logo">
 
-                    <img src="{{ asset('assets/images/home-fix-logo-colored.png') }}" style="margin-top: -40px !important; margin-bottom: -38px !important; margin-left: 50px !important" class="l-dark" height="70" alt="FixMaster Logo">
+                    <img src="https://fixmaster.com.ng/wp-content/uploads/2020/11/fix-master-logo-straight.png" style="margin-top: -40px !important; margin-bottom: -38px !important; margin-left: 50px !important" class="l-dark" height="70" alt="FixMaster Logo">
 
                 </a>
             </div>
