@@ -354,9 +354,11 @@
                                 <form method="POST" action="{{ route('flutterwave-submit', app()->getLocale()) }}">
                                     @csrf
                                     {{-- REQUIREMENTS FOR PAYMENT GATWAYS  --}}
-                                    <input type="hidden" class="d-none" value={{ $total_cost }} name="booking_fee">
+                                    <input type="hidden" class="d-none" value="{{ $total_cost }}" name="booking_fee">
 
                                     <input type="hidden" class="d-none" value="flutterwave" id="payment_channel" name="payment_channel">
+
+                                    <input type="hidden" class="d-none" value="service-request" id="payment_for" name="payment_for">
 
                                     <input type="hidden" class="d-none" value="{{ $invoice['unique_id'] }}" id="unique_id" name="unique_id">
 
