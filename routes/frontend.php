@@ -29,11 +29,19 @@ Auth::routes([
     'verify'   => false,  // for email verification
 ]);
 
-Route::post('/email/verification-notification', function (\Illuminate\Http\Request $request) {
-    $request->user()->sendEmailVerificationNotification();
 
-    return back()->with('status', 'verification-link-sent');
+Route::get('/email/verify/{id}/{hash}', [\App\Traits\EmailVerification::class, 'verify'])->middleware(['auth', 'signed'])->name('verification.verify');
+
+Route::get('email/verify', function () {
+    return view('auth.verify', ['email' => request()->user()->email]);
+})->middleware('auth')->name('verification.notice');
+
+Route::post('/email/verification-notification', function (\Illuminate\Http\Request $request) {
+    // Call Notification EmailVerification trait
+    $request->user()->sendEmailVerificationNotification();
+    return back()->with('status', 'Verification Email Sent');
 })->middleware(['auth', 'throttle:6,1'])->name('verification.send');
+
 
 Route::view('/', 'frontend.index')->name('frontend.index');
 

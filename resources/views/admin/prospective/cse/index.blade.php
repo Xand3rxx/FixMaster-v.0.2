@@ -1,5 +1,5 @@
 @extends('layouts.dashboard')
-@section('title', 'Prospective Prospective Customer Service Executive List')
+@section('title', 'Prospective Customer Service Executive List')
 @include('layouts.partials._messages')
 
 @section('content')
@@ -62,8 +62,8 @@
                                             <a href="" class="dropdown-link" data-toggle="dropdown"><i data-feather="more-vertical"></i></a>
                                             <div class="dropdown-menu dropdown-menu-right">
                                                 <a href="{{ route('admin.prospective.cse.show', [app()->getLocale(),$cse['uuid'] ]) }}" class="dropdown-item details text-primary"><i class="far fa-user"></i> Summary</a>
-                                                <a href="#" class="dropdown-item details"><i class="fas fa-address-card"></i> Approve </a>
-                                                <a href="#" class="dropdown-item details text-danger"><i class="fas fa-trash"></i> Decline</a>
+                                                <a href="#" class="dropdown-item details"><i class="fas fa-check"></i> Approve </a>
+                                                <a href="#" class="dropdown-item details text-danger"><i class="fas fa-ban"></i> Decline</a>
                                             </div>
                                         </div>
                                     </td>
