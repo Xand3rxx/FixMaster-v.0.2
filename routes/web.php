@@ -374,7 +374,9 @@ Route::prefix('/client')->middleware('monitor.clientservice.request.changes')->g
 
         Route::any('invoicePayment',                [InvoiceController::class, 'savePayment'])->name('invoice.payment');
         Route::get('verify/invoicePayment',         [InvoiceController::class, 'verifyPayment'])->name('invoice.verifyPayment');
-        Route::any('/invoiceRequestpaystack',       [InvoiceController::class, 'initiatePayment'])->name('invoice.initiatePayment');
+//        Route::any('/invoiceRequestpaystack',       [InvoiceController::class, 'initiatePayment'])->name('invoice.initiatePayment');
+        Route::any('flutterwavePayment',                [InvoiceController::class, 'saveFlutterwavePayment'])->name('flutterwave.payment');
+        Route::get('verify/flutterwavePayment',         [InvoiceController::class, 'verifyFlutterwavePayment'])->name('invoice.verifyflutterwavePayment');
 
         // // view all my service request
         Route::get('requests',                     [ClientController::class, 'myServiceRequest'])->name('service.all');
@@ -402,7 +404,7 @@ Route::prefix('/client')->middleware('monitor.clientservice.request.changes')->g
         // Route::get('/payment/flutterwave/{type}', [FlutterwaveController::class, 'complete'])->name('payment-flutterwave-complete');
         // /** Flutterwave Payment Gateway End */
 
-        
+
 
 
 
@@ -456,7 +458,7 @@ Route::prefix('/cse')->middleware('monitor.cseservice.request.changes')->group(f
                 // 'warranties' => \App\Models\Warranty::all(),
             ]
         )->name('request_details');
-    
+
 
         Route::get('/warranty/claims/list', [CseController::class, 'warranty_claims_list'])->name('warranty_claims_list');
         Route::get('/warranty-claims/details', [CseController::class, 'warranty_claims'])->name('warranty_claims');
