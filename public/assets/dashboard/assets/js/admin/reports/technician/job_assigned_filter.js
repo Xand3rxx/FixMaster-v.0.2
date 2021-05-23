@@ -34,7 +34,7 @@ $(document).ready(function() {
       }
     });
 
-    //SORT CSE REPORT BY CSE ID
+    //SORT CSE REPORT BY Technician ID
     $('#cse-list').on('change', function() {
       //Get the User ID
       $cseIdList = [];
@@ -104,7 +104,7 @@ $(document).ready(function() {
         $("#job-assigned-sorting").html('<div class="d-flex justify-content-center mt-4 mb-4"><span class="loadingspinner"></span></div>');
       },
       success: function(data) {
-        console.log(data);
+        //  console.log(data);
         // return false;
         if (data) {
           //Replace table with new sorted records
@@ -134,22 +134,11 @@ $(document).ready(function() {
 
   function jQuerySort() {
     $('.basicExample').DataTable({
-      "iDisplayLength": 10,
-        "language": {
-            "searchPlaceholder": 'Search...',
-            "sSearch": '',
-            "lengthMenu": '_MENU_ items/page',
-            // "lengthMenu": "Display _MENU_ records per page",
-            "zeroRecords": "No matching records found",
-            // "info": "Showing page _PAGE_ of _PAGES_",
-            "infoEmpty": "No records available",
-            "infoFiltered": "(filtered from _MAX_ total records)"
-        },
-      "dom": 'Bfrtip',
-      "buttons": [
-          'copy', 'csv', 'excel', 'pdf', 'print'
-      ],
-      "processing": true,
-    
+      'iDisplayLength': 10,
+      language: {
+        searchPlaceholder: 'Search...',
+        sSearch: '',
+        lengthMenu: '_MENU_ items/page',
+      }
     })
   }

@@ -50,6 +50,7 @@ use App\Http\Controllers\Supplier\DispatchController as SupplierDispatchControll
 use App\Http\Controllers\Admin\Report\SupplierReportController;
 use App\Http\Controllers\Admin\ServiceRequestController as RequestServiceController;
 use App\Http\Controllers\Admin\User\ClientController as AdministratorClientController;
+use App\Http\Controllers\Admin\Report\TechnicianReportController;
 use App\Http\Controllers\Payment\FlutterwaveController;
 use App\Http\Controllers\Admin\Prospective\CSEController as ProspectiveCSEController;
 use App\Http\Controllers\Admin\Prospective\SupplierController as ProspectiveSupplierController;
@@ -314,6 +315,13 @@ Route::prefix('admin')->name('admin.')->group(function () {
         Route::post('/reports/client-service-executive/job-assigned-sorting',      [CustomerServiceExecutiveReportController::class, 'jobAssignedSorting'])->name('cse_report_first_sorting');
         Route::post('/reports/client-service-executive/amount-earned-sorting',      [CustomerServiceExecutiveReportController::class, 'amountEarnedSorting'])->name('cse_report_second_sorting');
 
+
+        //Technician Reporting Routes
+        Route::get('/reports/technician',  [TechnicianReportController::class,'index'])->name('technician_reports');
+        Route::post('/reports/technician/job-assigned-sorting',      [TechnicianReportController::class, 'jobAssignedSorting'])->name('technician_report_first_sorting');
+
+//     });
+// });
         Route::get('/reports/supplier',             [SupplierReportController::class, 'index'])->name('supplier_reports');
         Route::post('/reports/supplier/item-delivered-sorting', [SupplierReportController::class, 'itemDeliveredSorting'])->name('supplier_report_first_sorting');
 
