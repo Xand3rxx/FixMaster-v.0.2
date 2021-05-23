@@ -50,6 +50,7 @@ use App\Http\Controllers\Supplier\DispatchController as SupplierDispatchControll
 use App\Http\Controllers\Admin\Report\SupplierReportController;
 use App\Http\Controllers\Admin\ServiceRequestController as RequestServiceController;
 use App\Http\Controllers\Admin\User\ClientController as AdministratorClientController;
+use App\Http\Controllers\Admin\Report\TechnicianReportController;
 use App\Http\Controllers\Payment\FlutterwaveController;
 use App\Http\Controllers\Admin\Prospective\CSEController as ProspectiveCSEController;
 use App\Http\Controllers\Admin\Prospective\SupplierController as ProspectiveSupplierController;
@@ -316,7 +317,8 @@ Route::prefix('admin')->name('admin.')->group(function () {
 
 
         //Technician Reporting Routes
-        Route::view('/reports/technician',    'admin.reports.technician.index')->name('technician_reports');
+        Route::get('/reports/technician',  [TechnicianReportController::class,'index'])->name('technician_reports');
+        Route::post('/reports/technician/job-assigned-sorting',      [TechnicianReportController::class, 'jobAssignedSorting'])->name('technician_report_first_sorting');
 
 //     });
 // });

@@ -158,7 +158,7 @@
         </ul>
       </li>
 
-      <li class="nav-item with-sub {{ Route::currentRouteNamed('admin.cse_reports',admin.technician_reports,admin.supplier_reports) ? 'active show' : '' }}">
+      <li class="nav-item with-sub {{ Route::currentRouteNamed('admin.cse_reports','admin.technician_reports','admin.supplier_reports') ? 'active show' : '' }}">
         <a href="" class="nav-link"><i data-feather="bar-chart-2"></i> <span>Reports</span></a>
         <ul>
 
@@ -166,7 +166,7 @@
           <li class=""><a href="#">Customer</a></li>
           <li class=""><a href="#">Job Management</a></li>
           <li class=""><a href="#">Marketing</a></li>
-          <li class=""><a href="#">Supplier</a></li>
+          <li class="nav-item {{ Route::currentRouteNamed('admin.supplier_reports') ? 'active' : '' }}"><a href="{{ route('admin.supplier_reports', app()->getLocale()) }}">Supplier</a></li>
           <li class="nav-item {{ Route::currentRouteNamed('admin.technician_reports') ? 'active' : '' }}"><a href="{{ route('admin.technician_reports', app()->getLocale()) }}">Technician</a></li>
         </ul>
       </li>

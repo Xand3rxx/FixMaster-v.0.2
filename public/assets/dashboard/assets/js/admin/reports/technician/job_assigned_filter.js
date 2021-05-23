@@ -34,7 +34,7 @@ $(document).ready(function() {
       }
     });
 
-    //SORT CSE REPORT BY CSE ID
+    //SORT CSE REPORT BY Technician ID
     $('#cse-list').on('change', function() {
       //Get the User ID
       $cseIdList = [];
@@ -104,7 +104,7 @@ $(document).ready(function() {
         $("#job-assigned-sorting").html('<div class="d-flex justify-content-center mt-4 mb-4"><span class="loadingspinner"></span></div>');
       },
       success: function(data) {
-        // console.log(data);
+        //  console.log(data);
         // return false;
         if (data) {
           //Replace table with new sorted records

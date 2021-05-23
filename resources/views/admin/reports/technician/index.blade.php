@@ -42,7 +42,7 @@
 
                 <div class="row mt-1 mb-1 ml-1 mr-1">
                   <div class="col-md-4">
-                    <input type="hidden" class="d-none" id="route" value="{{ route('admin.cse_report_first_sorting', app()->getLocale()) }}">
+                    <input type="hidden" class="d-none" id="route" value="{{ route('admin.technician_report_first_sorting', app()->getLocale()) }}">
                     <div class="form-group">
                       <label>Sorting Parameters</label>
                       <select class="custom-select" id="sorting-parameters">
@@ -56,12 +56,12 @@
                   </div>
                   <div class="col-md-4 cse-list d-none">
                     <div class="form-group position-relative">
-                      <label> List <span class="text-danger">*</span></label>
+                      <label>{{ !empty($technicians->name) ? $technicians->name : 'TECHNICIAN' }} List <span class="text-danger">*</span></label>
                       <select class="form-control selectpicker" multiple id="cse-list">
                         <option value="" disabled>Select...</option>
-                        {{-- @foreach ($cses['users'] as $cse)
-                        <option value="{{ '$cse['account']['user_id']' }}">{{ '!empty($cse['account']['first_name']') ? Str::title('$cse['account']['first_name']' ." ". '$cse['account']['last_name']') : 'UNAVAILABLE' }}</option>
-                        @endforeach --}}
+                        @foreach ($technicians['users'] as $technician)
+                        <option value="{{ $technician['account']['user_id'] }}">{{ !empty($technician['account']['first_name']) ? Str::title($technician['account']['first_name'] ." ". $technician['account']['last_name']) : 'UNAVAILABLE' }}</option>
+                        @endforeach
                       </select>
                     </div>
                   </div>
@@ -95,9 +95,9 @@
 
                 </div>
 
-                <div class=" table-responsive">
+                <div class="table-responsive">
                   <div id="job-assigned-sorting">
-                    {{-- @include('admin.reports.cse.tables._job_assigned') --}}
+                    @include('admin.reports.technician.tables._job_assigned')
                   </div>
                 </div><!-- table-responsive -->
               </div><!-- card -->
