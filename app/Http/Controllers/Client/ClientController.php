@@ -829,7 +829,6 @@ class ClientController extends Controller
 
         $data['mytransactions']    = Payment::where('user_id', auth()->user()->id)->orderBy('id', 'DESC')->get();
         $walTrans = WalletTransaction::where('user_id', auth()->user()->id)->orderBy('id', 'DESC')->first();
-        //  $data['ewallet'] = !isset($json->withdraw)? $walTrans->closing_balance: (is_array($json->withdraw) ?  (float)$walTrans->closing_balance + (float)array_sum($json->withdraw): (float)'1000.000' + (float)$json->withdraw) ;
 
         $data['ewallet'] =  !empty($walTrans->closing_balance) ? $walTrans->closing_balance : 0;
         $myWallet    = WalletTransaction::where('user_id', auth()->user()->id)->orderBy('id', 'DESC')->get();
@@ -865,7 +864,7 @@ class ClientController extends Controller
             $walTrans->user_id = auth()->user()->id;
             $walTrans->payment_id = $payment->id;
             $walTrans->amount =  $payment->amount;
-            $walTrans->payment_type = 'funding';
+            $walTrans->payment_type = 'loyalty';
             $walTrans->unique_id = $payment->unique_id;
             $walTrans->transaction_type = 'credit';
             $walTrans->opening_balance = $request->opening_balance;

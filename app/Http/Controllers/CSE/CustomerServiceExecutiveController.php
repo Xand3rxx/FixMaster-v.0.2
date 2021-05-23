@@ -155,6 +155,8 @@ class CustomerServiceExecutiveController extends Controller
             'technicians' => \App\Models\UserService::where('service_id', $service_request->service_id)->where('role_id', $technicainsRole->id)->with('user')->get(),
             'qaulity_assurances'    =>  \App\Models\Role::where('slug', 'quality-assurance-user')->with('users')->firstOrFail(),
             'request_progress' => $request_progress,
+            'shcedule_datetime' => !empty($service_request->service_request_warranty->service_request_warranty_issued) ? 
+            $service_request->service_request_warranty->service_request_warranty_issued->scheduled_datetime: '',
         ];
         if ($service_request->status_id == 2) {
             $service_request_progresses = \App\Models\ServiceRequestProgress::where('user_id', auth()->user()->id)->latest('created_at')->first();
