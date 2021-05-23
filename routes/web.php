@@ -50,6 +50,7 @@ use App\Http\Controllers\Supplier\DispatchController as SupplierDispatchControll
 use App\Http\Controllers\Admin\Report\SupplierReportController;
 use App\Http\Controllers\Admin\ServiceRequestController as RequestServiceController;
 use App\Http\Controllers\Admin\User\ClientController as AdministratorClientController;
+use App\Http\Controllers\Admin\Report\TechnicianReportController;
 use App\Http\Controllers\Payment\FlutterwaveController;
 use App\Http\Controllers\Admin\Prospective\CSEController as ProspectiveCSEController;
 use App\Http\Controllers\Admin\Prospective\SupplierController as ProspectiveSupplierController;
@@ -314,6 +315,13 @@ Route::prefix('admin')->name('admin.')->group(function () {
         Route::post('/reports/client-service-executive/job-assigned-sorting',      [CustomerServiceExecutiveReportController::class, 'jobAssignedSorting'])->name('cse_report_first_sorting');
         Route::post('/reports/client-service-executive/amount-earned-sorting',      [CustomerServiceExecutiveReportController::class, 'amountEarnedSorting'])->name('cse_report_second_sorting');
 
+
+        //Technician Reporting Routes
+        Route::get('/reports/technician',  [TechnicianReportController::class,'index'])->name('technician_reports');
+        Route::post('/reports/technician/job-assigned-sorting',      [TechnicianReportController::class, 'jobAssignedSorting'])->name('technician_report_first_sorting');
+
+//     });
+// });
         Route::get('/reports/supplier',             [SupplierReportController::class, 'index'])->name('supplier_reports');
         Route::post('/reports/supplier/item-delivered-sorting', [SupplierReportController::class, 'itemDeliveredSorting'])->name('supplier_report_first_sorting');
 
@@ -374,7 +382,9 @@ Route::prefix('/client')->middleware('monitor.clientservice.request.changes')->g
 
         Route::any('invoicePayment',                [InvoiceController::class, 'savePayment'])->name('invoice.payment');
         Route::get('verify/invoicePayment',         [InvoiceController::class, 'verifyPayment'])->name('invoice.verifyPayment');
-        Route::any('/invoiceRequestpaystack',       [InvoiceController::class, 'initiatePayment'])->name('invoice.initiatePayment');
+//        Route::any('/invoiceRequestpaystack',       [InvoiceController::class, 'initiatePayment'])->name('invoice.initiatePayment');
+        Route::any('flutterwavePayment',                [InvoiceController::class, 'saveFlutterwavePayment'])->name('flutterwave.payment');
+        Route::get('verify/flutterwavePayment',         [InvoiceController::class, 'verifyFlutterwavePayment'])->name('invoice.verifyflutterwavePayment');
 
         // // view all my service request
         Route::get('requests',                     [ClientController::class, 'myServiceRequest'])->name('service.all');
@@ -402,7 +412,7 @@ Route::prefix('/client')->middleware('monitor.clientservice.request.changes')->g
         // Route::get('/payment/flutterwave/{type}', [FlutterwaveController::class, 'complete'])->name('payment-flutterwave-complete');
         // /** Flutterwave Payment Gateway End */
 
-        
+
 
 
 
@@ -456,13 +466,16 @@ Route::prefix('/cse')->middleware('monitor.cseservice.request.changes')->group(f
                 // 'warranties' => \App\Models\Warranty::all(),
             ]
         )->name('request_details');
-    
+
 
         Route::get('/warranty/claims/list', [CseController::class, 'warranty_claims_list'])->name('warranty_claims_list');
         Route::get('/warranty-claims/details', [CseController::class, 'warranty_claims'])->name('warranty_claims');
         Route::get('/warranty/resolved/claims/details/{warranty:id}',          [WarrantyController::class, 'warranty_resolved_details'])->name('warranty_resolved_details');
         Route::get('/warranty/claims/details/{warranty:uuid}',      [CseController::class,  'warranty_details'])->name('warranty_details');
         Route::get('/mark/warrant/claims/resolved/{warranty:uuid}',      [WarrantyController::class, 'resolvedWarranty'])->name('mark_warranty_resolved');
+
+        Route::get('/sub-service-dynamic-feilds',  [CseController::class, 'subServiceDynamicFields'])->name('sub_service_dynamic_fields');
+
 
   });
 });

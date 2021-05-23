@@ -3,6 +3,8 @@
 @include('layouts.partials._messages')
 @section('content')
 <link rel="stylesheet" href="{{ asset('assets/dashboard/assets/css/dashforge.filemgr.css') }}">
+<link rel="stylesheet" href="{{ asset('assets/dashboard/assets/css/bootstrap-multiselect.css') }}">
+<input type="hidden" id="route" class="d-none" value="{{ route('cse.sub_service_dynamic_fields', app()->getLocale()) }}">
 
 <div class="content-body">
     <div class="container pd-x-0">
@@ -15,8 +17,14 @@
                         <li class="breadcrumb-item active" aria-current="page">Request Details</li>
                     </ol>
                 </nav>
-                <h4 class="mg-b-0 tx-spacing--1">Job: {{$service_request->unique_id}}</h4>
-                <hr>
+            </div>
+        </div>
+
+        <div class="row row-xs">
+
+            <div class="col-lg-12 col-xl-12">
+                <div class="divider-text">Service Request Modality</div>
+
                 <div class="media align-items-center">
                     <span class="tx-color-03 d-none d-sm-block">
                         {{-- <i data-feather="credit-card" class="wd-60 ht-60"></i> --}}
@@ -24,18 +32,20 @@
                     </span>
                     <div class="media-body mg-sm-l-20">
                         <h4 class="tx-18 tx-sm-20 mg-b-2">{{ucfirst($service_request->client->account->first_name)}}
-                        {{ucfirst($service_request->client->account->last_name)}}</h4>
+                        {{ucfirst($service_request->client->account->last_name)}} 
+                        <a href="tel:{{$service_request->client->account->contact->phone_number}}" class="btn btn-sm btn-primary btn-icon" title="Call Client "><i class="fas fa-phone"></i> </a>
+
+                        <a href="#" class="btn btn-sm btn-success btn-icon" title="Notify Client to schedule date"><i class="fas fa-bell"></i> </a>
+                    </h4>
                                         
-                        <p class="tx-13 tx-color-03 mg-b-0">{{$service_request->client->account->contact->phone_number}}
-                            <a href="tel:{{$service_request->client->account->contact->phone_number}}" class="btn btn-primary btn-icon"><i class="fas fa-phone"></i> Call Client</a>
-                        </p>
+                        {{-- <p class="tx-13 tx-color-03 mg-b-0">{{$service_request->client->account->contact->phone_number}}
+                            <a href="tel:{{$service_request->client->account->contact->phone_number}}" class="btn btn-primary btn-icon"><i class="fas fa-phone"></i> </a>
+                        </p> --}}
+
+                        <p class="tx-13 tx-color-03 mg-b-0">Scheduled Time: UNAVAILABLE </p>
+                        <p class="tx-13 tx-color-03 mg-b-0">Job Ref.: {{$service_request->unique_id}} </p>
                     </div>
                 </div><!-- media -->
-            </div>
-        </div>
-
-        <div class="row row-xs">
-            <div class="col-lg-12 col-xl-12">
 
                 <div class="contact-content-header mt-4">
                     <nav class="nav">

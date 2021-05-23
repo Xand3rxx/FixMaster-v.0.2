@@ -155,6 +155,8 @@ class CustomerServiceExecutiveController extends Controller
             'technicians' => \App\Models\UserService::where('service_id', $service_request->service_id)->where('role_id', $technicainsRole->id)->with('user')->get(),
             'qaulity_assurances'    =>  \App\Models\Role::where('slug', 'quality-assurance-user')->with('users')->firstOrFail(),
             'request_progress' => $request_progress,
+            'shcedule_datetime' => !empty($service_request->service_request_warranty->service_request_warranty_issued) ? 
+            $service_request->service_request_warranty->service_request_warranty_issued->scheduled_datetime: '',
         ];
         if ($service_request->status_id == 2) {
             $service_request_progresses = \App\Models\ServiceRequestProgress::where('user_id', auth()->user()->id)->latest('created_at')->first();
@@ -178,5 +180,16 @@ class CustomerServiceExecutiveController extends Controller
         }
 
         return view('cse.warranties.show', $variables);
+    }
+
+    public function subServiceDynamicFields(Request $request){
+        if ($request->ajax()) {
+            (array) $filters = $request->only('sub_service_list');
+
+            return view('cse.requests.includes._sub_service_dynamic_field', [
+                'results'   =>  $filters ?\App\Models\SubService::select('name')->whereIn('uuid', $filters['sub_service_list'][0])->orderBy('name', 'ASC')->get() : []
+            ]);
+            
+        }
     }
 }

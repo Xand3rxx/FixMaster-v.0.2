@@ -3,7 +3,7 @@
     <div class="mt-4">
         <div class="tx-13 mg-b-25">
             <div id="wizard3">
-                <h3>Report</h3>
+                <h3>Comments</h3>
                 <section>
                     <div class="mt-4 form-row">
                         <div class="form-group col-md-12">
@@ -29,7 +29,7 @@
                     </div>
                 </section>
                 @endif
-                <h3>Assign Technician</h3>
+                <h3>Assign Technician(s)</h3>
                 <section>
                     <div class="form-row mt-4">
                         <div class="form-group col-md-12">
@@ -69,9 +69,9 @@
                                             <a href="tel:08124483438" class="btn btn-primary btn-icon"><i class="fas fa-phone"></i></a>
                                         </div>
                                         <div class="form-group col-1 col-md-1 col-sm-1">
-                                            <div class="custom-control custom-radio mt-2">
-                                                <div class="custom-control custom-radio">
-                                                    <input type="radio" class="custom-control-input" id="{{ $loop->iteration }}" name="technician_user_uuid" value="{{ $technicain['user']['uuid'] }}">
+                                            <div class="custom-control custom-checkbox mt-2">
+                                                <div class="custom-control custom-checkbox">
+                                                    <input type="checkbox" class="custom-control-input" id="{{ $loop->iteration }}" name="technician_user_uuid" value="{{ $technicain['user']['uuid'] }}">
                                                     <label class="custom-control-label" for="{{ $loop->iteration }}"></label>
                                                 </div>
                                             </div>
