@@ -55,7 +55,9 @@ class LoginController extends Controller
    */
   protected function authenticated(Request $request, $user)
   {
+    // $this->addDiscountToFirstTimeUserTrait($user->id);
     $this->updateVerifiedUsers($user);
+
     $this->log('Login', 'Informational', Route::currentRouteAction(), $user->email . ' logged in.');
   }
 

@@ -12,10 +12,10 @@
           <ol class="breadcrumb breadcrumb-style1 mg-b-10">
             <li class="breadcrumb-item"><a href="{{ route('admin.index', app()->getLocale()) }}">Dashboard</a></li>
             <li class="breadcrumb-item" aria-current="page">Reports</li>
-            <li class="breadcrumb-item active" aria-current="page">Customer Service Executive</li>
+            <li class="breadcrumb-item active" aria-current="page">Technician</li>
           </ol>
         </nav>
-        <h4 class="mg-b-0 tx-spacing--1">Customer Service Executive Reports</h4>
+        <h4 class="mg-b-0 tx-spacing--1">Technician Reports</h4>
       </div>
     </div>
 
@@ -23,11 +23,11 @@
       <nav class="nav">
         <a href="#job_assigned" class="nav-link active" data-toggle="tab">Job Assigned</a>
         <a href="#amount_earned" class="nav-link" data-toggle="tab"><span>Amount Earned</a>
-        <a href="#cse_list" class="nav-link" data-toggle="tab"><span>List of CSE's</a>
-        <a href="#rating_history" class="nav-link" data-toggle="tab"><span>CSE Rating History</a>
+        <a href="#technician_list" class="nav-link" data-toggle="tab"><span>List of Technicians</a>
+        <a href="#tech_rating_history" class="nav-link" data-toggle="tab"><span>Technicians Rating History</a>
         <a href="#statement_balance" class="nav-link" data-toggle="tab"><span>Statement Balance</a>
-        <a href="#prospect_conversion_list" class="nav-link" data-toggle="tab"><span>Prospect Conversion List</a>
-        <a href="#customer_complaints" class="nav-link" data-toggle="tab"><span>List of Customer Complaints</a>
+        <a href="#unpaid_amount" class="nav-link" data-toggle="tab"><span>Unpaid Amount per Job</a>
+        {{-- <a href="#customer_complaints" class="nav-link" data-toggle="tab"><span>List of Customer Complaints</a> --}}
         <a href="#job_warranty_logs" class="nav-link" data-toggle="tab"><span>Job Warranty Log</a>
       </nav>
     </div><!-- contact-content-header -->
@@ -42,12 +42,12 @@
 
                 <div class="row mt-1 mb-1 ml-1 mr-1">
                   <div class="col-md-4">
-                    <input type="hidden" class="d-none" id="route" value="{{ route('admin.cse_report_first_sorting', app()->getLocale()) }}">
+                    <input type="hidden" class="d-none" id="route" value="{{ route('admin.technician_report_first_sorting', app()->getLocale()) }}">
                     <div class="form-group">
                       <label>Sorting Parameters</label>
                       <select class="custom-select" id="sorting-parameters">
                         <option value="" disabled selected>Select...</option>
-                        <option value="SortType1">CSE List</option>
+                        <option value="SortType1">Technician Name</option>
                         <option value="SortType2">Job Acceptance Date</option>
                         <option value="SortType3">Job Completion Date</option>
                         <option value="SortType4">Job Status</option>
@@ -56,11 +56,11 @@
                   </div>
                   <div class="col-md-4 cse-list d-none">
                     <div class="form-group position-relative">
-                      <label>{{ !empty($cses->name) ? $cses->name : 'CSE' }} List <span class="text-danger">*</span></label>
+                      <label>{{ !empty($technicians->name) ? $technicians->name : 'TECHNICIAN' }} List <span class="text-danger">*</span></label>
                       <select class="form-control selectpicker" multiple id="cse-list">
                         <option value="" disabled>Select...</option>
-                        @foreach ($cses['users'] as $cse)
-                        <option value="{{ $cse['account']['user_id'] }}">{{ !empty($cse['account']['first_name']) ? Str::title($cse['account']['first_name'] ." ". $cse['account']['last_name']) : 'UNAVAILABLE' }}</option>
+                        @foreach ($technicians['users'] as $technician)
+                        <option value="{{ $technician['account']['user_id'] }}">{{ !empty($technician['account']['first_name']) ? Str::title($technician['account']['first_name'] ." ". $technician['account']['last_name']) : 'UNAVAILABLE' }}</option>
                         @endforeach
                       </select>
                     </div>
@@ -95,9 +95,9 @@
 
                 </div>
 
-                <div class=" table-responsive">
+                <div class="table-responsive">
                   <div id="job-assigned-sorting">
-                    @include('admin.reports.cse.tables._job_assigned')
+                    @include('admin.reports.technician.tables._job_assigned')
                   </div>
                 </div><!-- table-responsive -->
               </div><!-- card -->
@@ -118,9 +118,9 @@
                       <label>Sorting Parameters</label>
                       <select class="custom-select" id="assigned-sorting-parameters">
                         <option value="" disabled selected>Select...</option>
-                        <option value="SortType1">CSE List</option>
-                        <option value="SortType2">Job Diagnostic Date</option>
-                        <option value="SortType3">Job Acceptance Date</option>
+                        <option value="SortType1">Technician Name</option>
+                        <option value="SortType2">Diagnostic Date Range</option>
+                        <option value="SortType3">Acceptance Date Range</option>
                         <option value="SortType4">Job Status</option>
                         <option value="SortType5">Paid Amount</option>
                       </select>
@@ -128,12 +128,12 @@
                   </div>
                   <div class="col-md-4 assigned-cse-list d-none">
                     <div class="form-group position-relative">
-                      <label>{{ !empty($cses->name) ? $cses->name : 'CSE' }} List <span class="text-danger">*</span></label>
+                      <label>{{ !empty($cses->name) ? '$cses->name' : 'CSE' }} List <span class="text-danger">*</span></label>
                       <select class="form-control selectpicker" multiple id="assigned-cse-list">
                         <option value="" disabled>Select...</option>
-                        @foreach ($cses['users'] as $cse)
-                        <option value="{{ $cse['account']['user_id'] }}">{{ !empty($cse['account']['first_name']) ? Str::title($cse['account']['first_name'] ." ". $cse['account']['last_name']) : 'UNAVAILABLE' }}</option>
-                        @endforeach
+                        {{-- @foreach ($cses['users'] as $cse)
+                        <option value="{{ '$cse['account']['user_id']' }}">{{ '!empty($cse['account']['first_name']') ? Str::title('$cse['account']['first_name']' ." ". '$cse['account']['last_name']') : 'UNAVAILABLE' }}</option>
+                        @endforeach --}}
                       </select>
                     </div>
                   </div>
@@ -180,7 +180,7 @@
 
                 <div class=" table-responsive">
                   <div id="amount-earned-sorting">
-                    @include('admin.reports.cse.tables._amount_earned')
+                    {{-- @include('admin.reports.cse.tables._amount_earned') --}}
                   </div>
                 </div><!-- table-responsive -->
               </div><!-- card -->
@@ -197,32 +197,11 @@
 
 @push('scripts')
 <script src="{{ asset('assets/dashboard/assets/js/bootstrap-multiselect.js') }}"></script>
-<script src="{{ asset('assets/dashboard/assets/js/admin/reports/cse/job_assigned_filter.js') }}"></script>
-<script src="{{ asset('assets/dashboard/assets/js/admin/reports/cse/amount_earned_filter.js') }}"></script>
+<script src="{{ asset('assets/dashboard/assets/js/admin/reports/technician/job_assigned_filter.js') }}"></script>
+<script src="{{ asset('assets/dashboard/assets/js/admin/reports/technician/amount_earned_filter.js') }}"></script>
 <script>
   $(document).ready(function(){
     $('.selectpicker').selectpicker(); //Initiate multiple dropdown select
-
-    $('#basicExample2, #basicExample3 #basicExample4').DataTable({
-        "iDisplayLength": 10,
-        "language": {
-            "searchPlaceholder": 'Search...',
-            "sSearch": '',
-            "lengthMenu": '_MENU_ items/page',
-            // "lengthMenu": "Display _MENU_ records per page",
-            "zeroRecords": "No matching records found",
-            // "info": "Showing page _PAGE_ of _PAGES_",
-            "infoEmpty": "No records available",
-            "infoFiltered": "(filtered from _MAX_ total records)"
-        },
-        "dom": 'Bfrtip',
-        "buttons": [
-            'copy', 'csv', 'excel', 'pdf', 'print'
-        ],
-        "processing": true,
-        // "scrollY":        "200px",
-        // "scrollCollapse": true,
-    });
   });
 </script>
 
