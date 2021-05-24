@@ -326,6 +326,7 @@ Route::prefix('client')->middleware('verified','monitor.clientservice.request.ch
     Route::name('client.')->group(function () {
         //All routes regarding clients should be in here
         Route::get('/',                                      [ClientController::class, 'index'])->name('index'); //Take me to Supplier Dashboard
+        Route::get('/send/discount/mail',                                      [ClientController::class, 'discount_mail'])->name('discount_mail'); //Take me to Supplier Dashboard
 
         // *****************Client profile**********************//
         Route::get('/settings',                              [ClientController::class, 'settings'])->name('settings');

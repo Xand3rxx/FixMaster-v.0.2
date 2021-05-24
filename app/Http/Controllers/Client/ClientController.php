@@ -1283,4 +1283,19 @@ class ClientController extends Controller
         }
     }
 
+
+    public function discount_mail(Request $request ){
+        if ($request->ajax())
+        {
+    
+         $data= $request->user;
+
+        $response =  $this->addDiscountToFirstTimeUserTrait($request->user());
+        if( $response == '1' ){
+            $referralResponse = $this->updateVerifiedUsers($request->user());
+        }
+      
+        return response()->json($referralResponse);
+        }
+      }
 }
