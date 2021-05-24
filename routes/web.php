@@ -5,7 +5,6 @@ use App\Http\Controllers\EstateController;
 use App\Http\Controllers\IncomeController;
 use App\Http\Controllers\EarningController;
 use App\Http\Controllers\InvoiceController;
-use App\Http\Middleware\EmailMustBeVerified;
 use App\Http\Controllers\Admin\RfqController;
 use App\Http\Controllers\Admin\TaxController;
 use App\Http\Controllers\SimulationController;
