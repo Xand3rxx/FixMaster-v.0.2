@@ -349,8 +349,25 @@
 
                                 <input type="hidden" class="d-none" value="{{ $invoice['uuid'] }}" id="uuid" name="uuid">
 
-                                <button type="submit" id="paystack_option"  class="btn btn-outline-success">Pay Now</button>
+                                <button type="submit" id="paystack_option"  class="btn btn-outline-success">Pay with paystack</button>
                             </form>
+                                <form method="POST" action="{{ route('flutterwave-submit', app()->getLocale()) }}">
+                                    @csrf
+                                    {{-- REQUIREMENTS FOR PAYMENT GATWAYS  --}}
+                                    <input type="hidden" class="d-none" value="{{ $total_cost }}" name="booking_fee">
+
+                                    <input type="hidden" class="d-none" value="flutterwave" id="payment_channel" name="payment_channel">
+
+                                    <input type="hidden" class="d-none" value="service-request" id="payment_for" name="payment_for">
+
+                                    <input type="hidden" class="d-none" value="{{ $invoice['unique_id'] }}" id="unique_id" name="unique_id">
+
+                                    <input type="hidden" class="d-none" value="{{ $invoice['invoice_type'] }}" id="invoice_type" name="invoice_type">
+
+                                    <input type="hidden" class="d-none" value="{{ $invoice['uuid'] }}" id="uuid" name="uuid">
+
+                                    <button type="submit" id="flutterwave_option"  class="btn btn-outline-success">Pay with flutterwave</button>
+                                </form>
                             @elseif($invoice['status'] === '2' && $invoice['phase'] == '2')
                             <a href="{{route('client.service.all', app()->getLocale())}}" class="btn btn-outline-primary">Go Back</a>
                         @endif

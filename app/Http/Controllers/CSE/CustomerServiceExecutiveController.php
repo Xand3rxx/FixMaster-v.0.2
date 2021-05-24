@@ -181,4 +181,15 @@ class CustomerServiceExecutiveController extends Controller
 
         return view('cse.warranties.show', $variables);
     }
+
+    public function subServiceDynamicFields(Request $request){
+        if ($request->ajax()) {
+            (array) $filters = $request->only('sub_service_list');
+
+            return view('cse.requests.includes._sub_service_dynamic_field', [
+                'results'   =>  $filters ?\App\Models\SubService::select('name')->whereIn('uuid', $filters['sub_service_list'][0])->orderBy('name', 'ASC')->get() : []
+            ]);
+            
+        }
+    }
 }
