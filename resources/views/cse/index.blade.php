@@ -128,13 +128,12 @@
       e.preventDefault()
       if (confirm('Are you sure?')) {
         $('#accept_service_request').val($(this).data('service'))
-        {{-- console.log($(this).data('service')); return false; --}}
         $('#accept-service-request-form').submit();
       }
       return false;
     });
   });
 </script>
-@endpush('scripts')
+@endpush
 
 @endsection

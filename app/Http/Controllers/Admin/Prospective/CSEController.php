@@ -44,18 +44,20 @@ class CSEController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
+     * @param  string $uuid
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show($language, string $uuid)
     {
-        //
+        return view('admin.prospective.cse.show', [
+            'user' => Applicant::where('uuid', $uuid)->firstOrFail()
+        ]);
     }
 
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  int  $id
+     * @param  string $uuid
      * @return \Illuminate\Http\Response
      */
     public function edit($id)
@@ -67,7 +69,7 @@ class CSEController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param  string $uuid
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, $id)
@@ -78,7 +80,7 @@ class CSEController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param  string $uuid
      * @return \Illuminate\Http\Response
      */
     public function destroy($id)
