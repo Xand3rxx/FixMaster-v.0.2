@@ -85,7 +85,7 @@
                 </span>
               @enderror
             </div>
-            <button type="submit" class="btn btn-primary">Create Service</button>
+            <button type="submit" class="btn btn-primary">Create Category</button>
           </div>
         </form>
       </div><!-- modal-body -->

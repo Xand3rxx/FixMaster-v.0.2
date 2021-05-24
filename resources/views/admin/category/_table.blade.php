@@ -4,8 +4,8 @@
         <th class="text-center">#</th>
         <th>Name</th>
         <th>Created By</th>        
-        <th class="text-center">Labour Markup</th>
-        <th class="text-center">Materials Markup</th>
+        <th class="text-center">Labour Markup (%)</th>
+        <th class="text-center">Materials Markup (%)</th>
         <th class="text-center">Services</th>
         <th>Status</th>
         <th>Date Created</th>
