@@ -230,10 +230,18 @@
                                             <td class="text-left">{{ $item->component_name }}</td>
                                             <td class="text-left">{{ $item->quantity }}</td>
                                             <td class="text-left">{{ $item->unit_of_measurement }}</td>
+                                            <td class="text-left">{{ $item->amount/$item->quantity }}</td>
                                             <td class="text-left">{{ $item->amount }}</td>
-                                            <td class="text-left">{{ $item->quantity* $item->amount }}</td>
                                         </tr>
                                     @endforeach
+                                    <tr>
+                                        <td class="text-left">-</td>
+                                        <td class="text-left">-</td>
+                                        <td class="text-left">-</td>
+                                        <td class="text-left">-</td>
+                                        <td class="text-left">-</td>
+                                        <td class="text-left">8000</td>
+                                    </tr>
                                     </tbody>
                                 </table>
                             </div>
