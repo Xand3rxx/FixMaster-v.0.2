@@ -53,11 +53,11 @@ class LoginController extends Controller
    * @return mixed
    *
    */
+  
+
   protected function authenticated(Request $request, $user)
   {
-    // $this->addDiscountToFirstTimeUserTrait($user->id);
-    $this->updateVerifiedUsers($user);
-
+   
     $this->log('Login', 'Informational', Route::currentRouteAction(), $user->email . ' logged in.');
   }
 

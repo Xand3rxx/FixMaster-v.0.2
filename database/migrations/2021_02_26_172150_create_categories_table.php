@@ -27,6 +27,8 @@ class CreateCategoriesTable extends Migration
                 ->onDelete('NO ACTION');
                 
             $table->string('name')->unique();
+            $table->float('labour_markup', 3);
+            $table->float('material_markup', 3);
             $table->softDeletes();
             $table->timestamps();
 

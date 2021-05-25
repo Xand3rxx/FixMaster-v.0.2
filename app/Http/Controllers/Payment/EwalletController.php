@@ -5,8 +5,9 @@ namespace App\Http\Controllers\Payment;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request; 
 use App\Models\Payment; 
-use App\Models\WalletTransaction;
+use App\Models\WalletTransaction; 
 use App\Models\Client; 
+use App\Models\ServicedAreas; 
 
 use App\Traits\RegisterPaymentTransaction;
 use App\Models\ServiceRequestPayment;
@@ -23,12 +24,21 @@ class EwalletController extends Controller
 
     public function store(Request $request)
     {
+        // return $request;
+        if (ServicedAreas::where('town_id', '=', $request['town_id'])->exists()) {
+            return back()->with('error', 'sorry!, this area you selected is not serviced at the moment, please try another area');
+        }
+        // return dd('test passed');
 
         $valid = $this->validate($request, [
             // List of things needed from the request like 
             'booking_fee'      => 'required',
             'payment_channel'  => 'required',
             'payment_for'     => 'required',
+
+            'service_id'                => 'required',
+            'myContact_id'              => 'required',
+            'servicdescriptione_id'     => 'required',
         ]);
 
         $client_controller = new ClientController;
@@ -79,22 +89,6 @@ class EwalletController extends Controller
                         $service_reqPayment->unique_id = $pay->unique_id;
                         $service_reqPayment->payment_type = $pay->payment_for;
                         $service_reqPayment->status = 'success';
-    
-                        if($request->hasFile('media_file')){
-                            $docs = $request->file('media_file');
-                            $documentName = sha1(time()) .'.'.$docs->getClientOriginalExtension();
-                            $imagePath = public_path('assets/service-request').'/'.$documentName;
-                            //Delete old document
-                            if(\File::exists(public_path('assets/service-request/'.$request->input('media_file')))){
-                                $done = \File::delete(public_path('assets/service-request/'.$request->input('media_file')));
-                                if($done){
-                                    // echo 'File has been deleted';
-                                }
-                            }
-                            //Move new image to `client-avatars` folder
-                            Image::make($docs->getRealPath())->resize(220, 220)->save($imagePath);
-                            $service_reqPayment->avatar = $imageName;
-                        }
     
                     }
                 }

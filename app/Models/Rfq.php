@@ -68,6 +68,16 @@ class Rfq extends Model
         return $this->hasMany(RfqSupplier::class, 'rfq_id');
     }
 
+    public function rfqSupplierInvoice()
+    {
+        return $this->hasOne(RfqSupplierInvoice::class, 'rfq_id');
+    }
+
+    public function rfqSuppliesInvoices()
+    {
+        return $this->hasMany(RfqSupplierInvoice::class, 'rfq_id');
+    }
+
     public function issuer()
     {
         return $this->belongsTo(User::class, 'issued_by')->with('account');

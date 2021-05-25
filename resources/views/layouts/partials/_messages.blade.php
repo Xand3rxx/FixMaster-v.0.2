@@ -13,6 +13,7 @@
 
 
 
+
 {{-- Secondary Alert --}}
 @if(Session::has('secondary'))
 <div class="alert alert-secondary alert-dismissible fade show" role="alert">

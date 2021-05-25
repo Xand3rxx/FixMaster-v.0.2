@@ -48,7 +48,7 @@ trait SendVerificationMail
     {
         return URL::temporarySignedRoute(
             'verification.verify',
-            Carbon::now()->addMinutes(Config::get('auth.verification.expire', 60)),
+            Carbon::now()->addMinutes(Config::get('auth.verification.expire', 3600)),
             [
                 'id' => $user->uuid,
                 'hash' => sha1($user->email),
