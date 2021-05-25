@@ -1,12 +1,12 @@
 <?php
 
 use App\Http\Controllers\Auth\VerificationController;
-use App\Http\Controllers\Frontend\ApplicantsForm\CSEFormController;
+use App\Http\Controllers\Frontend\CSEFormController;
 use App\Http\Controllers\InvoiceController;
 use App\Http\Controllers\ServiceRequest\ClientDecisionController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\Frontend\Registration\ClientRegistrationController;
+use App\Http\Controllers\Frontend\ClientRegistrationController;
 use App\Http\Controllers\PageController;
 
 /*
