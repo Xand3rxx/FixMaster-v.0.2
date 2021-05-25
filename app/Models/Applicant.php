@@ -43,9 +43,16 @@ class Applicant extends Model
         static::created(function ($applicant) {
             // $applicant this is the instance of the created applicant
             $messanger = new MessageController();
-            $mail_data = "<h1> Hello, " . $applicant->form_data['last_name_cse'] . " " . $applicant->form_data['first_name_cse'] . "</h1> <br> <p> Thank you for registering with us, we would review your application and respond as soon as possible. </p>";
-            $jsonResponse = $messanger->sendNewMessage('mail', 'Customer Service Executive Applicant Registration', 'dev@fix-master.com', $applicant->form_data['email_cse'], $mail_data);
+            // $mail_data = "<h1> Hello, " . $applicant->form_data['last_name_cse'] . " " . $applicant->form_data['first_name_cse'] . "</h1> <br> <p> Thank you for registering with us, we would review your application and respond as soon as possible. </p>";
+            // $jsonResponse = $messanger->sendNewMessage('mail', 'Customer Service Executive Applicant Registration', 'dev@fix-master.com', $applicant->form_data['email_cse'], $mail_data);
             // This is when i need to send a mail to the applicant that his application is submitted successfully!
+            $mail_data = collect([
+                'lastname' => $applicant->form_data['last_name_cse'],
+                'firstname' => $applicant->form_data['first_name_cse'],
+                'email' => $applicant->form_data['email_cse'],
+            ]);
+            $response = $messanger->sendNewMessage('email', 'Customer Service Executive Applicant Registration', 'dev@fix-master.com', $applicant->form_data['email_cse'], $mail_data, 'CSE_ACCOUNT_CREATION_NOTIFICATION');
+            dd($response);
         });
     }
 }
