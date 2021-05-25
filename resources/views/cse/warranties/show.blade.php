@@ -118,8 +118,8 @@
                             <span class="add-image-row"></span>
 
                         </section>
-                   
-                        @if(is_null($service_request->service_request_warranty->service_request_warranty_issued->scheduled_datetime))
+                    
+                        @if($shcedule_datetime=='' || is_null($shcedule_datetime))
                         <h3>Scheduled Fix Date</h3>
                         <section>
                         
@@ -139,6 +139,7 @@
                             </div>
                         </section>
                          @endif 
+                       
 
                         <h3>New RFQ</h3>
                     <section>
@@ -296,8 +297,10 @@
                 </div>
             </div><!-- df-example -->
         
+            @if(!empty($service_request->service_request_warranty->service_request_warranty_issued))
             <input type="hidden" value="{{$service_request->service_request_warranty->service_request_warranty_issued->scheduled_datetime}}" 
-            name="service_request_warrant_issued_schedule_date">
+            name="service_request_warrant_issued_schedule_date">   
+              @endif
             <input type="hidden" value="{{$service_request->uuid}}" name="service_request_uuid">
             <input type="hidden" value="{{$service_request->service_request_warranty->uuid}}" name="service_request_warranty_uuid">
             <input type="hidden" value="{{$service_request->service_request_warranty->id}}" name="service_request_warranty_id">
@@ -473,11 +476,15 @@
                                             <tr>
                                                 <td class="tx-medium">Technicians Assigned</td>
                                                 <td class="tx-color-03">
-                                                    {{CustomHelpers::arrayToList($service_request->service_request_assignees, 'technician-artisans') == 'UNAVAILABLE'? 
-                                                        CustomHelpers::getWarrantTechnician($service_request->service_request_warranty->service_request_warranty_issued->technician_id) 
-                                                        : 
-                                                    CustomHelpers::arrayToList($service_request->service_request_assignees, 'technician-artisans') 
-                                                    }}
+                                                @if(!empty($service_request->service_request_warranty->service_request_warranty_issued))
+                                                @if(!empty($service_request->service_request_warranty->service_request_warranty_issued->technician_id))
+                                               {{ CustomHelpers::getWarrantTechnician($service_request->service_request_warranty->service_request_warranty_issued->technician_id) }}
+
+                                                @endif
+                                                @else
+                                            {{ CustomHelpers::arrayToList($service_request->service_request_assignees, 'technician-artisans') }}
+                                                @endif
+                                                  
                                                 </td>
                                             </tr>
                                             <tr>
@@ -599,6 +606,7 @@
 
                         <div id="serviceRequestSummary" class="tab-pane pd-20 pd-xl-25">
                             <div class="divider-text">Diagnostic Reports</div>
+                            @if(!empty($service_request->service_request_warranty->service_request_warranty_issued))
                             @if(!empty($service_request->service_request_warranty->service_request_warranty_issued->warrantReport))
 
                             <div class="card-groups">
@@ -618,9 +626,11 @@
                           
                             </div>
                             @endif
+                            @endif
 
                             <div class="divider-text">Faulty Part Images</div>
                             <div class="row row-xs">
+                            @if(!empty($service_request->service_request_warranty->service_request_warranty_issued))
                             @if(!empty($service_request->service_request_warranty->service_request_warranty_issued->warrantyImage))
                             @foreach($service_request->service_request_warranty->service_request_warranty_issued->warrantyImage as $item)
 
@@ -650,6 +660,7 @@
                                 @endforeach
                     
                                 @endif
+                                 @endif
                             </div><!-- row -->
 
                             <div class="divider-text">RFQ's</div>

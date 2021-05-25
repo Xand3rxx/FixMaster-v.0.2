@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Auth\VerificationController;
 use App\Http\Controllers\Frontend\ApplicantsForm\CSEFormController;
 use App\Http\Controllers\InvoiceController;
 use App\Http\Controllers\ServiceRequest\ClientDecisionController;
@@ -29,11 +30,24 @@ Auth::routes([
     'verify'   => false,  // for email verification
 ]);
 
-Route::post('/email/verification-notification', function (\Illuminate\Http\Request $request) {
-    $request->user()->sendEmailVerificationNotification();
+Route::get('email/verify', [VerificationController::class, 'show'])->middleware('auth')->name('verification.notice');
+Route::get('/email/verify/{id}/{hash}', [VerificationController::class, 'verify'])->middleware(['auth', 'signed'])->name('verification.verify');
+Route::post('/email/verification-notification',  [VerificationController::class, 'resend'])->middleware(['auth', 'throttle:6,1'])->name('verification.send');
 
-    return back()->with('status', 'verification-link-sent');
-})->middleware(['auth', 'throttle:6,1'])->name('verification.send');
+// Route::post('/email/verification-notification', function (\Illuminate\Http\Request $request) {
+//     // Call Notification EmailVerification trait
+//     $request->user()->sendEmailVerificationNotification();
+//     return back()->with('status', 'Verification Email Sent');
+// })->middleware(['auth', 'throttle:6,1'])->name('verification.send');send'])->middleware(['auth', 'throttle:6,1'])->name('verification.send');
+// Route::post('/email/verification-notification', function (\Illuminate\Http\Request $request) {
+//     // Call Notification EmailVerification trait
+//     $request->user()->sendEmailVerificationNotification();
+//     return back()->with('status', 'Verification Email Sent');
+// })->middleware(['auth', 'throttle:6,1'])->name('verification.send');
+// Route::get('email/verify', function () {
+//     return view('auth.verify',);
+// })->middleware('auth')->name('verification.notice');
+
 
 Route::view('/', 'frontend.index')->name('frontend.index');
 

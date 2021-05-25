@@ -5,6 +5,7 @@ use App\Http\Controllers\EstateController;
 use App\Http\Controllers\IncomeController;
 use App\Http\Controllers\EarningController;
 use App\Http\Controllers\InvoiceController;
+use App\Http\Middleware\EmailMustBeVerified;
 use App\Http\Controllers\Admin\RfqController;
 use App\Http\Controllers\Admin\TaxController;
 use App\Http\Controllers\SimulationController;
@@ -20,8 +21,8 @@ use App\Http\Controllers\Client\ClientController;
 use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\WarrantyController;
 use App\Http\Controllers\Client\PaystackController;
-use App\Http\Controllers\Admin\ActivityLogController;
 
+use App\Http\Controllers\Admin\ActivityLogController;
 use App\Http\Controllers\Admin\AdminRatingController;
 use App\Http\Controllers\Admin\AdminReviewController;
 use App\Http\Controllers\Admin\ToolsRequestController;
@@ -50,6 +51,7 @@ use App\Http\Controllers\Supplier\DispatchController as SupplierDispatchControll
 use App\Http\Controllers\Admin\Report\SupplierReportController;
 use App\Http\Controllers\Admin\ServiceRequestController as RequestServiceController;
 use App\Http\Controllers\Admin\User\ClientController as AdministratorClientController;
+use App\Http\Controllers\Admin\Report\TechnicianReportController;
 use App\Http\Controllers\Payment\FlutterwaveController;
 use App\Http\Controllers\Admin\Prospective\CSEController as ProspectiveCSEController;
 use App\Http\Controllers\Admin\Prospective\SupplierController as ProspectiveSupplierController;
@@ -78,8 +80,7 @@ use App\Http\Controllers\Admin\Prospective\TechnicianArtisanController as Prospe
 */
 
 
-Route::prefix('admin')->group(function () {
-    Route::name('admin.')->group(function () {
+Route::prefix('admin')->name('admin.')->group(function () {
         Route::view('/', 'admin.index')->name('index'); //Take me to Admin Dashboard
 
         // Route::view('/ratings/cse-diagnosis', 'admin.ratings.cse_diagnosis_rating')->name('category');
@@ -315,15 +316,21 @@ Route::prefix('admin')->group(function () {
         Route::post('/reports/client-service-executive/job-assigned-sorting',      [CustomerServiceExecutiveReportController::class, 'jobAssignedSorting'])->name('cse_report_first_sorting');
         Route::post('/reports/client-service-executive/amount-earned-sorting',      [CustomerServiceExecutiveReportController::class, 'amountEarnedSorting'])->name('cse_report_second_sorting');
 
+
+        //Technician Reporting Routes
+        Route::get('/reports/technician',  [TechnicianReportController::class,'index'])->name('technician_reports');
+        Route::post('/reports/technician/job-assigned-sorting',      [TechnicianReportController::class, 'jobAssignedSorting'])->name('technician_report_first_sorting');
+
+//     });
+// });
         Route::get('/reports/supplier',             [SupplierReportController::class, 'index'])->name('supplier_reports');
         Route::post('/reports/supplier/item-delivered-sorting', [SupplierReportController::class, 'itemDeliveredSorting'])->name('supplier_report_first_sorting');
 
-    });
 });
 
 //All routes regarding clients should be in here
 
-Route::prefix('/client')->middleware('monitor.clientservice.request.changes')->group(function () {
+Route::prefix('client')->middleware('verified','monitor.clientservice.request.changes')->group(function () {
     Route::name('client.')->group(function () {
         //All routes regarding clients should be in here
         Route::get('/',                                      [ClientController::class, 'index'])->name('index'); //Take me to Supplier Dashboard
@@ -342,7 +349,7 @@ Route::prefix('/client')->middleware('monitor.clientservice.request.changes')->g
         Route::post('/requests/technician_profile',          [ClientController::class, 'technicianProfile'])->name('technician_profile');
         Route::get('/requests/warranty/{request:id}',          [ClientController::class, 'warrantyInitiate'])->name('warranty_initiate');
         Route::get('/requests/reinstate/{request:id}',          [ClientController::class, 'reinstateRequest'])->name('reinstate_request');
-        Route::get('/requests/completed-request/{request:id}',          [ClientController::class, 'markCompletedRequest'])->name('completed_request');
+        Route::get('/requests/completed-request/{request:id}',  [ClientController::class, 'markCompletedRequest'])->name('completed_request');
 
 
         // E-wallet Routes for clients
@@ -376,7 +383,9 @@ Route::prefix('/client')->middleware('monitor.clientservice.request.changes')->g
 
         Route::any('invoicePayment',                [InvoiceController::class, 'savePayment'])->name('invoice.payment');
         Route::get('verify/invoicePayment',         [InvoiceController::class, 'verifyPayment'])->name('invoice.verifyPayment');
-        Route::any('/invoiceRequestpaystack',       [InvoiceController::class, 'initiatePayment'])->name('invoice.initiatePayment');
+//        Route::any('/invoiceRequestpaystack',       [InvoiceController::class, 'initiatePayment'])->name('invoice.initiatePayment');
+        Route::any('flutterwavePayment',                [InvoiceController::class, 'saveFlutterwavePayment'])->name('flutterwave.payment');
+        Route::get('verify/flutterwavePayment',         [InvoiceController::class, 'verifyFlutterwavePayment'])->name('invoice.verifyflutterwavePayment');
 
         // // view all my service request
         Route::get('requests',                     [ClientController::class, 'myServiceRequest'])->name('service.all');
@@ -404,13 +413,13 @@ Route::prefix('/client')->middleware('monitor.clientservice.request.changes')->g
         // Route::get('/payment/flutterwave/{type}', [FlutterwaveController::class, 'complete'])->name('payment-flutterwave-complete');
         // /** Flutterwave Payment Gateway End */
 
-        
 
 
 
 
 
-    });
+
+});
 });
 
 
@@ -458,7 +467,7 @@ Route::prefix('/cse')->middleware('monitor.cseservice.request.changes')->group(f
                 // 'warranties' => \App\Models\Warranty::all(),
             ]
         )->name('request_details');
-    
+
 
         Route::get('/warranty/claims/list', [CseController::class, 'warranty_claims_list'])->name('warranty_claims_list');
         Route::get('/warranty-claims/details', [CseController::class, 'warranty_claims'])->name('warranty_claims');
@@ -466,13 +475,15 @@ Route::prefix('/cse')->middleware('monitor.cseservice.request.changes')->group(f
         Route::get('/warranty/claims/details/{warranty:uuid}',      [CseController::class,  'warranty_details'])->name('warranty_details');
         Route::get('/mark/warrant/claims/resolved/{warranty:uuid}',      [WarrantyController::class, 'resolvedWarranty'])->name('mark_warranty_resolved');
 
+        Route::get('/sub-service-dynamic-feilds',  [CseController::class, 'subServiceDynamicFields'])->name('sub_service_dynamic_fields');
+
+
   });
 });
 
 
 
-Route::prefix('/supplier')->group(function () {
-    Route::name('supplier.')->group(function () {
+Route::prefix('/supplier')->name('supplier.')->group(function () {
         //All routes regarding suppliers should be in here
         Route::get('/',                    [SupplierProfileController::class, 'dashboard'])->name('index'); //Take me to Supplier Dashboard
         Route::view('/messages/inbox',      'supplier.messages.inbox')->name('messages.inbox');
@@ -499,11 +510,9 @@ Route::prefix('/supplier')->group(function () {
         Route::get('/dispatch/delivered',                          [SupplierDispatchController::class, 'dispatchDelivered'])->name('dispatches_delivered');
         Route::get('/dispatch/returned',                          [SupplierDispatchController::class, 'dispatchReturned'])->name('dispatches_returned');
         Route::get('/requests-for-quote/details/image/{image:id}',            [SupplierRfqController::class, 'rfqDetailsImage'])->name('rfq_details_image');
-    });
 });
 
-Route::prefix('/technician')->group(function () {
-    Route::name('technician.')->group(function () {
+Route::prefix('/technician')->name('technician.')->group(function () {
         //All routes regarding technicians should be in here
         Route::get('/',                                 [TechnicianProfileController::class, 'index'])->name('index');    //Take me to Technician Dashboard
         Route::get('/location-request',                 [TechnicianProfileController::class, 'locationRequest'])->name('location_request');
@@ -527,11 +536,9 @@ Route::prefix('/technician')->group(function () {
         Route::view('/consultations/ongoing', 'technician.consultations.ongoing')->name('consultations.ongoing');
         Route::view('/consultations/completed', 'technician.consultations.completed')->name('consultations.completed');
         Route::view('/requests/cancelled', 'technician.requests.cancelled')->name('requests.cancelled');
-    });
 });
 
-Route::prefix('/quality-assurance')->group(function () {
-    Route::name('quality-assurance.')->group(function () {
+Route::prefix('/quality-assurance')->name('quality-assurance.')->group(function () {
         //All routes regarding quality_assurance should be in here
         Route::get('/', [ServiceRequestController::class, 'index'])->name('index');
         Route::get('/profile',    [QualityAssuranceProfileController::class, 'view_profile'])->name('view_profile');
@@ -559,12 +566,10 @@ Route::prefix('/quality-assurance')->group(function () {
         Route::get('/get_chart_data', [ServiceRequestController::class, 'chat_data']);
         //Route::get('/requests/details/{uuid}',  [ServiceRequestController::class, 'show'])->name('request_details');
         Route::get('/consultations/pending_details/{uuid}',  [ServiceRequestController::class, 'show'])->name('consultations.pending_details');
-    });
 });
 
 
-Route::prefix('/franchisee')->group(function () {
-    Route::name('franchisee.')->group(function () {
+Route::prefix('/franchisee')->name('franchisee.')->group(function () {
         Route::view('/',                'franchisee.index')->name('index'); //Take me to frnahisee Dashboard
         Route::view('/messages/inbox',      'franchisee.messages.inbox')->name('messages.inbox');
         Route::view('/messages/sent',       'franchisee.messages.sent')->name('messages.sent');
@@ -574,5 +579,4 @@ Route::prefix('/franchisee')->group(function () {
         Route::view('/profile',             'franchisee.view_profile')->name('view_profile');
         Route::view('/profile/edit',        'franchisee.edit_profile')->name('edit_profile');
         Route::view('/location-request',    'franchisee.location_request')->name('location_request');
-    });
 });

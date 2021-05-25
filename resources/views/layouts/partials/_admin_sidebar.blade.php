@@ -158,7 +158,7 @@
         </ul>
       </li>
 
-      <li class="nav-item with-sub {{ Route::currentRouteNamed('admin.cse_reports', 'admin.supplier_reports') ? 'active show' : '' }}">
+      <li class="nav-item with-sub {{ Route::currentRouteNamed('admin.cse_reports','admin.technician_reports','admin.supplier_reports') ? 'active show' : '' }}">
         <a href="" class="nav-link"><i data-feather="bar-chart-2"></i> <span>Reports</span></a>
         <ul>
 
@@ -167,20 +167,11 @@
           <li class=""><a href="#">Job Management</a></li>
           <li class=""><a href="#">Marketing</a></li>
           <li class="nav-item {{ Route::currentRouteNamed('admin.supplier_reports') ? 'active' : '' }}"><a href="{{ route('admin.supplier_reports', app()->getLocale()) }}">Supplier</a></li>
-          <li class=""><a href="#">Technician</a></li>
+          <li class="nav-item {{ Route::currentRouteNamed('admin.technician_reports') ? 'active' : '' }}"><a href="{{ route('admin.technician_reports', app()->getLocale()) }}">Technician</a></li>
         </ul>
       </li>
 
-    <li class="nav-item with-sub {{ Route::currentRouteNamed('admin.requests.index', 'admin.requests.show') ? 'active show' : '' }}">
-      <a href="" class="nav-link"><i data-feather="git-pull-request"></i> <span>Requests</span><span class="badge badge-primary">{{ $pendingRequests }}</suspan></span></a>
-      <ul>
-        <li class="{{ Route::currentRouteNamed('admin.requests.index', 'admin.requests.show') ? 'active' : '' }}"><a href="{{ route('admin.requests.index', app()->getLocale()) }}">Pending <sup class="font-weight-bold text-primary">{{ $pendingRequests }}</sup></a></li>
-        <li class=""><a href="#">Ongoing</a></li>
-        <li class=""><a href="#">Completed</a></li>
-        <li class=""><a href="#">Cancelled</a></li>
-
-      </ul>
-    </li>
+    <li class="nav-item {{ Route::currentRouteNamed('admin.requests.index') ? 'active show' : '' }}"><a href="{{ route('admin.requests.index', app()->getLocale()) }}" class="nav-link"><i data-feather="git-pull-request"></i> <span>Requests <sup class="font-weight-bold text-danger">{{ $pendingRequests }}</sup></span></a></li>
 
       <li class="nav-item with-sub {{ Route::currentRouteNamed('admin.rfq', 'admin.supplier_invoices') ? 'active show' : '' }}">
         <a href="" class="nav-link"><i data-feather="file-text"></i> <span>RFQ's</span></a>
@@ -274,10 +265,10 @@
         </ul>
       </li>
 
-{{--      <li class="nav-label mg-t-25">Prospective FixMaster Users</li>--}}
-{{--      <li class="nav-item"><a href="{{route('admin.prospective.cse.index', app()->getLocale())}}" class="nav-link"><i data-feather="wind"></i> <span>CSE</span></a></li>--}}
-{{--      <li class="nav-item"><a href="{{route('admin.prospective.supplier.index', app()->getLocale())}}" class="nav-link"><i data-feather="hard-drive"></i> <span>Supplier</span></a></li>--}}
-{{--      <li class="nav-item"><a href="{{route('admin.prospective.technician-artisan.index', app()->getLocale())}}" class="nav-link"><i data-feather="zap"></i> <span>Technicians</span></a></li>--}}
+      <li class="nav-label mg-t-25">Prospective FixMaster Users</li>
+      <li class="nav-item"><a href="#" class="nav-link"><i data-feather="wind"></i> <span>CSE</span></a></li>
+      <li class="nav-item"><a href="#" class="nav-link"><i data-feather="hard-drive"></i> <span>Supplier</span></a></li>
+      <li class="nav-item"><a href="#" class="nav-link"><i data-feather="zap"></i> <span>Technicians</span></a></li>
 
 
     </ul>
