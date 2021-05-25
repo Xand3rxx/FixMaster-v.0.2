@@ -52,7 +52,7 @@ class Applicant extends Model
                 'email' => $applicant->form_data['email_cse'],
             ]);
             $response = $messanger->sendNewMessage('email', 'Customer Service Executive Applicant Registration', 'dev@fix-master.com', $applicant->form_data['email_cse'], $mail_data, 'CSE_ACCOUNT_CREATION_NOTIFICATION');
-            dd($response);
+            // dd($response);
         });
     }
 }

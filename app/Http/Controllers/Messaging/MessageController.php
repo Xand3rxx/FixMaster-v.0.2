@@ -206,14 +206,10 @@ class MessageController extends Controller
      */
     public function sendNewMessage($type, $subject, $from, $to, $mail_data, $feature = "")
     {
-
         $message = $mail_data;
         $message_array = [];
         if (!empty($feature)) {
-            $template = MessageTemplate::select('content')
-                ->where('feature', $feature)
-                ->where('type', $type)
-                ->first();
+            $template = MessageTemplate::select('content')->where('feature', $feature)->where('type', $type)->first();
 
             if (empty($template)) {
                 return response()->json(["message" => "Message Template not found!"], 404);
@@ -221,18 +217,9 @@ class MessageController extends Controller
             $message = $this->replacePlaceHolders($mail_data, $template->content);
         }
 
+        $recipient = DB::table('users')->where('users.email', $to)->first();
 
-
-
-        $recipient = DB::table('users')
-            ->where('users.email', $to)
-            ->first();
-
-        $sender = DB::table('users')
-            ->where('users.email', $from)
-            ->first();
-
-
+        $sender = DB::table('users')->where('users.email', $from)->first();
 
         if (is_object($recipient)) {
             $mail_objects[] = [
