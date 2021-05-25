@@ -155,7 +155,6 @@ class MessageController extends Controller
         $receiverDetails = [];
 
         $senderDetails = $this->getUser($sender);
-        Log::debug($recipients);
         foreach($recipients as $recipient){
             array_push($receivers, $recipient['value']);
         }
@@ -204,6 +203,7 @@ class MessageController extends Controller
     
 
     public function sendNewMessage( $type, $subject, $from, $to, $mail_data,$feature=""){
+    
        $message = $mail_data;
        $message_array = [];
         if(!empty($feature)){
@@ -220,6 +220,7 @@ class MessageController extends Controller
         }
 
     
+     
 
         $recipient = DB::table('users')
         ->where('users.email', $to )
@@ -228,6 +229,8 @@ class MessageController extends Controller
         $sender = DB::table('users')
         ->where('users.email', $from )
         ->first();
+
+
       
          if(is_object($recipient)){
             $mail_objects[] = [
@@ -240,17 +243,23 @@ class MessageController extends Controller
                 'updated_at'        => Carbon::now(),
                 'mail_status'=>'Not Sent',
             ];
-        
+          
+
         Message::insert($mail_objects);
          }
             
 
         $message_array = ['to'=>$to, 'from'=>$from, 'subject'=>$subject, 'content'=>$message];
-        if($type=='mail')
+        if($type=='mail'){
             $this->dispatch(new PushEmails($message_array));
+            Log::debug("I sent the email");
+        }
+           
         elseif($type=='sms')
            $this->dispatch(new PushSMS($message_array));
         
+          
+
 
     }
 
