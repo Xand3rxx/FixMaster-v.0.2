@@ -18,22 +18,22 @@ class CSEFormController extends Controller
     {
         // Validate Request
         (array) $valid = $this->validate($request, [
-            'first_name_cse'         =>   'bail|required|string|max:180',
-            'last_name_cse'          =>   'bail|required|string|max:180',
-            'phone_cse'              =>   'bail|required|min:8',
-            'email_cse'              =>   'bail|required|email|unique:users,email',
-            'gender_cse'             => 'required|in:male,female,others',
-            'date_of_birth_cse'      => 'required|date|max:' . now()->subYears(18)->toDateString(),
-            'address_cse'            =>   'required|string',
+            'first_name'         =>   'bail|required|string|max:180',
+            'last_name'          =>   'bail|required|string|max:180',
+            'phone'              =>   'bail|required|min:8',
+            'email'              =>   'bail|required|email|unique:users,email',
+            'gender'             => 'required|in:male,female,others',
+            'date_of_birth'      => 'required|date|max:' . now()->subYears(18)->toDateString(),
+            'address'            =>   'required|string',
             'address_latitude'       =>   'sometimes|string',
             'address_longitude'      =>   'sometimes|string',
-            'cv_cse'                 => 'required||max:3000|mimetypes:application/msword,application/pdf,application/vnd.openxmlformats-officedocument.wordprocessingml.document',
-            'referral_code_cse'      => 'sometimes|string|nullable',
+            'cv'                 => 'required||max:3000|mimetypes:application/msword,application/pdf,application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+            'referral_code'      => 'sometimes|string|nullable',
 
         ]);
 
-        if ($request->hasFile('cv_cse')) {
-            $valid = array_merge($valid, ['cv_cse' => $valid['cv_cse']->store('assets/applicant-uploads', 'public')]);
+        if ($request->hasFile('cv')) {
+            $valid = array_merge($valid, ['cv' => $valid['cv']->store('assets/applicant-uploads', 'public')]);
         }
 
         return collect(Applicant::create(['user_type' => Applicant::USER_TYPES[0],  'form_data' => $valid]))->isNotEmpty()

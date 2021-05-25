@@ -1,13 +1,14 @@
 <?php
 
-use App\Http\Controllers\Auth\VerificationController;
-use App\Http\Controllers\Frontend\CSEFormController;
-use App\Http\Controllers\InvoiceController;
-use App\Http\Controllers\ServiceRequest\ClientDecisionController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\Frontend\ClientRegistrationController;
 use App\Http\Controllers\PageController;
+use App\Http\Controllers\InvoiceController;
+use App\Http\Controllers\Frontend\CSEFormController;
+use App\Http\Controllers\Auth\VerificationController;
+use App\Http\Controllers\Frontend\ClientRegistrationController;
+use App\Http\Controllers\ServiceRequest\ClientDecisionController;
+use App\Http\Controllers\Frontend\TechnicianArtisanFormController;
 
 /*
 |--------------------------------------------------------------------------
@@ -63,7 +64,9 @@ Route::post('/estate/add',                  [\App\Http\Controllers\EstateControl
 Route::view('/faq',                         'frontend.faq')->name('frontend.faq');
 Route::view('/register',                    'auth.register')->name('frontend.register');
 
+// Form Creation 
 Route::post('customer-service-executive', [CSEFormController::class, '__invoke'])->name('frontend.customer-service-executive.store');
+Route::post('technicain-artisan', [TechnicianArtisanFormController::class,'__invoke'])->name('frontend.technicain-artisan.store');
 
 Route::get('/invoice/{invoice:uuid}', [InvoiceController::class, 'invoice'])->name('invoice');
 //Route::get('/invoice/', [InvoiceController::class, 'invoice'])->name('invoice');
