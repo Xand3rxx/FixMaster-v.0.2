@@ -17,8 +17,8 @@ class CategorySeeder extends Seeder
         $category1 = new Category();
         $category1->user_id = '1';
         $category1->name = 'Uncategorized';
-        $category1->labour_markup = 0.10;
-        $category1->material_markup = 0.10;
+        $category1->labour_markup = 0.00;
+        $category1->material_markup = 0.00;
         $category1->save();
 
         $category2 = new Category();

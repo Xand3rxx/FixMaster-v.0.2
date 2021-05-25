@@ -181,6 +181,10 @@ Route::prefix('admin')->name('admin.')->group(function () {
 
         //  location request ajax_contactForm
         Route::get('/location-request',                     [AdminLocationRequestController::class, 'index'])->name('location_request');
+        // Route::get('/seviced-areas',                     [ServicedAreasController::class, 'index'])->name('seviced_areas');
+
+        //  serviced areas
+        Route::resource('seviced-areas',                     ServicedAreasController::class);
 
         // Route::post('/get-names',                           [AdminLocationRequestController::class, 'getNames'])->name('get_names');
         // Route::post('/request-location',                    [AdminLocationRequestController::class, 'requestLocation'])->name('request_location');
@@ -388,10 +392,10 @@ Route::prefix('client')->middleware('verified','monitor.clientservice.request.ch
         Route::any('flutterwavePayment',                [InvoiceController::class, 'saveFlutterwavePayment'])->name('flutterwave.payment');
         Route::get('verify/flutterwavePayment',         [InvoiceController::class, 'verifyFlutterwavePayment'])->name('invoice.verifyflutterwavePayment');
 
-        // // view all my service request
+        // *****************my service request**********************//
         Route::get('requests',                     [ClientController::class, 'myServiceRequest'])->name('service.all');
         Route::get('/requests/details/{ref}',      [ClientController::class, 'requestDetails'])->name('client.request_details');
-        Route::get('/requests/edit/{id}',          [ClientController::class, 'edit'])->name('client.edit_request');
+        Route::get('/requests/edit/{id}',          [ClientController::class, 'editRequest'])->name('client.edit_request');
         Route::put('/requests/update/{id}',        [ClientController::class, 'update'])->name('client.update_request');
 
 
