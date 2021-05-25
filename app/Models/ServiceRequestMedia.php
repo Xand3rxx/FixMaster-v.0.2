@@ -12,6 +12,6 @@ class ServiceRequestMedia extends Model
     protected $guarded = ['created_at', 'updated_at'];
 
     public function media_files(){
-        return $this->belongsTo(MediaFile::class, 'media_id', 'id');
+        return $this->belongsTo(Media::class, 'media_id', 'id');
     }
 }

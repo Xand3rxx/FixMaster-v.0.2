@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Models\Payment; 
 use App\Models\PaymentGateway;
 use App\Models\Client;
+use App\Models\ServicedAreas;
 
 use App\Traits\RegisterPaymentTransaction;
 use App\Traits\GenerateUniqueIdentity as Generator;
@@ -40,12 +41,20 @@ class FlutterwaveController extends Controller
      */
     public function store(Request $request)
     {
-
+        // return $request;
+        if (ServicedAreas::where('town_id', '=', $request['town_id'])->exists()) {
+            return back()->with('error', 'sorry!, this area you selected is not serviced at the moment, please try another area');
+        }
+        
         $valid = $this->validate($request, [
             // List of things needed from the request like 
             'booking_fee'      => 'required',
             'payment_channel'  => 'required',
             'payment_for'     => 'required',
+
+            'service_id'                => 'required',
+            'myContact_id'              => 'required',
+            'servicdescriptione_id'     => 'required',
         ]);
          $all = $request->all();
         // dd($all);
