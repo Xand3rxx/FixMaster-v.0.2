@@ -3,10 +3,29 @@
 namespace App\Http\Controllers\Technician;
 
 use App\Http\Controllers\Controller;
+use App\Models\ServiceRequestAssigned;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class ServiceRequestController extends Controller
 {
+
+
+
+    public function getActiveRequest(Request $request){
+
+        $activeRequest = ServiceRequestAssigned::whereHas('service_request', function ($query) {
+            $query->where('status_id', 2);
+        })
+            ->where('user_id', Auth::id())
+            ->where('assistive_role', 'Technician')
+            ->get();
+        return view('technician.requests.active')
+            ->with('activeJobs', $activeRequest);
+    }
+
+
+
     /**
      * Display a listing of the resource.
      *
