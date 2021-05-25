@@ -230,10 +230,18 @@
                                             <td class="text-left">{{ $item->component_name }}</td>
                                             <td class="text-left">{{ $item->quantity }}</td>
                                             <td class="text-left">{{ $item->unit_of_measurement }}</td>
+                                            <td class="text-left">{{ $item->amount/$item->quantity }}</td>
                                             <td class="text-left">{{ $item->amount }}</td>
-                                            <td class="text-left">{{ $item->quantity* $item->amount }}</td>
                                         </tr>
                                     @endforeach
+                                    <tr>
+                                        <td class="text-left">-</td>
+                                        <td class="text-left">-</td>
+                                        <td class="text-left">-</td>
+                                        <td class="text-left">-</td>
+                                        <td class="text-left">-</td>
+                                        <td class="text-left">8000</td>
+                                    </tr>
                                     </tbody>
                                 </table>
                             </div>
@@ -307,7 +315,6 @@
     :
     "
     <li class='test-muted d-flex justify-content-between'>Subtotal :<span>₦ ". number_format($subTotal, 2) ."</span></li>
-    <li class='test-muted d-flex justify-content-between'>Logistics :<span>₦ ". number_format($logistics, 2) ."</span></li>
     <li class='text-muted d-flex justify-content-between'>FixMaster Royalty :<span>₦ ". number_format($fixmasterRoyalty, 2)."</span></li>
     <li class='text-muted d-flex justify-content-between'>Taxes :<span> ₦ ". number_format($tax, 2)."</span></li>
     <li class='d-flex justify-content-between text-danger'>Less Booking Fee :<span> - ₦ 1,500.00</span></li>
