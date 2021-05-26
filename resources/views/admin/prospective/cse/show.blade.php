@@ -16,8 +16,8 @@
 
             <div class="d-md-block">
                 <a href="{{route('admin.prospective.cse.index', app()->getLocale())}}" class="btn btn-primary"><i class="fas fa-arrow-left"></i> Back</a>
-                <a href="" class="btn btn-success"><i class="fas fa-check"></i> Approve </a>
-                <a href="" class="btn btn-danger"><i class="fas fa-ban"></i> Decline </a>
+                <a href="#" data-user="{{$user['uuid']}}" data-action="approve" class="cse-decision-making btn btn-success"><i class="fas fa-check"></i> Approve </a>
+                <a href="#" data-user="{{$user['uuid']}}" data-action="decline" class="cse-decision-making btn btn-danger"><i class="fas fa-ban"></i> Decline </a>
             </div>
         </div>
 
@@ -43,5 +43,5 @@
         </div>
     </div>
 </div>
-
+<x-cse.decision/>
 @endsection

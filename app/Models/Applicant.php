@@ -13,6 +13,8 @@ class Applicant extends Model
 
     const USER_TYPES = ['cse', 'supplier', 'technician'];
 
+    const STATUSES = ['pending', 'approved', 'declined'];
+
     /**
      * The attributes that aren't mass assignable.
      *
@@ -68,6 +70,10 @@ class Applicant extends Model
                 ]);
                 $messanger->sendNewMessage('email', Str::title(Str::of($template_feature)->replace('_', ' ',)), 'dev@fix-master.com', $mail_data['email'], $mail_data, $template_feature);
             }
+        });
+
+        static::updating(function ($applicant) {
+            dd($applicant);
         });
     }
 }

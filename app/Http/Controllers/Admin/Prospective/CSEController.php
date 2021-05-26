@@ -21,27 +21,6 @@ class CSEController extends Controller
     }
 
     /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        //
-    }
-
-    /**
      * Display the specified resource.
      *
      * @param  string $uuid
@@ -55,6 +34,48 @@ class CSEController extends Controller
     }
 
     /**
+     * Handling of CSE Application Decision
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function decision(Request $request)
+    {
+        (array)$decision = $request->validate([
+            'decision' => 'required|string|in:approve,decline',
+            'user' => 'required|uuid|exists:applicants,uuid'
+        ]);
+        return $this->handleDecision($decision)
+            ? redirect()->route('admin.prospective.cse.index', app()->getLocale())->with('success', 'Application Decision Recorded')
+            : back()->with('error', 'Error Occured Updating Application Decision');
+    }
+
+    /**
+     * Handling of CSE Application Decision
+     *
+     * @param  string  $decision
+     * @return bool
+     */
+    protected function handleDecision(array $decision)
+    {
+        switch ($decision['decision']) {
+            case 'approve':
+                # code...
+                return Applicant::where('uuid', $decision['user'])->update(['status' =>  Applicant::STATUSES[1]]);
+                break;
+
+            case 'decline':
+                # code...
+                return Applicant::where('uuid', $decision['user'])->update(['status' =>  Applicant::STATUSES[2]]);
+                break;
+
+            default:
+                return false;
+                break;
+        }
+    }
+
+    /**
      * Show the form for editing the specified resource.
      *
      * @param  string $uuid
@@ -65,17 +86,7 @@ class CSEController extends Controller
         //
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  string $uuid
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
-        //
-    }
+
 
     /**
      * Remove the specified resource from storage.
