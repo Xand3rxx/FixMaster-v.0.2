@@ -174,6 +174,7 @@ tbody td, thead th {
 }
 </style>
 
+
 <div class="col-lg-8 col-12">
     <div class="card custom-form border-0">
         <div class="card-body mt-4">
@@ -314,7 +315,30 @@ tbody td, thead th {
                 </div>
             </div>
         @endforeach
+
+        
     @endif
+
+
+
+    <div class="col-md-12 form-group">
+        <h5><span class="font-weight-bold">Do you want to be contacted?</span></h5>
+    </div>
+
+    <div class="col-md-6 form-group">
+        <div class="custom-control custom-radio form-group position-relative">
+            <input type="radio" id="yes_contact" name="contacted" class="custom-control-input input-check" value="1" />
+            <label class="custom-control-label" for="yes_contact">Your Dedicated Project Manager will call you within the hour</label>
+        </div>
+    </div>
+
+    <div class="col-md-6 form-group">
+        <div class="custom-control custom-radio form-group position-relative">
+            <input type="radio" id="no_contact" name="contacted" class="custom-control-input input-check" value="0" />
+            <label class="custom-control-label" for="no_contact">I prefer to call my Dedicated Project Manager at my convenience</label>
+        </div>
+    </div>
+
 
     <div class="col-md-12 form-group">
         <h5><span class="font-weight-bold">Payment Options</span></h5>
