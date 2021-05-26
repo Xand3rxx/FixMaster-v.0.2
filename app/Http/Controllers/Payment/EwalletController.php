@@ -36,7 +36,6 @@ class EwalletController extends Controller
             'payment_channel'  => 'required',
             'payment_for'     => 'required',
 
-            'service_id'                => 'required',
             'myContact_id'              => 'required',
             'servicdescriptione_id'     => 'required',
         ]);

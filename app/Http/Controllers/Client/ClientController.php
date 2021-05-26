@@ -946,28 +946,28 @@ class ClientController extends Controller
 
 
         // upload multiple media files
-        foreach($request->media_file as $key => $file)
-        {
-            $originalName[$key] = $file->getClientOriginalName();
+        // foreach($request->media_file as $key => $file)
+        // {
+        //     $originalName[$key] = $file->getClientOriginalName();
 
-            $fileName = sha1($file->getClientOriginalName() . time()) . '.'.$file->getClientOriginalExtension();
-            $filePath = public_path('assets/service-request-media-files');
-            $file->move($filePath, $fileName);
-            $data[$key] = $fileName; 
-        }
-            $unique_name   = json_encode($data);
-            $original_name = json_encode($originalName);
+        //     $fileName = sha1($file->getClientOriginalName() . time()) . '.'.$file->getClientOriginalExtension();
+        //     $filePath = public_path('assets/service-request-media-files');
+        //     $file->move($filePath, $fileName);
+        //     $data[$key] = $fileName; 
+        // }
+        //     $unique_name   = json_encode($data);
+        //     $original_name = json_encode($originalName);
 
-            $saveToMedia = new Media();
-            $saveToMedia->client_id     = auth()->user()->id;
-            $saveToMedia->original_name = $original_name;
-            $saveToMedia->unique_name   = $unique_name;
-            $saveToMedia->save();
+        //     $saveToMedia = new Media();
+        //     $saveToMedia->client_id     = auth()->user()->id;
+        //     $saveToMedia->original_name = $original_name;
+        //     $saveToMedia->unique_name   = $unique_name;
+        //     $saveToMedia->save();
 
-            $saveServiceRequestMedia = new ServiceRequestMedia;
-            $saveServiceRequestMedia->media_id            = $saveToMedia->id; 
-            $saveServiceRequestMedia->service_request_id  = $service_request->id;
-            $saveServiceRequestMedia->save(); 
+        //     $saveServiceRequestMedia = new ServiceRequestMedia;
+        //     $saveServiceRequestMedia->media_id            = $saveToMedia->id; 
+        //     $saveServiceRequestMedia->service_request_id  = $service_request->id;
+        //     $saveServiceRequestMedia->save(); 
 
 
             // file uploading

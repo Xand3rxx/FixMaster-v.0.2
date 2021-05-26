@@ -49,11 +49,10 @@ class PaystackController extends Controller
             'payment_channel'  => 'required',
             'payment_for'     => 'required',
 
-            'service_id'                => 'required',
             'myContact_id'              => 'required',
             'servicdescriptione_id'     => 'required',
         ]);
-         $all = $request->all();
+         $all = $request->get();
         // dd($all);
         // Session::put('order_data', $all);
         $request->session()->put('order_data', $all);
