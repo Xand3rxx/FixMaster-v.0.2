@@ -152,7 +152,7 @@ class MessageController extends Controller
         $receiverDetails = [];
 
         $senderDetails = $this->getUser($sender);
-        foreach ($recipients as $recipient) {
+        foreach($recipients as $recipient){
             array_push($receivers, $recipient['value']);
         }
 
@@ -239,24 +239,35 @@ class MessageController extends Controller
      * 
      * @return \Illuminate\Http\Response
      */
-    public function sendNewMessage($type, $subject, $from, $to, $mail_data, $feature = "")
-    {
-        $message = $mail_data;
-        $message_array = [];
-        if (!empty($feature)) {
-            $template = MessageTemplate::select('content')->where('feature', $feature)->where('type', $type)->first();
-
-            if (empty($template)) {
-                return response()->json(["message" => "Message Template not found!"], 404);
+    public function sendNewMessage( $type, $subject, $from, $to, $mail_data,$feature=""){
+    
+       $message = $mail_data;
+       $message_array = [];
+        if(!empty($feature)){
+            $template = MessageTemplate::select('content')
+            ->where('feature', $feature)
+            ->where('type', $type)
+            ->first();
+            
+            if(empty($template)){
+            return response()->json(["message" => "Message Template not found!"], 404);
+    
             }
             $message = $this->replacePlaceHolders($mail_data, $template->content);
         }
 
-        $recipient = DB::table('users')->where('users.email', $to)->first();
+    
+     
 
         $sender = DB::table('users')->where('users.email', $from)->first();
 
-        if (is_object($recipient)) {
+        $sender = DB::table('users')
+        ->where('users.email', $from )
+        ->first();
+
+
+      
+         if(is_object($recipient)){
             $mail_objects[] = [
                 'title' => $subject,
                 'content' => $message,
@@ -267,16 +278,21 @@ class MessageController extends Controller
                 'updated_at'        => Carbon::now(),
                 'mail_status' => 'Not Sent',
             ];
+          
 
-            Message::insert($mail_objects);
-        }
+        Message::insert($mail_objects);
+         }
+            
 
-        $message_array = ['to' => $to, 'from' => $from, 'subject' => $subject, 'content' => $message];
-        if ($type == 'email') {
+        $message_array = ['to'=>$to, 'from'=>$from, 'subject'=>$subject, 'content'=>$message];
+        if($type=='mail'){
             $this->dispatch(new PushEmails($message_array));
             Log::debug("I sent the email");
-        } elseif ($type == 'sms')
-            $this->dispatch(new PushSMS($message_array));
+        }
+           
+        elseif($type=='sms')
+           $this->dispatch(new PushSMS($message_array));
+        
     }
 
 
