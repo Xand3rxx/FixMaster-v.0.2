@@ -80,7 +80,7 @@
       </li>
 
         <li class="nav-item with-sub {{ Route::currentRouteNamed('admin.earnings', 'admin.income', 'admin.income_history') ? 'active show' : '' }}">
-            <a href="" class="nav-link"><i data-feather="home"></i> <span>Income/Commission</span></a>
+            <a href="" class="nav-link"><i data-feather="download"></i> <span>Income/Commission</span></a>
             <ul>
                 <li class="{{ Route::currentRouteNamed('admin.earnings') ? 'active' : '' }}"><a href="{{ route('admin.earnings', app()->getLocale()) }}">Earnings</a></li>
                 <li class="{{ Route::currentRouteNamed('admin.income') ? 'active' : '' }}"><a href="{{ route('admin.income', app()->getLocale()) }}">Income</a></li>
@@ -94,7 +94,7 @@
 
 
 
-      <li class="nav-item {{ Route::currentRouteNamed('admin.location_request') ? 'active' : '' }}"><a href="{{ route('admin.location_request', app()->getLocale()) }}" class="nav-link"><i data-feather="map-pin"></i> <span>Location Request</span></a></li>
+      {{-- <li class="nav-item {{ Route::currentRouteNamed('admin.location_request') ? 'active' : '' }}"><a href="{{ route('admin.location_request', app()->getLocale()) }}" class="nav-link"><i data-feather="map-pin"></i> <span>Location Request</span></a></li> --}}
 
       <li class="nav-item with-sub {{ Route::currentRouteNamed('admin.add_loyalty', 'admin.loyalty_list', 'admin.loyalty_history') ? 'active show' : '' }}">
         <a href="" class="nav-link"><i data-feather="crop"></i> <span>Loyalty Management</span></a>
@@ -171,7 +171,15 @@
         </ul>
       </li>
 
-    <li class="nav-item {{ Route::currentRouteNamed('admin.requests.index') ? 'active show' : '' }}"><a href="{{ route('admin.requests.index', app()->getLocale()) }}" class="nav-link"><i data-feather="git-pull-request"></i> <span>Requests <sup class="font-weight-bold text-danger">{{ $pendingRequests }}</sup></span></a></li>
+      <li class="nav-item with-sub {{ Route::currentRouteNamed('admin.requests.index', 'admin.requests.show') ? 'active show' : '' }}">
+        <a href="" class="nav-link"><i data-feather="git-pull-request"></i> <span>Requests</span><span class="badge badge-primary">{{ $pendingRequests }}</suspan></span></a>
+        <ul>
+          <li class="{{ Route::currentRouteNamed('admin.requests.index', 'admin.requests.show') ? 'active' : '' }}"><a href="{{ route('admin.requests.index', app()->getLocale()) }}">Pending <sup class="font-weight-bold text-primary">{{ $pendingRequests }}</sup></a></li>
+          <li class=""><a href="#">Ongoing</a></li>
+          <li class=""><a href="#">Completed</a></li>
+          <li class=""><a href="#">Cancelled</a></li>
+        </ul>
+      </li>
 
       <li class="nav-item with-sub {{ Route::currentRouteNamed('admin.rfq', 'admin.supplier_invoices') ? 'active show' : '' }}">
         <a href="" class="nav-link"><i data-feather="file-text"></i> <span>RFQ's</span></a>
@@ -181,13 +189,13 @@
         </ul>
       </li>
 
-      <li class="nav-item with-sub">
+      {{-- <li class="nav-item with-sub">
         <a href="" class="nav-link"><i data-feather="git-pull-request"></i> <span>Special Project</span></a>
         <ul>
           <li class=""><a href="#">Inventory</a></li>
           <li class=""><a href="#">Requests</a></li>
         </ul>
-      </li>
+      </li> --}}
 
       <li class="nav-item {{ Route::currentRouteNamed('admin.taxes.index') ? 'active' : '' }}"><a href="{{ route('admin.taxes.index', app()->getLocale()) }}" class="nav-link"><i data-feather="percent"></i> <span>Tax Management</span></a></li>
 
