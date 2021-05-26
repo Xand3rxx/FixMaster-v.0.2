@@ -6,6 +6,7 @@ use App\Http\Controllers\PageController;
 use App\Http\Controllers\InvoiceController;
 use App\Http\Controllers\Frontend\CSEFormController;
 use App\Http\Controllers\Auth\VerificationController;
+use App\Http\Controllers\Frontend\SupplierFormController;
 use App\Http\Controllers\Frontend\ClientRegistrationController;
 use App\Http\Controllers\ServiceRequest\ClientDecisionController;
 use App\Http\Controllers\Frontend\TechnicianArtisanFormController;
@@ -35,21 +36,6 @@ Route::get('email/verify', [VerificationController::class, 'show'])->middleware(
 Route::get('/email/verify/{id}/{hash}', [VerificationController::class, 'verify'])->middleware(['auth', 'signed'])->name('verification.verify');
 Route::post('/email/verification-notification',  [VerificationController::class, 'resend'])->middleware(['auth', 'throttle:6,1'])->name('verification.send');
 
-// Route::post('/email/verification-notification', function (\Illuminate\Http\Request $request) {
-//     // Call Notification EmailVerification trait
-//     $request->user()->sendEmailVerificationNotification();
-//     return back()->with('status', 'Verification Email Sent');
-// })->middleware(['auth', 'throttle:6,1'])->name('verification.send');send'])->middleware(['auth', 'throttle:6,1'])->name('verification.send');
-// Route::post('/email/verification-notification', function (\Illuminate\Http\Request $request) {
-//     // Call Notification EmailVerification trait
-//     $request->user()->sendEmailVerificationNotification();
-//     return back()->with('status', 'Verification Email Sent');
-// })->middleware(['auth', 'throttle:6,1'])->name('verification.send');
-// Route::get('email/verify', function () {
-//     return view('auth.verify',);
-// })->middleware('auth')->name('verification.notice');
-
-
 Route::view('/', 'frontend.index')->name('frontend.index');
 
 Route::prefix('registration')->name('frontend.registration.')->group(function () {
@@ -66,7 +52,9 @@ Route::view('/register',                    'auth.register')->name('frontend.reg
 
 // Form Creation 
 Route::post('customer-service-executive', [CSEFormController::class, '__invoke'])->name('frontend.customer-service-executive.store');
-Route::post('technicain-artisan', [TechnicianArtisanFormController::class,'__invoke'])->name('frontend.technicain-artisan.store');
+Route::post('technicain-artisan', [TechnicianArtisanFormController::class, '__invoke'])->name('frontend.technicain-artisan.store');
+Route::post('supplier', [SupplierFormController::class, '__invoke'])->name('frontend.supplier.store');
+
 
 Route::get('/invoice/{invoice:uuid}', [InvoiceController::class, 'invoice'])->name('invoice');
 //Route::get('/invoice/', [InvoiceController::class, 'invoice'])->name('invoice');
@@ -114,11 +102,9 @@ Route::post('/payment/ewallet/submit',                [App\Http\Controllers\Paym
 
 
 //All frontend routes for Services
-Route::prefix('/services')->group(function () {
-    Route::name('services.')->group(function () {
-        Route::get('/',                     [PageController::class, 'services'])->name('list');
-        // Route::view('/details',             'frontend.services.show')->name('details');
-        Route::get('/details/{service}',    [PageController::class, 'serviceDetails'])->name('details');
-        Route::post('/search',              [PageController::class, 'search'])->name('search');
-    });
+Route::prefix('/services')->name('services.')->group(function () {
+    Route::get('/',                     [PageController::class, 'services'])->name('list');
+    // Route::view('/details',             'frontend.services.show')->name('details');
+    Route::get('/details/{service}',    [PageController::class, 'serviceDetails'])->name('details');
+    Route::post('/search',              [PageController::class, 'search'])->name('search');
 });

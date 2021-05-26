@@ -198,6 +198,41 @@ class MessageController extends Controller
         $this->sendNewMessage($type, $subject, $from, $to, $mail_data, $feature);
     }
 
+    /**
+     * Send message using Available Template Design
+     * 
+     * @param string $template_name ...use \App\Models\MessageTemplate::Feature
+     * @param mixed $parameters 
+     * 
+     * @return \Illuminate\Http\Response
+     */
+    // public static function usingTemplate(string $template_name, mixed $parameters)
+    // {
+    //     if (!in_array($template_name, \App\Models\MessageTemplate::FEATURES)) {
+    //         return response()->json(["message" => "Message Template not found!"], 404);
+    //     }
+    //     // Find needed Template
+    //     $messageTemplate = MessageTemplate::select('content')->where('feature', $template_name)->first();
+    //     // Build Message Body
+    //     $message_body = self::buildMessageBody($parameters, $messageTemplate->content);
+    // }
+
+    /**
+     * Build Message Body
+     * 
+     * @param string $template_name ...use \App\Models\MessageTemplate::Feature
+     * @param mixed $parameters 
+     * 
+     * @return \Illuminate\Http\Response
+     */
+    // protected static function buildMessageBody($variables, $messageTemp)
+    // {
+    //     (array) $builtBody = [];
+    //     foreach ($variables as $key => $value) {
+    //         $builtBody = str_replace('{' . $key . '}', $value, $messageTemp);
+    //     }
+    //     return $builtBody;
+    // }
 
     /**
      * Send message using feature
@@ -233,10 +268,8 @@ class MessageController extends Controller
                 'mail_status' => 'Not Sent',
             ];
 
-
             Message::insert($mail_objects);
         }
-
 
         $message_array = ['to' => $to, 'from' => $from, 'subject' => $subject, 'content' => $message];
         if ($type == 'email') {

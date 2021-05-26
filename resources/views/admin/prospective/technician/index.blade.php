@@ -57,7 +57,7 @@
                                         <div class="dropdown-file">
                                             <a href="" class="dropdown-link" data-toggle="dropdown"><i data-feather="more-vertical"></i></a>
                                             <div class="dropdown-menu dropdown-menu-right">
-                                                <a href="{{ route('admin.prospective.technician.show', [app()->getLocale(),$technician['uuid'] ]) }}" class="dropdown-item details text-primary"><i class="far fa-user"></i> Summary</a>
+                                                <a href="{{ route('admin.prospective.technician-artisan.show', [app()->getLocale(),$technician['uuid'] ]) }}" class="dropdown-item details text-primary"><i class="far fa-user"></i> Summary</a>
                                                 <a href="#" class="dropdown-item details"><i class="fas fa-check"></i> Approve </a>
                                                 <a href="#" class="dropdown-item details text-danger"><i class="fas fa-ban"></i> Decline</a>
                                             </div>

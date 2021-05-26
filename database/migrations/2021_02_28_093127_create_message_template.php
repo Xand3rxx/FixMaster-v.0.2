@@ -1,8 +1,9 @@
 <?php
 
-use Illuminate\Database\Migrations\Migration;
-use Illuminate\Database\Schema\Blueprint;
+use App\Models\MessageTemplate;
 use Illuminate\Support\Facades\Schema;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Database\Migrations\Migration;
 
 class CreateMessageTemplate extends Migration
 {
@@ -22,8 +23,8 @@ class CreateMessageTemplate extends Migration
             $table->uuid('uuid')->unique();
             $table->string('title');
             $table->text('content');
-            $table->enum('type', ['sms', 'email']);
-            $table->enum('feature', \App\Models\MessageTemplate::FEATURES);
+            $table->enum('type', MessageTemplate::TYPES);
+            $table->enum('feature', MessageTemplate::FEATURES);
             $table->timestamps();
             $table->softDeletes();
         });

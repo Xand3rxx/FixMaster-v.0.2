@@ -188,7 +188,7 @@
                                     <div class="col-md-12">
                                         <div class="form-group position-relative">
                                             <div class="custom-control custom-checkbox">
-                                                <input type="checkbox" name="terms"
+                                                <input type="checkbox" name="terms_cse"
                                                     class="form-control custom-control-input" id="customCheck1">
 
                                                 <label class="custom-control-label" for="customCheck1">I Accept <a
@@ -222,7 +222,8 @@
                         <div class="card-body">
                             <h4 class="title mb-4">Technician/Artisan Application Form</h4>
                             <form id="technician_application_form" class="rounded shadow p-4" enctype="multipart/form-data"
-                                method="POST" action="{{ route('frontend.technicain-artisan.store', app()->getLocale()) }}">
+                                method="POST"
+                                action="{{ route('frontend.technicain-artisan.store', app()->getLocale()) }}">
                                 @csrf
                                 <div class="row">
                                     <div class="col-md-6">
@@ -324,10 +325,10 @@
                                     <div class="col-md-12">
                                         <div class="form-group position-relative">
                                             <div class="custom-control custom-checkbox">
-                                                <input type="checkbox" name="terms"
-                                                    class="form-control custom-control-input" id="customCheck1">
+                                                <input type="checkbox" name="terms_technician"
+                                                    class="form-control custom-control-input" id="terms_technician">
 
-                                                <label class="custom-control-label" for="customCheck1">I Accept <a
+                                                <label class="custom-control-label" for="terms_technician">I Accept <a
                                                         data-toggle="modal" data-target="#terms" href="javascript:void(0)"
                                                         class="texty">Terms And Condition</a></label>
                                             </div>
@@ -352,6 +353,129 @@
                 </div>
             </div>
             {{-- End Technician/Artisan Registration --}}
+
+            {{-- Supplier Registration --}}
+            <div class="row justify-content-center supplier-registration d-none down-2">
+                <div class="col-lg-10 col-md-12">
+                    <div class="card custom-form border-0">
+                        <div class="card-body">
+                            <h4 class="title mb-4">Supplier Application Form</h4>
+                            <form class="rounded shadow p-4" action="{{ route('frontend.supplier.store', app()->getLocale()) }}" method="POST" enctype="multipart/form-data">
+                                @csrf
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="form-group position-relative">
+                                            <label>First Name <span class="text-danger">*</span></label>
+                                            <i data-feather="user" class="fea icon-sm icons"></i>
+                                            <input name="first_name" id="first_name" type="text" class="form-control pl-5">
+                                        </div>
+                                    </div>
+                                    <!--end col-->
+                                    <div class="col-md-6">
+                                        <div class="form-group position-relative">
+                                            <label>Last Name <span class="text-danger">*</span></label>
+                                            <i data-feather="user" class="fea icon-sm icons"></i>
+                                            <input name="last_name" id="last_name" type="text" class="form-control pl-5">
+                                        </div>
+                                    </div>
+                                    <!--end col-->
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="form-group position-relative">
+                                            <label>Your Email <span class="text-danger">*</span></label>
+                                            <i data-feather="mail" class="fea icon-sm icons"></i>
+                                            <input name="email" id="email" type="email" class="form-control pl-5">
+                                        </div>
+                                    </div>
+                                    <!--end col-->
+
+                                    <div class="col-md-6">
+                                        <div class="form-group position-relative">
+                                            <label>Phone Number <span class="text-danger">*</span></label>
+                                            <i data-feather="phone" class="fea icon-sm icons"></i>
+                                            <input name="phone" id="phone" type="tel" class="form-control pl-5">
+                                        </div>
+                                    </div>
+                                    <!--end col-->
+                                </div>
+                                <!--end row-->
+
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="form-group position-relative">
+                                            <label>Years of Experience <span class="text-danger">*</span></label>
+                                            <i data-feather="calendar" class="fea icon-sm icons"></i>
+                                            <input name="years_of_experience" id="years_of_experience" type="number"
+                                                class="form-control pl-5" maxlength="2">
+                                        </div>
+                                    </div>
+                                    <!--end col-->
+
+                                    <div class="col-md-6">
+                                        <div class="form-group position-relative">
+                                            <label>Compnay Name <span class="text-danger">*</span></label>
+                                            <i data-feather="briefcase" class="fea icon-sm icons"></i>
+                                            <input name="company_name" id="company_name" type="text" class="form-control pl-5">
+                                        </div>
+                                    </div>
+                                    <!--end col-->
+                                </div>
+                                <!--end row-->
+
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="form-group position-relative">
+                                            <label>Registered Address <span class="text-danger">*</span></label>
+                                            <i data-feather="map-pin" class="fea icon-sm icons"></i>
+                                            <textarea name="registered_address" id="user_address" rows="3"
+                                                class="user_address form-control pl-5"
+                                                placeholder="Your registered address :"></textarea>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group position-relative">
+                                            <label>Office Address </label>
+                                            <i data-feather="map-pin" class="fea icon-sm icons"></i>
+                                            <textarea name="office_address" rows="3" class="user_address form-control pl-5"
+                                                placeholder="Your office address :"></textarea>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="form-group position-relative">
+                                            <div class="custom-control custom-checkbox">
+                                                <input type="checkbox" name="terms_supplier"
+                                                    class="form-control custom-control-input" id="terms_supplier">
+
+                                                <label class="custom-control-label" for="terms_supplier">I Accept <a
+                                                        data-toggle="modal" data-target="#terms" href="javascript:void(0)"
+                                                        class="texty">Terms And Condition</a></label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-sm-12">
+                                        <input type="submit" id="submit" name="send" class="submitBnt btn btn-primary"
+                                            value="Apply Now">
+                                    </div>
+                                    <!--end col-->
+                                </div>
+                                <!--end row-->
+
+                            </form>
+                            <!--end form-->
+                        </div>
+                    </div>
+                    <!--end custom-form-->
+                </div>
+            </div>
+            {{-- End Supplier Registration --}}
 
         </div>
         <!--end container-->

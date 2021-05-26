@@ -21,6 +21,7 @@ class MessageTemplate extends Model
     const FEATURES = [
         'ADMIN_CUSTOMER_PAYMENT_SUCCESSFUL_NOTIFICATION',
         'ADMIN_CUSTOMER_JOB_COMPLETED_NOTIFICATION',
+        'ADMIN_CSE_JOB_ACCEPTANCE_NOTIFICATION',
         'ADMIN_CSE_JOB_COMPLETED_NOTIFICATION',
         'ADMIN_ASSIGNED_CSE_TO_A_JOB',
         'ADMIN_ASSIGNED_TECHNICIAN_TO_A_JOB',
@@ -99,6 +100,7 @@ class MessageTemplate extends Model
         'USER_EMAIL_VERIFICATION'
     ];
 
+    const TYPES = ['sms', 'email'];
 
     protected static function boot()
     {
