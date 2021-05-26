@@ -3,12 +3,14 @@
 namespace App\Http\Controllers\CSE;
 
 use App\Models\Cse;
-use Illuminate\Http\Request;
-use App\Http\Controllers\Controller;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Auth;
 use App\Models\User;
+use Illuminate\Http\Request;
+use App\Models\ServiceRequest;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
+use App\Models\ServiceRequestAssigned;
 
 
 class RequestController extends Controller
@@ -21,19 +23,27 @@ class RequestController extends Controller
     public function index()
     {
         return view('cse.requests.index', [
-            'requests' => \App\Models\ServiceRequestAssigned::where('user_id', auth()->user()->id)->with(['service_request', 'service_request.users', 'service_request.client'])->get(),
+            'requests' => ServiceRequestAssigned::where('user_id', auth()->user()->id)->with(['service_request', 'service_request.users', 'service_request.client'])->get(),
         ]);
     }
 
     /**
-     * Show the form for creating a new resource.
+     * Display a listing of the resource.
      *
+     * @param  \Illuminate\Http\Request  $request
+     * 
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function search(Request $request)
     {
-        //
+        // Data Needed on dashboard page
+        return view('cse.requests.index', [
+            'requests' => ServiceRequestAssigned::where('user_id', $request->user()->id)->with('service_request', 'service_request.price')->get()->filter(function ($each) use($request) {
+                return $each['service_request']['status_id'] == ServiceRequest::SERVICE_REQUEST_STATUSES[$request->get('status')];
+            }),
+        ]);
     }
+
 
     /**
      * Store a newly created resource in storage.
@@ -55,7 +65,6 @@ class RequestController extends Controller
      */
     public function show($language, $uuid)
     {
-     
 
         // find the service reqquest using the uuid and relations
         $service_request = \App\Models\ServiceRequest::where('uuid', $uuid)->with(['price', 'service', 'service.subServices'])->firstOrFail();

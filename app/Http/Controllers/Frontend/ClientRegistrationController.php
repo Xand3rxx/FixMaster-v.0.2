@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Frontend\Registration;
+namespace App\Http\Controllers\Frontend;
 
 use App\Http\Controllers\Controller;
 use App\Traits\RegisterClient;

@@ -2,9 +2,10 @@
 
 namespace App\Models;
 
-use App\Http\Controllers\Messaging\MessageController;
+use Illuminate\Support\Str;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use App\Http\Controllers\Messaging\MessageController;
 
 class Applicant extends Model
 {
@@ -28,6 +29,8 @@ class Applicant extends Model
         'form_data' => 'array',
     ];
 
+    protected $template_feature;
+
     /**
      * The "booted" method of the model.
      *
@@ -39,13 +42,32 @@ class Applicant extends Model
         static::creating(function ($applicant) {
             $applicant->uuid = (string) \Illuminate\Support\Str::uuid();
         });
-
         static::created(function ($applicant) {
-            // $applicant this is the instance of the created applicant
-            $messanger = new MessageController();
-            $mail_data = "<h1> Hello, " . $applicant->form_data['last_name_cse'] . " " . $applicant->form_data['first_name_cse'] . "</h1> <br> <p> Thank you for registering with us, we would review your application and respond as soon as possible. </p>";
-            $jsonResponse = $messanger->sendNewMessage('mail', 'Customer Service Executive Applicant Registration', 'dev@fix-master.com', $applicant->form_data['email_cse'], $mail_data);
-            // This is when i need to send a mail to the applicant that his application is submitted successfully!
+            (string) $template_feature = NULL;
+            switch ($applicant->user_type) {
+                case Applicant::USER_TYPES[0]: // CSE...
+                    $template_feature = 'CSE_ACCOUNT_CREATION_NOTIFICATION';
+                    break;
+                case Applicant::USER_TYPES[1]: // SUPPLIER...
+                    $template_feature = 'SUPPLIER_ACCOUNT_CREATION_NOTIFICATION';
+                    break;
+                case Applicant::USER_TYPES[2]: // TECHNICIAN...
+                    $template_feature = 'TECHNICIAN_ACCOUNT_CREATION_NOTIFICATION';
+                    break;
+                default:
+                    # Ask for default Notification...
+                    $template_feature = '';
+                    break;
+            }
+            if (!empty((string)$template_feature)) {
+                $messanger = new MessageController();
+                $mail_data = collect([
+                    'lastname' => $applicant->form_data['last_name'],
+                    'firstname' => $applicant->form_data['first_name'],
+                    'email' => $applicant->form_data['email'],
+                ]);
+                $messanger->sendNewMessage('email', Str::title(Str::of($template_feature)->replace('_', ' ',)), 'dev@fix-master.com', $mail_data['email'], $mail_data, $template_feature);
+            }
         });
     }
 }
