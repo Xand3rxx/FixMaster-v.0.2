@@ -253,14 +253,14 @@
                             <div class="form-row mt-4">
                                 <div class="form-group col-md-12">
                                     <ul class="list-group wd-md-100p">
-                                        @foreach ($technicians['users'] as $technician)
+                                        @foreach ($technicians as $technician)
                                         <li class="list-group-item d-flex align-items-center">
                                             
                                             <div class="form-row">
-                                            <img src="{{ asset('assets/images/default-male-avatar.png') }}" class="wd-30 rounded-circle mg-r-15" alt="Technician Avatar">
+                                            <img src="{{ asset('assets/user-avatars/'.$technician['user']['account']['avatar']??'default-male-avatar.png') }}" class="wd-30 rounded-circle mg-r-15" alt="Technician Avatar">
                                             
                                             <div class="col-md-6 col-sm-6">
-                                            <h6 class="tx-13 tx-inverse tx-semibold mg-b-0">{{ !empty($technician['account']['first_name']) ? $technician['account']['first_name'] .' '. $technician['account']['last_name'] : 'UNAVAILABLE'}}</h6>
+                                            <h6 class="tx-13 tx-inverse tx-semibold mg-b-0">{{ !empty($technician['user']['account']['first_name']) ? $technician['user']['account']['first_name'] .' '. $technician['user']['account']['last_name'] : 'UNAVAILABLE'}}</h6>
                                             
                                             <span class="d-block tx-11 text-muted">
                                                 @foreach ($technicians as $item)
@@ -333,7 +333,7 @@
                                         <li class="list-group-item d-flex align-items-center">
                                             
                                             <div class="form-row">
-                                            <img src="{{ asset('assets/images/'.$item->user->account->avatar??'default-male-avatar.png') }}" class="wd-30 rounded-circle mg-r-15" alt="Technician Avatar">
+                                            <img src="{{ asset('assets/user-avatars/'.$item->user->account->avatar??'default-male-avatar.png') }}" class="wd-30 rounded-circle mg-r-15" alt="Technician Avatar">
                                             
                                             <div class="col-md-6 col-sm-6">
                                             <h6 class="tx-13 tx-inverse tx-semibold mg-b-0">{{ ucfirst($item->user->account->first_name)}} {{  ucfirst($item->user->account->last_name)}}</h6>
@@ -359,14 +359,14 @@
                                     </ul>
 
                                     <div class="divider-text">Quality Assurance Managers </div>
-
+                                    @if(!empty($qaulity_assurances->user))
                                     <ul class="list-group wd-md-100p">
                                 
                                         <li class="list-group-item d-flex align-items-center">
                                             
                                             <div class="form-row">
-                                            <img src="{{ asset('assets/images/default-male-avatar.png') }}" class="wd-30 rounded-circle mg-r-15" alt="Technician Avatar">
-                                            
+                                            <img src="{{ asset('assets/user-avatars/'.qaulity_assurances->user->account->avatars??'default-male-avatar.png') }}" class="wd-30 rounded-circle mg-r-15" alt="Quality Assurance Avatar">
+
                                             <div class="col-md-6 col-sm-6">
                                            
                                             <h6 class="tx-13 tx-inverse tx-semibold mg-b-0">{{ ucfirst($qaulity_assurances->user)}} {{  ucfirst($qaulity_assurances->user)}}</h6>
@@ -389,6 +389,7 @@
                                         </li>
                                       
                                     </ul>
+                                    @endif
 
                                     <div class="divider-text">Suppliers </div>
 
@@ -397,7 +398,7 @@
                                             
                                             <div class="form-row">
                                             <img src="{{ asset('assets/images/default-male-avatar.png') }}" class="wd-30 rounded-circle mg-r-15" alt="Technician Avatar">
-                                            
+
                                             <div class="col-md-6 col-sm-6">
                                             <h6 class="tx-13 tx-inverse tx-semibold mg-b-0">Henry Efe</h6>
                                             
