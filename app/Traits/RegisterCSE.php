@@ -65,10 +65,11 @@ trait RegisterCSE
             // Register the CSE Account
             $user->cse()->create([
                 'account_id' => $account->id,
+                // 'referral_id' => 0,
                 'franchisee_id' => $valid['franchisee_id'],
             ]);
             // Register CSE Contact Details
-            \App\Models\Contact::attemptToStore($user->id, $account->id, 156, $valid['phone_number'], $valid['full_address'], $valid['address_longitude'], $valid['address_latitude']);
+            \App\Models\Contact::attemptToStore($user->id, $account->id, 156, $valid['phone_number'], $valid['full_address'], $valid['address_longitude'] ?? "3.4393863", $valid['address_latitude'] ?? "6.425007");
             // update registered to be true
             $registred = true;
         });
