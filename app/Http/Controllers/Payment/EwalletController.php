@@ -24,21 +24,32 @@ class EwalletController extends Controller
 
     public function store(Request $request)
     {
-        // return $request;
-        if (ServicedAreas::where('town_id', '=', $request['town_id'])->exists()) {
-            return back()->with('error', 'sorry!, this area you selected is not serviced at the moment, please try another area');
-        }
-        // return dd('test passed');
-
         $valid = $this->validate($request, [
             // List of things needed from the request like 
             'booking_fee'      => 'required',
             'payment_channel'  => 'required',
             'payment_for'     => 'required',
-
-            'myContact_id'              => 'required',
-            'servicdescriptione_id'     => 'required',
+            // 'myContact_id'    => 'required',
         ]);
+        
+        $Serviced_areas = ServicedAreas::where('town_id', '=', $request['town_id'])->orderBy('id', 'DESC')->first();
+        if ($Serviced_areas === null) {
+            return back()->with('error', 'sorry!, this area you selected is not serviced at the moment, please try another area');
+        }
+
+        // upload multiple media files
+        foreach($request->media_file as $key => $file)
+            {
+                $originalName[$key] = $file->getClientOriginalName();
+    
+                $fileName = sha1($file->getClientOriginalName() . time()) . '.'.$file->getClientOriginalExtension();
+                $filePath = public_path('assets/service-request-media-files');
+                $file->move($filePath, $fileName);
+                $data[$key] = $fileName; 
+            }
+                $data['unique_name']   = json_encode($data);
+                $data['original_name'] = json_encode($originalName);
+                
 
         $client_controller = new ClientController;
         
