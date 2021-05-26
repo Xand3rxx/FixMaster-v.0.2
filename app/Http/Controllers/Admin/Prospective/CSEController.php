@@ -46,8 +46,6 @@ class CSEController extends Controller
             'user' => 'required|uuid|exists:applicants,uuid'
         ]);
         return $this->handleDecision($decision);
-        //     ? redirect()->route('admin.prospective.cse.index', app()->getLocale())->with('success', 'Application Decision Recorded')
-        //     : back()->with('error', 'Error Occured Updating Application Decision');
     }
 
     /**
