@@ -16,7 +16,7 @@ class CSEController extends Controller
     public function index()
     {
         return view('admin.prospective.cse.index')->with([
-            'users' => Applicant::where('user_type', Applicant::USER_TYPES[0])->get(),
+            'users' => Applicant::where('user_type', Applicant::USER_TYPES[0])->latest()->get()->sortByDesc('status'),
         ]);
     }
 
@@ -45,32 +45,34 @@ class CSEController extends Controller
             'decision' => 'required|string|in:approve,decline',
             'user' => 'required|uuid|exists:applicants,uuid'
         ]);
-        return $this->handleDecision($decision)
-            ? redirect()->route('admin.prospective.cse.index', app()->getLocale())->with('success', 'Application Decision Recorded')
-            : back()->with('error', 'Error Occured Updating Application Decision');
+        return $this->handleDecision($decision);
+        //     ? redirect()->route('admin.prospective.cse.index', app()->getLocale())->with('success', 'Application Decision Recorded')
+        //     : back()->with('error', 'Error Occured Updating Application Decision');
     }
 
     /**
      * Handling of CSE Application Decision
      *
      * @param  string  $decision
-     * @return bool
+     * @return \Illuminate\Http\Response
      */
     protected function handleDecision(array $decision)
     {
+        $applicant = Applicant::where('uuid', $decision['user'])->firstOrfail();
         switch ($decision['decision']) {
-            case 'approve':
-                # code...
-                return Applicant::where('uuid', $decision['user'])->update(['status' =>  Applicant::STATUSES[1]]);
+            case 'approve': # approve cse...
+                $applicant->update(['status' =>  Applicant::STATUSES[1]]);
+                session(['applicant' => $applicant]);
+                return redirect()->route('admin.users.cse.create', app()->getLocale());
                 break;
 
-            case 'decline':
-                # code...
-                return Applicant::where('uuid', $decision['user'])->update(['status' =>  Applicant::STATUSES[2]]);
+            case 'decline': # declined cse...
+                $applicant->update(['status' =>  Applicant::STATUSES[2]]);
+                return redirect()->route('admin.prospective.cse.index', app()->getLocale())->with('success', 'Application Rejected Successfully!!');
                 break;
 
             default:
-                return false;
+                return back()->with('error', 'Error Occured Updating Application Decision');
                 break;
         }
     }

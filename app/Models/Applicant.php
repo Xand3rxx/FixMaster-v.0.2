@@ -71,9 +71,5 @@ class Applicant extends Model
                 $messanger->sendNewMessage('email', Str::title(Str::of($template_feature)->replace('_', ' ',)), 'dev@fix-master.com', $mail_data['email'], $mail_data, $template_feature);
             }
         });
-
-        static::updating(function ($applicant) {
-            dd($applicant);
-        });
     }
 }

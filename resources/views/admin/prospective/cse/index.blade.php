@@ -65,7 +65,7 @@
                                             </td>
 
                                             <td> {{ Str::title($cse['status']) }}</td>
-                                            
+
                                             <td class=" text-center">
                                                 <div class="dropdown-file">
                                                     <a href="" class="dropdown-link" data-toggle="dropdown"><i
@@ -74,12 +74,16 @@
                                                         <a href="{{ route('admin.prospective.cse.show', [app()->getLocale(), $cse['uuid']]) }}"
                                                             class="dropdown-item details text-primary"><i
                                                                 class="far fa-user"></i> Summary</a>
-                                                        <a href="#" data-user="{{ $cse['uuid'] }}" data-action="approve"
-                                                            class="cse-decision-making dropdown-item details"><i
-                                                                class="fas fa-check"></i> Approve </a>
-                                                        <a href="#" data-user="{{ $cse['uuid'] }}" data-action="decline"
-                                                            class="cse-decision-making dropdown-item details text-danger">
-                                                            <i class="fas fa-ban"></i> Decline</a>
+                                                        @if ($cse['status'] == \App\Models\Applicant::STATUSES[0])
+                                                            <a href="#" data-user="{{ $cse['uuid'] }}"
+                                                                data-action="approve"
+                                                                class="cse-decision-making dropdown-item details"><i
+                                                                    class="fas fa-check"></i> Approve </a>
+                                                            <a href="#" data-user="{{ $cse['uuid'] }}"
+                                                                data-action="decline"
+                                                                class="cse-decision-making dropdown-item details text-danger">
+                                                                <i class="fas fa-ban"></i> Decline</a>
+                                                        @endif
                                                     </div>
                                                 </div>
                                             </td>
