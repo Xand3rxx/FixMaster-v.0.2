@@ -64,9 +64,9 @@ class QualityAssuranceProfileController extends Controller
             'phone_number' => 'required',
             'profile_avater' => 'mimes:jpeg,jpg,png,gif',
             'full_address' => 'required',
-            'address_longitude'=> 'required|numeric',
-            'address_latitude'=> 'required|numeric',
-            'account_number' => 'required|numeric',
+            'address_longitude'=> 'sometimes|string',
+            'address_latitude'=> 'sometimes|string',
+            'account_number' => 'required|string',
             'bank_id' => 'required|numeric'
           ];
 
@@ -93,6 +93,8 @@ class QualityAssuranceProfileController extends Controller
             $filename = $user->account->avatar;
         }
 
+        //dd($request->address_longitude);
+
     $user->account->update([
         'user_id'=>$user->id,
         'first_name' =>$request->first_name,
@@ -108,8 +110,11 @@ class QualityAssuranceProfileController extends Controller
         'user_id'=>$user->id,
         'phone_number'=>$request->phone_number,
         'address'=>$request->full_address,
-        'address_longitude' => $request->address_longitude,
-        'address_latitude' => $request->address_longitude
+        'address_longitude' => !empty($request->address_longitude) ? $request->address_longitude : $user->contact->address_longitude,
+        'address_latitude' => !empty($request->address_latitude) ? $request->address_latitude : $user->contact->address_latitude
+    // 'address_longitude' => $request->address_longitude,
+    // 'address_latitude' => $request->address_latitude
+
     ]);
 
     $this->log($type, $severity, $actionUrl, $message);
