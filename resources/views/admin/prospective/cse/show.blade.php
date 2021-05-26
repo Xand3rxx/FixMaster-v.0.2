@@ -10,7 +10,7 @@
                 <ol class="breadcrumb breadcrumb-style1 mg-b-10">
                     <li class="breadcrumb-item"><a href="{{route('admin.index', app()->getLocale())}}">Dashboard</a></li>
                     <li class="breadcrumb-item"><a href="{{route('admin.prospective.cse.index', app()->getLocale())}}">CSE List</a></li>
-                    <li class="breadcrumb-item active" aria-current="page">{{Str::title($user['form_data']['first_name_cse']." ".$user['form_data']['last_name_cse'])}}</li>
+                    <li class="breadcrumb-item active" aria-current="page">{{Str::title($user['form_data']['first_name']." ".$user['form_data']['last_name'])}}</li>
                 </ol>
             </nav>
 
@@ -38,7 +38,7 @@
                 </table>
             </div>
             <div class="d-md-block">
-                <a href="{{asset($user['form_data']['cv_cse'])}}" download class="btn btn-success mt-3"><i class="fas fa-download"> </i> Download CV </a>
+                <a href="{{asset($user['form_data']['cv'])}}" download class="btn btn-success mt-3"><i class="fas fa-download"> </i> Download CV </a>
             </div>
         </div>
     </div>

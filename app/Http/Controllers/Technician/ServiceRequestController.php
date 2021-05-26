@@ -1,13 +1,31 @@
 <?php
 
-namespace App\Http\Controllers\Admin\Prospective;
+namespace App\Http\Controllers\Technician;
 
-use App\Models\Applicant;
-use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Models\ServiceRequestAssigned;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
-class SupplierController extends Controller
+class ServiceRequestController extends Controller
 {
+
+
+
+    public function getActiveRequest(Request $request){
+
+        $activeRequest = ServiceRequestAssigned::whereHas('service_request', function ($query) {
+            $query->where('status_id', 2);
+        })
+            ->where('user_id', Auth::id())
+            ->where('assistive_role', 'Technician')
+            ->get();
+        return view('technician.requests.active')
+            ->with('activeJobs', $activeRequest);
+    }
+
+
+
     /**
      * Display a listing of the resource.
      *
@@ -15,9 +33,7 @@ class SupplierController extends Controller
      */
     public function index()
     {
-        return view('admin.prospective.supplier.index')->with([
-            'users' => Applicant::where('user_type', Applicant::USER_TYPES[1])->get(),
-        ]);
+        //
     }
 
     /**
