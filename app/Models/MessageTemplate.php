@@ -11,7 +11,7 @@ class MessageTemplate extends Model
     use HasFactory;
     protected $fillable = [
         'title',
-        'type',
+        'sms',
         'content',
         'feature',
     ];
@@ -99,8 +99,6 @@ class MessageTemplate extends Model
         'QA_WARRANTY_CLAIM_NOTIFICATION',
         'USER_EMAIL_VERIFICATION'
     ];
-
-    const TYPES = ['sms', 'email'];
 
     protected static function boot()
     {
