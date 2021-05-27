@@ -1,0 +1,14 @@
+{
+    "comment": {
+        "diplay": true,
+        "name": "Comments",
+        "position": "1",
+        "button": {
+            "title": "1",
+            "label": "Add Comment",
+            "name": "add_comment",
+            "id": "add_comment",
+            "required": ""
+        }
+    }
+}

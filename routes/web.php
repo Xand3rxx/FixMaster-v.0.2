@@ -109,9 +109,8 @@ Route::prefix('admin')->name('admin.')->group(function () {
         Route::resource('cse', ProspectiveCSEController::class);
         Route::resource('supplier', ProspectiveSupplierController::class);
         Route::resource('technician-artisan', ProspectiveTechnicianArtisanController::class);
-        
-        Route::post('cse-decision', [ProspectiveCSEController::class, 'decision'])->name('cse.decision');
 
+        Route::post('cse-decision', [ProspectiveCSEController::class, 'decision'])->name('cse.decision');
     });
 
     //Routes for estate management
@@ -429,9 +428,21 @@ Route::prefix('cse')->name('cse.')->middleware('monitor.cseservice.request.chang
         Route::post('change-password', [ProfileController::class, 'change_password'])->name('change-password');
     });
 
-    Route::prefix('requests')->name('requests.')->group(function () {
-        Route::get('status', [RequestController::class, 'search'])->name('status');
+
+    Route::middleware('throttle:6,1')->group(function () {
+        Route::post('notify-client-schedule-date', [RequestController::class, 'sendNotification'])->name('notify.client');
+
+        Route::get('requests/status', [RequestController::class, 'search'])->name('requests.status');
+        Route::resource('requests', RequestController::class);
+
+        // All incoming service request actions
+        Route::post('service-request-action/{service_request:uuid}', [\App\Http\Controllers\ServiceRequest\RequestActionController::class, 'incoming'])->name('service.request.action')->whereUuid('service_request');
+
+        Route::post('project-progress', [ProjectProgressController::class, '__invoke'])->name('project.progress.update');
+        Route::post('/submit_ratings',  [CseController::class, 'user_rating'])->name('handle.ratings');
+        Route::post('/update_service_request',  [CseController::class, 'update_cse_service_rating'])->name('update_service_request');
     });
+
 
     Route::get('/profile/{cse:uuid}', [CseController::class, 'show'])->name('view_profile');
     Route::get('/profile/edit/{cse:uuid}', [CseController::class, 'edit'])->name('edit_profile');
@@ -444,12 +455,7 @@ Route::prefix('cse')->name('cse.')->middleware('monitor.cseservice.request.chang
     Route::view('/messages/inbox', 'cse.messages.inbox')->name('messages.inbox');
     Route::view('/messages/sent', 'cse.messages.sent')->name('messages.sent');
     Route::view('/payments', 'cse.payments')->name('payments');
-    Route::resource('requests', RequestController::class);
 
-    Route::post('assign-technician', [AssignTechnicianController::class, '__invoke'])->name('assign.technician');
-    Route::post('project-progress', [ProjectProgressController::class, '__invoke'])->name('project.progress.update');
-    Route::post('/submit_ratings',  [CseController::class, 'user_rating'])->name('handle.ratings');
-    Route::post('/update_service_request',  [CseController::class, 'update_cse_service_rating'])->name('update_service_request');
 
     Route::view('/location-request',    'cse.location_request')->name('location_request');
     Route::view(
