@@ -6,6 +6,10 @@
 .card-groups > .card {
     margin-bottom: 15px !important;
 }
+.card-file-thumb{
+    background-repeat: no-repeat;
+    background-size: 100% 220px;
+}
 </style>
 <link rel="stylesheet" href="{{ asset('assets/dashboard/assets/css/dashforge.filemgr.css') }}">
 
@@ -46,22 +50,22 @@
                             {{-- <a href="#" class="btn btn-sm btn-success btn-icon" title="Notify Client to schedule date"><i class="fas fa-bell"></i> </a> --}}
                         </h4>
                                         
-                        <p class="tx-13 tx-color-03 mg-b-0">Scheduled Fix Date: UNAVAILABLE </p>
+                        <p class="tx-13 tx-color-03 mg-b-0">Scheduled Fix Date: {{$shcedule_datetime != ''? 
+                            Carbon\Carbon::parse($shcedule_datetime, 'UTC')->isoFormat('MMMM Do YYYY, h:mm:ssa'):'UNAVAILABLE'}} </p>
                         <p class="tx-13 tx-color-03 mg-b-0">Job Ref.: {{$service_request->unique_id}} </p>
                     </div>
                 </div><!-- media -->
 
                 <div class="contact-content-header mt-4">
                     <nav class="nav">
-                    @if($service_request->service_request_warranty->has_been_attended_to == 'No')
+                 
                     @if(Auth::user()->type->url != 'admin')                    
                         <a href="#serviceRequestActions" class="nav-link active" data-toggle="tab">Actions</a>
                         @endif
-                        @endif
+                    
 
-                        @if($service_request->service_request_warranty->has_been_attended_to == 'Yes')     
-                    <a href="#contactCollaborators" class="nav-link active" data-toggle="tab"><span>Contact Collaborators</a>
-                    @elseif(Auth::user()->type->url == 'admin') 
+                    
+                    @if(Auth::user()->type->url == 'admin') 
                          <a href="#contactCollaborators" class="nav-link active" data-toggle="tab"><span>Contact Collaborators</a>
                         @else
                     <a href="#contactCollaborators" class="nav-link" data-toggle="tab"><span>Contact Collaborators</a>
@@ -77,17 +81,20 @@
                 </div><!-- contact-content-header -->
 
                 <div class="contact-content-body">
+
+              
                     <div class="tab-content">
    
-                    @if(Auth::user()->type->url != 'admin' && $service_request->service_request_warranty->has_been_attended_to == 'No')                    
+                    @if(Auth::user()->type->url != 'admin') 
                     <div id="serviceRequestActions" class="tab-pane show active pd-20 pd-xl-25">
-                        @else                                     
-                    <div id="serviceRequestActions" class="tab-pane pd-20 pd-xl-25">
-                        @endif
+                                                        
+                
 
                             <small class="text-danger">This tab is only visible once if a Warranty claim has not been marked as resolved or is still ongoing.</small>
                            {{-- {{  dd($technicians) }} --}}
-        <form class="form-data" method="POST" action="{{route('cse.assign.technician', [app()->getLocale()])}}"  enctype="multipart/form-data">
+  
+     @if($service_request->service_request_warranty->has_been_attended_to != 'Yes')
+        <form class="form-data" method="POST" action="{{route('cse.assign.warranty_technician', [app()->getLocale()])}}"  enctype="multipart/form-data">
             @csrf
             <div class="mt-4">
                 <div class="tx-13 mg-b-25">
@@ -482,10 +489,9 @@
                 </div>
             </div><!-- df-example -->
         
-            @if(!empty($service_request->service_request_warranty->service_request_warranty_issued))
-            <input type="hidden" value="{{$service_request->service_request_warranty->service_request_warranty_issued->scheduled_datetime}}" 
+            <input type="hidden" value="{{$shcedule_datetime}}" 
             name="service_request_warrant_issued_schedule_date">   
-              @endif
+         
             <input type="hidden" value="{{$service_request->uuid}}" name="service_request_uuid">
             <input type="hidden" value="{{$service_request->service_request_warranty->uuid}}" name="service_request_warranty_uuid">
             <input type="hidden" value="{{$service_request->service_request_warranty->id}}" name="service_request_warranty_id">
@@ -493,18 +499,21 @@
             <button type="submit" class="btn btn-primary d-none" id="update-progress">Update Progress</button>
         
         </form>
-
+        @else
+       
+       
                             <small class="text-danger">This tab is only visible once a Warranty claim has been marked as resolved.</small>
                             <h4> This Warranty Claim has been resolved. </h4>
+                            @endif
+                        
                         </div>
+                        @endif
 
                        
-                        @if(Auth::user()->type->url == 'admin' || $service_request->service_request_warranty->has_been_attended_to == 'Yes')                    
-                    <div id="contactCollaborators" class="tab-pane show active pd-20 pd-xl-25">
-                        @else                                     
+                                                      
                         <div id="contactCollaborators" class="tab-pane pd-20 pd-xl-25">
 
-                        @endif
+                 
                       
                         This show's a list of all FixMaster Collaborators that worked on the clients service request initially.
                                 
@@ -813,11 +822,11 @@
                                     <div class="dropdown-file">
                                         <a href="" class="dropdown-link" data-toggle="dropdown"><i data-feather="more-vertical"></i></a>
                                         <div class="dropdown-menu dropdown-menu-right">
-                                        <a href="{{ route('cse.download', ['file'=> $item->name, 'locale'=>app()->getLocale()]) }}" class="dropdown-item download"><i data-feather="download"></i>Download</a>
+                                        <a href="{{ route('cse.warranty_download', ['file'=> $item->name, 'locale'=>app()->getLocale()]) }}" class="dropdown-item download"><i data-feather="download"></i>Download</a>
                                         </div>
                                     </div><!-- dropdown -->
                                     <div class="card-file-thumb tx-danger" 
-                                    style="background-image: url('{{ asset('assets/warranty-images/'.$item->name)}}');"
+                                    style="background-image: url('{{ asset('assets/warranty-images/'.$item->name)}}')"
                                     >
                                         <i class="far fa-file-pdf"></i>
                                     </div>

@@ -14,7 +14,7 @@ class EnumHelper{
         $enumStr = $arr[0]->Type;
 
         // Parse string
-        preg_match_all("/'([^']+)'/", $enumStr, $matches);
+         preg_match_all("/'([^']+)'/", $enumStr, $matches);
 
         // Return matches
         return isset($matches[1]) ? $matches[1] : [];
