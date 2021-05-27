@@ -262,7 +262,8 @@ Route::prefix('admin')->name('admin.')->group(function () {
     Route::post('/flutter/update',                      [GatewayController::class, 'flutterUpdate'])->name('flutter_update');
 
     // messaging routes
-    Route::view('/messaging/templates',                   'admin.messaging.template')->name('template');
+    Route::view('/messaging/templates',                   'admin.messaging.template.template')->name('template');
+    Route::view('/messaging/templates/new',                   'admin.messaging.template.new')->name('new_template');
     Route::view('/messaging/outbox',      'admin.messaging.email.outbox')->name('outbox');
     Route::view('/messaging/inbox',      'admin.messaging.email.inbox')->name('inbox');
     Route::view('/messaging/new',      'admin.messaging.email.new')->name('new_email');

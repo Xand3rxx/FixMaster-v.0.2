@@ -130,9 +130,9 @@ class MessageController extends Controller
                 'updated_at'        => Carbon::now(),
                 'mail_status' => 'Not Sent',
             ];
-            $this->sendNewMessage("mail", $subject, $senderDetails->email, $user->email, $mail_content, "");
+            $this->sendNewMessage( $subject, $senderDetails->email, $user->email, $mail_content, "");
         }
-        //  Message::insert($mail_objects);
+         Message::insert($mail_objects);
         return response()->json([
             "message" => "Messages sent successfully!"
         ], 201);
@@ -193,9 +193,9 @@ class MessageController extends Controller
         $mail_data = $request->input('mail_data');
         $from = $request->input('sender');
         $feature = $request->input('feature');
-        $type = $request->input('type');
+        
 
-        $this->sendNewMessage($type, $subject, $from, $to, $mail_data, $feature);
+        $this->sendNewMessage($subject, $from, $to, $mail_data, $feature);
     }
 
     /**
@@ -239,14 +239,17 @@ class MessageController extends Controller
      * 
      * @return \Illuminate\Http\Response
      */
-    public function sendNewMessage( $type, $subject, $from, $to, $mail_data,$feature=""){
+    public function sendNewMessage($subject="", $from="", $to, $mail_data,$feature=""){
     
        $message = $mail_data;
+       $sms = "";
        $message_array = [];
+       $template = null;
+       $sender = null;
+       $recipient = null;
         if(!empty($feature)){
             $template = MessageTemplate::select('content')
             ->where('feature', $feature)
-            ->where('type', $type)
             ->first();
             
             if(empty($template)){
@@ -254,20 +257,20 @@ class MessageController extends Controller
     
             }
             $message = $this->replacePlaceHolders($mail_data, $template->content);
+            $sms = $this->replacePlaceHolders($mail_data, $template->sms);
+            $subject = $template->title;
         }
 
-    
-     
-
+    if($from!="")
         $sender = DB::table('users')->where('users.email', $from)->first();
+    else
+       $from = "noreply@fixmaster.com";
 
-        $recipient = DB::table('users')
-        ->where('users.email', $to )
-        ->first();
+       $recipient = DB::table('users')->where('users.email', $to )->first();
 
 
       
-         if(is_object($recipient)){
+         if($from!="" && is_object($recipient)){
             $mail_objects[] = [
                 'title' => $subject,
                 'content' => $message,
@@ -286,13 +289,15 @@ class MessageController extends Controller
             
 
         $message_array = ['to'=>$to, 'from'=>$from, 'subject'=>$subject, 'content'=>$message];
-        if($type=='email'){
-            $this->dispatch(new PushEmails($message_array));
-            Log::debug("I sent the email");
-        }
+        
+        $this->dispatch(new PushEmails($message_array));
+        
+        
            
-        elseif($type=='sms')
-           $this->dispatch(new PushSMS($message_array));
+        // if(!empty($feature) && $sms!=""){
+        //     $this->dispatch(new PushSMS($sms));
+        // }
+           
         
     }
 
