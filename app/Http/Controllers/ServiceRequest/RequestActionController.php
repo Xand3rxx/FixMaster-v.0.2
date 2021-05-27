@@ -5,9 +5,13 @@ namespace App\Http\Controllers\ServiceRequest;
 use Illuminate\Http\Request;
 use App\Models\ServiceRequest;
 use App\Http\Controllers\Controller;
+use App\Http\Controllers\ServiceRequest\Concerns\StoreInDatabase;
 
 class RequestActionController extends Controller
 {
+    use StoreInDatabase;
+
+    public $to_be_stored;
     /**
      * Handle the incoming request for service request action.
      *
@@ -19,11 +23,18 @@ class RequestActionController extends Controller
      */
     public function incoming(Request $request, string $locale, ServiceRequest $service_request)
     {
-        if ($request->hasAny(['add_comment', 'email'])) {
-            $action = new \App\Http\Controllers\ServiceRequest\Concerns\RepeatedActions($request, $service_request);
-            return $action->handle();
-        }
+        (array)$to_be_stored = [];
 
-        return dd([$request->all(), $service_request], 'requet');
+        if ($request->hasAny(['add_comment', 'intiate_rfq', 'intiate_trf'])) {
+            $action = \App\Http\Controllers\ServiceRequest\Concerns\ActionsRepeated::handle($request, $service_request, $to_be_stored);
+            $to_be_stored = $action;
+        }
+        dd($this->saveAction($to_be_stored));
+        // call the storage 
+        return !empty($to_be_stored)
+            ? ($this->saveAction($to_be_stored)
+                ? back()->with('success', 'Project Progress successfully!!')
+                : back()->with('error', 'Error occured while updating project progress'))
+            : back()->with('error', 'Error Generating Request Content');
     }
 }

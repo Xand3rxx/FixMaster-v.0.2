@@ -48,11 +48,7 @@
         });
 
         let count = 1;
-        //Add and Remove Request for
-        $(document).on('click', '.add-rfq', function() {
-            count++;
-            addRFQ(count);
-        });
+        
         $(document).on('click', '.remove-rfq', function() {
             count--;
             $(this).closest(".remove-rfq-row").remove();

@@ -59,13 +59,11 @@ class RequestController extends Controller
         // find the service reqquest using the uuid and relations
         $service_request = ServiceRequest::where('uuid', $uuid)->where('status_id', ServiceRequest::SERVICE_REQUEST_STATUSES['Pending'])->with(['price', 'service', 'service.subServices'])->firstOrFail();
 
-
-
         (array) $variables = [
             'contents'  => $this->path(base_path('contents/cse/service_request_action.json')),
             'service_request' => $service_request,
         ];
-        // dd($variables['contents']['comment']['button']);
+        // dd($variables);
         return view('cse.requests.show', $variables);
     }
 
