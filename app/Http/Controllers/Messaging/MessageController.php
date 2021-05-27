@@ -193,9 +193,9 @@ class MessageController extends Controller
         $mail_data = $request->input('mail_data');
         $from = $request->input('sender');
         $feature = $request->input('feature');
-        $type = $request->input('type');
+        
 
-        $this->sendNewMessage($type, $subject, $from, $to, $mail_data, $feature);
+        $this->sendNewMessage($subject, $from, $to, $mail_data, $feature);
     }
 
     /**
@@ -239,14 +239,14 @@ class MessageController extends Controller
      * 
      * @return \Illuminate\Http\Response
      */
-    public function sendNewMessage( $type, $subject, $from, $to, $mail_data,$feature=""){
+    public function sendNewMessage($subject, $from, $to, $mail_data,$feature=""){
     
        $message = $mail_data;
+       $sms = "";
        $message_array = [];
         if(!empty($feature)){
             $template = MessageTemplate::select('content')
             ->where('feature', $feature)
-            ->where('type', $type)
             ->first();
             
             if(empty($template)){
@@ -254,6 +254,7 @@ class MessageController extends Controller
     
             }
             $message = $this->replacePlaceHolders($mail_data, $template->content);
+            $sms = $this->replacePlaceHolders($mail_data, $template->sms);
         }
 
     
@@ -285,13 +286,15 @@ class MessageController extends Controller
             
 
         $message_array = ['to'=>$to, 'from'=>$from, 'subject'=>$subject, 'content'=>$message];
-        if($type=='mail'){
-            $this->dispatch(new PushEmails($message_array));
-            Log::debug("I sent the email");
+        
+        $this->dispatch(new PushEmails($message_array));
+        
+        
+           
+        if(!empty($feature) && $sms!=""){
+            $this->dispatch(new PushSMS($sms));
         }
            
-        elseif($type=='sms')
-           $this->dispatch(new PushSMS($message_array));
         
     }
 
