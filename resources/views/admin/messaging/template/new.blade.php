@@ -211,7 +211,7 @@
                 url: url+"/api/message/send",
                 type: 'POST',
                 data:{
-                    feature:'CUSTOMER_REGISTRATION',
+                    feature:'CUSTOMER_DIAGNOSIS_INVOICE',
                     subject:'Test Registration Email',
                     id:'1',
                     recipient:'john.doe-af83d6@inbox.mailtrap.io',

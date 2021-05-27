@@ -22,10 +22,13 @@ var checked_value = 'Email';
 $(document).ready(function () {
     $.get( url+"/api/template/list", function( data ) {
         var trow = "";
+        var cnt =0;
         $.each(data.data, function(key, val){
-           trow = '<tr data-id="'+val.uuid+'"><td class="tx-medium">'+ val.title + '</td>';
-           trow += '<td class="text-right">' + val.type + '</td>';
-           trow += '<td class="text-right">'+val.feature+'</td>';
+          cnt++;
+           trow = '<tr data-id="'+val.uuid+'">';
+           trow += '<td class="tx-color-03 tx-center">'+cnt+'</td>';
+           trow += '<td class="tx-medium">'+ val.title + '</td>'
+           trow += '<td class="tx-medium">'+val.feature+'</td>';
            trow += '<td class="text-medium nav-item"><span>';
            trow += '<a href="templates/new/?templateid='+val.uuid+'" class="msgedit" style="float: left;margin-right:10px;">';
         //    trow += '<i data-feather="edit" style="font-size: 9px;"></i></a></span>';
@@ -238,18 +241,20 @@ function insertTextArea(areaId,text) {
 <div class="content-body">
   <div class="container pd-x-0">
     <div class="d-sm-flex align-items-center justify-content-between mg-b-20 mg-lg-b-25 mg-xl-b-30">
-      <div>
+      <div style="float:left;">
         <nav aria-label="breadcrumb">
           <ol class="breadcrumb breadcrumb-style1 mg-b-10">
           <li class="breadcrumb-item active">Dashboard</li>
-            {{-- <li class="breadcrumb-item active" aria-current="page">Website Analytics</li> --}}
           </ol>
         </nav>
-        <h4 class="mg-b-0 tx-spacing--1">Welcome to Fix<span style="color: #E97D1F;">Master</span> </h4>
+        <h4 class="mg-b-0 tx-spacing--1">Notification Template<span style="color: #E97D1F;">  List</span> </h4>
       </div>
+      <div style=""> <button class="btn btn-sm btn-secondary" id="btnSendTestEmail" ><i data-feather="plus"></i> Send Test Email</button>&nbsp;
+                                &nbsp;&nbsp;&nbsp;<a href="templates/new" class="btn btn-sm btn-primary" id="btnNewTemplate" ><i data-feather="plus"></i> New Template</a>
+</div>
     </div>
 
-    <div class="row row-xs">
+    <!-- <div class="row row-xs">
       <div class="col-lg-12 col-xl-12">
          <div class="col-md-6 col-xl-8 mg-t-10 order-md-1 order-xl-0">
         <div class="card ht-lg-100p">
@@ -259,27 +264,37 @@ function insertTextArea(areaId,text) {
                                 <button class="btn btn-sm btn-secondary" id="btnSendTestEmail" ><i data-feather="plus"></i> Send Test Email</button>&nbsp;
                                 &nbsp;&nbsp;&nbsp;<a href="templates/new" class="btn btn-sm btn-primary" id="btnNewTemplate" ><i data-feather="plus"></i> New Template</a>
             </div>
-          </div><!-- card-header -->
-          <div class="card-body pd-0">
+          
+      </div>
+      </div> -->
 
-            <div class="table-responsive">
-              <table class="table table-borderless table-dashboard table-dashboard-one">
-                <thead>
-                  <tr>
-                    <th class="wd-40">Title</th>
-                    <th class="wd-25 text-right">Type</th>
-                    <th class="wd-25 text-right">Features</th>
-                    <th class="wd-35 text-right"></th>
-                  </tr>
-                </thead>
-                <tbody id="template-list">
-                </tbody>
-              </table>
-            </div><!-- table-responsive -->
-          </div><!-- card-body -->
-        </div><!-- card -->
-      </div>
-      </div>
+      <div class="row row-xs">
+            <div class="col-lg-12 col-xl-12 mg-t-10">
+                <div class="card mg-b-10">
+                    <div class="card-header pd-t-20 d-sm-flex align-items-start justify-content-between bd-b-0 pd-b-0">
+                       
+                    </div><!-- card-header -->
+
+                    <div class="table-responsive">
+
+                        <table class="table table-hover mg-b-0" id="basicExample">
+                            <thead class="thead-primary">
+                                <tr>
+                                    <th class="text-center">#</th>
+                                    <th>Title</th>
+                                    <th>Features</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody id="template-list">
+                              
+                            </tbody>
+                        </table>
+                    </div><!-- table-responsive -->
+                </div><!-- card -->
+
+            </div><!-- col -->
+        </div><!-- row -->
    </div><!-- container -->
 
    <div class="modal fade" id="messageModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
