@@ -2,8 +2,10 @@
 
 namespace App\Traits;
 
-use App\Traits\GenerateUniqueIdentity as Generator;
+use Illuminate\Support\Str;
 use Illuminate\Support\Facades\DB;
+use App\Traits\GenerateUniqueIdentity as Generator;
+use App\Http\Controllers\Messaging\MessageController;
 
 
 trait RegisterCSE
@@ -61,17 +63,36 @@ trait RegisterCSE
                 'account_number'    => $valid['account_number'],
                 'avatar'            => !empty($valid['avatar']) ? $valid['avatar']->store('user-avatar') : $valid['gender'] = 'male' ? 'default-male-avatar.png' : 'default-female-avatar.png',
             ]);
-            
+
             // Register the CSE Account
             $user->cse()->create([
                 'account_id' => $account->id,
+                // 'referral_id' => 0,
                 'franchisee_id' => $valid['franchisee_id'],
             ]);
             // Register CSE Contact Details
-            \App\Models\Contact::attemptToStore($user->id, $account->id, 156, $valid['phone_number'], $valid['full_address'], $valid['address_longitude'], $valid['address_latitude']);
+            \App\Models\Contact::attemptToStore($user->id, $account->id, 156, $valid['phone_number'], $valid['full_address'], $valid['address_longitude'] ?? "3.4393863", $valid['address_latitude'] ?? "6.425007");
+
+            // Notify CSE User of Account Creation
+            $this->sendAccountCreationNotification($valid);
             // update registered to be true
             $registred = true;
         });
         return $registred;
+    }
+
+    protected function sendAccountCreationNotification($valid)
+    {
+        $template_feature = 'CSE_APPLICATION_SUCCESSFUL';
+        if (!empty((string)$template_feature)) {
+            $messanger = new MessageController();
+            $mail_data = collect([
+                'lastname' => $valid['last_name'],
+                'firstname' => $valid['first_name'],
+                'email' => $valid['email'],
+                'password' => $valid['password'],
+            ]);
+            $messanger->sendNewMessage('email', Str::title(Str::of($template_feature)->replace('_', ' ',)), 'dev@fix-master.com', $mail_data['email'], $mail_data, $template_feature);
+        }
     }
 }

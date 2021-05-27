@@ -13,6 +13,8 @@ class Applicant extends Model
 
     const USER_TYPES = ['cse', 'supplier', 'technician'];
 
+    const STATUSES = ['pending', 'approved', 'declined'];
+
     /**
      * The attributes that aren't mass assignable.
      *
