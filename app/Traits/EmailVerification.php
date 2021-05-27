@@ -8,10 +8,11 @@ use Illuminate\Auth\Events\Verified;
 use Illuminate\Foundation\Auth\RedirectsUsers;
 use Illuminate\Auth\Access\AuthorizationException;
 use App\Http\Controllers\Auth\RedirectAuthenticatedUsers;
+use App\Traits\Utility;
 
 trait EmailVerification
 {
-    use RedirectsUsers, RedirectAuthenticatedUsers, SendVerificationMail;
+    use RedirectsUsers, RedirectAuthenticatedUsers, SendVerificationMail, Utility;
 
     /**
      * Show the email verification notice.
@@ -36,6 +37,7 @@ trait EmailVerification
      */
     public function verify(Request $request)
     {
+       
         if (!hash_equals((string) $request->route('id'), (string) $request->user()->uuid)) {
             throw new AuthorizationException;
         }
@@ -71,8 +73,9 @@ trait EmailVerification
      */
     protected function verified(Request $request)
     {
+     
+         $request->session()->put('verified', '1');
         $request->session()->flash('success', 'Account Verified Successfully!');
-        // Authenticated user is $request->user()->account
     }
 
     /**

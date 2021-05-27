@@ -39,7 +39,10 @@ use App\Models\ServiceRequestWarranty;
 use App\Traits\Utility;
 use App\Traits\Loggable;
 use App\Models\ServiceRequestSetting;
+use App\Models\ServiceRequestMedia;
+use App\Models\Media;
 use Image;
+use File;
 use App\Http\Controllers\Client\PaystackController;
 
 use Illuminate\Support\Facades\Route;
@@ -48,8 +51,9 @@ use App\Http\Controllers\RatingController;
 use App\Traits\RegisterPaymentTransaction;
 use App\Traits\GenerateUniqueIdentity as Generator;
 use App\Http\Controllers\Messaging\MessageController;
-use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Validator; 
 use App\Models\Warranty;
+use App\Models\ServicedAreas;
 
 
 class ClientController extends Controller
@@ -136,7 +140,7 @@ class ClientController extends Controller
     {
         //
     }
-
+    
     /**
      * Show the form for editing the specified resource.
      *
@@ -917,6 +921,7 @@ class ClientController extends Controller
 
     public function saveRequest($request){
         // return dd($request);
+
         $service_request                        = new ServiceRequest();
         $service_request->client_id             = auth()->user()->id;
         if ( $request['service_id'] ) {
@@ -936,23 +941,68 @@ class ClientController extends Controller
         $service_request->created_at            = Carbon::now()->toDateTimeString();
         // $service_request->updated_at         = Carbon::now()->toDateTimeString();
 
-
-        // if($request->hasFile('media_file')){
-        //     $docs = $request->file('media_file');
-        //     $documentName = sha1(time()) .'.'.$docs->getClientOriginalExtension();
-        //     $imagePath = public_path('assets/service-request').'/'.$documentName;
-        //     //Delete old document
-        //     if(\File::exists(public_path('assets/service-request/'.$request->input('media_file')))){
-        //         $done = \File::delete(public_path('assets/service-request/'.$request->input('media_file')));
-        //         if($done){
-        //             // echo 'File has been deleted';
-        //         }
-        //     }
-        //     //Move new image to `client-avatars` folder
-        //     Image::make($docs->getRealPath())->resize(220, 220)->save($imagePath);
-        // }
-
         if ($service_request->save()) {
+
+
+        // upload multiple media files
+        // foreach($request->media_file as $key => $file)
+        // {
+        //     $originalName[$key] = $file->getClientOriginalName();
+
+        //     $fileName = sha1($file->getClientOriginalName() . time()) . '.'.$file->getClientOriginalExtension();
+        //     $filePath = public_path('assets/service-request-media-files');
+        //     $file->move($filePath, $fileName);
+        //     $data[$key] = $fileName; 
+        // }
+        //     $unique_name   = json_encode($data);
+        //     $original_name = json_encode($originalName);
+
+        //     $saveToMedia = new Media();
+        //     $saveToMedia->client_id     = auth()->user()->id;
+        //     $saveToMedia->original_name = $original_name;
+        //     $saveToMedia->unique_name   = $unique_name;
+        //     $saveToMedia->save();
+
+        //     $saveServiceRequestMedia = new ServiceRequestMedia;
+        //     $saveServiceRequestMedia->media_id            = $saveToMedia->id; 
+        //     $saveServiceRequestMedia->service_request_id  = $service_request->id;
+        //     $saveServiceRequestMedia->save(); 
+
+
+            // file uploading
+            // if($request->hasFile('media_file')){
+            //     $docs = $request->file('media_file');
+            //     $documentName = sha1(time()) .'.'.$docs->getClientOriginalExtension();
+            //     $imagePath = public_path('assets/service-request-media-files').'/'.$documentName;
+            //     //Delete old document
+            //     if(\File::exists(public_path('assets/service-request-media-files/'.$request->input('media_file')))){
+            //         $done = \File::delete(public_path('assets/service-request-media-files/'.$request->input('media_file')));
+            //         if($done){
+            //             // echo 'File has been deleted';
+            //         }
+            //     }
+            //     //Move new image to `service request` folder
+            //     Image::make($docs->getRealPath())->resize(220, 220)->save($imagePath);
+    
+            //     $media_file                    = new Media();
+            //     $serviceRequestMedia_file      = new ServiceRequestMedia(); 
+    
+            //     $media_file->client_id            = auth()->user()->id;
+            //     $media_file->original_name        = $request->file('media_file');
+            //     $media_file->unique_name          = $documentName;
+    
+            //     //if media file name is saved 
+            //     if ( $media_file->save() ) {
+            //         $serviceRequestMedia_file->media_id            = $media_file->id;
+            //         $serviceRequestMedia_file->service_request_id  = $service_request->id;
+            //            // save file
+            //            $serviceRequestMedia_file->save();
+            //     }
+                
+            // }
+
+
+
                     //Temporary Assign a CSE to a client's request for demo purposes
         //List of CSE's Id's on the DB
         $cseArray = array(2, 3, 4);
@@ -1003,25 +1053,25 @@ class ClientController extends Controller
         }
     }
 
+    public function editRequest($language, $request){ 
+        // return $request;
+        $userServiceRequest = ServiceRequest::where('uuid', $request)->with('service_request_medias')->first();
 
-
-    public function editRequest($language, $request){
-
-        $userServiceRequest = ServiceRequest::where('uuid', $request)->first();
         $data = [
             'userServiceRequest'    =>  $userServiceRequest,
         ];
-
+        // return $data['userServiceRequest']['service_request_medias'][0]['media_files']['unique_name'];
+        // return $data['userServiceRequest']['service_request_medias'][0]['media_files']['unique_name'];
         return view('client._request_edit', $data);
     }
 
     public function updateRequest(Request $request, $language, $id){
-
+        // return $request->servicereq;
         $requestExist = ServiceRequest::where('uuid', $id)->first();
 
         $request->validate([
             'timestamp'             =>   'required',
-            'phone_number'          =>   'required',
+            // 'phone_number'          =>   'required', 
             'address'               =>   'required',
             'description'           =>   'required',
         ]);
@@ -1038,6 +1088,30 @@ class ClientController extends Controller
             'phone_number'          =>   $request->phone_number,
             'address'               =>   $request->address,
         ]);
+        
+        // upload multiple media files
+        foreach($request->media_file as $key => $file)
+        {
+            $originalName[$key] = $file->getClientOriginalName();
+
+            $fileName = sha1($file->getClientOriginalName() . time()) . '.'.$file->getClientOriginalExtension();
+            $filePath = public_path('assets/service-request-media-files');
+            $file->move($filePath, $fileName);
+            $data[$key] = $fileName; 
+        }
+        $unique_name   = json_encode($data);
+        $original_name = json_encode($originalName);
+
+        $saveToMedia = new Media();
+        $saveToMedia->client_id     = auth()->user()->id;
+        $saveToMedia->original_name = $original_name;
+        $saveToMedia->unique_name   = $unique_name;
+        $saveToMedia->save();
+
+        $saveServiceRequestMedia = new ServiceRequestMedia;
+        $saveServiceRequestMedia->media_id            = $saveToMedia->id; 
+        $saveServiceRequestMedia->service_request_id  = $request->servicereq;
+        $saveServiceRequestMedia->save();        
 
         if($updateServiceRequest){
           //acitvity log
@@ -1283,4 +1357,20 @@ class ClientController extends Controller
         }
     }
 
+
+    public function discount_mail(Request $request ){
+        if ($request->ajax())
+        {
+    
+         $data= $request->user;
+
+        $response =  $this->addDiscountToFirstTimeUserTrait($request->user());
+        if( $response == '1' ){
+            $referralResponse = $this->updateVerifiedUsers($request->user());
+        }
+      
+        return response()->json($referralResponse);
+        }
+      }
 }
+

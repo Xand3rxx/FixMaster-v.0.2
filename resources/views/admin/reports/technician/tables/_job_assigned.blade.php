@@ -8,7 +8,7 @@
         <th>Job Location</th>
         <th>Booking Date</th>
         <th>Acceptance Date</th>
-        {{-- <th>CSE Matched</th> --}}
+        <th>CSE Matched</th>
         <th>Diagnostic Date</th>
         <th>Completion Date</th>
         <th>Status</th>
@@ -22,19 +22,17 @@
         <td class="tx-color-03 tx-center">{{ $loop->iteration }}</td>
         <td class="tx-medium">{{ !empty($result['user']['account']['first_name']) ? Str::title($result['user']['account']['first_name'] ." ". $result['user']['account']['last_name']) : 'UNAVAILABLE' }}</td>
         <td class="tx-medium">{{ $result['service_request']['unique_id'] }}</td>
-        <td class="tx-medium">Victoria Island</td>
+        <td class="tx-medium">{{ !empty($result['service_request']['address']['town']['name']) ? $result['service_request']['address']['town']['name'] : 'UNAVAILABILE' }}</td>
         <td class="text-medium">{{ Carbon\Carbon::parse($result['service_request']['created_at'], 'UTC')->isoFormat('MMMM Do YYYY hh:mm:ssa') }}</td>
         <td class="text-medium">{{ Carbon\Carbon::parse($result['job_acceptance_time'], 'UTC')->isoFormat('MMMM Do YYYY hh:mm:ssa') }}</td>
-        {{-- @foreach($result['user']['roles'] as $data)
-
-           {{$data->name}}
-
-        @endforeach --}}
-
-
-
-        {{-- <td class="text-medium">Nwideh Kenneth</td> --}}
-
+        @foreach($result['service_request']['service_request_assignee']['user']['roles'] as $data)
+         @if($data['slug'] == 'cse-user')
+         <td class="text-medium">  {{$result['service_request']['service_request_assignee']['user']['account']['first_name']}}
+           {{$result['service_request']['service_request_assignee']['user']['account']['middle_name']}}
+           {{$result['service_request']['service_request_assignee']['user']['account']['last_name']}}
+        </td>
+         @endif
+        @endforeach
         <td class="text-medium">{{ Carbon\Carbon::parse($result['job_diagnostic_date'], 'UTC')->isoFormat('MMMM Do YYYY hh:mm:ssa') }}</td>
         <td class="text-medium">{{ !empty($result['job_completed_date']) ? Carbon\Carbon::parse($result['job_completed_date'], 'UTC')->isoFormat('MMMM Do YYYY hh:mm:ssa') : 'UNAVAILABLE' }}</td>
         @if($result['service_request']['status']['name'] == 'Pending')

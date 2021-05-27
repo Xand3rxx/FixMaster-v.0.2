@@ -130,9 +130,9 @@ class MessageController extends Controller
                 'updated_at'        => Carbon::now(),
                 'mail_status' => 'Not Sent',
             ];
-            $this->sendNewMessage("mail", $subject, $senderDetails->email, $user->email, $mail_content, "");
+            $this->sendNewMessage( $subject, $senderDetails->email, $user->email, $mail_content, "");
         }
-        //  Message::insert($mail_objects);
+         Message::insert($mail_objects);
         return response()->json([
             "message" => "Messages sent successfully!"
         ], 201);
@@ -152,7 +152,7 @@ class MessageController extends Controller
         $receiverDetails = [];
 
         $senderDetails = $this->getUser($sender);
-        foreach ($recipients as $recipient) {
+        foreach($recipients as $recipient){
             array_push($receivers, $recipient['value']);
         }
 
@@ -193,9 +193,9 @@ class MessageController extends Controller
         $mail_data = $request->input('mail_data');
         $from = $request->input('sender');
         $feature = $request->input('feature');
-        $type = $request->input('type');
+        
 
-        $this->sendNewMessage($type, $subject, $from, $to, $mail_data, $feature);
+        $this->sendNewMessage($subject, $from, $to, $mail_data, $feature);
     }
 
     /**
@@ -239,24 +239,38 @@ class MessageController extends Controller
      * 
      * @return \Illuminate\Http\Response
      */
-    public function sendNewMessage($type, $subject, $from, $to, $mail_data, $feature = "")
-    {
-        $message = $mail_data;
-        $message_array = [];
-        if (!empty($feature)) {
-            $template = MessageTemplate::select('content')->where('feature', $feature)->where('type', $type)->first();
-
-            if (empty($template)) {
-                return response()->json(["message" => "Message Template not found!"], 404);
+    public function sendNewMessage($subject="", $from="", $to, $mail_data,$feature=""){
+    
+       $message = $mail_data;
+       $sms = "";
+       $message_array = [];
+       $template = null;
+       $sender = null;
+       $recipient = null;
+        if(!empty($feature)){
+            $template = MessageTemplate::select('content')
+            ->where('feature', $feature)
+            ->first();
+            
+            if(empty($template)){
+            return response()->json(["message" => "Message Template not found!"], 404);
+    
             }
             $message = $this->replacePlaceHolders($mail_data, $template->content);
+            $sms = $this->replacePlaceHolders($mail_data, $template->sms);
+            $subject = $template->title;
         }
 
-        $recipient = DB::table('users')->where('users.email', $to)->first();
-
+    if($from!="")
         $sender = DB::table('users')->where('users.email', $from)->first();
+    else
+       $from = "noreply@fixmaster.com";
 
-        if (is_object($recipient)) {
+       $recipient = DB::table('users')->where('users.email', $to )->first();
+
+
+      
+         if($from!="" && is_object($recipient)){
             $mail_objects[] = [
                 'title' => $subject,
                 'content' => $message,
@@ -267,16 +281,24 @@ class MessageController extends Controller
                 'updated_at'        => Carbon::now(),
                 'mail_status' => 'Not Sent',
             ];
+          
 
-            Message::insert($mail_objects);
-        }
+        Message::insert($mail_objects);
+     
+         }
+            
 
-        $message_array = ['to' => $to, 'from' => $from, 'subject' => $subject, 'content' => $message];
-        if ($type == 'email') {
-            $this->dispatch(new PushEmails($message_array));
-            Log::debug("I sent the email");
-        } elseif ($type == 'sms')
-            $this->dispatch(new PushSMS($message_array));
+        $message_array = ['to'=>$to, 'from'=>$from, 'subject'=>$subject, 'content'=>$message];
+        
+        $this->dispatch(new PushEmails($message_array));
+        
+        
+           
+        // if(!empty($feature) && $sms!=""){
+        //     $this->dispatch(new PushSMS($sms));
+        // }
+           
+        
     }
 
 

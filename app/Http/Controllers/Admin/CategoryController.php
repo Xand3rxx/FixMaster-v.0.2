@@ -66,14 +66,18 @@ class CategoryController extends Controller
 
             // return $request->name;
             $request->validate([
-                'name'      => 'required|unique:categories,name',
+                'name'              => 'required|unique:categories,name',
+                'labour_markup'     => 'required',
+                'material_markup'   => 'required',
             ]);
 
             //Create or update record on `categories`
             $createCategory = Category::create([
-                'user_id'      =>  Auth::id(),
-                'name'         =>  ucwords($request->name),
-                'updated_at'   =>  null
+                'user_id'           =>  Auth::id(),
+                'name'              =>  ucwords($request->name),
+                'labour_markup'     =>  $request->labour_markup/100,
+                'material_markup'   =>  $request->material_markup/100,
+                'updated_at'        =>  null
             ]);
 
             // $createCategory = Category::updateOrInsert(
@@ -164,17 +168,23 @@ class CategoryController extends Controller
         //Validate user input fields
         $request->validate([
             'name'              =>   'required',
+            'labour_markup'     => 'required',
+            'material_markup'   => 'required',
         ]);
 
         //Get old name of category before update
         $oldCategoryName = Category::findOrFail($uuid)->name;
 
-        //New name of category to be uodated
-        $newCategoryName = $request->name;
+        //New Records of category to be uodated
+        $newCategoryName   = $request->name;
+        $newLabourMarkup   = $request->labour_markup/100;
+        $newMaterialMarkup = $request->material_markup/100;
 
         //Update category name record
         $updateCategory = Category::where('uuid', $uuid)->update([
-            'name'      =>  ucwords($newCategoryName),
+            'name'              =>  ucwords($newCategoryName),
+            'labour_markup'     => $newLabourMarkup,
+            'material_markup'   => $newMaterialMarkup
         ]);
 
         if($updateCategory){

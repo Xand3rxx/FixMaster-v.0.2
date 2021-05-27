@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Models\Payment; 
 use App\Models\PaymentGateway;
 use App\Models\Client;
+use App\Models\ServicedAreas;
 
 use App\Traits\RegisterPaymentTransaction;
 use App\Traits\GenerateUniqueIdentity as Generator;
@@ -37,17 +38,37 @@ class PaystackController extends Controller
      */
     public function store(Request $request)
     {
-
+        // return $request;
         $valid = $this->validate($request, [
             // List of things needed from the request like 
             'booking_fee'      => 'required',
             'payment_channel'  => 'required',
             'payment_for'     => 'required',
+            // 'myContact_id'    => 'required',
         ]);
-         $all = $request->all();
-        // dd($all);
-        // Session::put('order_data', $all);
-        $request->session()->put('order_data', $all);
+        
+        $Serviced_areas = ServicedAreas::where('town_id', '=', $request['town_id'])->orderBy('id', 'DESC')->first();
+        if ($Serviced_areas === null) {
+            return back()->with('error', 'sorry!, this area you selected is not serviced at the moment, please try another area');
+        }
+
+        // upload multiple media files
+        foreach($request->media_file as $key => $file)
+            {
+                $originalName[$key] = $file->getClientOriginalName();
+    
+                $fileName = sha1($file->getClientOriginalName() . time()) . '.'.$file->getClientOriginalExtension();
+                $filePath = public_path('assets/service-request-media-files');
+                $file->move($filePath, $fileName);
+                $data[$key] = $fileName; 
+            }
+                $data['unique_name']   = json_encode($data);
+                $data['original_name'] = json_encode($originalName);
+                // return $data;
+        
+        // $request->session()->put('order_data', $request);
+        $request->session()->put('order_data', $request->except(['media_file']));
+        $request->session()->put('medias', $data);
 
 
         // fetch the Client Table Record

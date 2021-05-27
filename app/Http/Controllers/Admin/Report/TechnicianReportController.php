@@ -5,18 +5,19 @@ namespace App\Http\Controllers\Admin\Report;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\ServiceRequestAssigned;
+use App\Models\Technician;
 use Auth;
 
 class TechnicianReportController extends Controller
 {
     public function index()
     {
-        return view('admin.reports.technician.index', [
+        $results = ServiceRequestAssigned::with('service_request', 'user')->whereHas('user.roles', function ($query){
+              $query->where('slug', 'technician-artisans');
+            })->latest('created_at')->get();
 
-            'results'   => [],
-
-            'technicians'  =>  \App\Models\Role::where('slug', 'technician-artisans')->with('users')->firstOrFail(),
-        ]);
+        $technicians  =  \App\Models\Role::where('slug', 'technician-artisans')->with('users')->firstOrFail();
+          return view('admin.reports.technician.index', compact('results', 'technicians'));
     }
 
 

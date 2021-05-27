@@ -261,7 +261,8 @@ Route::prefix('admin')->name('admin.')->group(function () {
     Route::post('/flutter/update',                      [GatewayController::class, 'flutterUpdate'])->name('flutter_update');
 
     // messaging routes
-    Route::view('/messaging/templates',                   'admin.messaging.template')->name('template');
+    Route::view('/messaging/templates',                   'admin.messaging.template.template')->name('template');
+    Route::view('/messaging/templates/new',                   'admin.messaging.template.new')->name('new_template');
     Route::view('/messaging/outbox',      'admin.messaging.email.outbox')->name('outbox');
     Route::view('/messaging/inbox',      'admin.messaging.email.inbox')->name('inbox');
     Route::view('/messaging/new',      'admin.messaging.email.new')->name('new_email');
@@ -359,6 +360,11 @@ Route::prefix('client')->name('client.')->middleware('verified', 'monitor.client
     Route::get('wallet',                                [ClientController::class, 'wallet'])->name('wallet');
     Route::any('fund',                                  [ClientController::class, 'walletSubmit'])->name('wallet.submit');
 
+        // *****************my service request**********************//
+        Route::get('requests',                     [ClientController::class, 'myServiceRequest'])->name('service.all');
+        Route::get('/requests/details/{ref}',      [ClientController::class, 'requestDetails'])->name('client.request_details');
+        Route::get('/requests/edit/{id}',          [ClientController::class, 'editRequest'])->name('client.edit_request');
+        Route::put('/requests/update/{id}',        [ClientController::class, 'update'])->name('client.update_request');
     Route::get('loyalty',                            [ClientController::class, 'loyalty'])->name('loyalty');
     Route::any('loyalty/submit',                     [ClientController::class, 'loyaltySubmit'])->name('loyalty.submit');
     Route::get('payments',                           [ClientController::class, 'payments'])->name('payments');
@@ -400,6 +406,8 @@ Route::prefix('client')->name('client.')->middleware('verified', 'monitor.client
 
     Route::post('/update_service_request',  [ClientController::class, 'update_client_service_rating'])->name('update_service_request');
     Route::post('/submit_ratings',  [ClientController::class, 'client_rating'])->name('handle.ratings');
+    Route::get('/discount_mail',  [ClientController::class, 'discount_mail'])->name('discount_mail');
+ 
 
     // //Paystack Routes
     // Route::get('/paystack/paystack/initiate',   [PaystackController::class, 'initiatePayment'])->name('payment.paystack-initiate');
@@ -456,7 +464,11 @@ Route::prefix('cse')->name('cse.')->middleware('monitor.cseservice.request.chang
     Route::view('/messages/sent', 'cse.messages.sent')->name('messages.sent');
     Route::view('/payments', 'cse.payments')->name('payments');
 
-
+    Route::post('assign-technician', [AssignTechnicianController::class, '__invoke'])->name('assign.technician');
+    Route::post('assign/warranty/technician', [AssignTechnicianController::class, 'assignWarrantyTechnician'])->name('assign.warranty_technician');
+    Route::get('warranty/download/{file:id}', [WarrantyController::class, 'download'])->name('warranty_download');
+    
+    
     Route::view('/location-request',    'cse.location_request')->name('location_request');
     Route::view(
         '/request/details',
