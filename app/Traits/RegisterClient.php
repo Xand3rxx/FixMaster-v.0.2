@@ -78,7 +78,7 @@ trait RegisterClient
             // register new client event
             //  event(new Registered($user));
 
-            // Send Email
+            // Send Notification  Instance
             $this->sendVerificationEmail($account);
 
             // Log the User into the Application as Basic User
