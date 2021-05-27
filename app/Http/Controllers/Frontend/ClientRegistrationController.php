@@ -29,7 +29,7 @@ class ClientRegistrationController extends Controller
      */
     public function index(Request $request)
     {
-        // dd($request);
+     
         if ($request->code) {
             $link = $request->code;
             $authenticateReferral = $this->authenticateRefferralLink($link);
