@@ -216,8 +216,11 @@
 
 
 @push('scripts')
+@if(Session::has('verified'))
 <script src="{{asset('assets/dashboard/assets/js/verified.js')}}"></script>
+@endif
 @endpush
+
 
 @endsection
 

@@ -240,34 +240,28 @@ trait Utility
     $name = ucfirst($user->firstname);
     if ($user_type == '' && $type == 'client') {
       $url =  app()->getLocale().'/verify/?code='.$user->code;
-      $data = (object)[
-        'subject' => 'Referral Link',
-        'recipient' =>  $user->email,
-        'content'  => '<h6>Dear, '. $user->firstname.' </h6> 
-                      <p>Below is your referral link, please copy and paste in browser </p><p>
-                      <p>Referral Link :'.url($url). '</p></p>',
-        'sender'=>'test@ninthbinary.com',
-     
-       ];
+       $mail_data = collect([
+        'email' =>  $user->email,
+        'template_feature' => 'CLIENT_REFERRAL_NOTIFICATION',
+        'url' =>  url($url),
+        'firstname' =>  $name,
+     ]);
 
-       $mail = $this->mailAction($data);
+       $mail = $this->mailAction( $mail_data);
        return '1';
   
     }
     if ($user_type == '' && $type == 'cse') {
 
       $url =  $user->code;
-      $data = (object)[
-        'subject' => 'Referral Link',
-        'recipient' =>  $user->email,
-        'content'  => '<h6>Dear, '. $user->firstname.' </h6> 
-                      <p>Below is your referral code,  </p><p>
-                      <p>Referral Code :'.$url. '</p></p>',
-        'sender'=>'test@ninthbinary.com',
+       $mail_data = collect([
+        'email' =>  $user->email,
+        'template_feature' => 'CSE_REFERRAL_NOTIFICATION',
+        'url' => $url ,
+        'firstname' =>  $name,
+     ]);
      
-       ];
-
-       $mail = $this->mailAction($data);
+       $mail = $this->mailAction($mail_data);
        return '1';
     } 
 
@@ -424,16 +418,15 @@ trait Utility
             'client_id' => $userDetails->user_id,
          ]);
       if($client AND $discountHistory){
-        
-        $data = (object)[
-            'subject' => 'Discount For First Time Client',
-            'recipient' =>  $user->email,
-            'content'  => '<h6>Dear, '. $userDetails->first_name.' </h6> <p>You have received a '.$discountDetails->rate.'% as a newly registered client. Thank you</p>',
-            'sender'=>'test@ninthbinary.com',
-         
-           ];
-
-       $mail = $this->mailAction($data);
+           $mail_data = collect([
+            'email' =>  $user->email,
+            'template_feature' => 'CLIENT_FIRSTTIME_DISCOUNT_NOTIFICATION',
+            'discount' => $discountDetails->rate,
+            'firstname' =>  $userDetails->first_name,
+         ]);
+      
+     
+       $mail = $this->mailAction($mail_data);
        return '1';
       }
 
@@ -443,8 +436,8 @@ trait Utility
 
   public function mailAction($data){
       $messanger = new MessageController();
-      $mail_data = $data->content;
-     return  $jsonResponse = $messanger->sendNewMessage('mail', $data->subject, 'dev@fix-master.com', $data->recipient, $mail_data);
+     return  $jsonResponse = $messanger->sendNewMessage('email', Str::title(Str::of($data['template_feature'])->replace('_', ' ',)), 'dev@fix-master.com', $data['email'], $data, $data['template_feature']);
+
 
   }
 

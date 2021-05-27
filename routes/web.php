@@ -109,6 +109,9 @@ Route::prefix('admin')->name('admin.')->group(function () {
         Route::resource('cse', ProspectiveCSEController::class);
         Route::resource('supplier', ProspectiveSupplierController::class);
         Route::resource('technician-artisan', ProspectiveTechnicianArtisanController::class);
+        
+        Route::post('cse-decision', [ProspectiveCSEController::class, 'decision'])->name('cse.decision');
+
     });
 
     //Routes for estate management
@@ -404,6 +407,8 @@ Route::prefix('client')->name('client.')->middleware('verified', 'monitor.client
 
     Route::post('/update_service_request',  [ClientController::class, 'update_client_service_rating'])->name('update_service_request');
     Route::post('/submit_ratings',  [ClientController::class, 'client_rating'])->name('handle.ratings');
+    Route::get('/discount_mail',  [ClientController::class, 'discount_mail'])->name('discount_mail');
+ 
 
     // //Paystack Routes
     // Route::get('/paystack/paystack/initiate',   [PaystackController::class, 'initiatePayment'])->name('payment.paystack-initiate');
@@ -450,6 +455,10 @@ Route::prefix('cse')->name('cse.')->middleware('monitor.cseservice.request.chang
     Route::resource('requests', RequestController::class);
 
     Route::post('assign-technician', [AssignTechnicianController::class, '__invoke'])->name('assign.technician');
+    Route::post('assign/warranty/technician', [AssignTechnicianController::class, 'assignWarrantyTechnician'])->name('assign.warranty_technician');
+Route::get('warranty/download/{file:id}', [WarrantyController::class, 'download'])->name('warranty_download');
+
+    
     Route::post('project-progress', [ProjectProgressController::class, '__invoke'])->name('project.progress.update');
     Route::post('/submit_ratings',  [CseController::class, 'user_rating'])->name('handle.ratings');
     Route::post('/update_service_request',  [CseController::class, 'update_cse_service_rating'])->name('update_service_request');

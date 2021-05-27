@@ -284,6 +284,7 @@ class MessageController extends Controller
           
 
         Message::insert($mail_objects);
+     
          }
             
 
