@@ -130,9 +130,9 @@ class MessageController extends Controller
                 'updated_at'        => Carbon::now(),
                 'mail_status' => 'Not Sent',
             ];
-            $this->sendNewMessage("mail", $subject, $senderDetails->email, $user->email, $mail_content, "");
+            $this->sendNewMessage( $subject, $senderDetails->email, $user->email, $mail_content, "");
         }
-        //  Message::insert($mail_objects);
+         Message::insert($mail_objects);
         return response()->json([
             "message" => "Messages sent successfully!"
         ], 201);
@@ -239,11 +239,14 @@ class MessageController extends Controller
      * 
      * @return \Illuminate\Http\Response
      */
-    public function sendNewMessage($subject, $from, $to, $mail_data,$feature=""){
+    public function sendNewMessage($subject="", $from="", $to, $mail_data,$feature=""){
     
        $message = $mail_data;
        $sms = "";
        $message_array = [];
+       $template = null;
+       $sender = null;
+       $recipient = null;
         if(!empty($feature)){
             $template = MessageTemplate::select('content')
             ->where('feature', $feature)
@@ -255,20 +258,19 @@ class MessageController extends Controller
             }
             $message = $this->replacePlaceHolders($mail_data, $template->content);
             $sms = $this->replacePlaceHolders($mail_data, $template->sms);
+            $subject = $template->title;
         }
 
-    
-     
-
+    if($from!="")
         $sender = DB::table('users')->where('users.email', $from)->first();
+    else
+       $from = "noreply@fixmaster.com";
 
-        $sender = DB::table('users')
-        ->where('users.email', $from )
-        ->first();
+       $recipient = DB::table('users')->where('users.email', $to )->first();
 
 
       
-         if(is_object($recipient)){
+         if($from!="" && is_object($recipient)){
             $mail_objects[] = [
                 'title' => $subject,
                 'content' => $message,
@@ -291,9 +293,9 @@ class MessageController extends Controller
         
         
            
-        if(!empty($feature) && $sms!=""){
-            $this->dispatch(new PushSMS($sms));
-        }
+        // if(!empty($feature) && $sms!=""){
+        //     $this->dispatch(new PushSMS($sms));
+        // }
            
         
     }
