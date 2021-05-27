@@ -27,7 +27,7 @@ $(document).ready(function () {
            trow += '<td class="text-right">' + val.type + '</td>';
            trow += '<td class="text-right">'+val.feature+'</td>';
            trow += '<td class="text-medium nav-item"><span>';
-           trow += '<a href="#" class="msgedit" style="float: left;margin-right:10px;">';
+           trow += '<a href="templates/new/?templateid='+val.uuid+'" class="msgedit" style="float: left;margin-right:10px;">';
         //    trow += '<i data-feather="edit" style="font-size: 9px;"></i></a></span>';
            trow += '<img src="'+ url+'/assets/images/icon/edit.svg" alt="Image"/></a></span>';
            trow += '<span>  <a href="#" class="msgdelete" style="float: left; margin-right:10px;">';
@@ -96,30 +96,30 @@ $(document).ready(function () {
         })
       });
 
-    $(document).on('click', '.msgedit', function(e){
-        e.preventDefault();
-        var uuid = $(this).parents('tr').data('id');
-        $.get( url+"/api/template/"+uuid, function( data ) {
-            data = data.data
-            var selected = data.feature;
-            $("#feature").filter(function() {
-            return $(this).text() == selected;
-            }).prop('selected', true);
-            $("#email-title").val(data.title);
-            $('#email_editor').summernote('code', data.content);
+    // $(document).on('click', '.msgedit', function(e){
+    //     e.preventDefault();
+    //     var uuid = $(this).parents('tr').data('id');
+    //     $.get( url+"/api/template/"+uuid, function( data ) {
+    //         data = data.data
+    //         var selected = data.feature;
+    //         $("#feature").filter(function() {
+    //         return $(this).text() == selected;
+    //         }).prop('selected', true);
+    //         $("#email-title").val(data.title);
+    //         $('#email_editor').summernote('code', data.content);
 
-            if(data.type=='SMS'){
-                $('#rd-sms').click()
-            }else{
-                $('#rd-email').click()
-            }
+    //         if(data.type=='SMS'){
+    //             $('#rd-sms').click()
+    //         }else{
+    //             $('#rd-email').click()
+    //         }
 
-            $("#btn-save").hide();
+    //         $("#btn-save").hide();
 
-            $("#btn-update").show();
-            $("#messageModal").modal('show');
-      });
-    })
+    //         $("#btn-update").show();
+    //         $("#messageModal").modal('show');
+    //   });
+    // })
 
     $(document).on('click', '.msgdelete', function(e){
         e.preventDefault();
@@ -257,7 +257,7 @@ function insertTextArea(areaId,text) {
             <h6 class="mg-b-0">Messaging Templates</h6>
             <div class="tx-13 d-flex align-items-right">
                                 <button class="btn btn-sm btn-secondary" id="btnSendTestEmail" ><i data-feather="plus"></i> Send Test Email</button>&nbsp;
-                                &nbsp;&nbsp;&nbsp;<a href="/messaging/templates/new" class="btn btn-sm btn-primary" id="btnNewTemplate" ><i data-feather="plus"></i> New Template</a>
+                                &nbsp;&nbsp;&nbsp;<a href="templates/new" class="btn btn-sm btn-primary" id="btnNewTemplate" ><i data-feather="plus"></i> New Template</a>
             </div>
           </div><!-- card-header -->
           <div class="card-body pd-0">
