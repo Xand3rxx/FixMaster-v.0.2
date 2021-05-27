@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 use App\Models\Payment;
 use App\Models\PaymentGateway;
 use App\Models\Client;
+use App\Models\ServicedAreas;
 
 use App\Traits\RegisterPaymentTransaction;
 use App\Traits\GenerateUniqueIdentity as Generator;
@@ -40,21 +41,41 @@ class FlutterwaveController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(Request $request) 
     {
-
+        // return $request;
         $valid = $this->validate($request, [
             // List of things needed from the request like
             'booking_fee'      => 'required',
             'payment_channel'  => 'required',
             'payment_for'     => 'required',
+            // 'myContact_id'    => 'required',
         ]);
-         $all = $request->all();
-        // dd($all);
-        // Session::put('order_data', $all);
-        $request->session()->put('order_data', $all);
-        Session::put('InvoiceUUID', $request->uuid);
+        
+        $Serviced_areas = ServicedAreas::where('town_id', '=', $request['town_id'])->orderBy('id', 'DESC')->first();
+        if ($Serviced_areas === null) {
+            return back()->with('error', 'sorry!, this area you selected is not serviced at the moment, please try another area');
+        }
 
+        // upload multiple media files
+        foreach($request->media_file as $key => $file)
+            {
+                $originalName[$key] = $file->getClientOriginalName();
+    
+                $fileName = sha1($file->getClientOriginalName() . time()) . '.'.$file->getClientOriginalExtension();
+                $filePath = public_path('assets/service-request-media-files');
+                $file->move($filePath, $fileName);
+                $data[$key] = $fileName; 
+            }
+                $data['unique_name']   = json_encode($data);
+                $data['original_name'] = json_encode($originalName);
+                // return $data;
+        
+        // $request->session()->put('order_data', $request);
+        $request->session()->put('order_data', $request->except(['media_file']));
+        $request->session()->put('medias', $data);
+
+            // return dd(  );
 
         // fetch the Client Table Record
         $client = Client::where('user_id', $request->user()->id)->with('user')->firstOrFail();
@@ -192,45 +213,14 @@ class FlutterwaveController extends Controller
 
                 if($paymentDetails->update()){
                     // NUMBER 2: add more for other payment process
-                    if($paymentDetails['payment_for'] = 'service-request' ){
-
-                        if($invoice) {
-                            if($invoice['invoice_type'] == "Diagnosis Invoice"){
-                                if($invoice['status'] == '1' && $invoice['phase'] == '2')
-                                {
-                                    $invoice['status'] = '2';
-                                    $invoice->update();
-                                }
-                                else if($invoice['status'] == '1' && $invoice['phase'] == '0') {
-                                    $SelectedCompleteInvoice = Invoice::where('service_request_id', $invoice['service_request_id'])->where('invoice_type', 'Completion Invoice')->first();
-
-                                    $invoice['status'] = '2';
-                                    $invoice['phase'] = '2';
-                                    $invoice->update();
-
-                                    $SelectedCompleteInvoice['status'] = '0';
-                                    $SelectedCompleteInvoice['phase'] = '0';
-                                    $SelectedCompleteInvoice->update();
-                                }
-
-                                /** Finally return the callback view for the end user */
-                                return redirect()->route('invoice', [app()->getLocale(), $invoiceUUID])->with('success', 'Invoice payment was successful!');
-                            }
-                            else if($invoice['invoice_type'] == "Final Invoice"){
-                                if($invoice['status'] == '1')
-                                {
-                                    $invoice['status'] = '2';
-                                    $invoice['phase'] = '2';
-                                    $invoice->update();
-                                }
-                            }
-                            return redirect()->route('invoice', [app()->getLocale(), $invoiceUUID])->with('success', 'Invoice payment was successful!');
-                        } else {
-                            $client_controller->saveRequest($request->session()->get('order_data'));
-                            return redirect()->route('client.service.all', app()->getLocale())->with('success', 'payment was successful');
-                        }
-                    }
-                }
+                    if($paymentDetails['payment_for'] = 'service-request' ){ 
+                        
+                        $client_controller->saveRequest( $request->session()->get('order_data') );
+                        // $client_controller->saveRequest( $request->session()->get('medias') );
+                        
+                        return redirect()->route('client.service.all' , app()->getLocale() )->with('success', 'payment was successful');
+                    }                    
+                }                
             }else {
                 // NUMBER 3: add more for other payment process
                 if($paymentDetails['payment_for'] = 'service-request' ){
