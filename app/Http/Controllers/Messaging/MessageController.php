@@ -261,8 +261,8 @@ class MessageController extends Controller
 
         $sender = DB::table('users')->where('users.email', $from)->first();
 
-        $sender = DB::table('users')
-        ->where('users.email', $from )
+        $recipient = DB::table('users')
+        ->where('users.email', $to )
         ->first();
 
 
@@ -281,11 +281,12 @@ class MessageController extends Controller
           
 
         Message::insert($mail_objects);
+     
          }
             
 
         $message_array = ['to'=>$to, 'from'=>$from, 'subject'=>$subject, 'content'=>$message];
-        if($type=='mail'){
+        if($type=='email'){
             $this->dispatch(new PushEmails($message_array));
             Log::debug("I sent the email");
         }
