@@ -104,24 +104,7 @@
     var checked_value = 'Email';
     $(document).ready(function (){
         $('#email_editor').summernote({height: 150});
-        $.get( url+"/api/template/list", function( data ) {
-            var trow = "";
-            $.each(data.data, function(key, val){
-            trow = '<tr data-id="'+val.uuid+'"><td class="tx-medium">'+ val.title + '</td>';
-            trow += '<td class="text-right">' + val.type + '</td>';
-            trow += '<td class="text-right">'+val.feature+'</td>';
-            trow += '<td class="text-medium nav-item"><span>';
-            trow += '<a href="#" class="msgedit" style="float: left;margin-right:10px;">';
-            //    trow += '<i data-feather="edit" style="font-size: 9px;"></i></a></span>';
-            trow += '<img src="'+ url+'/assets/images/icon/edit.svg" alt="Image"/></a></span>';
-            trow += '<span>  <a href="#" class="msgdelete" style="float: left; margin-right:10px;">';
-            trow += '<img src="'+ url+'/assets/images/icon/trash.svg" alt="Image"/></a></span></td>';
-            // trow += '<i data-feather="trash" style="font-size: 9px;"></i></a></span></td>';
-            trow += '</tr>';
-                $('#template-list').append(trow);
-            })
-        });
-
+       
         let params = (new URL(document.location)).searchParams;
          if(params.get("templateid")){
              const id = params.get("templateid");
@@ -270,6 +253,8 @@
             }).prop('selected', true);
             $("#email-title").val(data.title);
             $('#email_editor').summernote('code', data.content);
+            $('#sms_editor').val(data.sms);
+
 
             if(data.type=='SMS'){
                 $('#rd-sms').click()
