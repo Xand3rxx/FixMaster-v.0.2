@@ -55,4 +55,9 @@ class UserService extends Model
             'role_id'    => $role_id,
         ]);
     }
+
+    public function service()
+    {
+        return $this->belongsTo(Service::class, 'service_id', 'id')->with('category');
+    }
 }

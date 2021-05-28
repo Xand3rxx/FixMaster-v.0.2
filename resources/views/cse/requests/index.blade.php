@@ -14,7 +14,7 @@
                             <li class="breadcrumb-item active" aria-current="page">Service Requests</li>
                         </ol>
                     </nav>
-                    <h4 class="mg-b-0 tx-spacing--1">Service Requests</h4>
+                    <h4 class="mg-b-0 tx-spacing--1">{{\Request::get('status')}} Service Requests</h4>
                 </div>
             </div>
 
@@ -84,7 +84,7 @@
                                                 <div class="dropdown-file"> <a href="" class="dropdown-link"
                                                         data-toggle="dropdown"><i data-feather="more-vertical"></i></a>
                                                     <div class="dropdown-menu dropdown-menu-right">
-                                                        <a href="" class="dropdown-item details"><i
+                                                        <a href="{{route('cse.requests.show', ['locale' => app()->getLocale(), 'request' => $request['service_request']['uuid'] ])}}" class="dropdown-item details"><i
                                                                 class="far fa-clipboard"></i> Details </a>
                                                     </div>
                                                 </div>
