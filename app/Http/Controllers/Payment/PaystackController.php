@@ -52,24 +52,27 @@ class PaystackController extends Controller
             return back()->with('error', 'sorry!, this area you selected is not serviced at the moment, please try another area');
         }
 
-        // upload multiple media files
-        foreach($request->media_file as $key => $file)
+        if ($request->media_file) {            
+
+            // upload multiple media files
+            foreach($request->media_file as $key => $file)
             {
                 $originalName[$key] = $file->getClientOriginalName();
-    
+
                 $fileName = sha1($file->getClientOriginalName() . time()) . '.'.$file->getClientOriginalExtension();
                 $filePath = public_path('assets/service-request-media-files');
                 $file->move($filePath, $fileName);
-                $mediaFile[$key] = $fileName; 
+                $data[$key] = $fileName; 
             }
-                $mediaFile['unique_name']   = json_encode($mediaFile);
-                $mediaFile['original_name'] = json_encode($originalName);
+                $data['unique_name']   = json_encode($data);
+                $data['original_name'] = json_encode($originalName);
                 // return $data;
-                
         
-        // $request->session()->put('order_data', $request);
-        $request->session()->put('order_data', $request->except(['media_file']));
-        $request->session()->put('medias', $mediaFile);
+            // $request->session()->put('order_data', $request);
+            $request->session()->put('order_data', $request->except(['media_file']));
+            $request->session()->put('medias', $data);
+
+        }
 
 
         // fetch the Client Table Record
