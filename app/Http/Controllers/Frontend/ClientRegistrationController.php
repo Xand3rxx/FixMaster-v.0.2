@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Frontend\Registration;
+namespace App\Http\Controllers\Frontend;
 
 use App\Http\Controllers\Controller;
 use App\Traits\RegisterClient;
@@ -29,15 +29,18 @@ class ClientRegistrationController extends Controller
      */
     public function index(Request $request)
     {
-        if ($request->ref) {
-            $link = $request->ref;
+     
+        if ($request->code) {
+            $link = $request->code;
             $authenticateReferral = $this->authenticateRefferralLink($link);
             if (!$authenticateReferral) {
                 return abort(404);
             }
+            
         }
 
         return view('frontend.registration.client.index', [
+            'referralCode' => $request->code?? '',
             'states' => \App\Models\State::all(),
             'activeEstates' => \App\Models\Estate::select('id', 'estate_name')
                 ->orderBy('estates.estate_name', 'ASC')
@@ -61,7 +64,7 @@ class ClientRegistrationController extends Controller
         }
         // If registered, redirect to client url
         return ($this->register($valid) == true)
-            ? redirect()->route('client.index', app()->getLocale())->with('success', "User Account Created Successfully!!")
+            ? redirect()->route('verification.notice', app()->getLocale())->with('success', "Email Verification Sent!")
             : back()->with('error', "An error occurred while creating User Account!!");
     }
 

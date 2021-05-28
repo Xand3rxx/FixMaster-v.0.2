@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\ServiceRequestReport;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -18,7 +19,8 @@ class CreateServiceRequestReportsTable extends Migration
             $table->foreignId('service_request_id');
             $table->foreignId('user_id');
             $table->foreignId('sub_service_id')->nullable();
-            $table->enum('type', ['Diagnostic', 'Sub-Service']);
+            $table->enum('stage', ServiceRequestReport::STAGES)->default(ServiceRequestReport::STAGES[0]);
+            $table->enum('type', ServiceRequestReport::TYPES);
             $table->text('report');
             $table->timestamps();
         });

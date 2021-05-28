@@ -72,7 +72,7 @@ class ServiceController extends Controller
      */
     public function store(Request $request)
     {
-        // return($request->sub_service_name);
+        // return $request;
 
         //Validate user input fields
         $this->validateRequest();
@@ -91,13 +91,14 @@ class ServiceController extends Controller
             $imageName = $this->verifyAndStoreImage($request, $imageDirectory, $width = 350, $height = 259);
             //Create record for a new service
             $createService = Service::create([
-                'user_id'        =>  Auth::id(),
-                'category_id'    =>  $request->category_id,
-                'name'           =>  ucwords($request->name),
-                'service_charge' =>  $request->service_charge,
-                'description'    =>  $request->description,
-                'image'          =>  $imageName,
-                'updated_at'     =>  null,
+                'user_id'                           =>  Auth::id(),
+                'category_id'                       =>  $request->category_id,
+                'name'                              =>  ucwords($request->name),
+                'service_charge'                    =>  $request->service_charge,
+                'diagnosis_subsequent_hour_charge'  =>  $request->diagnosis_subsequent_hour_charge,
+                'description'                       =>  $request->description,
+                'image'                             =>  $imageName,
+                'updated_at'                        =>  null,
             ]);
 
             //Create each record for sub service
@@ -154,17 +155,18 @@ class ServiceController extends Controller
      */
     private function validateRequest(){
         return request()->validate([
-            'name'                      =>   'required|unique:services,name',
-            'category_id'               =>   'required',
-            'service_charge'            =>   'required|numeric',
-            'image'                     =>   'required|mimes:jpg,png,jpeg,gif,svg|max:512',
-            'description'               =>   'required',
-            'sub_service_name'          =>   'required|array|min:1', 
-            'sub_service_name.*'        =>   'required|distinct|unique:sub_services,name', 
-            'first_hour_charge'         =>   'required|array|min:1', 
-            'first_hour_charge.*'       =>   'required|numeric', 
-            'subsequent_hour_charge'    =>   'required|array|min:1', 
-            'subsequent_hour_charge.*'  =>   'required|numeric', 
+            'name'                              =>   'required|unique:services,name',
+            'category_id'                       =>   'required',
+            'service_charge'                    =>   'required|numeric',
+            'diagnosis_subsequent_hour_charge'  =>   'required|numeric',
+            'image'                             =>   'required|mimes:jpg,png,jpeg,gif,svg|max:512',
+            'description'                       =>   'required',
+            'sub_service_name'                  =>   'required|array|min:1', 
+            'sub_service_name.*'                =>   'required|string|distinct|unique:sub_services,name', 
+            'first_hour_charge'                 =>   'required|array|min:1', 
+            'first_hour_charge.*'               =>   'required|numeric', 
+            'subsequent_hour_charge'            =>   'required|array|min:1', 
+            'subsequent_hour_charge.*'          =>   'required|numeric', 
         ]);
     }
 
@@ -210,13 +212,14 @@ class ServiceController extends Controller
         
         //Validate user input fields
         $validate = $request->validate([
-            'name'                      =>   'required|unique:services,name,'.$service->id.',id',
-            'category_id'               =>   'required',
-            'service_charge'            =>   'required|numeric',
-            'image'                     =>   'sometimes|mimes:jpg,png,jpeg,gif,svg|max:512',
-            'description'               =>   'required',
-            'sub_service_name'          =>   'required|array', 
-            'sub_service_name.*'        =>   'required|string', 
+            'name'                              =>   'required|unique:services,name,'.$service->id.',id',
+            'category_id'                       =>   'required',
+            'service_charge'                    =>   'required|numeric',
+            'diagnosis_subsequent_hour_charge'  =>   'required|numeric',
+            'image'                             =>   'sometimes|mimes:jpg,png,jpeg,gif,svg|max:512',
+            'description'                       =>   'required',
+            'sub_service_name'                  =>   'required|array', 
+            'sub_service_name.*'                =>   'required|string', 
             //     'sub_service_name.*'          =>   Rule::unique('sub_services', 'name')->ignore($request->sub_service_id), 
         ]);
 
@@ -259,6 +262,7 @@ class ServiceController extends Controller
                 'category_id'    =>  $request->category_id,
                 'name'           =>  ucwords($request->name),
                 'service_charge' =>  $request->service_charge,
+                'diagnosis_subsequent_hour_charge'  =>  $request->diagnosis_subsequent_hour_charge,
                 'description'    =>  $request->description,
                 'image'          =>  $imageName,
             ]);

@@ -3,6 +3,7 @@
 @section('content')
 <section class="bg-home bg-circle-gradiant d-flex" style="align-items: center; padding: 150px 0;">
     <div class="bg-overlay bg-overlay-white"></div>
+
     <div class="container">
         <div class="row" style="justify-content: center;">
             <div class="col-lg-6 col-md-8">
@@ -27,8 +28,7 @@
 
                         <tr>
                             <td style="padding: 15px 24px 15px; color: #8492a6;">
-                                <a class="btn btn-primary btn-block" onclick="event.preventDefault();
-                            document.getElementById('verify-email').submit();" href="{{ route('verification.notice', app()->getLocale()) }}"> Resend Verification</a>
+                                <a class="btn btn-primary btn-block" onclick="event.preventDefault(); document.getElementById('verify-email').submit();" href="{{ route('verification.notice', app()->getLocale()) }}"> Resend Verification</a>
                             </td>
                             <form id="verify-email" action="{{ route('verification.send', app()->getLocale()) }}" method="POST" style="display: none;">
                                 @csrf

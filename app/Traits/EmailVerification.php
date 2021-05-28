@@ -5,12 +5,14 @@ namespace App\Traits;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Auth\Events\Verified;
+use Illuminate\Foundation\Auth\RedirectsUsers;
 use Illuminate\Auth\Access\AuthorizationException;
 use App\Http\Controllers\Auth\RedirectAuthenticatedUsers;
+use App\Traits\Utility;
 
-trait VerifiesEmails
+trait EmailVerification
 {
-    use RedirectAuthenticatedUsers;
+    use RedirectsUsers, RedirectAuthenticatedUsers, SendVerificationMail, Utility;
 
     /**
      * Show the email verification notice.
@@ -21,8 +23,8 @@ trait VerifiesEmails
     public function show(Request $request)
     {
         return $request->user()->hasVerifiedEmail()
-                        ? redirect($this->redirectPath())
-                        : view('auth.verify');
+            ? redirect($this->redirectPath())
+            : view('auth.verify', ['email' => $request->user()->email]);
     }
 
     /**
@@ -35,18 +37,19 @@ trait VerifiesEmails
      */
     public function verify(Request $request)
     {
-        if (! hash_equals((string) $request->route('id'), (string) $request->user()->getKey())) {
+       
+        if (!hash_equals((string) $request->route('id'), (string) $request->user()->uuid)) {
             throw new AuthorizationException;
         }
 
-        if (! hash_equals((string) $request->route('hash'), sha1($request->user()->getEmailForVerification()))) {
+        if (!hash_equals((string) $request->route('hash'), sha1($request->user()->email))) {
             throw new AuthorizationException;
         }
 
         if ($request->user()->hasVerifiedEmail()) {
             return $request->wantsJson()
-                        ? new JsonResponse([], 204)
-                        : redirect($this->redirectPath());
+                ? new JsonResponse([], 204)
+                : redirect($this->redirectPath());
         }
 
         if ($request->user()->markEmailAsVerified()) {
@@ -58,8 +61,8 @@ trait VerifiesEmails
         }
 
         return $request->wantsJson()
-                    ? new JsonResponse([], 204)
-                    : redirect($this->redirectPath())->with('verified', true);
+            ? new JsonResponse([], 204)
+            : redirect($this->redirectPath())->with('verified', true);
     }
 
     /**
@@ -70,7 +73,9 @@ trait VerifiesEmails
      */
     protected function verified(Request $request)
     {
-        //
+     
+         $request->session()->put('verified', '1');
+        $request->session()->flash('success', 'Account Verified Successfully!');
     }
 
     /**
@@ -83,14 +88,15 @@ trait VerifiesEmails
     {
         if ($request->user()->hasVerifiedEmail()) {
             return $request->wantsJson()
-                        ? new JsonResponse([], 204)
-                        : redirect($this->redirectPath());
+                ? new JsonResponse([], 204)
+                : redirect($this->redirectPath());
         }
 
-        $request->user()->sendEmailVerificationNotification();
+        $this->sendVerificationEmail($request->user()->account);
+        // $request->user()->sendEmailVerificationNotification();
 
         return $request->wantsJson()
-                    ? new JsonResponse([], 202)
-                    : back()->with('resent', true);
+            ? new JsonResponse([], 202)
+            : back()->with('status', 'Verification Email Sent');
     }
 }
