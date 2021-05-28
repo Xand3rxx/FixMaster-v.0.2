@@ -58,38 +58,20 @@ class RequestController extends Controller
      
 
         // find the service reqquest using the uuid and relations
-        $service_request = \App\Models\ServiceRequest::where('uuid', $uuid)->with(['price', 'service', 'service.subServices'])->firstOrFail();
-        
-        $request_progress = \App\Models\ServiceRequestProgress::where('service_request_id', $service_request->id)->with('user', 'substatus')->latest('created_at')->get();
-
-        // find the technician role CACHE THIS DURING PRODUCTION
-        $technicainsRole = \App\Models\Role::where('slug', 'technician-artisans')->first();
+        $service_request = ServiceRequest::where('uuid', $uuid)->where('status_id', ServiceRequest::SERVICE_REQUEST_STATUSES['Pending'])->with(['price', 'service', 'service.subServices', 'client'])->firstOrFail();
+        // $technicains = \App\Models\Role::where('slug', 'technician-artisans')->first();
+        $technicians = \App\Models\Technician::with('services', 'user', 'user.contact')->get();
+        // dd($service_request);
         (array) $variables = [
-            'service_request' => $service_request,
-            'technicains' => \App\Models\UserService::where('service_id', $service_request->service_id)->where('role_id', $technicainsRole->id)->with('user')->get(),
-            'qaulity_assurances'    =>  \App\Models\Role::where('slug', 'quality-assurance-user')->with('users')->firstOrFail(),
-            'request_progress' => $request_progress,
+            'contents'              => $this->path(base_path('contents/cse/service_request_action.json')),
+            'service_request'       => $service_request,
+            'tools'                 => \App\Models\ToolInventory::all(),
+            'qaulity_assurances'    => \App\Models\Role::where('slug', 'quality-assurance-user')->with('users', 'users.account')->firstOrFail(),
+            'technicians'           => $technicians,
+            'categories'              => \App\Models\Category::all(),
+            'services'              => \App\Models\Service::all()
         ];
-        if ($service_request->status_id == 2) {
-            $service_request_progresses = \App\Models\ServiceRequestProgress::where('user_id', auth()->user()->id)->latest('created_at')->first();
-            // Determine Ongoing Status List
-            $variables = array_merge($variables, [
-                'tools' => \App\Models\ToolInventory::all(),
-                'latest_service_request_progress' => $service_request_progresses,
-                'ongoingSubStatuses' => \App\Models\SubStatus::where('status_id', 2)
-                    ->when($service_request_progresses->sub_status_id <= 13, function ($query, $sub_status) {
-                        return $query->whereBetween('phase', [4, 9]);
-                    }, function ($query) {
-                        return $query->whereBetween('phase', [20, 27]);
-                    })->get(['id', 'uuid', 'name']),
-            ]);
-            if ($service_request_progresses->sub_status_id >= 13) {
-                // find the Issued RFQ
-                $service_request->load(['rfqs' => function ($query) {
-                    $query->where('status', 'Awaiting')->where('accepted', 'No')->with('rfqBatches', 'rfqSupplier', 'rfqSupplier.supplier')->first();
-                }]);
-            }
-        }
+        dd($variables);
         return view('cse.requests.show', $variables);
     }
 
