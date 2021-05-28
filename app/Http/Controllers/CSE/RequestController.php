@@ -57,18 +57,20 @@ class RequestController extends Controller
     public function show($language, $uuid)
     {
         // find the service reqquest using the uuid and relations
-        $service_request = ServiceRequest::where('uuid', $uuid)->where('status_id', ServiceRequest::SERVICE_REQUEST_STATUSES['Pending'])->with(['price', 'service', 'service.subServices'])->firstOrFail();
+        $service_request = ServiceRequest::where('uuid', $uuid)->where('status_id', ServiceRequest::SERVICE_REQUEST_STATUSES['Pending'])->with(['price', 'service', 'service.subServices', 'client'])->firstOrFail();
         // $technicains = \App\Models\Role::where('slug', 'technician-artisans')->first();
         $technicians = \App\Models\Technician::with('services', 'user', 'user.contact')->get();
-        // dd($technicians);
+        // dd($service_request);
         (array) $variables = [
             'contents'              => $this->path(base_path('contents/cse/service_request_action.json')),
             'service_request'       => $service_request,
             'tools'                 => \App\Models\ToolInventory::all(),
             'qaulity_assurances'    => \App\Models\Role::where('slug', 'quality-assurance-user')->with('users', 'users.account')->firstOrFail(),
             'technicians'           => $technicians,
+            'categories'              => \App\Models\Category::all(),
+            'services'              => \App\Models\Service::all()
         ];
-        // dd($variables);
+        dd($variables);
         return view('cse.requests.show', $variables);
     }
 

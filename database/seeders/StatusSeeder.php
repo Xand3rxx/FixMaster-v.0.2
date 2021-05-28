@@ -132,6 +132,15 @@ class StatusSeeder extends Seeder
                 'recurrence'    =>  'No',
                 'status'        =>  'active',
             ],
+            [
+                'user_id'       =>  1,
+                'uuid'          =>  '22821883-fc00-4366-9c29-c7360b7c2efc',
+                'status_id'     =>  2,
+                'name'          =>  'Schedule Diagnosis Date for Client',
+                'phase'         => $phaseOngoing++,
+                'recurrence'    =>  'No',
+                'status'        =>  'active',
+            ],
             array(
                 'user_id'       =>  1,
                 'uuid'          =>  'd258667a-1953-4c66-b746-d0c40de7189d',

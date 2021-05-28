@@ -6,14 +6,11 @@ use App\Models\Rfq;
 use App\Models\SubStatus;
 use Illuminate\Http\Request;
 use App\Models\ServiceRequest;
-use Illuminate\Support\Facades\DB;
 use App\Models\ServiceRequestReport;
-use App\Models\ServiceRequestProgress;
 
 class ActionsRepeated
 {
     public $repeated_actions;
-    // 
 
     /**
      * Handle repated Actions on a Service Request
@@ -43,6 +40,11 @@ class ActionsRepeated
         // Handle Request for QA
         if ($request->filled('qa_user_uuid')) {
             array_push($repeated_actions, self::build_requesting_qa($request, $service_request));
+        }
+
+        // Handle Assign a Technician
+        if($request->filled('technician_user_uuid')) {
+            array_push($repeated_actions, self::build_assign_technician($request, $service_request));
         }
 
         return $repeated_actions;
@@ -221,6 +223,43 @@ class ActionsRepeated
                 'severity'                  =>  'informational',
                 'action_url'                =>  \Illuminate\Support\Facades\Route::currentRouteAction(),
                 'message'                   =>  $request->user()->account->last_name . ' ' . $request->user()->account->first_name . ' requested a new Quality Assurance for Service Request:' . $service_request->unique_id . ' Job',
+            ]
+        ];
+    }
+
+    /**
+     * Build New Tools Request to be added to database
+     * 
+     * @throws \Illuminate\Validation\ValidationException
+     * @return array
+     */
+    protected static function build_assign_technician(Request $request, ServiceRequest $service_request)
+    {
+        // validate Request
+        (array) $valid = $request->validate([
+            'technician_user_uuid'      => 'required|uuid|exists:users,uuid',
+        ]);
+
+        // Each Key should match table names, value match accepted parameter in each table name stated
+        $sub_status = SubStatus::where('uuid', '1faffcc3-7404-4fad-87a7-97161d3b8546')->firstOrFail();
+        $user = \App\Models\User::where('uuid', $valid['technician_user_uuid'])->with('account')->firstOrFail();
+        return [
+            'service_request_assigned' => [
+                'user_id'                   => $user->id,
+                'service_request_id'        => $service_request->id,
+                'status'                    => null
+            ],
+            'service_request_progresses' => [
+                'user_id'              => $request->user()->id,
+                'service_request_id'   => $service_request->id,
+                'status_id'            => $sub_status->status_id,
+                'sub_status_id'        => $sub_status->id,
+            ],
+            'log' => [
+                'type'                      =>  'request',
+                'severity'                  =>  'informational',
+                'action_url'                =>  \Illuminate\Support\Facades\Route::currentRouteAction(),
+                'message'                   =>  $request->user()->account->last_name . ' ' . $request->user()->account->first_name . ' assigned a new Technician for Service Request:' . $service_request->unique_id . ' Job',
             ]
         ];
     }

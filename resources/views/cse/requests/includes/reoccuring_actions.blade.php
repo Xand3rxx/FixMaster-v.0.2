@@ -1,6 +1,4 @@
-<div class="mt-4">
-    <div class="tx-13 mg-b-25">
-        <div id="wizard3">
+
             {{-- Comments --}}
             <h3>{{ $contents['comment']['name'] }}</h3>
             <section>
@@ -246,7 +244,6 @@
             <h3>Assign New Technician</h3>
             <section>
                 <div class="form-group col-md-12">
-
                     <ul class="list-group wd-md-100p">
                         @foreach ($technicians as $technicain)
                             <li class="list-group-item d-flex align-items-center">
@@ -260,16 +257,14 @@
                                         </h6>
 
                                         <span class="d-block tx-11 text-muted">
-                                            @foreach ($technicians as $technicain)
                                                 <i class="icon ion-md-star lh-0 tx-orange"></i>
-                                            @endforeach
-                                            <span class="font-weight-bold ml-2">0.6km</span>
+                                            <span class="font-weight-bold ml-2">{{ \App\Traits\CalculateDistance::getDistanceBetweenPoints($service_request['client']['contact']['address_latitude'], $service_request['client']['contact']['address_longitude'], $technicain['user']['contact']['address_latitude'], $technicain['user']['contact']['address_longitude'])}} km</span>
                                         </span>
                                     </div>
                                     <div class="col-md-6 col-sm-6">
                                         <div class="form-row">
                                             <div class="form-group col-1 col-md-1 col-sm-1" style="margin-left: 3rem !important;">
-                                                <a href="tel:081244834384" class="btn btn-primary btn-icon"> <i class="fas fa-phone"></i></a>
+                                                <a href="tel:{{ $technicain['user']['contact']['phone_number']}}" class="btn btn-primary btn-icon"> <i class="fas fa-phone"></i></a>
                                             </div>
                                             <div class="form-group col-1 col-md-1 col-sm-1">
                                                 <div class="custom-control custom-radio mt-2">
@@ -288,7 +283,4 @@
                 </div>
             </section>
             {{-- End Assign New Technician --}}
-
-        </div>
-    </div>
-</div><!-- df-example -->
+       

@@ -28,7 +28,8 @@ $(document).ready(function() {
             // format: 'L', //LT for time only
             // inline: true,
             // sideBySide: true,
-            format: 'Y/m/d H:i',
+            timepicker:false,
+            format: 'Y/m/d',
             formatDate: 'Y/m/d',
             minDate: '-1970/01/02', // yesterday is minimum date
             mask: true,

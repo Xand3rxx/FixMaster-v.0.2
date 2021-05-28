@@ -67,10 +67,21 @@
                         <div class="tab-content">
 
                             {{-- Service Request Actions --}}
-                            <form class="form-data" enctype="multipart/form-data" method="POST" action="{{ route('cse.service.request.action', ['locale' => app()->getLocale(), 'service_request' => $service_request->uuid]) }}">
+                            <form class="form-data" enctype="multipart/form-data" method="POST"
+                                action="{{ route('cse.service.request.action', ['locale' => app()->getLocale(), 'service_request' => $service_request->uuid]) }}">
                                 @csrf
                                 <div id="serviceRequestActions" class="tab-pane show active pd-20 pd-xl-25">
-                                    @include('cse.requests.includes.reoccuring_actions')
+                                    <div class="mt-4">
+                                        <div class="tx-13 mg-b-25">
+                                            <div id="wizard3">
+                                                @if(is_null($service_request['preferred_time']))
+                                                @include('cse.requests.includes.schedule_date')
+                                                @endif
+                                                @include('cse.requests.includes.reoccuring_actions')
+                                            </div>
+                                        </div>
+                                    </div><!-- df-example -->
+
                                 </div>
 
                                 <button type="submit" class="btn btn-primary d-none" id="update-progress">Update

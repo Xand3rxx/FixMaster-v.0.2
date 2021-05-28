@@ -25,8 +25,13 @@ class RequestActionController extends Controller
     {
         (array)$to_be_stored = [];
 
-        if ($request->hasAny(['add_comment', 'intiate_rfq', 'intiate_trf', 'qa_user_uuid'])) {
+        if ($request->hasAny(['add_comment', 'intiate_rfq', 'intiate_trf', 'qa_user_uuid', 'technician_user_uuid'])) {
             $action = \App\Http\Controllers\ServiceRequest\Concerns\ActionsRepeated::handle($request, $service_request, $to_be_stored);
+            $to_be_stored = $action;
+        }
+
+        if($request->filled('preferred_time')){
+            $action = \App\Http\Controllers\ServiceRequest\Concerns\SchedulingDate::handle($request, $service_request, $to_be_stored);
             $to_be_stored = $action;
         }
         // call the storage 

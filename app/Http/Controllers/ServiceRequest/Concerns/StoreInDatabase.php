@@ -5,6 +5,7 @@ namespace App\Http\Controllers\ServiceRequest\Concerns;
 
 use App\Traits\Loggable;
 use App\Models\ActivityLog;
+use App\Models\ServiceRequest;
 use Illuminate\Support\Facades\DB;
 use App\Models\ServiceRequestReport;
 use App\Models\ServiceRequestAssigned;
@@ -44,6 +45,7 @@ trait StoreInDatabase
                         ]);
                     }
                 }
+
                 if (!empty($table['rfqs'])) {
                     // save on rfqs table
                     $rfq = \App\Models\Rfq::create($table['rfqs']);
@@ -65,6 +67,10 @@ trait StoreInDatabase
 
                 if (!empty($table['service_request_reports'])) {
                     ServiceRequestReport::create($table['service_request_reports']);
+                }
+
+                if(!empty($table['service_request_table'])) {
+                    $table['service_request_table']['service_request']->update($table['service_request_table']);
                 }
 
                 if (!empty($table['service_request_progresses'])) {
