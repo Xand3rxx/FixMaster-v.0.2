@@ -801,6 +801,9 @@ class ClientController extends Controller
             ->whereHas('service_requests', function ($query) {
                         $query->orderBy('created_at', 'ASC');
             })->firstOrFail();
+
+            // return $myServiceRequests->service_requests[0]->service_request_assignees->count();
+            // return dd($myServiceRequests->service_requests[0]);
         
         return view('client.services.list', [
             'myServiceRequests' =>  $myServiceRequests,
