@@ -38,7 +38,7 @@
             <tbody>
               <tr>
                 <td class="">Job Reference</td>
-                <td class="">{{$activeDetails->service_request->unique_id}}</td>
+                <td class="">{{$activeDetails->service_request->id}}</td>
               </tr>
               <tr>
                 <td class="">Service Required</td>
@@ -69,6 +69,10 @@
 
           <br>
           <div class="divider-text">Service Request Media Files</div>
+
+          @foreach($activeDetails->service_request->service_request_medias as $media)
+              {{$media->media_files->original_name}}
+          @endforeach
 
           <div class="row row-xs">
       @foreach($activeDetails->service_request->service_request_medias as $media)

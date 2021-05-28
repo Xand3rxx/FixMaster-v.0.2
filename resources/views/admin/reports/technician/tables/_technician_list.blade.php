@@ -17,10 +17,10 @@
     </thead>
     <tbody>
 
-      {{-- @foreach ($results as $result) --}}
+      @foreach ($results as $result)
       <tr>
         <td class="tx-color-03 tx-center">1</td>
-        <td class="tx-medium">Kenneth Ifeanyi</td>
+        <td class="tx-medium">{{$result['user']['account']['first_name']}}</td>
         <td class="tx-medium">Victorial Island</td>
         <td class="text-medium">Company</td>
         <td class="text-medium">{{ Carbon\Carbon::now('UTC') }}</td>
@@ -29,7 +29,7 @@
         <td class="text-center">{{ Carbon\Carbon::now('UTC') }}</td>
         <td class="text-center">8</td>
       </tr>
-      {{-- @endforeach --}}
+      @endforeach
 
     </tbody>
   </table>
