@@ -59,6 +59,10 @@ $('#supplier-list').on('change', function (){
 function sortItemDeliveredTable($sortLevel, $supplierId = null, $jobStatus, $dateFrom = null, $dateTo = null, $cseId = null){
     //Get sorting route
     $route = $('#route').val();
+    const $date = {
+        "date_from": $dateFrom,
+        "date_to": $dateTo
+      }
 
     $.ajaxSetup({
         headers: {
@@ -69,7 +73,7 @@ function sortItemDeliveredTable($sortLevel, $supplierId = null, $jobStatus, $dat
     $.ajax({
         url: $route,
         method: 'POST',
-        data: {"sort_level": $sortLevel, "supplier_id": $supplierId, "job_status": $jobStatus, "date_from": $dateFrom, "date_to": $dateTo, "cse_id" : $cseId},
+        data: {"sort_level": $sortLevel, "supplier_id": $supplierId, "job_status": $jobStatus, "date": $date, "cse_id" : $cseId},
         beforeSend : function(){
             $("#items-delivered-sorting").html('<div class="d-flex justify-content-center mt-4 mb-4"><span class="loadingspinner"></span></div>');
         },

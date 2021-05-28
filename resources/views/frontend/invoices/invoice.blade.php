@@ -230,10 +230,18 @@
                                             <td class="text-left">{{ $item->component_name }}</td>
                                             <td class="text-left">{{ $item->quantity }}</td>
                                             <td class="text-left">{{ $item->unit_of_measurement }}</td>
+                                            <td class="text-left">{{ $item->amount/$item->quantity }}</td>
                                             <td class="text-left">{{ $item->amount }}</td>
-                                            <td class="text-left">{{ $item->quantity* $item->amount }}</td>
                                         </tr>
                                     @endforeach
+                                    <tr>
+                                        <td class="text-left">-</td>
+                                        <td class="text-left">-</td>
+                                        <td class="text-left">-</td>
+                                        <td class="text-left">-</td>
+                                        <td class="text-left">-</td>
+                                        <td class="text-left">8000</td>
+                                    </tr>
                                     </tbody>
                                 </table>
                             </div>
@@ -307,7 +315,6 @@
     :
     "
     <li class='test-muted d-flex justify-content-between'>Subtotal :<span>₦ ". number_format($subTotal, 2) ."</span></li>
-    <li class='test-muted d-flex justify-content-between'>Logistics :<span>₦ ". number_format($logistics, 2) ."</span></li>
     <li class='text-muted d-flex justify-content-between'>FixMaster Royalty :<span>₦ ". number_format($fixmasterRoyalty, 2)."</span></li>
     <li class='text-muted d-flex justify-content-between'>Taxes :<span> ₦ ". number_format($tax, 2)."</span></li>
     <li class='d-flex justify-content-between text-danger'>Less Booking Fee :<span> - ₦ 1,500.00</span></li>
@@ -349,8 +356,25 @@
 
                                 <input type="hidden" class="d-none" value="{{ $invoice['uuid'] }}" id="uuid" name="uuid">
 
-                                <button type="submit" id="paystack_option"  class="btn btn-outline-success">Pay Now</button>
+                                <button type="submit" id="paystack_option"  class="btn btn-outline-success">Pay with paystack</button>
                             </form>
+                                <form method="POST" action="{{ route('flutterwave-submit', app()->getLocale()) }}">
+                                    @csrf
+                                    {{-- REQUIREMENTS FOR PAYMENT GATWAYS  --}}
+                                    <input type="hidden" class="d-none" value="{{ $total_cost }}" name="booking_fee">
+
+                                    <input type="hidden" class="d-none" value="flutterwave" id="payment_channel" name="payment_channel">
+
+                                    <input type="hidden" class="d-none" value="service-request" id="payment_for" name="payment_for">
+
+                                    <input type="hidden" class="d-none" value="{{ $invoice['unique_id'] }}" id="unique_id" name="unique_id">
+
+                                    <input type="hidden" class="d-none" value="{{ $invoice['invoice_type'] }}" id="invoice_type" name="invoice_type">
+
+                                    <input type="hidden" class="d-none" value="{{ $invoice['uuid'] }}" id="uuid" name="uuid">
+
+                                    <button type="submit" id="flutterwave_option"  class="btn btn-outline-success">Pay with flutterwave</button>
+                                </form>
                             @elseif($invoice['status'] === '2' && $invoice['phase'] == '2')
                             <a href="{{route('client.service.all', app()->getLocale())}}" class="btn btn-outline-primary">Go Back</a>
                         @endif
