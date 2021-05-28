@@ -7,10 +7,6 @@ use App\Models\Rating;
 use App\Models\Review;
 use App\Traits\Services;
 use Illuminate\Http\Request;
-use Illuminate\Support\Str;
-use Illuminate\Support\Carbon;
-use Illuminate\Support\Facades\URL;
-use Illuminate\Support\Facades\Config;
 
 
 class PageController extends Controller
@@ -45,23 +41,4 @@ class PageController extends Controller
         //Return all active categories with at least one Service of matched keyword or Category ID
         return view('frontend.services._search', $this->searchKeywords($request));
     }
-
-    public function mail(){
-        (string)$url = 'yyyyyyyyyyyyyyyyy';
-        $messanger = new \App\Http\Controllers\Messaging\MessageController();
-        // // $user this is the instance of the created applicant
-        // $mail_data = "<h1> Hello, " . $account['first_name'] . " " . $account['last_name'] . "</h1> <br> <p> Thank you for registering with us, Kind use this link " . $url . " to verify your account. </p>";
-        // return $messanger->sendNewMessage('email', 'Verify Email Address', 'dev@fix-master.com', $account->user->email, $mail_data);
-        $template_feature = 'USER_EMAIL_VERIFICATION';
-        $mail_data = collect([
-            'lastname' => 'dana',
-            'firstname' =>'frshs',
-            'email' => 'woorad7@gmail.com',
-            'url' => $url
-        ]);
-        $messanger->sendNewMessage('email', Str::title(Str::of($template_feature)->replace('_', ' ',)), 'dev@fix-master.com', $mail_data['email'], $mail_data, $template_feature);
-
-    }
-
-    
 }

@@ -17,8 +17,7 @@ class ServiceRequestWarrantyIssued extends Model
          'completed_by',
          'admin_comment', 
         'cse_comment',
-        'date_resolved',
-        'scheduled_datetime'
+        'date_resolved'
     ];
 
 

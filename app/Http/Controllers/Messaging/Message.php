@@ -23,6 +23,7 @@ class Message extends Controller
         $mail_data = $request->input('mail_data');
         $template = MessageTemplate::select('content')
                                     ->where('feature', $feature)
+                                    ->where('type', 'email')
                                     ->first();
 
         if(empty($template)){

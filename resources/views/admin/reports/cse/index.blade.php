@@ -69,7 +69,7 @@
                   <div class="col-md-4 date-range d-none">
                     <div class="form-group position-relative">
                       <label>From <span class="text-danger">*</span></label>
-                      <input name="date_from" id="date-from" type="date" class="form-control pl-5">
+                      <input name=date_from" id="date-from" type="date" class="form-control pl-5">
                     </div>
                   </div>
 
@@ -141,7 +141,7 @@
                   <div class="col-md-4 assigned-date-range d-none">
                     <div class="form-group position-relative">
                       <label>From <span class="text-danger">*</span></label>
-                      <input name="date_from" id="assigned-date-from" type="date" class="form-control pl-5">
+                      <input name=date_from" id="assigned-date-from" type="date" class="form-control pl-5">
                     </div>
                   </div>
 

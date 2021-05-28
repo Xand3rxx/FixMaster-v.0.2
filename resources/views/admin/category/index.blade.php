@@ -67,25 +67,7 @@
                   </span>
                 @enderror
             </div>
-            <div class="form-group col-md-12">
-              <label for="labour_markup">Labour Markup</label>
-              <input type="number" class="form-control @error('labour_markup') is-invalid @enderror" id="labour_markup" name="labour_markup" placeholder="Labour Markup" value="{{ old('labour_markup') }}" autocomplete="off" required>
-              @error('labour_markup')
-                <span class="invalid-feedback" role="alert">
-                    <strong>{{ $message }}</strong>
-                </span>
-              @enderror
-            </div>
-            <div class="form-group col-md-12">
-              <label for="material_markup">Material Markup</label>
-              <input type="number" class="form-control @error('material_markup') is-invalid @enderror" id="material_markup" name="material_markup" placeholder="Material Markup" value="{{ old('material_markup') }}" autocomplete="off" required>
-              @error('material_markup')
-                <span class="invalid-feedback" role="alert">
-                    <strong>{{ $message }}</strong>
-                </span>
-              @enderror
-            </div>
-            <button type="submit" class="btn btn-primary">Create Category</button>
+            <button type="submit" class="btn btn-primary">Create Service</button>
           </div>
         </form>
       </div><!-- modal-body -->

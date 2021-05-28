@@ -39,8 +39,10 @@
     <ul class="nav nav-aside">
       <li class="nav-label">Components</li>
       <li class="nav-item {{ Route::currentRouteNamed('technician.index') ? 'active' : '' }}"><a href="{{ route('technician.index', app()->getLocale()) }}" class="nav-link"><i data-feather="airplay"></i> <span>Dashboard</span></a></li>
+        <li class="nav-item {{ Route::currentRouteNamed('technician.requests', 'technician.request_details') ? 'active' : '' }}"><a href="{{ route('technician.requests', app()->getLocale()) }}" class="nav-link"><i data-feather="git-pull-request"></i> <span>Requests</span></a></li>
+{{--        <li class="nav-item {{ Route::currentRouteNamed('technician.location_request') ? 'active' : '' }}"><a href="{{ route('technician.location_request', app()->getLocale()) }}" class="nav-link"><i data-feather="map-pin"></i> <span>Location Request</span></a></li>--}}
 
-        <li class="nav-item with-sub {{ Route::currentRouteNamed('technician.requests.active', 'technician.requests.completed', 'technician.requests.warranty_claim', 'technician.requests.cancelled') ? 'active show' : '' }}">
+        <li class="nav-item with-sub {{ Route::currentRouteNamed('quality-assurance.requests.active', 'quality-assurance.requests.completed', 'quality-assurance.requests.warranty_claim', 'quality-assurance.requests.cancelled') ? 'active show' : '' }}">
             <a href="" class="nav-link"><i data-feather="git-pull-request"></i> <span>Requests</span></a>
             <ul>
                 <li class="{{ Route::currentRouteNamed('technician.requests.active') ? 'active' : '' }}"><a href="{{ route('technician.requests.active', app()->getLocale()) }}">Active</a></li>
@@ -49,9 +51,10 @@
                 <li class="{{ Route::currentRouteNamed('technician.requests.cancelled') ? 'active' : '' }}"><a href="{{ route('technician.requests.cancelled', app()->getLocale()) }}">Cancelled</a></li>
             </ul>
         </li>
+        <li class="nav-item {{ Route::currentRouteNamed('technician.location_request') ? 'active' : '' }}"><a href="{{ route('technician.location_request', app()->getLocale()) }}" class="nav-link"><i data-feather="map-pin"></i> <span>Location Request</span></a></li>
 
         <li class="nav-item with-sub {{ Route::currentRouteNamed('technician.consultations.pending', 'quality-assurance.consultations.ongoing', 'quality-assurance.consultations.completed') ? 'active show' : '' }}">
-            <a href="" class="nav-link"><i data-feather="layout"></i> <span>Consultations</span></a>
+            <a href="" class="nav-link"><i data-feather="message-circle"></i> <span>Consultations</span></a>
             <ul>
                 <li class="{{ Route::currentRouteNamed('technician.consultations.pending') ? 'active' : '' }}"><a href="{{ route('technician.consultations.pending', app()->getLocale()) }}">Pending</a></li>
                 <li class="{{ Route::currentRouteNamed('technician.consultations.ongoing') ? 'active' : '' }}"><a href="{{ route('technician.consultations.ongoing', app()->getLocale()) }}">Ongoing</a></li>

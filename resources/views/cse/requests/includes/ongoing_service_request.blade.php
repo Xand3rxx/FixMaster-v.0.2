@@ -4,70 +4,7 @@
         <div class="tx-13 mg-b-25">
             <div id="wizard3">
                 @if($latest_service_request_progress->sub_status_id > 12)
-                @if($latest_service_request_progress->sub_status_id < 14) 
-                <h3>Re-Categorization </h3>
-                    <section>
-                        
-                        <div class="mt-4 form-row">
-                            <div class="form-group col-md-6">
-                                <label for="category_id">Category</label>
-                                <select class="form-control custom-select @error('category_id') is-invalid @enderror" name="category_id">
-                                    <option selected disabled value="0" selected>Select Category</option>
-                                    @foreach($service_request['service']['subServices'] as $key => $sub_service)
-                                    <option value="{{$sub_service['uuid']}}">{{$sub_service['name']}} </option>
-                                    @endforeach
-                                </select>
-                                @error('category_id')
-                                <span class="invalid-feedback" role="alert">
-                                    <strong>{{ $message }}</strong>
-                                </span>
-                                @enderror
-                            </div>
-
-                            <div class="form-group col-md-6">
-                                <label for="service_id">Service</label>
-                                <select class="form-control custom-select @error('service_id') is-invalid @enderror" name="service_id">
-                                    <option selected disabled value="0" selected>Select Service</option>
-                                    @foreach($service_request['service']['subServices'] as $key => $sub_service)
-                                    <option value="{{$sub_service['uuid']}}">{{$sub_service['name']}} </option>
-                                    @endforeach
-                                </select>
-                                @error('service_id')
-                                <span class="invalid-feedback" role="alert">
-                                    <strong>{{ $message }}</strong>
-                                </span>
-                                @enderror
-                            </div>
-                            <div class="form-group col-md-12 position-relative">
-                                <label for="sub_service_uuid">Sub Service</label>
-                                <select class="form-control selectpicker @error('sub_service_uuid') is-invalid @enderror" name="sub_service_uuid" id="sub_service_uuid" multiple>
-                                    <option disabled value="">Select Sub service</option>
-                                    @foreach($service_request['service']['subServices'] as $key => $sub_service)
-                                <option value="{{$sub_service['uuid']}}" data-count="{{ $key }}" data-sub-service-name="{{$sub_service['name']}}">{{$sub_service['name']}} </option>
-                                    @endforeach
-                                </select>
-                                @error('sub_service_uuid')
-                                <span class="invalid-feedback" role="alert">
-                                    <strong>{{ $message }}</strong>
-                                </span>
-                                @enderror
-                            </div>
-                        </div>
-
-                        <div class="form-row">
-                            <div class="form-group col-md-12">
-                                <label for="root_cause">Root Cause <span class="text-danger">*</span></label>
-                                <textarea rows="3" class="form-control @error("root_cause") is-invalid @enderror" id="root_cause" name="root_cause"></textarea>
-                            </div>
-                            <div class="form-group col-md-12">
-                                <label for="other_comments">Other Comments(Optional)</label>
-                                <textarea rows="3" class="form-control @error("other_comments") is-invalid @enderror" id="other_comments" name="other_comments"></textarea>
-                            </div>
-                        </div>
-
-                    </section>
-
-                    <h3>Invoice building</h3>
+                @if($latest_service_request_progress->sub_status_id < 14) <h3>Project Cost Estimate</h3>
                     <section>
                         <small class="text-danger">This portion will be displayed only if the CSE selects "Completed Diganosis" and the Client chooses to continue with the Service Request</small>
                         <div class="mt-4 form-row">
@@ -96,40 +33,11 @@
                             </div>
 
                             <div class="form-group col-md-6">
-                                <label for="category_id">Category</label>
-                                <select class="form-control custom-select @error('category_id') is-invalid @enderror" name="category_id">
-                                    <option selected disabled value="0" selected>Select Category</option>
+                                <label for="estimated_hours">Category</label>
+                                <select class="form-control custom-select @error('sub_service_uuid') is-invalid @enderror" name="sub_service_uuid">
+                                    <option selected disabled value="0" selected>Select a category</option>
                                     @foreach($service_request['service']['subServices'] as $key => $sub_service)
                                     <option value="{{$sub_service['uuid']}}">{{$sub_service['name']}} </option>
-                                    @endforeach
-                                </select>
-                                @error('category_id')
-                                <span class="invalid-feedback" role="alert">
-                                    <strong>{{ $message }}</strong>
-                                </span>
-                                @enderror
-                            </div>
-
-                            <div class="form-group col-md-6">
-                                <label for="service_id">Service</label>
-                                <select class="form-control custom-select @error('service_id') is-invalid @enderror" name="service_id">
-                                    <option selected disabled value="0" selected>Select Service</option>
-                                    @foreach($service_request['service']['subServices'] as $key => $sub_service)
-                                    <option value="{{$sub_service['uuid']}}">{{$sub_service['name']}} </option>
-                                    @endforeach
-                                </select>
-                                @error('service_id')
-                                <span class="invalid-feedback" role="alert">
-                                    <strong>{{ $message }}</strong>
-                                </span>
-                                @enderror
-                            </div>
-                            <div class="form-group col-md-6 position-relative">
-                                <label for="sub_service_uuid">Sub Service</label>
-                                <select class="form-control selectpicker @error('sub_service_uuid') is-invalid @enderror" name="sub_service_uuid" id="sub_service_uuid" multiple>
-                                    <option disabled value="">Select Sub service</option>
-                                    @foreach($service_request['service']['subServices'] as $key => $sub_service)
-                                <option value="{{$sub_service['uuid']}}" data-count="{{ $key }}" data-sub-service-name="{{$sub_service['name']}}">{{$sub_service['name']}} </option>
                                     @endforeach
                                 </select>
                                 @error('sub_service_uuid')
@@ -139,10 +47,36 @@
                                 @enderror
                             </div>
 
+                            <div class="form-group col-md-6">
+                                <label for="estimated_hours">Service</label>
+                                <select class="form-control custom-select @error('sub_service_uuid') is-invalid @enderror" name="sub_service_uuid">
+                                    <option selected disabled value="0" selected>Select a service</option>
+                                    @foreach($service_request['service']['subServices'] as $key => $sub_service)
+                                    <option value="{{$sub_service['uuid']}}">{{$sub_service['name']}} </option>
+                                    @endforeach
+                                </select>
+                                @error('sub_service_uuid')
+                                <span class="invalid-feedback" role="alert">
+                                    <strong>{{ $message }}</strong>
+                                </span>
+                                @enderror
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label for="estimated_hours">Sub Service</label>
+                                <select class="form-control custom-select @error('sub_service_uuid') is-invalid @enderror" name="sub_service_uuid">
+                                    <option selected disabled value="0" selected>Select a sub service</option>
+                                    @foreach($service_request['service']['subServices'] as $key => $sub_service)
+                                    <option value="{{$sub_service['uuid']}}">{{$sub_service['name']}} </option>
+                                    @endforeach
+                                </select>
+                                @error('sub_service_uuid')
+                                <span class="invalid-feedback" role="alert">
+                                    <strong>{{ $message }}</strong>
+                                </span>
+                                @enderror
+                            </div>
                         </div>
 
-                        <span class="mt-2 sub-service-report"></span>
-                        
                     </section>
                     @endif
                     @if($service_request['rfqs']->isNotEmpty())
@@ -245,130 +179,6 @@
                     </section>
                     @endif
 
-                    <h3>Material Acceptance</h3>
-                    <section>
-                        <small class="text-danger">This portion will display only if the CSE initially executed a RFQ, the Client paid for the components and the Supplier has made the delivery.</small>
-
-                        <h5>Update RFQ Status</h5>
-                        <div class="form-row">
-                            <div class="form-group col-md-12">
-                                <label for="status">Status</label>
-                                <select class="form-control custom-select" id="status" name="status">
-                                    <option selected disabled value="" selected>Select...</option>
-                                    <option value="Awaiting" value="{{ old('Awaiting') }}" {{ old('status') == 'Awaiting' ? 'selected' : ''}}>Awaiting</option>
-                                    <option value="Shipped" value="{{ old('Shipped') }}" {{ old('status') == 'Shipped' ? 'selected' : ''}}>Shipped</option>
-                                    <option value="Delivered" value="{{ old('Shipped') }}" {{ old('status') == 'Delivered' ? 'selected' : ''}}>Delivered</option>
-                                </select>
-                                @error('status')
-                                <span class="invalid-feedback" role="alert">
-                                    <strong>{{ $message }}</strong>
-                                </span>
-                                @enderror
-                            </div>
-                        </div>
-
-                        <div class="table-responsive mt-4">
-                            <table class="table table-striped table-sm mg-b-0">
-                              <tbody>
-                                
-                                <tr>
-                                  <td class="tx-medium">Supplier Name</td>
-                                  <td class="tx-color-03">Henry Efe <small class="text-muted">(Business Name: IMPACT)</small></td>
-                                </tr>
-                                <tr>
-                                    <td class="tx-medium">Dispatch Status</td>
-                                    <td class="text-info">In-Transit</td>
-                                </tr>
-                                <tr>
-                                    <td class="tx-medium">Delivery Status</td>
-                                    <td class="text-warning">Pending</td>
-                                </tr>
-                                <tr>
-                                  <td class="tx-medium">Delivery Fee</td>
-                                  <td class="tx-color-03">₦{{ number_format(1500) }}</td>
-                                </tr>
-                                <tr>
-                                  <td class="tx-medium">Delivery Time</td>
-                                  <td class="tx-color-03">{{ Carbon\Carbon::now('UTC')->isoFormat('MMMM Do YYYY, h:mm:ssa') }}</td>
-                                </tr>
-                                <tr>
-                                  <td class="tx-medium">Grand Total</td>
-                                  <td class="tx-color-03">₦{{ number_format(3150) }}</td>
-                                </tr>
-                          
-                              </tbody>
-                            </table>
-                          </div>
-                          
-                        <div class="table-responsive mt-4">
-                            <table class="table table-hover mg-b-0" id="basicExampl">
-                              <thead class="thead-primary">
-                                <tr>
-                                  <th class="text-center">#</th>
-                                  <th>Manufacturer Name</th>
-                                  <th>Model Number</th>
-                                  <th>Component Name</th>
-                                  <th class="text-center">Quantity</th>
-                                  <th class="text-center">Size</th>
-                                  <th>Unit of Measurement</th>
-                                  <th class="text-center">Image</th>
-                                  <th class="text-center">Unit Price(₦)</th>
-                                  <th class="text-center">Amount(₦)</th>
-                                </tr>
-                              </thead>
-                              <tbody>
-                                <tr>
-                                    <td class="tx-color-03 tx-center">1</td>
-                                    <td class="tx-medium">S-Tek</td>
-                                    <td class="tx-medium">PC-234234</td>
-                                    <td class="tx-medium">Power cable</td>
-                                    <td class="tx-medium text-center">1</td>
-                                    <td class="tx-medium text-center">0</td>
-                                    <td class="tx-medium">Meters</td>
-                                    <td class="text-center">View</td>
-                                    <td class="tx-medium text-center">₦{{ number_format(450) }}</td>
-                                    <td class="tx-medium text-center">₦{{ number_format(450) }}</td>
-                                </tr>
-                                <tr>
-                                    <td class="tx-color-03 tx-center">2</td>
-                                    <td class="tx-medium">Crucial</td>
-                                    <td class="tx-medium">RM-3242</td>
-                                    <td class="tx-medium">8GB RAM</td>
-                                    <td class="tx-medium text-center">2</td>
-                                    <td class="tx-medium text-center">0</td>
-                                    <td class="tx-medium">Bytes</td>
-                                    <td class="text-center">View</td>
-                                    <td class="tx-medium text-center">₦{{ number_format(600) }}</td>
-                                    <td class="tx-medium text-center">₦{{ number_format(1200) }}</td>
-                                </tr>
-                              </tbody>
-                            </table>
-                        </div><!-- table-responsive -->
-
-                        
-                        
-                        <h5>Accept Materials Delivery</h5>
-                        <div class="form-row">
-                            <div class="form-group col-md-12">
-                                <label for="accept_materials">Accept Delivery</label>
-                                <select class="form-control custom-select" id="accept_materials" name="accept_materials">
-                                    <option selected disabled value="" selected>Select...</option>
-                                    <option value="Yes" value="{{ old('Yes') }}" {{ old('accept_materials') == 'Yes' ? 'selected' : ''}}>Yes, all ordered components were delivered</option>
-                                    <option value="No" value="{{ old('No') }}" {{ old('accept_materials') == 'No' ? 'selected' : ''}}>No, all ordered components were not delivered</option>
-                                </select>
-                                @error('accept_materials')
-                                <span class="invalid-feedback" role="alert">
-                                    <strong>{{ $message }}</strong>
-                                </span>
-                                @enderror
-                            </div>
-                            <div class="form-group decline-rfq-reason col-md-12">
-                                <label for="reason">Reason</label>
-                                <textarea rows="3" class="form-control @error("reason") is-invalid @enderror" id="reason" name="reason"></textarea>
-                            </div>
-                        </div>
-
-                    </section>
 
                     <h3>New RFQ</h3>
                     <section>

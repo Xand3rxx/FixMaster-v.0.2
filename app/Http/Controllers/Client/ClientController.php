@@ -280,7 +280,7 @@ class ClientController extends Controller
         $myWallet    = WalletTransaction::where('user_id', auth()->user()->id)->orderBy('id', 'DESC')->get();
         // validate Request
         $valid = $this->validate($request, [
-            // List of things needed from the request
+            // List of things needed from the request 
             'amount'           => 'required',
             'payment_channel'  => 'required',
             'payment_for'      => 'required',
@@ -301,7 +301,7 @@ class ClientController extends Controller
             // get the payment record saved in the DB using the generated Value as refId
             $paymentRecord =  Payment::where('reference_id', $generatedVal)->orderBy('id', 'DESC')->first();
 
-            // authenticated user
+            // authenticated user 
             $user = User::find($paymentRecord->user_id);
 
             // if there is no payment record saved
@@ -312,16 +312,16 @@ class ClientController extends Controller
             if ($paymentRecord->status != 'pending') {
                 $return = redirect()->route('client.wallet', app()->getLocale())->with('error', 'Transaction already saved');
             }
-            //check the payment method selected
+            //check the payment method selected    
               switch ($paymentRecord->payment_channel) {
-                  case 'paystack':
+                  case 'paystack':              
                     // Use paymentcontroller method in this controller
                     $return = $this->initiatePayment($request, $generatedVal, $paymentRecord, $user);
-
+                    
                     $return = redirect()->route('client.ipn.paystack', app()->getLocale());
                   break;
-                  case 'flutterwave':
-                    // $this->initiatePayment();
+                  case 'flutterwave': 
+                    // $this->initiatePayment(); 
                     // $return = redirect()->route('client.ipn.flutter', app()->getLocale());
 
                     $flutter['amount'] = $paymentRecord->amount;
@@ -333,11 +333,11 @@ class ClientController extends Controller
                     // return view('client.payment.flutter', compact('flutter', 'client'));
 
                     $return = $paystack_controller->initiatePayment($request, $generatedVal, $paymentRecord, $user);
-
+                   
                     // $return = redirect()->route('client.ipn.flutter', app()->getLocale());
 
                   break;
-
+                  
               default:
 
                 $return = redirect()->route('client.wallet', app()->getLocale())->with('error', 'Please select a payment method');
@@ -562,17 +562,17 @@ class ClientController extends Controller
     }
 
     function ajax_contactForm(Request $request){
-
+             
         $validatedData = $request->validate([
             'firstName'                   =>   'required',
             'lastName'                    =>   'required',
-            'phoneNumber'                 =>   'required',
-            'state'                       =>   'required',
-            'lga'                         =>   'required',
-            'town'                        =>   'required',
-            'streetAddress'               =>   'required',
-            'addressLat'                  =>   'required',
-            'addressLng'                  =>   'required',
+            'phoneNumber'                 =>   'required', 
+            'state'                       =>   'required',          
+            'lga'                         =>   'required',          
+            'town'                        =>   'required',          
+            'streetAddress'               =>   'required',          
+            'addressLat'                  =>   'required',          
+            'addressLng'                  =>   'required',          
           ]);
 
         $clientContact = new Contact;
@@ -777,7 +777,7 @@ class ClientController extends Controller
      * Request for a Custom Service frpm FixMaster.
      * Save custom request ['service_requests']
      * @return \Illuminate\Http\Response
-     */
+     */ 
     public function customService(){
         $data['bookingFees']  = $this->bookingFees();
         $data['myContacts'] = Contact::where('user_id', auth()->user()->id)->latest('created_at')->get();
@@ -785,7 +785,7 @@ class ClientController extends Controller
         $data['gateways']     = PaymentGateway::whereStatus(1)->orderBy('id', 'DESC')->get();
         $data['states'] = State::select('id', 'name')->orderBy('name', 'ASC')->get();
         $data['balance']      = WalletTransaction::where('user_id', auth()->user()->id)->orderBy('id', 'DESC')->first();
-
+        
         return view('client.services.service_custom', $data);
     }
 
@@ -801,12 +801,7 @@ class ClientController extends Controller
             ->whereHas('service_requests', function ($query) {
                         $query->orderBy('created_at', 'ASC');
             })->firstOrFail();
-
-
-        // $sortRequestByDate = $myServiceRequests::orderBy('created_at','DESC')->get();
-        // return dd($myServiceRequests['service_requests']);
-
-
+        
         return view('client.services.list', [
             'myServiceRequests' =>  $myServiceRequests,
         ]);
@@ -833,6 +828,7 @@ class ClientController extends Controller
 
         $data['mytransactions']    = Payment::where('user_id', auth()->user()->id)->orderBy('id', 'DESC')->get();
         $walTrans = WalletTransaction::where('user_id', auth()->user()->id)->orderBy('id', 'DESC')->first();
+        //  $data['ewallet'] = !isset($json->withdraw)? $walTrans->closing_balance: (is_array($json->withdraw) ?  (float)$walTrans->closing_balance + (float)array_sum($json->withdraw): (float)'1000.000' + (float)$json->withdraw) ;
 
         $data['ewallet'] =  !empty($walTrans->closing_balance) ? $walTrans->closing_balance : 0;
         $myWallet    = WalletTransaction::where('user_id', auth()->user()->id)->orderBy('id', 'DESC')->get();
@@ -868,7 +864,7 @@ class ClientController extends Controller
             $walTrans->user_id = auth()->user()->id;
             $walTrans->payment_id = $payment->id;
             $walTrans->amount =  $payment->amount;
-            $walTrans->payment_type = 'loyalty';
+            $walTrans->payment_type = 'funding';
             $walTrans->unique_id = $payment->unique_id;
             $walTrans->transaction_type = 'credit';
             $walTrans->opening_balance = $request->opening_balance;
@@ -915,7 +911,7 @@ class ClientController extends Controller
     }
 
     public function update_client_service_rating($language, Request $request, RatingController $updateClientRatings)
-    {
+    {   
         return $updateClientRatings->handleUpdateServiceRatings($request);
     }
 
@@ -926,7 +922,7 @@ class ClientController extends Controller
         $service_request->client_id             = auth()->user()->id;
         if ( $request['service_id'] ) {
             $service_request->service_id            = $request['service_id'];
-        }
+        }        
         // $service_request->unique_id             = 'REF-'.$this->generateReference();
         $service_request->price_id              = $request['price_id'];
         $service_request->contact_id              = $request['myContact_id'];
@@ -935,8 +931,8 @@ class ClientController extends Controller
         $service_request->status_id             = '2';
         $service_request->description           = $request['description'];
         $service_request->total_amount          = $request['booking_fee'];
-        $service_request->preferred_time        = Carbon::parse($request['timestamp'], 'UTC');
-        $service_request->has_client_rated      = 'No';
+        $service_request->preferred_time        = Carbon::parse($request['timestamp'], 'UTC'); 
+        $service_request->has_client_rated      = 'No'; 
         $service_request->has_cse_rated         = 'No';
         $service_request->created_at            = Carbon::now()->toDateTimeString();
         // $service_request->updated_at         = Carbon::now()->toDateTimeString();
@@ -1119,7 +1115,7 @@ class ClientController extends Controller
      //acitvity log
             return back()->with('error', 'An error occurred while trying to update a '.$requestExist->unique_id.' service request.');
         }
-
+       
         return back()->withInput();
     }
 
@@ -1127,14 +1123,14 @@ class ClientController extends Controller
     public function cancelRequest(Request $request, $language, $id){
 
         $requestExists = ServiceRequest::where('uuid', $id)->first();
-
+  
         //Validate user input fields
         $request->validate([
             'reason'       =>   'required',
         ]);
 
-
-        //service_request_status_id = Pending(1), Ongoing(2), Completed(4), Cancelled(3)
+    
+        //service_request_status_id = Pending(1), Ongoing(2), Completed(4), Cancelled(3) 
         $cancelRequest = ServiceRequest::where('uuid', $id)->update([
             'status_id' =>  '3',
         ]);
@@ -1143,20 +1139,20 @@ class ClientController extends Controller
 
         //Create record in `service_request_progress` table
         $recordServiceProgress = ServiceRequestProgress::create([
-            'user_id'                       =>  Auth::id(),
-            'service_request_id'            =>  $requestExists->id,
+            'user_id'                       =>  Auth::id(), 
+            'service_request_id'            =>  $requestExists->id, 
             'status_id'                     => '3',
             'sub_status_id'                 => '25'
         ]);
 
         $recordCancellation = ServiceRequestCancellation::create([
-            'user_id'                       =>  Auth::id(),
-            'service_request_id'            =>  $requestExists->id,
+            'user_id'                       =>  Auth::id(), 
+            'service_request_id'            =>  $requestExists->id, 
             'reason'                        =>  $request->reason,
         ]);
+ 
 
-
-
+     
 
         if($cancelRequest AND $recordServiceProgress AND $recordCancellation){
 
@@ -1166,7 +1162,7 @@ class ClientController extends Controller
             $client = Client::where('user_id', auth()->user()->id)->firstOrFail();
 
             // get last payment details
-            $lastPayment  = Payment::where('unique_id', $client->unique_id)->orderBy('id', 'DESC')->first();
+            $lastPayment  = Payment::where('unique_id', $client->unique_id)->orderBy('id', 'DESC')->first();            
 
                 $walTrans = new WalletTransaction;
                 $walTrans['user_id']          = auth()->user()->id;
@@ -1212,7 +1208,7 @@ class ClientController extends Controller
         return back()->withInput();
     }
 
-
+ 
 
 
     // public function addToWallet(){
@@ -1228,7 +1224,7 @@ class ClientController extends Controller
     //         $client = Client::where('user_id', auth()->user()->id)->firstOrFail();
 
     //         // get last payment details
-    //         $lastPayment  = Payment::where('unique_id', $client->unique_id)->orderBy('id', 'DESC')->first();
+    //         $lastPayment  = Payment::where('unique_id', $client->unique_id)->orderBy('id', 'DESC')->first();            
 
     //         // if (!WalletTransaction::where('unique_id', '=', $client['unique_id'])->exists()) {
     //             $walTrans = new WalletTransaction;
@@ -1261,7 +1257,7 @@ class ClientController extends Controller
         ]);
 
         $requestExists = ServiceRequest::where('uuid', $id)->first();
-
+    
         $account = Account::where('user_id', auth()->user()->id)->first();
         $accountAdmin = User::where('id', '1')->first();
 
@@ -1271,7 +1267,7 @@ class ClientController extends Controller
             'reason'            => $request->reason,
             'date_initiated'    =>  \Carbon\Carbon::now('UTC'),
         ]);
-
+            
         // $user = (object)[
         //     'name' => $account->first_name,
         //     'email' => auth()->user()->email,
@@ -1292,9 +1288,9 @@ class ClientController extends Controller
         //   $adminEmail = $this->sendWarrantyInitiationMail($admin, 'client');
 
         //send mail 1, admin, 2, client, 3 cse
-
+        
         if($initateWarranty){
-
+         
             return redirect()->route('client.service.all', app()->getLocale())->with('success', $requestExists->unique_id.' warranty was successfully initiated.');
 
           }else{
@@ -1307,7 +1303,7 @@ class ClientController extends Controller
     public function reinstateRequest(Request $request, $language, $id){
 
         $requestExists = ServiceRequest::where('uuid', $id)->firstOrFail();
-        //service_request_status_id = Pending(1), Ongoing(2), Completed(4), Cancelled(3)
+        //service_request_status_id = Pending(1), Ongoing(2), Completed(4), Cancelled(3) 
         $reinstateRequest = ServiceRequest::where('uuid', $id)->update([
             'status_id' =>  '1',
         ]);
@@ -1326,7 +1322,7 @@ class ClientController extends Controller
         if($reinstateRequest){
 
             $this->log('request', 'Informational', Route::currentRouteAction(), auth()->user()->account->last_name . ' ' . auth()->user()->account->first_name  . ') reinstated '. $jobReference.' service request.');
-
+            
             return back()->with('success', $jobReference.' service request was reinstated successfully.');
 
         }else{
@@ -1338,37 +1334,21 @@ class ClientController extends Controller
     }
 
     public function markCompletedRequest(Request $request, $language, $id){
-
+      
         $requestExists = ServiceRequest::where('uuid', $id)->firstOrFail();
 
         $updateMarkasCompleted =  $this->markCompletedRequestTrait(Auth::id(), $id);
-
+     
         if($updateMarkasCompleted ){
 
             $this->log('request', 'Informational', Route::currentRouteAction(), auth()->user()->account->last_name . ' ' . auth()->user()->account->first_name  . ') marked '.$requestExists->unique_id.' service request as completed.');
 
             return redirect()->route('client.service.all', app()->getLocale())->with('success', $requestExists->unique_id.' was marked as completed successfully.');
         }else{
-
+           
          //activity log
             return back()->with('error', 'An error occurred while trying to mark '.$requestExists->unique_id.' service request as completed.');
         }
     }
 
-
-    public function discount_mail(Request $request ){
-        if ($request->ajax())
-        {
-    
-         $data= $request->user;
-
-        $response =  $this->addDiscountToFirstTimeUserTrait($request->user());
-        if( $response == '1' ){
-            $referralResponse = $this->updateVerifiedUsers($request->user());
-        }
-      
-        return response()->json($referralResponse);
-        }
-      }
 }
-

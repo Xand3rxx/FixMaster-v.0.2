@@ -18,9 +18,6 @@ use App\Mail\WarrantyNotify;
 use App\Traits\GenerateUniqueIdentity as Generator;
 use App\Models\Warranty;
 use Carbon\Carbon;
-use App\Jobs\PushEmails;
-use Illuminate\Support\Str;
-use App\Http\Controllers\Messaging\MessageController;
 
 trait Utility
 {
@@ -61,11 +58,11 @@ trait Utility
        return false;
     }
 
-    $type = $user_type != '' ? $user_type : $user->type->url;
+    $type = $user_type != '' ? $user_type : $user
+      ->type->url;
     $created_by = $user_type != '' ? Auth::user()->email : $user->email;
     $mail = '';
-  
-   
+
     //updates firsttime  on users table to if user is not firsttime login
     switch ($type) {
       case 'client':
@@ -103,9 +100,7 @@ trait Utility
             Client::where('account_id', $user->id)
               ->update(['referral_id' => $referral, 'firsttime' => 1,]);
             $data = (object)['firstname' => $account->first_name, 'code' => $code, 'email' => $user->email, 'type' => 'client'];
-        
-            $mail = $this->sendRefferalMail($data, $user_type, $type);
-            return $mail;
+            $this->sendRefferalMail($data, $user_type, $type);
           }
         }
 
@@ -179,8 +174,7 @@ trait Utility
             Cse::where('user_id', $user->id)
               ->update(['referral_id' => $referral, 'firsttime' => 1]);
             $data = (object)['firstname' => $account->first_name, 'code' => $unique_id->unique_id, 'email' => $user->email, 'type' => 'cse'];
-            $mail = $this->sendRefferalMail($data, $user_type, $type);
-            return $mail;
+            $this->sendRefferalMail($data, $user_type, $type);
           }
         }
 
@@ -236,36 +230,16 @@ trait Utility
 
   public function sendRefferalMail($user, $user_type, $type)
   {
-    
     $name = ucfirst($user->firstname);
+    Mail::to($user->email)->send(new MailNotify($user));
     if ($user_type == '' && $type == 'client') {
-      $url =  app()->getLocale().'/verify/?code='.$user->code;
-       $mail_data = collect([
-        'email' =>  $user->email,
-        'template_feature' => 'CLIENT_REFERRAL_NOTIFICATION',
-        'url' =>  url($url),
-        'firstname' =>  $name,
-     ]);
-
-       $mail = $this->mailAction( $mail_data);
-       return '1';
-  
+      Session::flash('success', "Welcome $name, your refferal link has been sent to your mail");
     }
     if ($user_type == '' && $type == 'cse') {
-
-      $url =  $user->code;
-       $mail_data = collect([
-        'email' =>  $user->email,
-        'template_feature' => 'CSE_REFERRAL_NOTIFICATION',
-        'url' => $url ,
-        'firstname' =>  $name,
-     ]);
-     
-       $mail = $this->mailAction($mail_data);
-       return '1';
-    } 
-
-
+      Session::flash('success', "Welcome $name, your refferal code has been sent to your mail");
+    } else {
+      return '1';
+    }
   }
 
   public function authenticateRefferralLink($link)
@@ -401,47 +375,5 @@ trait Utility
    
   }
 
-  public function addDiscountToFirstTimeUserTrait($user){
-
-    $userDetails =  $user->account;
-    $discountDetails =  \App\Models\Discount::where(['id'=> '1'])->first();
- 
-  $client =  \App\Models\ClientDiscount::create([
-                'discount_id' => '1',
-                'client_id' => $userDetails->user_id,
-                    ]);
-            
-
-   $discountHistory = \App\Models\DiscountHistory::create([
-            'discount_id' => '1',
-            'client_name' =>   $userDetails->first_name.' '.  $userDetails->last_name,
-            'client_id' => $userDetails->user_id,
-         ]);
-      if($client AND $discountHistory){
-           $mail_data = collect([
-            'email' =>  $user->email,
-            'template_feature' => 'CLIENT_FIRSTTIME_DISCOUNT_NOTIFICATION',
-            'discount' => $discountDetails->rate,
-            'firstname' =>  $userDetails->first_name,
-         ]);
-      
-     
-       $mail = $this->mailAction($mail_data);
-       return '1';
-      }
-
-      
-
-  }
-
-  public function mailAction($data){
-      $messanger = new MessageController();
-     return  $jsonResponse = $messanger->sendNewMessage('email', Str::title(Str::of($data['template_feature'])->replace('_', ' ',)), 'dev@fix-master.com', $data['email'], $data, $data['template_feature']);
-
-
-  }
 
 }
-
-
-

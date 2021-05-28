@@ -47,9 +47,4 @@ class Technician extends Model
         return $this->hasMany(ServiceRequest::class);
     }
 
-    public function services()
-    {
-        return $this->hasMany(UserService::class, 'user_id', 'user_id')->with('service');
-    }
-
 }

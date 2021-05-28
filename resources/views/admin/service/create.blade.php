@@ -28,17 +28,15 @@
           <form method="POST" action="{{ route('admin.services.store', app()->getLocale()) }}" enctype="multipart/form-data">
             @csrf
             <div class="col-md-12">
-              <div class="divider-text">Diagnosis Cost</div>
-
               <div class="form-row mt-4">
-                <div class="form-group col-md-6">
+                <div class="form-group col-md-3">
                     <label for="name">Name</label>
                     <input type="text" class="form-control @error('name') is-invalid @enderror" name="name" id="name" placeholder="Name" value="{{ old('name') }}" autocomplete="off">
                     @error('name')
                       <x-alert :message="$message" />
                     @enderror
                 </div>
-                <div class="form-group col-md-6">
+                <div class="form-group col-md-3">
                   <label>Service</label>
                   <select class="custom-select @error('category_id') is-invalid @enderror" name="category_id">
                     <option selected value="">Select...</option>
@@ -52,21 +50,14 @@
                     <x-alert :message="$message" />
                   @enderror
                 </div>
-                <div class="form-group col-md-4">
-                    <label for="service_charge">Diagnosis Charge</label>
-                    <input type="number" min="1" maxlength="5" class="form-control @error('service_charge') is-invalid @enderror" name="service_charge" id="service_charge" placeholder="Diagnosis Charge" value="{{ old('service_charge') }}" autocomplete="off">
+                <div class="form-group col-md-3">
+                    <label for="service_charge">Service Charge</label>
+                    <input type="number" min="1" maxlength="5" class="form-control @error('service_charge') is-invalid @enderror" name="service_charge" id="service_charge" placeholder="Service Charge" value="{{ old('service_charge') }}" autocomplete="off">
                     @error('service_charge')
                       <x-alert :message="$message" />
                     @enderror
                 </div>
-                <div class="form-group col-md-4">
-                  <label for="diagnosis_subsequent_hour_charge">Subsequent Hour Charge</label>
-                  <input type="number" min="1" maxlength="5" class="form-control @error('diagnosis_subsequent_hour_charge') is-invalid @enderror" name="diagnosis_subsequent_hour_charge" id="diagnosis_subsequent_hour_charge" placeholder="Subsequent Hour Charge" value="{{ old('diagnosis_subsequent_hour_charge') }}" autocomplete="off">
-                  @error('diagnosis_subsequent_hour_charge')
-                    <x-alert :message="$message" />
-                  @enderror
-                </div>
-                <div class="form-group col-md-4">
+                <div class="form-group col-md-3">
                   <label>Category Cover Image</label>
                   <div class="custom-file">
                     <input type="file" accept="image/*" class="custom-file-input @error('image') is-invalid @enderror" name="image" id="image">
@@ -91,11 +82,11 @@
                 </div>
               </div>
 
-              <div class="divider-text">Labour Cost</div>
+              <div class="divider-text">Add Sub Services</div>
               <div class="form-row mt-4">
                 <div class="form-group col-md-3">
                     <label for="sub_service_name">Sub Service Name</label>
-                    <input type="text" class="form-control @error('sub_service_name') is-invalid @enderror" name="sub_service_name[]" id="sub_service_name" placeholder="Name" value="{{ old('sub_service_name[0]') }}" autocomplete="off">
+                    <input type="text" class="form-control @error('sub_service_name') is-invalid @enderror" name="sub_service_name[]" id="sub_service_name" placeholder="Name" value="{{ old('sub_service_name') }}" autocomplete="off">
                     @error('sub_service_name')
                       <x-alert :message="$message" />
                     @enderror
@@ -103,7 +94,7 @@
                 
                 <div class="form-group col-md-3">
                     <label for="first_hour_charge">First Hour Charge</label>
-                    <input type="number" min="1" maxlength="5" class="form-control @error('first_hour_charge') is-invalid @enderror" name="first_hour_charge[]" id="first_hour_charge" placeholder="First Hour Charge" value="{{ old('first_hour_charge[0]') }}" autocomplete="off">
+                    <input type="number" min="1" maxlength="5" class="form-control @error('first_hour_charge') is-invalid @enderror" name="first_hour_charge[]" id="first_hour_charge" placeholder="First Hour Charge" value="{{ old('first_hour_charge') }}" autocomplete="off">
                     @error('first_hour_charge')
                       <x-alert :message="$message" />
                     @enderror
@@ -111,7 +102,7 @@
                 <div class="form-group col-md-3">
                   <label for="subsequent_hour_charge">Subsequent Hour Charge</label>
                   <input type="number" min="1" maxlength="5" class="form-control @error('subsequent_hour_charge') is-invalid @enderror" name="subsequent_hour_charge[]" id="subsequent_hour_charge" placeholder="Subsequent Hour Charge" value="{{ old('subsequent_hour_charge') }}" autocomplete="off">
-                  @error('subsequent_hour_charge[0]')
+                  @error('subsequent_hour_charge')
                     <x-alert :message="$message" />
                   @enderror
                 </div>

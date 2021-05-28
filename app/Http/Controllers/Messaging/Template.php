@@ -14,13 +14,13 @@ class Template extends Controller
     public function getMessageModules()
     {
         $enumHelper = new EnumHelper();
-         return $enumHelper->getPossibleEnumValues('feature', 'message_templates');
+        return $enumHelper->getPossibleEnumValues ('feature', 'message_templates');
 
     }
 
     public function getAllTemplates()
     {
-        return MessageTemplate::select('id', 'uuid','title',  'feature')->paginate(10);
+        return MessageTemplate::select('id', 'uuid','title', 'type', 'feature')->paginate(10);
     }
 
     public function getTemplate($uuid)
@@ -39,15 +39,16 @@ class Template extends Controller
             $feature = $request->input('feature');
             $title = $request->input('title');
             $content = $request->input('content');
-            $sms = $request->input('sms');
+            $type = $request->input('message_type');
             $template = MessageTemplate::select('*')
                         ->where('feature', $feature)
+                        ->where('type', $type)
                         ->first();
             if(!empty($template)){
                 return response()->json(["message" => "There is already a template for this feature!"], 400);
             }
 
-            MessageTemplate::create(['title'=>$title, 'content'=>$content, 'sms'=>$sms, 'feature'=>$feature]);
+            MessageTemplate::create(['title'=>$title, 'content'=>$content, 'type'=>$type, 'feature'=>$feature]);
             return response()->json([
             "message" => "Template created successfully!", "data"=>$template
         ], 201);
@@ -65,11 +66,11 @@ class Template extends Controller
         $feature = $request->input('feature');
         $title = $request->input('title');
         $content = $request->input('content');
-        $sms = $request->input('sms');
+        $type = $request->input('message_type');
 
         $template = MessageTemplate::updateOrCreate(
-            ['feature'=> $feature],
-            ['title' => $title, 'content' => $content, 'sms' => $sms]
+            ['feature'=> $feature, 'type'=> $type],
+            ['title' => $title, 'content' => $content]
         );
         return response()->json([
         "message" => "Template updated successfully!", "data"=>$template
