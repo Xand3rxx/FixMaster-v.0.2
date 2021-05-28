@@ -108,7 +108,7 @@ class FlutterwaveController extends Controller
      */
     public function initiate($paymentId)
     {
-    //    dd($paymentId);
+//        dd($paymentId);
                 $curl = curl_init();
 
                 $payment = Payment::find($paymentId);
@@ -223,22 +223,12 @@ class FlutterwaveController extends Controller
 
                 if($paymentDetails->update()){
                     // NUMBER 2: add more for other payment process
-                    if($paymentDetails['payment_for'] = 'service-request' ){
+                    if($paymentDetails['payment_for'] = 'service-request' ){ 
                         
-                        if($invoice) {
-                            $invoice->update([
-                                'status' => '2',
-                                'phase' => '2'
-                            ]);
-
-                            return redirect()->route('invoice', [app()->getLocale(), $invoiceUUID])->with('success', 'Invoice payment was successful!');
-                        }else{
-                            $client_controller->saveRequest( $request->session()->get('order_data') );
+                        $client_controller->saveRequest( $request->session()->get('order_data') );
                         // $client_controller->saveRequest( $request->session()->get('medias') );
                         
                         return redirect()->route('client.service.all' , app()->getLocale() )->with('success', 'payment was successful');
-                        }
-                        
                     }                    
                 }                
             }else {
