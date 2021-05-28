@@ -1,3 +1,4 @@
+<script src="{{ asset('assets/dashboard/assets/js/bootstrap-multiselect.js') }}"></script>
 <script>
     $(function() {
         'use strict'
@@ -22,6 +23,56 @@
             });
             // User service requuest client_id
             // return respose of either success or failed
+        });
+        $('.sub_service_picker').selectpicker();
+        // Re-Categorization
+        // $('.sub_service_picker').selectpicker(); //Initiate multiple dropdown select
+        
+        const services_list = @json($services, JSON_PRETTY_PRINT);
+        const category_list = @json($categories, JSON_PRETTY_PRINT);
+        // console.log(services_list, category_list);
+
+        $(document).on('change', '#catogorized-category', function() {
+            let selected_category_uuid = $(this).val();
+            let selectedCategory = category_list.find(function(category, index, arr){
+                return category.uuid === selected_category_uuid
+            })
+            let selected_category_service =  services_list.filter(function(service, index, arr){
+                return service.category_id === selectedCategory.id
+            }, selectedCategory);
+
+            $('#service_uuid').find('option').not(':first').remove();
+            selected_category_service.forEach((service, index) => { 
+                $('#service_uuid').append(new Option(service.name, service.uuid));
+            })
+        });
+        // End Re-Categorization
+
+        $(document).on('change', '#service_uuid', function() {
+            let selected_service_uuid = $(this).val();
+            let selectedService = services_list.find(function(service, index, arr){
+                return service.uuid === selected_service_uuid 
+            })
+            $.ajax({
+            url: "{{ route('cse.needed.sub_service', app()->getLocale()) }}",
+            method: "POST",
+            dataType: "JSON",
+            data: {
+                "_token": "{{ csrf_token() }}",
+                "service_id": selectedService.id
+            },
+            success: function(data) {
+                $('#sub_service_uuid').find('option').remove();
+                data.sub_services.forEach((sub_service, index) => { 
+                    $('#sub_service_uuid').append(new Option(sub_service.name, sub_service.uuid));
+                })
+                $('.sub_service_picker').selectpicker('refresh');
+            },
+            catch: function(error) {
+                   return displayMessage('Error finding Sub Service List ', 'error');
+            }
+        })
+
         });
 
         $('#wizard3').steps({

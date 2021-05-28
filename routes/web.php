@@ -430,6 +430,7 @@ Route::prefix('cse')->name('cse.')->middleware('monitor.cseservice.request.chang
     Route::post('cse-availablity-request', [CseController::class, 'setAvailablity'])->name('availablity');
 
     Route::post('available-tool-quantity', [CseController::class, 'getAvailableToolQuantity'])->name('available.tools');
+    Route::post('get-sub-service-list', [CseController::class, 'getSubServices'])->name('needed.sub_service');
 
     Route::prefix('profile')->name('profile.')->group(function () {
         Route::get('/', [ProfileController::class, 'index'])->name('index');

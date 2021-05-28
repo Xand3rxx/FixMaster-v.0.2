@@ -37,6 +37,7 @@ class CreateServiceRequestsTable extends Migration
             $table->dateTime('preferred_time')->nullable();
             $table->enum('has_client_rated', ['Yes', 'No', 'Skipped'])->default('No');
             $table->enum('has_cse_rated', ['Yes', 'No', 'Skipped'])->default('No');
+            $table->enum('categorized', ['Yes','No'])->default('No');
             $table->softDeletes();
             $table->timestamps();
         });

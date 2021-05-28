@@ -34,6 +34,12 @@ class RequestActionController extends Controller
             $action = \App\Http\Controllers\ServiceRequest\Concerns\SchedulingDate::handle($request, $service_request, $to_be_stored);
             $to_be_stored = $action;
         }
+
+        if($request->filled('sub_service_uuid')){
+            $action = \App\Http\Controllers\ServiceRequest\Concerns\Categorization::handle($request, $service_request, $to_be_stored);
+            $to_be_stored = $action;
+        }
+
         // call the storage 
         return !empty($to_be_stored)
             ? ($this->saveAction($to_be_stored)

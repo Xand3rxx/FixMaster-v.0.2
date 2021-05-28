@@ -77,6 +77,7 @@
                                                 @if(is_null($service_request['preferred_time']))
                                                 @include('cse.requests.includes.schedule_date')
                                                 @endif
+                                                @include('cse.requests.includes.re-categorization')
                                                 @include('cse.requests.includes.reoccuring_actions')
                                             </div>
                                         </div>
