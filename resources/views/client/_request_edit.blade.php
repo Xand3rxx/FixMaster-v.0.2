@@ -1,9 +1,17 @@
-<form class="p-4" method="POST" action="{{ route('client.update_request', [ 'request'=>$userServiceRequest->uuid, 'locale'=>app()->getLocale() ])}}">
+@extends('layouts.client')
+@section('title', 'Service Details')
+@section('content')
+@include('layouts.partials._messages')
+
+{{-- {{ dd($service->serviceRequests()->count()) }} --}}
+<div class="col-lg-8 col-12" style="margin-top: 3rem;">
+<form class="p-4" method="POST" action="{{ route('client.update_request', [ 'request'=>$userServiceRequest->uuid, 'locale'=>app()->getLocale() ])}}" enctype="multipart/form-data">
     @csrf 
 
     <div class="row">
     <h5 class="ml-3">Editing {{ $userServiceRequest->unique_id }} Service request details</h5>
-        
+    <input type="hidden" value="{{ $userServiceRequest->id ?? '' }}" name="servicereq" >
+        <!-- ROW 1 -->
         <div class="col-md-6">
             <div class="form-group position-relative">
                 <label>Scheduled Date & Time :<span class="text-danger">*</span></label>
@@ -56,14 +64,67 @@
             </div>
         </div><!--end col--> 
 
-        
+
+
+        <div class="col-md-3 card-body">
+            <div class="form-group position-relative">
+                <a class="btn btn-outline btn-dark btn-pill btn-outline-1x btn-sm" id="add-more-file">Add more attachments</a>
+            </div> 
+        </div><!--end col-->
+
+          <div class="col-md-9 form-group card-body pl-0">
+          <div class="attachments">
+            <div class="form-group position-relative custom-file">
+                <input type="file" name="media_file[]" class="form-control-file btn btn-primary btn-sm" onchange="ValidateSize(this);" id="custom_file_1" accept="image/*,.txt,.doc,.docx,.pdf" />
+                <small style="font-size: 10px;" class="text-muted">File must not be more than 2MB</small>
+            </div> 
+            </div> 
+          </div>
+
                                            
         
     </div><!--end row-->
 
     <div class="row">
         <div class="col-sm-12">
-        <button type="submit" class="submitBnt btn btn-primary">Update</button>
+        <button type="submit" class="submitBnt btn btn-success btn-lg btn-block">Update</button>
         </div><!--end col-->
     </div><!--end row-->
 </form><!--end form-->
+
+</div>
+
+
+@push('scripts')
+<script>
+function ValidateSize(file) {
+        if (typeof(file.files[0]) === "undefined") {
+            $(file).val('');
+            $(file).parent('.custom-file').find('label').text('Choose File');
+            return false;
+        }
+        var FileSize = file.files[0].size / 1024 / 1024;
+        if (FileSize > 2) {
+            alert('File size exceeds 2 MB');
+            $(file).val(''); //for clearing with Jquery
+        } else {
+            $(file).parent('.custom-file').find('label').text(file.files[0].name);
+        }
+    }
+    
+ $('body').on('click', '#add-more-file', function () {
+        var count = parseInt($('.attachments').find('.custom-file:nth-last-child(1) input').prop('id').split("_")[2]) + 1; 
+        // $('.attachments').append('<div class="custom-file">'+
+        //     '<label class="custom-file-label" for="custom_file_'+count+'">file here</label>'+
+        //     '<input type="file" name="filename[]" accept="application/pdf, image/gif, image/jpeg, image/png" class="custom-file-input" size="20" onchange="ValidateSize(this);" id="custom_file_'+count+'">'+
+        //     '</div>')
+
+            $('.attachments').append('<div class="form-group position-relative custom-file">'+
+                '<input type="file" name="media_file[]" accept="image/*,.txt,.doc,.docx,.pdf" class="form-control-file btn btn-primary btn-sm" onchange="ValidateSize(this);" id="custom_file_'+count+'"  />'+
+                '<small style="font-size: 10px;" class="text-muted">File must not be more than 2MB</small>'+
+            '</div>')
+    });
+</script>
+@endpush
+
+@endsection

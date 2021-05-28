@@ -171,7 +171,7 @@ class ServiceRequest extends Model
     }
 
     public function service_request_medias(){
-        return $this->hasMany(serviceRequestMedia::class);
+        return $this->hasMany(serviceRequestMedia::class)->with('media_files');
     }
 
     public function technician()

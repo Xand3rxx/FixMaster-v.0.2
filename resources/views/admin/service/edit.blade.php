@@ -28,15 +28,17 @@
             <form method="POST" action="{{ route('admin.services.update', ['service'=>$service->uuid, 'locale'=>app()->getLocale()]) }}" enctype="multipart/form-data">
             @csrf @method('PUT')
             <div class="col-md-12">
+              <div class="divider-text">Edit Diagnosis Cost</div>
+
               <div class="form-row mt-4">
-                <div class="form-group col-md-3">
+                <div class="form-group col-md-6">
                     <label for="name">Name</label>
                     <input type="text" class="form-control @error('name') is-invalid @enderror" name="name" id="name" placeholder="Name" value="{{ old('name') ?? !empty($service->name) ? $service->name : 'UNAVAILABLE' }}" autocomplete="off">
                     @error('name')
                       <x-alert :message="$message" />
                     @enderror
                 </div>
-                <div class="form-group col-md-3">
+                <div class="form-group col-md-6">
                   <label>Service</label>
                   <select class="custom-select @error('category_id') is-invalid @enderror" name="category_id">
                     <option selected value="">Select...</option>
@@ -50,7 +52,7 @@
                     <x-alert :message="$message" />
                   @enderror
                 </div>
-                <div class="form-group col-md-3">
+                <div class="form-group col-md-4">
                     <label for="service_charge">Service Charge</label>
                     <input type="number" min="1" maxlength="5" class="form-control @error('service_charge') is-invalid @enderror" name="service_charge" id="service_charge" placeholder="Service Charge" value="{{ old('service_charge') ?? !empty($service->service_charge) ? $service->service_charge : '0' }}" autocomplete="off">
                     @error('service_charge')
@@ -58,7 +60,15 @@
                     @enderror
                 </div>
 
-                <div class="form-group col-md-3">
+                <div class="form-group col-md-4">
+                  <label for="diagnosis_subsequent_hour_charge">Subsequent Hour Charge</label>
+                  <input type="number" min="1" maxlength="5" class="form-control @error('diagnosis_subsequent_hour_charge') is-invalid @enderror" name="diagnosis_subsequent_hour_charge" id="diagnosis_subsequent_hour_charge" placeholder="Subsequent Hour Charge" value="{{ old('diagnosis_subsequent_hour_charge') ?? !empty($service->diagnosis_subsequent_hour_charge) ? $service->diagnosis_subsequent_hour_charge : '0' }}" autocomplete="off">
+                  @error('diagnosis_subsequent_hour_charge')
+                    <x-alert :message="$message" />
+                  @enderror
+                </div>
+
+                <div class="form-group col-md-4">
                     <label>Category Cover Image</label>
                     <div class="custom-file">
                       <input type="file" accept="image/*" class="custom-file-input @error('image') is-invalid @enderror" name="image" id="image">
@@ -83,7 +93,7 @@
                 </div>
               </div>
 
-              <div class="divider-text">Edit Sub Services</div>
+              <div class="divider-text">Edit Labour Cost</div>
               <div class="form-group col-md-3">
                 <button type="button" class="btn btn-primary add-sub-service" style="margin-top: 1.8rem !important;"><i class="fas fa-plus"></i> Add</button>
               </div>
