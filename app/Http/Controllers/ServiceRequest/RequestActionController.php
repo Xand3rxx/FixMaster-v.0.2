@@ -25,15 +25,14 @@ class RequestActionController extends Controller
     {
         (array)$to_be_stored = [];
 
-        if ($request->hasAny(['add_comment', 'intiate_rfq', 'intiate_trf'])) {
+        if ($request->hasAny(['add_comment', 'intiate_rfq', 'intiate_trf', 'qa_user_uuid'])) {
             $action = \App\Http\Controllers\ServiceRequest\Concerns\ActionsRepeated::handle($request, $service_request, $to_be_stored);
             $to_be_stored = $action;
         }
-        dd($this->saveAction($to_be_stored));
         // call the storage 
         return !empty($to_be_stored)
             ? ($this->saveAction($to_be_stored)
-                ? back()->with('success', 'Project Progress successfully!!')
+                ? back()->with('success', 'Project Progress Successfully!!')
                 : back()->with('error', 'Error occured while updating project progress'))
             : back()->with('error', 'Error Generating Request Content');
     }

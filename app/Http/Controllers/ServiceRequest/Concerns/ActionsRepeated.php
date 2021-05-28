@@ -25,7 +25,6 @@ class ActionsRepeated
      */
     public static function handle(Request $request, ServiceRequest $service_request, array $repeated_actions)
     {
-        // dd($request->add_comment, 'add_comment');
         // Handle Add Comment
         if ($request->filled('add_comment')) {
             array_push($repeated_actions, self::build_comment($request, $service_request));
@@ -34,6 +33,16 @@ class ActionsRepeated
         // Handle RFQ
         if ($request->filled('intiate_rfq')) {
             array_push($repeated_actions, self::build_new_rfq($request, $service_request));
+        }
+
+        // Handle Tool Request
+        if ($request->filled('intiate_trf')) {
+            array_push($repeated_actions, self::build_new_trf($request, $service_request));
+        }
+
+        // Handle Request for QA
+        if ($request->filled('qa_user_uuid')) {
+            array_push($repeated_actions, self::build_requesting_qa($request, $service_request));
         }
 
         return $repeated_actions;
@@ -74,7 +83,7 @@ class ActionsRepeated
     }
 
     /**
-     * Build Comment to be added to database
+     * Build New RFQ to be added to database
      * 
      * @throws \Illuminate\Validation\ValidationException
      * @return array
@@ -131,6 +140,87 @@ class ActionsRepeated
                 'severity'                  =>  'informational',
                 'action_url'                =>  \Illuminate\Support\Facades\Route::currentRouteAction(),
                 'message'                   =>  $request->user()->account->last_name . ' ' . $request->user()->account->first_name . ' issued an RFQ for Service Request:' . $service_request->unique_id . ' Job',
+            ]
+        ];
+    }
+
+    /**
+     * Build New Tools Request to be added to database
+     * 
+     * @throws \Illuminate\Validation\ValidationException
+     * @return array
+     */
+    protected static function build_new_trf(Request $request, ServiceRequest $service_request)
+    {
+        // dd($request->all(), 'intiate_trf');
+        // validate Request
+        (array) $valid = $request->validate([
+            'intiate_trf'               =>  'bail|string|in:yes,no',
+            'tool_id'                   =>  'bail|required|array',
+            'tool_id.*'                 =>  'bail|string',
+            'tool_quantity'             =>  'bail|required|array',
+            'tool_quantity.*'           =>  'bail|string',
+        ]);
+
+        // Each Key should match table names, value match accepted parameter in each table name stated
+        $sub_status = SubStatus::where('uuid', '1abe702c-e6b1-422f-9145-810394f92e1d')->firstOrFail();
+
+        return [
+            'trfs' => [
+                'requested_by'          => $request->user()->id,
+                'service_request_id'    => $service_request->id,
+                'tool_requests' => $valid,
+            ],
+            'service_request_progresses' => [
+                'user_id'              => $request->user()->id,
+                'service_request_id'   => $service_request->id,
+                'status_id'            => $sub_status->status_id,
+                'sub_status_id'        => $sub_status->id,
+            ],
+            'log' => [
+                'type'                      =>  'request',
+                'severity'                  =>  'informational',
+                'action_url'                =>  \Illuminate\Support\Facades\Route::currentRouteAction(),
+                'message'                   =>  $request->user()->account->last_name . ' ' . $request->user()->account->first_name . ' issued a new Tool Request for Service Request:' . $service_request->unique_id . ' Job',
+            ]
+        ];
+    }
+
+    /**
+     * Build New Tools Request to be added to database
+     * 
+     * @throws \Illuminate\Validation\ValidationException
+     * @return array
+     */
+    protected static function build_requesting_qa(Request $request, ServiceRequest $service_request)
+    {
+        // validate Request
+        (array) $valid = $request->validate([
+            'qa_user_uuid'      => 'required|uuid|exists:users,uuid',
+            'assistive_role'    => 'required|string|in:Consultant,Technician'
+        ]);
+
+        // Each Key should match table names, value match accepted parameter in each table name stated
+        $sub_status = SubStatus::where('uuid', 'e59c3305-45ce-4d8e-b5ab-a5f4e9d40aca')->firstOrFail();
+        $user = \App\Models\User::where('uuid', $valid['qa_user_uuid'])->with('account')->firstOrFail();
+        return [
+            'service_request_assigned' => [
+                'user_id'                   => $user->id,
+                'service_request_id'        => $service_request->id,
+                'assistive_role'            => $valid['assistive_role'],
+                'status'                    => null
+            ],
+            'service_request_progresses' => [
+                'user_id'              => $request->user()->id,
+                'service_request_id'   => $service_request->id,
+                'status_id'            => $sub_status->status_id,
+                'sub_status_id'        => $sub_status->id,
+            ],
+            'log' => [
+                'type'                      =>  'request',
+                'severity'                  =>  'informational',
+                'action_url'                =>  \Illuminate\Support\Facades\Route::currentRouteAction(),
+                'message'                   =>  $request->user()->account->last_name . ' ' . $request->user()->account->first_name . ' requested a new Quality Assurance for Service Request:' . $service_request->unique_id . ' Job',
             ]
         ];
     }

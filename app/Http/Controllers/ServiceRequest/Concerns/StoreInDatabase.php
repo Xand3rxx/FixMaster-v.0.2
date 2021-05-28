@@ -28,6 +28,22 @@ trait StoreInDatabase
         DB::transaction(function () use ($params, &$registred) {
             // dd($params, 'all parameters');
             foreach ($params as $table) {
+
+                if (!empty($table['service_request_assigned'])) {
+                    ServiceRequestAssigned::create($table['service_request_assigned']);
+                }
+
+                if (!empty($table['trfs'])) {
+                    // save on tool_requests
+                    $tool_request = \App\Models\ToolRequest::create($table['trfs']);
+                    foreach ($table['trfs']['tool_requests']['tool_id'] as $key => $tool_id) {
+                        \App\Models\ToolRequestBatch::create([
+                            'tool_request_id'  => $tool_request->id,
+                            'tool_id'           => $tool_id,
+                            'quantity'          => $table['trfs']['tool_requests']['tool_quantity'][$key],
+                        ]);
+                    }
+                }
                 if (!empty($table['rfqs'])) {
                     // save on rfqs table
                     $rfq = \App\Models\Rfq::create($table['rfqs']);
@@ -59,20 +75,10 @@ trait StoreInDatabase
                     ActivityLog::create($table['log']);
                 }
             }
-            // ServiceRequestAssigned::assignUserOnServiceRequest($technician->id, $serviceRequest->id);
-
-            // SubStatus::where('uuid', 'ab43a32e-709e-4bf9-bba2-78828d2cfda9')->firstOrFail();
-            // Update service_request_reports 
-            // ServiceRequestReport::store($this->request->user()->id, $this->service_request->id, ServiceRequestReport::STAGES[0], ServiceRequestReport::TYPES[2], $this->request->input('add_cooment'));
-            // Update service_request_progresses
-            // ServiceRequestProgress::storeProgress($this->request->user()->id, $this->service_request->id, $sub_status->status_id, $sub_status->id);
-
-            // $this->log('request', 'Informational', Route::currentRouteAction(), $request->user()->account->last_name . ' ' . $request->user()->account->first_name . ' assigned ' . $technician['account']['last_name'] . ' ' . $technician['account']['first_name'] . ' (Technician) to ' . $serviceRequest->unique_id . ' Job.');
 
             // 6. update registered to be true
             $registred = true;
         });
-        dd($registred, 'recorded');
         return $registred;
     }
 }

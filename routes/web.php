@@ -429,6 +429,8 @@ Route::prefix('cse')->name('cse.')->middleware('monitor.cseservice.request.chang
     Route::post('accept-service-request', [CseController::class, 'setJobAcceptance'])->name('accept-job');
     Route::post('cse-availablity-request', [CseController::class, 'setAvailablity'])->name('availablity');
 
+    Route::post('available-tool-quantity', [CseController::class, 'getAvailableToolQuantity'])->name('available.tools');
+
     Route::prefix('profile')->name('profile.')->group(function () {
         Route::get('/', [ProfileController::class, 'index'])->name('index');
         Route::get('edit', [ProfileController::class, 'edit'])->name('edit');
