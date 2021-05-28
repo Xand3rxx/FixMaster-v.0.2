@@ -17,6 +17,7 @@ use App\Http\Controllers\Payment\FlutterwaveController;
 
 use App\Http\Controllers\Client\ClientController;
 use Session;
+use App\Models\Contact;
 
 
 class FlutterwaveController extends Controller
@@ -42,11 +43,9 @@ class FlutterwaveController extends Controller
      */
     public function store(Request $request) 
     {
-        // return $request;
-        // return Town::find($request->town_id);
-        // foreach ($request as $key => $value) {
-        //     return $value;
-        // }
+        // return dd($request);
+        $contact_details = Contact::where('id', $request->myContact_id)->first();
+
         $valid = $this->validate($request, [
             // List of things needed from the request like 
             'booking_fee'      => 'required',
@@ -55,7 +54,8 @@ class FlutterwaveController extends Controller
             // 'myContact_id'    => 'required',
         ]);
         
-        $Serviced_areas = ServicedAreas::where('town_id', '=', $request['town_id'])->orderBy('id', 'DESC')->first();
+        // check if the town 
+        $Serviced_areas = ServicedAreas::where('town_id', '=', $contact_details->town_id)->orderBy('id', 'DESC')->first();
         if ($Serviced_areas === null) {
             return back()->with('error', 'sorry!, this area you selected is not serviced at the moment, please try another area');
         }
