@@ -210,7 +210,6 @@ class FlutterwaveController extends Controller
                 
                 /*************************************************************************************************
                  * Things to do if you want to use this function(Number 1 to 5) Not important if you don't need it
-                 * 
                  *************************************************************************************************/    
                 
                  // NUMBER 1: Instantiate the clientcontroller class in this controller's method in order to save request
