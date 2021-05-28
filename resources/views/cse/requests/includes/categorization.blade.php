@@ -34,7 +34,7 @@
         <div class="form-group col-md-12 position-relative">
             <label for="sub_service_uuid">Sub Service</label>
             <select id="sub_service_uuid" class="form-control sub_service_picker @error('sub_service_uuid') is-invalid @enderror"
-                name="sub_service_uuid" id="sub_service_uuid" multiple>
+                name="sub_service_uuid[]" id="sub_service_uuid" multiple>
                 <option disabled value="0">Select Sub service</option>
             </select>
             @error('sub_service_uuid')
@@ -45,7 +45,7 @@
         </div>
     </div>
 
-    <div class="form-row">
+    {{-- <div class="form-row">
         <div class="form-group col-md-12">
             <label for="root_cause">Root Cause <span class="text-danger">*</span></label>
             <textarea rows="3" class="form-control @error('root_cause') is-invalid @enderror" id="root_cause"
@@ -56,6 +56,6 @@
             <textarea rows="3" class="form-control @error('other_comments') is-invalid @enderror" id="other_comments"
                 name="other_comments"></textarea>
         </div>
-    </div>
+    </div> --}}
     
 </section>

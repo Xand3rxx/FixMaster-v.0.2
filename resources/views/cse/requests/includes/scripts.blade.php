@@ -231,34 +231,67 @@
         $('.close').click(function() {
             $(".modal-backdrop").remove();
         });
-    });
-    //Get available quantity of a particular tool.
-    $(document).on('change', '.tool_id', function() {
-        let toolId = $(this).find('option:selected').val();
-        let toolName = $(this).children('option:selected').text();
-        let quantityName = $(this).children('option:selected').data('id');
-        $.ajax({
-            url: "{{ route('cse.available.tools', app()->getLocale()) }}",
-            method: "POST",
-            dataType: "JSON",
-            data: {
-                "_token": "{{ csrf_token() }}",
-                "tool_id": toolId
-            },
-            success: function(data) {
-                if (data) {
-                    $('#' + quantityName + '').attr({
-                        "value": data,
-                        "max": data,
-                    });
-                } else {
-                    var message = 'Error occured while trying to get ' + toolName +
-                        ' available quantity';
+
+        $(document).on('change', '#sub_service_uuid', function(){
+          
+            let $subServiceUuidList = [];
+            let $subServiceUuid = $(this).val();
+            console.log($subServiceUuid);
+            $subServiceUuidList.push($subServiceUuid);
+            // var route = $('#route').val();
+            let route = '{{route('cse.sub_service_dynamic_fields', app()->getLocale())}}';
+
+            $.ajax({
+                url: route,
+                beforeSend: function() {
+                    $(".sub-service-report").html('<div class="d-flex justify-content-center mt-4 mb-4"><span class="loadingspinner"></span></div>');
+                },
+                data: {"sub_service_list":$subServiceUuidList},
+                // return the result
+                success: function(result) {
+                    $('.sub-service-report').html('');
+                    $('.sub-service-report').html(result);
+                },
+                error: function(jqXHR, testStatus, error) {
+                    var message = error+ ' An error occured while trying to retireve sub service details.';
                     var type = 'error';
                     displayMessage(message, type);
-                }
-            },
-        })
+                    $("#spinner-icon").hide();
+                },
+                timeout: 8000
+            })
+            
+        });
+
+         //Get available quantity of a particular tool.
+        $(document).on('change', '.tool_id', function() {
+            let toolId = $(this).find('option:selected').val();
+            let toolName = $(this).children('option:selected').text();
+            let quantityName = $(this).children('option:selected').data('id');
+            $.ajax({
+                url: "{{ route('cse.available.tools', app()->getLocale()) }}",
+                method: "POST",
+                dataType: "JSON",
+                data: {
+                    "_token": "{{ csrf_token() }}",
+                    "tool_id": toolId
+                },
+                success: function(data) {
+                    if (data) {
+                        $('#' + quantityName + '').attr({
+                            "value": data,
+                            "max": data,
+                        });
+                    } else {
+                        var message = 'Error occured while trying to get ' + toolName +
+                            ' available quantity';
+                        var type = 'error';
+                        displayMessage(message, type);
+                    }
+                },
+            })
+        });
     });
+   
 
 </script>

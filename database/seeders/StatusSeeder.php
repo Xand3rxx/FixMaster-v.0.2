@@ -145,7 +145,7 @@ class StatusSeeder extends Seeder
                 'user_id'       =>  1,
                 'uuid'          =>  'd258667a-1953-4c66-b746-d0c40de7189d',
                 'status_id'     =>  2,
-                'name'          =>  'Contacted Client for date and time availability',
+                'name'          =>  'Re-Categorize the Service request',
                 'phase'         =>  $phaseOngoing++,
                 'recurrence'    =>  'Yes',
                 'status'        =>  'active',

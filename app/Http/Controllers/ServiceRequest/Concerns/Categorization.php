@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers\ServiceRequest\Concerns;
 
+use App\Models\Service;
 use App\Models\SubStatus;
 use Illuminate\Http\Request;
 use App\Models\ServiceRequest;
+use App\Models\ServiceRequestReport;
 
 class Categorization
 {
@@ -36,17 +38,27 @@ class Categorization
         (array) $valid = $request->validate([
             'category_uuid'         => 'required|uuid',
             'service_uuid'          => 'required|uuid',
-            'sub_service_uuid'      => 'required|uuid|exists:sub_services,uuid',
+            'sub_service_uuid'      => 'required|array',
+            'sub_service_uuid.*'    => 'required|uuid|exists:sub_services,uuid',
             'root_cause'            => 'required|string',
             'other_comments'        => 'nullable',
         ]);
-        dd($valid, $request->all(), 'sub_service');
         // Each Key should match table names, value match accepted parameter in each table name stated
-        $sub_status = SubStatus::where('uuid', '22821883-fc00-4366-9c29-c7360b7c2efc')->firstOrFail();
+        $sub_status = SubStatus::where('uuid', 'd258667a-1953-4c66-b746-d0c40de7189d')->firstOrFail();
+        $service = Service::where('uuid', $valid['service_uuid'])->firstOrFail();
+        dd($valid, $request->all(), 'sub_service');
+
         return [
             'service_request_table' => [
-                'service_request'   => $service_request,
-                'preferred_time'              => $request->input('preferred_time'),
+                'service_request'       => $service_request,
+                'service_id'        => $service->id,
+            ],
+            'service_request_reports' => [
+                'user_id'              => $request->user()->id,
+                'service_request_id'   => $service_request->id,
+                'stage'                 => ServiceRequestReport::STAGES[0],
+                'type'                  => ServiceRequestReport::TYPES[0],
+                'report'                => $request->input('add_comment'),
             ],
             'service_request_progresses' => [
                 'user_id'              => $request->user()->id,

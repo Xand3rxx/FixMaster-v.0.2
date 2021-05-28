@@ -35,7 +35,7 @@ class RequestActionController extends Controller
             $to_be_stored = $action;
         }
 
-        if($request->filled('sub_service_uuid')){
+        if($request->filled('category_uuid')){
             $action = \App\Http\Controllers\ServiceRequest\Concerns\Categorization::handle($request, $service_request, $to_be_stored);
             $to_be_stored = $action;
         }
