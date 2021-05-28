@@ -46,8 +46,25 @@
                 $('#update-progress').trigger('click');
             },
         });
+        
+        // RFQ begin
+        $('#rfqYes').change(function() {
+            console.log('yes');
 
+            if ($(this).prop('checked')) {
+                $('.d-rfq').removeClass('d-none');
+            }
+        });
+        $('#rfqNo').change(function() {
+            if ($(this).prop('checked')) {
+                $('.d-rfq').addClass('d-none');
+            }
+        });
         let count = 1;
+        function addRFQ(count){
+            let html = '<div class="form-row remove-rfq-row"><div class="form-group col-md-4"> <label for="manufacturer_name">Manufacturer Name</label> <input type="text" class="form-control @error('manufacturer_name') is-invalid @enderror" id="manufacturer_name" name="manufacturer_name[]" value="{{ old('manufacturer_name[]') }}"> @error('manufacturer_name[]') <span class="invalid-feedback" role="alert"> <strong>{{ $message }}</strong> </span> @enderror</div><div class="form-group col-md-3"> <label for="model_number">Model Number</label> <input type="text" class="form-control @error('model_number') is-invalid @enderror" id="model_number" name="model_number[]" placeholder="" value="{{ old('model_number[]') }}"> @error('model_number[]') <span class="invalid-feedback" role="alert"> <strong>{{ $message }}</strong> </span> @enderror</div><div class="form-group col-md-4"> <label for="component_name">Component Name</label> <input type="text" class="form-control @error('component_name') is-invalid @enderror" id="component_name" name="component_name[]" value="{{ old('component_name[]') }}"> @error('component_name[]') <span class="invalid-feedback" role="alert"> <strong>{{ $message }}</strong> </span> @enderror</div><div class="form-group col-md-2"> <label for="quantity">Quantity</label> <input type="number" class="form-control @error('quantity') is-invalid @enderror" id="quantity" name="quantity[]" min="1" pattern="d*" maxlength="2" value="{{ old('quantity[]') }}"> @error('quantity[]') <span class="invalid-feedback" role="alert"> <strong>{{ $message }}</strong> </span> @enderror</div><div class="form-group col-md-2"> <label for="size">Size</label> <input type="number" class="form-control @error('size') is-invalid @enderror" id="size" name="size[]" min="1" pattern="d*" maxlength="2" value="{{ old('size[]') }}"> @error('size[]') <span class="invalid-feedback" role="alert"> <strong>{{ $message }}</strong> </span> @enderror</div><div class="form-group col-md-4"> <label for="unit_of_measurement">Unit of Measurement</label> <input type="text" class="form-control @error('unit_of_measurement') is-invalid @enderror" id="unit_of_measurement" name="unit_of_measurement[]" value="{{ old('unit_of_measurement[0]') }}"> @error('unit_of_measurement[]') <span class="invalid-feedback" role="alert"> <strong>{{ $message }}</strong> </span> @enderror</div><div class="form-group col-md-3"> <label>Image</label><div class="custom-file"> <input type="file" accept="image/*" class="custom-file-input @error('image.*') is-invalid @enderror" name="image[]" id="image"> <label class="custom-file-label" for="image">Component Image</label> @error('image.*') <span class="invalid-feedback" role="alert"> <strong>{{ $message }}</strong> </span> @enderror</div></div><div class="form-group col-md-1 mt-1"> <button class="btn btn-sm pd-x-15 btn-danger btn-uppercase mg-l-5 mt-4 remove-rfq" type="button"><i class="fas fa-times" class="wd-10 mg-r-5"></i></button></div></div>';
+            $('.add-rfq-row').append(html);
+        }
         //Add and Remove Request for
         $(document).on('click', '.add-rfq', function() {
             count++;
@@ -56,17 +73,37 @@
         $(document).on('click', '.remove-rfq', function() {
             count--;
             $(this).closest(".remove-rfq-row").remove();
-            // $(this).closest('tr').remove();
         });
+        // End RFQ
+
+        // Tool Request Begin
+        $('#trfYes').change(function() {
+            if ($(this).prop('checked')) {
+                $('.d-trf').removeClass('d-none');
+            }
+        });
+        $('#trfNo').change(function() {
+            if ($(this).prop('checked')) {
+                $('.d-trf').addClass('d-none');
+            }
+        });
+        
+        function addTRF(count){
+            let html = '<div class="tool-request form-row remove-trf-row"><div class="form-group col-md-4"> <label for="tool_id">Equipment/Tools Name</label> <select class="form-control custom-select @error('tool_id') is-invalid @enderror tool_id" id="tool_id" name="tool_id[]" ><option value="" selected>Select...</option> @foreach($tools as $tool)<option value="{{ $tool->id }}" {{ old('tool_id') == $tool->id ? 'selected' : ''}} data-id="tool_quantity'+count+'">{{ $tool->name }}</option> @endforeach </select> @error('tool_id') <span class="invalid-feedback" role="alert"> <strong>{{ $message }}</strong> </span> @enderror</div><div class="form-group quantity-section col-md-2"> <label for="tool_quantity">Quantity</label> <input type="number" class="form-control @error('tool_quantity') is-invalid @enderror tool_quantity" name="tool_quantity[]" id="tool_quantity'+count+'" min="1" pattern="\d*" maxlength="2" value="{{ old('tool_quantity') }}"> @error('tool_quantity') <span class="invalid-feedback" role="alert"> <strong>{{ $message }}</strong> </span> @enderror</div><div class="form-group col-md-2 mt-1"> <button class="btn btn-sm pd-x-15 btn-danger btn-uppercase mg-l-5 mt-4 remove-trf" type="button"><i class="fas fa-times" class="wd-10 mg-r-5"></i> </button></div></div>';
+            $('.add-trf-row').append(html);
+        }
+        let addTRFcount = 1;
         //Add and Remove Tools request form
         $(document).on('click', '.add-trf', function() {
-            count++;
-            addTRF(count);
+            addTRFcount++;
+            addTRF(addTRFcount);
         });
         $(document).on('click', '.remove-trf', function() {
-            count--;
+            addTRFcount--;
             $(this).closest(".remove-trf-row").remove();
         });
+        // End Tools Request
+        
         //Hide and Unhide Work Experience form
         $('#work_experience_yes').change(function() {
             if ($(this).prop('checked')) {
@@ -78,28 +115,8 @@
                 $('.previous-employment').addClass('d-none');
             }
         });
-        //Hide and Unhide RFQ
-        $('#rfqYes').change(function() {
-            if ($(this).prop('checked')) {
-                $('.d-rfq').removeClass('d-none');
-            }
-        });
-        $('#rfqNo').change(function() {
-            if ($(this).prop('checked')) {
-                $('.d-rfq').addClass('d-none');
-            }
-        });
-        //Hide and Unhide TRF
-        $('#trfYes').change(function() {
-            if ($(this).prop('checked')) {
-                $('.d-trf').removeClass('d-none');
-            }
-        });
-        $('#trfNo').change(function() {
-            if ($(this).prop('checked')) {
-                $('.d-trf').addClass('d-none');
-            }
-        });
+        
+        
         $(document).on('click', '#tool-request-details', function(event) {
             event.preventDefault();
             let route = $(this).attr('data-url');
@@ -170,7 +187,7 @@
         let toolName = $(this).children('option:selected').text();
         let quantityName = $(this).children('option:selected').data('id');
         $.ajax({
-            url: "{{ route('available_quantity', app()->getLocale()) }}",
+            url: "{{ route('cse.available.tools', app()->getLocale()) }}",
             method: "POST",
             dataType: "JSON",
             data: {

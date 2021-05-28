@@ -10,6 +10,10 @@ class Rfq extends Model
 {
     use Generator;
 
+    const TYPES = ['Request', 'Warranty'];
+    const ACCEPTABLE = ['None', 'Yes', 'No'];
+    const STATUSES = ['Pending', 'Awaiting', 'Shipped', 'Delivered', 'Rejected'];
+
     protected $fillable = [
         'uuid', 'unique_id', 'issued_by', 'client_id', 'invoice_id', 'service_request_id', 'type', 'status', 'accepted', 'total_amount', 'created_at', 'updated_at'
     ];
@@ -109,7 +113,6 @@ class Rfq extends Model
     public function scopePendingQuotes($query)
     {
         return $query->select('*')
-        ->where('status', 'Pending');
+            ->where('status', 'Pending');
     }
-    
 }

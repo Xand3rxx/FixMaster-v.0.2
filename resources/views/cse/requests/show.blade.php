@@ -67,7 +67,7 @@
                         <div class="tab-content">
 
                             {{-- Service Request Actions --}}
-                            <form class="form-data" method="POST" action="{{ route('cse.service.request.action', ['locale' => app()->getLocale(), 'service_request' => $service_request->uuid]) }}">
+                            <form class="form-data" enctype="multipart/form-data" method="POST" action="{{ route('cse.service.request.action', ['locale' => app()->getLocale(), 'service_request' => $service_request->uuid]) }}">
                                 @csrf
                                 <div id="serviceRequestActions" class="tab-pane show active pd-20 pd-xl-25">
                                     @include('cse.requests.includes.reoccuring_actions')

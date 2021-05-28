@@ -143,6 +143,16 @@ class StatusSeeder extends Seeder
             ),
             array(
                 'user_id'       =>  1,
+                'uuid'          =>  'e59c3305-45ce-4d8e-b5ab-a5f4e9d40aca',
+                'status_id'     =>  2,
+                'name'          =>  'CSE assigned a Quality Assurance',
+                'phase'         =>  $phaseOngoing++,
+                'recurrence'    =>  'Yes',
+                'status'        =>  'active',
+            ),
+
+            array(
+                'user_id'       =>  1,
                 'uuid'          =>  '1faffcc3-7404-4fad-87a7-97161d3b8546',
                 'status_id'     =>  2,
                 'name'          =>  'Assigned a Technician',
@@ -281,6 +291,15 @@ class StatusSeeder extends Seeder
                 'uuid'          =>  '2df4da1e-6c07-402c-a316-0378d37e50a1',
                 'status_id'     =>  2,
                 'name'          =>  'Issued a new RFQ',
+                'phase'         =>  $phaseOngoing++,
+                'recurrence'    =>  'Yes',
+                'status'        =>  'active',
+            ),
+            array(
+                'user_id'       =>  1,
+                'uuid'          =>  '1abe702c-e6b1-422f-9145-810394f92e1d',
+                'status_id'     =>  2,
+                'name'          =>  'Issued a new Tool Request',
                 'phase'         =>  $phaseOngoing++,
                 'recurrence'    =>  'Yes',
                 'status'        =>  'active',
