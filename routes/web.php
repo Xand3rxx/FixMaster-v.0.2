@@ -469,15 +469,9 @@ Route::prefix('cse')->name('cse.')->middleware('monitor.cseservice.request.chang
     Route::view('/payments', 'cse.payments')->name('payments');
 
     Route::post('assign-technician', [AssignTechnicianController::class, '__invoke'])->name('assign.technician');
-<<<<<<< Updated upstream
-    Route::post('assign/warranty/technician', [AssignTechnicianController::class, 'assignWarrantyTechnician'])->name('assign.warranty_technician');
-    Route::get('warranty/download/{file:id}', [WarrantyController::class, 'download'])->name('warranty_download');
-    
-=======
     Route::post('assign/warranty/technician', [WarrantClaimController::class, 'assignWarrantyTechnician'])->name('assign.warranty_technician');
 Route::get('warranty/download/{file:id}', [WarrantyController::class, 'download'])->name('warranty_download');
 
->>>>>>> Stashed changes
     
     Route::view('/location-request',    'cse.location_request')->name('location_request');
     Route::view(
