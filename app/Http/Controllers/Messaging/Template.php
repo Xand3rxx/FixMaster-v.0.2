@@ -14,7 +14,7 @@ class Template extends Controller
     public function getMessageModules()
     {
         $enumHelper = new EnumHelper();
-        return $enumHelper->getPossibleEnumValues ('feature', 'message_templates');
+         return $enumHelper->getPossibleEnumValues('feature', 'message_templates');
 
     }
 

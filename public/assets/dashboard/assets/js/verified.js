@@ -18,10 +18,9 @@ var name = $('#get_name').attr('data-name');
         },
         success: function(data) {
             if (data === '1') {
-                message= "Welcome ," + name + "please check your email for a registration discount and your referral code";
-                setTimeout(() => {
-                    displayMessage(message, 'success'); 
-                }, 2000);
+                $('.ttf').removeClass('d-none');
+                let message= "<h5><strong> Welcome " + name + ", </strong> please check your email for a registration discount and your referral link mail</h5>";
+                $('.verify-msg').html(message);
                
             } else {
                 var message =
@@ -31,6 +30,6 @@ var name = $('#get_name').attr('data-name');
             }
         },
         error: function(xhr, status, error) {
-    console.log(error, xhr, status, '100' )
+            console.log(error, xhr, status, '100' )
    }
     })

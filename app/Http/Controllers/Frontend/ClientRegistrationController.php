@@ -29,15 +29,18 @@ class ClientRegistrationController extends Controller
      */
     public function index(Request $request)
     {
-        if ($request->ref) {
-            $link = $request->ref;
+     
+        if ($request->code) {
+            $link = $request->code;
             $authenticateReferral = $this->authenticateRefferralLink($link);
             if (!$authenticateReferral) {
                 return abort(404);
             }
+            
         }
 
         return view('frontend.registration.client.index', [
+            'referralCode' => $request->code?? '',
             'states' => \App\Models\State::all(),
             'activeEstates' => \App\Models\Estate::select('id', 'estate_name')
                 ->orderBy('estates.estate_name', 'ASC')
