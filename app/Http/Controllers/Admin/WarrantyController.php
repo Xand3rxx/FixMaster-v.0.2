@@ -226,7 +226,7 @@ class WarrantyController extends Controller
 
            $serviceRequestIssued = \App\Models\ServiceRequestWarrantyIssued::where('service_request_warranty_id', $serviceRequest->id)->first();
            if( $serviceRequestIssued ){
-            $update = \App\Models\ServiceRequestWarrantyIssued::where('service_request_warranty_id', $serviceRequest->id)->update([
+            $warranty = \App\Models\ServiceRequestWarrantyIssued::where('service_request_warranty_id', $serviceRequest->id)->update([
                 'service_request_warranty_id'        =>   $serviceRequest->id,
                 'cse_id'             =>  $serviceRequest->service_request->cses[0]->account->user_id,
                 'completed_by'      =>   Auth::id(),
@@ -236,7 +236,7 @@ class WarrantyController extends Controller
             ]);
 
            }else{
-                $createWarranty = ServiceRequestWarrantyIssued::create([
+                $warranty = ServiceRequestWarrantyIssued::create([
                     'service_request_warranty_id'        =>   $serviceRequest->id,
                     'cse_id'             =>  $serviceRequest->service_request->cses[0]->account->user_id,
                     'completed_by'      =>   Auth::id(),
@@ -249,7 +249,7 @@ class WarrantyController extends Controller
            }
         
      
-        if ($update OR $createWarranty){
+        if ($warranty){
             $type = 'Others';
             $severity = 'Informational';
             $actionUrl = Route::currentRouteAction();

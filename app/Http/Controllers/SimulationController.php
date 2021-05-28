@@ -142,7 +142,6 @@ class SimulationController extends Controller
             $invoice_type = 'RFQ Invoice';
             $status = '1';
 
-
             $this->rfqInvoice($service_request_id, $rfq_id);
 
 
@@ -162,3 +161,5 @@ class SimulationController extends Controller
 
 
 }
+
+//mmmm

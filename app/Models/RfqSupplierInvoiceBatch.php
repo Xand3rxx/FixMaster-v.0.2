@@ -21,4 +21,12 @@ class RfqSupplierInvoiceBatch extends Model
     {
         return $this->belongsTo(RfqBatch::class, 'rfq_batch_id');
     }
+
+    public function supplier()
+    {
+        return $this->belongsTo(User::class, 'supplier_id')->with('account');
+    }
+
+ 
+   
 }

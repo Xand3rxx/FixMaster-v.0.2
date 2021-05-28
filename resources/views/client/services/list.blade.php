@@ -103,7 +103,7 @@
 
                                            
                                             @if($myServiceRequest->status_id == 4 && !empty($myServiceRequest['warranty']))
-                                            @if(!CustomHelpers::ifDateIsPast($myServiceRequest['warranty']['expiration_date']))
+                                            @if(CustomHelpers::ifDateIsPast($myServiceRequest['warranty']['expiration_date']))
                                                 <div class="dropdown-divider"></div>
                                                 
                                                 @if($myServiceRequest['warranty']['initiated'] != 'Yes')

@@ -61,7 +61,7 @@ class CustomHelpers
     }
 
    static function ifDateIsPast($date){
-     if(strtotime($date) < time())
+     if(strtotime($date) > time())
        return  true;
     else
       return false;

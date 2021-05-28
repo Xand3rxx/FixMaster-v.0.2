@@ -169,8 +169,14 @@ class CustomerServiceExecutiveController extends Controller
             'technicians' => \App\Models\UserService::where('service_id', $service_request->service_id)->where('role_id', $technicainsRole->id)->with('user')->get(),
             'qaulity_assurances'    =>  \App\Models\Role::where('slug', 'quality-assurance-user')->with('users')->firstOrFail(),
             'request_progress' => $request_progress,
-            'shcedule_datetime' =>  $scheduleDate
+            'shcedule_datetime' =>  $scheduleDate,
+            'technician_list'  =>  \App\Models\Technician::all(),
+            'suppliers'        =>  \App\Models\Rfq::where('service_request_id', $service_request->id)->with('rfqSupplies', 'rfqSuppliesInvoices','rfqBatches')->first(),
+
         ];
+      
+
+    //   dd($variables['suppliers']);
    
         if ($service_request->status_id == 2) {
             $service_request_progresses = \App\Models\ServiceRequestProgress::where('user_id', auth()->user()->id)->latest('created_at')->first();

@@ -19,9 +19,16 @@ class CreateServiceRequestReportsTable extends Migration
             $table->foreignId('service_request_id');
             $table->foreignId('user_id');
             $table->foreignId('sub_service_id')->nullable();
+<<<<<<< Updated upstream
             $table->enum('stage', ServiceRequestReport::STAGES)->default(ServiceRequestReport::STAGES[0]);
             $table->enum('type', ServiceRequestReport::TYPES);
             $table->text('report');
+=======
+            $table->enum('type', ['Diagnostic', 'Sub-Service']);
+            $table->foreignId('causal_agent_id');
+            $table->text('causal_reason');
+            $table->text('report')->nullable();
+>>>>>>> Stashed changes
             $table->timestamps();
         });
     }
