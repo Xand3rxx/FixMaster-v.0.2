@@ -15,7 +15,7 @@ trait SendVerificationMail
      * Send Email Verification to User Account Instance
      *
      * @param  \App\Models\Account $account
-     * 
+     *
      * @return void
      */
     protected function sendVerificationEmail(\App\Models\Account $account)
@@ -35,6 +35,7 @@ trait SendVerificationMail
 
 
         return $messanger->sendNewMessage('Verify Email Address', 'dev@fix-master.com', $account->user->email, $mail_data, $template_feature);
+
 
         // $messanger->sendNewMessage('email', Str::title(Str::of($template_feature)->replace('_', ' ',)), 'dev@fix-master.com', $mail_data['email'], $mail_data, $template_feature);
     }
