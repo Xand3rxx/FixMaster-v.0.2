@@ -1,8 +1,9 @@
 <?php
 
-use Illuminate\Database\Migrations\Migration;
-use Illuminate\Database\Schema\Blueprint;
+use App\Models\Rfq;
 use Illuminate\Support\Facades\Schema;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Database\Migrations\Migration;
 
 class CreateRfqsTable extends Migration
 {
@@ -22,11 +23,10 @@ class CreateRfqsTable extends Migration
             $table->uuid('uuid');
             $table->string('unique_id')->unique()->comment('e.g RFQ-C85BEA04');
             $table->foreignId('issued_by');
-            $table->foreignId('client_id');
             $table->foreignId('service_request_id');
-            $table->enum('type', ['Request', 'Warranty']);
-            $table->enum('status', ['Pending', 'Awaiting', 'Shipped', 'Delivered', 'Rejected'])->default('Pending');
-            $table->enum('accepted', ['None', 'Yes', 'No'])->default('None');
+            $table->enum('type', Rfq::TYPES);
+            $table->enum('status', Rfq::STATUSES)->default(Rfq::STATUSES[0]);
+            $table->enum('accepted',  Rfq::ACCEPTABLE)->default(Rfq::ACCEPTABLE[0]);
             $table->unsignedInteger('total_amount')->default(0);
             $table->softDeletes();
             $table->timestamps();
