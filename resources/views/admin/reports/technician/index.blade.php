@@ -1,5 +1,5 @@
 @extends('layouts.dashboard')
-@section('title', 'Customer Service Executive Reports')
+@section('title', 'Technician Reports')
 @include('layouts.partials._messages')
 @section('content')
 <link rel="stylesheet" href="{{ asset('assets/dashboard/assets/css/bootstrap-multiselect.css') }}">
@@ -44,6 +44,10 @@
                   <div class="col-md-4">
                     <input type="hidden" class="d-none" id="route" value="{{ route('admin.technician_report_first_sorting', app()->getLocale()) }}">
                     <div class="form-group">
+                        @foreach($technicians->users as $data)
+
+                   {{$data->account->first_name}}
+                        @endforeach
                       <label>Sorting Parameters</label>
                       <select class="custom-select" id="sorting-parameters">
                         <option value="" disabled selected>Select...</option>
