@@ -5,8 +5,9 @@ namespace App\Http\Controllers\Payment;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request; 
 use App\Models\Payment; 
-use App\Models\PaymentGateway;
+use App\Models\PaymentGateway; 
 use App\Models\Client;
+use App\Models\Town;
 use App\Models\ServicedAreas;
 
 use App\Traits\RegisterPaymentTransaction;
@@ -42,6 +43,10 @@ class FlutterwaveController extends Controller
     public function store(Request $request) 
     {
         // return $request;
+        // return Town::find($request->town_id);
+        // foreach ($request as $key => $value) {
+        //     return $value;
+        // }
         $valid = $this->validate($request, [
             // List of things needed from the request like 
             'booking_fee'      => 'required',
@@ -55,11 +60,13 @@ class FlutterwaveController extends Controller
             return back()->with('error', 'sorry!, this area you selected is not serviced at the moment, please try another area');
         }
 
-        // upload multiple media files
-        foreach($request->media_file as $key => $file)
+        if ($request->media_file) {            
+
+            // upload multiple media files
+            foreach($request->media_file as $key => $file)
             {
                 $originalName[$key] = $file->getClientOriginalName();
-    
+
                 $fileName = sha1($file->getClientOriginalName() . time()) . '.'.$file->getClientOriginalExtension();
                 $filePath = public_path('assets/service-request-media-files');
                 $file->move($filePath, $fileName);
@@ -69,9 +76,12 @@ class FlutterwaveController extends Controller
                 $data['original_name'] = json_encode($originalName);
                 // return $data;
         
-        // $request->session()->put('order_data', $request);
-        $request->session()->put('order_data', $request->except(['media_file']));
-        $request->session()->put('medias', $data);
+            // $request->session()->put('order_data', $request);
+            $request->session()->put('order_data', $request->except(['media_file']));
+            $request->session()->put('medias', $data);
+
+        }
+
 
             // return dd(  );
 

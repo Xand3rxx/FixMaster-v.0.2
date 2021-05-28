@@ -34,6 +34,7 @@
                                 <tbody>
 
                                 @foreach ($myServiceRequests['service_requests'] as $myServiceRequest)
+                                 
                                 <tr>
 
                                 <td class="tx-color-03 tx-center">{{ $loop->iteration }}</td>
@@ -72,14 +73,16 @@
                                              <!-- @if($myServiceRequest->status_id == 1)
                                              <a href="#editRequest" id="edit-request"
                                              data-toggle="modal"
+                                              
                                              data-url="{{ route('client.edit_request', [ 'request'=>$myServiceRequest->uuid, 'locale'=>app()->getLocale() ])}}"
                                               data-job-reference="{{ $myServiceRequest->unique_id  }}" class="dropdown-item details text-warning">
                                                <i data-feather="edit" class="fea icon-sm"></i> Edit Request </a>
 
                                              @endif -->
 
-                                             @if($myServiceRequest->status_id == 1)
+                                             @if($myServiceRequest->status_id == 1)                                            
                                              <a href="{{ route('client.edit_request', [ 'request'=>$myServiceRequest->uuid, 'locale'=>app()->getLocale() ]) }}" class="dropdown-item text-primary"><i data-feather="edit" class="fea icon-sm"></i> Edit Request</a>
+                                             
                                              @endif
 
                                              @if($myServiceRequest->status_id == 1)

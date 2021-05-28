@@ -81,8 +81,6 @@
             </div> 
           </div>
 
-                                           
-        
     </div><!--end row-->
 
     <div class="row">
@@ -90,6 +88,32 @@
         <button type="submit" class="submitBnt btn btn-success btn-lg btn-block">Update</button>
         </div><!--end col-->
     </div><!--end row-->
+
+
+
+
+             
+        <div class="row">
+        @foreach($images as $image) 
+            @php
+                $attached_files = json_decode($image['media_files']['unique_name'], true);                
+            @endphp
+
+            @foreach($attached_files as $attached_file) 
+            <div class="col-lg-2 col-md-3 col-6 mt-4 pt-2">
+                <div class="card shop-list border-0 position-relative">
+
+                    <div class="shop-image position-relative overflow-hidden rounded shadow">
+                        <img height="10px" src="{{ asset('assets/service-request-media-files/'.$attached_file) }}" class="img-fluid" alt="">
+                    </div>
+                </div>
+            </div><!--end col-->
+            @endforeach
+
+        @endforeach
+    </div>
+
+
 </form><!--end form-->
 
 </div>

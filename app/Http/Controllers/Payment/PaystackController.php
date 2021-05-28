@@ -60,15 +60,16 @@ class PaystackController extends Controller
                 $fileName = sha1($file->getClientOriginalName() . time()) . '.'.$file->getClientOriginalExtension();
                 $filePath = public_path('assets/service-request-media-files');
                 $file->move($filePath, $fileName);
-                $data[$key] = $fileName; 
+                $mediaFile[$key] = $fileName; 
             }
-                $data['unique_name']   = json_encode($data);
-                $data['original_name'] = json_encode($originalName);
+                $mediaFile['unique_name']   = json_encode($mediaFile);
+                $mediaFile['original_name'] = json_encode($originalName);
                 // return $data;
+                
         
         // $request->session()->put('order_data', $request);
         $request->session()->put('order_data', $request->except(['media_file']));
-        $request->session()->put('medias', $data);
+        $request->session()->put('medias', $mediaFile);
 
 
         // fetch the Client Table Record
@@ -193,10 +194,10 @@ class PaystackController extends Controller
                 $client_controller = new ClientController;
 
                 if($paymentDetails->update()){                  
-                    // NUMBER 2: add more for other payment process
+                    // NUMBER 2: add more for other payment process 
                     if($paymentDetails['payment_for'] = 'service-request' ){
                         
-                        $client_controller->saveRequest( $request->session()->get('order_data') );
+                        $client_controller->saveRequest( $request->session()->get('order_data'), $request->session()->get('medias') );
                         
                         return redirect()->route('client.service.all' , app()->getLocale() )->with('success', 'payment was successful');
                     }                    

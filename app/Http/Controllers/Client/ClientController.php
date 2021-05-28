@@ -600,50 +600,50 @@ class ClientController extends Controller
 
     }
 
-            // public function initiatePayment(){
-            //     $track  = Session::get('Track');
-            //     // dd($track);
-            //     $data = Payment::where('reference_id', $track)->orderBy('id', 'DESC')->first();
-            //     //  dd($data);
-            //     $user = User::find($data->user_id);
-            //     if($user){
+            public function initiatePayment(){
+                $track  = Session::get('Track');
+                // dd($track);
+                $data = Payment::where('reference_id', $track)->orderBy('id', 'DESC')->first();
+                //  dd($data);
+                $user = User::find($data->user_id);
+                if($user){
 
-            //         $curl = curl_init();
+                    $curl = curl_init();
 
-            //         curl_setopt_array($curl, array(
-            //             CURLOPT_URL => "https://api.paystack.co/transaction/initialize",
-            //             CURLOPT_RETURNTRANSFER => true,
-            //             CURLOPT_CUSTOMREQUEST => "POST",
-            //             CURLOPT_POSTFIELDS => json_encode([
-            //                 'amount' => $data->amount * 100,
-            //                 'email' => $user->email,
-            //                 'callback_url' => route('client.serviceRequest.verifyPayment', app()->getLocale())
-            //             ]),
-            //             CURLOPT_HTTPHEADER => [
-            //                 "authorization: Bearer sk_test_b612f25bd992c4d84760e312175c7515336b77fc",
-            //                 "content-type: application/json",
-            //                 "cache-control: no-cache"
-            //             ],
-            //         ));
+                    curl_setopt_array($curl, array(
+                        CURLOPT_URL => "https://api.paystack.co/transaction/initialize",
+                        CURLOPT_RETURNTRANSFER => true,
+                        CURLOPT_CUSTOMREQUEST => "POST",
+                        CURLOPT_POSTFIELDS => json_encode([
+                            'amount' => $data->amount * 100,
+                            'email' => $user->email,
+                            'callback_url' => route('client.serviceRequest.verifyPayment', app()->getLocale())
+                        ]),
+                        CURLOPT_HTTPHEADER => [
+                            "authorization: Bearer sk_test_b612f25bd992c4d84760e312175c7515336b77fc",
+                            "content-type: application/json",
+                            "cache-control: no-cache"
+                        ],
+                    ));
 
-            //         $response = curl_exec($curl);
-            //         $err = curl_error($curl);
-            //         if ($err) {
-            //             return back()->with('error', $err);
-            //         }
+                    $response = curl_exec($curl);
+                    $err = curl_error($curl);
+                    if ($err) {
+                        return back()->with('error', $err);
+                    }
 
-            //         $tranx = json_decode($response, true);
+                    $tranx = json_decode($response, true);
 
-            //         if (!$tranx['status']) {
-            //             return back()->with('error', $tranx['message']);
-            //         }
-            //         return redirect($tranx['data']['authorization_url']);
+                    if (!$tranx['status']) {
+                        return back()->with('error', $tranx['message']);
+                    }
+                    return redirect($tranx['data']['authorization_url']);
 
-            //     }else{
-            //         return back()->with('error', 'Error occured while making payment');
-            //     }
+                }else{
+                    return back()->with('error', 'Error occured while making payment');
+                }
 
-            // }
+            }
 
 
 
@@ -802,11 +802,6 @@ class ClientController extends Controller
                         $query->orderBy('created_at', 'ASC');
             })->firstOrFail();
         
-
-        // $sortRequestByDate = $myServiceRequests::orderBy('created_at','DESC')->get();
-        // return dd($myServiceRequests['service_requests']);
-        
-       
         return view('client.services.list', [
             'myServiceRequests' =>  $myServiceRequests,
         ]);
@@ -920,8 +915,8 @@ class ClientController extends Controller
         return $updateClientRatings->handleUpdateServiceRatings($request);
     }
 
-    public function saveRequest($request){
-        // return dd($request);
+    public function saveRequest($request, $media){
+        // return dd($media['unique_name']);
 
         $service_request                        = new ServiceRequest();
         $service_request->client_id             = auth()->user()->id;
@@ -958,16 +953,16 @@ class ClientController extends Controller
         //     $unique_name   = json_encode($data);
         //     $original_name = json_encode($originalName);
 
-        //     $saveToMedia = new Media();
-        //     $saveToMedia->client_id     = auth()->user()->id;
-        //     $saveToMedia->original_name = $original_name;
-        //     $saveToMedia->unique_name   = $unique_name;
-        //     $saveToMedia->save();
+            $saveToMedia = new Media();
+            $saveToMedia->client_id     = auth()->user()->id;
+            $saveToMedia->original_name = $media['original_name'];
+            $saveToMedia->unique_name   = $media['unique_name'];
+            $saveToMedia->save();
 
-        //     $saveServiceRequestMedia = new ServiceRequestMedia;
-        //     $saveServiceRequestMedia->media_id            = $saveToMedia->id; 
-        //     $saveServiceRequestMedia->service_request_id  = $service_request->id;
-        //     $saveServiceRequestMedia->save(); 
+            $saveServiceRequestMedia = new ServiceRequestMedia;
+            $saveServiceRequestMedia->media_id            = $saveToMedia->id; 
+            $saveServiceRequestMedia->service_request_id  = $service_request->id;
+            $saveServiceRequestMedia->save(); 
 
 
             // file uploading
@@ -1060,14 +1055,12 @@ class ClientController extends Controller
 
         $data = [
             'userServiceRequest'    =>  $userServiceRequest,
+            'images'    =>  $userServiceRequest['service_request_medias'],
         ];
-        // return $data['userServiceRequest']['service_request_medias'][0]['media_files']['unique_name'];
-        // return $data['userServiceRequest']['service_request_medias'][0]['media_files']['unique_name'];
-        return view('client._request_edit', $data);
+        return view('client._request_edit', $data); 
     }
 
     public function updateRequest(Request $request, $language, $id){
-        // return $request->servicereq;
         $requestExist = ServiceRequest::where('uuid', $id)->first();
 
         $request->validate([
