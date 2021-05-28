@@ -15,7 +15,6 @@ class AddSmsToMessageTemplates extends Migration
     {
         Schema::table('message_templates', function (Blueprint $table) {
             $table->text('sms');
-            $table->dropColumn('type');
         });
     }
 

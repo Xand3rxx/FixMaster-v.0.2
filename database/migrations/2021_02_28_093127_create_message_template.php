@@ -23,7 +23,6 @@ class CreateMessageTemplate extends Migration
             $table->uuid('uuid')->unique();
             $table->string('title');
             $table->text('content');
-            $table->enum('type', MessageTemplate::TYPES);
             $table->enum('feature', MessageTemplate::FEATURES);
             $table->timestamps();
             $table->softDeletes();
