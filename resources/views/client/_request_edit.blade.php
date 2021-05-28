@@ -12,7 +12,7 @@
     <h5 class="ml-3">Editing {{ $userServiceRequest->unique_id }} Service request details</h5>
     <input type="hidden" value="{{ $userServiceRequest->id ?? '' }}" name="servicereq" >
         <!-- ROW 1 -->
-        <div class="col-md-6">
+        <div class="col-md-12">
             <div class="form-group position-relative">
                 <label>Scheduled Date & Time :<span class="text-danger">*</span></label>
                 <i data-feather="calendar" class="fea icon-sm icons"></i>
@@ -25,7 +25,7 @@
             </div>
         </div><!--end col-->
 
-        <div class="col-md-6">
+        <!-- <div class="col-md-6">
             <div class="form-group position-relative">
                 <label>Your Phone no. :<span class="text-danger">*</span></label>
                 <i data-feather="phone" class="fea icon-sm icons"></i>
@@ -36,9 +36,10 @@
                     </span>
                 @enderror
             </div> 
-        </div><!--end col-->
+        </div> -->
+        <!--end col-->
         
-        <div class="col-md-12">
+        <!-- <div class="col-md-12">
             <div class="form-group position-relative">
                 <label>Address</label>
                 <i data-feather="map-pin" class="fea icon-sm icons"></i>
@@ -49,7 +50,8 @@
                     </span>
                 @enderror
             </div>
-        </div><!--end col--> 
+        </div> -->
+        <!--end col--> 
 
         <div class="col-md-12">
             <div class="form-group position-relative">

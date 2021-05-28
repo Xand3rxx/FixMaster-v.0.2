@@ -220,7 +220,7 @@ class FlutterwaveController extends Controller
                     // NUMBER 2: add more for other payment process
                     if($paymentDetails['payment_for'] = 'service-request' ){ 
                         
-                        $client_controller->saveRequest( $request->session()->get('order_data') );
+                        $client_controller->saveRequest( $request->session()->get('order_data'), $request->session()->get('medias') );
                         // $client_controller->saveRequest( $request->session()->get('medias') );
                         
                         return redirect()->route('client.service.all' , app()->getLocale() )->with('success', 'payment was successful');
