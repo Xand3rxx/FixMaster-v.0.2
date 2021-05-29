@@ -81,6 +81,18 @@ class CustomerServiceExecutiveController extends Controller
             : redirect()->route('login'));
     }
 
+    public function getAvailableToolQuantity(Request $request){
+        if($request->ajax()){
+            $toolId = $request->get('tool_id');
+
+            $toolExists = \App\Models\ToolInventory::where('id', $toolId)->firstOrFail();
+
+            $availableQuantity =  $toolExists->available;
+
+            return $availableQuantity;
+        }
+    }
+
     /**
      * Accept CSE Ratings from view and transfer to Ratings Controller for handling
      * 
