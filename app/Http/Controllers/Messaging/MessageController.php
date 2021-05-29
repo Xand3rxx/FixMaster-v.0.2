@@ -247,13 +247,11 @@ class MessageController extends Controller
        $template = null;
        $sender = null;
        $recipient = null;
+
        
        DB::enableQueryLog();
         if(!empty($feature)){
-            $template = MessageTemplate::select('content')
-            ->where('feature', $feature)
-            ->first();
-            Log::debug(DB::getQueryLog());
+            $template = MessageTemplate::where('feature', $feature)->first();
             
             if(empty($template)){
             return response()->json(["message" => "Message Template not found!"], 404);
@@ -270,25 +268,23 @@ class MessageController extends Controller
        $from = "noreply@fixmaster.com";
 
        $recipient = DB::table('users')->where('users.email', $to )->first();
-
-        Log::debug($recipient->id);
-      
-        //  if($from!="" && is_object($recipient)){
-        //     $mail_objects[] = [
-        //         'title' => $subject,
-        //         'content' => $message,
-        //         'recipient' => $recipient->id,
-        //         'sender' => $sender->id,
-        //         'uuid' => Str::uuid()->toString(),
-        //         'created_at'        => Carbon::now(),
-        //         'updated_at'        => Carbon::now(),
-        //         'mail_status' => 'Not Sent',
-        //     ];
+        
+         if($from!="" && is_object($recipient)){
+            $mail_objects[] = [
+                'title' => $subject,
+                'content' => $message,
+                'recipient' => $recipient->id,
+                'sender' => $sender->id,
+                'uuid' => Str::uuid()->toString(),
+                'created_at'        => Carbon::now(),
+                'updated_at'        => Carbon::now(),
+                'mail_status' => 'Not Sent',
+            ];
           
 
-        // Message::insert($mail_objects);
+        Message::insert($mail_objects);
      
-        //  }
+         }
             
 
         $message_array = ['to'=>$to, 'from'=>$from, 'subject'=>$subject, 'content'=>$message];

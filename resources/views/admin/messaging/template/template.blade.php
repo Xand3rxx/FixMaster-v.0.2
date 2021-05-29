@@ -249,8 +249,7 @@ function insertTextArea(areaId,text) {
         </nav>
         <h4 class="mg-b-0 tx-spacing--1">Notification Template<span style="color: #E97D1F;">  List</span> </h4>
       </div>
-      <div style=""> <button class="btn btn-sm btn-secondary" id="btnSendTestEmail" ><i data-feather="plus"></i> Send Test Email</button>&nbsp;
-                                &nbsp;&nbsp;&nbsp;<a href="templates/new" class="btn btn-sm btn-primary" id="btnNewTemplate" ><i data-feather="plus"></i> New Template</a>
+      <div style=""> <a href="templates/new" class="btn btn-sm btn-primary" id="btnNewTemplate" ><i data-feather="plus"></i> New Template</a>
 </div>
     </div>
 
@@ -272,7 +271,6 @@ function insertTextArea(areaId,text) {
             <div class="col-lg-12 col-xl-12 mg-t-10">
                 <div class="card mg-b-10">
                     <div class="card-header pd-t-20 d-sm-flex align-items-start justify-content-between bd-b-0 pd-b-0">
-                       
                     </div><!-- card-header -->
 
                     <div class="table-responsive">
@@ -287,7 +285,20 @@ function insertTextArea(areaId,text) {
                                 </tr>
                             </thead>
                             <tbody id="template-list">
-                              
+
+                            @foreach($templates as $template)
+                            <tr>
+                                    <td class="tx-color-03 tx-center">{{ $loop->iteration }}</td>
+                                    <td class="tx-medium">{{ucfirst($template->title) }}</td>
+                                    <td class="tx-medium">{{ $template->feature}}</td>
+                                    <td class="tx-medium text-center">
+                                        <span><a href="templates/new/?templateid={{$template->uuid}}" class="msgedit" style="float: left;margin-right:10px;">
+                                        <i data-feather="edit" style="font-size: 9px;"></i></a></span>
+                                        <span>  <a href="#" class="msgdelete" style="float: left; margin-right:10px;">
+                                        <img src="{{url('/assets/images/icon/trash.svg')}}" alt="Image"/></a></span>
+                                    </td>
+                            </tr>      
+                            @endforeach
                             </tbody>
                         </table>
                     </div><!-- table-responsive -->
