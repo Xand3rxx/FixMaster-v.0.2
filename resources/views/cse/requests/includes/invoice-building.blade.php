@@ -5,8 +5,7 @@
     <div class="mt-4 form-row">
         <div class="form-group col-md-6">
             <label for="estimated_hours">Estimated Work Hours</label>
-            <select class="form-control custom-select @error('estimated_work_hours') is-invalid @enderror"
-                name="estimated_work_hours">
+            <select id="estimated_work_hours" class="form-control custom-select @error('estimated_work_hours') is-invalid @enderror" name="estimated_work_hours">
                 <option value="" selected>Select...</option>
                 <option value="1">1</option>
                 <option value="2">2</option>
@@ -30,41 +29,22 @@
 
         <div class="form-group col-md-6">
             <label for="category_id">Category</label>
-            <select class="form-control custom-select @error('category_id') is-invalid @enderror" name="category_id">
-                <option selected disabled value="0" selected>Select Category</option>
-                @foreach ($service_request['service']['subServices'] as $key => $sub_service)
-                    <option value="{{ $sub_service['uuid'] }}">{{ $sub_service['name'] }} </option>
-                @endforeach
-            </select>
-            @error('category_id')
-                <span class="invalid-feedback" role="alert">
-                    <strong>{{ $message }}</strong>
-                </span>
-            @enderror
+            <input type="text" class="form-control " readonly
+                value="{{ $service_request['service']['category']['name'] }}">
         </div>
 
         <div class="form-group col-md-6">
             <label for="service_id">Service</label>
-            <select class="form-control custom-select @error('service_id') is-invalid @enderror" name="service_id">
-                <option selected disabled value="0" selected>Select Service</option>
-                @foreach ($service_request['service']['subServices'] as $key => $sub_service)
-                    <option value="{{ $sub_service['uuid'] }}">{{ $sub_service['name'] }} </option>
-                @endforeach
-            </select>
-            @error('service_id')
-                <span class="invalid-feedback" role="alert">
-                    <strong>{{ $message }}</strong>
-                </span>
-            @enderror
+            <input type="text" class="form-control " readonly value="{{ $service_request['service']['name'] }}">
         </div>
         <div class="form-group col-md-6 position-relative">
             <label for="sub_service_uuid">Sub Service</label>
-            <select class="form-control selectpicker @error('sub_service_uuid') is-invalid @enderror"
-                name="sub_service_uuid" id="sub_service_uuid" multiple>
+            <select class="form-control selectpicker name="sub_service_uuid[]" id="sub_service_uuid" multiple>
                 <option disabled value="">Select Sub service</option>
-                @foreach ($service_request['service']['subServices'] as $key => $sub_service)
-                    <option value="{{ $sub_service['uuid'] }}" data-count="{{ $key }}"
-                        data-sub-service-name="{{ $sub_service['name'] }}">{{ $sub_service['name'] }} </option>
+                @foreach ($service_request['sub_services'] as $key => $sub_service_uuid)
+                    <option value="{{ $sub_service_uuid }}" data-count="{{ $key }}"
+                        data-sub-service-name="{{ \App\Models\SubService::getNameUsingUUID($sub_service_uuid) }}">
+                        {{ \App\Models\SubService::getNameUsingUUID($sub_service_uuid) }} </option>
                 @endforeach
             </select>
             @error('sub_service_uuid')
@@ -74,6 +54,10 @@
             @enderror
         </div>
     </div>
+
+    <span class="mt-2 sub-service-report"></span>
+
+
     <div class="form-row">
         <div class="form-group col-md-12">
             <label for="root_cause">Root Cause <span class="text-danger">*</span></label>
@@ -81,11 +65,49 @@
                 name="root_cause"></textarea>
         </div>
         <div class="form-group col-md-12">
-            <label for="other_comments">Other Comments(Optional)</label>
-            <textarea rows="3" class="form-control @error('other_comments') is-invalid @enderror" id="other_comments"
-                name="other_comments"></textarea>
+            <label for="comments">Other Comments(Optional)</label>
+            <textarea rows="3" class="form-control @error('comments') is-invalid @enderror" id="comments"
+                name="comments"></textarea>
         </div>
     </div>
-    <span class="mt-2 sub-service-report"></span>
 
 </section>
+@push('scripts')
+    <script defer>
+        $(function() {
+            'use strict'
+            $(document).on('change', '#sub_service_uuid', function() {
+                let $subServiceUuidList = [];
+                let $subServiceUuid = $(this).val();
+                $subServiceUuidList.push($subServiceUuid);
+                let route = '{{ route('cse.sub_service_dynamic_fields', app()->getLocale()) }}';
+
+                $.ajax({
+                    url: route,
+                    beforeSend: function() {
+                        $(".sub-service-report").html(
+                            '<div class="d-flex justify-content-center mt-4 mb-4"><span class="loadingspinner"></span></div>'
+                        );
+                    },
+                    data: {
+                        "sub_service_list": $subServiceUuidList
+                    },
+                    // return the result
+                    success: function(result) {
+                        $('.sub-service-report').html('');
+                        $('.sub-service-report').html(result);
+                    },
+                    error: function(jqXHR, testStatus, error) {
+                        var message = error +
+                            ' An error occured while trying to retireve sub service details.';
+                        var type = 'error';
+                        displayMessage(message, type);
+                        $("#spinner-icon").hide();
+                    },
+                    timeout: 8000
+                })
+            });
+        });
+
+    </script>
+@endpush

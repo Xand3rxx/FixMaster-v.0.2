@@ -8,7 +8,7 @@ use Illuminate\Http\Request;
 use App\Models\ServiceRequest;
 use App\Models\ServiceRequestReport;
 
-class Categorization
+class InvoiceBuilder
 {
     public $actionable;
 
@@ -22,7 +22,7 @@ class Categorization
      */
     public static function handle(Request $request, ServiceRequest $service_request, array $actionable)
     {
-        array_push($actionable, self::build_categorization($request, $service_request));
+        array_push($actionable, self::build_invoice($request, $service_request));
         return $actionable;
     }
 
@@ -32,18 +32,23 @@ class Categorization
      * @throws \Illuminate\Validation\ValidationException
      * @return array
      */
-    protected static function build_categorization(Request $request, ServiceRequest $service_request)
+    protected static function build_invoice(Request $request, ServiceRequest $service_request)
     {
-        // dd($request->all(), 'sub_service');
-        (array) $valid = $request->validate([
-            'category_uuid'         => 'required|uuid',
-            'service_uuid'          => 'required|uuid',
-            'sub_service_uuid'      => 'required|array',
-            'sub_service_uuid.*'    => 'required|uuid|exists:sub_services,uuid',
-            'other_comments'        => 'nullable',
-        ]);
+        try {
+            (array) $valid = $request->validate([
+                'estimated_work_hours'  => 'required|numeric',
+                'quantity'              => 'required|array',
+                'quantity.*'            => 'sometimes',
+                'other_comments'        => 'nullable',
+            ]);
+        } catch (\Throwable $th) {
+           dd($th);
+        }
+
+        dd($request->all(), 'invoice');
+
         // Each Key should match table names, value match accepted parameter in each table name stated
-        $sub_status = SubStatus::where('uuid', 'd258667a-1953-4c66-b746-d0c40de7189d')->firstOrFail();
+        $sub_status = SubStatus::where('uuid', 'f95c31c6-6667-4a64-bee3-8aa4b5b943d3')->firstOrFail();
         $service = Service::where('uuid', $valid['service_uuid'])->firstOrFail();
         $requiredArray = [
             'service_request_table' => [
@@ -70,7 +75,7 @@ class Categorization
                     'user_id'              => $request->user()->id,
                     'service_request_id'   => $service_request->id,
                     'stage'                 => ServiceRequestReport::STAGES[0],
-                    'type'                  => ServiceRequestReport::TYPES[1],
+                    'type'                  => ServiceRequestReport::TYPES[2],
                     'report'                => $request->input('other_comments'),
                 ]
             ];

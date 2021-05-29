@@ -40,10 +40,15 @@ class RequestActionController extends Controller
             $to_be_stored = $action;
         }
 
+        if($request->filled(['estimated_work_hours','root_cause'])){
+            $action = \App\Http\Controllers\ServiceRequest\Concerns\Invoicebuilder::handle($request, $service_request, $to_be_stored);
+            $to_be_stored = $action;
+        }
+
         // call the storage 
         return !empty($to_be_stored)
             ? ($this->saveAction($to_be_stored)
-                ? back()->with('success', 'Project Progress Successfully!!')
+                ? back()->with('success', 'Project Progress updated Successfully!!')
                 : back()->with('error', 'Error occured while updating project progress'))
             : back()->with('error', 'Error Generating Request Content');
     }

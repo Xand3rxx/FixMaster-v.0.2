@@ -54,19 +54,19 @@ class RequestController extends Controller
      * @param  string  $uuid
      * @return \Illuminate\Http\Response
      */
-    public function show($language, $uuid)
+    public function show($language, string $uuid)
     {
         // find the service request using the uuid and relations
-        $service_request = ServiceRequest::where('uuid', $uuid)->where('status_id', ServiceRequest::SERVICE_REQUEST_STATUSES['Pending'])->with(['price', 'service', 'service.subServices', 'client'])->firstOrFail();
+        $service_request = ServiceRequest::where('uuid', $uuid)->with(['price', 'service', 'service.subServices', 'client'])->firstOrFail();
         $technicians = \App\Models\Technician::with('services', 'user', 'user.contact')->get();
-        // dd($service_request);
+        // dd($service_request['sub_services']);
         (array) $variables = [
             'contents'              => $this->path(base_path('contents/cse/service_request_action.json')),
             'service_request'       => $service_request,
             'tools'                 => \App\Models\ToolInventory::all(),
             'qaulity_assurances'    => \App\Models\Role::where('slug', 'quality-assurance-user')->with('users', 'users.account')->firstOrFail(),
             'technicians'           => $technicians,
-            'categories'              => \App\Models\Category::where('id', '!=', 1)->get(),
+            'categories'            => \App\Models\Category::where('id', '!=', 1)->get(),
             'services'              => \App\Models\Service::all()
         ];
         // dd($variables);

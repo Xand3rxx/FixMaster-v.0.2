@@ -18,23 +18,20 @@ class ServiceRequest extends Model
         'Completed' => 4
     ];
 
-    protected $fillable = [
-        'client_id',
-        'service_id',
-        'unique_id',
-        'state_id',
-        'lga_id',
-        'town_id',
-        'price_id',
-        'contact_id',
-        'client_discount_id',
-        'client_security_code',
-        'status_id',
-        'description',
-        'total_amount',
-        'preferred_time',
-        'has_cse_rated',
-        'has_client_rated'
+    /**
+     * The attributes that aren't mass assignable.
+     *
+     * @var array
+     */
+    protected $guarded = ['uuid', 'client_security_code', 'deleted_at', 'created_at', 'updated_at'];
+
+    /**
+     * The attributes that should be cast.
+     *
+     * @var array
+     */
+    protected $casts = [
+        'sub_services' => 'array',
     ];
 
     /**
@@ -42,9 +39,9 @@ class ServiceRequest extends Model
      *
      * @var array
      */
-    // protected $hidden = [
-    //     'id'
-    // ];
+    protected $hidden = [
+        'client_id'
+    ];
 
     /**
      * The "booted" method of the model.
@@ -66,31 +63,17 @@ class ServiceRequest extends Model
         });
     }
 
-    public function user()
-    {
-        return $this->belongsTo(User::class)->with('account', 'roles');
-    }
-
-    public function state()
-    {
-        return $this->belongsTo(State::class);
-    }
-
-    public function lga()
-    {
-        return $this->belongsTo(Lga::class);
-    }
-
+    /**
+     * Get the client information of the current service service request
+     */
     public function client()
     {
         return $this->belongsTo(User::class, 'client_id')->with('account', 'contact');
     }
 
-    public function account()
-    {
-        return $this->belongsTo(Account::class);
-    }
-
+    /**
+     * Get all users assigned to the service request
+     */
     public function users()
     {
         return $this->belongsToMany(User::class, 'service_request_assigned');
@@ -112,28 +95,25 @@ class ServiceRequest extends Model
         return $this->hasOne(Service::class, 'id', 'service_id')->with('category')->withDefault();
     }
 
-
-
-    public function cse()
-    {
-        return $this->belongsTo(Account::class);
-    }
-    public function cses()
-    {
-        return $this->belongsToMany(User::class, 'service_request_assigned')->with('account', 'roles', 'contact');
-    }
-
+    // public function cses()
+    // {
+    //     return $this->belongsToMany(User::class, 'service_request_assigned')->with('account', 'roles', 'contact');
+    // }
+    
+    /**
+     * Get the invoice of the current service request
+     */
     public function invoice()
     {
         return $this->hasOne(Invoice::class);
     }
+
+    
     public function invoices()
     {
         return $this->hasMany(Invoice::class);
     }
-    // public function service(){
-    //    return $this->hasOne(Service::class, 'id', 'service_id')->with('user');
-    // }
+  
     public function services()
     {
         return $this->hasMany(Service::class, 'id', 'service_id');
@@ -161,31 +141,15 @@ class ServiceRequest extends Model
         return $this->hasOne(ServiceRequest::class, 'uuid', 'service_request_id');
     }
 
-    public function clientAccount()
-    {
-        return $this->hasOne(Account::class, 'user_id', 'client_id');
-    }
     public function address()
     {
         return $this->belongsTo(Contact::class, 'contact_id');
     }
 
-    public function service_request_medias(){
+    public function service_request_medias()
+    {
         return $this->hasMany(serviceRequestMedia::class)->with('media_files');
     }
-
-    public function technician()
-    {
-        return $this->belongsTo(Account::class);
-    }
-
-
-    public function technicians()
-    {
-
-        return $this->hasOne(Price::class, 'user_id', 'service_id')->withDefault();
-    }
-
 
     public function service_request_assignee()
     {
@@ -238,11 +202,11 @@ class ServiceRequest extends Model
 
     public function service_request_assignees()
     {
-
         return $this->hasMany(ServiceRequestAssigned::class, 'service_request_id')->with('user');
     }
 
-    public function service_request_warranty(){
+    public function service_request_warranty()
+    {
         return $this->hasOne(ServiceRequestWarranty::class, 'service_request_id', 'id');
     }
 

@@ -212,7 +212,7 @@ class CustomerServiceExecutiveController extends Controller
             (array) $filters = $request->only('sub_service_list');
 
             return view('cse.requests.includes._sub_service_dynamic_field', [
-                'results'   =>  $filters ? \App\Models\SubService::select('name')->whereIn('uuid', $filters['sub_service_list'][0])->orderBy('name', 'ASC')->get() : []
+                'results'   =>  $filters ? \App\Models\SubService::select('name','uuid')->whereIn('uuid', $filters['sub_service_list'][0])->orderBy('name', 'ASC')->get() : []
             ]);
         }
     }
