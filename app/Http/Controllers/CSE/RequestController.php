@@ -61,6 +61,8 @@ class RequestController extends Controller
 
         $technicians = \App\Models\Technician::with('services', 'user', 'user.contact')->get();
 
+        $materials_accepted = \App\Models\Rfq::where('service_request_id', $service_request->id)->with('rfqBatches', 'rfqSupplier', 'rfqSupplierInvoice');
+
         (array) $variables = [
             'contents'              => $this->path(base_path('contents/cse/service_request_action.json')),
             'service_request'       => $service_request,
