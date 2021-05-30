@@ -25,7 +25,7 @@ class RequestActionController extends Controller
     {
         (array)$to_be_stored = [];
 
-        if ($request->hasAny(['add_comment', 'intiate_rfq', 'intiate_trf', 'qa_user_uuid', 'add_technician_user_uuid'])) {
+        if ($request->hasAny(['add_comment','qa_user_uuid', 'add_technician_user_uuid'])) {
             $action = \App\Http\Controllers\ServiceRequest\Concerns\ActionsRepeated::handle($request, $service_request, $to_be_stored);
             $to_be_stored = $action;
         }
@@ -45,7 +45,7 @@ class RequestActionController extends Controller
             $to_be_stored = $action;
         }
 
-        if($request->filled(['estimated_work_hours','root_cause'])){
+        if($request->filled(['estimated_work_hours','root_cause', 'intiate_rfq', 'intiate_trf', ])){
             $action = \App\Http\Controllers\ServiceRequest\Concerns\Invoicebuilder::handle($request, $service_request, $to_be_stored);
             $to_be_stored = $action;
         }

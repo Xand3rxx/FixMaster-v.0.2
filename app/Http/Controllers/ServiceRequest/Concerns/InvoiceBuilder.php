@@ -22,6 +22,17 @@ class InvoiceBuilder
      */
     public static function handle(Request $request, ServiceRequest $service_request, array $actionable)
     {
+        // Handle RFQ
+        if ($request->filled('intiate_rfq')) {
+            array_push($repeated_actions, self::build_new_rfq($request, $service_request));
+        }
+
+        // Handle Tool Request
+        if ($request->filled('intiate_trf')) {
+            array_push($repeated_actions, self::build_new_trf($request, $service_request));
+        }
+
+
         array_push($actionable, self::build_invoice($request, $service_request));
         return $actionable;
     }
@@ -61,6 +72,10 @@ class InvoiceBuilder
                 'service_id'        => $service_request->service_id,
                 'sub_services'      => $valid['sub_services'],
             ],
+            'invoice_building'      => [
+                'estimated_work_hours' => $valid['estimated_work_hours'],
+                'service_request'      => $service_request
+            ],
             'service_request_progresses' => [
                 'user_id'              => $request->user()->id,
                 'service_request_id'   => $service_request->id,
@@ -91,5 +106,109 @@ class InvoiceBuilder
         }
 
         return  $requiredArray;
+    }
+
+    /**
+     * Build New RFQ to be added to database
+     * 
+     * @throws \Illuminate\Validation\ValidationException
+     * @return array
+     */
+    protected static function build_new_rfq(Request $request, ServiceRequest $service_request)
+    {
+        // validate Request
+        (array) $valid = $request->validate([
+            'intiate_rfq'               => 'bail|string|in:yes,no',
+
+            'manufacturer_name'         => 'bail|required|array',
+            'manufacturer_name.*'       => 'required|string',
+
+            'model_number'              => 'bail|required|array',
+            'model_number.*'            => 'required|string',
+
+            'component_name'            => 'bail|required|array',
+            'component_name.*'          => 'required|string',
+
+            'quantity'                  => 'bail|required|array',
+            'quantity.*'                => 'required|string',
+
+            'image'                     => 'bail|required|array',
+            'image.*'                   => 'bail|required|image',
+
+            'unit_of_measurement'       => 'bail|sometimes|array|nullable',
+            'unit_of_measurement.*'     => 'nullable',
+
+            'size'                      => 'bail|required|array',
+            'size.*'                    => 'nullable',
+        ]);
+
+
+        // Each Key should match table names, value match accepted parameter in each table name stated
+        $sub_status = SubStatus::where('uuid', '2df4da1e-6c07-402c-a316-0378d37e50a1')->firstOrFail();
+
+        return [
+            'rfqs' => [
+                // save on rfqs table
+                'issued_by'             => $request->user()->id,
+                'service_request_id'    => $service_request->id,
+                'type'                  => \App\Models\Rfq::TYPES[0],
+                'rfq_batches' => $valid,
+            ],
+
+            'service_request_progresses' => [
+                'user_id'              => $request->user()->id,
+                'service_request_id'   => $service_request->id,
+                'status_id'            => $sub_status->status_id,
+                'sub_status_id'        => $sub_status->id,
+            ],
+            'log' => [
+                'type'                      =>  'request',
+                'severity'                  =>  'informational',
+                'action_url'                =>  \Illuminate\Support\Facades\Route::currentRouteAction(),
+                'message'                   =>  $request->user()->account->last_name . ' ' . $request->user()->account->first_name . ' issued an RFQ for Service Request:' . $service_request->unique_id . ' Job',
+            ]
+        ];
+    }
+
+    /**
+     * Build New Tools Request to be added to database
+     * 
+     * @throws \Illuminate\Validation\ValidationException
+     * @return array
+     */
+    protected static function build_new_trf(Request $request, ServiceRequest $service_request)
+    {
+        // dd($request->all(), 'intiate_trf');
+        // validate Request
+        (array) $valid = $request->validate([
+            'intiate_trf'               =>  'bail|string|in:yes,no',
+            'tool_id'                   =>  'bail|required|array',
+            'tool_id.*'                 =>  'bail|string',
+            'tool_quantity'             =>  'bail|required|array',
+            'tool_quantity.*'           =>  'bail|string',
+        ]);
+
+        // Each Key should match table names, value match accepted parameter in each table name stated
+        $sub_status = SubStatus::where('uuid', '1abe702c-e6b1-422f-9145-810394f92e1d')->firstOrFail();
+
+        return [
+            'trfs' => [
+                'requested_by'          => $request->user()->id,
+                'service_request_id'    => $service_request->id,
+                'tool_requests' => $valid,
+            ],
+            'service_request_progresses' => [
+                'user_id'              => $request->user()->id,
+                'service_request_id'   => $service_request->id,
+                'status_id'            => $sub_status->status_id,
+                'sub_status_id'        => $sub_status->id,
+            ],
+            'log' => [
+                'type'                      =>  'request',
+                'severity'                  =>  'informational',
+                'action_url'                =>  \Illuminate\Support\Facades\Route::currentRouteAction(),
+                'message'                   =>  $request->user()->account->last_name . ' ' . $request->user()->account->first_name . ' issued a new Tool Request for Service Request:' . $service_request->unique_id . ' Job',
+            ]
+        ];
     }
 }

@@ -62,8 +62,11 @@ trait StoreInDatabase
                             'size'                  => $table['rfqs']['rfq_batches']['size'][$key]
                         ]);
                     }
-                    // \App\Traits\Invoices::rfqInvoice($rfq->service_request_id, $rfq->id);
-                    
+                }
+
+                if (!empty($table['invoice_building'])) {
+                    // $table['invoice_building'] ==>  array of 1. $table['invoice_building']['estimated_work_hours'] 2. $table['invoice_building']['service_request']
+                    // \App\Traits\Invoices::completedServiceInvoice($table['invoice_building']['service_request'], $table['invoice_building']['estimated_work_hours']);
                 }
 
                 if (!empty($table['service_request_reports'])) {
