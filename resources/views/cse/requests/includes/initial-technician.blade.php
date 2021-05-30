@@ -36,7 +36,7 @@ $useable = $technicians->filter(function ($tech, $key) use ($service_request) {
                                 <div class="form-group col-1 col-md-1 col-sm-1">
                                     <div class="custom-control custom-radio mt-2">
                                         <div class="custom-control custom-radio">
-                                            <input required type="radio" class="custom-control-input"
+                                            <input type="radio" class="custom-control-input"
                                                 id="technician{{ $loop->iteration }}" name="technician_user_uuid"
                                                 value="{{ $technicain['user']['uuid'] }}">
                                             <label class="custom-control-label"

@@ -42,19 +42,24 @@ class InvoiceBuilder
                 'other_comments'        => 'nullable',
             ]);
         } catch (\Throwable $th) {
-           dd($th);
+            dd($th);
         }
 
-        dd($request->all(), 'invoice');
 
         // Each Key should match table names, value match accepted parameter in each table name stated
         $sub_status = SubStatus::where('uuid', 'f95c31c6-6667-4a64-bee3-8aa4b5b943d3')->firstOrFail();
-        $service = Service::where('uuid', $valid['service_uuid'])->firstOrFail();
+        $valid['sub_services'] = [];
+        foreach ($valid['quantity'] as $key => $quantity) {
+            array_push($valid['sub_services'], [
+                'uuid' => $key,
+                'quantity' => $quantity
+            ]);
+        }
         $requiredArray = [
             'service_request_table' => [
                 'service_request'   => $service_request,
-                'service_id'        => $service->id,
-                'sub_services'      => $valid['sub_service_uuid']
+                'service_id'        => $service_request->service_id,
+                'sub_services'      => $valid['sub_services'],
             ],
             'service_request_progresses' => [
                 'user_id'              => $request->user()->id,
@@ -69,7 +74,7 @@ class InvoiceBuilder
                 'type'                      =>  'request',
                 'severity'                  =>  'informational',
                 'action_url'                =>  \Illuminate\Support\Facades\Route::currentRouteAction(),
-                'message'                   =>  $request->user()->account->last_name . ' ' . $request->user()->account->first_name . ' scheduled date for client on Service Request:' . $service_request->unique_id . ' Job',
+                'message'                   =>  $request->user()->account->last_name . ' ' . $request->user()->account->first_name . ' cse generated invoice on Service Request:' . $service_request->unique_id . ' Job',
             ]
         ];
         if ($request->filled('other_comments')) {
@@ -84,6 +89,7 @@ class InvoiceBuilder
             ];
             $requiredArray = array_merge($requiredArray, $otherComments);
         }
+
         return  $requiredArray;
     }
 }

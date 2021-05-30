@@ -18,6 +18,13 @@ class ServiceRequest extends Model
         'Completed' => 4
     ];
 
+    const ONGOING_VIEW_STAGES = ['assigned_cse', 'categorized', 'assigned_technician', 'generate_invoice','after_diagnosis'];
+
+    const CSE_ACTIVITY_STEP = [
+        'schedule_categorization' => 1,
+        'add_technician'          => 2
+    ];
+
     /**
      * The attributes that aren't mass assignable.
      *
@@ -100,7 +107,7 @@ class ServiceRequest extends Model
     // {
     //     return $this->belongsToMany(User::class, 'service_request_assigned')->with('account', 'roles', 'contact');
     // }
-    
+
     /**
      * Get the invoice of the current service request
      */
@@ -109,12 +116,12 @@ class ServiceRequest extends Model
         return $this->hasOne(Invoice::class);
     }
 
-    
+
     public function invoices()
     {
         return $this->hasMany(Invoice::class);
     }
-  
+
     public function services()
     {
         return $this->hasMany(Service::class, 'id', 'service_id');
@@ -152,10 +159,11 @@ class ServiceRequest extends Model
         return $this->hasMany(serviceRequestMedia::class)->with('media_files');
     }
 
-    public function service_request_assignee()
-    {
-        return $this->belongsTo(ServiceRequestAssigned::class, 'id', 'service_request_id');
-    }
+    // Wrong, this return just the first assigned person to a request
+    // public function service_request_assignee()
+    // {
+    //     return $this->belongsTo(ServiceRequestAssigned::class, 'id', 'service_request_id');
+    // }
 
 
     public function clientDiscount()
@@ -173,11 +181,11 @@ class ServiceRequest extends Model
         return $this->belongsTo(Payment::class, 'id', 'user_id');
     }
 
-
-    public function cse_service_request()
-    {
-        return $this->belongsTo(ServiceRequestAssigned::class, 'service_request_id')->with('users', 'client');
-    }
+    // Wrong, this return just the first assigned person to a request
+    // public function cse_service_request()
+    // {
+    //     return $this->belongsTo(ServiceRequestAssigned::class, 'service_request_id')->with('users', 'client');
+    // }
 
 
     public function payment_statuses()
@@ -201,6 +209,9 @@ class ServiceRequest extends Model
         return $this->hasOne(Price::class, 'id', 'price_id');
     }
 
+    /**
+     * Get users assigned to a service request
+     */
     public function service_request_assignees()
     {
         return $this->hasMany(ServiceRequestAssigned::class, 'service_request_id')->with('user');

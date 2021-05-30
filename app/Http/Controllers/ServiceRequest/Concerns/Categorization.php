@@ -45,11 +45,20 @@ class Categorization
         // Each Key should match table names, value match accepted parameter in each table name stated
         $sub_status = SubStatus::where('uuid', 'd258667a-1953-4c66-b746-d0c40de7189d')->firstOrFail();
         $service = Service::where('uuid', $valid['service_uuid'])->firstOrFail();
+
+        (array)$valid['sub_services'] = [];
+        foreach ($valid['sub_service_uuid'] as $key => $sub_service_uuid) {
+            array_push($valid['sub_services'], [
+                'uuid' => $sub_service_uuid,
+                'quantity' => 0
+            ]);
+        }
+
         $requiredArray = [
             'service_request_table' => [
                 'service_request'   => $service_request,
                 'service_id'        => $service->id,
-                'sub_services'      => $valid['sub_service_uuid']
+                'sub_services'      => $valid['sub_services'],
             ],
             'service_request_progresses' => [
                 'user_id'              => $request->user()->id,

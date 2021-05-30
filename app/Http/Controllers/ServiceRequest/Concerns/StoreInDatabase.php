@@ -62,19 +62,26 @@ trait StoreInDatabase
                             'size'                  => $table['rfqs']['rfq_batches']['size'][$key]
                         ]);
                     }
-                    \App\Traits\Invoices::rfqInvoice($rfq->service_request_id, $rfq->id);
+                    // \App\Traits\Invoices::rfqInvoice($rfq->service_request_id, $rfq->id);
+                    
                 }
 
                 if (!empty($table['service_request_reports'])) {
                     ServiceRequestReport::create($table['service_request_reports']);
                 }
 
-                if(!empty($table['service_request_table'])) {
+                if (!empty($table['service_request_table'])) {
                     $table['service_request_table']['service_request']->update($table['service_request_table']);
                 }
 
                 if (!empty($table['service_request_progresses'])) {
                     ServiceRequestProgress::create($table['service_request_progresses']);
+                }
+
+                if (!empty($table['add_technicians'])) {
+                    foreach ($table['add_technicians'] as $key => $technician) {
+                        ServiceRequestAssigned::create($technician);
+                    }
                 }
 
                 if (!empty($table['log'])) {

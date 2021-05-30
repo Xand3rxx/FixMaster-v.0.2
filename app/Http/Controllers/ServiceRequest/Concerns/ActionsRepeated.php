@@ -44,7 +44,7 @@ class ActionsRepeated
         }
 
         // Handle Assign a Technician
-        if($request->filled('technician_user_uuid')) {
+        if ($request->filled('add_technician_user_uuid')) {
             array_push($repeated_actions, self::build_assign_technician($request, $service_request));
         }
 
@@ -237,18 +237,25 @@ class ActionsRepeated
     {
         // validate Request
         (array) $valid = $request->validate([
-            'technician_user_uuid'      => 'required|uuid|exists:users,uuid',
+            'add_technician_user_uuid'        => 'required|array',
+            'add_technician_user_uuid.*'      => 'required|uuid|exists:users,uuid',
         ]);
 
         // Each Key should match table names, value match accepted parameter in each table name stated
         $sub_status = SubStatus::where('uuid', '1faffcc3-7404-4fad-87a7-97161d3b8546')->firstOrFail();
-        $user = \App\Models\User::where('uuid', $valid['technician_user_uuid'])->with('account')->firstOrFail();
-        return [
-            'service_request_assigned' => [
+        $valid['technicians'] = [];
+        
+        foreach ($valid['add_technician_user_uuid'] as $key => $technician) {
+            $user = \App\Models\User::where('uuid', $technician)->firstOrFail();
+            array_push($valid['technicians'], [
                 'user_id'                   => $user->id,
                 'service_request_id'        => $service_request->id,
                 'status'                    => null
-            ],
+            ]);
+        }
+
+        return [
+            'add_technicians' => $valid['technicians'],
             'service_request_progresses' => [
                 'user_id'              => $request->user()->id,
                 'service_request_id'   => $service_request->id,

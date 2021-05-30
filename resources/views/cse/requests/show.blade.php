@@ -2,9 +2,7 @@
 @section('title', 'Service Request Details')
     @include('layouts.partials._messages')
 @section('content')
-    @php
-    $stage1 = is_null($service_request['sub_services']);
-    @endphp
+
     <link rel="stylesheet" href="{{ asset('assets/dashboard/assets/css/dashforge.filemgr.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/dashboard/assets/css/bootstrap-multiselect.css') }}">
     <input type="hidden" id="route" class="d-none"
@@ -79,19 +77,25 @@
                                     <div class="mt-4">
                                         <div class="tx-13 mg-b-25">
                                             <div id="wizard3">
-                                                @if ($stage1)
+                                                @if ($stage == \App\Models\ServiceRequest::CSE_ACTIVITY_STEP['schedule_categorization'])
                                                     {{-- Stage 1 --}}
-                                                    @if (is_null($service_request['preferred_time']))
-                                                        @include('cse.requests.includes.schedule_date')
-                                                    @endif
+                                                    {{-- @if (is_null($service_request['preferred_time'])) --}}
+                                                    @include('cse.requests.includes.schedule_date')
+                                                    {{-- @endif --}}
                                                     @include('cse.requests.includes.categorization')
-                                                    @include('cse.requests.includes.initial-technician')
                                                     {{-- End of Stage 1 --}}
                                                 @else
                                                     {{-- Stage 2 --}}
-                                                    {{-- @include('cse.requests.includes.invoice-building') --}}
-                                                    @include('cse.requests.includes.reoccuring-actions')
+                                                    {{-- @include('cse.requests.includes.initial-technician') --}}
                                                     {{-- End of Stage 2 --}}
+                                                    {{-- Stage 3 --}}
+                                                    {{-- @include('cse.requests.includes.invoice-building') --}}
+
+                                                    {{-- End of Stage 3 --}}
+                                                    @include('cse.requests.includes.reoccuring-actions')
+                                                    @include('cse.requests.includes.materials-acceptance')
+
+
                                                 @endif
 
                                             </div>
@@ -125,6 +129,7 @@
     {{-- Modals --}}
     {{-- @include('cse.requests.includes.modals') --}}
     {{-- Modals End --}}
+
     @push('scripts')
         <script>
             $('#wizard3').steps({
@@ -147,32 +152,17 @@
                 showFinishButtonAlways: false,
                 onStepChanging: function(event, currentIndex, newIndex) {
                     if (currentIndex < newIndex) {
-                        @if ($stage1)
-                            @if (is_null($service_request['preferred_time']))
-                                // Step 1 Schedule Date
-                                if (currentIndex === 0) {
-                                return ($("#service-date-time").val().length !== 0) ? true : false;
-                                }
-                                // Step 2 Re-categorization
-                                if (currentIndex === 1) {
-                                return ($("#sub_service_uuid").val().length !== 0) ? true : false;
-                                }
-                                // Step 3 Assign Technician
-                                if (currentIndex === 2) {
-                                return ($("#technician_user_uuid").val().length !== 0) ? true : false;
-                                }
-                            @else
-                                // Step 1 Re-categorization
-                                if (currentIndex === 0) {
-                                return ($("#sub_service_uuid").val().length !== 0) ? true : false;
-                                }
-                                // Step 2 Assign Technician
-                                if (currentIndex === 1) {
-                                return ($("#technician_user_uuid").val().length !== 0) ? true : false;
-                                }
-                            @endif
+                        @if ($stage == \App\Models\ServiceRequest::CSE_ACTIVITY_STEP['schedule_categorization'])
+                            // Step 1 Schedule Date
+                            if (currentIndex === 0) {
+                            return ($("#service-date-time").val().length !== 0) ? true : false;
+                            }
+                            // Step 2 Re-categorization
+                            if (currentIndex === 1) {
+                            return ($("#sub_service_uuid").val().length !== 0) ? true : false;
+                            }
                         @else
-                            return true
+                            return true;
                         @endif
                     } else {
                         // Always allow step back to the previous step even if the current step is not valid.

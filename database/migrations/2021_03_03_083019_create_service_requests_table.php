@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\ServiceRequest;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -43,8 +44,6 @@ class CreateServiceRequestsTable extends Migration
             $table->enum('has_client_rated', ['Yes', 'No', 'Skipped'])->default('No');
             $table->enum('has_cse_rated', ['Yes', 'No', 'Skipped'])->default('No');
             
-            // $table->enum('categorized', ['Yes','No'])->default('No');
-
             $table->foreignId('status_id')->default(\App\Models\ServiceRequest::SERVICE_REQUEST_STATUSES['Pending']);
 
             $table->softDeletes();

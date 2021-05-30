@@ -58,12 +58,8 @@ class RequestController extends Controller
     {
         // find the service request using the uuid and relations
         $service_request = ServiceRequest::where('uuid', $uuid)->with(['price', 'service', 'service.subServices', 'client'])->firstOrFail();
-        // dd($service_request['sub_services']);
 
         $technicians = \App\Models\Technician::with('services', 'user', 'user.contact')->get();
-        
-
-        // dd($technicians);
 
         (array) $variables = [
             'contents'              => $this->path(base_path('contents/cse/service_request_action.json')),
@@ -72,9 +68,10 @@ class RequestController extends Controller
             'qaulity_assurances'    => \App\Models\Role::where('slug', 'quality-assurance-user')->with('users', 'users.account')->firstOrFail(),
             'technicians'           => $technicians,
             'categories'            => \App\Models\Category::where('id', '!=', 1)->get(),
-            'services'              => \App\Models\Service::all()
+            'services'              => \App\Models\Service::all(),
+            'stage'                 => collect($service_request['sub_services'])->isEmpty() ? ServiceRequest::CSE_ACTIVITY_STEP['schedule_categorization'] : ServiceRequest::CSE_ACTIVITY_STEP['add_technician'],
         ];
-        // dd($variables);
+        // dd($service_request);
         return view('cse.requests.show', $variables);
     }
 
