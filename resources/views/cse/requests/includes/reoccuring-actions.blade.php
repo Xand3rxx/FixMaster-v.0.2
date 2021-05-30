@@ -251,9 +251,12 @@
 
                             <span class="d-block tx-11 text-muted">
                                 <i class="icon ion-md-star lh-0 tx-orange"></i>
-                                <span
-                                    class="font-weight-bold ml-2">{{ \App\Traits\CalculateDistance::getDistanceBetweenPoints($service_request['client']['contact']['address_latitude'], $service_request['client']['contact']['address_longitude'], $technicain['user']['contact']['address_latitude'], $technicain['user']['contact']['address_longitude']) }}
-                                    km</span>
+                                <span class="font-weight-bold ml-2">
+                                    {{ \App\Traits\CalculateDistance::getDistanceBetweenPoints($service_request['client']['contact']['address_latitude'], $service_request['client']['contact']['address_longitude'], $technicain['user']['contact']['address_latitude'], $technicain['user']['contact']['address_longitude']) }} km
+                                </span>
+                                @foreach ( $technicain['services'] as $service)
+                                    <span class="font-weight-bold ml-2"> {{Str::title($service['name'])}} </span>
+                                @endforeach
                             </span>
                         </div>
                         <div class="col-md-6 col-sm-6">
@@ -342,6 +345,34 @@
     $(document).on('click', '.remove-trf', function() {
         addTRFcount--;
         $(this).closest(".remove-trf-row").remove();
+    });
+    //Get available quantity of a particular tool.
+    $(document).on('change', '.tool_id', function() {
+        let toolId = $(this).find('option:selected').val();
+        let toolName = $(this).children('option:selected').text();
+        let quantityName = $(this).children('option:selected').data('id');
+        $.ajax({
+            url: "{{ route('cse.available.tools', app()->getLocale()) }}",
+            method: "POST",
+            dataType: "JSON",
+            data: {
+                "_token": "{{ csrf_token() }}",
+                "tool_id": toolId
+            },
+            success: function(data) {
+                if (data) {
+                    $('#' + quantityName + '').attr({
+                        "value": data,
+                        "max": data,
+                    });
+                } else {
+                    var message = 'Error occured while trying to get ' + toolName +
+                        ' available quantity';
+                    var type = 'error';
+                    displayMessage(message, type);
+                }
+            },
+        })
     });
     // End Tools Request
     });

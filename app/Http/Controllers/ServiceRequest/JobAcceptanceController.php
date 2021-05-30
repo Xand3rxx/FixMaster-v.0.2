@@ -77,7 +77,7 @@ class JobAcceptanceController extends Controller
         (bool) $assigned = false;
         DB::transaction(function () use ($sub_status, &$assigned) {
             // 1. Service Request Assigned Table create record: user_id, service_request_id, job_acceptance_time, status == active
-            ServiceRequestAssigned::assignUserOnServiceRequest($this->user->id, $this->service_request->id, ServiceRequestAssigned::JOB_ACCEPTED[0], now(), ServiceRequestAssigned::STATUS[0]);
+            ServiceRequestAssigned::assignUserOnServiceRequest($this->user->id, $this->service_request->id, ServiceRequestAssigned::JOB_ACCEPTED[0], now(), ServiceRequestAssigned::STATUS[0], null,null,null,ServiceRequestAssigned::ASSISTIVE_ROLE[2]);
             // 2. Store Service request progress
             ServiceRequestProgress::storeProgress($this->user->id, $this->service_request->id, $sub_status->status_id, $sub_status->id);
             // 3. Update Service Request to Ongoing

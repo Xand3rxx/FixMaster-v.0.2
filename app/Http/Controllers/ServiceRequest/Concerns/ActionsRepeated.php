@@ -7,6 +7,7 @@ use App\Models\SubStatus;
 use Illuminate\Http\Request;
 use App\Models\ServiceRequest;
 use App\Models\ServiceRequestReport;
+use App\Models\ServiceRequestAssigned;
 
 class ActionsRepeated
 {
@@ -208,7 +209,7 @@ class ActionsRepeated
             'service_request_assigned' => [
                 'user_id'                   => $user->id,
                 'service_request_id'        => $service_request->id,
-                'assistive_role'            => 'Consultant',
+                'assistive_role'            => ServiceRequestAssigned::ASSISTIVE_ROLE[1],
                 'status'                    => null
             ],
             'service_request_progresses' => [
