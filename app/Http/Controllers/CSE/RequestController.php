@@ -58,8 +58,13 @@ class RequestController extends Controller
     {
         // find the service request using the uuid and relations
         $service_request = ServiceRequest::where('uuid', $uuid)->with(['price', 'service', 'service.subServices', 'client'])->firstOrFail();
-        $technicians = \App\Models\Technician::with('services', 'user', 'user.contact')->get();
         // dd($service_request['sub_services']);
+
+        $technicians = \App\Models\Technician::with('services', 'user', 'user.contact')->get();
+        
+
+        // dd($technicians);
+
         (array) $variables = [
             'contents'              => $this->path(base_path('contents/cse/service_request_action.json')),
             'service_request'       => $service_request,

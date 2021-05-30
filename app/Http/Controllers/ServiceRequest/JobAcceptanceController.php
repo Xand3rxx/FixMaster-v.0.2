@@ -89,7 +89,7 @@ class JobAcceptanceController extends Controller
             $assigned = true;
         });
         return $assigned == true
-            ? back()->with('success', 'Job Accepted Successfully!')
+            ? redirect()->route('cse.requests.show', ['locale' => app()->getLocale(), 'request' => $this->service_request->uuid])->with('success', 'Job Accepted Successfully!')
             : back()->with('error', 'Error Aceepting this Job');
     }
 }

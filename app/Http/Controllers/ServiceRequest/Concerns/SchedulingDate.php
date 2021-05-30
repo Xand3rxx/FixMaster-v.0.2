@@ -46,6 +46,9 @@ class SchedulingDate
                 'status_id'            => $sub_status->status_id,
                 'sub_status_id'        => $sub_status->id,
             ],
+            'notification' => [
+                'feature' => 'CUSTOMER_JOB_SCHEDULED_TIME_NOTIFICATION',
+            ],
             'log' => [
                 'type'                      =>  'request',
                 'severity'                  =>  'informational',

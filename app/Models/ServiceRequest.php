@@ -32,6 +32,7 @@ class ServiceRequest extends Model
      */
     protected $casts = [
         'sub_services' => 'array',
+        'preferred_time' => 'date',
     ];
 
     /**

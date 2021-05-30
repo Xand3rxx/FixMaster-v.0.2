@@ -74,7 +74,8 @@
 
         $(document).on('change', '#catogorized-category', function() {
             let selected_category_uuid = $(this).val();
-            return populate_service_options(selected_category_uuid);
+            populate_service_options(selected_category_uuid)
+            return  populate_sub_service($('#service_uuid').val());
         });
 
         function populate_service_options(selected_category_uuid) {

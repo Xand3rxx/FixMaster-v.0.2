@@ -199,7 +199,6 @@ class ActionsRepeated
         // validate Request
         (array) $valid = $request->validate([
             'qa_user_uuid'      => 'required|uuid|exists:users,uuid',
-            'assistive_role'    => 'required|string|in:Consultant,Technician'
         ]);
 
         // Each Key should match table names, value match accepted parameter in each table name stated
@@ -209,7 +208,7 @@ class ActionsRepeated
             'service_request_assigned' => [
                 'user_id'                   => $user->id,
                 'service_request_id'        => $service_request->id,
-                'assistive_role'            => $valid['assistive_role'],
+                'assistive_role'            => 'Consultant',
                 'status'                    => null
             ],
             'service_request_progresses' => [
@@ -254,6 +253,9 @@ class ActionsRepeated
                 'service_request_id'   => $service_request->id,
                 'status_id'            => $sub_status->status_id,
                 'sub_status_id'        => $sub_status->id,
+            ],
+            'notification' => [
+                'feature' => 'CUSTOMER_JOB_SCHEDULED_TIME_NOTIFICATION',
             ],
             'log' => [
                 'type'                      =>  'request',

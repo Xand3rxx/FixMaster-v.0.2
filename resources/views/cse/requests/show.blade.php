@@ -147,21 +147,32 @@
                 showFinishButtonAlways: false,
                 onStepChanging: function(event, currentIndex, newIndex) {
                     if (currentIndex < newIndex) {
-                        @if($stage1)
-                            // Step 1 Schedule Date
-                            if (currentIndex === 0) {
-                            return ($("#service-date-time").val().length !== 0) ? true : false;
-                            }
-                            // Step 2 Re-categorization
-                            if (currentIndex === 1) {
-                            return ($("#sub_service_uuid").val().length !== 0) ? true : false;
-                            }
-                            // Step 3 Assign Technician
-                            if (currentIndex === 2) {
-                            return ($("#technician_user_uuid").val().length !== 0) ? true : false;
-                            }
+                        @if ($stage1)
+                            @if (is_null($service_request['preferred_time']))
+                                // Step 1 Schedule Date
+                                if (currentIndex === 0) {
+                                return ($("#service-date-time").val().length !== 0) ? true : false;
+                                }
+                                // Step 2 Re-categorization
+                                if (currentIndex === 1) {
+                                return ($("#sub_service_uuid").val().length !== 0) ? true : false;
+                                }
+                                // Step 3 Assign Technician
+                                if (currentIndex === 2) {
+                                return ($("#technician_user_uuid").val().length !== 0) ? true : false;
+                                }
+                            @else
+                                // Step 1 Re-categorization
+                                if (currentIndex === 0) {
+                                return ($("#sub_service_uuid").val().length !== 0) ? true : false;
+                                }
+                                // Step 2 Assign Technician
+                                if (currentIndex === 1) {
+                                return ($("#technician_user_uuid").val().length !== 0) ? true : false;
+                                }
+                            @endif
                         @else
-                        return true
+                            return true
                         @endif
                     } else {
                         // Always allow step back to the previous step even if the current step is not valid.

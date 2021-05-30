@@ -1,8 +1,15 @@
-<h3>Assign Technician(s)</h3>
+@php
+$useable = $technicians->filter(function ($tech, $key) use ($service_request) {
+    return $tech['services']->first(function ($service, $key) use ($service_request) {
+        return $service['service_id'] == $service_request['service_id'];
+    });
+});
+@endphp
+<h3>Assign Technician </h3>
 <section>
     <div class="form-group col-md-12">
         <ul class="list-group wd-md-100p">
-            @foreach ($technicians as $technicain)
+            @foreach ($useable as $technicain)
                 <li class="list-group-item d-flex align-items-center">
                     <div class="form-row">
                         <img src="{{ asset('assets/images/default-male-avatar.png') }}"
