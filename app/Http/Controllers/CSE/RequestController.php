@@ -62,7 +62,8 @@ class RequestController extends Controller
         $technicians = \App\Models\Technician::with('services', 'user', 'user.contact')->get();
 
         $materials_accepted = \App\Models\Rfq::where('service_request_id', $service_request->id)->with('rfqBatches', 'rfqSupplier', 'rfqSupplierInvoice');
-
+        $service_request_progresses = \App\Models\ServiceRequestProgress::where('user_id', auth()->user()->id)->latest('created_at')->first();
+        
         (array) $variables = [
             'contents'              => $this->path(base_path('contents/cse/service_request_action.json')),
             'service_request'       => $service_request,
@@ -71,6 +72,12 @@ class RequestController extends Controller
             'technicians'           => $technicians,
             'categories'            => \App\Models\Category::where('id', '!=', 1)->get(),
             'services'              => \App\Models\Service::all(),
+            'ongoingSubStatuses' => \App\Models\SubStatus::where('status_id', 2)
+                    ->when($service_request_progresses->sub_status_id <= 13, function ($query, $sub_status) {
+                        return $query->whereBetween('phase', [4, 9]);
+                    }, function ($query) {
+                        return $query->whereBetween('phase', [20, 27]);
+                    })->get(['id', 'uuid', 'name']),
             'stage'                 => collect($service_request['sub_services'])->isEmpty() ? ServiceRequest::CSE_ACTIVITY_STEP['schedule_categorization'] : ServiceRequest::CSE_ACTIVITY_STEP['add_technician'],
         ];
         // dd($service_request);

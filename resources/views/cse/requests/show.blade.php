@@ -94,7 +94,7 @@
                                                     {{-- End of Stage 3 --}}
                                                     @include('cse.requests.includes.reoccuring-actions')
                                                     @include('cse.requests.includes.materials-acceptance')
-
+                                                    @include('cse.requests.includes.project-progresses')
 
                                                 @endif
 
