@@ -55,6 +55,8 @@ use App\Http\Controllers\Payment\FlutterwaveController;
 use App\Http\Controllers\Admin\Prospective\CSEController as ProspectiveCSEController;
 use App\Http\Controllers\Admin\Prospective\SupplierController as ProspectiveSupplierController;
 use App\Http\Controllers\Admin\Prospective\TechnicianArtisanController as ProspectiveTechnicianArtisanController;
+use App\Http\Controllers\Messaging\Template;
+
 
 
 /*
@@ -260,8 +262,8 @@ Route::prefix('admin')->name('admin.')->group(function () {
     Route::post('/paystack/update',                     [GatewayController::class, 'paystackUpdate'])->name('paystack_update');
     Route::post('/flutter/update',                      [GatewayController::class, 'flutterUpdate'])->name('flutter_update');
 
-    // messaging routes
-    Route::view('/messaging/templates',                   'admin.messaging.template.template')->name('template');
+    // messaging routes messageTemplates
+    Route::get('/messaging/templates',                   [Template::class, 'getAllTemplates'])->name('message_template');
     Route::view('/messaging/templates/new',                   'admin.messaging.template.new')->name('new_template');
     Route::view('/messaging/outbox',      'admin.messaging.email.outbox')->name('outbox');
     Route::view('/messaging/inbox',      'admin.messaging.email.inbox')->name('inbox');
