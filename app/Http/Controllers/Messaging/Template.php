@@ -2,15 +2,16 @@
 
 namespace App\Http\Controllers\Messaging;
 
-use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
+use Throwable;
 use App\Helpers\EnumHelper;
+use Illuminate\Http\Request;
 use App\Models\MessageTemplate;
 use Illuminate\Support\Facades\Log;
+use App\Http\Controllers\Controller;
 
 
 class Template extends Controller
-{ 
+{
     public function getMessageModules()
     {
         $enumHelper = new EnumHelper();

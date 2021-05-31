@@ -2,17 +2,18 @@
 
 namespace App\Http\Controllers\Payment;
 
-use App\Http\Controllers\Controller;
-use Illuminate\Http\Request; 
-use App\Models\Payment; 
-use App\Models\PaymentGateway;
 use App\Models\Client;
+use App\Models\Payment;
+use Illuminate\Http\Request;
 use App\Models\ServicedAreas;
+use App\Models\PaymentGateway;
+use App\Http\Controllers\Controller;
 
 use App\Traits\RegisterPaymentTransaction;
-use App\Traits\GenerateUniqueIdentity as Generator;
-
 use App\Http\Controllers\Client\ClientController;
+
+use App\Traits\GenerateUniqueIdentity as Generator;
+use App\Http\Controllers\Messaging\MessageController;
 
 
 class PaystackController extends Controller
@@ -40,13 +41,13 @@ class PaystackController extends Controller
     {
         // return $request;
         $valid = $this->validate($request, [
-            // List of things needed from the request like 
+            // List of things needed from the request like
             'booking_fee'      => 'required',
             'payment_channel'  => 'required',
             'payment_for'     => 'required',
             // 'myContact_id'    => 'required',
         ]);
-        
+
         $Serviced_areas = ServicedAreas::where('town_id', '=', $request['town_id'])->orderBy('id', 'DESC')->first();
         if ($Serviced_areas === null) {
             return back()->with('error', 'sorry!, this area you selected is not serviced at the moment, please try another area');
@@ -56,16 +57,16 @@ class PaystackController extends Controller
         foreach($request->media_file as $key => $file)
             {
                 $originalName[$key] = $file->getClientOriginalName();
-    
+
                 $fileName = sha1($file->getClientOriginalName() . time()) . '.'.$file->getClientOriginalExtension();
                 $filePath = public_path('assets/service-request-media-files');
                 $file->move($filePath, $fileName);
-                $data[$key] = $fileName; 
+                $data[$key] = $fileName;
             }
                 $data['unique_name']   = json_encode($data);
                 $data['original_name'] = json_encode($originalName);
                 // return $data;
-        
+
         // $request->session()->put('order_data', $request);
         $request->session()->put('order_data', $request->except(['media_file']));
         $request->session()->put('medias', $data);
@@ -77,12 +78,12 @@ class PaystackController extends Controller
         $generatedVal = $this->generateReference();
         // save ordered items
         $payment = $this->payment($valid['booking_fee'], $valid['payment_channel'], $valid['payment_for'], $client['unique_id'], 'pending', $generatedVal);
-        
+
         $payment_id = $payment->id;
 
-        return $this->initiate($payment_id); 
+        return $this->initiate($payment_id);
 
-       
+
     }
 
     /**
@@ -94,18 +95,18 @@ class PaystackController extends Controller
     {
                 if(auth()->user()){
                     $payment = Payment::find($paymentId);
-                    
+
                     $url = "https://api.paystack.co/transaction/initialize";
                     $fields = [
                       'email' => auth()->user()->email,
                       'amount' => $payment->amount * 100,
                       'reference' => $payment->reference_id,
-                      'callback_url' => route('paystack-verify', app()->getLocale()),                       
+                      'callback_url' => route('paystack-verify', app()->getLocale()),
                     ];
                     $fields_string = http_build_query($fields);
                     //open connection
                     $ch = curl_init();
-                    
+
                     curl_setopt($ch,CURLOPT_URL, $url);
                     curl_setopt($ch,CURLOPT_POST, true);
                     curl_setopt($ch,CURLOPT_POSTFIELDS, $fields_string);
@@ -114,7 +115,7 @@ class PaystackController extends Controller
                         "Cache-Control: no-cache",
                     ));
 
-                    curl_setopt($ch,CURLOPT_RETURNTRANSFER, true); 
+                    curl_setopt($ch,CURLOPT_RETURNTRANSFER, true);
 
                     $response = curl_exec($ch);
                     $err = curl_error($ch);
@@ -136,17 +137,17 @@ class PaystackController extends Controller
 
 
     public function verify(Request $request)
-    {        
-        $input_data = $request->all();  
+    {
+        $input_data = $request->all();
 
         $reference = $request->get('reference', '');
-        
+
         if (!$reference) {
             die('No reference supplied');
         }
 
-        $paymentDetails = Payment::where('reference_id', $reference)->orderBy('id', 'DESC')->first();        
-                 
+        $paymentDetails = Payment::where('reference_id', $reference)->orderBy('id', 'DESC')->first();
+
         if( $input_data['reference']){
 
             // $reference = $request->get('reference', '');
@@ -182,31 +183,38 @@ class PaystackController extends Controller
 
             if($resp->data->status == 'success'){
                $paymentDetails['transaction_id'] = $resp->data->id;
-               $paymentDetails['status']         = 'success';                
+               $paymentDetails['status']         = 'success';
                 //if the payment was updated to success
-                
+
                 /*************************************************************************************************
                  * Things to do if you want to use this function(Number 1 to 5) Not important if you don't need it
-                 *************************************************************************************************/    
-                
+                 *************************************************************************************************/
+
                  // NUMBER 1: Instantiate the clientcontroller class in this controller's method in order to save request
                 $client_controller = new ClientController;
 
-                if($paymentDetails->update()){                  
+                if($paymentDetails->update()){
                     // NUMBER 2: add more for other payment process
                     if($paymentDetails['payment_for'] = 'service-request' ){
-                        
+
                         $client_controller->saveRequest( $request->session()->get('order_data') );
-                        
+
+                        $message = new MessageController();
+                        $mail_data = collect([
+                            'applicant_name' => 'Nwideh Kenneth',
+                            'technician_category' => 'Radio Mechanic',
+                        ]);
+                        $message->sendNewMessage('', 'dev@fix-master.com', 'nwidehifeanyi@gmail.com', $mail_data, 'TECHNICIAN_APPLICATION_REJECTED');
+
                         return redirect()->route('client.service.all' , app()->getLocale() )->with('success', 'payment was successful');
-                    }                    
-                }                
+                    }
+                }
             }else {
                 // NUMBER 3: add more for other payment process
                 if($paymentDetails['payment_for'] = 'service-request' ){
                     return redirect()->route('client.services.list', app()->getLocale() )->with('error', 'Verification not successful, try again!');
                 }
-                
+
             }
 
         }else {
@@ -215,12 +223,12 @@ class PaystackController extends Controller
                 return redirect()->route('client.services.list', app()->getLocale() )->with('error', 'Could not initiate payment process because payment was cancelled, try again!');
             }
         }
-        
+
         // NUMBER 5: add more for other payment process
         if($paymentDetails['payment_for'] = 'service-request' ){
             return redirect()->route('client.services.list', app()->getLocale() )->with('error', 'there was an error, please try again!');
         }
-       
+
     }
 
 

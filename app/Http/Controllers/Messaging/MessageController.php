@@ -21,7 +21,6 @@ use App\Jobs\PushSMS;
 use Mail;
 use Route;
 use Auth;
-
 class MessageController extends Controller
 {
     use Loggable;
@@ -193,17 +192,17 @@ class MessageController extends Controller
         $mail_data = $request->input('mail_data');
         $from = $request->input('sender');
         $feature = $request->input('feature');
-        
+
 
         $this->sendNewMessage($subject, $from, $to, $mail_data, $feature);
     }
 
     /**
      * Send message using Available Template Design
-     * 
+     *
      * @param string $template_name ...use \App\Models\MessageTemplate::Feature
-     * @param mixed $parameters 
-     * 
+     * @param mixed $parameters
+     *
      * @return \Illuminate\Http\Response
      */
     // public static function usingTemplate(string $template_name, mixed $parameters)
@@ -219,10 +218,10 @@ class MessageController extends Controller
 
     /**
      * Build Message Body
-     * 
+     *
      * @param string $template_name ...use \App\Models\MessageTemplate::Feature
-     * @param mixed $parameters 
-     * 
+     * @param mixed $parameters
+     *
      * @return \Illuminate\Http\Response
      */
     // protected static function buildMessageBody($variables, $messageTemp)
@@ -236,28 +235,28 @@ class MessageController extends Controller
 
     /**
      * Send message using feature
-     * 
+     *
      * @return \Illuminate\Http\Response
      */
     public function sendNewMessage($subject="", $from="", $to, $mail_data,$feature=""){
-    
+
        $message = $mail_data;
        $sms = "";
        $message_array = [];
        $template = null;
        $sender = null;
        $recipient = null;
-       
+
        DB::enableQueryLog();
         if(!empty($feature)){
             $template = MessageTemplate::select('content')
             ->where('feature', $feature)
             ->first();
             Log::debug(DB::getQueryLog());
-            
+
             if(empty($template)){
             return response()->json(["message" => "Message Template not found!"], 404);
-    
+
             }
             $message = $this->replacePlaceHolders($mail_data, $template->content);
             //$sms = $this->replacePlaceHolders($mail_data, $template->sms);
@@ -271,8 +270,10 @@ class MessageController extends Controller
 
        $recipient = DB::table('users')->where('users.email', $to )->first();
 
+       //$recipient = Auth::user()->email;
+
         Log::debug($recipient->id);
-      
+
         //  if($from!="" && is_object($recipient)){
         //     $mail_objects[] = [
         //         'title' => $subject,
@@ -284,24 +285,24 @@ class MessageController extends Controller
         //         'updated_at'        => Carbon::now(),
         //         'mail_status' => 'Not Sent',
         //     ];
-          
+
 
         // Message::insert($mail_objects);
-     
+
         //  }
-            
+
 
         $message_array = ['to'=>$to, 'from'=>$from, 'subject'=>$subject, 'content'=>$message];
-        
+
         $this->dispatch(new PushEmails($message_array));
-        
-        
-           
+
+
+
         // if(!empty($feature) && $sms!=""){
         //     $this->dispatch(new PushSMS($sms));
         // }
-           
-        
+
+
     }
 
 
