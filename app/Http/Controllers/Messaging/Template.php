@@ -2,26 +2,26 @@
 
 namespace App\Http\Controllers\Messaging;
 
-use Throwable;
-use App\Helpers\EnumHelper;
+use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use App\Helpers\EnumHelper;
 use App\Models\MessageTemplate;
 use Illuminate\Support\Facades\Log;
-use App\Http\Controllers\Controller;
 
 
 class Template extends Controller
-{
+{ 
     public function getMessageModules()
     {
         $enumHelper = new EnumHelper();
-        return $enumHelper->getPossibleEnumValues ('feature', 'message_templates');
+         return $enumHelper->getPossibleEnumValues('feature', 'message_templates');
 
     }
 
     public function getAllTemplates()
     {
-        return MessageTemplate::select('id', 'uuid','title', 'type', 'feature')->paginate(10);
+        $messageTemplates = MessageTemplate::select(['id', 'title', 'uuid', 'feature'])->get();
+        return view('admin.messaging.template.template', ['templates'=>$messageTemplates]);
     }
 
     public function getTemplate($uuid)
@@ -40,16 +40,15 @@ class Template extends Controller
             $feature = $request->input('feature');
             $title = $request->input('title');
             $content = $request->input('content');
-            $type = $request->input('message_type');
+            $sms = $request->input('sms');
             $template = MessageTemplate::select('*')
                         ->where('feature', $feature)
-                        ->where('type', $type)
                         ->first();
             if(!empty($template)){
                 return response()->json(["message" => "There is already a template for this feature!"], 400);
             }
 
-            MessageTemplate::create(['title'=>$title, 'content'=>$content, 'type'=>$type, 'feature'=>$feature]);
+            MessageTemplate::create(['title'=>$title, 'content'=>$content, 'sms'=>$sms, 'feature'=>$feature]);
             return response()->json([
             "message" => "Template created successfully!", "data"=>$template
         ], 201);
@@ -67,11 +66,11 @@ class Template extends Controller
         $feature = $request->input('feature');
         $title = $request->input('title');
         $content = $request->input('content');
-        $type = $request->input('message_type');
+        $sms = $request->input('sms');
 
         $template = MessageTemplate::updateOrCreate(
-            ['feature'=> $feature, 'type'=> $type],
-            ['title' => $title, 'content' => $content]
+            ['feature'=> $feature],
+            ['title' => $title, 'content' => $content, 'sms' => $sms]
         );
         return response()->json([
         "message" => "Template updated successfully!", "data"=>$template
