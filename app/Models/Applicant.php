@@ -2,18 +2,15 @@
 
 namespace App\Models;
 
-use Illuminate\Support\Str;
+use App\Http\Controllers\Messaging\MessageController;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use App\Http\Controllers\Messaging\MessageController;
 
 class Applicant extends Model
 {
     use SoftDeletes;
 
     const USER_TYPES = ['cse', 'supplier', 'technician'];
-
-    const STATUSES = ['pending', 'approved', 'declined'];
 
     /**
      * The attributes that aren't mass assignable.
@@ -31,8 +28,6 @@ class Applicant extends Model
         'form_data' => 'array',
     ];
 
-    protected $template_feature;
-
     /**
      * The "booted" method of the model.
      *
@@ -44,32 +39,18 @@ class Applicant extends Model
         static::creating(function ($applicant) {
             $applicant->uuid = (string) \Illuminate\Support\Str::uuid();
         });
+
         static::created(function ($applicant) {
-            (string) $template_feature = NULL;
-            switch ($applicant->user_type) {
-                case Applicant::USER_TYPES[0]: // CSE...
-                    $template_feature = 'CSE_ACCOUNT_CREATION_NOTIFICATION';
-                    break;
-                case Applicant::USER_TYPES[1]: // SUPPLIER...
-                    $template_feature = 'SUPPLIER_ACCOUNT_CREATION_NOTIFICATION';
-                    break;
-                case Applicant::USER_TYPES[2]: // TECHNICIAN...
-                    $template_feature = 'TECHNICIAN_ACCOUNT_CREATION_NOTIFICATION';
-                    break;
-                default:
-                    # Ask for default Notification...
-                    $template_feature = '';
-                    break;
-            }
-            if (!empty((string)$template_feature)) {
-                $messanger = new MessageController();
-                $mail_data = collect([
-                    'lastname' => $applicant->form_data['last_name'],
-                    'firstname' => $applicant->form_data['first_name'],
-                    'email' => $applicant->form_data['email'],
-                ]);
-                $messanger->sendNewMessage('email', Str::title(Str::of($template_feature)->replace('_', ' ',)), 'dev@fix-master.com', $mail_data['email'], $mail_data, $template_feature);
-            }
+            // $applicant this is the instance of the created applicant
+            $messanger = new MessageController();
+            // (object)$mail_data = collect([
+            //     'lastname' => $applicant->form_data['last_name_cse'],
+            //     'firstname' => $applicant->form_data['first_name_cse'],
+            // ]);
+            $mail_data = "<h1> Hello, " . $applicant->form_data['last_name_cse'] . " " . $applicant->form_data['first_name_cse'] . "</h1> <br> <p> Thank you for registering with us, we would review your application and respond as soon as possible. </p>";
+            $jsonResponse = $messanger->sendNewMessage('email', 'Customer Service Executive Applicant Registration', 'dev@fix-master.com', $applicant->form_data['email_cse'], $mail_data);
+            // report($jsonResponse);
+            // This is when i need to send a mail to the applicant that his application is submitted successfully!
         });
     }
 }

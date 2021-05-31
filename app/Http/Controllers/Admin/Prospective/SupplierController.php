@@ -2,9 +2,8 @@
 
 namespace App\Http\Controllers\Admin\Prospective;
 
-use App\Models\Applicant;
-use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Http\Request;
 
 class SupplierController extends Controller
 {
@@ -15,9 +14,7 @@ class SupplierController extends Controller
      */
     public function index()
     {
-        return view('admin.prospective.supplier.index')->with([
-            'users' => Applicant::where('user_type', Applicant::USER_TYPES[1])->get(),
-        ]);
+        //
     }
 
     /**

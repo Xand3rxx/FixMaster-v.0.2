@@ -207,21 +207,4 @@
         
     </div><!--end row-->
 </div><!--end col-->
-<div>
-<input type="hidden"  data-url="{{ route('client.discount_mail',app()->getLocale()) }}" id="get_url" />
-<input type="hidden"  data-token="{{ csrf_token() }}" class="get_token" /> 
-<input type="hidden"  data-users="{{ Auth::user()->id }}" id="get_users" /> 
-<input type="hidden"  data-name="{{ Auth::user()->account->first_name }}" id="get_name" /> 
-    </div>
-
-
-@push('scripts')
-@if(Session::has('verified'))
-<script src="{{asset('assets/dashboard/assets/js/verified.js')}}"></script>
-@endif
-@endpush
-
-
 @endsection
-
-

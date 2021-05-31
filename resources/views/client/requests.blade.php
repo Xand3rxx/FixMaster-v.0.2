@@ -123,7 +123,7 @@
                                 </button>
                                 <div class="dropdown-menu">
                                     <a href="{{ route('client.request_details', $userServiceRequest->id) }}" class="dropdown-item text-primary"><i data-feather="clipboard" class="fea icon-sm"></i> View Details</a>
-                                    @if($userServiceRequest->service_request_status_id == '1')
+                                    @if($userServiceRequest->service_request_status_id <= '2')
                                         <a href="#editRequest" id="edit-request" data-toggle="modal" class="dropdown-item text-info" data-url="{{ route('client.edit_request', $userServiceRequest->id) }}" data-job-reference="{{ $userServiceRequest->job_reference }}"><i data-feather="edit" class="fea icon-sm"></i> Edit Request</a>
                                     @endif
                                     

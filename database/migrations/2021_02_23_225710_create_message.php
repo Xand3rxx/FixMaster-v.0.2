@@ -20,7 +20,6 @@ class CreateMessage extends Migration
 
             $table->id();
             $table->uuid('uuid')->unique();
-            $table->foreignId('sender');
             $table->string('title');
             $table->text('content');
             $table->string('recipient');

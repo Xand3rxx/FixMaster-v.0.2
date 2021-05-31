@@ -15,7 +15,7 @@ class ProfileController extends Controller
     /**
      * Display a listing of the resource.
      * @param  \Illuminate\Http\Request  $request
-     *
+     * 
      * @return \Illuminate\Http\Response
      */
     public function index(Request $request)
@@ -28,7 +28,7 @@ class ProfileController extends Controller
     /**
      * Show the form for editing the specified resource.
      * @param  \Illuminate\Http\Request  $request
-     *
+     * 
      * @return \Illuminate\Contracts\View\View
      */
     public function edit(Request $request)
@@ -42,14 +42,13 @@ class ProfileController extends Controller
     /**
      * Update the specified resource in storage.
      * @param  \Illuminate\Http\Request  $request
-     *
+     * 
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, $cse)
     {
         (array)$valid = $this->validateUpdateRequest($request);
         (bool)$updated = false;
-
         \Illuminate\Support\Facades\DB::transaction(function () use ($request, $valid, &$updated) {
             // Update CSE Accounts Records table
             $request->user()->account()->update([
@@ -61,7 +60,6 @@ class ProfileController extends Controller
                 'account_number'    => $valid['account_number'],
                 'avatar'            => !empty($valid['profile_avatar']) ?  $valid['profile_avatar']->store('assets/user-avatars', 'public') : $request->user()->account->avatar
             ]);
-
             $request->user()->contact()->update([
                 'phone_number'          =>  $valid['phone_number'],
                 'address'               =>  $valid['full_address'],
@@ -81,7 +79,7 @@ class ProfileController extends Controller
     /**
      * Change the password of the current authenticated User
      * @param  \Illuminate\Http\Request  $request
-     *
+     * 
      * @return \Illuminate\Http\Response
      */
     public function change_password(Request $request)
@@ -92,7 +90,7 @@ class ProfileController extends Controller
     /**
      * Validate the create customer service executive user request.
      * @param  \Illuminate\Http\Request  $request
-     *
+     * 
      * @return array
      * @throws \Illuminate\Validation\ValidationException
      */

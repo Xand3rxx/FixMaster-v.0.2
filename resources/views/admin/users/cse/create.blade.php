@@ -28,7 +28,7 @@
                     <div class="form-row">
                         <div class="form-group col-md-4">
                             <label for="first_name">First Name</label>
-                            <input type="text" class="form-control @error('first_name') is-invalid @enderror" id="first_name" name="first_name" value="{{ $applicant['form_data']['first_name'] ?? old('first_name') }}" placeholder="First Name" autocomplete="off">
+                            <input type="text" class="form-control @error('first_name') is-invalid @enderror" id="first_name" name="first_name" value="{{ old('first_name') }}" placeholder="First Name" autocomplete="off">
                             @error('first_name')
                             <x-alert :message="$message" />
                             @enderror
@@ -42,7 +42,7 @@
                         </div>
                         <div class="form-group col-md-4">
                             <label for="last_name">Last Name</label>
-                            <input type="text" class="form-control @error('last_name') is-invalid @enderror" id="last_name" name="last_name" value="{{ $applicant['form_data']['last_name'] ?? old('last_name') }}" autocomplete="off" placeholder="Last Name">
+                            <input type="text" class="form-control @error('last_name') is-invalid @enderror" id="last_name" name="last_name" value="{{ old('last_name') }}" autocomplete="off" placeholder="Last Name">
                             @error('last_name')
                             <x-alert :message="$message" />
                             @enderror
@@ -51,7 +51,7 @@
                     <div class="form-row">
                         <div class="form-group col-md-4">
                             <label for="inputEmail4">Email</label>
-                            <input type="email" class="form-control @error('email') is-invalid @enderror" placeholder="E-Mail" name="email" id="email" value="{{ $applicant['form_data']['email'] ?? old('email') }}" required autocomplete="off">
+                            <input type="email" class="form-control @error('email') is-invalid @enderror" placeholder="E-Mail" name="email" id="email" value="{{ old('email') }}" required autocomplete="off">
                             @error('email')
                             <x-alert :message="$message" />
                             @enderror
@@ -61,9 +61,9 @@
                             <label for="gender">Gender</label>
                             <select class="form-control @error('gender') is-invalid @enderror" name="gender" id="gender" required>
                                 <option selected disabled value="0">Select...</option>
-                                <option value="Male" {{ Str::title($applicant['form_data']['gender']) ?? old('gender') == 'Male' ? 'selected' : ''}}>Male</option>
-                                <option value="Female" {{Str::title($applicant['form_data']['gender']) ?? old('gender') == 'Female' ? 'selected' : ''}}>Female</option>
-                                <option value="Others" {{ Str::title($applicant['form_data']['gender']) ?? old('gender') == 'Others' ? 'selected' : ''}}>Others</option>
+                                <option value="Male" {{ old('gender') == 'Male' ? 'selected' : ''}}>Male</option>
+                                <option value="Female" {{ old('gender') == 'Female' ? 'selected' : ''}}>Female</option>
+                                <option value="Others" {{ old('gender') == 'Others' ? 'selected' : ''}}>Others</option>
                             </select>
                             @error('gender')
                             <x-alert :message="$message" />
@@ -72,7 +72,7 @@
 
                         <div class="form-group col-md-4">
                             <label for="phone_number">Phone Number</label>
-                            <input type="tel" class="form-control @error('phone_number') is-invalid @enderror" placeholder="Phone Number" name="phone_number" id="phone_number" value="{{ $applicant['form_data']['phone'] ?? old('phone_number') }}" maxlength="11" required autocomplete="off">
+                            <input type="tel" class="form-control @error('phone_number') is-invalid @enderror" placeholder="Phone Number" name="phone_number" id="phone_number" value="{{ old('phone_number') }}" maxlength="11" required autocomplete="off">
                             @error('phone_number')
                             <x-alert :message="$message" />
                             @enderror
@@ -137,7 +137,7 @@
                         </div>
                         <div class="form-group col-md-4">
                             <label for="account_number">Account Number</label>
-                            <input type="tel" class="form-control @error('account_number') is-invalid @enderror" id="account_number" name="account_number" value="{{ old('account_number') }}" placeholder="Account Number" maxlength="10" autocomplete="off">
+                            <input type="tel" required class="form-control @error('account_number') is-invalid @enderror" id="account_number" name="account_number" value="{{ old('account_number') }}" placeholder="Account Number" maxlength="10" autocomplete="off">
                             @error('account_number')
                             <x-alert :message="$message" />
                             @enderror
@@ -180,7 +180,7 @@
                     <div class="form-row">
                         <div class="form-group col-md-12">
                             <label for="inputAddress2">Full Address</label>
-                            <textarea id="user_address" class="user_address form-control @error('full_address') is-invalid @enderror" rows="1" name="full_address" id="full_address" placeholder="e.g. 284B, Ajose Adeogun Street, Victoria Island, Lagos, Nigeria.">{{ $applicant['form_data']['address'] ?? old('full_address') }}</textarea>
+                            <textarea id="user_address" class="user_address form-control @error('full_address') is-invalid @enderror" rows="1" name="full_address" id="full_address" placeholder="e.g. 284B, Ajose Adeogun Street, Victoria Island, Lagos, Nigeria.">{{ old('full_address') }}</textarea>
                             @error('full_address')
                             <x-alert :message="$message" />
                             @enderror
@@ -203,7 +203,7 @@
 
     $(document).ready(function() {
         "use strict";
-        $('#user_address').trigger('click');
+
         //Append the image name from file options to post cover field
         $('input[type="file"]').change(function(e) {
             let fileName = e.target.files[0].name;

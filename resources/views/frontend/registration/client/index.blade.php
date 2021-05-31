@@ -216,8 +216,6 @@
                             <input type="hidden" class="form-control" value="" name="user_address" id="user_address" placeholder="Your Location">
                             <input type="hidden" value="" name="address_latitude" id="user_latitude">
                             <input type="hidden" value="" name="address_longitude" id="user_longitude">
-                            <input type="hidden"  name="ref"  value="{{$referralCode}}">
-
 
                             <div class="col-md-12">
                                 <div class="form-group">

@@ -38,7 +38,8 @@ class PaystackController extends Controller
      */
     public function store(Request $request)
     {
-        // return $request;
+        $contact_details = Contact::where('id', $request->myContact_id)->first();
+
         $valid = $this->validate($request, [
             // List of things needed from the request like 
             'booking_fee'      => 'required',
@@ -47,16 +48,19 @@ class PaystackController extends Controller
             // 'myContact_id'    => 'required',
         ]);
         
-        $Serviced_areas = ServicedAreas::where('town_id', '=', $request['town_id'])->orderBy('id', 'DESC')->first();
+        // check if the town 
+        $Serviced_areas = ServicedAreas::where('town_id', '=', $contact_details->town_id)->orderBy('id', 'DESC')->first();
         if ($Serviced_areas === null) {
             return back()->with('error', 'sorry!, this area you selected is not serviced at the moment, please try another area');
         }
 
-        // upload multiple media files
-        foreach($request->media_file as $key => $file)
+        if ($request->media_file) {            
+
+            // upload multiple media files
+            foreach($request->media_file as $key => $file)
             {
                 $originalName[$key] = $file->getClientOriginalName();
-    
+
                 $fileName = sha1($file->getClientOriginalName() . time()) . '.'.$file->getClientOriginalExtension();
                 $filePath = public_path('assets/service-request-media-files');
                 $file->move($filePath, $fileName);
@@ -66,9 +70,11 @@ class PaystackController extends Controller
                 $data['original_name'] = json_encode($originalName);
                 // return $data;
         
-        // $request->session()->put('order_data', $request);
-        $request->session()->put('order_data', $request->except(['media_file']));
-        $request->session()->put('medias', $data);
+            // $request->session()->put('order_data', $request);
+            $request->session()->put('order_data', $request->except(['media_file']));
+            $request->session()->put('medias', $data);
+
+        }
 
 
         // fetch the Client Table Record
@@ -193,10 +199,10 @@ class PaystackController extends Controller
                 $client_controller = new ClientController;
 
                 if($paymentDetails->update()){                  
-                    // NUMBER 2: add more for other payment process
+                    // NUMBER 2: add more for other payment process 
                     if($paymentDetails['payment_for'] = 'service-request' ){
                         
-                        $client_controller->saveRequest( $request->session()->get('order_data') );
+                        $client_controller->saveRequest( $request->session()->get('order_data'), $request->session()->get('medias') );
                         
                         return redirect()->route('client.service.all' , app()->getLocale() )->with('success', 'payment was successful');
                     }                    

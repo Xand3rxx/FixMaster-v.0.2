@@ -137,7 +137,7 @@
                             <div class="form-group col-md-6">
                               <label>Bank</label>
                               <select name="bank_id" id="bank_id" class="form-control @error('bank_id') is-invalid @enderror" required>
-                                <option value="{{$result->account->bank->id??'0'}}">{{$result->account->bank->name??'Select...'}}</option>
+                                <option value="selected {{$result->account->bank->id??'Select...'}}">{{$result->account->bank->name??'Select...'}}</option>
                                 {{-- <option value="">Select...</option> --}}
                                 @foreach($banks as $bank)
                                 <option value="{{ $bank->id }}" {{ old('bank_id') == $bank->id ? 'selected' : ''}}>{{ $bank->name }}</option>
@@ -163,7 +163,7 @@
                             <!-- Full Address -->
                             <div class="form-group col-md-12">
                               <label for="inputAddress2">Full Address</label>
-                              <textarea rows="3" id="user_address" class="user_address form-control @error('full_address') is-invalid @enderror" name="full_address">{{$result->contact->address??'Unavailable'}}</textarea>
+                              <textarea rows="3" id="user_address" class="user_address form-control @error('full_address') is-invalid @enderror" id="" name="full_address">{{$result->contact->address??'Unavailable'}}</textarea>
                               @error('full_address')
                             <span class="invalid-feedback" role="alert">
                                 <strong>{{ $message }}</strong>
@@ -235,7 +235,7 @@
   (function($){
     "use scrict";
     $(document).ready(function(){
-        
+
       $(document).on('change','#profile_image', function(){
         readURL(this);
       })

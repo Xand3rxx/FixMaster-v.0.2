@@ -9,11 +9,11 @@
                   </tr>
                   <tr>
                     <td class="tx-medium">Delivery Fee</td>
-                    <td class="tx-color-03">₦{{ number_format($rfqDetails['rfqSupplier']['devlivery_fee'] ?? '0') }}</td>
+                    <td class="tx-color-03">₦{{ number_format($rfqDetails->rfqSupplier->devlivery_fee ?? '0') }}</td>
                   </tr>
                   <tr>
                     <td class="tx-medium">Delivery Time</td>
-                    <td class="tx-color-03">{{ !empty($rfqDetails['rfqSupplier']['delivery_time']) ? Carbon\Carbon::parse($rfqDetails['rfqSupplier']['delivery_time'], 'UTC')->isoFormat('MMMM Do YYYY, h:mm:ssa') : 'UNAVAILABLE' }}</td>
+                    <td class="tx-color-03">{{ Carbon\Carbon::parse($rfqDetails->created_at, 'UTC')->isoFormat('MMMM Do YYYY, h:mm:ssa') }}</td>
                   </tr>
                   <tr>
                     <td class="tx-medium">Issued By</td>
@@ -31,7 +31,7 @@
                     @elseif($rfqDetails->accepted == 'No')
                       <td class="tx-color-03">No, all ordered components were not delivered</td>
                     @else
-                      <td class="tx-color-03">UNAVAILABLE</td>
+                      <td class="tx-color-03">Pending payment</td>
                     @endif
                     <td class="tx-color-03"></td>
                   </tr>
@@ -63,7 +63,7 @@
                   <tbody>
                       @foreach ($rfqDetails->rfqBatches as $item)
                         <tr>
-                            <td class="tx-color-03 tx-center">{{ $loop->iteration }}</td>
+                            <td class="tx-color-03 tx-center">{{ ++$i }}</td>
                             <td class="tx-medium">{{ !empty($item->manufacturer_name) ? $item->manufacturer_name : 'UNAVAILABLE' }}</td>
                             <td class="tx-medium">{{ !empty($item->model_number) ? $item->model_number : 'UNAVAILABLE' }}</td>
                             <td class="tx-medium">{{ !empty($item->component_name) ? $item->component_name : 'UNAVAILABLE' }}</td>

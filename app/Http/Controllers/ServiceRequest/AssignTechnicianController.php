@@ -96,7 +96,7 @@ class AssignTechnicianController extends Controller
            
             ['preferred_time' => 'required_if:service_request_warrant_issued_schedule_date,==,null'],
             ['required_if' => 'This scheduled fix date is required'],
-         
+            [ 'intiate_rfq'               => 'bail|string|in:yes,no',]
         );
    
  
@@ -133,15 +133,13 @@ class AssignTechnicianController extends Controller
 
 
     protected function save($serviceRequest, $service_request_warranty_id,$request ){
-       
-        $upload='1'; $comment='1';
-      
+
         if($serviceRequest){
             $updateWarranty = \App\Models\ServiceRequestWarrantyIssued::where('service_request_warranty_id', $service_request_warranty_id)->update([
                     'service_request_warranty_id'     =>   $request['service_request_warranty_id'],
                     'cse_id'             =>  Auth::id(),
                     'technician_id'     =>   $request['technician_user_uuid'],
-                    
+                    'scheduled_datetime' => $request->preferred_time
                 ]);
                 $updateNewTechnician = \App\Models\ServiceRequestAssigned::where(['service_request_id'=>  $request->serviceRequestId, 'user_id'=> $request['technician_user_uuid']])->update([
                         'job_accepted'              => null,
@@ -156,14 +154,11 @@ class AssignTechnicianController extends Controller
 
 
         }else{
-       
             $createWarranty = \App\Models\ServiceRequestWarrantyIssued::create([
                     'service_request_warranty_id'        =>   $request['service_request_warranty_id'],
                     'cse_id'             =>  Auth::id(),
                     'technician_id'     =>   $request['technician_user_uuid'],
-                    'scheduled_datetime' => $request->preferred_time,
-                  
-
+                    'scheduled_datetime' => $request->preferred_time
                 ]);
                 \App\Models\ServiceRequestAssigned::create([
                     'user_id'                   => $request['technician_user_uuid'],

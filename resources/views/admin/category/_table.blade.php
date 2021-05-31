@@ -3,9 +3,7 @@
       <tr>
         <th class="text-center">#</th>
         <th>Name</th>
-        <th>Created By</th>        
-        <th class="text-center">Labour Markup (%)</th>
-        <th class="text-center">Materials Markup (%)</th>
+        <th>Created By</th>
         <th class="text-center">Services</th>
         <th>Status</th>
         <th>Date Created</th>
@@ -18,8 +16,6 @@
           <td class="tx-color-03 tx-center">{{ ++$i }}</td>
           <td class="tx-medium">{{ !empty($category->name) ? $category->name : 'UNAVAILABLE' }}</td>
           <td>{{ !empty($category->user->email) ? $category->user->email : 'UNAVAILABLE' }}</td>
-          <td class="tx-medium text-center">{{ !empty($category->labour_markup) ? $category->labour_markup*100 : 'UNAVAILABLE' }}</td>
-          <td class="tx-medium text-center">{{ !empty($category->material_markup) ? $category->material_markup*100 : 'UNAVAILABLE' }}</td>
           <td class="tx-medium text-center">{{ $category->services()->count() ?? '0' }}</td>
           @if(empty($category->deleted_at)) 
           <td class="text-success">Active</td>
@@ -36,7 +32,7 @@
                 @if($category->id > '1')
                   <a href="#serviceDetails" data-toggle="modal" class="dropdown-item details text-primary" title="View {{ $category->name}} details" data-url="{{ route('admin.categories.show', ['category'=>$category->uuid, 'locale'=>app()->getLocale()] ) }}" data-service-name="{{ $category->name}}" id="service-details"><i class="far fa-clipboard"></i> Details</a>
 
-                  <a href="#editService" data-toggle="modal" id="service-edit" title="Edit {{ $category->name }}" data-url="{{ route('admin.categories.edit', ['category'=>$category ->uuid, 'locale'=>app()->getLocale()]) }}" data-service-name="{{ $category->name }}" data-labour-markup="{{ $category->labour_markup }}" data-material-markup="{{ $category->material_markup }}" data-id="{{ $category->uuid }}" class="dropdown-item details text-info"><i class="far fa-edit"></i> Edit</a>
+                  <a href="#editService" data-toggle="modal" id="service-edit" title="Edit {{ $category->name }}" data-url="{{ route('admin.categories.edit', ['category'=>$category ->uuid, 'locale'=>app()->getLocale()]) }}" data-service-name="{{ $category->name }}" data-id="{{ $category->uuid }}" class="dropdown-item details text-info"><i class="far fa-edit"></i> Edit</a>
 
                   @if(empty($category->deleted_at)) 
                     <a data-url="{{ route('admin.categories.deactivate', ['category'=>$category->uuid, 'locale'=>app()->getLocale()]) }}" class="dropdown-item details text-warning deactivate-entity" title="Deactivate {{ $category->name}}" style="cursor: pointer;"><i class="fas fa-ban"></i> Deactivate</a>

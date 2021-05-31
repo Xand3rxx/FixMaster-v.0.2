@@ -54,11 +54,11 @@
             </tr>
             <tr>
                 <td class="tx-medium">Town/City</td>
-                <td class="tx-color-03">{{$activeDetails['service_request']['address']['town']['name']}}</td>
+                <td class="tx-color-03">{{$activeDetails->service_request->address->town->name}}</td>
             </tr>
             <tr>
                 <td class="tx-medium">L.G.A</td>
-                <td class="tx-color-03">{{$activeDetails['service_request']['address']['lga']['name']}}</td>
+                <td class="tx-color-03">{{$activeDetails->service_request->address->lga->name}}</td>
             </tr>
               <tr>
                 <td class="">Service Description</td>

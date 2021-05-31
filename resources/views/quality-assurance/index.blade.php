@@ -31,7 +31,7 @@
             <div class="col-md-6">
           <div class="card-header pd-t-20 pd-b-0 bd-b-0">
             <h6 class="lh-5 mg-b-5">Overall Rating</h6>
-            <p class="tx-12 tx-color-03 mg-b-0">Ratings is based on {{ Auth::user()->ratings->count() }} total votes by CSE's and Customer reviews on the quality of service provided by you.</p>
+            <p class="tx-12 tx-color-03 mg-b-0">Ratings is based on 152 total votes by Customer reviews on the quality of service provided by you.</p>
 
           </div><!-- card-header -->
 

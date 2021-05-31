@@ -54,7 +54,7 @@ $(document).ready(function() {
       //Get the Activity Log Type
       $type = $("#activity_log_type").find("option:selected").val();
 
-     // console.log($type);
+      console.log($type);
 
       //Set other related sorting fields so default
       $("#sort_by_range, #sort_by_year, #sort_by_month").prop('selectedIndex', 0);

@@ -73,5 +73,9 @@ class Client extends Model
         return round($this->ratings->avg('star'));
     }
 
+    // public function service_request_assigned(){
+    //     return $this->hasMany()
+    // }
+
 }
 

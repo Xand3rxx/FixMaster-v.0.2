@@ -2,9 +2,8 @@
 
 namespace App\Http\Controllers\Admin\Prospective;
 
-use App\Models\Applicant;
-use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Http\Request;
 
 class TechnicianArtisanController extends Controller
 {
@@ -15,9 +14,7 @@ class TechnicianArtisanController extends Controller
      */
     public function index()
     {
-        return view('admin.prospective.technician.index')->with([
-            'users' => Applicant::where('user_type', Applicant::USER_TYPES[2])->get(),
-        ]);
+        //
     }
 
     /**

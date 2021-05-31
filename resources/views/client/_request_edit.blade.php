@@ -12,7 +12,7 @@
     <h5 class="ml-3">Editing {{ $userServiceRequest->unique_id }} Service request details</h5>
     <input type="hidden" value="{{ $userServiceRequest->id ?? '' }}" name="servicereq" >
         <!-- ROW 1 -->
-        <div class="col-md-6">
+        <div class="col-md-12">
             <div class="form-group position-relative">
                 <label>Scheduled Date & Time :<span class="text-danger">*</span></label>
                 <i data-feather="calendar" class="fea icon-sm icons"></i>
@@ -25,7 +25,7 @@
             </div>
         </div><!--end col-->
 
-        <div class="col-md-6">
+        <!-- <div class="col-md-6">
             <div class="form-group position-relative">
                 <label>Your Phone no. :<span class="text-danger">*</span></label>
                 <i data-feather="phone" class="fea icon-sm icons"></i>
@@ -36,9 +36,10 @@
                     </span>
                 @enderror
             </div> 
-        </div><!--end col-->
+        </div> -->
+        <!--end col-->
         
-        <div class="col-md-12">
+        <!-- <div class="col-md-12">
             <div class="form-group position-relative">
                 <label>Address</label>
                 <i data-feather="map-pin" class="fea icon-sm icons"></i>
@@ -49,7 +50,8 @@
                     </span>
                 @enderror
             </div>
-        </div><!--end col--> 
+        </div> -->
+        <!--end col--> 
 
         <div class="col-md-12">
             <div class="form-group position-relative">
@@ -81,8 +83,6 @@
             </div> 
           </div>
 
-                                           
-        
     </div><!--end row-->
 
     <div class="row">
@@ -90,6 +90,32 @@
         <button type="submit" class="submitBnt btn btn-success btn-lg btn-block">Update</button>
         </div><!--end col-->
     </div><!--end row-->
+
+
+
+
+             
+        <div class="row">
+        @foreach($images as $image) 
+            @php
+                $attached_files = json_decode($image['media_files']['unique_name'], true);                
+            @endphp
+
+            @foreach($attached_files as $attached_file) 
+            <div class="col-lg-2 col-md-3 col-6 mt-4 pt-2">
+                <div class="card shop-list border-0 position-relative">
+
+                    <div class="shop-image position-relative overflow-hidden rounded shadow">
+                        <img height="10px" src="{{ asset('assets/service-request-media-files/'.$attached_file) }}" class="img-fluid" alt="">
+                    </div>
+                </div>
+            </div><!--end col-->
+            @endforeach
+
+        @endforeach
+    </div>
+
+
 </form><!--end form-->
 
 </div>

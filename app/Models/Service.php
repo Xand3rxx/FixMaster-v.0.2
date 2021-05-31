@@ -19,7 +19,7 @@ class Service extends Model
     // public $incrementing = false;
 
     protected $fillable = [
-        'user_id', 'category_id', 'name', 'service_charge', 'diagnosis_subsequent_hour_charge', 'description', 'status', 'image'
+        'user_id', 'category_id', 'name', 'service_charge', 'description', 'status', 'image'
     ];
 
     /**

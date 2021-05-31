@@ -5,10 +5,11 @@ namespace App\Traits;
 use App\Models\Referral;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Auth\Events\Registered;
 
 trait RegisterClient
 {
-    use RegisterUser, SendVerificationMail;
+    use RegisterUser;
     /**
      * Handle registration of a Client request for the application.
      *
@@ -74,14 +75,11 @@ trait RegisterClient
                 'address_longitude'     =>  $valid['address_longitude'],
                 'address_latitude'      =>  $valid['address_latitude'],
             ]);
-
+            
             // register new client event
-            //  event(new Registered($user));
+            // event(new Registered($user));
 
-            // Send Notification  Instance
-            $this->sendVerificationEmail($account);
-
-            // Log the User into the Application as Basic User
+            // Log the User into the Application
             $this->guard()->login($user);
 
             // update registered to be true
@@ -100,5 +98,4 @@ trait RegisterClient
     {
         return Auth::guard();
     }
-    
 }

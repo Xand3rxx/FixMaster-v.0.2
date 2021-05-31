@@ -33,7 +33,6 @@ class CreateServicesTable extends Migration
 
             $table->string('name')->unique();
             $table->unsignedInteger('service_charge');
-            $table->unsignedInteger('diagnosis_subsequent_hour_charge');
             $table->text('description');
             $table->boolean('status')->default(1);
             $table->string('image')->unique();

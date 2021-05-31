@@ -14,11 +14,11 @@
                                 
                                     <div class="custom-control custom-radio custom-control-inline">
                                         <div class="form-group mb-0">
-                                            <input type="radio" id="{{$myContact->id}}" value="{{ $myContact->id }}" name="myContact_id" class="custom-control-input"  />
+                                            <input type="radio" id="{{$myContact->id}}" value="{{isset($myContact)? @$myContact->id: ''}}" name="myContact_id" class="custom-control-input"  />
                                             <!-- <input type="radio" id="{{$myContact->id}}" name="id" value="{{ $myContact->id }}" {{ ( (isset($myContact->is_default) && intval($myContact->is_default)) ? 'checked=checked' : '') }}> -->
-                                            <input type="hidden" name="state_id" value="{{ $myContact->state_id }}">
-                                            <input type="hidden" name="lga_id" value="{{ $myContact->lga_id }}">
-                                            <input type="hidden" name="town_id" value="{{ $myContact->town_id }}">
+                                            <input type="hidden" name="state_id" value="{{isset($myContact)? @$myContact->state_id: ''}}">
+                                            <input type="hidden" name="lga_id" value="{{isset($myContact)? @$myContact->lga_id: ''}}">
+                                            <input type="hidden" name="town_id" value="{{isset($myContact)? @$myContact->town_id: ''}}">
                                             <label class="custom-control-label" for="{{$myContact->id}}">{{$myContact->name ?? ''}}</label>
                                         </div>
                                     </div>

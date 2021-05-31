@@ -87,8 +87,6 @@
 
   <body>
 
-
-
     {{-- <div id="preloader">
       <div id="status">
           <div class="spinner">
@@ -102,6 +100,7 @@
     @include('layouts.partials._client_header')
     @include('layouts.partials._client_sidebar')
     @include('layouts.partials._client_footer')
+
 
     <script src="{{asset('assets/frontend/js/jquery-3.5.1.min.js')}}"></script>
     {{-- <script src="{{asset('assets/client/js/jquery.min.js')}}"></script> --}}
@@ -137,7 +136,6 @@
     <script src="https://unicons.iconscout.com/release/v2.1.9/script/monochrome/bundle.js"></script>
     <script src="{{ asset('assets/client/js/sweetalert2.min.js') }}"></script>
     <script src="{{ asset('assets/dashboard/assets/js/jquery.tinymce.min.js') }}"></script>
-
 
     <div class="modal fade" id="modalDetails" tabindex="-1" role="dialog" aria-hidden="true" data-backdrop="static">
         <div class="modal-dialog modal-dialog-centered modal-lg wd-sm-650" role="document">
@@ -308,8 +306,6 @@
         }
     </script>
 
-
-
  @yield('scripts')
  @stack('scripts')
 
@@ -372,10 +368,7 @@
 
 
       });
- 
     </script>
-
-
 
 
   </body>

@@ -15,20 +15,12 @@
     #topnav .navigation-menu.nav-light > li > a:active{
         color: #ffff !important;
     }
-  
     /* #topnav.nav-sticky .navigation-menu > li > a {
         color: #3c4858 !important;
     } */
     /* #topnav .navigation-menu .has-submenu .menu-arrow {
         border: solid #ffffff;
     } */
-
-    .alert-dismissible .close-alert{
-  font-size: 30px;
- position: relative;
-  top:-10px;
-  cursor:pointer !important;
-}
     @media (max-width: 991px){
         #topnav .navigation-menu.nav-light > li > a {
             color: #3c4858 !important;
@@ -133,22 +125,12 @@
 
 <!-- Hero Start -->
 {{-- <section class="bg-profile d-table w-100 bg-primary" style="background: url('{{ asset("assets/images/account/bg.png") }}') center center no-repeat;"> --}}
-   
-
     <section class="bg-profile d-table w-100  bg-primar" style="background-color: #ff9800 !important;" >
     <div class="container">
         <div class="row">
             <div class="col-lg-12"> 
-             <div class="card public-profile border-0 rounded shadow" style="z-index: 1;">
-
-             <div class="alert alert-primary alert-dismissible d-none ttf" role="alert">
-                <span type="button" class="close" data-dismiss="alert" aria-label="Close" style="cursor:pointer">
-                <span class="close-alert" aria-hidden="true">&times;</span>
-                </span>
-                <span class="verify-msg"></span>
-               
-            </div>
-                 <div class="card-body">
+                <div class="card public-profile border-0 rounded shadow" style="z-index: 1;">
+                    <div class="card-body">
                         <div class="row align-items-center">
                             <div class="col-lg-2 col-md-3 text-md-left text-center">
                        
