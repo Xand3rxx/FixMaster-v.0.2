@@ -39,6 +39,7 @@ class RequestController extends Controller
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
+     *
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
@@ -76,18 +77,7 @@ class RequestController extends Controller
     }
 
     /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
+     * Send Notification
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  int  $id
@@ -95,18 +85,21 @@ class RequestController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
-    {
-        //
+        return $request->all();
+        $valid = $request->validate(['service_request' => 'required|uuid']);
+        $serviceRequest = ServiceRequest::where('uuid', $valid['service_requests'])->with('client', 'client.user')->firstOrFail();
+        $user = $serviceRequest['client']['user'];
+        // Define a Feature
+        $template_feature = 'CSE_ACCOUNT_CREATION_NOTIFICATION';
+        // Build possible Parameters
+        $mail_data = collect([
+            // 'lastname' => $applicant->form_data['last_name'],
+            // 'firstname' => $applicant->form_data['first_name'],
+            // 'email' => $applicant->form_data['email'],
+        ]);
+        // Instantiate Contoller
+        $messanger = new \App\Http\Controllers\Messaging\MessageController();
+        return $messanger->sendNewMessage('email', \Illuminate\Support\Str::title(\Illuminate\Support\Str::of($template_feature)->replace('_', ' ',)), 'dev@fix-master.com', $mail_data['email'], $mail_data, $template_feature);
     }
 
     public function getServiceRequestsByTechnician(Request $request)

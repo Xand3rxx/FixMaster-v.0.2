@@ -323,7 +323,6 @@ Route::prefix('admin')->group(function () {
         Route::get('/reports/supplier',             [SupplierReportController::class, 'index'])->name('supplier_reports');
         Route::post('/reports/supplier/item-delivered-sorting', [SupplierReportController::class, 'itemDeliveredSorting'])->name('supplier_report_first_sorting');
 
-<<<<<<< HEAD
     //Routes for estate management
     Route::get('/estate/list',      [EstateController::class, 'index'])->name('list_estate');
     Route::get('/estate/add',      [EstateController::class, 'create'])->name('add_estate');
@@ -537,9 +536,7 @@ Route::prefix('admin')->group(function () {
 
     Route::get('/reports/supplier',             [SupplierReportController::class, 'index'])->name('supplier_reports');
     Route::post('/reports/supplier/item-delivered-sorting', [SupplierReportController::class, 'itemDeliveredSorting'])->name('supplier_report_first_sorting');
-=======
     });
->>>>>>> b4814b54d1adcc86fe2f493766800abce9f96781
 });
 
 //All routes regarding clients should be in here
@@ -669,7 +666,6 @@ Route::prefix('/cse')->middleware('monitor.cseservice.request.changes')->group(f
         Route::post('/submit_ratings',  [CseController::class, 'user_rating'])->name('handle.ratings');
         Route::post('/update_service_request',  [CseController::class, 'update_cse_service_rating'])->name('update_service_request');
 
-<<<<<<< HEAD
     Route::post('assign-technician', [AssignTechnicianController::class, '__invoke'])->name('assign.technician');
     Route::post('assign/warranty/technician', [WarrantClaimController::class, 'assignWarrantyTechnician'])->name('assign.warranty_technician');
 Route::get('warranty/download/{file:id}', [WarrantyController::class, 'download'])->name('warranty_download');
@@ -695,7 +691,6 @@ Route::get('warranty/download/{file:id}', [WarrantyController::class, 'download'
     Route::get('/requests-for-quote/details/image/{image:id}',            [SupplierRfqController::class, 'rfqDetailsImage'])->name('rfq_details_image');
 
     Route::get('/sub-service-dynamic-feilds',  [CseController::class, 'subServiceDynamicFields'])->name('sub_service_dynamic_fields');
-=======
         Route::view('/location-request',    'cse.location_request')->name('location_request');
         Route::view(
             '/request/details',
@@ -715,12 +710,10 @@ Route::get('warranty/download/{file:id}', [WarrantyController::class, 'download'
         Route::get('/mark/warrant/claims/resolved/{warranty:uuid}',      [WarrantyController::class, 'resolvedWarranty'])->name('mark_warranty_resolved');
 
   });
->>>>>>> b4814b54d1adcc86fe2f493766800abce9f96781
 });
 
 
 
-<<<<<<< HEAD
 Route::prefix('/supplier')->name('supplier.')->group(function () {
     //All routes regarding suppliers should be in here
     Route::get('/',                    [SupplierProfileController::class, 'dashboard'])->name('index'); //Take me to Supplier Dashboard
@@ -747,7 +740,6 @@ Route::prefix('/supplier')->name('supplier.')->group(function () {
     Route::get('/dispatch/update/{dispatch:id}',     [SupplierDispatchController::class, 'updateDispatchStatus'])->name('update_dispatch_status');
     Route::get('/dispatch/delivered',                          [SupplierDispatchController::class, 'dispatchDelivered'])->name('dispatches_delivered');
     Route::get('/dispatch/returned',                          [SupplierDispatchController::class, 'dispatchReturned'])->name('dispatches_returned');
-=======
 Route::prefix('/supplier')->group(function () {
     Route::name('supplier.')->group(function () {
         //All routes regarding suppliers should be in here
@@ -777,7 +769,6 @@ Route::prefix('/supplier')->group(function () {
         Route::get('/dispatch/returned',                          [SupplierDispatchController::class, 'dispatchReturned'])->name('dispatches_returned');
         Route::get('/requests-for-quote/details/image/{image:id}',            [SupplierRfqController::class, 'rfqDetailsImage'])->name('rfq_details_image');
     });
->>>>>>> b4814b54d1adcc86fe2f493766800abce9f96781
 });
 
 Route::prefix('/technician')->group(function () {

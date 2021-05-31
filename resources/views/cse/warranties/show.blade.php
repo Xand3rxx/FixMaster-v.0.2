@@ -6,7 +6,6 @@
 .card-groups > .card {
     margin-bottom: 15px !important;
 }
-<<<<<<< HEAD
 .card-file-thumb{
     background-repeat: no-repeat;
     background-size: 100% 220px;
@@ -18,8 +17,6 @@
      opacity: 0; 
     left:10px
 }
-=======
->>>>>>> b4814b54d1adcc86fe2f493766800abce9f96781
 </style>
 <link rel="stylesheet" href="{{ asset('assets/dashboard/assets/css/dashforge.filemgr.css') }}">
 
@@ -84,14 +81,8 @@
 
                 <div class="contact-content-body">
                     <div class="tab-content">
-<<<<<<< HEAD
-
-                    
-                    @if(Auth::user()->type->url != 'admin') 
-=======
    
                     @if(Auth::user()->type->url != 'admin' && $service_request->service_request_warranty->has_been_attended_to == 'No')                    
->>>>>>> b4814b54d1adcc86fe2f493766800abce9f96781
                     <div id="serviceRequestActions" class="tab-pane show active pd-20 pd-xl-25">
                         @else                                     
                     <div id="serviceRequestActions" class="tab-pane pd-20 pd-xl-25">
@@ -159,7 +150,6 @@
                             </div>
                         </section>
                          @endif 
-<<<<<<< HEAD
                        
                          <h3>Indicate Causal Agent</h3>
                          <section>
@@ -173,8 +163,6 @@
                                  </div>
                              </div>
                          </section>
-=======
->>>>>>> b4814b54d1adcc86fe2f493766800abce9f96781
 
                         <h3>New RFQ</h3>
                     <section>
@@ -196,142 +184,6 @@
                             </div>
                         </div>
 
-<<<<<<< HEAD
-                            <div class="d-none d-rfq">
-                            <small class="text-danger">This portion will display only if the CSE initially executed a RFQ, the Client paid for the components and the Supplier has made the delivery.</small>
-                          
-                              @if(!empty($suppliers->rfqSuppliesInvoices))
-                              @foreach($suppliers->rfqSuppliesInvoices as $item)
-                              @if($item->accepted == 'Pending')
-                            
-                            @include('cse.warranties.includes.suppliers_contact')
-
-
-                            <div class="table-responsive mt-4">
-                                <table class="table table-striped table-sm mg-b-0">
-                                    <tbody>
-                                    
-                                    <tr>
-                                        <td class="tx-medium">Supplier Name</td>
-                                        <td class="tx-color-03">{{ ucfirst($item->warranty_claim_supplier->user->account->first_name)}} {{  ucfirst($item->warranty_claim_supplier->user->account->last_name)}}</h6>
-
-                                         <small class="text-muted">(Business Name: {{$item->warranty_claim_supplier->business_name}} )</small></td>
-                                    </tr>
-                                    <!-- <tr>
-                                        <td class="tx-medium">Dispatch Status</td>
-                                        <td class="text-info">In-Transit</td>
-                                    </tr> -->
-                                    <!-- <tr>
-                                        <td class="tx-medium">Delivery Status</td>
-                                        <td class="text-warning">Pending</td>
-                                    </tr> -->
-                                    <tr>
-                                        <td class="tx-medium">Delivery Fee</td>
-                                        <td class="tx-color-03">₦{{ number_format($item->delivery_fee) }}</td>
-                                    </tr>
-                                    <tr>
-                                        <td class="tx-medium">Delivery Time</td>
-                                        <td class="tx-color-03">{{ Carbon\Carbon::now('UTC')->isoFormat('MMMM Do YYYY, h:mm:ssa') }}</td>
-                                    </tr>
-                                    <tr>
-                                        <td class="tx-medium">Grand Total</td>
-                                        <td class="tx-color-03">₦{{ number_format($item->total_amount) }}</td>
-                                    </tr>
-                                
-                                    </tbody>
-                                </table>
-                                </div>
-                              
-                            <div class="table-responsive mt-4">
-                                <table class="table table-hover mg-b-0" id="basicExampl">
-                                    <thead class="thead-primary">
-                                    <tr>
-                                        <th class="text-center">#</th>
-                                        <th>Manufacturer Name</th>
-                                        <th>Model Number</th>
-                                        <th>Component Name</th>
-                                        <th class="text-center">Quantity</th>
-                                        <th class="text-center">Size</th>
-                                        <th>Unit of Measurement</th>
-                                        <th class="text-center">Image</th>
-                                        <th class="text-center">Unit Price(₦)</th>
-                                        <th class="text-center">Amount(₦)</th>
-                                    </tr>
-                                    </thead>
-                                    <tbody>
-                                   
-                                    @foreach($item->supplierInvoiceBatches as $items)
-                                    <tr>
-                            <td class="tx-color-03 tx-center">{{ $loop->iteration }}</td>
-                            <td class="tx-medium">{{ !empty($items->rfqBatch->manufacturer_name) ? $items->rfqBatch->manufacturer_name : 'UNAVAILABLE' }}</td>
-                            <td class="tx-medium">{{ !empty($items->rfqBatch->model_number) ? $items->rfqBatch->model_number : 'UNAVAILABLE' }}</td>
-                            <td class="tx-medium">{{ !empty($items->rfqBatch->component_name) ? $items->rfqBatch->component_name : 'UNAVAILABLE' }}</td>
-                            <td class="tx-medium text-center">{{ !empty($items->rfqBatch->quantity) ? number_format($items->rfqBatch->quantity) : '0' }}</td>
-                            <td class="tx-medium text-center">{{ !empty($items->rfqBatch->size) ? number_format($items->rfqBatch->size) : '0' }}</td>
-                            <td class="tx-medium">{{ !empty($items->rfqBatch->unit_of_measurement) ? $items->rfqBatch->unit_of_measurement : 'UNAVAILABLE' }}</td>
-                            <td class="text-center">
-                              @if(!empty($items->rfqBatch->image))
-                              <a href="#rfqImageDetails" data-toggle="modal" class="text-info" title="View {{ $items->rfqBatch->component_name }} image" data-batch-number="{{ $items->rfqBatch->id }}" data-url="{{ route('cse.rfq_details_image', ['image'=>$items->rfqBatch->id, 'locale'=>app()->getLocale()]) }}" id="rfq-image-details"> View</a>
-                              @else
-                                    -
-                              @endif
-                            </td>
-                            <td class="tx-medium text-center">₦{{ number_format($item->unit_price) }}</td>
-                            <td class="tx-medium text-center">₦{{ number_format($item->total_amount) }}</td>
-                        </tr>
-                                    @endforeach
-                                  
-                                    </tbody>
-                                </table>
-                            </div><!-- table-responsive -->
-                            @endif    
-                @endforeach
-                <input type="hidden" value="{{$suppliers->id}}" name="rfq_id">
-              
-             
-                @endif
-                            </div><!-- end the d-none -->
-                        
-                        </section>
-                        
-                        <h3>Material Acceptance</h3>
-                       
-                        <section>
-                        <small class="text-danger">This portion will display only if the CSE initially executed a RFQ, the Client paid for the components and the Supplier has made the delivery.</small>
-
-                            <span  class="d-rfq2">
-                            <h5>Update RFQ Status</h5>
-                            <div class="form-row">
-                                <div class="form-group col-md-12">
-                                    <label for="status">Material Status</label>
-                                    <select class="form-control custom-select" id="status" name="status">
-                                        <option selected disabled value="" selected>Select...</option>
-                                        <option value="Approved" value="{{ old('Approved') }}" {{ old('status') == 'Approved' ? 'selected' : ''}}>Approved</option>
-                                        <option value="Declined" value="{{ old('') }}" {{ old('status') == 'Declined' ? 'selected' : ''}}>Declined</option>
-                                    </select>
-                                    @error('status')
-                                    <span class="invalid-feedback" role="alert">
-                                        <strong>{{ $message }}</strong>
-                                    </span>
-                                    @enderror
-                                </div>
-                            </div>
-
-                         
-
-                            
-                            
-                            <!-- <h5>Accept Materials Delivery</h5>
-                            <div class="form-row">
-                                <div class="form-group col-md-12">
-                                    <label for="accept_materials">Accept Delivery</label>
-                                    <select class="form-control custom-select" id="accept_materials" name="accept_materials">
-                                        <option selected disabled value="" selected>Select...</option>
-                                        <option value="Yes" value="{{ old('Yes') }}" {{ old('accept_materials') == 'Yes' ? 'selected' : ''}}>Yes, all ordered components were delivered</option>
-                                        <option value="No" value="{{ old('No') }}" {{ old('accept_materials') == 'No' ? 'selected' : ''}}>No, all ordered components were not delivered</option>
-                                    </select>
-                                    @error('accept_materials')
-=======
                         <div class="d-none d-rfq">
                             <h4 id="section1" class="mt-4 mb-2">Make Request</h4>
                             <div class="form-row">
@@ -390,7 +242,6 @@
                                     <label for="unit_of_measurement">Unit of Measurement</label>
                                     <input type="text" class="form-control @error('unit_of_measurement') is-invalid @enderror" id="unit_of_measurement" name="unit_of_measurement[]" value="{{ old('unit_of_measurement[0]') }}">
                                     @error('unit_of_measurement[0]')
->>>>>>> b4814b54d1adcc86fe2f493766800abce9f96781
                                     <span class="invalid-feedback" role="alert">
                                         <strong>{{ $message }}</strong>
                                     </span>
@@ -413,28 +264,23 @@
                                 <div class="form-group col-md-1 mt-1">
                                     <button class="btn btn-sm pd-x-15 btn-primary btn-uppercase mg-l-5 mt-4 add-rfq" type="button"><i class="fas fa-plus" class="wd-10 mg-r-5"></i></button>
                                 </div>
-<<<<<<< HEAD
                             </div> -->
                             </span>
                         </section>
                      
-=======
                             </div>
 
                             <span class="add-rfq-row"></span>
 
                         </div>
                     </section>
->>>>>>> b4814b54d1adcc86fe2f493766800abce9f96781
 
                         <h3>Assign New Technician</h3>
                         <section>
                             <div class="form-row mt-4">
                                 <div class="form-group col-md-12">
                                     <ul class="list-group wd-md-100p">
-<<<<<<< HEAD
                                     @include('cse.warranties.includes.assign_new_technician')  
-=======
                                         @foreach ($technicians['users'] as $technician)
                                         <li class="list-group-item d-flex align-items-center">
                                             
@@ -469,7 +315,6 @@
                                         </div>
                                         </li>
                                         @endforeach
->>>>>>> b4814b54d1adcc86fe2f493766800abce9f96781
                                     </ul>
                                 </div>
                             </div>
@@ -480,16 +325,13 @@
                 </div>
             </div><!-- df-example -->
         
-<<<<<<< HEAD
             <input type="hidden" value="{{$shcedule_datetime}}" 
             name="service_request_warrant_issued_schedule_date">   
          
           
 
-=======
             <input type="hidden" value="{{$service_request->service_request_warranty->service_request_warranty_issued->scheduled_datetime}}" 
             name="service_request_warrant_issued_schedule_date">
->>>>>>> b4814b54d1adcc86fe2f493766800abce9f96781
             <input type="hidden" value="{{$service_request->uuid}}" name="service_request_uuid">
             <input type="hidden" value="{{$service_request->service_request_warranty->uuid}}" name="service_request_warranty_uuid">
             <input type="hidden" value="{{$service_request->service_request_warranty->id}}" name="service_request_warranty_id">
@@ -503,9 +345,7 @@
                         </div>
 
                        
-<<<<<<< HEAD
                         @include('cse.warranties.includes.collaborators')
-=======
                         @if(Auth::user()->type->url == 'admin' || $service_request->service_request_warranty->has_been_attended_to == 'Yes')                    
                     <div id="contactCollaborators" class="tab-pane show active pd-20 pd-xl-25">
                         @else                                     
@@ -617,7 +457,6 @@
 
 
 
->>>>>>> b4814b54d1adcc86fe2f493766800abce9f96781
 
                                                    
                         <div id="description" class="tab-pane pd-20 pd-xl-25">
@@ -627,10 +466,8 @@
                             <h6>Warranty Claim Description</h6>
                             <div class="row row-xs mt-4">
                                 <div class="col-lg-12 col-xl-12">
-<<<<<<< HEAD
                                 @include('cse.warranties.includes.description')
                                     
-=======
                                     <table class="table table-striped table-sm mg-b-0">
                                        
                                             <tbody>
@@ -793,14 +630,11 @@
                                         </div><!-- col -->
                                       </div><!-- row -->
                                 </div><!-- df-example -->
->>>>>>> b4814b54d1adcc86fe2f493766800abce9f96781
                             </div>
                         </div>
 
 
-<<<<<<< HEAD
                         @include('cse.warranties.includes.summary')                       
-=======
                         <div id="serviceRequestSummary" class="tab-pane pd-20 pd-xl-25">
                             <div class="divider-text">Diagnostic Reports</div>
                             @if(!empty($service_request->service_request_warranty->service_request_warranty_issued->warrantReport))
@@ -892,7 +726,6 @@
                             </div><!-- table-responsive -->
 
                         </div>
->>>>>>> b4814b54d1adcc86fe2f493766800abce9f96781
 
                     </div>
                 </div>
