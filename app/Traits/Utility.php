@@ -362,6 +362,7 @@ trait Utility
 
   public function markCompletedRequestTrait($user, $id){
 
+    $admin = User::where('id', 1)->with('account')->first();
     $requestExists = ServiceRequest::where('uuid', $id)->firstOrFail();
     $ifWarrantyExists =  \App\Models\ServiceRequestWarranty::where(['service_request_id'=> $requestExists->id])
      ->first();
@@ -393,6 +394,37 @@ trait Utility
          if( $updateRequest AND $recordServiceProgress AND $updateServiceRequestWarranty){
 
            //send mails to 1.admin, 2.client, 3.cse for mark as completed;
+
+             //email for client
+            $mail_data_admin = collect([
+              'email' =>  $admin->email,
+              'template_feature' => 'CUSTOMER_SENT_ADMIN_JOB_COMPLETED_NOTIFICATION',
+              'firstname' =>  $admin->account->first_name,
+              'customer_name' => Auth::user()->account->first_name.' '.Auth::user()->account->last_name,
+              'customer_email' => Auth::user()->email,
+              'job_ref' =>  $requestExists->unique_id
+            ]);
+            $mail1 = $this->mailAction($mail_data_admin);
+
+            $mail_data_client = collect([
+              'email' =>  Auth::user()->email,
+              'template_feature' => 'CUSTOMER_JOB_COMPLETED_NOTIFICATION',
+              'customer_name' => Auth::user()->account->first_name.' '.Auth::user()->account->last_name,
+              'job_ref' =>  $requestExists->unique_id
+            ]);
+
+            $mail2 = $this->mailAction($mail_data_client);
+
+            $mail_data_cse = collect([
+              'email' =>  $requestExists->cses[0]->account->user->email,
+              'template_feature' => 'CUSTOMER_SENT_CSE_JOB_COMPLETED_NOTIFICATION',
+              'firstname' =>   $requestExists->cses[0]->account->first_name,
+              'customer_name' => Auth::user()->account->first_name.' '.Auth::user()->account->last_name,
+              'customer_email' => Auth::user()->email,
+              'job_ref' =>  $requestExists->unique_id
+            ]);
+            $mail3 = $this->mailAction($mail_data_cse);  
+
           return $requestExists ;
          }else{
            return false;
@@ -420,7 +452,7 @@ trait Utility
       if($client AND $discountHistory){
            $mail_data = collect([
             'email' =>  $user->email,
-            'template_feature' => 'CLIENT_FIRSTTIME_DISCOUNT_NOTIFICATION',
+            'template_feature' => 'CUSTOMER_WELCOME_DISCOUNT',
             'discount' => $discountDetails->rate,
             'firstname' =>  $userDetails->first_name,
          ]);
@@ -436,12 +468,10 @@ trait Utility
 
   public function mailAction($data){
       $messanger = new MessageController();
-     return  $jsonResponse = $messanger->sendNewMessage('email', Str::title(Str::of($data['template_feature'])->replace('_', ' ',)), 'dev@fix-master.com', $data['email'], $data, $data['template_feature']);
-
-
-  }
-
+     return  $jsonResponse = $messanger->sendNewMessage(Str::title(Str::of($data['template_feature'])->replace('_', ' ',)), 'noreply@fixmaster.com', $data['email'], $data, $data['template_feature']);
+    
 }
 
+}
 
 

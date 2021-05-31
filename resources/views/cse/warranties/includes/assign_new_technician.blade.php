@@ -17,7 +17,7 @@
                                             <div class="col-md-6 col-sm-6">
                                             <div class="form-row">
                                                 <div class="form-group col-1 col-md-1 col-sm-1" style="margin-left: 3rem !important;">
-                                                    <a href="tel:08124483438" class="btn btn-primary btn-icon"><i class="fas fa-phone"></i></a>
+                                                    <a href="tel:{{$technician['user']['account']['contact']['phone_number']}} " class="btn btn-primary btn-icon"><i class="fas fa-phone"></i></a>
                                                 </div>
                                                 <div class="form-group col-1 col-md-1 col-sm-1">
                                                     <div class="custom-control custom-radio mt-2">

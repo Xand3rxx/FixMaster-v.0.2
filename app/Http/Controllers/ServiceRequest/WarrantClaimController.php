@@ -68,6 +68,7 @@ class WarrantClaimController extends Controller
     protected function save($serviceRequest, $service_request_warranty_id,$request ){
 
         if($request['technician_user_uuid'] || $request->preferred_time ){
+           
        
         $upload='1'; $comment='1';
       
@@ -76,6 +77,7 @@ class WarrantClaimController extends Controller
                     'service_request_warranty_id'     =>   $request['service_request_warranty_id'],
                     'cse_id'             =>  Auth::id(),
                     'technician_id'     =>   $request['technician_user_uuid'],
+                    'scheduled_datetime' => $request->preferred_time,
                     
                 ]);
                 $updateNewTechnician = \App\Models\ServiceRequestAssigned::where(['service_request_id'=>  $request->serviceRequestId, 'user_id'=> $request['technician_user_uuid']])->update([
@@ -176,12 +178,20 @@ class WarrantClaimController extends Controller
 
     public function saveRfq($request){
 
+        $updateOldSupplierStatus = \App\Models\RfqSupplierInvoice::where(['rfq_id'=> $request->rfq_id, 'accepted'=> 'Yes'])->update([
+            'accepted'     =>   'Pending',
+            
+        ]);
+
+      
         $updateNewSupplierStatus = \App\Models\RfqSupplierInvoice::where(['rfq_id'=> $request->rfq_id, 'supplier_id'=>$request->supplier_id])->update([
             'accepted'     =>   'Yes',
             
         ]);
          $supplierDetails =  \App\Models\RfqSupplierInvoice::where(['rfq_id'=> $request->rfq_id, 'supplier_id'=>$request->supplier_id])->first();
          $supplierRfq =  \App\Models\Rfq::where(['id'=> $request->rfq_id])->first();
+         $suppliersUser  = \App\Models\Supplier::where(['id'=> $request->supplier_id])->with('user')->first();
+        //  dd($suppliersUser->user->account->first_name, 'ref');
 
         $updateNewRfqSupplier = \App\Models\RfqSupplier::where(['rfq_id'=> $request->rfq_id])->update([
             'supplier_id'=> $request->supplier_id,
@@ -210,11 +220,18 @@ class WarrantClaimController extends Controller
             'delivery_medium' => 'Okada',
             'cse_status' => $request->status == 'Approved'? 'Yes': 'No',
             'supplier_status' => 'Processing',
-            
-            
+          
         ]);
 
-        return   $updateNewRfqSupplyDispatch;
+         //$suppliersUser->user->email;
+        // $mail_data = collect([
+        //     'email' => 'woorad7@gmail.com',
+        //     'template_feature' => 'CSE_SENT_SUPPLIER_MESSAGE_NOTIFICATION',
+        //     'firstname' =>  $suppliersUser->user->account->first_name,
+        //  ]);
+      
+       $mail = $this->mailAction($mail_data);
+        return  $updateNewRfqSupplyDispatch;
     }
 
 

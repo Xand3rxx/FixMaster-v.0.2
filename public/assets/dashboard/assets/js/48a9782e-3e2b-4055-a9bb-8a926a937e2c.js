@@ -35,6 +35,17 @@ $(document).ready(function() {
         });
     });
 
+    $(document).on('click', '#service-date-time2', function() {
+        $('#service-date-tim2').datetimepicker({
+            // format: 'L', //LT for time only
+            // inline: true,
+            // sideBySide: true,
+            format: 'Y/m/d',
+            formatDate: 'Y/m/d',
+            minDate: '-1970/01/02', // yesterday is minimum date
+            mask: true,
+        });
+    });
 
     //Prevent characters or string asides number in phone number input field
     $("#phone_number, #other_phone_number, #account_number, .amount").on("keypress keyup blur", function(event) {

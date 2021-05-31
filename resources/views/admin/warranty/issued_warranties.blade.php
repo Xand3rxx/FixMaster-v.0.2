@@ -2,6 +2,22 @@
 @section('title', 'Warranty List')
 @include('layouts.partials._messages')
 @section('content')
+<style>
+.card-groups > .card {
+    margin-bottom: 15px !important;
+}
+.card-file-thumb{
+    background-repeat: no-repeat;
+    background-size: 100% 220px;
+}
+
+.custom-control-input {
+    position: absolute;
+     z-index: 200 !important;;
+     opacity: 0; 
+    left:10px
+}
+</style>
 <input class="d-none" id="locale" type="hidden" value="{{ app()->getLocale() }}">
 
 <div class="content-body">
@@ -41,6 +57,9 @@
         <th>End Date</th>  
         <th>Warrant Status</th>
         <th>Status</th>
+        <th>Assigned CSE</th>
+        <th>Assigned Status</th>
+       
         <th class="text-center">Action</th>
       </tr>
     </thead>
@@ -58,17 +77,25 @@
           @else
             <td class="text-danger">Unused</td>
           @endif
+
+
           @if($warranty->has_been_attended_to == 'Yes')
           <td class="text-success">Resolved</td>
           @else
           <td class="text-danger">Unresolved</td>
           @endif
+          <td class="text-danger">None </td>
+          <td class="text-danger">Pending</td>
+          
           <td class=" text-center">
             <div class="dropdown-file">
               <a href="" class="dropdown-link" data-toggle="dropdown"><i data-feather="more-vertical"></i></a>
               <div class="dropdown-menu dropdown-menu-right">
-            
+
+
               <a href="{{ route('admin.warranty_details', ['warranty'=>$warranty->service_request->uuid, 'locale'=>app()->getLocale()]) }}" class="dropdown-item details text-primary"><i class="far fa-clipboard"></i> Details</a>
+             @if($warranty->expiration_date >  Carbon\Carbon::now())
+             <a href="{{ route('admin.warranty_details', ['warranty'=>$warranty->service_request->uuid, 'locale'=>app()->getLocale()]) }}" class="dropdown-item details text-primary"><i class="far fa-clipboard"></i> Accept</a>
 
               @if($warranty->has_been_attended_to == 'Yes')
             
@@ -82,11 +109,21 @@
               data-url="{{ route('admin.mark_warranty_resolved', ['warranty'=>$warranty->uuid, 'locale'=>app()->getLocale() ]) }}"
               class="dropdown-item details text-success"><i class="fas fa-check"></i>  Mark as Resolved</a>
           @endif
+          @endif
+         
+          
+          @if(CustomHelpers::getHours($warranty->date_initiated, Carbon\Carbon::now()))
+          
+          <a href="#assignCse" data-toggle="modal" class="dropdown-item details text-primary" 
+                data-url="{{ route('admin.assign_cses', ['warranty'=>$warranty->uuid, 'locale'=>app()->getLocale()]) }}" 
+                id="assign-Cse" data-job="{{ $warranty['service_request']['unique_id']}}">
+               <i class="far fa-clipboard"></i> Assign Warranty </a>
               
-
+               @endif
               </div>
             </div>
           </td>
+        
         </tr>
       @endforeach
     </tbody>
@@ -156,6 +193,27 @@
     </div><!-- modal-dialog -->
 
 </div><!-- modal -->
+
+
+<div class="modal fade" id="assignCse" tabindex="-1" role="dialog" aria-hidden="true" data-keyboard="false" data-backdrop="static">
+  <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+    <div class="modal-content">
+    <div class="modal-header">
+            <!-- <h5 class="modal-title" id="exampleModalCenterTitle">Assign CSES for <span id="job">
+            </span></h5> -->
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+        </div>
+      <div class="modal-body pd-x-25 pd-sm-x-30 pd-t-40 pd-sm-t-20 pd-b-15 pd-sm-b-20"  id="modal-body-assign">
+      
+     
+      </div><!-- modal-body -->
+    </div><!-- modal-content -->
+  </div><!-- modal-dialog -->
+</div><!-- modal -->
+
+
 
 @push('scripts')
   <script src="{{ asset('assets/dashboard/assets/js/4823bfe5-4a86-49ee-8905-bb9a0d89e2e0.js') }}"></script>

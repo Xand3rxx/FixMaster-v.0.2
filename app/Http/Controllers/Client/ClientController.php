@@ -1262,42 +1262,66 @@ class ClientController extends Controller
             'reason'       =>   'required',
         ]);
 
+        $admin = User::where('id', 1)->with('account')->first();
         $requestExists = ServiceRequest::where('uuid', $id)->first();
-
         $account = Account::where('user_id', auth()->user()->id)->first();
-        $accountAdmin = User::where('id', '1')->first();
+        $cses  = \App\Models\Cse::with('user', 'user.account', 'user.contact', 'user.roles')->withCount('service_request_assgined')->get();
+        $mail1 = '';  $mail2= '';
 
-        $initateWarranty = ServiceRequestWarranty::where('client_id', auth()->user()->id)->update([
+        $initateWarranty = ServiceRequestWarranty::where('service_request_id',  $requestExists->id)->update([
             'status'            => 'used',
             'initiated'         => 'Yes',
             'reason'            => $request->reason,
             'date_initiated'    =>  \Carbon\Carbon::now('UTC'),
         ]);
 
-        // $user = (object)[
-        //     'name' => $account->first_name,
-        //     'email' => auth()->user()->email,
-        //     'type' => 'client',
-        //     'service_request_unique' => $requestExists->unique_id,
-        //   ];
-
-
-        //   $admin = (object)[
-        //     'name' => 'Admin',
-        //     'email' =>  $accountAdmin->email,
-        //     'client'=> $account->first_name . ' ' .$account->last_name ,
-        //     'client_email' => auth()->user()->email,
-        //     'type' => 'admin',
-        //     'service_request_unique' => $requestExists->unique_id
-        //   ];
-        //   $clientEmail = $this->sendWarrantyInitiationMail($user, 'client');
-        //   $adminEmail = $this->sendWarrantyInitiationMail($admin, 'client');
-
         //send mail 1, admin, 2, client, 3 cse
+       if($initateWarranty) { 
+        $mail_data_admin = collect([
+            'email' =>  $admin->email,
+            'template_feature' => 'ADMIN_WARRANTY_CLAIM_NOTIFICATION',
+            'firstname' =>  $admin->account->first_name,
+            'customer_name' => Auth::user()->account->first_name.' '.Auth::user()->account->last_name,
+            'customer_email' => Auth::user()->email,
+            'job_ref' =>  $requestExists->unique_id
+          ]);
+          $this->mailAction($mail_data_admin);
+            $mail1 = '1';
+        }
+
+      
+        if($mail1 == '1') { 
+          $mail_data_client = collect([
+            'email' =>  Auth::user()->email,
+            'template_feature' => 'CUSTOMER_WARRANTY_CLAIM_NOTIFICATION',
+            'customer_name' => Auth::user()->account->first_name.' '.Auth::user()->account->last_name,
+            'job_ref' =>  $requestExists->unique_id
+          ]);
+          $this->mailAction($mail_data_client);
+          $mail2 ='1';
+        }
+
+        if($mail2 == '1') { 
+          foreach($cses as $cse){
+          
+            $mail_data_cse = collect([
+                'email' =>   $cse['user']['email'],
+                'template_feature' => 'ADMIN_WARRANTY_CLAIM_NOTIFICATION',
+                'firstname' => $cse['user']['account']['first_name'] ,
+                'customer_name' => Auth::user()->account->first_name.' '.Auth::user()->account->last_name,
+                'customer_email' => Auth::user()->email,
+                'job_ref' =>  $requestExists->unique_id
+              ]);
+              $mail1 = $this->mailAction($mail_data_cse);
+          };
+          
+        }
+
+       
 
         if($initateWarranty){
 
-            return redirect()->route('client.service.all', app()->getLocale())->with('success', $requestExists->unique_id.' warranty was successfully initiated.');
+            return redirect()->route('client.service.all', app()->getLocale())->with('success', $requestExists->unique_id.' warranty was successfully initiated.Please check your mail for notification');
 
           }else{
             return back()->with('error', 'An error occurred while trying to initiate warranty for'.  $requestExists->unique_id.' service request.');
@@ -1349,7 +1373,7 @@ class ClientController extends Controller
 
             $this->log('request', 'Informational', Route::currentRouteAction(), auth()->user()->account->last_name . ' ' . auth()->user()->account->first_name  . ') marked '.$requestExists->unique_id.' service request as completed.');
 
-            return redirect()->route('client.service.all', app()->getLocale())->with('success', $requestExists->unique_id.' was marked as completed successfully.');
+            return redirect()->route('client.service.all', app()->getLocale())->with('success', $requestExists->unique_id.' was marked as completed successfully.Please check your mail for notification');
         }else{
 
          //activity log

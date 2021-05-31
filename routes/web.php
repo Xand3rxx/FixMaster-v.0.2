@@ -56,6 +56,7 @@ use App\Http\Controllers\Admin\Prospective\CSEController as ProspectiveCSEContro
 use App\Http\Controllers\Admin\Prospective\SupplierController as ProspectiveSupplierController;
 use App\Http\Controllers\Admin\Prospective\TechnicianArtisanController as ProspectiveTechnicianArtisanController;
 use App\Http\Controllers\ServiceRequest\WarrantClaimController;
+use App\Http\Controllers\CSE\CseWarrantyClaimController;
 
 
 /*
@@ -136,9 +137,12 @@ Route::prefix('admin')->name('admin.')->group(function () {
     Route::get('/warranty/delete/{details:uuid}',  [WarrantyController::class, 'deleteWarranty'])->name('delete_warranty');
     Route::get('/warranty/issued',      [WarrantyController::class, 'issuedWarranties'])->name('issued_warranty');
     Route::get('/warranty/issued/resolved/{warranty:uuid}',      [WarrantyController::class, 'resolvedWarranty'])->name('mark_warranty_resolved');
-    Route::get('/warranty/issued/details/{warranty:uuid}',       [CseController::class,  'warranty_details'])->name('warranty_details');
+    Route::get('/warranty/issued/details/{warranty:uuid}',       [WarrantyClaimCseController::class,  'warranty_details'])->name('warranty_details');
     Route::get('/resolved/warranty/details/{warranty:id}',          [WarrantyController::class, 'warranty_resolved_details'])->name('warranty_resolved_details');
+    Route::get('/assign/cses/warranty/claim/{warranty:id}',          [WarrantyController::class, 'assign_cses'])->name('assign_cses');
+    Route::post('/save/assigned/cse/warranty/claim/',          [WarrantyController::class, 'save_assigned_waranty_cse'])->name('save_assigned_waranty_cse');
 
+  
     //Routes for Invoice Management
     Route::get('/invoices',      [InvoiceController::class, 'index'])->name('invoices');
     Route::get('/invoice/{invoice:uuid}', [InvoiceController::class, 'invoice'])->name('invoice');
@@ -484,11 +488,13 @@ Route::get('warranty/download/{file:id}', [WarrantyController::class, 'download'
         ]
     )->name('request_details');
 
-
+  
+    Route::get('/cse/accept/warranty/claims/{warranty:id}',          [CseWarrantyClaimController::class, 'accept_warranty_claim'])->name('accept_warranty_claim');
     Route::get('/warranty/claims/list', [CseController::class, 'warranty_claims_list'])->name('warranty_claims_list');
     Route::get('/warranty-claims/details', [CseController::class, 'warranty_claims'])->name('warranty_claims');
+
+    Route::get('/warranty/claims/details/{warranty:uuid}',      [CseController::class, 'warranty_details'])->name('warranty_details');
     Route::get('/warranty/resolved/claims/details/{warranty:id}',          [WarrantyController::class, 'warranty_resolved_details'])->name('warranty_resolved_details');
-    Route::get('/warranty/claims/details/{warranty:uuid}',      [CseController::class,  'warranty_details'])->name('warranty_details');
     Route::get('/mark/warrant/claims/resolved/{warranty:uuid}',      [WarrantyController::class, 'resolvedWarranty'])->name('mark_warranty_resolved');
     Route::get('/requests-for-quote/details/image/{image:id}',            [SupplierRfqController::class, 'rfqDetailsImage'])->name('rfq_details_image');
 

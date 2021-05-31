@@ -104,6 +104,17 @@ class CustomHelpers
     $output = explode(".",$string);
     return $output[count($output)-1];
    }
+
+   static function getHours($date1, $date2){
+    $date = Carbon::parse($date1);
+    $diff = $date->diffForHumans($date2, true);
+    $data =  explode(" ", $diff);
+    $time = array("minutes", "seconds", 'second', 'minute');
+    if(!in_array($data[1], $time))
+           return $data[1];
+    else
+    return false;
+   }
     
 }
 ?>

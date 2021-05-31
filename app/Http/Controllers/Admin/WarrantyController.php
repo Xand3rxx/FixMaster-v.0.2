@@ -228,21 +228,21 @@ class WarrantyController extends Controller
            if( $serviceRequestIssued ){
             $warranty = \App\Models\ServiceRequestWarrantyIssued::where('service_request_warranty_id', $serviceRequest->id)->update([
                 'service_request_warranty_id'        =>   $serviceRequest->id,
-                'cse_id'             =>  $serviceRequest->service_request->cses[0]->account->user_id,
-                'completed_by'      =>   Auth::id(),
-                'admin_comment'       =>   Auth::user()->type->url == 'admin'? $request->comment: '', 
-                'cse_comment'       =>  Auth::user()->type->url != 'admin'? $request->comment: '',
-                'date_resolved'       =>  \Carbon\Carbon::now('UTC'),
+                // 'cse_id'             =>  $serviceRequest->service_request->cses[0]->account->user_id,
+                // 'completed_by'      =>   Auth::id(),
+                // 'admin_comment'       =>   Auth::user()->type->url == 'admin'? $request->comment: '', 
+                // 'cse_comment'       =>  Auth::user()->type->url != 'admin'? $request->comment: '',
+                // 'date_resolved'       =>  \Carbon\Carbon::now('UTC'),
             ]);
 
            }else{
                 $warranty = ServiceRequestWarrantyIssued::create([
                     'service_request_warranty_id'        =>   $serviceRequest->id,
-                    'cse_id'             =>  $serviceRequest->service_request->cses[0]->account->user_id,
-                    'completed_by'      =>   Auth::id(),
-                    'admin_comment'       =>   Auth::user()->type->url == 'admin'? $request->comment: '', 
-                    'cse_comment'       =>  Auth::user()->type->url != 'admin'? $request->comment: '',
-                    'date_resolved'       =>  \Carbon\Carbon::now('UTC'),
+                    // 'cse_id'             =>  $serviceRequest->service_request->cses[0]->account->user_id,
+                    // 'completed_by'      =>   Auth::id(),
+                    // 'admin_comment'       =>   Auth::user()->type->url == 'admin'? $request->comment: '', 
+                    // 'cse_comment'       =>  Auth::user()->type->url != 'admin'? $request->comment: '',
+                    // 'date_resolved'       =>  \Carbon\Carbon::now('UTC'),
                 ]);
         
     
@@ -291,6 +291,106 @@ class WarrantyController extends Controller
             'warrantyExist' => $warrantyExist 
         ]);
 
+    }
+
+
+
+    public function assign_cses(Request $request, $language, $uuid){
+
+        $serviceRequest = ServiceRequestWarranty::where('uuid', $uuid)->with('user.account', 'service_request', 'warranty')->first();
+        $warrantyExist = Warranty::where('id',  $serviceRequest->warranty_id)->first();
+        $requestDetail = \App\Models\ServiceRequest::where('id',  $serviceRequest->service_request_id)->with('price')->firstOrFail();
+
+        return view('admin.warranty._assignwarranty_cses', [
+            'serviceRequest'    =>  $serviceRequest,
+            'warrantyExist' => $warrantyExist,
+            'users' => \App\Models\Cse::with('user', 'user.account', 'user.contact', 'user.roles')->withCount('service_request_assgined')->get(),
+            'requestDetail' =>  $requestDetail 
+        ]);
+      
+
+       
+    }
+
+    public function save_assigned_waranty_cse(Request $request){
+     
+        $request->validate([
+            'deadline' => 'required',
+            // 'cse' => 'required'
+        ]);
+   
+        $admin = \App\Models\User::where('id', 1)->with('account')->first();
+        $serviceRequest = \App\Models\ServiceRequest::where('id', $request->service_request_id)->with('user.account', 'service_request', 'warranty')->first();
+        $csedetails = \App\Models\User::where('id', $request->cse)->with('account')->first();
+        $cses  = \App\Models\Cse::with('user', 'user.account', 'user.contact', 'user.roles')->withCount('service_request_assgined')->get();
+
+
+            $updateOldCseAssigned = \App\Models\ServiceRequestAssigned::where([
+                'service_request_id'=>  $request->service_request_id, 
+                'user_id'=> $request->cse_old, 'status'=> 'Active'])->update([
+                'status'                    => 'Inactive'
+            ]);
+            
+            if($updateOldCseAssigned ){
+            $createNewCseAssigned = \App\Models\ServiceRequestAssigned::create([
+                'user_id'                   => $request->cse,
+                'service_request_id'        => $request->service_request_id,
+                'job_accepted'              => null,
+                'job_acceptance_time'       => null,
+                'job_diagnostic_date'       => null,
+                'job_declined_time'         => null,
+                'job_completed_date'        => null,
+                'status'                    => 'Active'
+            ]);
+            }
+
+            if($createNewCseAssigned  AND   $updateOldCseAssigned ){
+                $updateOldCseAssigned = \App\Models\Cse::where([
+                    'user_id'=> $request->cse])->update([
+                    'job_availability'        => 'Yes'
+                ]);
+                
+
+            $warranty = ServiceRequestWarrantyIssued::create([
+                'service_request_warranty_id'        =>  $request->warranty_claim_id,
+               
+            ]);
+          }
+
+          
+
+           //send cse mail
+          $mail_data_cse = collect([
+            'email' => 'lifeparo@gmail.com',
+            'template_feature' => 'ADMIN_SEND_CSE_WARRANTY_CLAIM_ASSIGN_NOTIFICATION',
+            'cse_name' => $csedetails->account->first_name.' '.$csedetails->account->last_name,
+            'job_ref' =>  $serviceRequest->unique_id,
+            'subject' => 'testing'
+          ]);
+          $mail1 = $this->mailAction($mail_data_cse);
+
+          if ($warranty AND  $createNewCseAssigned AND  $updateOldCseAssigned ){
+            $type = 'Others';
+            $severity = 'Informational';
+            $actionUrl = Route::currentRouteAction();
+            $message = Auth::user()->email.' assigned job reference '.$serviceRequest->unique_id ;
+            $this->log($type, $severity, $actionUrl, $message);
+            return redirect()->route('admin.issued_warranty', app()->getLocale())->with('success', $serviceRequest->unique_id.' has been assigned successfully.');
+
+        
+        }
+        else {
+            $type = 'Errors';
+            $severity = 'Error';
+            $actionUrl = Route::currentRouteAction();
+            $message = 'An Error Occured while '. Auth::user()->email. ' was trying to assign '.$serviceRequest->unique_id;
+            $this->log($type, $severity, $actionUrl, $message);
+            return back()->with('error', 'An error occurred while trying to assign '.$serviceRequest->unique_id);
+        }
+
+      
+
+       
     }
 
 

@@ -137,9 +137,11 @@ class CustomerServiceExecutiveController extends Controller
 
     public function warranty_claims_list()
     {
-        $warranties = \App\Models\ServiceRequestAssigned::with('service_request_warranty', 'user.account', 'service_request')
-            ->where(['user_id' => auth()->user()->id, 'status' => 'Active'])
-            ->get();
+        // $warranties = \App\Models\ServiceRequestAssigned::with('service_request_warranty', 'user.account', 'service_request')
+        //     ->where(['status' => 'Active'])
+        //     ->get();
+            $warranties = \App\Models\ServiceRequestWarranty::with('user.account', 'service_request', 'warranty', 'service_request_warranty_issued')->orderBy('has_been_attended_to', 'ASC')->latest()->get();
+   
 
         return view('cse.warranties.index', [
             'issuedWarranties' =>  $warranties
@@ -163,7 +165,6 @@ class CustomerServiceExecutiveController extends Controller
         $scheduleDate =!empty($service_request->service_request_warranty->service_request_warranty_issued) ? 
         $service_request->service_request_warranty->service_request_warranty_issued->scheduled_datetime: '';
 
-
         (array) $variables = [
             'service_request' => $service_request,
             'technicians' => \App\Models\UserService::where('service_id', $service_request->service_id)->where('role_id', $technicainsRole->id)->with('user')->get(),
@@ -171,13 +172,9 @@ class CustomerServiceExecutiveController extends Controller
             'request_progress' => $request_progress,
             'shcedule_datetime' =>  $scheduleDate,
             'technician_list'  =>  \App\Models\Technician::all(),
-            'suppliers'        =>  \App\Models\Rfq::where('service_request_id', $service_request->id)->with('rfqSupplies', 'rfqSuppliesInvoices','rfqBatches')->first(),
-
+            'suppliers'        =>  \App\Models\Rfq::where('service_request_id', $service_request->id)->with('rfqSupplies', 'rfqSuppliesInvoices','rfqBatches')->first()
         ];
       
-
-    //   dd($variables['suppliers']);
-   
         if ($service_request->status_id == 2) {
             $service_request_progresses = \App\Models\ServiceRequestProgress::where('user_id', auth()->user()->id)->latest('created_at')->first();
             // Determine Ongoing Status List

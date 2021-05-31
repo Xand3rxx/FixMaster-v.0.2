@@ -42,60 +42,84 @@
         <th>End Date</th>  
         <th>Warrant Status</th>
         <th>Status</th>
+        <th>Assigned CSE</th>
+        <th>Assigned Status</th>
+       
         <th class="text-center">Action</th>
       </tr>
     </thead>
     <tbody>
-     
-    @foreach ($issuedWarranties as $warranty)
-      @if(!empty($warranty->service_request_warranty))
-    
+      @foreach ($issuedWarranties as $warranty)
         <tr>
           <td class="tx-color-03 tx-center">{{ $loop->iteration }}</td>
           <td class="tx-medium">{{ $warranty['user']['account']['first_name'].' '.$warranty['user']['account']['last_name'] }}</td>
-          <td class="tx-medium">{{ $warranty['service_request_warranty']['warranty']['name'] }}</td>
+          <td class="tx-medium">{{ $warranty['warranty']['name'] }}</td>
           <td class="tx-medium">{{ $warranty['service_request']['unique_id'] }}</td>
-          <td class="tx-medium">{{ Carbon\Carbon::parse($warranty->service_request_warranty->start_date ?? '2020-12-28 16:58:54', 'UTC')->isoFormat('MMMM Do YYYY, h:mm:ssa') }}</td>
-          <td class="tx-medium">{{ Carbon\Carbon::parse($warranty->service_request_warranty->expiration_date ?? '2020-12-28 16:58:54', 'UTC')->isoFormat('MMMM Do YYYY, h:mm:ssa') }}</td>
-          @if($warranty->service_request_warranty->status == 'used')
+          <td class="tx-medium">{{ Carbon\Carbon::parse($warranty->start_date ?? '2020-12-28 16:58:54', 'UTC')->isoFormat('MMMM Do YYYY, h:mm:ssa') }}</td>
+          <td class="tx-medium">{{ Carbon\Carbon::parse($warranty->expiration_date ?? '2020-12-28 16:58:54', 'UTC')->isoFormat('MMMM Do YYYY, h:mm:ssa') }}</td>
+          @if($warranty->status == 'used')
             <td class="text-success">Used</td>
           @else
             <td class="text-danger">Unused</td>
           @endif
-          @if($warranty->service_request_warranty->has_been_attended_to == 'Yes')
+
+
+          @if($warranty->has_been_attended_to == 'Yes')
           <td class="text-success">Resolved</td>
           @else
           <td class="text-danger">Unresolved</td>
           @endif
+          @if(is_null($warranty->service_request_warranty_issued))
+          <td class="text-danger">None </td>
+          @else
+          <td class="text-danger">Yes</td>
+          @endif
+
+          @if(is_null($warranty->service_request_warranty_issued))
+          <td class="text-danger">Pending</td>
+          @else
+          <td class="text-danger">Accepted</td>
+          @endif
+        
+        
           <td class=" text-center">
             <div class="dropdown-file">
-              <a href="" class="dropdown-link" data-toggle="dropdown"><i data-feather="more-vertical"></i></a>
+            <a href="" class="dropdown-link" data-toggle="dropdown"><i data-feather="more-vertical"></i></a>
               <div class="dropdown-menu dropdown-menu-right">
+              @if($warranty->expiration_date >  Carbon\Carbon::now())
+
+              @if(is_null($warranty->service_request_warranty_issued))
+              <a href="{{ route('cse.accept_warranty_claim', ['warranty'=>$warranty->uuid, 'locale'=>app()->getLocale()]) }}" class="dropdown-item details text-primary"><i class="far fa-clipboard"></i> Accept</a>
+               @endif
+
+               @if(!is_null($warranty->service_request_warranty_issued))
+               @if($warranty->service_request_warranty_issued->cse_id == Auth::user()->id)
+               <a href="{{ route('admin.warranty_details', ['warranty'=>$warranty->service_request->uuid, 'locale'=>app()->getLocale()]) }}" class="dropdown-item details text-primary"><i class="far fa-clipboard"></i> Details</a>
+               @else
+               <a href="#" class="dropdown-item details text-primary"><i class="far fa-clipboard"></i> No Details</a>
+
+               @endif
+               @endif
+
+          
+
+              @if($warranty->has_been_attended_to == 'Yes')
             
-              <a href="{{ route('cse.warranty_details', ['warranty'=> $warranty->service_request->uuid, 'locale'=>app()->getLocale()]) }}" class="dropdown-item details text-primary"><i class="far fa-clipboard"></i> Details</a>
-              
-              @if($warranty->service_request_warranty->has_been_attended_to == 'Yes')
+            <a href="#resolvedDetails" data-toggle="modal" class="dropdown-item details text-primary" 
+             data-url="{{ route('admin.warranty_resolved_details', ['warranty'=>$warranty->uuid, 'locale'=>app()->getLocale()]) }}" 
+             id="resolved-details" data-job="{{ $warranty['service_request']['unique_id']}}">
+            <i class="far fa-clipboard"></i> Resolved Details</a>
+            @endif
+            @endif
+            @if($warranty->expiration_date <  Carbon\Carbon::now())
+            <a href="{{ route('admin.warranty_details', ['warranty'=>$warranty->service_request->uuid, 'locale'=>app()->getLocale()]) }}" class="dropdown-item details text-primary"><i class="far fa-clipboard"></i> Details</a>
 
-
-              <a href="#resolvedDetails" data-toggle="modal" class="dropdown-item details text-primary" 
-                data-url="{{ route('cse.warranty_resolved_details',  ['warranty'=> $warranty->service_request_warranty->uuid, 'locale'=>app()->getLocale()]) }}" 
-                id="resolved-details" data-job="{{ $warranty->service_request->unique_id}}">
-               <i class="far fa-clipboard"></i> Resolved Details</a>
-              <!-- <a href="#" class="dropdown-item details text-success"> Resolved Warranty</a> -->
-
-          @else
-          <a href="#markAsResolved" id="markas-resolved"
-              data-toggle="modal"
-              data-url="{{ route('cse.mark_warranty_resolved', ['warranty'=>$warranty->service_request_warranty->uuid, 'locale'=>app()->getLocale() ]) }}"
-              class="dropdown-item details text-success"><i class="fas fa-check"></i>  Mark as Resolved</a>
-          @endif
-              
-
+              @endif
               </div>
             </div>
           </td>
+        
         </tr>
-        @endif
       @endforeach
     </tbody>
   </table>
