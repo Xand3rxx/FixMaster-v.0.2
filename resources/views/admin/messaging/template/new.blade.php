@@ -171,11 +171,12 @@
         $('#email_editor').summernote('destroy');
         });
 
-
         $.get( url+"/api/template/features", function( data ) {
+            console.log(data);
             $.each(data, function(key, val){
                 $('<option>').val(val).text(val).appendTo('#feature');
             })
+
         });
 
         $(document).on('click', '.msgedit', function(e){
@@ -248,6 +249,7 @@
     function getTemplate(uuid){
         $.get( url+"/api/template/"+uuid, function( data ) {
             data = data.data
+            console.log(data);
             var selected = data.feature;
             $("#feature").filter(function() {
             return $(this).text() == selected;

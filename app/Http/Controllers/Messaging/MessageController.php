@@ -21,7 +21,6 @@ use App\Jobs\PushSMS;
 use Mail;
 use Route;
 use Auth;
-
 class MessageController extends Controller
 {
     use Loggable;
@@ -198,23 +197,74 @@ class MessageController extends Controller
         $feature = $request->input('feature');
         $type = $request->input('type');
 
+
         $this->sendNewMessage( $type, $subject, $from, $to, $mail_data, $feature);
     }
 
     
 
     public function sendNewMessage( $type, $subject, $from, $to, $mail_data,$feature=""){
+    /**
+     * Send message using Available Template Design
+     *
+     * @param string $template_name ...use \App\Models\MessageTemplate::Feature
+     * @param mixed $parameters
+     *
+     * @return \Illuminate\Http\Response
+     */
+    // public static function usingTemplate(string $template_name, mixed $parameters)
+    // {
+    //     if (!in_array($template_name, \App\Models\MessageTemplate::FEATURES)) {
+    //         return response()->json(["message" => "Message Template not found!"], 404);
+    //     }
+    //     // Find needed Template
+    //     $messageTemplate = MessageTemplate::select('content')->where('feature', $template_name)->first();
+    //     // Build Message Body
+    //     $message_body = self::buildMessageBody($parameters, $messageTemplate->content);
+    // }
+
+    /**
+     * Build Message Body
+     *
+     * @param string $template_name ...use \App\Models\MessageTemplate::Feature
+     * @param mixed $parameters
+     *
+     * @return \Illuminate\Http\Response
+     */
+    // protected static function buildMessageBody($variables, $messageTemp)
+    // {
+    //     (array) $builtBody = [];
+    //     foreach ($variables as $key => $value) {
+    //         $builtBody = str_replace('{' . $key . '}', $value, $messageTemp);
+    //     }
+    //     return $builtBody;
+    // }
+
+    /**
+     * Send message using feature
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function sendNewMessage($subject="", $from="", $to, $mail_data,$feature=""){
+
        $message = $mail_data;
        $message_array = [];
+       $template = null;
+       $sender = null;
+       $recipient = null;
+
+       DB::enableQueryLog();
         if(!empty($feature)){
             $template = MessageTemplate::select('content')
             ->where('feature', $feature)
             ->where('type', $type)
             ->first();
             
+            Log::debug(DB::getQueryLog());
+
             if(empty($template)){
             return response()->json(["message" => "Message Template not found!"], 404);
-    
+
             }
             $message = $this->replacePlaceHolders($mail_data, $template->content);
         }
@@ -251,6 +301,40 @@ class MessageController extends Controller
         elseif($type=='sms')
            $this->dispatch(new PushSMS($message_array));
         
+       //$recipient = Auth::user()->email;
+
+        Log::debug($recipient->id);
+
+        //  if($from!="" && is_object($recipient)){
+        //     $mail_objects[] = [
+        //         'title' => $subject,
+        //         'content' => $message,
+        //         'recipient' => $recipient->id,
+        //         'sender' => $sender->id,
+        //         'uuid' => Str::uuid()->toString(),
+        //         'created_at'        => Carbon::now(),
+        //         'updated_at'        => Carbon::now(),
+        //         'mail_status' => 'Not Sent',
+        //     ];
+
+
+        // Message::insert($mail_objects);
+
+        //  }
+
+
+        $message_array = ['to'=>$to, 'from'=>$from, 'subject'=>$subject, 'content'=>$message];
+
+        $this->dispatch(new PushEmails($message_array));
+
+
+
+        // if(!empty($feature) && $sms!=""){
+        //     $this->dispatch(new PushSMS($sms));
+        // }
+
+
+    }
 
     }
 
