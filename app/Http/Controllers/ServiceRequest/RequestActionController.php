@@ -25,29 +25,28 @@ class RequestActionController extends Controller
     {
         (array)$to_be_stored = [];
 
+        if($request->filled('project_progress')){
+            $to_be_stored = \App\Http\Controllers\ServiceRequest\Concerns\ProjectProgress::handle($request, $service_request, $to_be_stored);
+        }
+
         if ($request->hasAny(['add_comment','qa_user_uuid', 'add_technician_user_uuid'])) {
-            $action = \App\Http\Controllers\ServiceRequest\Concerns\ActionsRepeated::handle($request, $service_request, $to_be_stored);
-            $to_be_stored = $action;
+            $to_be_stored = \App\Http\Controllers\ServiceRequest\Concerns\ActionsRepeated::handle($request, $service_request, $to_be_stored);
         }
 
         if($request->filled('technician_user_uuid')){
-            $action = \App\Http\Controllers\ServiceRequest\Concerns\AssignTechnician::handle($request, $service_request, $to_be_stored);
-            $to_be_stored = $action;
+            $to_be_stored = \App\Http\Controllers\ServiceRequest\Concerns\AssignTechnician::handle($request, $service_request, $to_be_stored);
         }
 
         if($request->filled('preferred_time')){
-            $action = \App\Http\Controllers\ServiceRequest\Concerns\SchedulingDate::handle($request, $service_request, $to_be_stored);
-            $to_be_stored = $action;
+            $to_be_stored = \App\Http\Controllers\ServiceRequest\Concerns\SchedulingDate::handle($request, $service_request, $to_be_stored);
         }
 
         if($request->filled('category_uuid')){
-            $action = \App\Http\Controllers\ServiceRequest\Concerns\Categorization::handle($request, $service_request, $to_be_stored);
-            $to_be_stored = $action;
+            $to_be_stored = \App\Http\Controllers\ServiceRequest\Concerns\Categorization::handle($request, $service_request, $to_be_stored);
         }
 
         if($request->filled(['estimated_work_hours','root_cause', 'intiate_rfq', 'intiate_trf', ])){
-            $action = \App\Http\Controllers\ServiceRequest\Concerns\Invoicebuilder::handle($request, $service_request, $to_be_stored);
-            $to_be_stored = $action;
+            $to_be_stored = \App\Http\Controllers\ServiceRequest\Concerns\Invoicebuilder::handle($request, $service_request, $to_be_stored);
         }
 
         // call the storage 

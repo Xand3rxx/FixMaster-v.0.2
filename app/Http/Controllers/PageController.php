@@ -19,8 +19,11 @@ class PageController extends Controller
 
     public function index()
     {
-        $states = State::all();
-        return view('frontend.careers.index', compact('states'));
+        $service = $this->categoryAndServices();
+        return view('frontend.careers.index', [
+            'states' => State::all(),
+            'services' => $service['services']
+        ]);
     }
 
     public function services(){
