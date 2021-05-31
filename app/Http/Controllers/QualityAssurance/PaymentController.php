@@ -114,4 +114,8 @@ class PaymentController extends Controller
             'payment' => $payment
         ]);
     }
+
+    public function paymentDistory(){
+        return view('payment.payment_history');
+    }
 }

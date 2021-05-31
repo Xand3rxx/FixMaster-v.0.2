@@ -312,4 +312,14 @@ class TechnicianProfileController extends Controller
             }
         }
     }
+
+    public function paymentHistory(Request $request){
+
+        $years =  $this->getDistinctYears($tableName = 'payments_disbursed');
+
+        $payments = PaymentDisbursed::where('recipient_id', Auth::id())->with('user')->get();
+        // $payments = PaymentDisbursed::where('recipient_id',Auth::id())
+        // ->orderBy('created_at', 'DESC')->get();
+        return view('technician.payment_history', compact('payments', 'years'));
+    }
 }

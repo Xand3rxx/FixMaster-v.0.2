@@ -55,6 +55,8 @@ use App\Http\Controllers\Admin\Prospective\CSEController as ProspectiveCSEContro
 use App\Http\Controllers\Admin\Prospective\SupplierController as ProspectiveSupplierController;
 use App\Http\Controllers\Admin\Prospective\TechnicianArtisanController as ProspectiveTechnicianArtisanController;
 
+use App\Http\Controllers\Technician\ServiceRequestController as TechnicianServiceRequestController;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -402,7 +404,7 @@ Route::prefix('/client')->middleware('monitor.clientservice.request.changes')->g
         // Route::get('/payment/flutterwave/{type}', [FlutterwaveController::class, 'complete'])->name('payment-flutterwave-complete');
         // /** Flutterwave Payment Gateway End */
 
-        
+
 
 
 
@@ -456,7 +458,7 @@ Route::prefix('/cse')->middleware('monitor.cseservice.request.changes')->group(f
                 // 'warranties' => \App\Models\Warranty::all(),
             ]
         )->name('request_details');
-    
+
 
         Route::get('/warranty/claims/list', [CseController::class, 'warranty_claims_list'])->name('warranty_claims_list');
         Route::get('/warranty-claims/details', [CseController::class, 'warranty_claims'])->name('warranty_claims');
@@ -514,7 +516,9 @@ Route::prefix('/technician')->name('technician.')->group(function () {
         Route::post('/disbursed_payments_sorting', [TechnicianProfileController::class, 'sortDisbursedPayments'])->name('disbursed_payments_sorting');
         Route::view('/messages/inbox', 'technician.messages.inbox')->name('messages.inbox');
         Route::view('/messages/sent', 'technician.messages.outbox')->name('messages.outbox');
-        Route::view('/requests/active', 'technician.requests.active')->name('requests.active');
+        Route::get('/requests/active',  [TechnicianServiceRequestController::class, 'getActiveRequest'])->name('requests.active');
+
+        Route::get('/payments/history', [TechnicianProfileController::class, 'paymentHistory'])->name('payment.history');
 
         Route::view('/requests/completed', 'technician.requests.completed')->name('requests.completed');
         Route::view('/requests/warranty-claim', 'technician.requests.warranty_claim')->name('requests.warranty_claim');
