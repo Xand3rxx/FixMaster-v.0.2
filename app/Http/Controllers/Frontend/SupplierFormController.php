@@ -16,17 +16,22 @@ class SupplierFormController extends Controller
      */
     public function __invoke(Request $request)
     {
-        //
         // Validate Request
         (array) $valid = $this->validate($request, [
             'first_name'            => 'bail|required|string|max:180',
             'last_name'             => 'bail|required|string|max:180',
             'phone'                 => 'bail|required|numeric|min:8',
             'email'                 => 'bail|required|email|unique:users,email',
-            'company_name'          => 'required|string',
-            'years_of_experience'   => 'required|numeric',
+
+            'cac_number'            => 'required|string|max:180',
+            'company_name'          => 'required|string|max:180',
+            'establishment_date'    => 'required|string|date',
+            
             'registered_address'    =>   'required|string',
             'office_address'        =>   'sometimes|string',
+
+            'supplier_category'     => 'required|array',
+            'supplier_category.*'   => 'required|string',
 
             'address_latitude'       =>   'sometimes|string',
             'address_longitude'      =>   'sometimes|string',
