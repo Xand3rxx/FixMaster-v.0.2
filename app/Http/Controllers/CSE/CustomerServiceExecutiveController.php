@@ -49,7 +49,7 @@ class CustomerServiceExecutiveController extends Controller
         ]);
     }
 
-    
+
 
     /**
      * Accept Service Request Job
@@ -81,8 +81,9 @@ class CustomerServiceExecutiveController extends Controller
             : redirect()->route('login'));
     }
 
-    public function getAvailableToolQuantity(Request $request){
-        if($request->ajax()){
+    public function getAvailableToolQuantity(Request $request)
+    {
+        if ($request->ajax()) {
             $toolId = $request->get('tool_id');
 
             $toolExists = \App\Models\ToolInventory::where('id', $toolId)->firstOrFail();
@@ -91,6 +92,14 @@ class CustomerServiceExecutiveController extends Controller
 
             return $availableQuantity;
         }
+    }
+
+    public function getSubServices(Request $request)
+    {
+        if ($request->ajax()) {
+            return response()->json(['sub_services' => \App\Models\SubService::where('service_id', $request->get('service_id'))->get()]);
+        }
+        return response()->json(['sub_services' => null], 404);
     }
 
     /**
@@ -160,8 +169,8 @@ class CustomerServiceExecutiveController extends Controller
 
         // find the technician role CACHE THIS DURING PRODUCTION
         $technicainsRole = \App\Models\Role::where('slug', 'technician-artisans')->first();
-        $scheduleDate =!empty($service_request->service_request_warranty->service_request_warranty_issued) ? 
-        $service_request->service_request_warranty->service_request_warranty_issued->scheduled_datetime: '';
+        $scheduleDate = !empty($service_request->service_request_warranty->service_request_warranty_issued) ?
+            $service_request->service_request_warranty->service_request_warranty_issued->scheduled_datetime : '';
 
 
         (array) $variables = [
@@ -171,7 +180,7 @@ class CustomerServiceExecutiveController extends Controller
             'request_progress' => $request_progress,
             'shcedule_datetime' =>  $scheduleDate
         ];
-   
+
         if ($service_request->status_id == 2) {
             $service_request_progresses = \App\Models\ServiceRequestProgress::where('user_id', auth()->user()->id)->latest('created_at')->first();
             // Determine Ongoing Status List
@@ -192,7 +201,7 @@ class CustomerServiceExecutiveController extends Controller
                 }]);
             }
         }
-       
+
 
         return view('cse.warranties.show', $variables);
     }
@@ -203,7 +212,7 @@ class CustomerServiceExecutiveController extends Controller
             (array) $filters = $request->only('sub_service_list');
 
             return view('cse.requests.includes._sub_service_dynamic_field', [
-                'results'   =>  $filters ? \App\Models\SubService::select('name')->whereIn('uuid', $filters['sub_service_list'][0])->orderBy('name', 'ASC')->get() : []
+                'results'   =>  $filters ? \App\Models\SubService::select('name','uuid')->whereIn('uuid', $filters['sub_service_list'][0])->orderBy('name', 'ASC')->get() : []
             ]);
         }
     }

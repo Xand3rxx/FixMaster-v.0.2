@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\ServiceRequestAssigned;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -36,7 +37,7 @@ class CreateServiceRequestAssignedTable extends Migration
             $table->timestamp('job_declined_time')->nullable();
             $table->timestamp('job_completed_date')->nullable();
             $table->enum('status', ['Active', 'Inactive'])->nullable()->default('Inactive');
-            $table->enum('assistive_role', ['Technician', 'Consultant'])->nullable()->default('Technician');
+            $table->enum('assistive_role', ServiceRequestAssigned::ASSISTIVE_ROLE)->nullable()->default(ServiceRequestAssigned::ASSISTIVE_ROLE[0]);
 
             $table->primary(['user_id', 'service_request_id']);
             $table->timestamps();

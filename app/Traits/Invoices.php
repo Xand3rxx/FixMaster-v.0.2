@@ -168,7 +168,7 @@ trait Invoices
         ]);
     }
 
-    public static function completedServiceInvoice($service_request)
+    public static function completedServiceInvoice($service_request, $hours_spent)
     {
         return self::getServiceRequestDetails($service_request_id, $rfq_id, $warranty_id, $sub_service_id, $hours_spent);
     }
