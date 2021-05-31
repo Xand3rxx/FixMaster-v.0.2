@@ -83,9 +83,9 @@
                                              @endif -->
 
                                              @if($myServiceRequest->status_id < 3)  
-                                               <!-- @if( $myServiceRequest->service_request_assignees->count() > 0 )  -->
+                                               @if( $myServiceRequest->service_request_assignees->count() > 1 ) 
                                              <a href="{{ route('client.edit_request', [ 'request'=>$myServiceRequest->uuid, 'locale'=>app()->getLocale() ]) }}" class="dropdown-item text-primary"><i data-feather="edit" class="fea icon-sm"></i>{{count($myServiceRequest->service_request_assignees)}} Edit Request</a>     
-                                               <!-- @endif -->
+                                               @endif
                                              @endif
 
                                              @if($myServiceRequest->status_id == 1)

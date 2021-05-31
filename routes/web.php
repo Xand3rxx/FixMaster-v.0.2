@@ -16,6 +16,7 @@ use App\Http\Controllers\Admin\StatusController;
 use App\Http\Controllers\Admin\EWalletController;
 use App\Http\Controllers\Admin\GatewayController;
 use App\Http\Controllers\Admin\ServiceController;
+use App\Http\Controllers\Admin\ServicedAreasController;
 use App\Http\Controllers\Client\ClientController;
 use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\WarrantyController;
@@ -181,7 +182,7 @@ Route::prefix('admin')->group(function () {
         //  location request ajax_contactForm
         Route::get('/location-request',                     [AdminLocationRequestController::class, 'index'])->name('location_request');
         // Route::get('/seviced-areas',                     [ServicedAreasController::class, 'index'])->name('seviced_areas');
-
+ 
         //  serviced areas
         Route::resource('seviced-areas',                     ServicedAreasController::class);
 
