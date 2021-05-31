@@ -36,4 +36,15 @@ class RfqSupplier extends Model
     {
         return $this->belongsTo(User::class, 'supplier_id')->with('account');
     }
+
+    public function warranty_claim_supplier()
+    {
+        return $this->belongsTo(Supplier::class, 'supplier_id')->with('user');
+    }
+
+    public function rfqbatch()
+    {
+        return $this->hasMany(RfqBatch::class, 'rfq_id', 'rfq_id');
+    }
+
 }

@@ -34,4 +34,11 @@ class RfqSupplierInvoiceBatch extends Model
              });
         });
     }
+    public function supplier()
+    {
+        return $this->belongsTo(User::class, 'supplier_id')->with('account');
+    }
+
+ 
+   
 }

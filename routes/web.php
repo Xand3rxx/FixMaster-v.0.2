@@ -55,6 +55,7 @@ use App\Http\Controllers\Payment\FlutterwaveController;
 use App\Http\Controllers\Admin\Prospective\CSEController as ProspectiveCSEController;
 use App\Http\Controllers\Admin\Prospective\SupplierController as ProspectiveSupplierController;
 use App\Http\Controllers\Admin\Prospective\TechnicianArtisanController as ProspectiveTechnicianArtisanController;
+use App\Http\Controllers\ServiceRequest\WarrantClaimController;
 
 
 /*
@@ -317,6 +318,7 @@ Route::prefix('admin')->name('admin.')->group(function () {
     Route::get('/reports/client-service-executive',      [CustomerServiceExecutiveReportController::class, 'index'])->name('cse_reports');
     Route::post('/reports/client-service-executive/job-assigned-sorting',      [CustomerServiceExecutiveReportController::class, 'jobAssignedSorting'])->name('cse_report_first_sorting');
     Route::post('/reports/client-service-executive/amount-earned-sorting',      [CustomerServiceExecutiveReportController::class, 'amountEarnedSorting'])->name('cse_report_second_sorting');
+    Route::get('/requests-for-quote/details/image/{image:id}',     [RfqController::class, 'rfqDetailsImage'])->name('rfq_details_image');
 
 
     //Technician Reporting Routes
@@ -467,9 +469,9 @@ Route::prefix('cse')->name('cse.')->middleware('monitor.cseservice.request.chang
     Route::view('/payments', 'cse.payments')->name('payments');
 
     Route::post('assign-technician', [AssignTechnicianController::class, '__invoke'])->name('assign.technician');
-    Route::post('assign/warranty/technician', [AssignTechnicianController::class, 'assignWarrantyTechnician'])->name('assign.warranty_technician');
-    Route::get('warranty/download/{file:id}', [WarrantyController::class, 'download'])->name('warranty_download');
-    
+    Route::post('assign/warranty/technician', [WarrantClaimController::class, 'assignWarrantyTechnician'])->name('assign.warranty_technician');
+Route::get('warranty/download/{file:id}', [WarrantyController::class, 'download'])->name('warranty_download');
+
     
     Route::view('/location-request',    'cse.location_request')->name('location_request');
     Route::view(
@@ -488,6 +490,7 @@ Route::prefix('cse')->name('cse.')->middleware('monitor.cseservice.request.chang
     Route::get('/warranty/resolved/claims/details/{warranty:id}',          [WarrantyController::class, 'warranty_resolved_details'])->name('warranty_resolved_details');
     Route::get('/warranty/claims/details/{warranty:uuid}',      [CseController::class,  'warranty_details'])->name('warranty_details');
     Route::get('/mark/warrant/claims/resolved/{warranty:uuid}',      [WarrantyController::class, 'resolvedWarranty'])->name('mark_warranty_resolved');
+    Route::get('/requests-for-quote/details/image/{image:id}',            [SupplierRfqController::class, 'rfqDetailsImage'])->name('rfq_details_image');
 
     Route::get('/sub-service-dynamic-feilds',  [CseController::class, 'subServiceDynamicFields'])->name('sub_service_dynamic_fields');
 });
@@ -520,7 +523,6 @@ Route::prefix('/supplier')->name('supplier.')->group(function () {
     Route::get('/dispatch/update/{dispatch:id}',     [SupplierDispatchController::class, 'updateDispatchStatus'])->name('update_dispatch_status');
     Route::get('/dispatch/delivered',                          [SupplierDispatchController::class, 'dispatchDelivered'])->name('dispatches_delivered');
     Route::get('/dispatch/returned',                          [SupplierDispatchController::class, 'dispatchReturned'])->name('dispatches_returned');
-    Route::get('/requests-for-quote/details/image/{image:id}',            [SupplierRfqController::class, 'rfqDetailsImage'])->name('rfq_details_image');
 });
 
 Route::prefix('/technician')->name('technician.')->group(function () {

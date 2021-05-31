@@ -21,7 +21,9 @@ class CreateServiceRequestWarrantyReportsTable extends Migration
             $table->id();
             $table->foreignId('user_id');
             $table->foreignId('service_request_warranties_issued_id');
-            $table->text('report');
+            $table->foreignId('causal_agent_id');
+            $table->text('causal_reason');
+            $table->text('report')->nullable();
             $table->timestamps();
         });
     }

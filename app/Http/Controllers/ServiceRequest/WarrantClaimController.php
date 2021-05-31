@@ -14,7 +14,7 @@ use App\Traits\Utility;
 use Image;
 
 
-class AssignTechnicianController extends Controller
+class WarrantClaimController extends Controller
 {
     use findRecordWithUUID, Loggable, Utility;
     /**
@@ -23,73 +23,9 @@ class AssignTechnicianController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function __invoke(Request $request)
-    {
-        // validate Request
-        $this->validate($request, [
-            'technician_user_uuid'  =>   'required|uuid|exists:users,uuid',
-            'service_request_uuid' =>    'required|uuid|exists:service_requests,uuid'
-        ]);
-        return $this->assignTechnician($request) == true
-            ? back()->with('success', 'Technician Assigned successfully!!')
-            : back()->with('error', 'Error occured while assigning a technician');
-    }
-
-    public function handleAdditionalTechnician(Request $request)
-    {
-        return $this->assignTechnician($request);
-    }
-
-    /**
-     * Update neccesary tables to assign the Technician to a service
-     *
-     * @param  \Illuminate\Http\Request     $request
-     * 
-     * @return \Illuminate\Http\Response
-     */
-    protected function assignTechnician(Request $request)
-    {
-        (bool) $registred = false;
-        // 1. Find the Service Request ID from the UUID
-        $serviceRequest = \App\Models\ServiceRequest::where('uuid', $request['service_request_uuid'])->with('users')->firstOrFail();
-        // 2. Find the technician
-        $technician = \App\Models\User::where('uuid', $request['technician_user_uuid'])->with('account')->firstOrFail();
-        // 3. Confirm if Technician is already assigned
-        if (collect($serviceRequest['users']->first(function ($user) use ($technician) {
-            return $user->id == $technician->id;
-        }))->isNotEmpty()) {
-            return back()->with('error', $technician['account']['last_name'] . ' ' . $technician['account']['first_name'] . ' is already assigned to this Service Request');
-        }
-        // 4. Find the status for Assigning technician record
-        $status = \App\Models\SubStatus::where('uuid', '1faffcc3-7404-4fad-87a7-97161d3b8546')->firstOrFail();
-
-        // Run DB Transaction to update all necessary records after confirmation Technician is not already on the Service Request
-        DB::transaction(function () use ($request, $serviceRequest, $technician, $status, &$registred) {
-            // When preferred time is set
-            $request->whenFilled('preferred_time', function () use ($request, $serviceRequest) {
-                $serviceRequest->update(['preferred_time' => $request['preferred_time']]);
-                $status = \App\Models\SubStatus::where('uuid', 'd258667a-1953-4c66-b746-d0c40de7189d')->firstOrFail();
-                \App\Models\ServiceRequestProgress::storeProgress($request->user()->id, $serviceRequest->id, 2, $status->id);
-            });
-
-            // 1. Update the Service Request Status to Ongoing
-            $serviceRequest->update(['status_id' => $status->status_id]);
-            // 2. store in the service_request_assigned
-            \App\Models\ServiceRequestAssigned::assignUserOnServiceRequest($technician->id, $serviceRequest->id);
-            // 3. store in the service_request_progresses
-            \App\Models\ServiceRequestProgress::storeProgress($request->user()->id, $serviceRequest->id, 2, $status->id);
-            // 4. store in the activity log
-            $this->log('request', 'Informational', Route::currentRouteAction(), $request->user()->account->last_name . ' ' . $request->user()->account->first_name . ' assigned ' . $technician['account']['last_name'] . ' ' . $technician['account']['first_name'] . ' (Technician) to ' . $serviceRequest->unique_id . ' Job.');
-            // 5. notify the technicain in Email and In-app notification
-
-            // 6. update registered to be true
-            $registred = true;
-        });
-        return $registred;
-    }
-
+    
     public function assignWarrantyTechnician(Request $request){
-    //    dd($request);
+    //  dd($request);
 
         $this->validate(
             $request, 
@@ -99,12 +35,11 @@ class AssignTechnicianController extends Controller
          
         );
    
- 
-    
+
         $service_request_warranty_id = $request['service_request_warranty_id'];
         $serviceRequest = \App\Models\ServiceRequestWarrantyIssued::where('service_request_warranty_id', $request['service_request_warranty_id'])->first();
      
-        if($request->intiate_rfq == 'no'){
+     
        $done = $this->save($serviceRequest, $service_request_warranty_id,$request);
 
         if (  $done){
@@ -124,15 +59,15 @@ class AssignTechnicianController extends Controller
             $this->log($type, $severity, $actionUrl, $message);
             return back()->with('error', 'An error occurred while trying to assigned new technician ');
         }
-    }
+    
 
-    if($request->intiate_rfq == 'yes'){
-        $done = $this->saveRfq($serviceRequest, $service_request_warranty_id,$request);
-    }
+   
     }
 
 
     protected function save($serviceRequest, $service_request_warranty_id,$request ){
+
+        if($request['technician_user_uuid'] || $request->preferred_time ){
        
         $upload='1'; $comment='1';
       
@@ -145,15 +80,11 @@ class AssignTechnicianController extends Controller
                 ]);
                 $updateNewTechnician = \App\Models\ServiceRequestAssigned::where(['service_request_id'=>  $request->serviceRequestId, 'user_id'=> $request['technician_user_uuid']])->update([
                         'job_accepted'              => null,
-                        'job_acceptance_time '      => null,
                         'job_diagnostic_date'       => null,
                         'job_declined_time'         => null,
                         'job_completed_date'        => null,
                         'status'                    => null
                     ]);
-                    
-                
-
 
         }else{
        
@@ -176,18 +107,32 @@ class AssignTechnicianController extends Controller
                     'status'                    => null
                 ]);
         }
+    }
         $serviceRequestIssued = $serviceRequest??  $createWarranty;
+
+         //dd($serviceRequestIssued);
     
 
-        if($request->hasFile('upload_image')) {
+        if($request->hasFile('upload_image')) 
             $upload = $this->upload_image($request,$serviceRequestIssued);
-        }
+        else
+           $upload = '1';
 
-        if($request->cse_comment) {
-       $comment =  $this->diagnosticWarrantReport($request,$serviceRequestIssued);
-        }
+
+        
+
+        if($request->cse_comment || $request->causal_reason || $request->causal_agent_id) 
+           $comment =  $this->diagnosticWarrantReport($request,$serviceRequestIssued);
+        else
+           $comment =  '1';
+
+        if($request->intiate_rfq == 'yes')
+            $done = $this->saveRfq($request);
+        else
+           $done = '1';    
+        
       
-        if($upload  AND $comment){
+        if($upload  AND $comment AND $done){
             return true;
 
         }else{
@@ -229,8 +174,47 @@ class AssignTechnicianController extends Controller
         return  $createWarranty ;
     }
 
-    public function saveRfq(){
+    public function saveRfq($request){
 
+        $updateNewSupplierStatus = \App\Models\RfqSupplierInvoice::where(['rfq_id'=> $request->rfq_id, 'supplier_id'=>$request->supplier_id])->update([
+            'accepted'     =>   'Yes',
+            
+        ]);
+         $supplierDetails =  \App\Models\RfqSupplierInvoice::where(['rfq_id'=> $request->rfq_id, 'supplier_id'=>$request->supplier_id])->first();
+         $supplierRfq =  \App\Models\Rfq::where(['id'=> $request->rfq_id])->first();
+
+        $updateNewRfqSupplier = \App\Models\RfqSupplier::where(['rfq_id'=> $request->rfq_id])->update([
+            'supplier_id'=> $request->supplier_id,
+            'devlivery_fee' =>   $supplierDetails->delivery_fee,
+            'delivery_time' => $supplierDetails->delivery_time?? now(),
+            
+        ]);
+      
+
+        $updateNewRfq = \App\Models\Rfq::where(['id'=> $request->rfq_id])->update([
+            'issued_by'=> Auth::id(),
+            'type' =>   'Warranty',
+            'status' => 'Awaiting',
+            'accepted' => 'Yes',
+            'total_amount' => $supplierDetails->total_amount
+            
+        ]);
+
+        $updateNewRfqSupplyDispatch = \App\Models\RfqSupplierDispatch::create([
+            'rfq_id' => $request->rfq_id,
+            'rfq_supplier_invoice' =>  $supplierDetails->id,
+            'unique_id' => $supplierRfq->unique_id,
+            'supplier_id' => $request->supplier_id,
+            'courier_name' => 'Lasgdis',
+            'courier_phone_number' => '080765432',
+            'delivery_medium' => 'Okada',
+            'cse_status' => $request->status == 'Approved'? 'Yes': 'No',
+            'supplier_status' => 'Processing',
+            
+            
+        ]);
+
+        return   $updateNewRfqSupplyDispatch;
     }
 
 
