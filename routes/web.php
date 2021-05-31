@@ -626,6 +626,8 @@ Route::prefix('/client')->middleware('monitor.clientservice.request.changes')->g
 
 
 
+    Route::post('available-tool-quantity', [CseController::class, 'getAvailableToolQuantity'])->name('available.tools');
+    Route::post('get-sub-service-list', [CseController::class, 'getSubServices'])->name('needed.sub_service');
 
 
     });

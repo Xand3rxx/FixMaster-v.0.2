@@ -40,4 +40,10 @@ class SubService extends Model
     {
         return $this->belongsTo(Service::class, 'service_id', 'id');
     }
+
+
+    public static function getNameUsingUUID(string $uuid)
+    {
+        return SubService::where('uuid', $uuid)->pluck('name')->first() ?? "UNAVAILABLE";
+    }
 }

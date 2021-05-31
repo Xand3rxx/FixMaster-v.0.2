@@ -62,19 +62,29 @@ trait StoreInDatabase
                             'size'                  => $table['rfqs']['rfq_batches']['size'][$key]
                         ]);
                     }
-                    \App\Traits\Invoices::rfqInvoice($rfq->service_request_id, $rfq->id);
+                }
+
+                if (!empty($table['invoice_building'])) {
+                    // $table['invoice_building'] ==>  array of 1. $table['invoice_building']['estimated_work_hours'] 2. $table['invoice_building']['service_request']
+                    // \App\Traits\Invoices::completedServiceInvoice($table['invoice_building']['service_request'], $table['invoice_building']['estimated_work_hours']);
                 }
 
                 if (!empty($table['service_request_reports'])) {
                     ServiceRequestReport::create($table['service_request_reports']);
                 }
 
-                if(!empty($table['service_request_table'])) {
+                if (!empty($table['service_request_table'])) {
                     $table['service_request_table']['service_request']->update($table['service_request_table']);
                 }
 
                 if (!empty($table['service_request_progresses'])) {
                     ServiceRequestProgress::create($table['service_request_progresses']);
+                }
+
+                if (!empty($table['add_technicians'])) {
+                    foreach ($table['add_technicians'] as $key => $technician) {
+                        ServiceRequestAssigned::create($technician);
+                    }
                 }
 
                 if (!empty($table['log'])) {

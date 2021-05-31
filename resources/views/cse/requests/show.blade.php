@@ -2,67 +2,61 @@
 @section('title', 'Request Details')
 @include('layouts.partials._messages')
 @section('content')
-<link rel="stylesheet" href="{{ asset('assets/dashboard/assets/css/dashforge.filemgr.css') }}">
 
-<div class="content-body">
-    <div class="container pd-x-0">
-        <div class="d-sm-flex align-items-center justify-content-between mg-b-20 mg-lg-b-25 mg-xl-b-30">
-            <div>
-                <nav aria-label="breadcrumb">
-                    <ol class="breadcrumb breadcrumb-style1 mg-b-10">
-                        <li class="breadcrumb-item"><a href="{{ route('cse.index', app()->getLocale()) }}">Dashboard</a></li>
-                        <li class="breadcrumb-item"><a href="{{ route('cse.requests.index', app()->getLocale()) }}">Requests</a></li>
-                        <li class="breadcrumb-item active" aria-current="page">Request Details</li>
-                    </ol>
-                </nav>
-                <h4 class="mg-b-0 tx-spacing--1">Job: {{$service_request->unique_id}}</h4>
-                <hr>
-                <div class="media align-items-center">
-                    <span class="tx-color-03 d-none d-sm-block">
-                        {{-- <i data-feather="credit-card" class="wd-60 ht-60"></i> --}}
-                        <img src="{{ asset('assets/images/default-male-avatar.png') }}" class="avatar rounded-circle" alt="Male Avatar">
-                    </span>
-                    <div class="media-body mg-sm-l-20">
-                        <h4 class="tx-18 tx-sm-20 mg-b-2">{{ucfirst($service_request->client->account->first_name)}}
-                        {{ucfirst($service_request->client->account->last_name)}}</h4>
-                                        
-                        <p class="tx-13 tx-color-03 mg-b-0">{{$service_request->client->account->contact->phone_number}}
-                            <a href="tel:{{$service_request->client->account->contact->phone_number}}" class="btn btn-primary btn-icon"><i class="fas fa-phone"></i> Call Client</a>
-                        </p>
-                    </div>
-                </div><!-- media -->
+    <link rel="stylesheet" href="{{ asset('assets/dashboard/assets/css/dashforge.filemgr.css') }}">
+    <link rel="stylesheet" href="{{ asset('assets/dashboard/assets/css/bootstrap-multiselect.css') }}">
+    <input type="hidden" id="route" class="d-none"
+        value="{{ route('cse.sub_service_dynamic_fields', app()->getLocale()) }}">
+
+    <div class="content-body">
+        <div class="container pd-x-0">
+            <div class="d-sm-flex align-items-center justify-content-between mg-b-20 mg-lg-b-25 mg-xl-b-30">
+                <div>
+                    <nav aria-label="breadcrumb">
+                        <ol class="breadcrumb breadcrumb-style1 mg-b-10">
+                            <li class="breadcrumb-item"><a
+                                    href="{{ route('cse.index', app()->getLocale()) }}">Dashboard</a></li>
+                            <li class="breadcrumb-item"><a
+                                    href="{{ route('cse.requests.index', app()->getLocale()) }}">Requests</a></li>
+                            <li class="breadcrumb-item active" aria-current="page">Request Details</li>
+                        </ol>
+                    </nav>
+                </div>
             </div>
         </div>
 
         <div class="row row-xs">
             <div class="col-lg-12 col-xl-12">
 
-                <div class="contact-content-header mt-4">
-                    <nav class="nav">
-                
-                        <a href="#serviceRequestActions" class="nav-link active" data-toggle="tab">Service Request Actions</a>
-                      
-                        <a href="#description" class="nav-link" data-toggle="tab"><span>Job Description</a>
-                        <a href="#serviceRequestSummary" class="nav-link" data-toggle="tab"><span>Service Request Summary</a>
-                    </nav>
-                    {{-- <a href="" id="contactOptions" class="text-secondary mg-l-auto d-xl-none"><i data-feather="more-horizontal"></i></a> --}}
-                </div><!-- contact-content-header -->
+            <div class="row row-xs">
 
-                <div class="contact-content-body">
-                    <div class="tab-content">
-                  
-                        <div id="serviceRequestActions" class="tab-pane show active pd-20 pd-xl-25">
-                            <small class="text-danger">This tab is only visible once the Service request has an Ongoing status. Which logically is updated by the system or the CSE Coordinator by assigning a CSE to the request</small>
-                            @if ($service_request->status_id == 1)
-                            @include('cse.requests.includes.assign_first_technician')
-                            @elseif($service_request->status_id == 2)
-                            @include('cse.requests.includes.ongoing_service_request')
-                            @push('scripts')
-                            @include('cse.requests.includes.ongoing_service_request_script')
-                            @endpush
-                            @else
-                            <h4> Completed the Service Request </h4>
-                            @endif
+                <div class="col-lg-12 col-xl-12">
+                    <div class="divider-text"> Service Request Modality</div>
+
+                    <div class="media align-items-center">
+                        <span class="tx-color-03 d-none d-sm-block">
+                            <img src="{{ asset('assets/images/default-male-avatar.png') }}" class="avatar rounded-circle"
+                                alt="Male Avatar">
+                        </span>
+                        <div class="media-body mg-sm-l-20">
+                            <h4 class="tx-18 tx-sm-20 mg-b-2">
+                                {{ ucfirst($service_request->client->account->first_name) }}
+                                {{ ucfirst($service_request->client->account->last_name) }}
+                                <a class="btn btn-sm btn-primary btn-icon" title="Call Client"
+                                    href="tel:{{ $service_request->client->account->contact->phone_number }}"><i
+                                        class="fas fa-phone"></i> </a>
+
+                                @if (empty($service_request['preferred_time']))
+                                    <a href="#" data-service="{{ $service_request['uuid'] }}"
+                                        class="notify-client-schedule-date btn btn-sm btn-success btn-icon"
+                                        title="Notify Client to schedule date"><i class="fas fa-bell"></i> </a>
+                                @endif
+                            </h4>
+
+                            <p class="tx-13 tx-color-03 mg-b-0">Scheduled Date:
+                                {{ !empty($service_request['preferred_time']) ? Carbon\Carbon::parse($service_request['preferred_time'], 'UTC')->isoFormat('MMMM Do YYYY') : 'UNSCHEDULED' }}
+                            </p>
+                            <p class="tx-13 tx-color-03 mg-b-0">Job Ref.: {{ $service_request->unique_id }} </p>
                         </div>
                     </div><!-- media -->
 
@@ -80,17 +74,34 @@
                         <div class="tab-content">
 
                             {{-- Service Request Actions --}}
-                            <form class="form-data" enctype="multipart/form-data" method="POST"
+                            <form id="service_request_form" class="form-data" enctype="multipart/form-data" method="POST"
                                 action="{{ route('cse.service.request.action', ['locale' => app()->getLocale(), 'service_request' => $service_request->uuid]) }}">
                                 @csrf
                                 <div id="serviceRequestActions" class="tab-pane show active pd-20 pd-xl-25">
                                     <div class="mt-4">
                                         <div class="tx-13 mg-b-25">
                                             <div id="wizard3">
-                                                @if(is_null($service_request['preferred_time']))
-                                                @include('cse.requests.includes.schedule_date')
+                                                @if ($stage == \App\Models\ServiceRequest::CSE_ACTIVITY_STEP['schedule_categorization'])
+                                                    {{-- Stage 1 --}}
+                                                    {{-- @if (is_null($service_request['preferred_time'])) --}}
+                                                    @include('cse.requests.includes.schedule_date')
+                                                    {{-- @endif --}}
+                                                    @include('cse.requests.includes.categorization')
+                                                    {{-- End of Stage 1 --}}
+                                                @else
+                                                    {{-- Stage 2 --}}
+                                                    {{-- @include('cse.requests.includes.initial-technician') --}}
+                                                    {{-- End of Stage 2 --}}
+                                                    {{-- Stage 3 --}}
+                                                    {{-- @include('cse.requests.includes.invoice-building') --}}
+
+                                                    {{-- End of Stage 3 --}}
+                                                    @include('cse.requests.includes.reoccuring-actions')
+                                                    @include('cse.requests.includes.materials-acceptance')
+                                                    @include('cse.requests.includes.project-progresses')
+
                                                 @endif
-                                                @include('cse.requests.includes.reoccuring_actions')
+
                                             </div>
                                         </div>
                                     </div><!-- df-example -->
@@ -245,170 +256,56 @@
 
 @push('scripts')
 
-<script>
-    $(function() {
-        'use strict'
-        $('#wizard3').steps({
-            headerTag: 'h3'
-            , bodyTag: 'section'
-            , autoFocus: true
-            , titleTemplate: '<span class="number">#index#</span> <span class="title">#title#</span>'
-            , loadingTemplate: '<span class="spinner"></span> #text#'
-            , labels: {
-                // current: "current step:",
-                // pagination: "Pagination",
-                finish: "Update Job Progress",
-                // next: "Next",
-                // previous: "Previous",
-                loading: "Loading ..."
-            }
-            , stepsOrientation: 1,
-            // transitionEffect: "fade",
-            // transitionEffectSpeed: 200,
-            showFinishButtonAlways: false
-            , onFinished: function(event, currentIndex) {
-                $('#update-progress').trigger('click');
-            }
-        , });
-        let count = 1;
-        //Add and Remove Request for
-        $(document).on('click', '.add-rfq', function() {
-            count++;
-            addRFQ(count);
-        });
-        $(document).on('click', '.remove-rfq', function() {
-            count--;
-            $(this).closest(".remove-rfq-row").remove();
-            // $(this).closest('tr').remove();
-        });
-        //Add and Remove Tools request form
-        $(document).on('click', '.add-trf', function() {
-            count++;
-            addTRF(count);
-        });
-        $(document).on('click', '.remove-trf', function() {
-            count--;
-            $(this).closest(".remove-trf-row").remove();
-        });
-        //Hide and Unhide Work Experience form
-        $('#work_experience_yes').change(function() {
-            if ($(this).prop('checked')) {
-                $('.previous-employment').removeClass('d-none');
-            }
-        });
-        $('#work_experience_no').change(function() {
-            if ($(this).prop('checked')) {
-                $('.previous-employment').addClass('d-none');
-            }
-        });
-        //Hide and Unhide RFQ
-        $('#rfqYes').change(function() {
-            if ($(this).prop('checked')) {
-                $('.d-rfq').removeClass('d-none');
-            }
-        });
-        $('#rfqNo').change(function() {
-            if ($(this).prop('checked')) {
-                $('.d-rfq').addClass('d-none');
-            }
-        });
-        //Hide and Unhide TRF
-        $('#trfYes').change(function() {
-            if ($(this).prop('checked')) {
-                $('.d-trf').removeClass('d-none');
-            }
-        });
-        $('#trfNo').change(function() {
-            if ($(this).prop('checked')) {
-                $('.d-trf').addClass('d-none');
-            }
-        });
-        $(document).on('click', '#tool-request-details', function(event) {
-            event.preventDefault();
-            let route = $(this).attr('data-url');
-            let batchNumber = $(this).attr('data-batch-number');
-            $.ajax({
-                url: route
-                , beforeSend: function() {
-                    $("#spinner-icon").html('<div class="d-flex justify-content-center mt-4 mb-4"><span class="loadingspinner"></span></div>');
+    {{-- Modals --}}
+    {{-- @include('cse.requests.includes.modals') --}}
+    {{-- Modals End --}}
+
+    @push('scripts')
+        <script>
+            $('#wizard3').steps({
+                headerTag: 'h3',
+                bodyTag: 'section',
+                autoFocus: true,
+                titleTemplate: '<span class="number">#index#</span> <span class="title">#title#</span>',
+                loadingTemplate: '<span class="spinner"></span> #text#',
+                labels: {
+                    // current: "current step:",
+                    // pagination: "Pagination",
+                    finish: "Update Job Progress",
+                    // next: "Next",
+                    // previous: "Previous",
+                    loading: "Loading ..."
                 },
-                // return the result
-                success: function(result) {
-                    $('#modal-body').modal("show");
-                    $('#modal-body').html('');
-                    $('#modal-body').html(result).show();
-                }
-                , complete: function() {
-                    $("#spinner-icon").hide();
-                }
-                , error: function(jqXHR, testStatus, error) {
-                    var message = error + ' An error occured while trying to retireve ' + batchNumber + '  details.';
-                    var type = 'error';
-                    displayMessage(message, type);
-                    $("#spinner-icon").hide();
-                }
-                , timeout: 8000
-            })
-        });
-        $(document).on('click', '#rfq-details', function(event) {
-            event.preventDefault();
-            let route = $(this).attr('data-url');
-            let batchNumber = $(this).attr('data-batch-number');
-            $.ajax({
-                url: route
-                , beforeSend: function() {
-                    $("#spinner-icon").html('<div class="d-flex justify-content-center mt-4 mb-4"><span class="loadingspinner"></span></div>');
+                stepsOrientation: 1,
+                // transitionEffect: "fade",
+                // transitionEffectSpeed: 200,
+                showFinishButtonAlways: false,
+                onStepChanging: function(event, currentIndex, newIndex) {
+                    if (currentIndex < newIndex) {
+                        @if ($stage == \App\Models\ServiceRequest::CSE_ACTIVITY_STEP['schedule_categorization'])
+                            // Step 1 Schedule Date
+                            if (currentIndex === 0) {
+                            return ($("#service-date-time").val().length !== 0) ? true : false;
+                            }
+                            // Step 2 Re-categorization
+                            if (currentIndex === 1) {
+                            return ($("#sub_service_uuid").val().length !== 0) ? true : false;
+                            }
+                        @else
+                            return true;
+                        @endif
+                    } else {
+                        // Always allow step back to the previous step even if the current step is not valid.
+                        return true;
+                    }
                 },
-                // return the result
-                success: function(result) {
-                    $('#modal-body-rfq-details').modal("show");
-                    $('#modal-body-rfq-details').html('');
-                    $('#modal-body-rfq-details').html(result).show();
-                }
-                , complete: function() {
-                    $("#spinner-icon").hide();
-                }
-                , error: function(jqXHR, testStatus, error) {
-                    var message = error + ' An error occured while trying to retireve ' + batchNumber + '  details.';
-                    var type = 'error';
-                    displayMessage(message, type);
-                    $("#spinner-icon").hide();
-                }
-                , timeout: 8000
-            })
-        });
-        $('.close').click(function() {
-            $(".modal-backdrop").remove();
-        });
-    });
-    //Get available quantity of a particular tool.
-    $(document).on('change', '.tool_id', function() {
-        let toolId = $(this).find('option:selected').val();
-        let toolName = $(this).children('option:selected').text();
-        let quantityName = $(this).children('option:selected').data('id');
-        $.ajax({
-            url: "{{ route('available_quantity', app()->getLocale()) }}"
-            , method: "POST"
-            , dataType: "JSON"
-            , data: {
-                "_token": "{{ csrf_token() }}"
-                , "tool_id": toolId
-            }
-            , success: function(data) {
-                if (data) {
-                    $('#' + quantityName + '').attr({
-                        "value": data
-                        , "max": data
-                    , });
-                } else {
-                    var message = 'Error occured while trying to get ' + toolName + ' available quantity';
-                    var type = 'error';
-                    displayMessage(message, type);
-                }
-            }
-        , })
-    });
-</script>
-@endpush
+                onFinished: function(event, currentIndex) {
+                    $('#update-progress').trigger('click');
+                },
+            });
+
+        </script>
+        @include('cse.requests.includes.scripts')
+    @endpush
 
 @endsection
