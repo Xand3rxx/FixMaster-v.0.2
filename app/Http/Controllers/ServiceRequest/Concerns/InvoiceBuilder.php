@@ -24,12 +24,12 @@ class InvoiceBuilder
     {
         // Handle RFQ
         if ($request->filled('intiate_rfq')) {
-            array_push($repeated_actions, self::build_new_rfq($request, $service_request));
+            array_push($actionable, self::build_new_rfq($request, $service_request));
         }
 
         // Handle Tool Request
         if ($request->filled('intiate_trf')) {
-            array_push($repeated_actions, self::build_new_trf($request, $service_request));
+            array_push($actionable, self::build_new_trf($request, $service_request));
         }
 
 

@@ -33,9 +33,7 @@ trait SendVerificationMail
         // $mail_data = "<h1> Hello, " . $account['first_name'] . " " . $account['last_name'] . "</h1> <br> <p> Thank you for registering with us, Kind use this link " . $url . " to verify your account. </p>";
         $template_feature = 'USER_EMAIL_VERIFICATION';
 
-
         return $messanger->sendNewMessage('Verify Email Address', 'dev@fix-master.com', $account->user->email, $mail_data, $template_feature);
-
 
         // $messanger->sendNewMessage('email', Str::title(Str::of($template_feature)->replace('_', ' ',)), 'dev@fix-master.com', $mail_data['email'], $mail_data, $template_feature);
     }

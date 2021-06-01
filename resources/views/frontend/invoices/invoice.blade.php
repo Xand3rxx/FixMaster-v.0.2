@@ -169,7 +169,7 @@
                                     </dl>
                                     <dl class="row mb-0">
                                         <dt class="col-md-6 col-5 font-weight-normal">Assigned CSE. :</dt>
-                                        <dd class="col-md-6 col-7 text-muted">{{ $invoice['serviceRequest']['service_request_assignee']['user']['account']['first_name'].' '. $invoice['serviceRequest']['service_request_assignee']['user']['account']['last_name'] }}</dd>
+                                        <dd class="col-md-6 col-7 text-muted">{{ $service_request_assigneed['user']['account']['first_name'].' '. $service_request_assigneed['user']['account']['last_name'] }}</dd>
                                     </dl>
                                     <dl class="row mb-0">
                                         <dt class="col-md-6 col-5 font-weight-normal">Visit Date. :</dt>
@@ -188,23 +188,19 @@
 
                             <div class="mt-5">
                             <h5 class="font-weight-bold text-uppercase">Electricity: </h5>
-                            <div class="card shadow rounded">
+                            <div class="card shadow rounded my-2">                                
                                 <div class="card-body">
-                                    <h5 class="card-title">Root Cause: </h5>
+                                    <h5 class="card-title">Root Cause:</h5>
+                                    <p class="card-text">Sit tempora ut magnam quisquam sed eius magnam. Aliquam sed quiquia quaerat ipsum tempora. Ipsum dolore quaerat ut. Dolorem non numquam ut tempora modi non porro. Aliquam ut quaerat neque quiquia non sed. </p>
+                                </div>
+                            </div>
+                            <div class="card shadow rounded">                                
+                                <div class="card-body">
+                                    <h5 class="card-title d-flex justify-content-center">Other Comments</h5>
                                     <p class="card-text">Sit tempora ut magnam quisquam sed eius magnam. Aliquam sed quiquia quaerat ipsum tempora. Ipsum dolore quaerat ut. Dolorem non numquam ut tempora modi non porro. Aliquam ut quaerat neque quiquia non sed. Quaerat est magnam magnam quisquam sit ut dolorem. Amet porro quiquia neque est quiquia porro. Sit porro adipisci quaerat sit. Amet aliquam porro dolorem labore dolorem. Dolor amet ut quiquia dolor quiquia. Tempora velit aliquam tempora dolore etincidunt magnam dolorem. Tempora sed quaerat quisquam dolore est. Dolorem dolor numquam dolor voluptatem. Dolorem sit neque labore. Dolorem neque adipisci magnam dolor. Tempora adipisci amet voluptatem porro labore consectetur. Quiquia est non dolore dolorem adipisci amet non. Numquam neque ut sed. Voluptatem non amet etincidunt adipisci aliquam sit velit. Neque quisquam amet eius tempora. Ut dolorem neque adipisci consectetur. Etincidunt numquam tempora dolor dolor. Etincidunt consectetur aliquam est. Adipisci sed modi neque ut dolor sed.</p>
                                 </div>
                             </div>
                             </div>
-                            <div class="my-3">
-                            <h5 class="font-weight-bold text-uppercase">Plumbing: </h5>
-                            <div class="card shadow rounded">
-                                <div class="card-body">
-                                    <h5 class="card-title">Root Cause: </h5>
-                                    <p class="card-text">Sit tempora ut magnam quisquam sed eius magnam. Aliquam sed quiquia quaerat ipsum tempora. Ipsum dolore quaerat ut. Dolorem non numquam ut tempora modi non porro. Aliquam ut quaerat neque quiquia non sed. Quaerat est magnam magnam quisquam sit ut dolorem. Amet porro quiquia neque est quiquia porro. Sit porro adipisci quaerat sit. Amet aliquam porro dolorem labore dolorem. Dolor amet ut quiquia dolor quiquia. Tempora velit aliquam tempora dolore etincidunt magnam dolorem. Tempora sed quaerat quisquam dolore est. Dolorem dolor numquam dolor voluptatem. Dolorem sit neque labore. Dolorem neque adipisci magnam dolor. Tempora adipisci amet voluptatem porro labore consectetur. Quiquia est non dolore dolorem adipisci amet non. Numquam neque ut sed. Voluptatem non amet etincidunt adipisci aliquam sit velit. Neque quisquam amet eius tempora. Ut dolorem neque adipisci consectetur. Etincidunt numquam tempora dolor dolor. Etincidunt consectetur aliquam est. Adipisci sed modi neque ut dolor sed.</p>
-                                </div>
-                            </div>
-                            </div>
-
                         </div>
 
                         <div class="py-3">
@@ -230,8 +226,8 @@
                                             <td class="text-left">{{ $item->component_name }}</td>
                                             <td class="text-left">{{ $item->quantity }}</td>
                                             <td class="text-left">{{ $item->unit_of_measurement }}</td>
-                                            <td class="text-left">{{ $item->amount/$item->quantity }}</td>
-                                            <td class="text-left">{{ $item->amount }}</td>
+                                            <td class="text-left">{{ $item->amount/$item->quantity + $item->amount/$item->quantity*$materialsMarkup }}</td>
+                                            <td class="text-left">{{ $item['amount'] + $item['amount']*$materialsMarkup }}</td>
                                         </tr>
                                     @endforeach
                                     <tr>
@@ -240,7 +236,7 @@
                                         <td class="text-left">-</td>
                                         <td class="text-left">-</td>
                                         <td class="text-left">-</td>
-                                        <td class="text-left">8000</td>
+                                        <td class="text-left">{{ $materialsMarkupPrice }}</td>
                                     </tr>
                                     </tbody>
                                 </table>
@@ -253,23 +249,21 @@
                                         <tr>
                                             <th scope="col" class="text-left">S/N</th>
                                             <th scope="col" class="text-left">Labour</th>
+                                            <th scope="col" class="text-left">Quantity</th>
                                             <th scope="col" class="text-left">Total Price</th>
                                             <th scope="col" class="text-left">Sub Totals</th>
                                         </tr>
                                         </thead>
                                         <tbody>
-                                        <tr>
-                                            <td class="text-left">1</td>
-                                            <td class="text-left">Activity 1</td>
-                                            <td class="text-left">₦ 2000</td>
-                                            <td class="text-left"></td>
-                                        </tr>
-                                        <tr>
-                                            <td class="text-left">2</td>
-                                            <td class="text-left">Activity 2</td>
-                                            <td class="text-left">₦ 2000</td>
-                                            <td class="text-left">₦ 4000</td>
-                                        </tr>
+                                        @foreach($sub_service as $sub_serv)
+                                            <tr>
+                                                <td class="text-left">{{$loop->iteration }}</td>
+                                                <td class="text-left">{{$sub_serv}}</td>
+                                                <td class="text-left">₦ 2000</td>
+                                                <td class="text-left">₦ 2000</td>
+                                                <td class="text-left"></td>
+                                            </tr>
+                                        @endforeach
                                         </tbody>
                                     </table>
                                 </div>
@@ -299,28 +293,25 @@
                             <div class="row my-4">
                                 <div class="col-lg-6 col-md-6 ml-auto">
                                     <ul class="list-unstyled h5 font-weight-normal mt-4 mb-0">
-                                        {!!
-    $invoice['invoice_type'] == 'Final Invoice'
-    ?
-    "
-    <li class='test-muted d-flex justify-content-between'>Subtotal :<span>₦". number_format($invoice['rfqs']['total_amount']+4000, 2) ."</span></li>
-    <li class='test-muted d-flex justify-content-between'>Logistics :<span>₦".  number_format($logistics, 2) ."</span></li>
-    <li class='text-muted d-flex justify-content-between'>FixMaster Royalty :<span>₦". number_format($fixmasterRoyalty, 2)."</span></li>
-    <li class='text-muted d-flex justify-content-between mt-2'>Discounts :</li>
+
+    @if($invoice['invoice_type'] == 'Final Invoice')
+
+    <li class='test-muted d-flex justify-content-between'>Subtotal :<span>₦ {{number_format(4000, 2)}} </span></li>
+    <li class='test-muted d-flex justify-content-between'>Logistics :<span>₦  {{number_format($logistics, 2)}} </span></li>
+    <li class='text-muted d-flex justify-content-between'>FixMaster Royalty :<span>₦ {{number_format($fixmasterRoyalty, 2)}}</span></li>
+    <li class='text-muted d-flex justify-content-between mt-2'>Discounts : </li>
     <li class='d-flex justify-content-between text-danger mb-2'>First Booking Discount :<span> - ₦ 1,500.00</span></li>
-    <li class='text-muted d-flex justify-content-between'>Total Job Quotation :<span> ₦ ".number_format(($invoice['rfqs']['total_amount']+4000) + $logistics + $fixmasterRoyalty - 1500, 2)." </span></li>
+    <li class='text-muted d-flex justify-content-between'>Total Job Quotation :<span> ₦ {{number_format(($invoice['rfqs']['total_amount']+4000) + $logistics + $fixmasterRoyalty - 1500, 2)}}</span></li>
     <li class='d-flex justify-content-between text-danger'>Less Booking Fee :<span> - ₦ 1,500.00</span></li>
-    <li class='d-flex justify-content-between mt-2'>Total Amount Due :<span>₦ ".number_format(($invoice['rfqs']['total_amount']+4000) + $logistics + $fixmasterRoyalty - 1500 - 1500, 2)."</span></li>
-    "
-    :
-    "
-    <li class='test-muted d-flex justify-content-between'>Subtotal :<span>₦ ". number_format($subTotal, 2) ."</span></li>
-    <li class='text-muted d-flex justify-content-between'>FixMaster Royalty :<span>₦ ". number_format($fixmasterRoyalty, 2)."</span></li>
-    <li class='text-muted d-flex justify-content-between'>Taxes :<span> ₦ ". number_format($tax, 2)."</span></li>
+    <li class='d-flex justify-content-between mt-2'>Total Amount Due :<span>₦ {{number_format(($invoice['rfqs']['total_amount']+4000) + $logistics + $fixmasterRoyalty - 1500 - 1500, 2)}} </span></li>
+    @else
+    <li class='test-muted d-flex justify-content-between'>Subtotal :<span>₦  {{number_format($subTotal, 2)}} </span></li>
+    <li class='text-muted d-flex justify-content-between'>FixMaster Royalty :<span>₦ {{number_format($fixmasterRoyalty, 2)}} </span></li>
+    <li class='text-muted d-flex justify-content-between'>Taxes :<span> ₦ {{number_format($tax, 2)}} </span></li>
     <li class='d-flex justify-content-between text-danger'>Less Booking Fee :<span> - ₦ 1,500.00</span></li>
-    <li class='d-flex justify-content-between'>Total Amount Due :<span>₦ ". number_format($subTotal + $logistics + $fixmasterRoyalty + $tax - 1500, 2)."</span></li>
-    "
-    !!}
+    <li class='d-flex justify-content-between'>Total Amount Due :<span>₦ {{number_format($subTotal + $logistics + $fixmasterRoyalty + $tax - 1500, 2)}}</span></li>
+    @endif
+
 
                                     </ul>
                                 </div><!--end col-->

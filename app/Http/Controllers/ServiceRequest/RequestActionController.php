@@ -45,8 +45,8 @@ class RequestActionController extends Controller
             $to_be_stored = \App\Http\Controllers\ServiceRequest\Concerns\Categorization::handle($request, $service_request, $to_be_stored);
         }
 
-        if($request->filled(['estimated_work_hours','root_cause', 'intiate_rfq', 'intiate_trf', ])){
-            $to_be_stored = \App\Http\Controllers\ServiceRequest\Concerns\Invoicebuilder::handle($request, $service_request, $to_be_stored);
+        if($request->hasAny(['estimated_work_hours','root_cause', 'intiate_rfq', 'intiate_trf', ])){
+            $to_be_stored = \App\Http\Controllers\ServiceRequest\Concerns\InvoiceBuilder::handle($request, $service_request, $to_be_stored);
         }
 
         // call the storage 

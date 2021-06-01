@@ -89,12 +89,12 @@
                                                     {{-- @include('cse.requests.includes.initial-technician') --}}
                                                     {{-- End of Stage 2 --}}
                                                     {{-- Stage 3 --}}
-                                                    {{-- @include('cse.requests.includes.invoice-building') --}}
+                                                    @include('cse.requests.includes.invoice-building')
 
                                                     {{-- End of Stage 3 --}}
-                                                    @include('cse.requests.includes.reoccuring-actions')
-                                                    @include('cse.requests.includes.materials-acceptance')
-                                                    @include('cse.requests.includes.project-progresses')
+                                                    {{-- @include('cse.requests.includes.reoccuring-actions') --}}
+                                                    {{-- @include('cse.requests.includes.materials-acceptance') --}}
+                                                    {{-- @include('cse.requests.includes.project-progresses') --}}
 
                                                 @endif
 
