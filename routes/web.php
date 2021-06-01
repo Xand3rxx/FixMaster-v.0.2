@@ -137,7 +137,7 @@ Route::prefix('admin')->name('admin.')->group(function () {
     Route::get('/warranty/delete/{details:uuid}',  [WarrantyController::class, 'deleteWarranty'])->name('delete_warranty');
     Route::get('/warranty/issued',      [WarrantyController::class, 'issuedWarranties'])->name('issued_warranty');
     Route::get('/warranty/issued/resolved/{warranty:uuid}',      [WarrantyController::class, 'resolvedWarranty'])->name('mark_warranty_resolved');
-    Route::get('/warranty/issued/details/{warranty:uuid}',       [WarrantyClaimCseController::class,  'warranty_details'])->name('warranty_details');
+    Route::get('/warranty/issued/details/{warranty:uuid}',       [CseController::class,  'warranty_details'])->name('warranty_details');
     Route::get('/resolved/warranty/details/{warranty:id}',          [WarrantyController::class, 'warranty_resolved_details'])->name('warranty_resolved_details');
     Route::get('/assign/cses/warranty/claim/{warranty:id}',          [WarrantyController::class, 'assign_cses'])->name('assign_cses');
     Route::post('/save/assigned/cse/warranty/claim/',          [WarrantyController::class, 'save_assigned_waranty_cse'])->name('save_assigned_waranty_cse');

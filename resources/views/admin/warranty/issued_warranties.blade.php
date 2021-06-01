@@ -84,8 +84,19 @@
           @else
           <td class="text-danger">Unresolved</td>
           @endif
+          @if(is_null($warranty->service_request_warranty_issued))
           <td class="text-danger">None </td>
+          @else
+          <td class="text-success">Yes</td>
+          @endif
+
+          @if(is_null($warranty->service_request_warranty_issued))
           <td class="text-danger">Pending</td>
+          @else
+          <td class="text-success">Accepted</td>
+          @endiff
+        
+
           
           <td class=" text-center">
             <div class="dropdown-file">
@@ -95,7 +106,8 @@
 
               <a href="{{ route('admin.warranty_details', ['warranty'=>$warranty->service_request->uuid, 'locale'=>app()->getLocale()]) }}" class="dropdown-item details text-primary"><i class="far fa-clipboard"></i> Details</a>
              @if($warranty->expiration_date >  Carbon\Carbon::now())
-             <a href="{{ route('admin.warranty_details', ['warranty'=>$warranty->service_request->uuid, 'locale'=>app()->getLocale()]) }}" class="dropdown-item details text-primary"><i class="far fa-clipboard"></i> Accept</a>
+
+        
 
               @if($warranty->has_been_attended_to == 'Yes')
             
@@ -113,12 +125,12 @@
          
           
           @if(CustomHelpers::getHours($warranty->date_initiated, Carbon\Carbon::now()))
-          
+          @if(is_null($warranty->service_request_warranty_issued))
           <a href="#assignCse" data-toggle="modal" class="dropdown-item details text-primary" 
                 data-url="{{ route('admin.assign_cses', ['warranty'=>$warranty->uuid, 'locale'=>app()->getLocale()]) }}" 
                 id="assign-Cse" data-job="{{ $warranty['service_request']['unique_id']}}">
                <i class="far fa-clipboard"></i> Assign Warranty </a>
-              
+          @endif
                @endif
               </div>
             </div>

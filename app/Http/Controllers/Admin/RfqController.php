@@ -59,6 +59,7 @@ class RfqController extends Controller
                 return $query->rfq_id;
             }),
 
+
         ]);
     }
 
@@ -186,7 +187,7 @@ class RfqController extends Controller
         $meters = $kilometers * 1000;
 
         // return compact('miles','feet','yards','kilometers','meters'); 
-        return round($kilometers, 2); 
+        return round($kilometers, 2)??0; 
     }
 
 }

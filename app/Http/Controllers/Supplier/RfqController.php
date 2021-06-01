@@ -39,6 +39,8 @@ class RfqController extends Controller
     /**
      * Display the specified resource.
      *
+     * 
+     * 
      * @param  string  $uuid
      * @return \Illuminate\Http\Response
      */
@@ -52,6 +54,7 @@ class RfqController extends Controller
     /**
      * Display the specified resource.
      *
+     * 
      * @param  string  $uuid
      * @return \Illuminate\Http\Response
      */

@@ -159,7 +159,7 @@ class CustomerServiceExecutiveController extends Controller
         $service_request = \App\Models\ServiceRequest::where('uuid', $uuid)->with(['price', 'service', 'service.subServices'])->firstOrFail();
 
         $request_progress = \App\Models\ServiceRequestProgress::where('service_request_id', $service_request->id)->with('user', 'substatus')->latest('created_at')->get();
-
+       
         // find the technician role CACHE THIS DURING PRODUCTION
         $technicainsRole = \App\Models\Role::where('slug', 'technician-artisans')->first();
         $scheduleDate =!empty($service_request->service_request_warranty->service_request_warranty_issued) ? 
@@ -172,9 +172,12 @@ class CustomerServiceExecutiveController extends Controller
             'request_progress' => $request_progress,
             'shcedule_datetime' =>  $scheduleDate,
             'technician_list'  =>  \App\Models\Technician::all(),
-            'suppliers'        =>  \App\Models\Rfq::where('service_request_id', $service_request->id)->with('rfqSupplies', 'rfqSuppliesInvoices','rfqBatches')->first()
+            'suppliers'        =>  \App\Models\Rfq::where('service_request_id', $service_request->id)->with('rfqSupplies', 'rfqSuppliesInvoices','rfqBatches')->first(),
+            'requestReports'  => \App\Models\ServiceRequestReport::where('service_request_id', $service_request->id)->latest('created_at')->get(),
+
         ];
       
+       
         if ($service_request->status_id == 2) {
             $service_request_progresses = \App\Models\ServiceRequestProgress::where('user_id', auth()->user()->id)->latest('created_at')->first();
             // Determine Ongoing Status List

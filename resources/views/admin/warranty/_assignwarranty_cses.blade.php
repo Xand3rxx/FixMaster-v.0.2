@@ -4,25 +4,12 @@
          
           <div class="form-row mt-4">
             <div class="form-group col-md-12">
-              <div class="form-row mt-4">
-                <div class="form-group col-md-12">
-                <label>Deadline</label>
-                <input type="date" class="form-control @error('name') is-invalid @enderror" name="deadline" id="name"  autocomplete="off" required>
-                  
-                  @error('deadline')
-                    <span class="invalid-feedback" role="alert">
-                        <strong>{{ $message }}</strong>
-                    </span>
-                  @enderror
-                </div>
-          
-                </div>
-                <div class="divider-text">Available Cses  </div>
+              
+                <div class="divider-text">Select Cses  </div>
               <div class="form-row">
               @if(!empty($users))
               @foreach($users as $cse)
             
-              @if($cse->job_availability == 'No')
           
               <div class="form-group col-md-6">
             <ul class="list-group wd-md-100p">
@@ -67,7 +54,7 @@
  
 </ul>
 </div><!-- df-example -->
-@endif
+
 @endforeach
 @endif
 

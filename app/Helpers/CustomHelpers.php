@@ -66,6 +66,7 @@ class CustomHelpers
     else
       return false;
    }
+   
 
    static function arrayToList($array, $title){
        $arr = [];
@@ -96,8 +97,13 @@ class CustomHelpers
 
    static function getWarrantTechnician($str){
        $name =  \App\Models\Account::where('user_id', $str)->first();
-       return ucfirst($name->first_name). ' '.ucfirst($name->last_name);
+       return  $name ? ucfirst($name->first_name). ' '.ucfirst($name->last_name): 'UNAVAILABLE';
    }
+
+   static function getUserDetail($str){
+    $detail =  \App\Models\User::where('id', $str)->with('account', 'roles')->first();
+    return  $detail ??'UNAVAILABLE';
+}
 
    static function getExtention($str){
     $string = $str;

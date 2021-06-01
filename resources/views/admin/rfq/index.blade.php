@@ -51,8 +51,10 @@
                   <td class="tx-color-03 tx-center">{{ ++$i }}</td>
                   <td class="tx-medium">{{ $rfq->serviceRequest->unique_id }}</td>
                   <td class="tx-medium">{{ $rfq->unique_id }}</td>
-                  <td class="tx-medium">{{ Str::title($rfq['client']['account']['first_name'] ." ". $rfq['client']['account']['last_name']) }}</td>
-                  <td class="tx-medium">{{ Str::title($rfq['issuer']['account']['first_name'] ." ". $rfq['issuer']['account']['last_name']) }}</td>
+                  <td class="tx-medium">{{ $rfq->unique_id }}</td>
+                  <td class="tx-medium">{{ $rfq->unique_id }}</td>
+                  {{--<td class="tx-medium">{{ Str::title($rfq['client']['account']['first_name'] ." ". $rfq['client']['account']['last_name']) }}</td>
+                  <td class="tx-medium">{{Str::title($rfq['issuer']['account']['first_name'] ." ". $rfq['issuer']['account']['last_name'])}}</td>--}}
                   @if($rfq->status == 'Pending')
                     <td class="text-medium text-warning">Awaiting Supplier's invoices</td>
                   @elseif($rfq->status == 'Awaiting')

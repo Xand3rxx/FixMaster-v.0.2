@@ -1,4 +1,5 @@
 
+                                
   <div class="divider-text">Supplier {{ $loop->iteration }}</div>
                                     <ul class="list-group wd-md-100p">
              

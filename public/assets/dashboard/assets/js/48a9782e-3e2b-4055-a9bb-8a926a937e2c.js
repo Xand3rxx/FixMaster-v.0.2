@@ -35,11 +35,10 @@ $(document).ready(function() {
         });
     });
 
+    //for dates alone
     $(document).on('click', '#service-date-time2', function() {
-        $('#service-date-tim2').datetimepicker({
-            // format: 'L', //LT for time only
-            // inline: true,
-            // sideBySide: true,
+        $('#service-date-time2').datetimepicker({
+            timepicker:false,
             format: 'Y/m/d',
             formatDate: 'Y/m/d',
             minDate: '-1970/01/02', // yesterday is minimum date

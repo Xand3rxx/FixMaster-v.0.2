@@ -45,6 +45,45 @@ This show's a list of all FixMaster Collaborators that worked on the clients ser
             </ul>
             @endif
 
+
+         
+            @if(!empty($service_request->service_request_warranty->service_request_warranty_issued))
+       @if(!is_null($service_request->service_request_warranty->service_request_warranty_issued->technician_id))
+            <div class="divider-text">Warrant Technicians  </div>
+     
+        <ul class="list-group wd-md-100p">
+                      
+                <li class="list-group-item d-flex align-items-center">
+                    
+                    <div class="form-row">
+                    <img src="{{ asset('assets/user-avatars/'.CustomHelpers::getUserDetail('4')->account->avatar??'default-male-avatar.png') }}" class="wd-30 rounded-circle mg-r-15" alt="Technician Avatar">
+                    
+                    <div class="col-md-6 col-sm-6">
+                    <h6 class="tx-13 tx-inverse tx-semibold mg-b-0">
+                   
+                    
+                    </h6>
+                    
+                    <span class="d-block tx-11 text-muted">
+                            <i class="icon ion-md-star lh-0 tx-orange"></i>
+                            <i class="icon ion-md-star lh-0 tx-orange"></i>
+                            <i class="icon ion-md-star lh-0 tx-orange"></i>
+                        <span class="font-weight-bold ml-2">0.6km</span>
+                    </span>
+                    </div>
+                    <div class="col-md-6 col-sm-6">
+                    <div class="form-row">
+                        <div class="form-group col-1 col-md-1 col-sm-1" style="margin-left: 3rem !important;">
+                            <a href="tel:{{$item->user->account->contact->phone_number}}" class="btn btn-primary btn-icon"><i class="fas fa-phone"></i></a>
+                        </div>
+                    </div>
+                    </div>
+                </div>
+                </li>
+            </ul>
+            @endif
+            @endif
+
             <div class="divider-text">Quality Assurance Managers </div>
             @if(!empty($service_request['service_request_assignees']))
             <ul class="list-group wd-md-100p">
@@ -106,17 +145,9 @@ This show's a list of all FixMaster Collaborators that worked on the clients ser
                     <div class="col-md-6 col-sm-6">
                     <div class="form-row">
                     <div class="form-group col-1 col-md-1 col-sm-1" style="margin-left: 3rem !important;">
-                                                    <a href="tel: {{$item->warranty_claim_supplier->user->account->contact->phone_number}}" class="btn btn-primary btn-icon"><i class="fas fa-phone"></i></a>
+                                                    <a href="tel:08124483438" class="btn btn-primary btn-icon"><i class="fas fa-phone"></i></a>
                                                 </div>
 
-                                                <div class="form-group col-1 col-md-1 col-sm-1">
-                                                     <div class="custom-control custom-radio mt-2">
-                                                         <div class="custom-control custom-radio">
-                                                             <input type="radio" class="custom-control-input" id="" name="supplier_id" value="{{$item->warranty_claim_supplier->id}}">
-                                                             <label class="custom-control-label" for="{{ $loop->iteration }}"></label>
-                                                         </div>
-                                                     </div>
-                                                 </div>
                     </div>
                     </div>
                 </div>

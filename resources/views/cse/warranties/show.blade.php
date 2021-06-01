@@ -58,7 +58,7 @@
                         </h4>
                                         
                         <p class="tx-13 tx-color-03 mg-b-0">Scheduled Fix Date: {{$shcedule_datetime != ''? 
-                            Carbon\Carbon::parse($shcedule_datetime, 'UTC')->isoFormat('MMMM Do YYYY, h:mm:ssa'):'UNAVAILABLE'}} </p>
+                            Carbon\Carbon::parse($shcedule_datetime, 'UTC')->isoFormat('MMMM Do YYYY'):'UNAVAILABLE'}} </p>
                         <p class="tx-13 tx-color-03 mg-b-0">Job Ref.: {{$service_request->unique_id}} </p>
                     </div>
                 </div><!-- media -->
@@ -146,8 +146,8 @@
                         
                             <div class="mt-4 form-row">
                                 <div class="form-group col-md-12">
-                                    <label for="preferred_time">Scheduled Fix Date & Time</label>
-                                    <input id="service-date-time" type="text" readonly min="{{ \Carbon\Carbon::now()->isoFormat('2021-04-13 00:00:00') }}" class="form-control @error('preferred_time') is-invalid @enderror"
+                                    <label for="preferred_time">Scheduled Fix Date</label>
+                                    <input id="service-date-time2" type="text" readonly min="{{ \Carbon\Carbon::now()->isoFormat('2021-04-13 00:00:00') }}" class="form-control @error('preferred_time') is-invalid @enderror"
                                      name="preferred_time"
                                       placeholder="Click to Enter Scheduled Date & Time" value="{{ old('preferred_time') }}">
                                     
@@ -165,11 +165,8 @@
                          <section>
                              <div class="form-row mt-4">
                                  <div class="form-group col-md-12">
-                                     <ul class="list-group wd-md-100p">
-                                     @include('cse.warranties.includes.causal_agent')
-
-                
-                                     </ul>
+                                 @include('cse.warranties.includes.causal_agent')
+                                   
                                  </div>
                              </div>
                          </section>
@@ -196,7 +193,56 @@
 
                             <div class="d-none d-rfq">
                             <small class="text-danger">This portion will display only if the CSE initially executed a RFQ, the Client paid for the components and the Supplier has made the delivery.</small>
-                          
+                           
+                    <div class="divider-text">Initial Supplier </div>
+                    <ul class="list-group wd-md-100p">
+                                @if(!empty($suppliers->rfqSuppliesInvoices))
+                                @foreach($suppliers->rfqSuppliesInvoices as $item)
+                                @if($item->accepted == 'Yes')
+                                    <li class="list-group-item d-flex align-items-center">
+                                        
+                                        <div class="form-row">
+                                        <img src="{{ asset('assets/user-avatars/'.$item->warranty_claim_supplier->user->account->avatar??'default-male-avatar.png') }}" class="wd-30 rounded-circle mg-r-15" alt="Technician Avatar">
+
+                                        <div class="col-md-6 col-sm-6">
+                                        <h6 class="tx-13 tx-inverse tx-semibold mg-b-0">{{ ucfirst($item->warranty_claim_supplier->user->account->first_name)}} {{  ucfirst($item->warranty_claim_supplier->user->account->last_name)}}</h6>
+                                        
+                                        <span class="d-block tx-11 text-muted">
+                                                <i class="icon ion-md-star lh-0 tx-orange"></i>
+                                                <i class="icon ion-md-star lh-0 tx-orange"></i>
+                                                <i class="icon ion-md-star lh-0 tx-orange"></i>
+                                            <span class="font-weight-bold ml-2">0.6km</span>
+                                        </span>
+                                        </div>
+                                        <div class="col-md-6 col-sm-6">
+                                        <div class="form-row">
+                                        <div class="form-group col-1 col-md-1 col-sm-1" style="margin-left: 3rem !important;">
+                                                                        <a href="tel:08124483438" class="btn btn-primary btn-icon"><i class="fas fa-phone"></i></a>
+                                                                    </div>
+                                                <div class="form-group col-1 col-md-1 col-sm-1">
+                                                        <div class="custom-control custom-radio mt-2">
+                                                            <div class="custom-control custom-radio">
+                                                                <input type="radio" class="custom-control-input" id="initial_supplier" name="supplier_id" value="{{$item->warranty_claim_supplier->id}}">
+                                                                <input type="hidden" class="custom-control-input" id="add_inital_supplier" name="initial_supplier" value="{{$item->warranty_claim_supplier->id}}">
+                                                                <input type="hidden" class="custom-control-input" id="" name="supplier_email" value="{{$item->warranty_claim_supplier->user->email}}">
+                                                                <input type="hidden" class="custom-control-input" id="" name="supplier_fname" value="{{$item->warranty_claim_supplier->user->account->first_name}}">
+                                                                <input type="hidden" class="custom-control-input" id="" name="supplier_lname" value="{{$item->warranty_claim_supplier->user->account->last_name}}">
+
+                                                                <label class="custom-control-label" for="{{ $loop->iteration }}"></label>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+                                                </div>
+                                                </div>
+                                            </div>
+                                            </li>
+                                            @endif    
+                                            @endforeach
+                                            @endif
+                                        </ul>
+
+
                               @if(!empty($suppliers->rfqSuppliesInvoices))
                               @foreach($suppliers->rfqSuppliesInvoices as $item)
                               @if($item->accepted == 'Pending')
@@ -342,7 +388,7 @@
                         </section>
                      
 
-                        <h3>Assign New Technician</h3>
+                        <h3>Assign Job To Technician</h3>
                         <section>
                             <div class="form-row mt-4">
                                 <div class="form-group col-md-12">
@@ -363,7 +409,8 @@
          
           
 
-            <input type="hidden" value="{{$service_request->uuid}}" name="service_request_uuid">
+            <input type="hidden" value="{{$service_request->id}}" name="service_request_id">
+            <input type="hidden" value="{{$service_request->unique_id}}" name="service_request_unique_id">
             <input type="hidden" value="{{$service_request->service_request_warranty->uuid}}" name="service_request_warranty_uuid">
             <input type="hidden" value="{{$service_request->service_request_warranty->id}}" name="service_request_warranty_id">
 
@@ -371,14 +418,12 @@
         
         </form>
         @else
-       
-       
-                            <small class="text-danger">This tab is only visible once a Warranty claim has been marked as resolved.</small>
-                            <h4> This Warranty Claim has been resolved. </h4>
-                            @endif
+        <small class="text-danger">This tab is only visible once a Warranty claim has been marked as resolved.</small>
+        <h4> This Warranty Claim has been resolved. </h4>
+        @endif
                         
-                        </div>
-                        @endif
+        </div>
+        @endif
 
                        
                         @include('cse.warranties.includes.collaborators')

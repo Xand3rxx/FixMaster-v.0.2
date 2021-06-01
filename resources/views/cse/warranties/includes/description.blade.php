@@ -34,17 +34,24 @@
                                        <tr>
                                            <td class="tx-medium">Initial Technicians Assigned</td>
                                            <td class="tx-color-03">
-                                           @if(!empty($service_request->service_request_warranty->service_request_warranty_issued))
-                                           @if(!empty($service_request->service_request_warranty->service_request_warranty_issued->technician_id))
-                                          {{ CustomHelpers::getWarrantTechnician($service_request->service_request_warranty->service_request_warranty_issued->technician_id) }}
-
-                                           @endif
-                                           @else
+                                      
                                        {{ CustomHelpers::arrayToList($service_request->service_request_assignees, 'technician-artisans') }}
-                                           @endif
+                                         
                                              
                                            </td>
                                        </tr>
+
+                                       @if(!empty($service_request->service_request_warranty->service_request_warranty_issued))
+                                            @if(!is_null($service_request->service_request_warranty->service_request_warranty_issued->technician_id))
+                                       <tr>
+                                           <td class="tx-medium">Warranty Technicians Assigned</td>
+                                           <td class="tx-color-03">
+                                        
+                                          {{ CustomHelpers::getWarrantTechnician($service_request->service_request_warranty->service_request_warranty_issued->technician_id) }}
+                                           </td>
+                                       </tr>
+                                       @endif
+                                           @endif
                                        <tr>
                                            <td class="tx-medium">Initial Quality Assurance Managers Assigned</td>
                                            <td class="tx-color-03">{{CustomHelpers::arrayToList($service_request->service_request_assignees, 'quality-assurance-user')}}</td>

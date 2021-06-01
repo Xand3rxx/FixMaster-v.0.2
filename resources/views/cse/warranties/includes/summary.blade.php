@@ -1,11 +1,11 @@
 <div id="serviceRequestSummary" class="tab-pane pd-20 pd-xl-25">
                             <div class="divider-text">Diagnostic Reports</div>
-                            @if(!empty($service_request->service_request_warranty->service_request_warranty_issued))
-                            @if(!empty($service_request->service_request_warranty->service_request_warranty_issued->warrantReport))
+                            @if(!empty($requestReports))
+                          
 
                             <div class="card-groups">
-                          @foreach($service_request->service_request_warranty->service_request_warranty_issued->warrantReport as $item)
-                          @if(!empty($item->report ))
+                          @foreach($requestReports as $item)
+                       
                                 <div class="card">
                                     <div class="card-body shadow-none bd-primary overflow-hidden">
                                         <div class="marker-primary marker-ribbon pos-absolute t-10 l-0">1</div>
@@ -15,13 +15,9 @@
                                         </small></p>
                                     </div>
                                 </div>
-                                @endif
+                              
                                 @endforeach
-                    
-                                
-                          
                             </div>
-                            @endif
                             @endif
 
                             <div class="divider-text">Causal Reports</div>
@@ -50,7 +46,7 @@
                                     <div class="card-body shadow-none bd-primary overflow-hidden">
                                         <div class="marker-primary marker-ribbon pos-absolute t-10 l-0">1</div>
 
-                                        <p class="card-text">Causal Agent</p>
+                                        <p class="card-text">Causal Agent:  {{ CustomHelpers::getUserDetail($item->causal_agent_id)->roles[0]->name }} </p>
                                         <p class="card-text">{{ CustomHelpers::getWarrantTechnician($item->causal_agent_id) }}</p>
                                         <p class="card-text"><small class="text-muted">Date Created: {{ Carbon\Carbon::parse($item->created_at, 'UTC')->isoFormat('MMMM Do YYYY, h:mm:ssa')}}
                                         </small></p>
@@ -104,7 +100,7 @@
                             <h5 class="mt-4">Request For Quotation</h5>
                             <div class="table-responsive">
                              
-
+                               @if(!empty($suppliers))
                                 <table class="table table-hover mg-b-0 mt-4">
                                     <thead class="">
                                         <tr>
@@ -118,6 +114,7 @@
                                             <th>Action</th>
                                         </tr>
                                     </thead>
+
                                     <tbody>
                                         @php $y = 0; @endphp
                                         <tr>
@@ -134,6 +131,7 @@
                                         </tr>
                                     </tbody>
                                 </table>
+                                @endif
                             </div><!-- table-responsive -->
 
                         </div><!----end summary-->

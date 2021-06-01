@@ -72,13 +72,13 @@
           @if(is_null($warranty->service_request_warranty_issued))
           <td class="text-danger">None </td>
           @else
-          <td class="text-danger">Yes</td>
+          <td class="text-success">Yes</td>
           @endif
 
           @if(is_null($warranty->service_request_warranty_issued))
           <td class="text-danger">Pending</td>
           @else
-          <td class="text-danger">Accepted</td>
+          <td class="text-success">Accepted</td>
           @endif
         
         
@@ -93,10 +93,11 @@
                @endif
 
                @if(!is_null($warranty->service_request_warranty_issued))
+        
                @if($warranty->service_request_warranty_issued->cse_id == Auth::user()->id)
-               <a href="{{ route('admin.warranty_details', ['warranty'=>$warranty->service_request->uuid, 'locale'=>app()->getLocale()]) }}" class="dropdown-item details text-primary"><i class="far fa-clipboard"></i> Details</a>
+               <a href="{{ route('cse.warranty_details', ['warranty'=>$warranty->service_request->uuid, 'locale'=>app()->getLocale()]) }}" class="dropdown-item details text-primary"><i class="far fa-clipboard"></i> Details</a>
                @else
-               <a href="#" class="dropdown-item details text-primary"><i class="far fa-clipboard"></i> No Details</a>
+               <a href="#" class="dropdown-item details text-default"> No Details</a>
 
                @endif
                @endif

@@ -58,7 +58,8 @@
                       {{-- <td class="tx-medium tx-center">{{ $rfq->delivery_fee }}</td> --}}
                       <td class="tx-medium tx-center">{{ $rfq->total_amount }}</td>
                       <td class="text-medium">{{ Carbon\Carbon::parse($rfq->delivery_time, 'UTC')->isoFormat('MMMM Do YYYY, h:mm:ssa') }}</td>
-                      <td class="text-center text-success">{{ App\Http\Controllers\Admin\RfqController::getDistanceBetweenPoints($rfq['rfq']['serviceRequest']['client']['contact']['address_latitude'], $rfq['rfq']['serviceRequest']['client']['contact']['address_longitude'], $rfq['supplier']['contact']['address_latitude'], $rfq['supplier']['contact']['address_longitude']) }}km</td>
+                     {{-- <td class="text-center text-success">{{ App\Http\Controllers\Admin\RfqController::getDistanceBetweenPoints($rfq['rfq']['serviceRequest']['client']['contact']['address_latitude'], $rfq['rfq']['serviceRequest']['client']['contact']['address_longitude'], $rfq['supplier']['contact']['address_latitude'], $rfq['supplier']['contact']['address_longitude']) }}km</td>--}}
+                     <td class="text-center text-success">10km</td>
                       <td class="text-center">
                         <div class="dropdown-file">
                           <a href="" class="dropdown-link" data-toggle="dropdown"><i data-feather="more-vertical"></i></a>

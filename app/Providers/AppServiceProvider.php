@@ -47,7 +47,7 @@ class AppServiceProvider extends ServiceProvider
         view()->composer('layouts.partials._cse_sidebar', function ($view) {
             $view->with([
                 'cse_availability' => \App\Models\Cse::isAvailable() ? ['Available', 'checked'] : ['Unavailable', ''],
-                'unresolvedWarranties' =>\App\Models\ServiceRequestWarranty::with('user.account', 'service_request', 'warranty', 'service_request_warranty_issued')->orderBy('has_been_attended_to', 'ASC')->latest()->get(),
+                'unresolvedWarranties' =>\App\Models\ServiceRequestWarranty::with('user.account', 'service_request', 'warranty', 'service_request_warranty_issued')->get()->count(),
 
                 ]);
         });
