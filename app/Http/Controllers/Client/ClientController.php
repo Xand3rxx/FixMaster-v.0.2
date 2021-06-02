@@ -190,28 +190,11 @@ class ClientController extends Controller
 
     public function update_profile(Request $request)
     {
-        // $all = $request->all();
-        // dd($all);
-        // return;
-
-        // $img = $request->file('profile_avater');
-        // $allowedExts = array('jpg', 'png', 'jpeg');
-
         $validatedData = $request->validate([
             'first_name'  => 'required|max:255',
             'gender'   => 'required',
             'phone_number'   => 'required|max:255',
             'email'       => 'required|email|max:255',
-            // 'profile_avater' => [
-            //     function ($attribute, $value, $fail) use ($request, $img, $allowedExts) {
-            //         if ($request->hasFile('old_avatar')) {
-            //             $ext = $img->getClientOriginalExtension();
-            //             if (!in_array($ext, $allowedExts)) {
-            //                 return $fail("Only png, jpg, jpeg image is allowed");
-            //             }
-            //         }
-            //     },
-            // ],
             'state_id'   => 'required|max:255',
             'lga_id'   => 'required|max:255',
             'full_address'   => 'required|max:255',
@@ -792,19 +775,11 @@ class ClientController extends Controller
 
     public function myServiceRequest(){
 
-        // $myServiceRequests = Client::where('user_id', auth()->user()->id)->with(['service_requests.invoices' => function ($query) {
-        //     $query->orderBy('created_at', 'DESC');
-        // }])->firstOrFail();
-
         $myServiceRequests = Client::where('user_id', auth()->user()->id)
             ->with('service_requests.invoices')
             ->whereHas('service_requests', function ($query) {
                         $query->orderBy('created_at', 'ASC');
             })->firstOrFail();
-
-            // return $myServiceRequests->service_requests[0]->service_request_assignees->count();
-            // return dd($myServiceRequests->service_requests[0]);
-        
         return view('client.services.list', [
             'myServiceRequests' =>  $myServiceRequests,
         ]);
@@ -941,21 +916,6 @@ class ClientController extends Controller
         // $service_request->updated_at         = Carbon::now()->toDateTimeString();
 
         if ($service_request->save()) {
-
-
-        // upload multiple media files
-        // foreach($request->media_file as $key => $file)
-        // {
-        //     $originalName[$key] = $file->getClientOriginalName();
-
-        //     $fileName = sha1($file->getClientOriginalName() . time()) . '.'.$file->getClientOriginalExtension();
-        //     $filePath = public_path('assets/service-request-media-files');
-        //     $file->move($filePath, $fileName);
-        //     $data[$key] = $fileName; 
-        // }
-        //     $unique_name   = json_encode($data);
-        //     $original_name = json_encode($originalName);
-
             $saveToMedia = new Media();
             $saveToMedia->client_id     = auth()->user()->id;
             $saveToMedia->original_name = $media['original_name'];
@@ -966,39 +926,6 @@ class ClientController extends Controller
             $saveServiceRequestMedia->media_id            = $saveToMedia->id; 
             $saveServiceRequestMedia->service_request_id  = $service_request->id;
             $saveServiceRequestMedia->save(); 
-
-
-            // file uploading
-            // if($request->hasFile('media_file')){
-            //     $docs = $request->file('media_file');
-            //     $documentName = sha1(time()) .'.'.$docs->getClientOriginalExtension();
-            //     $imagePath = public_path('assets/service-request-media-files').'/'.$documentName;
-            //     //Delete old document
-            //     if(\File::exists(public_path('assets/service-request-media-files/'.$request->input('media_file')))){
-            //         $done = \File::delete(public_path('assets/service-request-media-files/'.$request->input('media_file')));
-            //         if($done){
-            //             // echo 'File has been deleted';
-            //         }
-            //     }
-            //     //Move new image to `service request` folder
-            //     Image::make($docs->getRealPath())->resize(220, 220)->save($imagePath);
-    
-            //     $media_file                    = new Media();
-            //     $serviceRequestMedia_file      = new ServiceRequestMedia(); 
-    
-            //     $media_file->client_id            = auth()->user()->id;
-            //     $media_file->original_name        = $request->file('media_file');
-            //     $media_file->unique_name          = $documentName;
-    
-            //     //if media file name is saved 
-            //     if ( $media_file->save() ) {
-            //         $serviceRequestMedia_file->media_id            = $media_file->id;
-            //         $serviceRequestMedia_file->service_request_id  = $service_request->id;
-            //            // save file
-            //            $serviceRequestMedia_file->save();
-            //     }
-                
-            // }
 
 
 
@@ -1069,7 +996,7 @@ class ClientController extends Controller
         $request->validate([
             'timestamp'             =>   'required',
             // 'phone_number'          =>   'required', 
-            'address'               =>   'required',
+            // 'address'               =>   'required',
             'description'           =>   'required',
         ]);
 

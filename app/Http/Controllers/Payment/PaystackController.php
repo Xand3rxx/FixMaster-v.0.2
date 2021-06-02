@@ -8,6 +8,7 @@ use App\Models\Payment;
 use App\Models\PaymentGateway;
 use App\Models\Client;
 use App\Models\ServicedAreas;
+use App\Models\Contact;
 
 use App\Traits\RegisterPaymentTransaction;
 use App\Traits\GenerateUniqueIdentity as Generator;

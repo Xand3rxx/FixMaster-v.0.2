@@ -43,7 +43,7 @@ class ServicedAreasController extends Controller
     }
 
 
-        /**
+    /**
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
@@ -90,7 +90,7 @@ class ServicedAreasController extends Controller
     }
 
 
-        /**
+    /**
      * Validate user input fields
      */
     private function validateRequest(){
