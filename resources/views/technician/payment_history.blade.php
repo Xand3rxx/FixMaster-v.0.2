@@ -137,31 +137,8 @@
                                         <th>QA Amount</th>
                                         <th>Technician Amount</th>
                                         <th>Supplier Amount</th>
-                                        <th>Date of completion</th>
-
-
-
-                                        CSE Name
-                                        CSE Nuban
-                                        CSE Bank
-                                        QA Name
-                                        QA Nuban
-                                        QA Bank
-                                        Technician Name
-                                        Technician Nuban
-                                        Technician Bank
-                                        Supplier Name
-                                        Supplier Nuban
-                                        Supplier Bank
-                                        CSE Amount
-                                        QA Amount
-                                        Technician Amount
-                                        Supplier Amount
-
-
-
-{{--                                        <th class="text-center">Payment Date</th>--}}
-                                        <th>Action</th>
+                                        <th class="text-center">Date of completion</th>
+                                        <th class="fix-col">Action</th>
                                     </tr>
                                     </thead>
                                     <tbody>
@@ -171,26 +148,43 @@
                                             <td class="tx-color-03 tx-center">{{ $sn++ }}</td>
                                             <td class="tx-medium">REF-66EB5A26</td>
                                             <td class="tx-medium">UNAVAILABLE</td>
+                                            <td class="tx-medium">Regular</td>
                                             <td class="tx-medium">GT BANK</td>
                                             <td class="tx-medium">John Doe</td>
                                             <td class="tx-medium">UNAVAILABLE</td>
                                             <td class="tx-medium">FIRST BANK</td>
+                                            <td class="tx-medium">Jane Doe
+                                            <td class="tx-medium">UNAVAILABLE</td>
+                                            <td class="tx-medium">FIRST BANK</td>
                                             <td class="tx-medium">Jane Doe</td>
+                                            <td class="tx-medium">UNAVAILABLE</td>
+                                            <td class="tx-medium">FIRST BANK</td>
+                                            <td class="tx-medium">Jane Doe</td>
+                                            <td class="tx-medium">UNAVAILABLE</td>
+                                            <td class="tx-medium">FIRST BANK</td>
+                                            <td class="tx-medium">Jane Doe</td>
+                                            <td class="tx-medium">UNAVAILABLE</td>
+                                            <td class="tx-medium">FIRST BANK</td>
+                                            <td class="tx-medium">Jane Doe</td>
+
 {{--                                            <td class="text-medium tx-center">{{ Carbon\Carbon::parse($result->created_at, 'UTC')->isoFormat('MMMM Do YYYY, h:mm:ssa') }}</td>--}}
-                                            <td><a href="#" data-toggle="modal" data-target="#transactionDetails" data-payment-ref="{{ $result->unique_id }}" data-url="{{ route('quality-assurance.payment_details', ['payment' => $result->id, 'locale' => app()->getLocale()]) }}" id="payment-details" class="btn btn-primary btn-sm ">Details</a></td>
+                                            <td class="fix-col"><a href="#" data-toggle="modal" data-target="#transactionDetails" data-payment-ref="{{ $result->unique_id }}" data-url="{{ route('quality-assurance.payment_details', ['payment' => $result->id, 'locale' => app()->getLocale()]) }}" id="payment-details" class="btn btn-primary btn-sm ">Details</a></td>
                                         </tr>
-                                        <tr>
-                                            <td class="tx-color-03 tx-center">{{ $sn++ }}</td>
-                                            <td class="tx-medium">REF-66EB5A26</td>
-                                            <td class="tx-medium">UNAVAILABLE</td>
-                                            <td class="tx-medium">GT BANK</td>
-                                            <td class="tx-medium">John Doe</td>
-                                            <td class="tx-medium">UNAVAILABLE</td>
-                                            <td class="tx-medium">FIRST BANK</td>
-                                            <td class="tx-medium">Jane Doe</td>
-                                            {{--                                            <td class="text-medium tx-center">{{ Carbon\Carbon::parse($result->created_at, 'UTC')->isoFormat('MMMM Do YYYY, h:mm:ssa') }}</td>--}}
-                                            <td><a href="#" data-toggle="modal" data-target="#transactionDetails" data-payment-ref="{{ $result->unique_id }}" data-url="{{ route('quality-assurance.payment_details', ['payment' => $result->id, 'locale' => app()->getLocale()]) }}" id="payment-details" class="btn btn-primary btn-sm ">Details</a></td>
-                                        </tr>
+
+                                        <style>
+                                            .table {
+                                                max-width: 400px !important;
+                                            }
+                                            .fix-col {
+                                                border-left: solid 1px #E97D1F;
+                                                border-right: solid 1px #E97D1F;
+                                                left: 0;
+                                                position: absolute;
+                                                top: auto;
+                                                width: 110px;
+                                            }
+                                        </style>
+
                                     @endforeach
                                     </tbody>
                                 </table>

@@ -32,9 +32,9 @@
                         <div class="card-header pd-t-20 pd-b-0 bd-b-0">
                           <h6 class="lh-5 mg-b-5">Overall Rating</h6>
                           <p class="tx-12 tx-color-03 mg-b-0">Ratings is based on 152 total votes by Customer reviews on the quality of service provided by you.</p>
-          
+
                         </div><!-- card-header -->
-          
+
                         <div class="card-body pd-0">
                           <div class="pd-t-10 pd-b-15 pd-x-20 d-flex align-items-baseline">
                             <h1 class="tx-normal tx-rubik mg-b-0 mg-r-5">4</h1>
@@ -58,20 +58,20 @@
 
                     <div class="card-body pd-lg-25">
                         <div class="row">
-                          <x-card cardtitle="Total Requests" cardnumber="20" />
-                          <x-card cardtitle="Completed Requests" cardnumber="10" />
-                          <x-card cardtitle="Ongoing Requests" cardnumber="7" />
-                          <x-card cardtitle="Pending Consultations" cardnumber="3" />
-                          <x-card cardtitle="Completed Consultations" cardnumber="4" />
+                          <x-card cardtitle="Total Requests" cardnumber="{{ $total_request->count() }}" />
+                          <x-card cardtitle="Completed Requests" cardnumber="{{ $completed_request->count() }}" />
+                          <x-card cardtitle="Ongoing Requests" cardnumber="{{ $ongoing_request->count() }}" />
+                          <x-card cardtitle="Pending Consultations" cardnumber="{{ $pending_consultations->count() }}" />
+                          <x-card cardtitle="Completed Consultations" cardnumber="{{ $completed_consultations->count() }}" />
                           <x-card cardtitle="Payment Received" cardnumber="20" />
                         </div>
                       </div>
-          
+
                   </div><!-- card -->
                 </div>
-          
+
                 <div class="col-md-12 col-xl-12 mg-t-10">
-                  
+
                   <div class="card ht-100p">
                     <div class="card-header d-flex align-items-center justify-content-between">
                       <h6 class="mg-b-0">Recent Payments</h6>
@@ -98,11 +98,11 @@
                     <div class="card-footer text-center tx-13">
                     <a href="{{ route('quality-assurance.payments',app()->getLocale()) }}" class="link-03">View All Transactions <i class="icon ion-md-arrow-down mg-l-5"></i></a>
                     </div><!-- card-footer -->
-                    
+
                   </div><!-- card -->
                 </div>
-          
-          
+
+
               </div><!-- row -->
         </div><!-- container -->
     </div>
