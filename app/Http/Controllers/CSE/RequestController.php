@@ -3,20 +3,16 @@
 namespace App\Http\Controllers\CSE;
 
 use App\Models\Cse;
-use App\Models\User;
 use Illuminate\Http\Request;
-use App\Models\ServiceRequest;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\File;
-use App\Models\ServiceRequestAssigned;
-use App\Traits\PageContent;
+use App\Models\User;
+use Illuminate\Support\Facades\Log;
+
 
 class RequestController extends Controller
 {
-    use PageContent;
     /**
      * Display a listing of the resource.
      *
@@ -25,26 +21,30 @@ class RequestController extends Controller
     public function index()
     {
         return view('cse.requests.index', [
-            'requests' => ServiceRequestAssigned::where('user_id', auth()->user()->id)->with(['service_request', 'service_request.users', 'service_request.client'])->get(),
+            'requests' => \App\Models\ServiceRequestAssigned::where('user_id', auth()->user()->id)->with(['service_request', 'service_request.users', 'service_request.client'])->get(),
         ]);
     }
 
     /**
-     * Display a listing of the resource.
+     * Show the form for creating a new resource.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * 
      * @return \Illuminate\Http\Response
      */
-    public function search(Request $request)
+    public function create()
     {
-        $request->validate(['status' => 'sometimes|in:Ongoing,Pending,Completed,Canceled']);
-        // Data Needed on dashboard page
-        return view('cse.requests.index', [
-            'requests' => ServiceRequestAssigned::where('user_id', $request->user()->id)->with('service_request', 'service_request.price')->get()->filter(function ($each) use ($request) {
-                return $each['service_request']['status_id'] == ServiceRequest::SERVICE_REQUEST_STATUSES[$request->get('status')];
-            }),
-        ]);
+        //
+    }
+
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function store(Request $request)
+    {
+        //
     }
 
     /**
@@ -85,15 +85,18 @@ class RequestController extends Controller
     }
 
     /**
-     * Send Notification 
+     * Send Notification
      *
      * @param  \Illuminate\Http\Request  $request
+     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function sendNotification(Request $request)
+    public function update(Request $request, $id)
     {
         return $request->all();
-        $request->validate(['service_request' => 'required|uuid']);
+        $valid = $request->validate(['service_request' => 'required|uuid']);
+        $serviceRequest = ServiceRequest::where('uuid', $valid['service_requests'])->with('client', 'client.user')->firstOrFail();
+        $user = $serviceRequest['client']['user'];
         // Define a Feature
         $template_feature = 'CSE_ACCOUNT_CREATION_NOTIFICATION';
         // Build possible Parameters
@@ -109,54 +112,57 @@ class RequestController extends Controller
 
     public function getServiceRequestsByTechnician(Request $request)
     {
-        $technicianServices = DB::table('service_request_assigned')
-            ->join('service_requests', 'service_request_assigned.service_request_id', '=', 'service_requests.id')
-            ->orderBy('service_request_assigned.created_at', 'DESC')
-            ->select('service_requests.unique_id')
-            ->where('service_request_assigned.user_id', $request->userid)
-            ->where('service_request_assigned.status', 'Active')
-            ->get();
+       $technicianServices = DB::table('service_request_assigned')
+       ->join('service_requests', 'service_request_assigned.service_request_id', '=', 'service_requests.id')
+       ->orderBy('service_request_assigned.created_at', 'DESC')
+       ->select('service_requests.unique_id')
+       ->where('service_request_assigned.user_id', $request->userid)
+       ->where('service_request_assigned.status', 'Active')
+       ->get();
 
 
-        if (!empty($technicianServices)) {
-            return response()->json(["data" => $technicianServices], 200);
+       if(!empty($technicianServices)){
+        return response()->json(["data" => $technicianServices], 200);
         }
         return response()->json(["message" => "No ongoing jobs available"], 404);
+   
     }
 
     public function getServiceRequestsByCse(Request $request)
     {
-        $cseServices = DB::table('service_request_assigned')
-            ->join('service_requests', 'service_request_assigned.service_request_id', '=', 'service_requests.id')
-            ->orderBy('service_request_assigned.created_at', 'DESC')
-            ->select('service_requests.unique_id')
-            ->where('service_request_assigned.user_id', $request->userid)
-            ->where('service_request_assigned.status', 'Active')
-            ->get();
+       $cseServices = DB::table('service_request_assigned')
+       ->join('service_requests', 'service_request_assigned.service_request_id', '=', 'service_requests.id')
+       ->orderBy('service_request_assigned.created_at', 'DESC')
+       ->select('service_requests.unique_id')
+       ->where('service_request_assigned.user_id', $request->userid)
+       ->where('service_request_assigned.status', 'Active')
+       ->get();
 
 
-        if (!empty($cseServices)) {
-            return response()->json(["data" => $cseServices], 200);
+       if(!empty($cseServices)){
+        return response()->json(["data" => $cseServices], 200);
         }
         return response()->json(["message" => "No ongoing jobs available"], 404);
+   
     }
 
 
     public function getUsersByReferenceID(Request $request)
     {
-        $users = DB::table('service_request_assigned')
-            ->join('users', 'service_request_assigned.user_id', '=', 'users.id')
-            ->join('accounts', 'accounts.user_id', '=', 'service_request_assigned.user_id')
-            ->join('service_requests', 'service_requests.id', '=', 'service_request_assigned.service_request_id')
-            ->orderBy('service_request_assigned.created_at', 'DESC')
-            ->select('service_request_assigned.user_id', 'users.email', 'accounts.first_name', 'accounts.last_name')
-            ->where('service_requests.unique_id', $request->reqid)
-            ->where('service_request_assigned.status', 'Active')
-            ->get();
+       $users = DB::table('service_request_assigned')
+       ->join('users', 'service_request_assigned.user_id', '=', 'users.id')
+       ->join('accounts', 'accounts.user_id', '=', 'service_request_assigned.user_id')
+       ->join('service_requests', 'service_requests.id', '=', 'service_request_assigned.service_request_id')
+       ->orderBy('service_request_assigned.created_at', 'DESC')
+       ->select('service_request_assigned.user_id', 'users.email' ,'accounts.first_name', 'accounts.last_name')
+       ->where('service_requests.unique_id', $request->reqid)
+       ->where('service_request_assigned.status', 'Active')
+       ->get();
 
-        if (!empty($users)) {
-            return response()->json(["data" => $users], 200);
+       if(!empty($users)){
+        return response()->json(["data" => $users], 200);
         }
         return response()->json(["message" => "No Users"], 404);
+
     }
 }
