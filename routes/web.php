@@ -16,6 +16,7 @@ use App\Http\Controllers\Admin\StatusController;
 use App\Http\Controllers\Admin\EWalletController;
 use App\Http\Controllers\Admin\GatewayController;
 use App\Http\Controllers\Admin\ServiceController;
+use App\Http\Controllers\Admin\ServicedAreasController;
 use App\Http\Controllers\Client\ClientController;
 use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\WarrantyController;
@@ -326,7 +327,7 @@ Route::prefix('admin')->name('admin.')->group(function () {
 
     Route::get('/reports/supplier',             [SupplierReportController::class, 'index'])->name('supplier_reports');
     Route::post('/reports/supplier/item-delivered-sorting', [SupplierReportController::class, 'itemDeliveredSorting'])->name('supplier_report_first_sorting');
-    
+
 });
 
 //All routes regarding clients should be in here
