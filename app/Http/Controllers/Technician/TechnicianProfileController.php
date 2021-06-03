@@ -35,8 +35,69 @@ class TechnicianProfileController extends Controller
      */
     public function index()
     {
+        $total_request =  ServiceRequestAssigned::where('user_id', Auth::id())->with('users', 'service_request')
+            ->orderBy('created_at', 'DESC')->get();
 
-        return view('technician.index')->with('i');
+        $ongoing_request = ServiceRequestAssigned::whereHas('service_request', function ($query) {
+            $query->where('status_id', 2);
+        })
+            ->where('user_id', Auth::id())
+            ->where('assistive_role', 'Technician')
+            ->get();
+
+        $completed_request = ServiceRequestAssigned::whereHas('service_request',function ($query) {
+            $query->where('status_id', 4);
+        })
+            ->where('user_id', Auth::id())
+            ->where('assistive_role', 'Technician')
+            ->get();
+
+//        $ongoing_consultations = ServiceRequestAssigned::whereHas('service_request',function ($query) {
+//            $query->where('status_id', 2);
+//        })
+//            ->where('user_id', Auth::id())
+//            ->where('assistive_role', 'Technician')
+//            ->get();
+
+        $pending_consultations = ServiceRequestAssigned::whereHas('service_request',function ($query) {
+            $query->where('status_id', 1);
+        })
+            ->where('user_id', Auth::id())
+            ->where('assistive_role', 'Technician')
+            ->get();
+
+        $completed_consultations = ServiceRequestAssigned::whereHas('service_request',function ($query) {
+            $query->where('status_id', 4);
+        })
+            ->where('user_id', Auth::id())
+            ->where('assistive_role', 'Technician')
+            ->get();
+
+        $payments = PaymentDisbursed::where('recipient_id', Auth::id())->get();
+
+        //dd($data);
+//        return ServiceRequestAssigned::with('users', 'service_request')->whereHas('service_request', function ($query) {
+//            $query->where('status_id', 2);
+//        })->where('user_id', Auth::id())
+//            ->get();
+//
+//        return ServiceRequestAssigned::where('user_id', auth()->user()->id)
+//            ->with(['service_request', 'service_request.users.roles', 'service_request.client','service_request.account'])
+//            ->get();
+
+        $data = compact(
+            'total_request',
+            'ongoing_request',
+            'completed_request',
+            'completed_consultations',
+            'pending_consultations',
+            'payments'
+
+        );
+
+
+
+        return view('technician.index', $data)->with('i');
     }
 
     public function newIndex()
@@ -311,5 +372,15 @@ class TechnicianProfileController extends Controller
                  return view('technician._disbursed_table', compact('payments','message'));
             }
         }
+    }
+
+    public function paymentHistory(Request $request){
+
+        $years =  $this->getDistinctYears($tableName = 'payments_disbursed');
+
+        $payments = PaymentDisbursed::where('recipient_id', Auth::id())->with('user')->get();
+        // $payments = PaymentDisbursed::where('recipient_id',Auth::id())
+        // ->orderBy('created_at', 'DESC')->get();
+        return view('technician.payment_history', compact('payments', 'years'));
     }
 }
