@@ -3,21 +3,21 @@
 namespace App\Http\Controllers\Payment;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request; 
-use App\Models\Payment; 
-use App\Models\PaymentGateway; 
+use App\Models\Invoice;
+use App\Models\ServiceRequest;
+use Illuminate\Http\Request;
+use App\Models\Payment;
+use App\Models\PaymentGateway;
 use App\Models\Client;
-use App\Models\Town;
 use App\Models\ServicedAreas;
 
 use App\Traits\RegisterPaymentTransaction;
 use App\Traits\GenerateUniqueIdentity as Generator;
 
-use App\Http\Controllers\Payment\FlutterwaveController;
+//use App\Http\Controllers\Payment\FlutterwaveController;
 
 use App\Http\Controllers\Client\ClientController;
 use Session;
-use App\Models\Contact;
 
 
 class FlutterwaveController extends Controller
@@ -43,30 +43,25 @@ class FlutterwaveController extends Controller
      */
     public function store(Request $request) 
     {
-        // return dd($request);
-        $contact_details = Contact::where('id', $request->myContact_id)->first();
-
+        // return $request;
         $valid = $this->validate($request, [
-            // List of things needed from the request like 
+            // List of things needed from the request like
             'booking_fee'      => 'required',
             'payment_channel'  => 'required',
             'payment_for'     => 'required',
             // 'myContact_id'    => 'required',
         ]);
         
-        // check if the town 
-        $Serviced_areas = ServicedAreas::where('town_id', '=', $contact_details->town_id)->orderBy('id', 'DESC')->first();
+        $Serviced_areas = ServicedAreas::where('town_id', '=', $request['town_id'])->orderBy('id', 'DESC')->first();
         if ($Serviced_areas === null) {
             return back()->with('error', 'sorry!, this area you selected is not serviced at the moment, please try another area');
         }
 
-        if ($request->media_file) {            
-
-            // upload multiple media files
-            foreach($request->media_file as $key => $file)
+        // upload multiple media files
+        foreach($request->media_file as $key => $file)
             {
                 $originalName[$key] = $file->getClientOriginalName();
-
+    
                 $fileName = sha1($file->getClientOriginalName() . time()) . '.'.$file->getClientOriginalExtension();
                 $filePath = public_path('assets/service-request-media-files');
                 $file->move($filePath, $fileName);
@@ -76,12 +71,9 @@ class FlutterwaveController extends Controller
                 $data['original_name'] = json_encode($originalName);
                 // return $data;
         
-            // $request->session()->put('order_data', $request);
-            $request->session()->put('order_data', $request->except(['media_file']));
-            $request->session()->put('medias', $data);
-
-        }
-
+        // $request->session()->put('order_data', $request);
+        $request->session()->put('order_data', $request->except(['media_file']));
+        $request->session()->put('medias', $data);
 
             // return dd(  );
 
@@ -91,12 +83,12 @@ class FlutterwaveController extends Controller
         $generatedVal = $this->generateReference();
         // save ordered items
         $payment = $this->payment($valid['booking_fee'], $valid['payment_channel'], $valid['payment_for'], $client['unique_id'], 'pending', $generatedVal);
-        
+
         $payment_id = $payment->id;
 
-        return $this->initiate($payment_id); 
+        return $this->initiate($payment_id);
 
-       
+
     }
 
     /**
@@ -106,10 +98,11 @@ class FlutterwaveController extends Controller
      */
     public function initiate($paymentId)
     {
+//        dd($paymentId);
                 $curl = curl_init();
-                
-                $payment = Payment::find($paymentId);                 
-                
+
+                $payment = Payment::find($paymentId);
+
                 $request = [
                     'tx_ref' => $payment->reference_id,
                     'amount' => $payment->amount,
@@ -148,14 +141,14 @@ class FlutterwaveController extends Controller
                 ),
                 ));
 
-                $response = curl_exec($curl);                
+                $response = curl_exec($curl);
 
                 curl_close($curl);
-    
-                $res = json_decode($response); 
+
+                $res = json_decode($response);
 
                 if($res->status == 'success')
-                {                    
+                {
                     return redirect($res->data->link);
                 }else
                 {
@@ -166,13 +159,16 @@ class FlutterwaveController extends Controller
 
 
     public function verify(Request $request)
-    {        
-        $input_data = $request->all();  
+    {
+        $input_data = $request->all();
+
+        $invoiceUUID = Session::get('InvoiceUUID');
+        $invoice = Invoice::where('uuid', $invoiceUUID)->first();
 
         $trans_id = $request->get('tx_ref', '');
 
-        $paymentDetails = Payment::where('reference_id', $trans_id)->orderBy('id', 'DESC')->first();        
-                 
+        $paymentDetails = Payment::where('reference_id', $trans_id)->orderBy('id', 'DESC')->first();
+
 
         if( $input_data['status']  == 'successful'){
 
@@ -205,22 +201,21 @@ class FlutterwaveController extends Controller
 
             if(($resp->status ?? '') == "success"){
                $paymentDetails['transaction_id'] = $resp->data->flw_ref ?? '';
-               $paymentDetails['status']         = 'success';                
+               $paymentDetails['status']         = 'success';
                 //if the payment was updated to success
-                
+
                 /*************************************************************************************************
                  * Things to do if you want to use this function(Number 1 to 5) Not important if you don't need it
-                 * 
-                 *************************************************************************************************/    
-                
+                 *************************************************************************************************/
+
                  // NUMBER 1: Instantiate the clientcontroller class in this controller's method in order to save request
                 $client_controller = new ClientController;
 
-                if($paymentDetails->update()){                  
+                if($paymentDetails->update()){
                     // NUMBER 2: add more for other payment process
                     if($paymentDetails['payment_for'] = 'service-request' ){ 
                         
-                        $client_controller->saveRequest( $request->session()->get('order_data'), $request->session()->get('medias') );
+                        $client_controller->saveRequest( $request->session()->get('order_data') );
                         // $client_controller->saveRequest( $request->session()->get('medias') );
                         
                         return redirect()->route('client.service.all' , app()->getLocale() )->with('success', 'payment was successful');
@@ -231,7 +226,7 @@ class FlutterwaveController extends Controller
                 if($paymentDetails['payment_for'] = 'service-request' ){
                     return redirect()->route('client.services.list', app()->getLocale() )->with('error', 'Verification not successful, try again!');
                 }
-                
+
             }
 
         }else {
@@ -240,12 +235,12 @@ class FlutterwaveController extends Controller
                 return redirect()->route('client.services.list', app()->getLocale() )->with('error', 'Could not initiate payment process because payment was cancelled, try again!');
             }
         }
-        
+
         // NUMBER 5: add more for other payment process
         if($paymentDetails['payment_for'] = 'service-request' ){
             return redirect()->route('client.services.list', app()->getLocale() )->with('error', 'there was an error, please try again!');
         }
-       
+
     }
 
 

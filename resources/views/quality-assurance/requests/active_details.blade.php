@@ -38,7 +38,7 @@
             <tbody>
               <tr>
                 <td class="">Job Reference</td>
-                <td class="">{{$activeDetails->service_request->id}}</td>
+                <td class="">{{$activeDetails->service_request->unique_id}}</td>
               </tr>
               <tr>
                 <td class="">Service Required</td>
@@ -54,11 +54,11 @@
             </tr>
             <tr>
                 <td class="tx-medium">Town/City</td>
-                <td class="tx-color-03">{{$activeDetails->service_request->address->town->name}}</td>
+                <td class="tx-color-03">{{$activeDetails['service_request']['address']['town']['name']}}</td>
             </tr>
             <tr>
                 <td class="tx-medium">L.G.A</td>
-                <td class="tx-color-03">{{$activeDetails->service_request->address->lga->name}}</td>
+                <td class="tx-color-03">{{$activeDetails['service_request']['address']['lga']['name']}}</td>
             </tr>
               <tr>
                 <td class="">Service Description</td>
@@ -70,15 +70,11 @@
           <br>
           <div class="divider-text">Service Request Media Files</div>
 
-          @foreach($activeDetails->service_request->service_request_medias as $media)
-              {{$media->media_files->original_name}}
-          @endforeach
-
           <div class="row row-xs">
       @foreach($activeDetails->service_request->service_request_medias as $media)
             <div class="col-6 col-sm-4 col-md-3">
               <div class="card card-file">
-                 <img data-magnify="gallery" data-src="{{ asset('assets/service-request-media-files/'.$media->media_files->original_name) }}" src="{{ asset('assets/service-request-media-files/'.$media->media_files->original_name) }}" height="250" class="img-fluid h-100" alt="Profile avatar">
+                 <img data-magnify="gallery" data-src="{{ asset('assets/service-request-images/'.$media->media_files->original_name) }}" src="{{ asset('assets/service-request-images/'.$media->media_files->original_name) }}" height="250" class="img-fluid h-100" alt="Profile avatar">
               </div>
             </div>
       @endforeach

@@ -10,8 +10,10 @@ class SubService extends Model
 {
     use SoftDeletes;
 
+    protected $table = 'sub_services';
+
     protected $fillable = [
-        'user_id', 'service_id', 'name', 'first_hour_charge', 'subsequent_hour_charge'
+        'user_id', 'service_id', 'name', 'labour_cost', 'cost_type'
     ];
 
     /**

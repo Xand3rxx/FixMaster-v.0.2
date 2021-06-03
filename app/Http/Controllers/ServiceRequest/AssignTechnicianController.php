@@ -89,14 +89,14 @@ class AssignTechnicianController extends Controller
     }
 
     public function assignWarrantyTechnician(Request $request){
-    //    dd($request);
-
+       
+    
         $this->validate(
             $request, 
            
             ['preferred_time' => 'required_if:service_request_warrant_issued_schedule_date,==,null'],
             ['required_if' => 'This scheduled fix date is required'],
-            [ 'intiate_rfq'               => 'bail|string|in:yes,no',]
+         
         );
    
  
@@ -111,64 +111,44 @@ class AssignTechnicianController extends Controller
             $type = 'Others';
             $severity = 'Informational';
             $actionUrl = Route::currentRouteAction();
-            $message = Auth::user()->email.' Warranty Claim Updated successfully ';
+            $message = Auth::user()->email.' assigned new technician successfully ';
             $this->log($type, $severity, $actionUrl, $message);
-            return back()->with('success','Warranty Claim Updated successfully');
+            return back()->with('success','Assigned new technician successfully');
 
         }
         else {
             $type = 'Errors';
             $severity = 'Error';
             $actionUrl = Route::currentRouteAction();
-            $message = 'An Error Occured while '. Auth::user()->email. ' was trying to update warranty claim ';
+            $message = 'An Error Occured while '. Auth::user()->email. ' was trying to assigned new technician ';
             $this->log($type, $severity, $actionUrl, $message);
             return back()->with('error', 'An error occurred while trying to assigned new technician ');
         }
-    }
-
-    if($request->intiate_rfq == 'yes'){
-        $done = $this->saveRfq($serviceRequest, $service_request_warranty_id,$request);
     }
     }
 
 
     protected function save($serviceRequest, $service_request_warranty_id,$request ){
-
+       
+        $upload='1'; $comment='1';
+      
         if($serviceRequest){
             $updateWarranty = \App\Models\ServiceRequestWarrantyIssued::where('service_request_warranty_id', $service_request_warranty_id)->update([
                     'service_request_warranty_id'     =>   $request['service_request_warranty_id'],
                     'cse_id'             =>  Auth::id(),
                     'technician_id'     =>   $request['technician_user_uuid'],
-                    'scheduled_datetime' => $request->preferred_time
-                ]);
-                $updateNewTechnician = \App\Models\ServiceRequestAssigned::where(['service_request_id'=>  $request->serviceRequestId, 'user_id'=> $request['technician_user_uuid']])->update([
-                        'job_accepted'              => null,
-                        'job_acceptance_time '      => null,
-                        'job_diagnostic_date'       => null,
-                        'job_declined_time'         => null,
-                        'job_completed_date'        => null,
-                        'status'                    => null
-                    ]);
                     
-                
-
+                ]);
 
         }else{
+       
             $createWarranty = \App\Models\ServiceRequestWarrantyIssued::create([
                     'service_request_warranty_id'        =>   $request['service_request_warranty_id'],
                     'cse_id'             =>  Auth::id(),
                     'technician_id'     =>   $request['technician_user_uuid'],
-                    'scheduled_datetime' => $request->preferred_time
-                ]);
-                \App\Models\ServiceRequestAssigned::create([
-                    'user_id'                   => $request['technician_user_uuid'],
-                    'service_request_id'        => $request->serviceRequestId,
-                    'job_accepted'              => null,
-                    'job_acceptance_time '      => null,
-                    'job_diagnostic_date'       => null,
-                    'job_declined_time'         => null,
-                    'job_completed_date'        => null,
-                    'status'                    => null
+                    'scheduled_datetime' => $request->preferred_time,
+                  
+
                 ]);
         }
         $serviceRequestIssued = $serviceRequest??  $createWarranty;
@@ -215,17 +195,11 @@ class AssignTechnicianController extends Controller
         $createWarranty = \App\Models\ServiceRequestWarrantyReport::create([
             'user_id'                                         =>  Auth::id(),
             'service_request_warranties_issued_id'             =>  $serviceRequesIssued->id,
-            'report'                                           =>   $request->cse_comment,
-            'causal_agent_id'                                  =>   $request->causal_agent_id,
-            'causal_reason'                                    =>   $request->causal_reason,
+            'report'                                             =>   $request->cse_comment,
             
         ]);
 
         return  $createWarranty ;
-    }
-
-    public function saveRfq(){
-
     }
 
 

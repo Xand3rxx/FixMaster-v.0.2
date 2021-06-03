@@ -103,7 +103,7 @@
 </div>
 <form id="accept-service-request-form" action="{{ route('cse.accept-job', app()->getLocale()) }}" method="POST" style="display: none;">
   @csrf
-  <input id="accepted_service_request" type="hidden" name="service_request_uuid" value="0">
+  <input id="accept_service_request" type="hidden" name="service_request_uuid" value="0">
 </form>
 
 
@@ -127,14 +127,13 @@
     $('.btn-accept-service-request').on('click', function(e) {
       e.preventDefault()
       if (confirm('Are you sure?')) {
-        $('#accepted_service_request').val($(this).data('service'))
-        {{-- console.log($(this).data('service')); return false; --}}
+        $('#accept_service_request').val($(this).data('service'))
         $('#accept-service-request-form').submit();
       }
       return false;
     });
   });
 </script>
-@endpush('scripts')
+@endpush
 
 @endsection

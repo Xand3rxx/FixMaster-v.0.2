@@ -10,6 +10,7 @@ use App\Http\Controllers\Controller;
 use App\Models\ServiceRequestSetting;
 use App\Models\ServiceRequestAssigned;
 use App\Models\ServiceRequestProgress;
+use App\Http\Controllers\Messaging\MessageController;
 
 class JobAcceptanceController extends Controller
 {
@@ -81,6 +82,9 @@ class JobAcceptanceController extends Controller
             ServiceRequestProgress::storeProgress($this->user->id, $this->service_request->id, $sub_status->status_id, $sub_status->id);
             // 3. Update Service Request to Ongoing
             $this->service_request->update(['status_id' => $sub_status->status_id]);
+            // CSE_JOB_COMPLETED_NOTIFICATION ADMIN_CSE_JOB_ACCEPTANCE_NOTIFICATION
+            // $messager = new MessageController();
+            // $messager->sendNewMessage(\App\Models\MessageTemplate::TYPES[1], )
             // update registered to be true
             $assigned = true;
         });

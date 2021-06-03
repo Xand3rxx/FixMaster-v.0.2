@@ -21,24 +21,4 @@ class RfqSupplierInvoiceBatch extends Model
     {
         return $this->belongsTo(RfqBatch::class, 'rfq_batch_id');
     }
-
-    //Scope to return all services
-    public function scopeitemDeliveredSorting($query, array $filters)
-    {
-        // Split all filter parameters from the array of filters
-        $query->when((array)$filters['supplier_id'] ?? null, function ($query, array $suppliers) {
-            $query->whereIn('user_id', $suppliers[0]);
-        })->when((string)$filters['job_status'] ?? null, function ($query) use ($filters) {
-            $query->whereHas('service_request', function ($query) use ($filters) {
-                $query->where('status_id', $filters['job_status']);
-             });
-        });
-    }
-    public function supplier()
-    {
-        return $this->belongsTo(User::class, 'supplier_id')->with('account');
-    }
-
- 
-   
 }

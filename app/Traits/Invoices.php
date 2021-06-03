@@ -26,7 +26,7 @@ trait Invoices
      * @param  int  $service_request_id
      * @param  string  $invoice_type
      * @param  int  $total_amount
-    * @param  int  $amount_due
+     * @param  int  $amount_due
      * @param  int  $amount_paid
      * @param  string  $hours_spent
      * @param  string  $status
@@ -168,7 +168,7 @@ trait Invoices
         ]);
     }
 
-    public static function completedServiceInvoice($service_request)
+    public static function completedServiceInvoice($service_request_id, $rfq_id, $warranty_id, $sub_service_id, $hours_spent)
     {
         return self::getServiceRequestDetails($service_request_id, $rfq_id, $warranty_id, $sub_service_id, $hours_spent);
     }

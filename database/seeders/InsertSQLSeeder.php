@@ -24,7 +24,6 @@ class InsertSQLSeeder extends Seeder
         // $rfqSuppliers = file_get_contents(database_path() . '/insert_sql/rfq_suppliers.sql');
         $serviceRequestWarranties = file_get_contents(database_path() . '/insert_sql/service_request_warranties.sql');
         $messageTemplates = file_get_contents(database_path() . '/insert_sql/message_templates.sql');
-    
 
         DB::statement($banks);
         DB::statement($paymentGateways);
@@ -36,7 +35,7 @@ class InsertSQLSeeder extends Seeder
         // DB::statement($rfqSuppliers);
         DB::statement($serviceRequestWarranties);
         DB::statement($messageTemplates);
-
+        
     }
 }
 

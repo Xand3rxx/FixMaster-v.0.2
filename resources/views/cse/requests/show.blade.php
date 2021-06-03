@@ -1,6 +1,6 @@
 @extends('layouts.dashboard')
-@section('title', 'Request Details')
-@include('layouts.partials._messages')
+@section('title', 'Service Request Details')
+    @include('layouts.partials._messages')
 @section('content')
 
     <link rel="stylesheet" href="{{ asset('assets/dashboard/assets/css/dashforge.filemgr.css') }}">
@@ -23,10 +23,6 @@
                     </nav>
                 </div>
             </div>
-        </div>
-
-        <div class="row row-xs">
-            <div class="col-lg-12 col-xl-12">
 
             <div class="row row-xs">
 
@@ -107,154 +103,28 @@
                                     </div><!-- df-example -->
 
                                 </div>
-                            </div>
 
-                            <div class="divider-text">Service Request Progress</div>
-                            <h5 class="mt-4">Service Request Progress</h5>
-                            <div class="table-responsive mb-4">
-                                <table class="table table-hover mg-b-0">
-                                    <thead class="">
-                                        <tr>
-                                            <th class="text-center">#</th>
-                                            <th>Author</th>
-                                            <th>Status</th>
-                                            <th class="text-center">Timestamp</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        @foreach($request_progress as $key => $progress)
-                                        <tr>
-                                            <td class="tx-color-03 tx-center">{{ $loop->iteration }}</td>
-                                            <td class="tx-medium">{{ Str::title($progress['user']['account']['last_name'] . ' '.$progress['user']['account']['first_name'])  }} ({{$progress['user']['roles'][0]['name']}})</td>
-                                            <td class="tx-medium text-success"> {{$progress['substatus']['name']}} </td>
-                                            <td class="text-center">{{ Carbon\Carbon::parse($progress['created_at'], 'UTC')->isoFormat('MMMM Do YYYY, h:mm:ssa') }}</td>
-                                        </tr>
-                                        @endforeach
-                                    </tbody>
-                                </table>
-                            </div><!-- table-responsive -->
+                                <button type="submit" class="btn btn-primary d-none" id="update-progress">Update
+                                    Progress</button>
 
-                            <div class="divider-text">Tools Request</div>
-                            <h5 class="mt-4">Tools Requests</h5>
-                            <div class="table-responsive mb-4">
-                                <table class="table table-hover mg-b-0">
-                                    <thead class="">
-                                        <tr>
-                                            <th class="text-center">#</th>
-                                            <th>Batch Number</th>
-                                            <th>Client</th>
-                                            <th>Approved By</th>
-                                            <th>Requested By</th>
-                                            <th>Status</th>
-                                            <th>Date Requested</th>
-                                            <th>Action</th>
-                                         
-                                        </tr>
-                                    </thead>
-                                    <tbody>
+                            </form>
+                            {{-- End of Service Request Actions --}}
 
-                                        @php $z = 0; @endphp
-                                        <tr>
-                                            <td class="tx-color-03 tx-center">{{ ++$z }}</td>
-                                            <td class="tx-medium">TRF-C85BEA04</td>
-                                            <td class="tx-medium">Kelvin Adesanya</td>
-                                            <td class="tx-medium">Charles Famoriyo</td>
-                                            <td class="tx-medium">David Akinsola (CSE)</td>
-                                            <td class="text-medium text-success">Approved</td>
+                            {{-- Job Description --}}
+                            {{-- @include('cse.requests.includes.job_description') --}}
+                            {{-- End of Job Description --}}
 
-                                            <td class="text-medium">{{ Carbon\Carbon::parse('2020-12-28 16:58:54', 'UTC')->isoFormat('MMMM Do YYYY, h:mm:ssa') }}</td>
-                                            <td class=" text-center">
-                                                <a href="#toolsRequestDetails" data-toggle="modal" class="btn btn-sm btn-primary" title="View TRF-C85BEA04 details" data-batch-number="TRF-C85BEA04" data-url="#" id="tool-request-details">Details</a>
-                                            </td>
-                                            
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </div><!-- table-responsive -->
+                            {{-- Service Request Summary --}}
+                            {{-- @include('cse.requests.includes.service_request_summary') --}}
+                            {{-- End Service Request Summary --}}
 
-                            <div class="divider-text">RFQ's</div>
-                            <h5 class="mt-4">Request For Quotation</h5>
-                            <div class="table-responsive">
-
-                                <table class="table table-hover mg-b-0 mt-4">
-                                    <thead class="">
-                                        <tr>
-                                            <th class="text-center">#</th>
-                                            <th>Batch Number</th>
-                                            <th>Client</th>
-                                            <th>Issued By</th>
-                                            <th>Status</th>
-                                            <th class="text-center">Total Amount</th>
-                                            <th>Date Created</th>
-                                            @if(Auth::user()->type->url != 'admin')
-                                            <th>Action</th>
-                                            @endif
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        @php $y = 0; @endphp
-                                        <tr>
-                                            <td class="tx-color-03 tx-center">{{ ++$y }}</td>
-                                            <td class="tx-medium">RFQ-C85BEA04 </td>
-                                            <td class="tx-medium">Kelvin Adesanya</td>
-                                            <td class="tx-medium">David Akinsola</td>
-                                            <td class="text-medium text-success">Payment received</td>
-                                            <td class="tx-medium text-center">₦{{ number_format(5000) ?? 'Null'}}</td>
-                                            <td class="text-medium">{{ Carbon\Carbon::parse('2020-12-28 16:58:54', 'UTC')->isoFormat('MMMM Do YYYY, h:mm:ssa') }}</td>
-                                          
-                                            <td class=" text-center">
-                                                <a href="#rfqDetails" data-toggle="modal" class="btn btn-sm btn-primary" title="View RFQ-C85BEA04 details" data-batch-number="RFQ-C85BEA04" data-url="#" id="rfq-details"></i> Details</a>
-                                            </td>
-                                            
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </div><!-- table-responsive -->
                         </div>
-
                     </div>
+
                 </div>
-
             </div>
         </div>
     </div>
-</div>
-
-<div class="modal fade" id="toolsRequestDetails" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel2" aria-hidden="true" data-keyboard="false" data-backdrop="static">
-    <div class="modal-dialog modal-dialog-centered" role="document">
-        <div class="modal-content tx-14">
-            <div class="modal-header">
-                <h6 class="modal-title" id="exampleModalLabel2">Tools Request</h6>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body" id="modal-body">
-                <!-- Modal displays here -->
-                <div id="spinner-icon"></div>
-            </div>
-        </div>
-    </div>
-</div>
-
-<div class="modal fade" id="rfqDetails" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel2" aria-hidden="true" data-keyboard="false" data-backdrop="static">
-    <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
-        <div class="modal-content tx-14">
-            <div class="modal-header">
-                <h6 class="modal-title" id="exampleModalLabel2">RFQ Details</h6>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body" id="modal-body-rfq-details">
-                <!-- Modal displays here -->
-                <div id="spinner-icon"></div>
-            </div>
-        </div>
-    </div>
-</div>
-
-@push('scripts')
 
     {{-- Modals --}}
     {{-- @include('cse.requests.includes.modals') --}}

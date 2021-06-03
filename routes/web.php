@@ -83,11 +83,8 @@ use App\Http\Controllers\Messaging\Template;
 
 Route::prefix('admin')->name('admin.')->group(function () {
     Route::view('/', 'admin.index')->name('index'); //Take me to Admin Dashboard
-
-    // Route::view('/ratings/cse-diagnosis', 'admin.ratings.cse_diagnosis_rating')->name('category');
-    // Route::view('/ratings/services',      'admin.ratings.service_rating')->name('job');
+    
     Route::get('/ratings/cse-diagnosis', [AdminRatingController::class, 'cseDiagnosis'])->name('category');
-    //Route::view('/ratings/service-reviews',      'admin.ratings.service_reviews')->name('category_reviews');
     Route::get('/ratings/services',      [AdminRatingController::class, 'getServiceRatings'])->name('job');
     Route::get('/ratings/service_reviews',      [AdminReviewController::class, 'getServiceReviews'])->name('category_reviews');
     Route::get('/activate/{uuid}',      [AdminReviewController::class, 'activate'])->name('activate_review');
@@ -400,7 +397,7 @@ Route::prefix('/client')->middleware('monitor.clientservice.request.changes')->g
 
         Route::post('/update_service_request',  [ClientController::class, 'update_client_service_rating'])->name('update_service_request');
         Route::post('/submit_ratings',  [ClientController::class, 'client_rating'])->name('handle.ratings');
-
+        Route::get('/discount_mail',  [ClientController::class, 'discount_mail'])->name('discount_mail');
         // //Paystack Routes
         // Route::get('/paystack/paystack/initiate',   [PaystackController::class, 'initiatePayment'])->name('payment.paystack-initiate');
         // Route::get('/product/paystack/verify',      [PaystackController::class, 'verify'])->name('payment.paystack-verify');

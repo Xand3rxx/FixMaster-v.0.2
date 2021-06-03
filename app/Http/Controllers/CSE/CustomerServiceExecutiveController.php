@@ -169,8 +169,8 @@ class CustomerServiceExecutiveController extends Controller
 
         // find the technician role CACHE THIS DURING PRODUCTION
         $technicainsRole = \App\Models\Role::where('slug', 'technician-artisans')->first();
-        $scheduleDate =!empty($service_request->service_request_warranty->service_request_warranty_issued) ? 
-        $service_request->service_request_warranty->service_request_warranty_issued->scheduled_datetime: '';
+        $scheduleDate = !empty($service_request->service_request_warranty->service_request_warranty_issued) ?
+            $service_request->service_request_warranty->service_request_warranty_issued->scheduled_datetime : '';
 
 
         (array) $variables = [
@@ -178,15 +178,9 @@ class CustomerServiceExecutiveController extends Controller
             'technicians' => \App\Models\UserService::where('service_id', $service_request->service_id)->where('role_id', $technicainsRole->id)->with('user')->get(),
             'qaulity_assurances'    =>  \App\Models\Role::where('slug', 'quality-assurance-user')->with('users')->firstOrFail(),
             'request_progress' => $request_progress,
-            'shcedule_datetime' =>  $scheduleDate,
-            'technician_list'  =>  \App\Models\Technician::all(),
-            'suppliers'        =>  \App\Models\Rfq::where('service_request_id', $service_request->id)->with('rfqSupplies', 'rfqSuppliesInvoices','rfqBatches')->first(),
-
+            'shcedule_datetime' =>  $scheduleDate
         ];
-      
 
-    //   dd($variables['suppliers']);
-   
         if ($service_request->status_id == 2) {
             $service_request_progresses = \App\Models\ServiceRequestProgress::where('user_id', auth()->user()->id)->latest('created_at')->first();
             // Determine Ongoing Status List
@@ -207,7 +201,7 @@ class CustomerServiceExecutiveController extends Controller
                 }]);
             }
         }
-       
+
 
         return view('cse.warranties.show', $variables);
     }
