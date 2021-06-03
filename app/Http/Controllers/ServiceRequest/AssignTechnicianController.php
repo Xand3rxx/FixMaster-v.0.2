@@ -89,8 +89,8 @@ class AssignTechnicianController extends Controller
     }
 
     public function assignWarrantyTechnician(Request $request){
-    //    dd($request);
-
+       
+    
         $this->validate(
             $request, 
            
@@ -111,23 +111,19 @@ class AssignTechnicianController extends Controller
             $type = 'Others';
             $severity = 'Informational';
             $actionUrl = Route::currentRouteAction();
-            $message = Auth::user()->email.' Warranty Claim Updated successfully ';
+            $message = Auth::user()->email.' assigned new technician successfully ';
             $this->log($type, $severity, $actionUrl, $message);
-            return back()->with('success','Warranty Claim Updated successfully');
+            return back()->with('success','Assigned new technician successfully');
 
         }
         else {
             $type = 'Errors';
             $severity = 'Error';
             $actionUrl = Route::currentRouteAction();
-            $message = 'An Error Occured while '. Auth::user()->email. ' was trying to update warranty claim ';
+            $message = 'An Error Occured while '. Auth::user()->email. ' was trying to assigned new technician ';
             $this->log($type, $severity, $actionUrl, $message);
             return back()->with('error', 'An error occurred while trying to assigned new technician ');
         }
-    }
-
-    if($request->intiate_rfq == 'yes'){
-        $done = $this->saveRfq($serviceRequest, $service_request_warranty_id,$request);
     }
     }
 
@@ -143,17 +139,6 @@ class AssignTechnicianController extends Controller
                     'technician_id'     =>   $request['technician_user_uuid'],
                     
                 ]);
-                $updateNewTechnician = \App\Models\ServiceRequestAssigned::where(['service_request_id'=>  $request->serviceRequestId, 'user_id'=> $request['technician_user_uuid']])->update([
-                        'job_accepted'              => null,
-                        'job_acceptance_time '      => null,
-                        'job_diagnostic_date'       => null,
-                        'job_declined_time'         => null,
-                        'job_completed_date'        => null,
-                        'status'                    => null
-                    ]);
-                    
-                
-
 
         }else{
        
@@ -164,16 +149,6 @@ class AssignTechnicianController extends Controller
                     'scheduled_datetime' => $request->preferred_time,
                   
 
-                ]);
-                \App\Models\ServiceRequestAssigned::create([
-                    'user_id'                   => $request['technician_user_uuid'],
-                    'service_request_id'        => $request->serviceRequestId,
-                    'job_accepted'              => null,
-                    'job_acceptance_time '      => null,
-                    'job_diagnostic_date'       => null,
-                    'job_declined_time'         => null,
-                    'job_completed_date'        => null,
-                    'status'                    => null
                 ]);
         }
         $serviceRequestIssued = $serviceRequest??  $createWarranty;
@@ -220,17 +195,11 @@ class AssignTechnicianController extends Controller
         $createWarranty = \App\Models\ServiceRequestWarrantyReport::create([
             'user_id'                                         =>  Auth::id(),
             'service_request_warranties_issued_id'             =>  $serviceRequesIssued->id,
-            'report'                                           =>   $request->cse_comment,
-            'causal_agent_id'                                  =>   $request->causal_agent_id,
-            'causal_reason'                                    =>   $request->causal_reason,
+            'report'                                             =>   $request->cse_comment,
             
         ]);
 
         return  $createWarranty ;
-    }
-
-    public function saveRfq(){
-
     }
 
 

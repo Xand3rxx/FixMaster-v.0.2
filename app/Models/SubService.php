@@ -13,7 +13,7 @@ class SubService extends Model
     protected $table = 'sub_services';
 
     protected $fillable = [
-        'user_id', 'service_id', 'name', 'first_hour_charge', 'subsequent_hour_charge'
+        'user_id', 'service_id', 'name', 'labour_cost', 'cost_type'
     ];
 
     /**
@@ -41,5 +41,11 @@ class SubService extends Model
     public function service()
     {
         return $this->belongsTo(Service::class, 'service_id', 'id');
+    }
+
+
+    public static function getNameUsingUUID(string $uuid)
+    {
+        return SubService::where('uuid', $uuid)->pluck('name')->first() ?? "UNAVAILABLE";
     }
 }

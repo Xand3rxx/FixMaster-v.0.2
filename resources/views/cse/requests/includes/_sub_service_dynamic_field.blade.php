@@ -6,12 +6,12 @@
         <div class="form-row">
             <div class="form-group col-md-12">
                 <label for="quantity">Quantity</label>
-                <input type="number" class="form-control" id="quantity" name="quantity[]" value="" min="" max="">
+                <input type="number" class="form-control" id="quantity" name="quantity[{{$result->uuid}}]" value="" min="" max="">
             </div>
-            <div class="form-group col-md-12">
+            {{-- <div class="form-group col-md-12">
                 <label for="report">Report</label>
                 <textarea rows="3" class="form-control @error("report") is-invalid @enderror" id="report" name="report[]"></textarea>
-            </div>
+            </div> --}}
         </div>
     @endforeach
 @endif

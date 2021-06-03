@@ -405,19 +405,46 @@
                                 <div class="row">
                                     <div class="col-md-6">
                                         <div class="form-group position-relative">
-                                            <label>Years of Experience <span class="text-danger">*</span></label>
+                                            <label>CAC Number<span class="text-danger">*</span></label>
                                             <i data-feather="calendar" class="fea icon-sm icons"></i>
-                                            <input name="years_of_experience" id="years_of_experience" type="number"
-                                                class="form-control pl-5" maxlength="2">
+                                            <input name="cac_number" id="cac_number" type="text" class="form-control pl-5" minlength="5">
                                         </div>
                                     </div>
                                     <!--end col-->
 
                                     <div class="col-md-6">
                                         <div class="form-group position-relative">
-                                            <label>Compnay Name <span class="text-danger">*</span></label>
+                                            <label>Company Name <span class="text-danger">*</span></label>
                                             <i data-feather="briefcase" class="fea icon-sm icons"></i>
                                             <input name="company_name" id="company_name" type="text" class="form-control pl-5">
+                                        </div>
+                                    </div>
+                                    <!--end col-->
+                                </div>
+                                <!--end row-->
+
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="form-group position-relative">
+                                            <label>Established On <span class="text-danger">*</span></label>
+                                            <i data-feather="calendar" class="fea icon-sm icons"></i>
+                                            <input name="establishment_date" id="establishment_date" type="date" class="form-control pl-5">
+                                        </div>
+                                    </div>
+                                    <!--end col-->
+
+                                    <div class="col-md-6">
+                                        <div class="form-group position-relative">
+                                            <label>Service Category <span class="text-danger">*</span></label>
+                                            <select class="form-control selectpicker @error('supplier_category') is-invalid @enderror" id="supplier_category" name="supplier_category[]" multiple="multiple" data-live-search="true">
+                                                @foreach ($services as $service)
+                                                <optgroup label="{{ $service->name }}">
+                                                    @foreach($service->services as $item)
+                                                    <option value="{{ $item->id }}">{{ $item->name }}</option>
+                                                    @endforeach
+                                                </optgroup>
+                                                @endforeach
+                                            </select>
                                         </div>
                                     </div>
                                     <!--end col-->
@@ -436,7 +463,7 @@
                                     </div>
                                     <div class="col-md-6">
                                         <div class="form-group position-relative">
-                                            <label>Office Address </label>
+                                            <label>Office Address <span class="text-danger">*</span></label>
                                             <i data-feather="map-pin" class="fea icon-sm icons"></i>
                                             <textarea name="office_address" rows="3" class="user_address form-control pl-5"
                                                 placeholder="Your office address :"></textarea>
@@ -534,12 +561,14 @@
         <script type="text/javascript"
             src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDeDLVAiaU13p2O0d3jfcPjscsbVsCQUzc&v=3.exp&libraries=places">
         </script>
+        <script src="{{ asset('assets/dashboard/assets/js/bootstrap-multiselect.js') }}"></script>
         <script src="{{ asset('assets/js/geolocation.js') }}"></script>
         <script src="{{ asset('assets/js/jquery.validate.min.js') }}"></script>
         <script src="{{ asset('assets/js/applicants.js') }}"></script>
         <script>
             $(document).ready(function() {
                 $('.submitBnt').prop('disabled', false)
+                $('.selectpicker').selectpicker();
                 //Get list of L.G.A's in a particular state.
                 $('#state_id').on('change', function() {
                     let stateId = $('#state_id').find('option:selected').val();
@@ -567,6 +596,8 @@
         </script>
     @endpush
     @push('css')
+        <link rel="stylesheet" href="{{ asset('assets/dashboard/assets/css/bootstrap-multiselect.css') }}">
+
         <style>
             .invalid-response {
                 color: #e43f52;

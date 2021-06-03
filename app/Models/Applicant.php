@@ -2,18 +2,15 @@
 
 namespace App\Models;
 
-use Illuminate\Support\Str;
+use App\Http\Controllers\Messaging\MessageController;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use App\Http\Controllers\Messaging\MessageController;
 
 class Applicant extends Model
 {
     use SoftDeletes;
 
     const USER_TYPES = ['cse', 'supplier', 'technician'];
-
-    const STATUSES = ['pending', 'approved', 'declined'];
 
     /**
      * The attributes that aren't mass assignable.
@@ -31,8 +28,6 @@ class Applicant extends Model
         'form_data' => 'array',
     ];
 
-    protected $template_feature;
-
     /**
      * The "booted" method of the model.
      *
@@ -44,6 +39,7 @@ class Applicant extends Model
         static::creating(function ($applicant) {
             $applicant->uuid = (string) \Illuminate\Support\Str::uuid();
         });
+
         static::created(function ($applicant) {
             (string) $template_feature = NULL;
             switch ($applicant->user_type) {
@@ -68,7 +64,8 @@ class Applicant extends Model
                     'firstname' => $applicant->form_data['first_name'],
                     'email' => $applicant->form_data['email'],
                 ]);
-                $messanger->sendNewMessage('email', Str::title(Str::of($template_feature)->replace('_', ' ',)), 'dev@fix-master.com', $mail_data['email'], $mail_data, $template_feature);
+                $messanger->sendNewMessage('Account Created', 'dev@fix-master.com', $mail_data['email'], $mail_data, $template_feature);
+                // $messanger->sendNewMessage('email', Str::title(Str::of($template_feature)->replace('_', ' ',)), 'dev@fix-master.com', $mail_data['email'], $mail_data, $template_feature);
             }
         });
     }

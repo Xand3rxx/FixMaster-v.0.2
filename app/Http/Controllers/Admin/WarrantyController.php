@@ -381,7 +381,7 @@ class WarrantyController extends Controller
     public function download(Request $request, $lang, $file){
     
 
-        $filePath = public_path('/assets/warranty-images/'.$file);
+        $filePath = public_path('/assets/warranty-claim-images/'.$file);
    
 
         $headers = ['Content-Disposition' => 'inline'];

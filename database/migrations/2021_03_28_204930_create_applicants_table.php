@@ -23,7 +23,6 @@ class CreateApplicantsTable extends Migration
             $table->uuid('uuid')->unique();
             
             $table->enum('user_type', Applicant::USER_TYPES);
-            $table->enum('status', Applicant::STATUSES)->default(Applicant::STATUSES[0]);
             $table->json('form_data');
             $table->softDeletes();
             $table->timestamps();

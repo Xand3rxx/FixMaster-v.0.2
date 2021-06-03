@@ -77,18 +77,18 @@ class ServiceController extends Controller
         //Validate user input fields
         $this->validateRequest();
 
-        //Set `createService`  and `createSubService` to false before Db transaction
+        //Set `createService` to false before Db transaction
         (bool) $createService  = false;
-        (bool) $createSubService  = false;
         
         // Set DB to rollback DB transacations if error occurs
-        DB::transaction(function () use ($request, &$createService, &$createSubService) {
+        DB::transaction(function () use ($request, &$createService) {
 
             //Image storage directory
             $imageDirectory = public_path('assets/service-images').'/';
 
              //Validate if an image file was selected
             $imageName = $this->verifyAndStoreImage($request, $imageDirectory, $width = 350, $height = 259);
+
             //Create record for a new service
             $createService = Service::create([
                 'user_id'                           =>  Auth::id(),
@@ -104,22 +104,21 @@ class ServiceController extends Controller
             //Create each record for sub service
             if(count($request->sub_service_name) > 0){
                 foreach($request->sub_service_name as $item => $value){
-                    $createSubService = SubService::create([
-                        'user_id'                   =>  Auth::id(), 
-                        'service_id'                =>  $createService->id, 
-                        'name'                      =>  $request->sub_service_name[$item], 
-                        'first_hour_charge'         =>  $request->first_hour_charge[$item], 
-                        'subsequent_hour_charge'    =>  $request->subsequent_hour_charge[$item],
+
+                    SubService::create([
+                        'user_id'       =>  Auth::id(), 
+                        'service_id'    =>  $createService->id, 
+                        'name'          =>  $request->sub_service_name[$item], 
+                        'labour_cost'   =>  $request->labour_cost[$item], 
+                        'cost_type'     =>  $request->cost_type[$item],
                     ]);
                 }
             }
 
             $createService  = true;
-            $createSubService  = true;
-
         });
 
-       if($createService AND $createSubService){
+       if($createService){
 
            //Record crurrenlty logged in user activity
            $type = 'Others';
@@ -163,10 +162,10 @@ class ServiceController extends Controller
             'description'                       =>   'required',
             'sub_service_name'                  =>   'required|array|min:1', 
             'sub_service_name.*'                =>   'required|string|distinct|unique:sub_services,name', 
-            'first_hour_charge'                 =>   'required|array|min:1', 
-            'first_hour_charge.*'               =>   'required|numeric', 
-            'subsequent_hour_charge'            =>   'required|array|min:1', 
-            'subsequent_hour_charge.*'          =>   'required|numeric', 
+            'labour_cost'                       =>   'required|array|min:1', 
+            'labour_cost.*'                     =>   'required|numeric', 
+            'cost_type'                         =>   'required|array|min:1', 
+            'cost_type.*'                       =>   'required|in:Fixed,Variable', 
         ]);
     }
 
@@ -207,9 +206,8 @@ class ServiceController extends Controller
      */
     public function update($language, Request $request, $uuid)
     {
-        // return $request;
         $service = Service::where('uuid', $uuid)->firstOrFail();
-        
+
         //Validate user input fields
         $validate = $request->validate([
             'name'                              =>   'required|unique:services,name,'.$service->id.',id',
@@ -219,20 +217,22 @@ class ServiceController extends Controller
             'image'                             =>   'sometimes|mimes:jpg,png,jpeg,gif,svg|max:512',
             'description'                       =>   'required',
             'sub_service_name'                  =>   'required|array', 
-            'sub_service_name.*'                =>   'required|string', 
-            //     'sub_service_name.*'          =>   Rule::unique('sub_services', 'name')->ignore($request->sub_service_id), 
+            // 'sub_service_name.*'                =>   'required|string|distinct|unique:sub_services,name,'.$request->sub_service_id[0].',id', 
+            // 'sub_service_name.*'          =>   Rule::unique('sub_services', 'name')->ignore($request->sub_service_id[0]), 
         ]);
 
-        //Validate if  name is unique updating and creating of record
-        if(!empty(SubService::where('name', ucwords(end($validate['sub_service_name'])))->withTrashed()->exists())){
-            return back()->with('error', 'Sub Service name has already been taken.');
+        //Validate if name is unique updating and creating of record
+        if(count($validate['sub_service_name']) > count($request['sub_service_id']))
+        {
+            if(!empty(SubService::where('name', ucwords(end($validate['sub_service_name'])))->withTrashed()->exists())){
+                return back()->with('error', 'Sub Service name has already been taken.');
+            }
         }
 
-        //Set `updateService`  and `updateSubService` to false before Db transaction
+        //Set `updateService` to false before Db transaction
         (bool) $updateService  = false;
-        (bool) $updateSubService  = false;
         
-        DB::transaction(function () use ($request, $validate, $uuid, $service, &$updateService, &$updateSubService) {
+        DB::transaction(function () use ($request, $validate, $uuid, $service, &$updateService) {
 
             //Image storage directory
             $imageDirectory = public_path('assets/service-images').'/';
@@ -258,7 +258,7 @@ class ServiceController extends Controller
             }
 
             //Update Service record
-            $updateService = Service::where('uuid', $uuid)->update([
+            Service::where('uuid', $uuid)->update([
                 'category_id'    =>  $request->category_id,
                 'name'           =>  ucwords($request->name),
                 'service_charge' =>  $request->service_charge,
@@ -270,28 +270,26 @@ class ServiceController extends Controller
             //Update each sub service records or create a record for a new sub service added
             foreach($validate['sub_service_name'] as $item => $value){
 
-                $updateSubService = $service->subServices()->updateOrCreate(
-                [
-                    'id'    => $request->sub_service_id[$item] ?? $service->id,
-                    // 'name'  =>  $value
-                ],
-                [
-                    'user_id'                   =>  Auth::id(), 
-                    'service_id'                =>  $service->id, 
-                    'name'                      =>  $request->sub_service_name[$item], 
-                    'first_hour_charge'         =>  $request->first_hour_charge[$item], 
-                    'subsequent_hour_charge'    =>  $request->subsequent_hour_charge[$item],
-                ]);
+                $service->subServices()->updateOrCreate(
+                    [
+                        'id'    => $request->sub_service_id[$item] ?? $service->id,
+                    ],
+                    [
+                        'user_id'       =>  Auth::id(), 
+                        'service_id'    =>  $service->id, 
+                        'name'          =>  $request->sub_service_name[$item], 
+                        'labour_cost'   =>  $request->labour_cost[$item], 
+                        'cost_type'     =>  $request->cost_type[$item],
+                    ]
+                );
             }
 
             //Set variables as true to be validated outside the DB transaction
             $updateService  = true;
-            $updateSubService  = true;
-
         });
 
 
-        if($updateService AND $updateSubService){
+        if($updateService){
 
             //Record crurrenlty logged in user activity
             $type = 'Others';

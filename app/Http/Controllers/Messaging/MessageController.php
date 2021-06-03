@@ -248,20 +248,17 @@ class MessageController extends Controller
        $template = null;
        $sender = null;
        $recipient = null;
-       
-       DB::enableQueryLog();
         if(!empty($feature)){
             $template = MessageTemplate::select('content')
             ->where('feature', $feature)
             ->first();
-            Log::debug(DB::getQueryLog());
             
             if(empty($template)){
             return response()->json(["message" => "Message Template not found!"], 404);
     
             }
             $message = $this->replacePlaceHolders($mail_data, $template->content);
-            //$sms = $this->replacePlaceHolders($mail_data, $template->sms);
+            $sms = $this->replacePlaceHolders($mail_data, $template->sms);
             $subject = $template->title;
         }
 
@@ -272,24 +269,24 @@ class MessageController extends Controller
 
        $recipient = DB::table('users')->where('users.email', $to )->first();
 
-        Log::debug($recipient->id);
+
       
-        //  if($from!="" && is_object($recipient)){
-        //     $mail_objects[] = [
-        //         'title' => $subject,
-        //         'content' => $message,
-        //         'recipient' => $recipient->id,
-        //         'sender' => $sender->id,
-        //         'uuid' => Str::uuid()->toString(),
-        //         'created_at'        => Carbon::now(),
-        //         'updated_at'        => Carbon::now(),
-        //         'mail_status' => 'Not Sent',
-        //     ];
+         if($from!="" && is_object($recipient)){
+            $mail_objects[] = [
+                'title' => $subject,
+                'content' => $message,
+                'recipient' => $recipient->id,
+                'sender' => $sender->id,
+                'uuid' => Str::uuid()->toString(),
+                'created_at'        => Carbon::now(),
+                'updated_at'        => Carbon::now(),
+                'mail_status' => 'Not Sent',
+            ];
           
 
-        // Message::insert($mail_objects);
+        Message::insert($mail_objects);
      
-        //  }
+         }
             
 
         $message_array = ['to'=>$to, 'from'=>$from, 'subject'=>$subject, 'content'=>$message];

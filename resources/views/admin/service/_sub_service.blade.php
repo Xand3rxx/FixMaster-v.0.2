@@ -9,17 +9,21 @@
     </div>
     
     <div class="form-group col-md-3">
-        <label for="first_hour_charge">First Hour Charge</label>
-        <input type="number" min="1" maxlength="5" class="form-control @error('first_hour_charge') is-invalid @enderror" name="first_hour_charge[]" id="first_hour_charge" placeholder="First Hour Charge" value="{{ old('first_hour_charge') ?? !empty($subService->first_hour_charge) ? $subService->first_hour_charge : '0' }}" autocomplete="off">
-        @error('first_hour_charge')
+        <label for="labour_cost">Labour Cost(₦)</label>
+        <input type="number" min="1" maxlength="5" class="form-control @error('labour_cost') is-invalid @enderror" name="labour_cost[]" id="labour_cost" placeholder="Labour Cost" value="{{ old('labour_cost[0]') ?? !empty($subService->labour_cost) ? $subService->labour_cost : '0' }}" autocomplete="off">
+        @error('labour_cost[0]')
             <x-alert :message="$message" />
         @enderror
     </div>
 
     <div class="form-group col-md-3">
-        <label for="subsequent_hour_charge">Subsequent Hour Charge</label>
-        <input type="number" min="1" maxlength="5" class="form-control @error('subsequent_hour_charge') is-invalid @enderror" name="subsequent_hour_charge[]" id="subsequent_hour_charge" placeholder="Subsequent Hour Charge" value="{{ old('subsequent_hour_charge') ?? !empty($subService->subsequent_hour_charge) ? $subService->subsequent_hour_charge : '0' }}" autocomplete="off">
-        @error('subsequent_hour_charge')
+        <label for="cost_type">Cost Type</label>
+        <select class="custom-select @error('cost_type') is-invalid @enderror" name="cost_type[]">
+            <option selected value="">Select...</option>
+            <option value="Fixed" {{ old('cost_type, []') == 'Fixed' ? 'selected' : ''}} @if($subService->cost_type == 'Fixed') selected @endif>Fixed</option>
+            <option value="Variable" {{ old('cost_type, []') == 'Variable' ? 'selected' : ''}} @if($subService->cost_type == 'Variable') selected @endif>Variable</option>
+        </select>
+        @error('cost_type, []')
         <x-alert :message="$message" />
         @enderror
     </div>

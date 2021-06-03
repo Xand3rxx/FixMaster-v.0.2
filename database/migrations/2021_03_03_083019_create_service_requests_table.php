@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\ServiceRequest;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -21,22 +22,30 @@ class CreateServiceRequestsTable extends Migration
 
             $table->id();
             $table->uuid('uuid')->unique();
-		    $table->foreignId('client_id');
-            $table->foreignId('service_id')->nullable();
             $table->string('unique_id')->unique();
-            // $table->foreignId('state_id');
-            // $table->foreignId('lga_id');
-            // $table->foreignId('town_id')->nullable();
-            $table->foreignId('price_id');
-            $table->foreignId('contact_id');
+		    $table->foreignId('client_id');
             $table->foreignId('client_discount_id')->nullable();
             $table->string('client_security_code')->unique();
-            $table->foreignId('status_id')->default(1);
-            $table->text('description');
-            $table->bigInteger('total_amount')->unsigned();
             $table->dateTime('preferred_time')->nullable();
+
+            $table->foreignId('contact_id');
+            $table->longText('description');
+
+
+
+            $table->foreignId('price_id');
+            $table->bigInteger('total_amount')->unsigned();
+
+
+
+            $table->foreignId('service_id')->nullable();
+            $table->json('sub_services')->nullable();
+            
             $table->enum('has_client_rated', ['Yes', 'No', 'Skipped'])->default('No');
             $table->enum('has_cse_rated', ['Yes', 'No', 'Skipped'])->default('No');
+            
+            $table->foreignId('status_id')->default(\App\Models\ServiceRequest::SERVICE_REQUEST_STATUSES['Pending']);
+
             $table->softDeletes();
             $table->timestamps();
         });
