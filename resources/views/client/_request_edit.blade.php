@@ -12,7 +12,7 @@
     <h5 class="ml-3">Editing {{ $userServiceRequest->unique_id }} Service request details</h5>
     <input type="hidden" value="{{ $userServiceRequest->id ?? '' }}" name="servicereq" >
         <!-- ROW 1 -->
-        <div class="col-md-6">
+        <div class="col-md-12">
             <div class="form-group position-relative">
                 <label>Scheduled Date & Time :<span class="text-danger">*</span></label>
                 <i data-feather="calendar" class="fea icon-sm icons"></i>
@@ -25,7 +25,7 @@
             </div>
         </div><!--end col-->
 
-        <div class="col-md-6">
+        <!-- <div class="col-md-6">
             <div class="form-group position-relative">
                 <label>Your Phone no. :<span class="text-danger">*</span></label>
                 <i data-feather="phone" class="fea icon-sm icons"></i>
@@ -36,9 +36,10 @@
                     </span>
                 @enderror
             </div> 
-        </div><!--end col-->
+        </div> -->
+        <!--end col-->
         
-        <div class="col-md-12">
+        <!-- <div class="col-md-12">
             <div class="form-group position-relative">
                 <label>Address</label>
                 <i data-feather="map-pin" class="fea icon-sm icons"></i>
@@ -49,7 +50,8 @@
                     </span>
                 @enderror
             </div>
-        </div><!--end col--> 
+        </div> -->
+        <!--end col--> 
 
         <div class="col-md-12">
             <div class="form-group position-relative">
@@ -81,8 +83,6 @@
             </div> 
           </div>
 
-                                           
-        
     </div><!--end row-->
 
     <div class="row">
@@ -144,7 +144,6 @@ function ValidateSize(file) {
         //     '<label class="custom-file-label" for="custom_file_'+count+'">file here</label>'+
         //     '<input type="file" name="filename[]" accept="application/pdf, image/gif, image/jpeg, image/png" class="custom-file-input" size="20" onchange="ValidateSize(this);" id="custom_file_'+count+'">'+
         //     '</div>')
-
             $('.attachments').append('<div class="form-group position-relative custom-file">'+
                 '<input type="file" name="media_file[]" accept="image/*,.txt,.doc,.docx,.pdf" class="form-control-file btn btn-primary btn-sm" onchange="ValidateSize(this);" id="custom_file_'+count+'"  />'+
                 '<small style="font-size: 10px;" class="text-muted">File must not be more than 2MB</small>'+

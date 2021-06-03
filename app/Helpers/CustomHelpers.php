@@ -66,6 +66,7 @@ class CustomHelpers
     else
       return false;
    }
+   
 
    static function arrayToList($array, $title){
        $arr = [];
@@ -96,13 +97,55 @@ class CustomHelpers
 
    static function getWarrantTechnician($str){
        $name =  \App\Models\Account::where('user_id', $str)->first();
-       return ucfirst($name->first_name). ' '.ucfirst($name->last_name);
+       return  $name ? ucfirst($name->first_name). ' '.ucfirst($name->last_name): 'UNAVAILABLE';
    }
+
+   static function getUserDetail($str){
+    $detail =  \App\Models\User::where('id', $str)->with('account', 'roles')->first();
+    return  $detail ??'UNAVAILABLE';
+}
 
    static function getExtention($str){
     $string = $str;
     $output = explode(".",$string);
     return $output[count($output)-1];
+   }
+
+   static function getHours($date1, $date2){
+    $date = Carbon::parse($date1);
+    $diff = $date->diffForHumans($date2, true);
+    $data =  explode(" ", $diff);
+    $time = array("minutes", "seconds", 'second', 'minute');
+    if(!in_array($data[1], $time))
+           return $data[1];
+    else
+    return false;
+   }
+
+   static function getTotalAmmount($amount, $deduct){
+    $arr = [];
+    $arr1 = [];
+    $sum1=''; $sum2='';
+   
+    if($deduct != '0'){
+       $amt = $deduct;
+        foreach ($deduct as $item) {
+                $arr1 []= $item['rfqInvoices']['total_amount'];
+            
+        }
+         $sum1 =array_sum($arr1);
+
+        $amt = $amount['supplierSentInvoices'];
+        foreach ($amt as $val) {
+            $arr []= $val['total_amount'];
+        }
+        $sum2 = array_sum($arr);
+
+        return   (int)$sum2 - (int)$sum1;
+    }
+
+   
+    
    }
     
 }
