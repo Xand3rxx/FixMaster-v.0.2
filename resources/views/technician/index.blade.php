@@ -50,7 +50,7 @@
                       </div>
                       <div class="col-md-6">
                         <div class="card-body pd-t-10 pd-b-15 pd-x-20 mt-2">
-                          <h6 class="lh-5 mg-b-5">Your Earnings:<h1 class="tx-normal tx-rubik mg-b-0 mg-r-5"> ₦{{ number_format(29850) }} </h1>
+                          <h6 class="lh-5 mg-b-5">Your Earnings:<h1 class="tx-normal tx-rubik mg-b-0 mg-r-5"> ₦{{ number_format($payments->sum('amount')) }} </h1>
                           </h6>
                         </div>
                       </div>
@@ -63,7 +63,7 @@
                           <x-card cardtitle="Ongoing Requests" cardnumber="{{ $ongoing_request->count() }}" />
                           <x-card cardtitle="Pending Consultations" cardnumber="{{ $pending_consultations->count() }}" />
                           <x-card cardtitle="Completed Consultations" cardnumber="{{ $completed_consultations->count() }}" />
-                          <x-card cardtitle="Payment Received" cardnumber="20" />
+                          <x-card cardtitle="Payment Received" cardnumber="{{ $payments->count() }}" />
                         </div>
                       </div>
 

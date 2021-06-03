@@ -73,10 +73,7 @@ class TechnicianProfileController extends Controller
             ->where('assistive_role', 'Technician')
             ->get();
 
-
-
-
-
+        $payments = PaymentDisbursed::where('recipient_id', Auth::id())->get();
 
         //dd($data);
 //        return ServiceRequestAssigned::with('users', 'service_request')->whereHas('service_request', function ($query) {
@@ -94,8 +91,11 @@ class TechnicianProfileController extends Controller
             'completed_request',
             'completed_consultations',
             'pending_consultations',
+            'payments'
 
         );
+
+
 
         return view('technician.index', $data)->with('i');
     }
