@@ -1,6 +1,6 @@
 <form method="POST" action="{{ route('admin.save_assigned_waranty_cse', app()->getLocale()) }}">
         @csrf @method('POST')
-          <h5 class="mg-b-2"><strong>Assign a Cse </strong></h5>
+          <h5 class="mg-b-2"><strong>Assign Cse </strong></h5>
          
           <div class="form-row mt-4">
             <div class="form-group col-md-12">

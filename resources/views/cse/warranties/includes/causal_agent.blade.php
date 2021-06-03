@@ -25,7 +25,7 @@
                                                  <div class="form-group col-1 col-md-1 col-sm-1">
                                                      <div class="custom-control custom-radio mt-2">
                                                          <div class="custom-control custom-radio">
-                                                             <input type="radio" class="custom-control-input" id="{{ $loop->iteration }}" name="causal_agent_id" value="{{$item->user->id}}">
+                                                             <input type="checkbox" class="custom-control-input" id="{{ $loop->iteration }}" name="causal_agent_id[]" value="{{$item->user->id}}">
                                                              <label class="custom-control-label" for="{{ $loop->iteration }}"></label>
                                                          </div>
                                                      </div>
@@ -46,7 +46,9 @@
 
             <ul class="list-group wd-md-100p">
             @if(!empty($suppliers->rfqSuppliesInvoices))
+           
             @foreach($suppliers->rfqSuppliesInvoices as $item)
+    
             @if($item->accepted == 'Yes')
                 <li class="list-group-item d-flex align-items-center">
                     
@@ -72,7 +74,7 @@
                                                 <div class="form-group col-1 col-md-1 col-sm-1">
                                                      <div class="custom-control custom-radio mt-2">
                                                          <div class="custom-control custom-radio">
-                                                             <input type="radio" class="custom-control-input" id="" name="causal_agent_id"  value="{{$item->warranty_claim_supplier->user_id}}">
+                                                             <input type="checkbox" class="custom-control-input" id="" name="causal_agent_id[]"  value="{{$item->warranty_claim_supplier->user_id}}">
                                                              <label class="custom-control-label" for="{{ $loop->iteration }}"></label>
                                                          </div>
                                                      </div>

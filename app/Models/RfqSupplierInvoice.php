@@ -45,12 +45,17 @@ class RfqSupplierInvoice extends Model
 
     public function warranty_claim_supplier()
     {
-        return $this->belongsTo(Supplier::class, 'supplier_id')->with('user');
+        return $this->belongsTo(Supplier::class, 'supplier_id', 'user_id');
     }
 
     public function rfqBatches()
     {
         return $this->hasMany(RfqBatch::class,'rfq_id', 'rfq_id');
+    }
+
+    public function warrantyIssued()
+    {
+        return $this->hasMany(ServiceRequestWarrantyReport::class,'supplier_id','causal_agent_id');
     }
 
 }

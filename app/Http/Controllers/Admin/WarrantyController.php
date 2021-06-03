@@ -213,6 +213,7 @@ class WarrantyController extends Controller
      
         $serviceRequest = ServiceRequestWarranty::where('uuid', $uuid)->with('user.account', 'service_request', 'warranty')->first();
         $warrantyExist = Warranty::where('id',  $serviceRequest->warranty_id)->first();
+        $updateWarranty='';
    
 
            //Update ServiceRequestWarranty
@@ -224,24 +225,10 @@ class WarrantyController extends Controller
                $updateWarranty = true;
            });
 
-           $serviceRequestIssued = \App\Models\ServiceRequestWarrantyIssued::where('service_request_warranty_id', $serviceRequest->id)->first();
-           if( $serviceRequestIssued ){
-            $warranty = \App\Models\ServiceRequestWarrantyIssued::where('service_request_warranty_id', $serviceRequest->id)->update([
-                'service_request_warranty_id'        =>   $serviceRequest->id,
-              ,
-            ]);
-
-           }else{
-                $warranty = ServiceRequestWarrantyIssued::create([
-                    'service_request_warranty_id'        =>   $serviceRequest->id,
-                 ,
-                ]);
-        
-    
-           }
+         
         
      
-        if ($warranty){
+        if (  $updateWarranty){
             $type = 'Others';
             $severity = 'Informational';
             $actionUrl = Route::currentRouteAction();
@@ -370,9 +357,9 @@ class WarrantyController extends Controller
             $type = 'Others';
             $severity = 'Informational';
             $actionUrl = Route::currentRouteAction();
-            $message = Auth::user()->email.' assigned job reference '.$serviceRequest->unique_id ;
+            $message = Auth::user()->email.' assigned CSE to job reference '.$serviceRequest->unique_id . 'for Warranty' ;
             $this->log($type, $severity, $actionUrl, $message);
-            return redirect()->route('admin.issued_warranty', app()->getLocale())->with('success', $serviceRequest->unique_id.' has been assigned successfully.');
+            return redirect()->route('admin.issued_warranty', app()->getLocale())->with('success', $serviceRequest->unique_id.' has been assigned a CSE successfully.');
 
         
         }
@@ -380,9 +367,9 @@ class WarrantyController extends Controller
             $type = 'Errors';
             $severity = 'Error';
             $actionUrl = Route::currentRouteAction();
-            $message = 'An Error Occured while '. Auth::user()->email. ' was trying to assign '.$serviceRequest->unique_id;
+            $message = 'An Error Occured while '. Auth::user()->email. ' was trying to assign a CSE to job reference'.$serviceRequest->unique_id;
             $this->log($type, $severity, $actionUrl, $message);
-            return back()->with('error', 'An error occurred while trying to assign '.$serviceRequest->unique_id);
+            return back()->with('error', 'An error occurred while trying to assign CSE to job reference'.$serviceRequest->unique_id);
         }
 
       

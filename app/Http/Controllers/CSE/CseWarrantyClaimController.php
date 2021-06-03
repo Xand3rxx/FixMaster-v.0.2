@@ -30,14 +30,6 @@ class CseWarrantyClaimController extends Controller
     $warranty = \App\Models\ServiceRequestWarrantyIssued::create([
         'service_request_warranty_id'    =>  $serviceRequest->id,
         'cse_id'             =>  Auth::id(),            
-        // 'technician_id'      => null,
-        // 'scheduled_datetime'       =>  null, 
-        // 'completed_by'       =>   null,
-        // 'cse_comment'       => null,
-        // 'admin_comment'       =>  null,
-        // 'date_resolved'       => null,
-        // 'date_resolved'       =>   null
-        
     ]);
    }else{
 

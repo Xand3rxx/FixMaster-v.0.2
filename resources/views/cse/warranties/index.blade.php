@@ -96,6 +96,11 @@
         
                @if($warranty->service_request_warranty_issued->cse_id == Auth::user()->id)
                <a href="{{ route('cse.warranty_details', ['warranty'=>$warranty->service_request->uuid, 'locale'=>app()->getLocale()]) }}" class="dropdown-item details text-primary"><i class="far fa-clipboard"></i> Details</a>
+               <a href="#markAsResolved" id="markas-resolved"
+              data-toggle="modal"
+              data-url="{{ route('cse.mark_warranty_resolved', ['warranty'=>$warranty->uuid, 'locale'=>app()->getLocale() ]) }}"
+              class="dropdown-item details text-success"><i class="fas fa-check"></i>  Mark as Resolved</a>
+             
                @else
                <a href="#" class="dropdown-item details text-default"> No Details</a>
 

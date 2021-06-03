@@ -176,6 +176,7 @@ class RfqController extends Controller
         return view('supplier.rfq.sent_invoices', [
             'rfqs'  =>  Auth::user()->supplierSentInvoices()->get(),
         ]);
+       
     }
 
     public function sentInvoiceDetails($language, $id){
@@ -214,5 +215,9 @@ class RfqController extends Controller
         return view('supplier.rfq._details_image', [
             'rfqDetails'    =>  \App\Models\RfqBatch::select('image')->where('id', $id)->firstOrFail(),
         ]);
+    }
+
+    public function warrantyReplacementNotify($language, $id){
+     
     }
 }

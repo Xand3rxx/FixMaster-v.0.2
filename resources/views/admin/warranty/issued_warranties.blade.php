@@ -84,18 +84,15 @@
           @else
           <td class="text-danger">Unresolved</td>
           @endif
+          
           @if(is_null($warranty->service_request_warranty_issued))
           <td class="text-danger">None </td>
-          @else
-          <td class="text-success">Yes</td>
-          @endif
-
-          @if(is_null($warranty->service_request_warranty_issued))
           <td class="text-danger">Pending</td>
           @else
+          <td class="text-success">Yes</td>
           <td class="text-success">Accepted</td>
-          @endiff
-        
+          @endif
+
 
           
           <td class=" text-center">

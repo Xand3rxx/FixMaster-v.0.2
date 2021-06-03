@@ -121,6 +121,32 @@ class CustomHelpers
     else
     return false;
    }
+
+   static function getTotalAmmount($amount, $deduct){
+    $arr = [];
+    $arr1 = [];
+    $sum1=''; $sum2='';
+   
+    if($deduct != '0'){
+       $amt = $deduct;
+        foreach ($deduct as $item) {
+                $arr1 []= $item['rfqInvoices']['total_amount'];
+            
+        }
+         $sum1 =array_sum($arr1);
+
+        $amt = $amount['supplierSentInvoices'];
+        foreach ($amt as $val) {
+            $arr []= $val['total_amount'];
+        }
+        $sum2 = array_sum($arr);
+
+        return   (int)$sum2 - (int)$sum1;
+    }
+
+   
+    
+   }
     
 }
 ?>

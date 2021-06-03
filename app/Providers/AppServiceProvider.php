@@ -41,6 +41,8 @@ class AppServiceProvider extends ServiceProvider
                 'profile'   =>  auth()->user()->account,
                 'pendingRequests'   => \App\Models\ServiceRequest::PendingRequests()->get()->count(),
                 'unresolvedWarranties'  =>  \App\Models\ServiceRequestWarranty::UnresolvedWarranties()->get()->count(),
+                'RfqDispatchNotification' =>\App\Models\RfqDispatchNotification::where(['supplier_id' => auth()->user()->id, 'notification'=> 'On' ])->with('rfq', 'service_request')->latest('created_at')->get(),
+
             ]);
         });
 

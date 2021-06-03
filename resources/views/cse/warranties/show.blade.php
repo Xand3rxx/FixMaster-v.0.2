@@ -141,12 +141,12 @@
                         </section>
                     
                         @if($shcedule_datetime=='' || is_null($shcedule_datetime))
-                        <h3>Scheduled Fix Date</h3>
+                        <h3>Scheduled Fix Date </h3>
                         <section>
                         
                             <div class="mt-4 form-row">
                                 <div class="form-group col-md-12">
-                                    <label for="preferred_time">Scheduled Fix Date</label>
+                                    <label for="preferred_time">Scheduled Fix Date</label> <span style="color:red">(required)</span>
                                     <input id="service-date-time2" type="text" readonly min="{{ \Carbon\Carbon::now()->isoFormat('2021-04-13 00:00:00') }}" class="form-control @error('preferred_time') is-invalid @enderror"
                                      name="preferred_time"
                                       placeholder="Click to Enter Scheduled Date & Time" value="{{ old('preferred_time') }}">
@@ -161,6 +161,7 @@
                         </section>
                          @endif 
                        
+                       @if($causalAgent->isEmpty())
                          <h3>Indicate Causal Agent</h3>
                          <section>
                              <div class="form-row mt-4">
@@ -170,16 +171,39 @@
                                  </div>
                              </div>
                          </section>
+                         @endif 
 
+                     
+                         @if(is_null($RfqDispatchNotification))
                         <h3>New RFQ</h3>
                         <section>
-                            <p class="mg-b-0">A request for quotation is a business process in which a company or public entity requests a quote from a supplier for the purchase of specific products or services.</p>
+                        <p class="mg-b-0">A request for quotation is a business process in which a company or public entity requests a quote from a supplier for the purchase of specific products or services.</p>
+                           
+                         
+                        @if(!empty($causalAgent))
+                            
+                            @if($causalTechnician != '0')
+                            <h4 id="section1" class="mt-4 mb-2">Initiate RFQ if only SUPPLIER is a causal agent!</h4>
+                            @else 
                             <h4 id="section1" class="mt-4 mb-2">Initiate RFQ?</h4>
+                            @endif
+                            @else 
+                             <h4 id="section1" class="mt-4 mb-2">Initiate RFQ?</h4>
+                             @endif 
+                        
+
 
                             <div class="form-row mt-4">
                                 <div class="form-group col-md-4">
                                     <div class="custom-control custom-radio">
-                                        <input type="radio" class="custom-control-input" id="rfqYes" name="intiate_rfq" value="yes" >
+                                    @if(!empty($causalAgent))
+                                        <input type="radio" class="custom-control-input" id="rfqYes" name="intiate_rfq" value="yes"
+                                    {{$causalTechnician != 0? 'disabled': '' }}
+                                     >
+                                     @else 
+                                     <input type="radio" class="custom-control-input" id="rfqYes" name="intiate_rfq" value="yes">
+                                     @endif 
+                                   
                                         <label class="custom-control-label" for="rfqYes">Yes</label><br>
                                     </div>
                                 </div>
@@ -195,6 +219,8 @@
                             <small class="text-danger">This portion will display only if the CSE initially executed a RFQ, the Client paid for the components and the Supplier has made the delivery.</small>
                            
                     <div class="divider-text">Initial Supplier </div>
+
+                    <h4 id="section1" class="mt-4 mb-2">Initiate RFQ To Initial Supplier?</h4>
                     <ul class="list-group wd-md-100p">
                                 @if(!empty($suppliers->rfqSuppliesInvoices))
                                 @foreach($suppliers->rfqSuppliesInvoices as $item)
@@ -222,8 +248,8 @@
                                                 <div class="form-group col-1 col-md-1 col-sm-1">
                                                         <div class="custom-control custom-radio mt-2">
                                                             <div class="custom-control custom-radio">
-                                                                <input type="radio" class="custom-control-input" id="initial_supplier" name="supplier_id" value="{{$item->warranty_claim_supplier->id}}">
-                                                                <input type="hidden" class="custom-control-input" id="add_inital_supplier" name="initial_supplier" value="{{$item->warranty_claim_supplier->id}}">
+                                                                <input type="radio" class="custom-control-input" id="initial_supplier" name="supplier_id" value="{{$item->warranty_claim_supplier->user_id}}">
+                                                                <input type="hidden" class="custom-control-input" id="add_inital_supplier" name="initial_supplier" value="{{$item->warranty_claim_supplier->user_id}}">
                                                                 <input type="hidden" class="custom-control-input" id="" name="supplier_email" value="{{$item->warranty_claim_supplier->user->email}}">
                                                                 <input type="hidden" class="custom-control-input" id="" name="supplier_fname" value="{{$item->warranty_claim_supplier->user->account->first_name}}">
                                                                 <input type="hidden" class="custom-control-input" id="" name="supplier_lname" value="{{$item->warranty_claim_supplier->user->account->last_name}}">
@@ -241,6 +267,21 @@
                                             @endforeach
                                             @endif
                                         </ul>
+                                 
+     
+                            
+                            <h4 id="section1" class="mt-4 mb-2">Initiate RFQ To Other Initial Supplier?</h4>
+                             <div class="form-row mt-4">
+                                <div class="form-group col-md-4">
+                                    <div class="custom-control custom-radio">
+                                        <input type="radio" class="custom-control-input"  name="supplier_id" value="all" 
+                                     
+                                         >
+                                        <label class="custom-control-label" for="rfqYes">Yes</label><br>
+                                    </div>
+                                </div>
+                                
+                            </div>
 
 
                               @if(!empty($suppliers->rfqSuppliesInvoices))
@@ -250,83 +291,7 @@
                             @include('cse.warranties.includes.suppliers_contact')
 
 
-                            <div class="table-responsive mt-4">
-                                <table class="table table-striped table-sm mg-b-0">
-                                    <tbody>
-                                    
-                                    <tr>
-                                        <td class="tx-medium">Supplier Name</td>
-                                        <td class="tx-color-03">{{ ucfirst($item->warranty_claim_supplier->user->account->first_name)}} {{  ucfirst($item->warranty_claim_supplier->user->account->last_name)}}</h6>
-
-                                         <small class="text-muted">(Business Name: {{$item->warranty_claim_supplier->business_name}} )</small></td>
-                                    </tr>
-                                    <!-- <tr>
-                                        <td class="tx-medium">Dispatch Status</td>
-                                        <td class="text-info">In-Transit</td>
-                                    </tr> -->
-                                    <!-- <tr>
-                                        <td class="tx-medium">Delivery Status</td>
-                                        <td class="text-warning">Pending</td>
-                                    </tr> -->
-                                    <tr>
-                                        <td class="tx-medium">Delivery Fee</td>
-                                        <td class="tx-color-03">₦{{ number_format($item->delivery_fee) }}</td>
-                                    </tr>
-                                    <tr>
-                                        <td class="tx-medium">Delivery Time</td>
-                                        <td class="tx-color-03">{{ Carbon\Carbon::now('UTC')->isoFormat('MMMM Do YYYY, h:mm:ssa') }}</td>
-                                    </tr>
-                                    <tr>
-                                        <td class="tx-medium">Grand Total</td>
-                                        <td class="tx-color-03">₦{{ number_format($item->total_amount) }}</td>
-                                    </tr>
-                                
-                                    </tbody>
-                                </table>
-                                </div>
-                              
-                            <div class="table-responsive mt-4">
-                                <table class="table table-hover mg-b-0" id="basicExampl">
-                                    <thead class="thead-primary">
-                                    <tr>
-                                        <th class="text-center">#</th>
-                                        <th>Manufacturer Name</th>
-                                        <th>Model Number</th>
-                                        <th>Component Name</th>
-                                        <th class="text-center">Quantity</th>
-                                        <th class="text-center">Size</th>
-                                        <th>Unit of Measurement</th>
-                                        <th class="text-center">Image</th>
-                                        <th class="text-center">Unit Price(₦)</th>
-                                        <th class="text-center">Amount(₦)</th>
-                                    </tr>
-                                    </thead>
-                                    <tbody>
-                                   
-                                    @foreach($item->supplierInvoiceBatches as $items)
-                                    <tr>
-                            <td class="tx-color-03 tx-center">{{ $loop->iteration }}</td>
-                            <td class="tx-medium">{{ !empty($items->rfqBatch->manufacturer_name) ? $items->rfqBatch->manufacturer_name : 'UNAVAILABLE' }}</td>
-                            <td class="tx-medium">{{ !empty($items->rfqBatch->model_number) ? $items->rfqBatch->model_number : 'UNAVAILABLE' }}</td>
-                            <td class="tx-medium">{{ !empty($items->rfqBatch->component_name) ? $items->rfqBatch->component_name : 'UNAVAILABLE' }}</td>
-                            <td class="tx-medium text-center">{{ !empty($items->rfqBatch->quantity) ? number_format($items->rfqBatch->quantity) : '0' }}</td>
-                            <td class="tx-medium text-center">{{ !empty($items->rfqBatch->size) ? number_format($items->rfqBatch->size) : '0' }}</td>
-                            <td class="tx-medium">{{ !empty($items->rfqBatch->unit_of_measurement) ? $items->rfqBatch->unit_of_measurement : 'UNAVAILABLE' }}</td>
-                            <td class="text-center">
-                              @if(!empty($items->rfqBatch->image))
-                              <a href="#rfqImageDetails" data-toggle="modal" class="text-info" title="View {{ $items->rfqBatch->component_name }} image" data-batch-number="{{ $items->rfqBatch->id }}" data-url="{{ route('cse.rfq_details_image', ['image'=>$items->rfqBatch->id, 'locale'=>app()->getLocale()]) }}" id="rfq-image-details"> View</a>
-                              @else
-                                    -
-                              @endif
-                            </td>
-                            <td class="tx-medium text-center">₦{{ number_format($item->unit_price) }}</td>
-                            <td class="tx-medium text-center">₦{{ number_format($item->total_amount) }}</td>
-                        </tr>
-                                    @endforeach
-                                  
-                                    </tbody>
-                                </table>
-                            </div><!-- table-responsive -->
+                           
                             @endif    
                 @endforeach
                 <input type="hidden" value="{{$suppliers->id}}" name="rfq_id">
@@ -336,9 +301,11 @@
                             </div><!-- end the d-none -->
                         
                         </section>
+                        @endif
                         
+
+                        @if(is_null($RfqDispatchNotification))
                         <h3>Material Acceptance</h3>
-                       
                         <section>
                         <small class="text-danger">This portion will display only if the CSE initially executed a RFQ, the Client paid for the components and the Supplier has made the delivery.</small>
 
@@ -386,8 +353,10 @@
                             </div> -->
                             </span>
                         </section>
+                        @endif
                      
-
+                         
+                         @if(!is_null($technicianExist))
                         <h3>Assign Job To Technician</h3>
                         <section>
                             <div class="form-row mt-4">
@@ -398,6 +367,7 @@
                                 </div>
                             </div>
                         </section>
+                        @endif
         
         
                     </div>

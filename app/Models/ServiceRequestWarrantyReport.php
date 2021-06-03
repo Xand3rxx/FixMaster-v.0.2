@@ -20,4 +20,8 @@ class ServiceRequestWarrantyReport extends Model
     }
 
    
+    public function rfqInvoices()
+    {
+        return $this->belongsTo(RfqSupplierInvoice::class,  'causal_agent_id','supplier_id',);
+    }
 }

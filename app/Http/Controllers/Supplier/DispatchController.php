@@ -109,8 +109,8 @@ class DispatchController extends Controller
             //Set variables as true to be validated outside the DB transaction
             $createDispatch =  true;
         });
-
-        if($createDispatch){
+        $updateWArrantyDispatch = $this->updateRfqDispatchNotify($request->rfq_id);
+        if($createDispatch AND $updateWArrantyDispatch){
 
             //Code to send mail to FixMaster, CSE and Supplier who sent the quote
 
@@ -208,5 +208,14 @@ class DispatchController extends Controller
                 return back()->with('error', 'An error occurred while trying to update dispatch code for '.$request->dispatch_code);
             }
         }
+    }
+
+    public function updateRfqDispatchNotify($rfq_id){
+        $updateOldSupplierRfqDispatch = \App\Models\RfqDispatchNotification::where(['rfq_id'=>$rfq_id ,  'supplier_id' => Auth::user()->id ])->update([
+             'notification' => 'Off',
+            'dispatch' => 'Yes',
+        ]);
+
+        return $updateOldSupplierRfqDispatch ;
     }
 }

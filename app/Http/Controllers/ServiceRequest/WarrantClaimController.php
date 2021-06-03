@@ -25,17 +25,15 @@ class WarrantClaimController extends Controller
      */
     
     public function assignWarrantyTechnician(Request $request){
-    //  dd($request);
+    //   dd($request);
 
         $this->validate(
             $request, 
-           
             ['preferred_time' => 'required_if:service_request_warrant_issued_schedule_date,==,null'],
             ['required_if' => 'This scheduled fix date is required'],
-         
         );
+    
    
-
         $service_request_warranty_id = $request['service_request_warranty_id'];
         $serviceRequest = \App\Models\ServiceRequestWarrantyIssued::where('service_request_warranty_id', $request['service_request_warranty_id'])->first();
      
@@ -67,50 +65,23 @@ class WarrantClaimController extends Controller
 
     protected function save($serviceRequest, $service_request_warranty_id,$request ){
 
-        if($request['technician_user_uuid'] || $request->preferred_time ){
-           
-       
+        if($request->preferred_time){
         $upload='1'; $comment='1';
-      
         if($serviceRequest){
             $updateWarranty = \App\Models\ServiceRequestWarrantyIssued::where('service_request_warranty_id', $service_request_warranty_id)->update([
                     'service_request_warranty_id'     =>   $request['service_request_warranty_id'],
-                    'cse_id'             =>  Auth::id(),
-                    'technician_id'     =>   $request['technician_user_uuid'],
-                    'scheduled_datetime' => $request->preferred_time,
-                    
-                ]);
-                $updateNewTechnician = \App\Models\ServiceRequestAssigned::where(['service_request_id'=>  $request->serviceRequestId, 'user_id'=> $request['technician_user_uuid']])->update([
-                        'job_accepted'              => null,
-                        'job_diagnostic_date'       => null,
-                        'job_declined_time'         => null,
-                        'job_completed_date'        => null,
-                        'status'                    => null
-                    ]);
-
-        }else{
-       
-            $createWarranty = \App\Models\ServiceRequestWarrantyIssued::create([
-                    'service_request_warranty_id'        =>   $request['service_request_warranty_id'],
-                    'cse_id'             =>  Auth::id(),
-                    'technician_id'     =>   $request['technician_user_uuid'],
-                    'scheduled_datetime' => $request->preferred_time,
-                  
-
-                ]);
-                \App\Models\ServiceRequestAssigned::create([
-                    'user_id'                   => $request['technician_user_uuid'],
-                    'service_request_id'        => $request->serviceRequestId,
-                    'job_accepted'              => null,
-                    'job_acceptance_time '      => null,
-                    'job_diagnostic_date'       => null,
-                    'job_declined_time'         => null,
-                    'job_completed_date'        => null,
-                    'status'                    => null
+                  'scheduled_datetime' => $request->preferred_time,  
                 ]);
         }
     }
-        $serviceRequestIssued = $serviceRequest??  $createWarranty;
+
+
+    if($request['technician_user_uuid'] ){
+         $updateTecnician = $this->saveTechnician($serviceRequest, $service_request_warranty_id,$request);
+        }
+
+
+        $serviceRequestIssued = $serviceRequest;
 
          //dd($serviceRequestIssued);
     
@@ -123,10 +94,15 @@ class WarrantClaimController extends Controller
 
         
 
-        if($request->cse_comment || $request->causal_reason || $request->causal_agent_id) 
+        if($request->causal_reason || $request->causal_agent_id) 
            $comment =  $this->diagnosticWarrantReport($request,$serviceRequestIssued);
         else
            $comment =  '1';
+
+           if($request->cse_comment) 
+           $report =  $this->serviceRequestReport($request,$serviceRequestIssued);
+        else
+           $report =  '1';
 
         if($request->intiate_rfq == 'yes')
             $done = $this->saveRfq($request);
@@ -134,7 +110,7 @@ class WarrantClaimController extends Controller
            $done = '1';    
         
       
-        if($upload  AND $comment AND $done){
+        if($upload  AND $comment AND $done AND $report){
             return true;
 
         }else{
@@ -164,75 +140,128 @@ class WarrantClaimController extends Controller
 
 
     protected function diagnosticWarrantReport($request,$serviceRequesIssued){
+
+        if($request->causal_agent_id){
+        foreach ($request->causal_agent_id as $value) {
         $createWarranty = \App\Models\ServiceRequestWarrantyReport::create([
             'user_id'                                         =>  Auth::id(),
             'service_request_warranties_issued_id'             =>  $serviceRequesIssued->id,
             'report'                                           =>   $request->cse_comment,
-            'causal_agent_id'                                  =>   $request->causal_agent_id,
-            'causal_reason'                                    =>   $request->causal_reason,
+            'causal_agent_id'                                  =>   $value,
+            'causal_reason'                                    =>   $request->causal_reason??'None',
             
         ]);
 
+      }
+    }else{
+        $createWarranty = \App\Models\ServiceRequestWarrantyReport::create([
+            'user_id'                                         =>  Auth::id(),
+            'service_request_warranties_issued_id'             =>  $serviceRequesIssued->id,
+            'report'                                           =>   $request->cse_comment,
+            'causal_agent_id'                                  =>   0,
+            'causal_reason'                                    =>   $request->causal_reason??'None',
+            
+        ]);
+    }
+    
         return  $createWarranty ;
     }
 
+
+    protected function serviceRequestReport($request,$serviceRequesIssued){
+        $createReport = \App\Models\ServiceRequestReport::create([
+            'user_id'                                         =>  Auth::id(),
+            'service_request_id'             =>  $request->service_request_id,
+            'report'                                   =>   $request->cse_comment,
+            'stage'                                  =>   'Warranty-Claim',
+            'type '                                    =>   'Root-Cause',
+            
+        ]);
+
+        return  $createReport ;
+    }
+
+
+
     public function saveRfq($request){
 
-        $updateOldSupplierStatus = \App\Models\RfqSupplierInvoice::where(['rfq_id'=> $request->rfq_id, 'accepted'=> 'Yes'])->update([
-            'accepted'     =>   'Pending',
-            
-        ]);
+        // dd($request);
 
-      
-        $updateNewSupplierStatus = \App\Models\RfqSupplierInvoice::where(['rfq_id'=> $request->rfq_id, 'supplier_id'=>$request->supplier_id])->update([
-            'accepted'     =>   'Yes',
-            
-        ]);
-         $supplierDetails =  \App\Models\RfqSupplierInvoice::where(['rfq_id'=> $request->rfq_id, 'supplier_id'=>$request->supplier_id])->first();
-         $supplierRfq =  \App\Models\Rfq::where(['id'=> $request->rfq_id])->first();
-         $suppliersUser  = \App\Models\Supplier::where(['id'=> $request->supplier_id])->with('user')->first();
-        //  dd($suppliersUser->user->account->first_name, 'ref');
-
-        $updateNewRfqSupplier = \App\Models\RfqSupplier::where(['rfq_id'=> $request->rfq_id])->update([
-            'supplier_id'=> $request->supplier_id,
-            'devlivery_fee' =>   $supplierDetails->delivery_fee,
-            'delivery_time' => $supplierDetails->delivery_time?? now(),
-            
-        ]);
-      
-
-        $updateNewRfq = \App\Models\Rfq::where(['id'=> $request->rfq_id])->update([
-            'issued_by'=> Auth::id(),
-            'type' =>   'Warranty',
-            'status' => 'Awaiting',
-            'accepted' => 'Yes',
-            'total_amount' => $supplierDetails->total_amount
-            
-        ]);
-
-        $updateNewRfqSupplyDispatch = \App\Models\RfqSupplierDispatch::create([
+     if($request->supplier_id != 'all'){
+        $supplier = $request->initial_supplier == $request->supplier_id? $request->initial_supplier: $request->supplier_id;
+        $ifSupplier =    \App\Models\RfqDispatchNotification::where([
+             'rfq_id' => $request->rfq_id,  'supplier_id' => $request->supplier_id])->first();
+    
+       //send notification
+      if( $ifSupplier){
+          return '1';
+      }
+       $updateOldSupplierRfqDispatch = \App\Models\RfqDispatchNotification::create([
             'rfq_id' => $request->rfq_id,
-            'rfq_supplier_invoice' =>  $supplierDetails->id,
-            'unique_id' => $supplierRfq->unique_id,
             'supplier_id' => $request->supplier_id,
-            'courier_name' => 'Lasgdis',
-            'courier_phone_number' => '080765432',
-            'delivery_medium' => 'Okada',
-            'cse_status' => $request->status == 'Approved'? 'Yes': 'No',
-            'supplier_status' => 'Processing',
-          
+            'service_request_id' => $request->service_request_id,
         ]);
 
-         //$suppliersUser->user->email;
-        // $mail_data = collect([
-        //     'email' => 'woorad7@gmail.com',
-        //     'template_feature' => 'CSE_SENT_SUPPLIER_MESSAGE_NOTIFICATION',
-        //     'firstname' =>  $suppliersUser->user->account->first_name,
-        //  ]);
-      
-       $mail = $this->mailAction($mail_data);
-        return  $updateNewRfqSupplyDispatch;
+        if($updateOldSupplierRfqDispatch){
+        $mail_data_supplier = collect([
+            'email' =>  $request->supplier_email,
+            'template_feature' => 'CSE_SENT_SUPPLIER_MESSAGE_NOTIFICATION',
+            'firstname' => $request->supplier_fname.' '.$request->supplier_lname,
+            'job_ref' =>  $request->service_request_unique_id,
+            'subject' => 'testing'
+        ]);
+        $mail1 = $this->mailAction($mail_data_supplier);
+        return '1';
+        }
+         }
+
+         $users = \App\Models\Cse::where('user_id' ,'<>', $request->initial_supplier)->with('user', 'user.account', 'user.contact', 'user.roles')->withCount('service_request_assgined')->get();
+
+         $updateOldSupplierRfqDispatch = \App\Models\RfqDispatchNotification::create([
+            'rfq_id' => $request->rfq_id,
+            'service_request_id' => $request->service_request_id,
+            'supplier_id' => 0
+        ]);
+
+
+           $updateNewRfq = \App\Models\Rfq::where(['id'=> $request->rfq_id])->create([
+            'issued_by'=> Auth::id(),
+             'service_request_id' => $request->service_request_id,
+            'type' =>   'Warranty',
+            'status' => 'Pending',
+            'accepted' => 'No',
+            'total_amount' => 0
+            
+        ]);
+       if( $updateOldSupplierRfqDispatch){
+             foreach($users as $cse){
+                $mail_data_supplier = collect([
+                    'email' =>  $cse['user']['email'],
+                    'template_feature' => 'CSE_SENT_SUPPLIER_MESSAGE_NOTIFICATION',
+                    'firstname' => $cse['user']['account']['first_name'].' '.$cse['user']['account']['last_name'],
+                    'job_ref' =>  $request->service_request_unique_id,
+                    'subject' => 'testing'
+                ]);
+                $mail1 = $this->mailAction($mail_data_supplier);
+                return '1';
+            }  
+        } 
+     
     }
+    
+    protected function saveTechnician($serviceRequest, $service_request_warranty_id,$request ){
+        $updateWarranty= '';
+        $checkOldTechnician = \App\Models\ServiceRequestAssigned::where(['service_request_id'=>  $request->serviceRequestId, 'user_id'=> $request['technician_user_uuid']])->first();
+
+        if($serviceRequest){
+            $updateWarranty = \App\Models\ServiceRequestWarrantyIssued::where('service_request_warranty_id', $service_request_warranty_id)->update([
+                    'service_request_warranty_id'     =>   $request['service_request_warranty_id'],
+                    'technician_id'     =>   $checkOldTechnician ? NULL : $request['technician_user_uuid'],
+                ]);   
+        }
+       return $updateWarranty;
+    }
+
 
 
 }
