@@ -58,6 +58,8 @@ use App\Http\Controllers\ServiceRequest\WarrantClaimController;
 use App\Http\Controllers\Messaging\Template;
 
 
+use App\Http\Controllers\Technician\ServiceRequestController as TechnicianServiceRequestController;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -413,7 +415,7 @@ Route::prefix('/client')->middleware('monitor.clientservice.request.changes')->g
         // Route::get('/payment/flutterwave/{type}', [FlutterwaveController::class, 'complete'])->name('payment-flutterwave-complete');
         // /** Flutterwave Payment Gateway End */
 
-        
+
 
 
 
@@ -482,6 +484,26 @@ Route::prefix('cse')->name('cse.')->middleware('monitor.cseservice.request.chang
 
     Route::get('/sub-service-dynamic-feilds',  [CseController::class, 'subServiceDynamicFields'])->name('sub_service_dynamic_fields');
 
+//        Route::view('/location-request',    'cse.location_request')->name('location_request');
+//        Route::view(
+//            '/request/details',
+//            'cse.request_details',
+//            [
+//                // 'tools' => \App\Models\ToolInventory::all(),
+//                // 'ongoingSubStatuses' => \App\Models\SubStatus::where('status_id', 2)->get(['id', 'name']),
+//                // 'warranties' => \App\Models\Warranty::all(),
+//            ]
+//        )->name('request_details');
+//
+//
+//        Route::get('/warranty/claims/list', [CseController::class, 'warranty_claims_list'])->name('warranty_claims_list');
+//        Route::get('/warranty-claims/details', [CseController::class, 'warranty_claims'])->name('warranty_claims');
+//        Route::get('/warranty/resolved/claims/details/{warranty:id}',          [WarrantyController::class, 'warranty_resolved_details'])->name('warranty_resolved_details');
+//        Route::get('/warranty/claims/details/{warranty:uuid}',      [CseController::class,  'warranty_details'])->name('warranty_details');
+//        Route::get('/mark/warrant/claims/resolved/{warranty:uuid}',      [WarrantyController::class, 'resolvedWarranty'])->name('mark_warranty_resolved');
+//
+//  });
+
 });
 
 
@@ -532,7 +554,9 @@ Route::prefix('/technician')->name('technician.')->group(function () {
         Route::post('/disbursed_payments_sorting', [TechnicianProfileController::class, 'sortDisbursedPayments'])->name('disbursed_payments_sorting');
         Route::view('/messages/inbox', 'technician.messages.inbox')->name('messages.inbox');
         Route::view('/messages/sent', 'technician.messages.outbox')->name('messages.outbox');
-        Route::view('/requests/active', 'technician.requests.active')->name('requests.active');
+        Route::get('/requests/active',  [TechnicianServiceRequestController::class, 'getActiveRequest'])->name('requests.active');
+
+        Route::get('/payments/history', [TechnicianProfileController::class, 'paymentHistory'])->name('payment.history');
 
         Route::view('/requests/completed', 'technician.requests.completed')->name('requests.completed');
         Route::view('/requests/warranty-claim', 'technician.requests.warranty_claim')->name('requests.warranty_claim');
