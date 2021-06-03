@@ -46,7 +46,7 @@
                                     <div class="card-body shadow-none bd-primary overflow-hidden">
                                         <div class="marker-primary marker-ribbon pos-absolute t-10 l-0">1</div>
 
-                                        <p class="card-text">Causal Agent:  {{ CustomHelpers::getUserDetail($item->causal_agent_id)->roles[0]->name }} </p>
+                                        <p class="card-text">Causal Agent: <span style="color:red"> {{ ucfirst(CustomHelpers::getUserDetail($item->causal_agent_id)->roles[0]->url) }}</span> </p>
                                         <p class="card-text">{{ CustomHelpers::getWarrantTechnician($item->causal_agent_id) }}</p>
                                         <p class="card-text"><small class="text-muted">Date Created: {{ Carbon\Carbon::parse($item->created_at, 'UTC')->isoFormat('MMMM Do YYYY, h:mm:ssa')}}
                                         </small></p>
@@ -100,7 +100,7 @@
                             <h5 class="mt-4">Request For Quotation</h5>
                             <div class="table-responsive">
                              
-                               @if(!empty($suppliers))
+                            @if(!empty($suppliers))
                                 <table class="table table-hover mg-b-0 mt-4">
                                     <thead class="">
                                         <tr>

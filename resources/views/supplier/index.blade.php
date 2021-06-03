@@ -46,7 +46,7 @@
             </div>
             <div class="col-md-6">
               <div class="card-body pd-t-10 pd-b-15 pd-x-20 mt-2">
-                <h6 class="lh-5 mg-b-5">Your ID:<h1 class="tx-normal tx-rubik mg-b-0 mg-r-5"> {{ $profile['supplier']['unique_id'] }} </h1>
+                <h6 class="lh-5 mg-b-5">Your ID:  <h1 class="tx-normal tx-rubik mg-b-0 mg-r-5"> {{ $profile['supplier']['unique_id'] }} </h1>
                 </h6>
               </div>
             </div>
@@ -56,7 +56,7 @@
             <div class="row">
             <x-card cardtitle="Sent Quotes" cardnumber="{{ !empty($profile['supplierSentInvoices']) ? number_format($profile['supplierSentInvoices']->count()) : '0' }}" />
               <x-card cardtitle="Approved Quotes" cardnumber="{{ !empty($profile['supplierSentInvoices']) ? number_format($profile['supplierSentInvoices']->where('accepted', 'Yes')->count()) : '0' }}" />
-              <x-card cardtitle="Amount Earned" cardnumber="₦32,890" />
+              <x-card cardtitle="Amount Earned" cardnumber="₦{{  !empty($profile['supplierSentInvoices']) ?number_format(CustomHelpers::getTotalAmmount($profile, $causalAgentAmt)) : 0}}" />
             </div>
           </div>
           

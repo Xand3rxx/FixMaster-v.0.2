@@ -21,6 +21,7 @@ use App\Jobs\PushSMS;
 use Mail;
 use Route;
 use Auth;
+use App\Mail\MailNotify;
 
 class MessageController extends Controller
 {
@@ -292,11 +293,25 @@ class MessageController extends Controller
             
 
         $message_array = ['to'=>$to, 'from'=>$from, 'subject'=>$subject, 'content'=>$message];
+
+        $mail =  Mail::to($to)->send(new MailNotify($message_array));
+
+    if(count(Mail::failures()) > 0 ) {
+    
+      foreach(Mail::failures() as $email_address) {
+          " - $email_address <br />";
+          return false;
+       }
+    
+        } else {
+          return true;
+        }
+      
         
-        $this->dispatch(new PushEmails($message_array));
-        
-        
-           
+        // $this->dispatch(new PushEmails($message_array));
+      
+
+    
         // if(!empty($feature) && $sms!=""){
         //     $this->dispatch(new PushSMS($sms));
         // }
