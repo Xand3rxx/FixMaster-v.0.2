@@ -2,6 +2,7 @@
 @section('title', 'Service Request Details')
     @include('layouts.partials._messages')
 @section('content')
+
     <link rel="stylesheet" href="{{ asset('assets/dashboard/assets/css/dashforge.filemgr.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/dashboard/assets/css/bootstrap-multiselect.css') }}">
     <input type="hidden" id="route" class="d-none"
@@ -41,13 +42,15 @@
                                     href="tel:{{ $service_request->client->account->contact->phone_number }}"><i
                                         class="fas fa-phone"></i> </a>
 
-                                <a href="#" data-service="{{ $service_request['uuid'] }}"
-                                    class="notify-client-schedule-date btn btn-sm btn-success btn-icon"
-                                    title="Notify Client to schedule date"><i class="fas fa-bell"></i> </a>
+                                @if (empty($service_request['preferred_time']))
+                                    <a href="#" data-service="{{ $service_request['uuid'] }}"
+                                        class="notify-client-schedule-date btn btn-sm btn-success btn-icon"
+                                        title="Notify Client to schedule date"><i class="fas fa-bell"></i> </a>
+                                @endif
                             </h4>
 
-                            <p class="tx-13 tx-color-03 mg-b-0">Scheduled Time:
-                                {{ !empty($request['service_request']['preferred_time']) ? Carbon\Carbon::parse($request['service_request']['preferred_time'], 'UTC')->isoFormat('MMMM Do YYYY') : 'UNSCHEDULED' }}
+                            <p class="tx-13 tx-color-03 mg-b-0">Scheduled Date:
+                                {{ !empty($service_request['preferred_time']) ? Carbon\Carbon::parse($service_request['preferred_time'], 'UTC')->isoFormat('MMMM Do YYYY') : 'UNSCHEDULED' }}
                             </p>
                             <p class="tx-13 tx-color-03 mg-b-0">Job Ref.: {{ $service_request->unique_id }} </p>
                         </div>
@@ -67,12 +70,13 @@
                         <div class="tab-content">
 
                             {{-- Service Request Actions --}}
-                            <form class="form-data" enctype="multipart/form-data" method="POST" action="{{ route('cse.service.request.action', ['locale' => app()->getLocale(), 'service_request' => $service_request->uuid]) }}">
+                            <form id="service_request_form" class="form-data" enctype="multipart/form-data" method="POST"
+                                action="{{ route('cse.service.request.action', ['locale' => app()->getLocale(), 'service_request' => $service_request->uuid]) }}">
                                 @csrf
                                 <div id="serviceRequestActions" class="tab-pane show active pd-20 pd-xl-25">
-<<<<<<< Updated upstream
+
                                     @include('cse.requests.includes.reoccuring_actions')
-=======
+
                                     <div class="mt-4">
                                         <div class="tx-13 mg-b-25">
                                             <div id="wizard3">
@@ -94,14 +98,18 @@
                                                     @include('cse.requests.includes.reoccuring-actions')
                                                     @include('cse.requests.includes.materials-acceptance')
                                                     @include('cse.requests.includes.project-progresses')
+                                                    @include('cse.requests.includes.invoice-building')
 
+                                                    {{-- End of Stage 3 --}}
+                                                    {{-- @include('cse.requests.includes.reoccuring-actions') --}}
+                                                    {{-- @include('cse.requests.includes.materials-acceptance') --}}
+                                                    {{-- @include('cse.requests.includes.project-progresses') --}
                                                 @endif
 
                                             </div>
                                         </div>
                                     </div><!-- df-example -->
 
->>>>>>> Stashed changes
                                 </div>
 
                                 <button type="submit" class="btn btn-primary d-none" id="update-progress">Update
@@ -129,7 +137,52 @@
     {{-- Modals --}}
     {{-- @include('cse.requests.includes.modals') --}}
     {{-- Modals End --}}
+
     @push('scripts')
+        <script>
+            $('#wizard3').steps({
+                headerTag: 'h3',
+                bodyTag: 'section',
+                autoFocus: true,
+                titleTemplate: '<span class="number">#index#</span> <span class="title">#title#</span>',
+                loadingTemplate: '<span class="spinner"></span> #text#',
+                labels: {
+                    // current: "current step:",
+                    // pagination: "Pagination",
+                    finish: "Update Job Progress",
+                    // next: "Next",
+                    // previous: "Previous",
+                    loading: "Loading ..."
+                },
+                stepsOrientation: 1,
+                // transitionEffect: "fade",
+                // transitionEffectSpeed: 200,
+                showFinishButtonAlways: false,
+                onStepChanging: function(event, currentIndex, newIndex) {
+                    if (currentIndex < newIndex) {
+                        @if ($stage == \App\Models\ServiceRequest::CSE_ACTIVITY_STEP['schedule_categorization'])
+                            // Step 1 Schedule Date
+                            if (currentIndex === 0) {
+                            return ($("#service-date-time").val().length !== 0) ? true : false;
+                            }
+                            // Step 2 Re-categorization
+                            if (currentIndex === 1) {
+                            return ($("#sub_service_uuid").val().length !== 0) ? true : false;
+                            }
+                        @else
+                            return true;
+                        @endif
+                    } else {
+                        // Always allow step back to the previous step even if the current step is not valid.
+                        return true;
+                    }
+                },
+                onFinished: function(event, currentIndex) {
+                    $('#update-progress').trigger('click');
+                },
+            });
+
+        </script>
         @include('cse.requests.includes.scripts')
     @endpush
 

@@ -52,30 +52,28 @@ class FlutterwaveController extends Controller
             // 'myContact_id'    => 'required',
         ]);
         
-        // $Serviced_areas = ServicedAreas::where('town_id', '=', $request['town_id'])->orderBy('id', 'DESC')->first();
-        // if ($Serviced_areas === null) {
-        //     return back()->with('error', 'sorry!, this area you selected is not serviced at the moment, please try another area');
-        // }
+        $Serviced_areas = ServicedAreas::where('town_id', '=', $request['town_id'])->orderBy('id', 'DESC')->first();
+        if ($Serviced_areas === null) {
+            return back()->with('error', 'sorry!, this area you selected is not serviced at the moment, please try another area');
+        }
 
-        // // upload multiple media files
-        // foreach($request->media_file as $key => $file)
-        //     {
-        //         $originalName[$key] = $file->getClientOriginalName();
+        // upload multiple media files
+        foreach($request->media_file as $key => $file)
+            {
+                $originalName[$key] = $file->getClientOriginalName();
     
-        //         $fileName = sha1($file->getClientOriginalName() . time()) . '.'.$file->getClientOriginalExtension();
-        //         $filePath = public_path('assets/service-request-media-files');
-        //         $file->move($filePath, $fileName);
-        //         $data[$key] = $fileName; 
-        //     }
-        //         $data['unique_name']   = json_encode($data);
-        //         $data['original_name'] = json_encode($originalName);
-        //         // return $data;
+                $fileName = sha1($file->getClientOriginalName() . time()) . '.'.$file->getClientOriginalExtension();
+                $filePath = public_path('assets/service-request-media-files');
+                $file->move($filePath, $fileName);
+                $data[$key] = $fileName; 
+            }
+                $data['unique_name']   = json_encode($data);
+                $data['original_name'] = json_encode($originalName);
+                // return $data;
         
-        // // $request->session()->put('order_data', $request);
-        // $request->session()->put('order_data', $request->except(['media_file']));
-        // $request->session()->put('medias', $data);
-
-        $request->session()->put('InvoiceUUID', $request->uuid);
+        // $request->session()->put('order_data', $request);
+        $request->session()->put('order_data', $request->except(['media_file']));
+        $request->session()->put('medias', $data);
 
             // return dd(  );
 
@@ -100,7 +98,7 @@ class FlutterwaveController extends Controller
      */
     public function initiate($paymentId)
     {
-    //    dd($paymentId);
+//        dd($paymentId);
                 $curl = curl_init();
 
                 $payment = Payment::find($paymentId);
@@ -215,22 +213,12 @@ class FlutterwaveController extends Controller
 
                 if($paymentDetails->update()){
                     // NUMBER 2: add more for other payment process
-                    if($paymentDetails['payment_for'] = 'service-request' ){
+                    if($paymentDetails['payment_for'] = 'service-request' ){ 
                         
-                        if($invoice) {
-                            $invoice->update([
-                                'status' => '2',
-                                'phase' => '2'
-                            ]);
-
-                            return redirect()->route('invoice', [app()->getLocale(), $invoiceUUID])->with('success', 'Invoice payment was successful!');
-                        }else{
-                            $client_controller->saveRequest( $request->session()->get('order_data') );
+                        $client_controller->saveRequest( $request->session()->get('order_data') );
                         // $client_controller->saveRequest( $request->session()->get('medias') );
                         
                         return redirect()->route('client.service.all' , app()->getLocale() )->with('success', 'payment was successful');
-                        }
-                        
                     }                    
                 }                
             }else {

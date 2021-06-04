@@ -11,6 +11,7 @@ class ServiceRequestAssigned extends Model
 
     const JOB_ACCEPTED = ['Yes', 'No'];
     const STATUS = ['Active', 'Inactive'];
+    const ASSISTIVE_ROLE = ['Technician', 'Consultant', 'CSE'];
 
     /**
      * The attributes that aren't mass assignable.
@@ -48,7 +49,7 @@ class ServiceRequestAssigned extends Model
      *
      * @return \App\Models\ServiceRequestAssigned|Null
      */
-    public static function assignUserOnServiceRequest(int $user_id, int $service_request_id, string $job_accepted = null, string $job_acceptance_time = null, string $status = null, string $job_diagnostic_date = null, string $job_declined_time = null, string $job_completed_date = null)
+    public static function assignUserOnServiceRequest(int $user_id, int $service_request_id, string $job_accepted = null, string $job_acceptance_time = null, string $status = null, string $job_diagnostic_date = null, string $job_declined_time = null, string $job_completed_date = null, $assitive_role = null)
     {
         return ServiceRequestAssigned::create([
             'user_id'                   => $user_id,
@@ -58,6 +59,7 @@ class ServiceRequestAssigned extends Model
             'job_diagnostic_date'       => $job_diagnostic_date,
             'job_declined_time'         => $job_declined_time,
             'job_completed_date'        => $job_completed_date,
+            'assistive_role'            => $assitive_role ?? ServiceRequestAssigned::ASSISTIVE_ROLE[0],
             'status'                    => $status
         ]);
     }

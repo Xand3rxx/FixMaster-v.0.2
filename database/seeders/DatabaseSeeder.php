@@ -53,6 +53,7 @@ class DatabaseSeeder extends Seeder
             ServiceRequestSettingSeeder::class,
             MediaSeeder::class,
             ServicedAreasSeeder::class,
+            CollaboratorsPaymentSeeder::class,
         ]);
     }
 }

@@ -15,7 +15,7 @@ class Rfq extends Model
     const STATUSES = ['Pending', 'Awaiting', 'Shipped', 'Delivered', 'Rejected'];
 
     protected $fillable = [
-        'uuid', 'unique_id', 'issued_by', 'client_id', 'invoice_id', 'service_request_id', 'type', 'status', 'accepted', 'total_amount', 'created_at', 'updated_at'
+        'uuid', 'unique_id', 'issued_by', 'invoice_id', 'service_request_id', 'type', 'status', 'accepted', 'total_amount', 'created_at', 'updated_at'
     ];
 
     /**

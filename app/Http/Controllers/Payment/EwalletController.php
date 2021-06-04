@@ -8,6 +8,7 @@ use App\Models\Payment;
 use App\Models\WalletTransaction; 
 use App\Models\Client; 
 use App\Models\ServicedAreas; 
+use App\Models\Contact; 
 
 use App\Traits\RegisterPaymentTransaction;
 use App\Models\ServiceRequestPayment;
@@ -24,6 +25,8 @@ class EwalletController extends Controller
 
     public function store(Request $request)
     {
+        $contact_details = Contact::where('id', $request->myContact_id)->first();
+
         $valid = $this->validate($request, [
             // List of things needed from the request like 
             'booking_fee'      => 'required',
@@ -32,7 +35,8 @@ class EwalletController extends Controller
             // 'myContact_id'    => 'required',
         ]);
         
-        $Serviced_areas = ServicedAreas::where('town_id', '=', $request['town_id'])->orderBy('id', 'DESC')->first();
+        // check if the town 
+        $Serviced_areas = ServicedAreas::where('town_id', '=', $contact_details->town_id)->orderBy('id', 'DESC')->first();
         if ($Serviced_areas === null) {
             return back()->with('error', 'sorry!, this area you selected is not serviced at the moment, please try another area');
         }
@@ -49,6 +53,9 @@ class EwalletController extends Controller
             }
                 $data['unique_name']   = json_encode($data);
                 $data['original_name'] = json_encode($originalName);
+
+                $request->session()->put('order_data', $request->except(['media_file']));
+                $request->session()->put('medias', $data);
                 
 
         $client_controller = new ClientController;
@@ -56,7 +63,8 @@ class EwalletController extends Controller
             
         if($request->balance > $request->booking_fee){
             // $SavedRequest = $this->saveRequest($request);
-            $SavedRequest = $client_controller->saveRequest( $request);
+            // $SavedRequest = $client_controller->saveRequest( $request);
+            $client_controller->saveRequest( $request->session()->get('order_data'), $request->session()->get('medias') );
             
             // dd($service_request); 
             if ($SavedRequest) {

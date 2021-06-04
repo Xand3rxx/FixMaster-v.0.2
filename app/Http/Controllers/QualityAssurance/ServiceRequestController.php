@@ -9,7 +9,6 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use App\Models\ServiceRequestAssigned;
 use App\Models\ServiceRequestWarranty;
-//use App\Http\Controllers\Messaging\MessageController;
 
 class ServiceRequestController extends Controller
 {

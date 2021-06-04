@@ -85,7 +85,7 @@
         <button type="button" class="btn btn-primary" id="btn-update">Update message</button>
                          </div>
             </fieldset>
-
+              
 
         </div>
     </div>
@@ -100,12 +100,11 @@
 <script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.js" defer></script>
 <script>
     var url = window.location.origin;
-    console.log(url);
     var editor_disabled = false;
     var checked_value = 'Email';
     $(document).ready(function (){
         $('#email_editor').summernote({height: 150});
-
+       
         let params = (new URL(document.location)).searchParams;
          if(params.get("templateid")){
              const id = params.get("templateid");
@@ -171,12 +170,11 @@
         $('#email_editor').summernote('destroy');
         });
 
+
         $.get( url+"/api/template/features", function( data ) {
-            console.log(data);
             $.each(data, function(key, val){
                 $('<option>').val(val).text(val).appendTo('#feature');
             })
-
         });
 
         $(document).on('click', '.msgedit', function(e){
@@ -229,7 +227,7 @@
             var content = $('#email_editor').val();
             var sms = $('#sms_editor').val();
             var feature = $('#feature').val();
-
+            
             var jqxhr = $.post(url+"/api/template/"+endpoint,
                 {
                     title: title,
@@ -249,7 +247,6 @@
     function getTemplate(uuid){
         $.get( url+"/api/template/"+uuid, function( data ) {
             data = data.data
-            console.log(data);
             var selected = data.feature;
             $("#feature").filter(function() {
             return $(this).text() == selected;
