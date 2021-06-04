@@ -16,7 +16,6 @@ class CreateCollaboratorsPaymentsTable extends Migration
         Schema::create('collaborators_payments', function (Blueprint $table) {
             $table->id();
             $table->foreignId('service_request_id');
-            $table->foreignId('payment_id');
             $table->foreignId('user_id');
             $table->enum('service_type', ['Regular', 'Warranty']);
             $table->integer('flat_rate')->nullable();

@@ -19,7 +19,6 @@ class CollaboratorsPaymentSeeder extends Seeder
 
         $collab_payment1 = new CollaboratorsPayment();
         $collab_payment1->service_request_id = 1;
-        $collab_payment1->payment_id = 1;
         $collab_payment1->user_id = 2;
         $collab_payment1->service_type = 'Regular';
         $collab_payment1->flat_rate = 1000;
