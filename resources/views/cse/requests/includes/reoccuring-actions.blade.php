@@ -63,25 +63,50 @@
             @foreach ($technicians as $technicain)
                 <li class="list-group-item d-flex align-items-center">
                     <div class="form-row">
+                        
+
+
                         <div class="col-md-1 col-sm-1">
-                            <img src="{{ asset('assets/images/default-male-avatar.png') }}"
-                            class="wd-30 rounded-circle mg-r-15" alt="Technician Avatar">
+                            @php
+                                if($technicain['user']['account']['gender'] == 'male' || $technicain['user']['account']['gender'] == 'others'){
+                                    $genderAvatar = 'default-male-avatar.png';
+                                }else{
+                                    $genderAvatar = 'default-female-avatar.png';
+                                }
+                            @endphp
+
+                            @if(empty($technicain['user']['account']['avatar']))
+                                <img src="{{ asset('assets/images/'.$genderAvatar) }}" class="wd-30 rounded-circle mg-r-15" alt="Default avatar">
+                            @elseif(!file_exists(public_path('assets/user-avatars/'.$technicain['user']['account']['avatar'])))
+                                <img src="{{ asset('assets/images/'.$genderAvatar) }}" class="wd-30 rounded-circle mg-r-15" alt="Profile avatar">
+                            @else
+                                <img src="{{ asset('assets/user-avatars/'.$technicain['user']['account']['avatar']) }}" class="wd-30 rounded-circle mg-r-15" alt="Profile avatar">
+                            @endif
                         </div>
-                        <div class="col-md-5 col-sm-5">
+                        <div class="col-md-5 col-sm-5 ml-4">
                             <h6 class="tx-13 tx-inverse tx-semibold mg-b-0">
                                 {{ $technicain['user']['account']['first_name'] . ' ' . $technicain['user']['account']['last_name'] }}
                             </h6>
 
                             <span class="d-block tx-11 text-muted">
-                                <i class="icon ion-md-star lh-0 tx-orange"></i>
+                                @for ($i = 0; $i < round($technicain['user']['ratings']->avg('star')); $i++)
+                                    <i class="icon ion-md-star lh-0 tx-orange"></i>
+                                @endfor
+                                @for ($x = 0; $x < (5 - round($technicain['user']['ratings']->avg('star'))); $x++)
+                                    <i class="icon ion-md-star lh-0 tx-gray-300"></i>
+                                @endfor
+                                |
                                 <span class="font-weight-bold ml-2">
-                                    {{ \App\Traits\CalculateDistance::getDistanceBetweenPoints($service_request['client']['contact']['address_latitude'], $service_request['client']['contact']['address_longitude'], $technicain['user']['contact']['address_latitude'], $technicain['user']['contact']['address_longitude']) }} km |                                 </span>
-                                    <div class="mt-1">
+                                    {{ \App\Traits\CalculateDistance::getDistanceBetweenPoints($service_request['client']['contact']['address_latitude'], $service_request['client']['contact']['address_longitude'], $technicain['user']['contact']['address_latitude'], $technicain['user']['contact']['address_longitude']) }} km 
+                                </span><br>
+                                <span class="font-weight-bold ml-2">Assigned Services:</span>
+                                <div class="mt-1">
+                                    <ul>
                                         @foreach ( $technicain['services'] as $service)
-                                        <span class="font-weight-bold ml-2"> {{Str::title($service['service']['name'])}} {{$loop->last ? '' : ' - '}} </span>
+                                            <li> {{Str::title($service['service']['name'])}}  </li>
                                         @endforeach
-                                    </div>
-                                    
+                                    </ul>
+                                </div>
                             </span>
                         </div>
                         <div class="col-md-5 col-sm-5">
@@ -92,8 +117,8 @@
                                     </a>
                                 </div>
                                 <div class="form-group col-1 col-md-1 col-sm-1">
-                                    <div class="custom-control custom-radio mt-2">
-                                        <div class="custom-control custom-radio">
+                                    <div class="custom-control custom-checkbox mt-2">
+                                        <div class="custom-control custom-checkbox">
                                             <input type="checkbox" class="custom-control-input"
                                                 id="technician{{ $loop->iteration }}" name="add_technician_user_uuid[]"
                                                 value="{{ $technicain['user']['uuid'] }}">
