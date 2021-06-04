@@ -43,4 +43,9 @@ class RfqSupplierInvoice extends Model
         return $this->hasMany(RfqSupplierInvoiceBatch::class);
     }
 
+    public function supplierDispatch()
+    {
+        return $this->hasOne(RfqSupplierDispatch::class, 'rfq_supplier_invoice');
+    }
+
 }

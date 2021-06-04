@@ -34,6 +34,7 @@ class RfqSupplier extends Model
 
     public function supplier()
     {
-        return $this->belongsTo(User::class, 'supplier_id')->with('account');
+        return $this->belongsTo(User::class, 'supplier_id')->with('account', 'supplier');
     }
+    
 }
