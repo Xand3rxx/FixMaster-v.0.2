@@ -27,4 +27,9 @@ class RfqBatch extends Model
     {
         return $this->hasMany(Rfq::class, 'id', 'rfq_id');
     }
+    
+    public function supplierInvoiceBatches()
+    {
+        return $this->hasMany(RfqSupplierInvoiceBatch::class);
+    }
 }

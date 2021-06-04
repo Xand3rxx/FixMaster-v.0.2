@@ -23,8 +23,8 @@ class CreateSubServicesTable extends Migration
             $table->foreignId('user_id');
             $table->foreignId('service_id');
             $table->string('name')->unique();
-            $table->unsignedInteger('first_hour_charge');
-            $table->unsignedInteger('subsequent_hour_charge');
+            $table->unsignedInteger('labour_cost');
+            $table->enum('cost_type', ['Fixed', 'Variable']);
             $table->softDeletes();
             $table->timestamps();
         });

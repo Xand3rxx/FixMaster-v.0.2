@@ -15,6 +15,7 @@ class CreateServicedAreasTable extends Migration
     {
         Schema::create('serviced_areas', function (Blueprint $table) {
             $table->id();
+            $table->uuid('uuid')->unique();
             $table->integer('state_id');
             $table->integer('lga_id');
             $table->integer('town_id');
