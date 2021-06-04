@@ -28,21 +28,21 @@
                     <div class="form-row">
                         <div class="form-group col-md-4">
                             <label for="first_name">First Name</label>
-                            <input required type="text" class="form-control @error('first_name') is-invalid @enderror" id="first_name" name="first_name" value="{{ old('first_name') }}" placeholder="First Name" autocomplete="off">
+                            <input required type="text" class="form-control @error('first_name') is-invalid @enderror" id="first_name" name="first_name" value="{{ $applicant['form_data']['first_name'] ?? old('first_name') }}" placeholder="First Name" autocomplete="off">
                             @error('first_name')
                             <x-alert :message="$message" />
                             @enderror
                         </div>
                         <div class="form-group col-md-4">
                             <label for="middle_name">Middle Name</label>
-                            <input type="text" class="form-control" id="middle_name" name="middle_name" value="{{ old('middle_name') }}" autocomplete="off" placeholder="Middle Name">
+                            <input type="text" class="form-control" id="middle_name" name="middle_name" value="{{ $applicant['form_data']['middle_name'] ?? old('middle_name') }}" autocomplete="off" placeholder="Middle Name">
                             @error('middle_name')
                             <x-alert :message="$message" />
                             @enderror
                         </div>
                         <div class="form-group col-md-4">
                             <label for="last_name">Last Name</label>
-                            <input type="text" class="form-control @error('last_name') is-invalid @enderror" id="last_name" name="last_name" value="{{ old('last_name') }}" autocomplete="off" placeholder="Last Name">
+                            <input type="text" class="form-control @error('last_name') is-invalid @enderror" id="last_name" name="last_name" value="{{ $applicant['form_data']['last_name'] ?? old('last_name') }}" autocomplete="off" placeholder="Last Name">
                             @error('last_name')
                             <x-alert :message="$message" />
                             @enderror
@@ -52,21 +52,21 @@
                     <div class="form-row">
                         <div class="form-group col-md-4">
                             <label for="email">Email</label>
-                            <input type="email" class="form-control @error('email') is-invalid @enderror" placeholder="E-Mail" name="email" id="email" value="{{ old('email') }}" required autocomplete="off">
+                            <input type="email" class="form-control @error('email') is-invalid @enderror" placeholder="E-Mail" name="email" id="email" value="{{ $applicant['form_data']['email'] ?? old('email') }}" required autocomplete="off">
                             @error('email')
                             <x-alert :message="$message" />
                             @enderror
                         </div>
                         <div class="form-group col-md-4">
                             <label for="phone_number">Phone Number</label>
-                            <input type="tel" class="form-control @error('phone_number') is-invalid @enderror" placeholder="Phone Number" name="phone_number" id="phone_number" value="{{ old('phone_number') }}" maxlength="11" required autocomplete="off">
+                            <input type="tel" class="form-control @error('phone_number') is-invalid @enderror" placeholder="Phone Number" name="phone_number" id="phone_number" value="{{ $applicant['form_data']['phone'] ?? old('phone_number') }}" maxlength="11" required autocomplete="off">
                             @error('phone_number')
                             <x-alert :message="$message" />
                             @enderror
                         </div>
                         <div class="form-group col-md-4">
                             <label for="cac_number">CAC Number</label>
-                            <input type="text" class="form-control @error('cac_number') is-invalid @enderror" placeholder="CAC Number" name="cac_number" id="cac_number" value="{{ old('cac_number') }}" required autocomplete="off">
+                            <input type="text" class="form-control @error('cac_number') is-invalid @enderror" placeholder="CAC Number" name="cac_number" id="cac_number" value="{{ $applicant['form_data']['cac_number'] ?? old('cac_number') }}" required autocomplete="off">
                             @error('cac_number')
                             <x-alert :message="$message" />
                             @enderror
@@ -78,14 +78,14 @@
 
                         <div class="form-group col-md-4">
                             <label for="established_on">Established On</label>
-                            <input type="date" class="form-control @error('established_on') is-invalid @enderror" placeholder="Established On" name="established_on" id="established_on" value="{{ old('established_on') }}" required autocomplete="off">
+                            <input type="date" class="form-control @error('established_on') is-invalid @enderror" placeholder="Established On" name="established_on" id="established_on" value="{{ $applicant['form_data']['establishment_date'] ?? old('established_on') }}" required autocomplete="off">
                             @error('established_on')
                             <x-alert :message="$message" />
                             @enderror
                         </div>
                         <div class="form-group col-md-4">
                             <label for="supplier_name">Business Name</label>
-                            <input type="text" class="form-control @error('supplier_name') is-invalid @enderror" placeholder="Supplier Name" name="supplier_name" id="supplier_name" value="{{ old('supplier_name') }}" required autocomplete="off">
+                            <input type="text" class="form-control @error('supplier_name') is-invalid @enderror" placeholder="Supplier Name" name="supplier_name" id="supplier_name" value="{{ $applicant['form_data']['company_name'] ?? old('supplier_name') }}" required autocomplete="off">
 
                             @error('supplier_name')
                             <x-alert :message="$message" />
@@ -97,7 +97,7 @@
                                 @foreach ($services as $service)
                                 <optgroup label="{{ $service->name }}">
                                     @foreach($service->services as $item)
-                                    <option value="{{ $item->id }}">{{ $item->name }}</option>
+                                    <option @if (!empty($applicant['form_data']['supplier_category'][ $item->id])) {{'selected' }} @endif value="{{ $item->id }}">{{ $item->name }}</option>
                                     @endforeach
                                 </optgroup>
                                 @endforeach
@@ -218,7 +218,7 @@
                     <div class="form-row">
                         <div class="form-group col-md-12">
                             <label for="inputAddress2">Full Address</label>
-                            <textarea required id="user_address" class="user_address form-control @error('full_address') is-invalid @enderror" rows="3" name="full_address" id="full_address" placeholder="e.g. 284B, Ajose Adeogun Street, Victoria Island, Lagos, Nigeria.">{{ old('full_address') }}</textarea>
+                            <textarea required id="user_address" class="user_address form-control @error('full_address') is-invalid @enderror" rows="3" name="full_address" id="full_address" placeholder="e.g. 284B, Ajose Adeogun Street, Victoria Island, Lagos, Nigeria.">{{ $applicant['form_data']['office_address'] ?? old('full_address') }}</textarea>
                             @error('full_address')
                             <x-alert :message="$message" />
                             @enderror

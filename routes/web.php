@@ -109,7 +109,7 @@ Route::prefix('admin')->name('admin.')->group(function () {
         Route::resource('cse', ProspectiveCSEController::class);
         Route::resource('supplier', ProspectiveSupplierController::class);
         Route::resource('technician-artisan', ProspectiveTechnicianArtisanController::class);
-
+        Route::post('supplier-decision', [ProspectiveSupplierController::class, 'decision'])->name('supplier.decision');
         Route::post('cse-decision', [ProspectiveCSEController::class, 'decision'])->name('cse.decision');
     });
 
