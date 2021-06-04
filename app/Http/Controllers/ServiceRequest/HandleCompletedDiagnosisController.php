@@ -195,6 +195,6 @@ class HandleCompletedDiagnosisController extends Controller
     protected function sendNewEmail($type, $subject, $from, $to, $mail_data, $feature)
     {
         $sendMail = new MessageController();
-        return $sendMail->sendNewMessage($type, $subject, $from, $to, $mail_data, $feature);
+        return $sendMail->sendNewMessage($subject, $from, $to, $mail_data, $feature);
     }
 }
