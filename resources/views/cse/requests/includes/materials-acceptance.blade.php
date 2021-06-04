@@ -1,20 +1,15 @@
 <h3>Material Acceptance</h3>
 <section>
-    <small class="text-danger">This portion will display only if the CSE initially executed a RFQ, the Client paid for the components and the Supplier has made the delivery.</small>
+    {{-- <small class="text-danger">This portion will display only if the CSE initially executed a RFQ, the Client paid for the components and the Supplier has made the delivery.</small> --}}
 
     
     <div class="table-responsive mt-4">
-        <h3>Supplier Details</h3>
+        <h5>Supplier Details</h5>
         <table class="table table-striped table-sm mg-b-0">
             <tbody>
-
                 <tr>
                     <td class="tx-medium">Supplier Name</td>
                     <td class="tx-color-03">{{ !empty($materials_accepted['rfqSupplier']['supplier']['account']['first_name']) ? Str::title($materials_accepted['rfqSupplier']['supplier']['account']['first_name'] ." ". $materials_accepted['rfqSupplier']['supplier']['account']['last_name']) : 'UNAVAILABLE' }} <small class="text-muted">(Business Name: {{ $materials_accepted['rfqSupplier']['supplier']['supplier']['business_name'] }})</small></td>
-                </tr>
-                <tr>
-                    <td class="tx-medium">Dispatch Status</td>
-                    <td class="text-info">In-Transit</td>
                 </tr>
                 <tr>
                     <td class="tx-medium">Delivery Status</td>
@@ -36,7 +31,44 @@
                 </tr>
                 <tr>
                     <td class="tx-medium">Grand Total</td>
-                    <td class="tx-color-03">₦{{ number_format($materials_accepted['total_amount'] + (!empty($materials_accepted['rfqSupplier']['devlivery_fee']) ? $materials_accepted['rfqSupplier']['devlivery_fee'] : 0)) ?? 0 }}</td>
+                    <td class="tx-color-03">₦{{ number_format($materials_accepted['total_amount'] ? $materials_accepted['total_amount'] : 0) }}</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <h5 class="mt-4">Dispatch Details</h5>
+        <table class="table table-striped table-sm mg-b-0">
+            <tbody>
+
+                <tr>
+                    <td class="tx-medium">Courier Name</td>
+                    <td class="tx-color-03">{{ !empty($materials_accepted['rfqSupplierInvoice']['supplierDispatch']['courier_name']) ? Str::title($materials_accepted['rfqSupplierInvoice']['supplierDispatch']['courier_name']) : 'UNAVAILABLE' }}</td>
+                </tr>
+                <tr>
+                    <td class="tx-medium">Courier Phone Number</td>
+                    <td class="tx-color-03">{{ !empty($materials_accepted['rfqSupplierInvoice']['supplierDispatch']['courier_phone_number']) ? $materials_accepted['rfqSupplierInvoice']['supplierDispatch']['courier_phone_number'] : 'UNAVAILABLE' }}</td>
+                </tr>
+                <tr>
+                    <td class="tx-medium">Dispatch Status</td>
+                    @if($materials_accepted['rfqSupplierInvoice']['supplierDispatch']['supplier_status'] == 'Processing')
+                        <td class="text-warning">{{ $materials_accepted['rfqSupplierInvoice']['supplierDispatch']['supplier_status'] }}</td>
+                    @elseif($materials_accepted['rfqSupplierInvoice']['supplierDispatch']['supplier_status'] == 'In-Transit')
+                        <td class="text-info">{{ $materials_accepted['rfqSupplierInvoice']['supplierDispatch']['supplier_status'] }}</td>
+                    @elseif($materials_accepted['rfqSupplierInvoice']['supplierDispatch']['supplier_status'] == 'Delivered')
+                        <td class="text-success">{{ $materials_accepted['rfqSupplierInvoice']['supplierDispatch']['supplier_status'] }}</td>
+                    @endif
+                </tr>
+                <tr>
+                    <td class="tx-medium">Delivery Medium</td>
+                    <td class="tx-color-03">{{ $materials_accepted['rfqSupplierInvoice']['supplierDispatch']['delivery_medium'] }}</td>
+                </tr>
+                <tr>
+                    <td class="tx-medium">Supplier Comment</td>
+                    <td class="tx-color-03">{{ $materials_accepted['rfqSupplierInvoice']['supplierDispatch']['comment'] }}</td>
+                </tr>
+                <tr>
+                    <td class="tx-medium">CSE Acceptance Comment</td>
+                    <td class="tx-color-03">{{ $materials_accepted['rfqSupplierInvoice']['supplierDispatch']['cse_comment'] }}</td>
                 </tr>
 
             </tbody>
@@ -139,7 +171,7 @@
     @endif
 
 </section>
-
+@include('cse.requests.includes.modals')
 @push('scripts')
 <script>
 $(document).ready(function() {
