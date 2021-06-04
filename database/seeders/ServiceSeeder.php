@@ -307,74 +307,105 @@ class ServiceSeeder extends Seeder
         $subService->user_id = '1';
         $subService->service_id = '1';
         $subService->name = 'Monitor & Screens';
-        $subService->first_hour_charge = 500;
-        $subService->subsequent_hour_charge = 750;
+        $subService->labour_cost = 500;
+        $subService->cost_type = 'Fixed';
         $subService->save();
 
         $subService = new SubService();
         $subService->user_id = '1';
         $subService->service_id = '1';
         $subService->name = 'Motherboard';
-        $subService->first_hour_charge = 500;
-        $subService->subsequent_hour_charge = 750;
+        $subService->labour_cost = 500;
+        $subService->cost_type = 'Fixed';
         $subService->save();
 
         $subService = new SubService();
         $subService->user_id = '1';
         $subService->service_id = '1';
         $subService->name = 'Keyboard & Other Peripherals';
-        $subService->first_hour_charge = 500;
-        $subService->subsequent_hour_charge = 750;
+        $subService->labour_cost = 500;
+        $subService->cost_type = 'Fixed';
         $subService->save();
 
         $subService = new SubService();
         $subService->user_id = '1';
         $subService->service_id = '2';
         $subService->name = 'Speaker';
-        $subService->first_hour_charge = 500;
-        $subService->subsequent_hour_charge = 750;
+        $subService->labour_cost = 500;
+        $subService->cost_type = 'Fixed';
         $subService->save();
 
         $subService = new SubService();
         $subService->user_id = '1';
         $subService->service_id = '2';
         $subService->name = 'Disk Changer';
-        $subService->first_hour_charge = 500;
-        $subService->subsequent_hour_charge = 750;
+        $subService->labour_cost = 500;
+        $subService->cost_type = 'Fixed';
         $subService->save();
 
         $subService = new SubService();
         $subService->user_id = '1';
         $subService->service_id = '2';
         $subService->name = 'Input/Ouput Connector';
-        $subService->first_hour_charge = 500;
-        $subService->subsequent_hour_charge = 750;
+        $subService->labour_cost = 500;
+        $subService->cost_type = 'Fixed';
         $subService->save();
 
         $subService = new SubService();
         $subService->user_id = '1';
         $subService->service_id = '3';
         $subService->name = 'LED Tube';
-        $subService->first_hour_charge = 500;
-        $subService->subsequent_hour_charge = 750;
+        $subService->labour_cost = 500;
+        $subService->cost_type = 'Fixed';
         $subService->save();
 
         $subService = new SubService();
         $subService->user_id = '1';
         $subService->service_id = '10';
         $subService->name = 'Gas Change';
-        $subService->first_hour_charge = 500;
-        $subService->subsequent_hour_charge = 750;
+        $subService->labour_cost = 500;
+        $subService->cost_type = 'Fixed';
         $subService->save();
 
         $subService = new SubService();
         $subService->user_id = '1';
         $subService->service_id = '10';
         $subService->name = 'General Maintenance';
-        $subService->first_hour_charge = 500;
-        $subService->subsequent_hour_charge = 750;
+        $subService->labour_cost = 500;
+        $subService->cost_type = 'Fixed';
         $subService->save();
 
+        $subService = new SubService();
+        $subService->user_id = '1';
+        $subService->service_id = '25';
+        $subService->name = 'Heating Element';
+        $subService->labour_cost = 500;
+        $subService->cost_type = 'Fixed';
+        $subService->save();
+
+        $subService = new SubService();
+        $subService->user_id = '1';
+        $subService->service_id = '25';
+        $subService->name = 'Door Latch';
+        $subService->labour_cost = 500;
+        $subService->cost_type = 'Fixed';
+        $subService->save();
+
+        $subService = new SubService();
+        $subService->user_id = '1';
+        $subService->service_id = '25';
+        $subService->name = 'Third-Level Rack';
+        $subService->labour_cost = 500;
+        $subService->cost_type = 'Fixed';
+        $subService->save();
+
+        $subService = new SubService();
+        $subService->user_id = '1';
+        $subService->service_id = '25';
+        $subService->name = 'Tap';
+        $subService->labour_cost = 500;
+        $subService->cost_type = 'Fixed';
+        $subService->save();
 
     }
 }

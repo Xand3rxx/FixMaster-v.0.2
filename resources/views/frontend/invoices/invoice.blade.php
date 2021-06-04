@@ -255,15 +255,22 @@
                                         </tr>
                                         </thead>
                                         <tbody>
-                                        @foreach($sub_service as $sub_serv)
+                                        @foreach($subService as $item)
                                             <tr>
                                                 <td class="text-left">{{$loop->iteration }}</td>
-                                                <td class="text-left">{{$sub_serv}}</td>
-                                                <td class="text-left">₦ 2000</td>
-                                                <td class="text-left">₦ 2000</td>
-                                                <td class="text-left"></td>
+                                                <td class="text-left">{{$item['name']}}</td>
+                                                <td class="text-left">2</td>
+                                                <td class="text-left">₦ {{number_format(1350)}}</td>
+                                                <td class="text-left">₦ {{number_format(1350)}}</td>  
                                             </tr>
                                         @endforeach
+                                        <tr>
+                                            <td class="text-left">-</td>
+                                            <td class="text-left">-</td>
+                                            <td class="text-left">-</td>
+                                            <td class="text-left">-</td>
+                                            <td class="text-left">₦ {{number_format(2700)}}</td>
+                                        </tr>
                                         </tbody>
                                     </table>
                                 </div>
@@ -282,8 +289,8 @@
                                     <tr>
                                         <td class="text-left">1</td>
                                         <td class="text-left">Service Charge</td>
-                                        <td class="text-left">₦ {{ number_format($invoice['serviceRequest']['service']['service_charge']) }}</td>
-                                        <td class="text-left">₦ {{ number_format($invoice['serviceRequest']['service']['service_charge']) }}</td>
+                                        <td class="text-left">₦ {{ number_format(($invoice['serviceRequest']['service']['service_charge'] + 2000 * $labourMarkup) + $invoice['serviceRequest']['service']['service_charge'] + 2000) }}</td>
+                                        <td class="text-left">₦ {{ number_format(($invoice['serviceRequest']['service']['service_charge'] + 2000 * $labourMarkup) + $invoice['serviceRequest']['service']['service_charge'] + 2000) }}</td>
                                     </tr>
                                     </tbody>
                                 </table>
@@ -296,20 +303,21 @@
 
     @if($invoice['invoice_type'] == 'Final Invoice')
 
-    <li class='test-muted d-flex justify-content-between'>Subtotal :<span>₦ {{number_format(4000, 2)}} </span></li>
+    <li class='test-muted d-flex justify-content-between'>Subtotal :<span>₦ {{number_format(6000, 2)}} </span></li>
     <li class='test-muted d-flex justify-content-between'>Logistics :<span>₦  {{number_format($logistics, 2)}} </span></li>
-    <li class='text-muted d-flex justify-content-between'>FixMaster Royalty :<span>₦ {{number_format($fixmasterRoyalty, 2)}}</span></li>
+    <li class='text-muted d-flex justify-content-between'>FixMaster Royalty :<span>₦ {{number_format($fixmasterRoyalty*6000, 2)}}</span></li>
     <li class='text-muted d-flex justify-content-between mt-2'>Discounts : </li>
     <li class='d-flex justify-content-between text-danger mb-2'>First Booking Discount :<span> - ₦ 1,500.00</span></li>
-    <li class='text-muted d-flex justify-content-between'>Total Job Quotation :<span> ₦ {{number_format(($invoice['rfqs']['total_amount']+4000) + $logistics + $fixmasterRoyalty - 1500, 2)}}</span></li>
+    <li class='text-muted d-flex justify-content-between'>Total Job Quotation :<span> ₦ {{number_format(6000 + $logistics + $fixmasterRoyalty*6000 - 1500, 2)}}</span></li>
     <li class='d-flex justify-content-between text-danger'>Less Booking Fee :<span> - ₦ 1,500.00</span></li>
-    <li class='d-flex justify-content-between mt-2'>Total Amount Due :<span>₦ {{number_format(($invoice['rfqs']['total_amount']+4000) + $logistics + $fixmasterRoyalty - 1500 - 1500, 2)}} </span></li>
+    <li class='d-flex justify-content-between mt-2'>Total Amount Due :<span>₦ {{number_format(6000 + $logistics + $fixmasterRoyalty*6000 - 1500 - 1500, 2)}} </span></li>
     @else
-    <li class='test-muted d-flex justify-content-between'>Subtotal :<span>₦  {{number_format($subTotal, 2)}} </span></li>
-    <li class='text-muted d-flex justify-content-between'>FixMaster Royalty :<span>₦ {{number_format($fixmasterRoyalty, 2)}} </span></li>
-    <li class='text-muted d-flex justify-content-between'>Taxes :<span> ₦ {{number_format($tax, 2)}} </span></li>
+    <li class='test-muted d-flex justify-content-between'>Subtotal :<span>₦  {{ number_format(($invoice['serviceRequest']['service']['service_charge'] + 2000 * $labourMarkup) + $invoice['serviceRequest']['service']['service_charge'] + 2000, 2) }} </span></li>
+    <li class='text-muted d-flex justify-content-between'>FixMaster Royalty :<span>₦ 
+        {{number_format($fixmasterRoyalty*(($invoice['serviceRequest']['service']['service_charge'] + 2000 * $labourMarkup) + $invoice['serviceRequest']['service']['service_charge'] + 2000), 2)}} 
+    </span></li>
     <li class='d-flex justify-content-between text-danger'>Less Booking Fee :<span> - ₦ 1,500.00</span></li>
-    <li class='d-flex justify-content-between'>Total Amount Due :<span>₦ {{number_format($subTotal + $logistics + $fixmasterRoyalty + $tax - 1500, 2)}}</span></li>
+    <li class='d-flex justify-content-between'>Total Amount Due :<span>₦ {{number_format((($invoice['serviceRequest']['service']['service_charge'] + 2000 * $labourMarkup) + $invoice['serviceRequest']['service']['service_charge'] + 2000) + ($fixmasterRoyalty*(($invoice['serviceRequest']['service']['service_charge'] + 2000 * $labourMarkup) + $invoice['serviceRequest']['service']['service_charge'] + 2000)) - 1500, 2)}}</span></li>
     @endif
 
 
@@ -337,7 +345,7 @@
                             <form method="POST" action="{{ route('client.invoice.payment', app()->getLocale()) }}">
                                 @csrf
                                 {{-- REQUIREMENTS FOR PAYMENT GATWAYS  --}}
-                                <input type="hidden" class="d-none" value={{ $total_cost }} name="booking_fee">
+                                <input type="hidden" class="d-none" value={{ 3000 + $fixmasterRoyalty*3000 - 1500 }} name="booking_fee">
 
                                 <input type="hidden" class="d-none" value="paystack" id="payment_channel" name="payment_channel">
 
@@ -352,7 +360,7 @@
                                 <form method="POST" action="{{ route('flutterwave-submit', app()->getLocale()) }}">
                                     @csrf
                                     {{-- REQUIREMENTS FOR PAYMENT GATWAYS  --}}
-                                    <input type="hidden" class="d-none" value="{{ $total_cost }}" name="booking_fee">
+                                    <input type="hidden" class="d-none" value="{{ 3000 + $fixmasterRoyalty*3000 - 1500 }}" name="booking_fee">
 
                                     <input type="hidden" class="d-none" value="flutterwave" id="payment_channel" name="payment_channel">
 

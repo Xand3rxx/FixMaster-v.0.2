@@ -33,7 +33,7 @@ class RequestController extends Controller
      * Display a listing of the resource.
      *
      * @param  \Illuminate\Http\Request  $request
-     *
+     * 
      * @return \Illuminate\Http\Response
      */
     public function search(Request $request)
@@ -85,7 +85,7 @@ class RequestController extends Controller
     }
 
     /**
-     * Send Notification
+     * Send Notification 
      *
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
@@ -93,9 +93,7 @@ class RequestController extends Controller
     public function sendNotification(Request $request)
     {
         return $request->all();
-        $valid = $request->validate(['service_request' => 'required|uuid']);
-        $serviceRequest = ServiceRequest::where('uuid', $valid['service_requests'])->with('client', 'client.user')->firstOrFail();
-        $user = $serviceRequest['client']['user'];
+        $request->validate(['service_request' => 'required|uuid']);
         // Define a Feature
         $template_feature = 'CSE_ACCOUNT_CREATION_NOTIFICATION';
         // Build possible Parameters

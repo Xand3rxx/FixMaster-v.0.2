@@ -84,7 +84,7 @@ class ServiceRequest extends Model
      */
     public function users()
     {
-        return $this->belongsToMany(User::class, 'service_request_assigned');
+        return $this->belongsToMany(User::class, 'service_request_assigned')->with('account', 'roles');
     }
 
     /**

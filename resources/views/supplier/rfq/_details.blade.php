@@ -63,7 +63,7 @@
                   <tbody>
                       @foreach ($rfqDetails->rfqBatches as $item)
                         <tr>
-                            <td class="tx-color-03 tx-center">{{ $loop->iteration }}</td>
+                            <td class="tx-color-03 tx-center">{{ ++$i }}</td>
                             <td class="tx-medium">{{ !empty($item->manufacturer_name) ? $item->manufacturer_name : 'UNAVAILABLE' }}</td>
                             <td class="tx-medium">{{ !empty($item->model_number) ? $item->model_number : 'UNAVAILABLE' }}</td>
                             <td class="tx-medium">{{ !empty($item->component_name) ? $item->component_name : 'UNAVAILABLE' }}</td>

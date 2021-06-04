@@ -69,20 +69,19 @@ class InvoiceController extends Controller
 
         $sub_services = '';
 
-        $logistics = 2000;
-        $fixmasterRoyalty = 1000;
+        $logistics = $get_logistics['amount'];
+        $fixmasterRoyalty = $get_fixMaster_royalty['percentage'];
 
         (array) $sub_services = $invoice['serviceRequest']['sub_services'];
         $subService = array();
 
         foreach ($sub_services as $sub_service) {
             // echo $sub_service['uuid']."<br>";
-            echo $sub_service['uuid']."<br>";
-            echo $sub_service['quantity']."<hr>";
-            $subService[] = SubService::where('uuid', $sub_service['uuid'])->firstOrFail();
+            // echo $sub_service['uuid']."<br>";
+            // echo $sub_service['quantity']."<hr>";
+            $subService[] = SubService::where('uuid', $sub_service['uuid'])->firstOrFail();        
         }
-        return $subService;
-
+        // return;
 
         $fixMasterRoyalty = '';
         $subTotal = '';
@@ -92,6 +91,26 @@ class InvoiceController extends Controller
         $discountValue = 5/100;
         $total_cost = '';        
         $fixedAmount = '';
+        $totalLabourCost = array();
+        
+
+        foreach($subService as $item) {
+            // echo $item['first_hour_charge']."<br>";
+            if($invoice['hours_spent'] == 1)
+            {
+                $labourCost = $item['first_hour_charge'] * $labourMarkup;
+                $totalLabourCost[] = $item['first_hour_charge'] + $labourCost."<br>";
+            }
+            else
+            {
+                $labourCost = ($item['first_hour_charge'] + $item['subsequent_hour_charge'] * ($invoice['hours_spent']-1)) * $labourMarkup;
+                $totalLabourCost[] = ($item['first_hour_charge'] + $item['subsequent_hour_charge'] * ($invoice['hours_spent']-1)) + $labourCost."<br>";
+            }
+        }
+
+
+        
+        
 
         $total = 0;        
         foreach ($invoice['rfqs']['rfqBatches'] as $item) {
@@ -113,9 +132,11 @@ class InvoiceController extends Controller
             'invoice' => $invoice,
             'service_request_assigneed' => $service_request_assigneed,
             'logistics' => $logistics,
-            'sub_service' => $sub_service,
+            'subService' => $subService,
+            'totalLabourCost' => $totalLabourCost,
             'fixmasterRoyalty' => $fixmasterRoyalty,
             'materialsMarkup' => $materialsMarkup,
+            'labourMarkup' => $labourMarkup,
             'materialsMarkupPrice' => $materialsMarkupPrice
             
         ]);

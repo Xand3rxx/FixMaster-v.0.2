@@ -6,7 +6,7 @@
           <th class="text-center">#</th>
           <th>Name</th>
           <th>Category</th>
-          <th class="text-center">Service Charge</th>
+          <th class="text-center">Service Charge(₦)</th>
           <th class="text-center">Sub Services</th>
           <th class="text-center">Requests</th>
           <th>Status</th>

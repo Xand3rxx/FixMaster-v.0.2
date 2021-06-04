@@ -162,6 +162,8 @@ class CustomerServiceExecutiveController extends Controller
 
     public function warranty_details($language, $uuid)
     {
+
+
         // find the service reqquest using the uuid and relations
         $service_request = \App\Models\ServiceRequest::where('uuid', $uuid)->with(['price', 'service', 'service.subServices'])->firstOrFail();
 

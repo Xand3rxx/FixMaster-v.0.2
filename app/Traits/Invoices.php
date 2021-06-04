@@ -26,7 +26,7 @@ trait Invoices
      * @param  int  $service_request_id
      * @param  string  $invoice_type
      * @param  int  $total_amount
-    * @param  int  $amount_due
+     * @param  int  $amount_due
      * @param  int  $amount_paid
      * @param  string  $hours_spent
      * @param  string  $status

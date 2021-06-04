@@ -15,7 +15,7 @@ trait SendVerificationMail
      * Send Email Verification to User Account Instance
      *
      * @param  \App\Models\Account $account
-     *
+     * 
      * @return void
      */
     protected function sendVerificationEmail(\App\Models\Account $account)
@@ -25,8 +25,8 @@ trait SendVerificationMail
         $messanger = new \App\Http\Controllers\Messaging\MessageController();
         // $user this is the instance of the created applicant
         $mail_data = collect([
-            'lastname' => $account['last_name'],
-            'firstname' => $account['first_name'],
+            'lastname' => $account->user['last_name'],
+            'firstname' => $account->user['first_name'],
             'email' => $account->user['email'],
             'url' => (string)$url
         ]);

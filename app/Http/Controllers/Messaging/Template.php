@@ -20,8 +20,7 @@ class Template extends Controller
 
     public function getAllTemplates()
     {
-        $messageTemplates = MessageTemplate::select(['id', 'title', 'uuid', 'feature'])->get();
-        return view('admin.messaging.template.template', ['templates'=>$messageTemplates]);
+        return MessageTemplate::select('id', 'uuid','title',  'feature')->paginate(10);
     }
 
     public function getTemplate($uuid)

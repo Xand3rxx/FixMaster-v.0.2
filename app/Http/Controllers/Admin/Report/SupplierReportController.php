@@ -5,7 +5,6 @@ namespace App\Http\Controllers\Admin\Report;
 use App\Http\Controllers\Controller;
 use App\Models\RfqSupplier;
 use Illuminate\Http\Request;
-use App\Models\RfqSupplierInvoiceBatch;
 
 class SupplierReportController extends Controller
 {
@@ -22,13 +21,14 @@ class SupplierReportController extends Controller
 
     public function itemDeliveredSorting($language, Request $request)
     {
+//        (array) $filters = $request->only('supplier_id', 'sort_level', 'job_status', 'cse_id', 'data');
         if($request->ajax()) {
-            (array) $filters = $request->only('supplier_id', 'sort_level', 'job_status', 'cse_id', 'date');
+            (array) $filters = $request->only('supplier_id', 'sort_level', 'job_status', 'cse_id', 'data');
 
             return view('admin.reports.suppliers.tables._item_delivered', [
-                // 'results'   =>  RfqSupplierInvoiceBatch::itemDeliveredSorting($filters)
-                // ->latest('created_at')->get()
-                'results' => RfqSupplierInvoiceBatch::all()
+//                'results' => RfqSupplier::itemDeliveredSorting($filters)->with('service_request', 'users')
+//                    ->latest('created_at')->get()
+            'results' => RfqSupplier::all()
             ]);
 
         }
