@@ -177,7 +177,7 @@ trait Invoices
         $client_id = $service_request['client_id'];
         $rfq = Rfq::where('service_request_id', $service_request['id'])->firstOrFail();
         $rfq_id = $rfq['id'];
-        
+
         return self::createcompletedServiceInvoice($client_id, $service_request_id, $rfq_id, $hours_spent);
     }
 
@@ -189,6 +189,7 @@ trait Invoices
             'client_id'             => $client_id,
             'service_request_id'    => $service_request_id,
             'rfq_id'                => $rfq_id,
+            'warranty_id'           => 1,
             'unique_id'             => static::generate('invoices', 'INV-'),
             'invoice_type'          => $invoice_type,
             'hours_spent'           => $hours_spent,
