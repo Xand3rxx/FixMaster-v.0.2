@@ -32,7 +32,6 @@ class InvoiceBuilder
             array_push($actionable, self::build_new_trf($request, $service_request));
         }
 
-
         array_push($actionable, self::build_invoice($request, $service_request));
         return $actionable;
     }

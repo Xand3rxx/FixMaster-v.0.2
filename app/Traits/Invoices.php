@@ -62,14 +62,11 @@ trait Invoices
         $fixMasterMarkup = Income::select('amount', 'percentage')->where('income_name', 'FixMaster Markup')->first();
         $total_hours_spent = 0;
 
-        $materials_cost = $rfq_id!=null ? $rfq->total_amount : 0;
+        $materials_cost = $rfq_id != null ? $rfq->total_amount : 0;
 
-        if($hours_spent == 1)
-        {
+        if ($hours_spent == 1) {
             $total_hours_spent = $subService->first_hour_charge;
-        }
-        else
-        {
+        } else {
             $total_hours_spent = $subService->first_hour_charge + $subService->subsequent_hour_charge * ($hours_spent - 1);
         }
 
@@ -170,33 +167,24 @@ trait Invoices
 
     public static function completedServiceInvoice(\App\Models\ServiceRequest $service_request, string $hours_spent)
     {
-        (array)$sub_services = $service_request['sub_services'];
-        // return dd($service_request, $service_request['sub_services'][0]['quantity'], $hours_spent, 'laravel');
-
-        $service_request_id = $service_request['id'];
-        $client_id = $service_request['client_id'];
-        $rfq = Rfq::where('service_request_id', $service_request['id'])->firstOrFail();
-        $rfq_id = $rfq['id'];
-
-        return self::createcompletedServiceInvoice($client_id, $service_request_id, $rfq_id, $hours_spent);
+        $rfq = Rfq::where('service_request_id', $service_request['id'])->first();
+        
+        return self::createcompletedServiceInvoice($service_request, $rfq, $hours_spent);
     }
 
-    protected static function createcompletedServiceInvoice(string $client_id, string $service_request_id, string $rfq_id, string $hours_spent)
+    protected static function createcompletedServiceInvoice($service_request, $rfq, $hours_spent)
     {
-        $invoice_type = 'Final Invoice';
-        Invoice::create([
+       return Invoice::create([
             'uuid'                  => Str::uuid('uuid'),
-            'client_id'             => $client_id,
-            'service_request_id'    => $service_request_id,
-            'rfq_id'                => $rfq_id,
+            'client_id'             => $service_request['client_id'],
+            'service_request_id'    => $service_request->id,
+            'rfq_id'                => $rfq->id ?? null,
             'warranty_id'           => 1,
             'unique_id'             => static::generate('invoices', 'INV-'),
-            'invoice_type'          => $invoice_type,
+            'invoice_type'          => 'Final Invoice',
             'hours_spent'           => $hours_spent,
             'status'                => '1',
             'phase'                 => '1'
         ]);
     }
-
-
 }

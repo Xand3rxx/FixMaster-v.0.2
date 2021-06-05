@@ -77,7 +77,6 @@ trait StoreInDatabase
                 }
 
                 if (!empty($table['invoice_building'])) {
-                    // dd($table['invoice_building']);
                     // $table['invoice_building'] ==>  array of 1. $table['invoice_building']['estimated_work_hours'] 2. $table['invoice_building']['service_request']
                     \App\Traits\Invoices::completedServiceInvoice($table['invoice_building']['service_request'], $table['invoice_building']['estimated_work_hours']);
                 }

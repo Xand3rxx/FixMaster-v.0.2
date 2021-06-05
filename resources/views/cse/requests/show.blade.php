@@ -95,27 +95,27 @@
                                         <div class="mt-4">
                                             <div class="tx-13 mg-b-25">
                                                 <div id="wizard3">
-                                                    @if ($stage == \App\Models\ServiceRequest::CSE_ACTIVITY_STEP['schedule_categorization'])
+                                                    @if (collect($service_request->sub_services)->isEmpty())
                                                         {{-- Stage 1 --}}
-                                                        {{-- @if (is_null($service_request['preferred_time'])) --}}
                                                         @include('cse.requests.includes.schedule_date')
-                                                        {{-- @endif --}}
                                                         @include('cse.requests.includes.categorization')
                                                         {{-- End of Stage 1 --}}
                                                     @else
                                                         {{-- Stage 2 --}}
-                                                        {{-- @include('cse.requests.includes.initial-technician') --}}
+                                                        @if (CustomHelpers::existRole($service_request->service_request_assignees, 'technician-artisans'))
+                                                            @include('cse.requests.includes.initial-technician')
+                                                        @endif
                                                         {{-- End of Stage 2 --}}
                                                         {{-- Stage 3 --}}
-                                                        @include('cse.requests.includes.invoice-building')
-
+                                                        @if (collect($service_request->invoice)->isEmpty())
+                                                            @include('cse.requests.includes.invoice-building')
+                                                        @endif
                                                         {{-- End of Stage 3 --}}
-                                                        {{-- @include('cse.requests.includes.reoccuring-actions') --}}
+                                                        @include('cse.requests.includes.reoccuring-actions')
                                                         @if (!empty($materials_accepted))
                                                             @include('cse.requests.includes.materials-acceptance')
                                                         @endif
-                                                        {{-- @include('cse.requests.includes.project-progresses') --}}
-
+                                                        @include('cse.requests.includes.project-progresses')
                                                     @endif
 
                                                 </div>
@@ -124,7 +124,8 @@
 
                                     </div>
 
-                                    <button type="submit" class="btn btn-primary d-none" id="update-progress">Update Progress</button>
+                                    <button type="submit" class="btn btn-primary d-none" id="update-progress">Update
+                                        Progress</button>
 
                                 </form>
                             </div>
@@ -175,7 +176,7 @@
                 showFinishButtonAlways: false,
                 onStepChanging: function(event, currentIndex, newIndex) {
                     if (currentIndex < newIndex) {
-                        @if ($stage == \App\Models\ServiceRequest::CSE_ACTIVITY_STEP['schedule_categorization'])
+                        @if (collect($service_request->sub_services)->isEmpty())
                             // Step 1 Schedule Date
                             if (currentIndex === 0) {
                             return ($("#service-date-time").val().length !== 0) ? true : false;
