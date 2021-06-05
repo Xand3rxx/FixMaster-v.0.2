@@ -2,6 +2,7 @@
             <div class="table-responsive mt-4">
               <table class="table table-striped table-sm mg-b-0">
                 <tbody>
+              
                   <tr>
                     <td class="tx-medium">Supplier's Name</td>
                     <td class="tx-color-03">
@@ -61,6 +62,7 @@
                     </tr>
                   </thead>
                   <tbody>
+      
                       @foreach ($rfqDetails->rfqBatches as $item)
                         <tr>
                             <td class="tx-color-03 tx-center">{{ ++$i }}</td>

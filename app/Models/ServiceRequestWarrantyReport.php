@@ -10,7 +10,7 @@ class ServiceRequestWarrantyReport extends Model
     // use HasFactory;
 
     protected $fillable = [
-        'user_id', 'service_request_warranties_issued_id', 'report'
+        'user_id', 'service_request_warranties_issued_id', 'report','causal_agent_id', 'causal_reason'
     ];
 
 

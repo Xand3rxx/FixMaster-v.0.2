@@ -179,13 +179,13 @@ class CustomerServiceExecutiveController extends Controller
         $issued_id = !empty($service_request->service_request_warranty->service_request_warranty_issued) ? 
         $service_request->service_request_warranty->service_request_warranty_issued->id: '';
         $technicianExist = !empty($service_request->service_request_warranty->service_request_warranty_issued) ? 
-        $service_request->service_request_warranty->service_request_warranty_issued->technician_id : '';
+        $service_request->service_request_warranty->service_request_warranty_issued->technician_id : [];
         $getCausalTechnician =  $issued_id? \App\Models\ServiceRequestWarrantyReport::where(['service_request_warranties_issued_id' => $issued_id ])->get(): [];
         $causalTechnician  = [];
         $causalSuppliers  = [];
         if(!empty($getCausalTechnician)){
         foreach($getCausalTechnician as $val) {
-          if($val->causal_agent_id != '0')
+          if($val->causal_agent_id != 0)
             if( \CustomHelpers::getUserDetail($val->causal_agent_id)->roles[0]->url == 'technician')
             $causalTechnician [] = $val->causal_agent_id;
             elseif( \CustomHelpers::getUserDetail($val->causal_agent_id)->roles[0]->url == 'supplier')
@@ -193,7 +193,7 @@ class CustomerServiceExecutiveController extends Controller
           
         }
         }
-    
+
 
         (array) $variables = [
             'service_request' => $service_request,
@@ -205,7 +205,7 @@ class CustomerServiceExecutiveController extends Controller
             'suppliers'        =>  \App\Models\Rfq::where('service_request_id', $service_request->id)->with('rfqSupplies', 'rfqSuppliesInvoices','rfqBatches', 'rfqSupplierDispatches', 'serviceRequest')->first(),
             'requestReports'  => \App\Models\ServiceRequestReport::where('service_request_id', $service_request->id)->latest('created_at')->get(),
             'RfqDispatchNotification' =>\App\Models\RfqDispatchNotification::where(['service_request_id' => $service_request->id ])->first(),
-            'causalAgent'  =>  $issued_id? \App\Models\ServiceRequestWarrantyReport::where([
+            'causalAgent'  =>  $issued_id != '' ? \App\Models\ServiceRequestWarrantyReport::where([
                 'service_request_warranties_issued_id' => $issued_id ])
                 ->get(): [],
             'technicianExist' =>  $technicianExist,
@@ -215,6 +215,7 @@ class CustomerServiceExecutiveController extends Controller
 
       //dd( $causalTechnician);
       
+ 
        
         if ($service_request->status_id == 2) {
             $service_request_progresses = \App\Models\ServiceRequestProgress::where('user_id', auth()->user()->id)->latest('created_at')->first();

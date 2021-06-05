@@ -87,18 +87,22 @@ This show's a list of all FixMaster Collaborators that worked on the clients ser
          
             @if(!empty($service_request->service_request_warranty->service_request_warranty_issued))
        @if(!is_null($service_request->service_request_warranty->service_request_warranty_issued->technician_id))
-            <div class="divider-text">Warrant Technicians  </div>
+            <div class="divider-text">Warrant Technician Assigned  </div>
      
         <ul class="list-group wd-md-100p">
                       
                 <li class="list-group-item d-flex align-items-center">
                     
                     <div class="form-row">
-                    <img src="{{ asset('assets/user-avatars/'.CustomHelpers::getUserDetail('4')->account->avatar??'default-male-avatar.png') }}" class="wd-30 rounded-circle mg-r-15" alt="Technician Avatar">
+                    <img src="{{ asset('assets/user-avatars/'.CustomHelpers::getUserDetail($service_request->service_request_warranty->service_request_warranty_issued->technician_id)->account->avatar??'default-male-avatar.png') }}" 
+                    class="wd-30 rounded-circle mg-r-15" alt="Technician Avatar">
                     
                     <div class="col-md-6 col-sm-6">
                     <h6 class="tx-13 tx-inverse tx-semibold mg-b-0">
-                   
+                    <h6 class="tx-13 tx-inverse tx-semibold mg-b-0">{{ ucfirst(CustomHelpers::getUserDetail($service_request->service_request_warranty->service_request_warranty_issued->technician_id)->account->first_name)}} 
+                    {{ ucfirst(CustomHelpers::getUserDetail($service_request->service_request_warranty->service_request_warranty_issued->technician_id)->account->last_name)}} 
+                    </h6>
+
                     
                     </h6>
                     
@@ -112,7 +116,9 @@ This show's a list of all FixMaster Collaborators that worked on the clients ser
                     <div class="col-md-6 col-sm-6">
                     <div class="form-row">
                         <div class="form-group col-1 col-md-1 col-sm-1" style="margin-left: 3rem !important;">
-                            <a href="tel:{{$item->user->account->contact->phone_number}}" class="btn btn-primary btn-icon"><i class="fas fa-phone"></i></a>
+                            <a href="tel:{CustomHelpers::getUserDetail($service_request->service_request_warranty->service_request_warranty_issued->technician_id)->account->contact->phone_number}}" 
+                            
+                            class="btn btn-primary btn-icon"><i class="fas fa-phone"></i></a>
                         </div>
                     </div>
                     </div>

@@ -97,8 +97,8 @@ class ClientController extends Controller
 
     public function clientRequestDetails($language, $request){
 
-        $requestDetail = ServiceRequest::where('uuid', $request)->with('price')->firstOrFail();
-
+        $requestDetail = ServiceRequest::where('uuid', $request)->with('service_request_assignees')->firstOrFail();
+        
         // return \App\Models\ServiceRequestAssigned::where('service_request_id', $requestDetail->id)->where('status', 'Active')->firstOrFail()->status;
 
         return view('client.request_details', [

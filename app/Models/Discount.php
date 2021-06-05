@@ -13,7 +13,7 @@ class Discount extends Model
   
 
     protected $fillable = [
-        'name',  'entity', 'rate', 'apply_discount','notify', 'duration_start', 'duration_end', 'description','parameter','created_by','status'
+        'name', 'client_id', 'entity', 'rate', 'apply_discount','notify', 'duration_start', 'duration_end', 'description','parameter','created_by','status'
     ];
 
     protected $softDelete = true;

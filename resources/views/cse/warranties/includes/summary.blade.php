@@ -76,7 +76,7 @@
                                         </div>
                                     </div><!-- dropdown -->
                                     <div class="card-file-thumb tx-danger" 
-                                    style="background-image: url('{{ asset('assets/warranty-images/'.$item->name)}}')"
+                                    style="background-image: url('{{ asset('assets/warranty-claim-images/'.$item->name)}}')"
                                     >
                                         <i class="far fa-file-pdf"></i>
                                     </div>

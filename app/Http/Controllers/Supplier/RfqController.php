@@ -47,7 +47,7 @@ class RfqController extends Controller
     public function rfqDetails($language, $uuid){
 
         return view('supplier.rfq._details', [
-            'rfqDetails'    =>  Rfq::where('uuid', $uuid)->firstOrFail(),
+            'rfqDetails'    =>  Rfq::where('uuid', $uuid)->with('rfqSupplier','rfqBatches')->firstOrFail(),
         ]);
     }
 

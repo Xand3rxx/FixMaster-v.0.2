@@ -240,8 +240,8 @@ class MessageController extends Controller
      * 
      * @return \Illuminate\Http\Response
      */
-    public function sendNewMessage($subject="", $from="", $to, $mail_data,$feature=""){
-    
+    public function sendNewMessage($subject="", $from="", $to='', $mail_data=[],$feature=""){
+      
        $message = $mail_data;
        $sms = "";
        $message_array = [];
@@ -259,16 +259,15 @@ class MessageController extends Controller
             }
             $message = $this->replacePlaceHolders($mail_data, $template->content);
             $sms = $this->replacePlaceHolders($mail_data, $template->sms);
-            $subject = $template->title;
+            $subject = $template->title??$subject;
         }
 
     if($from!="")
-        $sender = DB::table('users')->where('users.email', $from)->first();
+       $sender = DB::table('users')->where('users.email', $from)->first();  
     else
        $from = "noreply@fixmaster.com";
 
-       $recipient = DB::table('users')->where('users.email', $to )->first();
-
+      $recipient = DB::table('users')->where('users.email', $to )->first();
 
       
          if($from!="" && is_object($recipient)){
@@ -290,22 +289,10 @@ class MessageController extends Controller
             
 
         $message_array = ['to'=>$to, 'from'=>$from, 'subject'=>$subject, 'content'=>$message];
-
-        $mail =  Mail::to($to)->send(new MailNotify($message_array));
-
-    if(count(Mail::failures()) > 0 ) {
-    
-      foreach(Mail::failures() as $email_address) {
-          " - $email_address <br />";
-          return false;
-       }
-    
-        } else {
-          return true;
-        }
-      
-        
-        // $this->dispatch(new PushEmails($message_array));
+  
+         $mail = $this->dispatch(new PushEmails($message_array));
+   
+         return $mail;
       
 
     

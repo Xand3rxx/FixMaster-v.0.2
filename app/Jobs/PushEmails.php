@@ -41,7 +41,7 @@ class PushEmails  implements ShouldQueue
         $to = $message->to;
         $from = $message->from;
         $subject = $message->subject;
-        $mailer->send('emails.message', ['mail_message' => $message->content], function ($m) use ($to, $from, $subject) {
+       return  $mailer->send('emails.message', ['mail_message' => $message->content], function ($m) use ($to, $from, $subject) {
             $m->from($from, $subject);
     
             $m->to($to, $to)->subject($subject);

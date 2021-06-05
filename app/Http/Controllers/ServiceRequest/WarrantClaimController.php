@@ -25,7 +25,7 @@ class WarrantClaimController extends Controller
      */
     
     public function assignWarrantyTechnician(Request $request){
-    //   dd($request);
+
 
         $this->validate(
             $request, 
@@ -66,6 +66,7 @@ class WarrantClaimController extends Controller
     protected function save($serviceRequest, $service_request_warranty_id,$request ){
 
         if($request->preferred_time){
+  
         $upload='1'; $comment='1';
         if($serviceRequest){
             $updateWarranty = \App\Models\ServiceRequestWarrantyIssued::where('service_request_warranty_id', $service_request_warranty_id)->update([
@@ -123,7 +124,7 @@ class WarrantClaimController extends Controller
         foreach ($request->file('upload_image') as $file) {
             $image = $file;
             $imageName = (string) Str::uuid() .'.'.$file->getClientOriginalExtension();
-            $imageDirectory = public_path('assets/warranty-images').'/';
+            $imageDirectory = public_path('assets/warranty-claim-images').'/';
             $width = 350; $height = 259;
             Image::make($image->getRealPath())->resize($width, $height)->save($imageDirectory.$imageName);
 
@@ -146,7 +147,7 @@ class WarrantClaimController extends Controller
         $createWarranty = \App\Models\ServiceRequestWarrantyReport::create([
             'user_id'                                         =>  Auth::id(),
             'service_request_warranties_issued_id'             =>  $serviceRequesIssued->id,
-            'report'                                           =>   $request->cse_comment,
+            'report'                                           =>  $request->cse_comment?? 'none',
             'causal_agent_id'                                  =>   $value,
             'causal_reason'                                    =>   $request->causal_reason??'None',
             
@@ -157,8 +158,8 @@ class WarrantClaimController extends Controller
         $createWarranty = \App\Models\ServiceRequestWarrantyReport::create([
             'user_id'                                         =>  Auth::id(),
             'service_request_warranties_issued_id'             =>  $serviceRequesIssued->id,
-            'report'                                           =>   $request->cse_comment,
-            'causal_agent_id'                                  =>   0,
+            'report'                                           =>   $request->cse_comment?? 'none',
+            'causal_agent_id'                                  =>   '0',
             'causal_reason'                                    =>   $request->causal_reason??'None',
             
         ]);
@@ -215,7 +216,8 @@ class WarrantClaimController extends Controller
         }
          }
 
-         $users = \App\Models\Cse::where('user_id' ,'<>', $request->initial_supplier)->with('user', 'user.account', 'user.contact', 'user.roles')->withCount('service_request_assgined')->get();
+
+         $users = \App\Models\Supplier::where('user_id' ,'<>', $request->initial_supplier)->with('user')->get();
 
          $updateOldSupplierRfqDispatch = \App\Models\RfqDispatchNotification::create([
             'rfq_id' => $request->rfq_id,
@@ -234,18 +236,20 @@ class WarrantClaimController extends Controller
             
         ]);
        if( $updateOldSupplierRfqDispatch){
-             foreach($users as $cse){
-                $mail_data_supplier = collect([
-                    'email' =>  $cse['user']['email'],
-                    'template_feature' => 'CSE_SENT_SUPPLIER_MESSAGE_NOTIFICATION',
-                    'firstname' => $cse['user']['account']['first_name'].' '.$cse['user']['account']['last_name'],
-                    'job_ref' =>  $request->service_request_unique_id,
-                    'subject' => 'testing'
-                ]);
+        foreach($users as $supplier){
+            $mail_data_supplier = collect([
+                'email' =>  $supplier['user']['email'],
+                'template_feature' => 'CSE_SENT_SUPPLIER_MESSAGE_NOTIFICATION',
+                'firstname' => $supplier['user']['account']['first_name'],
+                'lastname' => $supplier['user']['account']['last_name'],
+                'job_ref' =>  $request->service_request_unique_id,
+                'subject' => 'testing'
+            ]);
                 $mail1 = $this->mailAction($mail_data_supplier);
-                return '1';
+                
             }  
         } 
+        return '1';
      
     }
     
