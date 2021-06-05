@@ -1,4 +1,4 @@
-@if(!empty($materials_accepted))
+
 
 <h3>Material Acceptance</h3>
 <section>
@@ -217,4 +217,3 @@ $(document).ready(function() {
 </script>
   @endpush
 
-  @endif

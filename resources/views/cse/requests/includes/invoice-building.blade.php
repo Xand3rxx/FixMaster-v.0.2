@@ -66,7 +66,7 @@
         </div>
         <div class="form-group col-md-12">
             <label for="comments">Other Comments(Optional)</label>
-            <textarea rows="3" class="form-control @error('comments') is-invalid @enderror" id="comments"
+            <textarea rows="3" name="other_comments" class="form-control @error('comments') is-invalid @enderror" id="comments"
                 name="comments"></textarea>
         </div>
     </div>

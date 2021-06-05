@@ -31,21 +31,24 @@
 
                     <div class="media align-items-center">
                         <span class="tx-color-03 d-none d-sm-block">
-                                @php
-                                    if($service_request['client']['account']['gender'] == 'male' || $service_request['client']['account']['gender'] == 'others'){
-                                        $genderAvatar = 'default-male-avatar.png';
-                                    }else{
-                                        $genderAvatar = 'default-female-avatar.png';
-                                    }
-                                @endphp
+                            @php
+                                if ($service_request['client']['account']['gender'] == 'male' || $service_request['client']['account']['gender'] == 'others') {
+                                    $genderAvatar = 'default-male-avatar.png';
+                                } else {
+                                    $genderAvatar = 'default-female-avatar.png';
+                                }
+                            @endphp
 
-                                @if(empty($service_request['client']['account']['avatar']))
-                                    <img src="{{ asset('assets/images/'.$genderAvatar) }}" class="avatar rounded-circle" alt="Default avatar">
-                                @elseif(!file_exists(public_path('assets/user-avatars/'.$service_request['client']['account']['avatar'])))
-                                    <img src="{{ asset('assets/images/'.$genderAvatar) }}" class="avatar rounded-circle" alt="Profile avatar">
-                                @else
-                                    <img src="{{ asset('assets/user-avatars/'.$service_request['client']['account']['avatar']) }}" class="avatar rounded-circle" alt="Profile avatar">
-                                @endif
+                            @if (empty($service_request['client']['account']['avatar']))
+                                <img src="{{ asset('assets/images/' . $genderAvatar) }}" class="avatar rounded-circle"
+                                    alt="Default avatar">
+                            @elseif(!file_exists(public_path('assets/user-avatars/'.$service_request['client']['account']['avatar'])))
+                                <img src="{{ asset('assets/images/' . $genderAvatar) }}" class="avatar rounded-circle"
+                                    alt="Profile avatar">
+                            @else
+                                <img src="{{ asset('assets/user-avatars/' . $service_request['client']['account']['avatar']) }}"
+                                    class="avatar rounded-circle" alt="Profile avatar">
+                            @endif
 
                         </span>
                         <div class="media-body mg-sm-l-20">
@@ -83,50 +86,52 @@
                     <div class="contact-content-body">
                         <div class="tab-content">
                             <div id="serviceRequestActions" class="tab-pane show active pd-20 pd-xl-25">
-                            {{-- Service Request Actions --}}
-                            <form id="service_request_form" class="form-data" enctype="multipart/form-data" method="POST"
-                                action="{{ route('cse.service.request.action', ['locale' => app()->getLocale(), 'service_request' => $service_request->uuid]) }}">
-                                @csrf
-                                <div id="serviceRequestActions" class="tab-pane show active pd-20 pd-xl-25">
-                                    <div class="mt-4">
-                                        <div class="tx-13 mg-b-25">
-                                            <div id="wizard3">
-                                                @if ($stage == \App\Models\ServiceRequest::CSE_ACTIVITY_STEP['schedule_categorization'])
-                                                    {{-- Stage 1 --}}
-                                                    {{-- @if (is_null($service_request['preferred_time'])) --}}
-                                                    @include('cse.requests.includes.schedule_date')
-                                                    {{-- @endif --}}
-                                                    @include('cse.requests.includes.categorization')
-                                                    {{-- End of Stage 1 --}}
-                                                @else
-                                                    {{-- Stage 2 --}}
-                                                    {{-- @include('cse.requests.includes.initial-technician') --}}
-                                                    {{-- End of Stage 2 --}}
-                                                    {{-- Stage 3 --}}
-                                                    {{-- @include('cse.requests.includes.invoice-building') --}}
+                                {{-- Service Request Actions --}}
+                                <form id="service_request_form" class="form-data" enctype="multipart/form-data"
+                                    method="POST"
+                                    action="{{ route('cse.service.request.action', ['locale' => app()->getLocale(), 'service_request' => $service_request->uuid]) }}">
+                                    @csrf
+                                    <div id="serviceRequestActions" class="tab-pane show active pd-20 pd-xl-25">
+                                        <div class="mt-4">
+                                            <div class="tx-13 mg-b-25">
+                                                <div id="wizard3">
+                                                    @if ($stage == \App\Models\ServiceRequest::CSE_ACTIVITY_STEP['schedule_categorization'])
+                                                        {{-- Stage 1 --}}
+                                                        {{-- @if (is_null($service_request['preferred_time'])) --}}
+                                                        @include('cse.requests.includes.schedule_date')
+                                                        {{-- @endif --}}
+                                                        @include('cse.requests.includes.categorization')
+                                                        {{-- End of Stage 1 --}}
+                                                    @else
+                                                        {{-- Stage 2 --}}
+                                                        {{-- @include('cse.requests.includes.initial-technician') --}}
+                                                        {{-- End of Stage 2 --}}
+                                                        {{-- Stage 3 --}}
+                                                        @include('cse.requests.includes.invoice-building')
 
-                                                    {{-- End of Stage 3 --}}
-                                                    @include('cse.requests.includes.reoccuring-actions')
-                                                    @include('cse.requests.includes.materials-acceptance')
-                                                    @include('cse.requests.includes.project-progresses')
+                                                        {{-- End of Stage 3 --}}
+                                                        {{-- @include('cse.requests.includes.reoccuring-actions') --}}
+                                                        @if (!empty($materials_accepted))
+                                                            @include('cse.requests.includes.materials-acceptance')
+                                                        @endif
+                                                        {{-- @include('cse.requests.includes.project-progresses') --}}
 
-                                                @endif
+                                                    @endif
 
+                                                </div>
                                             </div>
-                                        </div>
-                                    </div><!-- df-example -->
+                                        </div><!-- df-example -->
 
-                                </div>
+                                    </div>
 
-                                <button type="submit" class="btn btn-primary d-none" id="update-progress">Update
-                                    Progress</button>
+                                    <button type="submit" class="btn btn-primary d-none" id="update-progress">Update Progress</button>
 
-                            </form>
+                                </form>
                             </div>
                             {{-- End of Service Request Actions --}}
 
                             {{-- Job Description --}}
-                            @if(!empty($materials_accepted))
+                            @if (!empty($materials_accepted))
                                 @include('cse.requests.includes.job_description')
                             @endif
 
