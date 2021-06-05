@@ -176,7 +176,7 @@
 
 
 
-    @if (\Request::filled('users') && \Request::filled('role') && \Request::filled('serviceRequestId') && \Request::filled('totalAmount') && \Request::filled('serviceId') && \Request::filled('unique_id'))
+    @if (\Request::filled('users') && \Request::filled('serviceRequestId') && \Request::filled('totalAmount') && \Request::filled('serviceId') && \Request::filled('unique_id'))
 
     @yield('scripts')
     @stack('scripts')
@@ -188,7 +188,8 @@
       const service_request_id = @json(\Request::get('serviceRequestId'));
       const unique_id = @json(\Request::get('unique_id'));
       //console.log(totalAmount);
-      const role = @json(\Request::get('role'));
+      //const role = @json(\Request::get('role'));
+      //console.log(role);
       let ratings_row = `<div class="row">
                                         <div class="col-md-4 col-lg-4 col-4">
                                             <p id="user0" style="margin-top:20px;"> Rate CSE Job Diagnosis </p>

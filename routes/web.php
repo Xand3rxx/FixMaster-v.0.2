@@ -328,6 +328,9 @@ Route::prefix('admin')->name('admin.')->group(function () {
     Route::get('/reports/supplier',             [SupplierReportController::class, 'index'])->name('supplier_reports');
     Route::post('/reports/supplier/item-delivered-sorting', [SupplierReportController::class, 'itemDeliveredSorting'])->name('supplier_report_first_sorting');
 
+    //Admin Payments
+    Route::view('/payments/pending', 'admin.payments.pending')->name('payments.pending');
+
 });
 
 //All routes regarding clients should be in here

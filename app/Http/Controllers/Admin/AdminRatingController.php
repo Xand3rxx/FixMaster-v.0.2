@@ -24,7 +24,7 @@ class AdminRatingController extends Controller
                 \DB::raw('COUNT(id) as id'),
                 \DB::raw('AVG(star) as starAvg')
             ])->with('clientAccount', 'service_request')
-            ->where('service_id', null)
+            ->where('service_id', '!=', null)
             ->where('service_diagnosis_by', null)
             ->where('ratee_id', '!=', null)
                 ->groupBy('service_request_id')->get();
@@ -34,7 +34,7 @@ class AdminRatingController extends Controller
 
     public function getRatings(Request $request){
        $results = Rating::where('service_request_id', $request->id)->with('clientAccount', 'service_request','service')
-                ->where('service_id', null)
+                ->where('service_id', '!=', null)
                 ->where('service_diagnosis_by', null)
                 ->where('ratee_id', '!=', null)->get();
       return response()->json($results);
