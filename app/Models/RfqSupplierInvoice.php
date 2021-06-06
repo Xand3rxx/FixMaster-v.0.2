@@ -43,6 +43,7 @@ class RfqSupplierInvoice extends Model
         return $this->hasMany(RfqSupplierInvoiceBatch::class);
     }
 
+<<<<<<< HEAD
     public function warranty_claim_supplier()
     {
         return $this->belongsTo(Supplier::class, 'supplier_id', 'user_id');
@@ -56,6 +57,11 @@ class RfqSupplierInvoice extends Model
     public function warrantyIssued()
     {
         return $this->hasMany(ServiceRequestWarrantyReport::class,'supplier_id','causal_agent_id');
+=======
+    public function supplierDispatch()
+    {
+        return $this->hasOne(RfqSupplierDispatch::class, 'rfq_supplier_invoice');
+>>>>>>> 2c347da14359250595c44b3636093082dcee019d
     }
 
 }

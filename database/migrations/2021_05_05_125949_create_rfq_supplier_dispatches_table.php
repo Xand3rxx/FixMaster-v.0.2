@@ -28,6 +28,7 @@ class CreateRfqSupplierDispatchesTable extends Migration
             $table->string('delivery_medium');
             $table->enum('cse_status', ['Pending', 'Yes', 'No'])->default('Pending');
             $table->enum('supplier_status', ['Processing', 'In-Transit', 'Delivered'])->default('Processing');
+            $table->text('cse_comment')->nullable();
             $table->text('comment')->nullable();
             $table->timestamps();
         });

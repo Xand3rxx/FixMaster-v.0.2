@@ -213,7 +213,7 @@ class RfqController extends Controller
      */
     public function rfqDetailsImage($language, $id){
         return view('supplier.rfq._details_image', [
-            'rfqDetails'    =>  \App\Models\RfqBatch::select('image')->where('id', $id)->firstOrFail(),
+            'rfqDetails'    =>  \App\Models\RfqBatch::select('image')->where('id', $id)->first(),
         ]);
     }
 

@@ -145,7 +145,7 @@ class RfqController extends Controller
         });
 
         if($supplierUpdate){
-            $this->supplierInvoice($supplier->rfq->service_request_id, $supplier->rfq_id);
+            // $this->supplierInvoice($supplier->rfq->service_request_id, $supplier->rfq_id);
             return back()->with('success', $supplier['supplier']['account']['first_name'] ." ". $supplier['supplier']['account']['last_name'].' invoice has been selected for '.$supplier->rfq->unique_id.' RFQ');
         }
 

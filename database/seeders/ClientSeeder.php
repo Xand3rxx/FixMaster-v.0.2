@@ -91,7 +91,7 @@ class ClientSeeder extends Seeder
             'user_id'       =>  $client->id,
             'state_id'         =>  24,
             'lga_id'           =>  505,
-            'lga_id'           =>  88,
+            'town_id'           =>  80,
             'first_name'    => "Kelvin",
             'middle_name'   => "Israel",
             'last_name'     => "Adesanya",
@@ -101,6 +101,9 @@ class ClientSeeder extends Seeder
 
         $clientAccount1 = \App\Models\Account::create([
             'user_id'       =>  $client1->id,
+            'state_id'         =>  24,
+            'lga_id'           =>  508,
+            'town_id'           =>  117,
             'first_name'    => "Wisdom",
             'middle_name'   => "Basil",
             'last_name'     => "Amana",
@@ -110,6 +113,9 @@ class ClientSeeder extends Seeder
 
         $clientAccount2 = \App\Models\Account::create([
             'user_id'       =>  $client2->id,
+            'state_id'         =>  24,
+            'lga_id'           =>  514,
+            'town_id'           =>  201,
             'first_name'    => "Adebola",
             'middle_name'   => "Julius",
             'last_name'     => "Williams",
@@ -119,6 +125,9 @@ class ClientSeeder extends Seeder
 
         $clientAccount3 = \App\Models\Account::create([
             'user_id'       =>  $client3->id,
+            'state_id'         =>  24,
+            'lga_id'           =>  513,
+            'town_id'           =>  193,
             'first_name'    => "Jennifer",
             'middle_name'   => "Ifeyinwa",
             'last_name'     => "Isaac",
@@ -128,6 +137,9 @@ class ClientSeeder extends Seeder
 
         $clientAccount4 = \App\Models\Account::create([
             'user_id'       =>  $client4->id,
+            'state_id'         =>  24,
+            'lga_id'           =>  503,
+            'town_id'           =>  55,
             'first_name'    => "Favour",
             'middle_name'   => "Chidera",
             'last_name'     => "Onuoha",

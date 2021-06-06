@@ -8,16 +8,16 @@
                 <tbody>
                     <tr>
                         <td class="tx-medium">Job Reference</td>
-                        <td class="tx-color-03"> {{ $service_request->unique_id }}</td>
+                        <td class="tx-color-03"> {{ $service_request['unique_id'] }}</td>
                     </tr>
                     <tr>
                         <td class="tx-medium">Service Required</td>
-                        <td class="tx-color-03"> {{ $service_request->service->name }}</td>
+                        <td class="tx-color-03"> {{ $service_request['service']['name'] }}</td>
                     </tr>
                     <tr>
                         <td class="tx-medium">Scheduled Date & Time </td>
                         <td class="tx-color-03">
-                            {{ !empty($service_request->preferred_time) ? Carbon\Carbon::parse($service_request->preferred_time, 'UTC')->isoFormat('MMMM Do YYYY, h:mm:ssa') : 'Not Scheduled yet' }}
+                            {{ !empty($service_request['preferred_time']) ? Carbon\Carbon::parse($service_request->preferred_time, 'UTC')->isoFormat('MMMM Do YYYY, h:mm:ssa') : 'Not Scheduled yet' }}
                         </td>
                     </tr>
                     <tr>
@@ -27,25 +27,17 @@
                         </td>
                     </tr>
                     <tr>
-                        <td class="tx-medium">Initial Service Charge</td>
+                        <td class="tx-medium">Booking Fee</td>
                         <td class="tx-color-03">
-                            ₦{{ number_format($service_request->price->amount) }} Standard
-                            Price</td>
-                    </tr>
-                    <tr>
-                        <td class="tx-medium">Total Service Charge</td>
-                        <td class="tx-color-03">
-                            ₦{{ number_format($service_request->total_amount) }}</td>
+                            ₦{{ number_format($service_request['price']['amount']) }} ({{ $service_request['price']['name'] }}
+                            Price)</td>
                     </tr>
                     <tr>
                         <td class="tx-medium">Security Code</td>
-                        <td class="tx-color-03">{{ $service_request->client_security_code }}
+                        <td class="tx-color-03">{{ $service_request['client_security_code'] }}
                         </td>
                     </tr>
-                    <tr>
-                        <td class="tx-medium">Supervised By</td>
-                        <td class="tx-color-03">David Akinsola</td>
-                    </tr>
+                    
                     <tr>
                         <td class="tx-medium">CSE's Assigned</td>
                         <td class="tx-color-03">
@@ -68,38 +60,38 @@
                     <tr>
                         <td class="tx-medium">State</td>
                         <td class="tx-color-03">
-                            {{ $service_request->client->account->state->name ?? 'UNAVAILABLE' }}
+                            {{ $service_request['client']['account']['state']['name'] ?? 'UNAVAILABLE' }}
                         </td>
                     </tr>
                     <tr>
                         <td class="tx-medium">L.G.A</td>
                         <td class="tx-color-03">
-                            {{ $service_request->client->account->lga->name ?? 'UNAVAILABLE' }}
+                            {{ $service_request['client']['account']['lga']['name'] ?? 'UNAVAILABLE' }}
                         </td>
                     </tr>
                     <tr>
                         <td class="tx-medium">Town/City</td>
                         <td class="tx-color-03">
-                            {{ $service_request->client->account->town->name ?? 'UNAVAIALABLE' }}
+                            {{ $service_request['client']['account']['town']['name'] ?? 'UNAVAIALABLE' }}
                         </td>
                     </tr>
                     <tr>
                         <td class="tx-medium">Request Address</td>
                         <td class="tx-color-03">
-                            {{ $service_request->client->account->contact == null ? '' : $service_request->client->account->contact->address }}.
+                            {{ $service_request['client']['account']['contact'] == null ? '' : $service_request['client']['account']['contact']['address'] }}.
                         </td>
                     </tr>
                     <tr>
                         <td class="tx-medium">Request Description</td>
-                        <td class="tx-color-03">{{ $service_request->description }}.</td>
+                        <td class="tx-color-03">{{ $service_request['description'] }}.</td>
                     </tr>
 
-                    @if (!empty($service_request_cancellation->reason))
+                    @if (!empty($service_request['service_request_cancellation']))
                         <tr>
                             <td class="tx-medium">Reason for Cancellation </td>
-                            <td class="tx-color-03">I'm no longer interested. <span
-                                    class="text-danger">(Only visible if the request was
-                                    cancelled)</span></td>
+                            <td class="tx-color-03">{{ $service_request['service_request_cancellation']['reason'] }}<br>
+                                <small class="text-danger">Date Cancelled: {{ Carbon\Carbon::parse($service_request['service_request_cancellation']['created_at'], 'UTC')->isoFormat('MMMM Do YYYY, h:mm:ssa') }}</small>
+                            </td>
                         </tr>
                     @endif
                 </tbody>
