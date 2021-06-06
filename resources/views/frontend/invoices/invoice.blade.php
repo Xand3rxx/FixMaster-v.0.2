@@ -207,6 +207,7 @@
                             <span class="font-weight-bold text-uppercase">Quotation  Schedule:</span>
                         </div>
                         @if($invoice['invoice_type'] === 'Final Invoice')
+                            @if($invoice['rfq_id'] !== null)
                             <div class="table-responsive bg-white shadow rounded">
                                 <table class="table mb-0 table-center invoice-tb">
                                     <thead class="bg-light">
@@ -241,6 +242,7 @@
                                     </tbody>
                                 </table>
                             </div>
+                            @endif
 
 
                                 <div class="table-responsive bg-white shadow rounded mt-4">
@@ -307,12 +309,14 @@
     <li class='text-muted d-flex justify-content-between'>Logistics :<span>₦  {{number_format($logistics, 2)}} </span></li>
     <li class='text-muted d-flex justify-content-between'>FixMaster Royalty :<span>₦ {{number_format($fixMasterRoyalty, 2)}}</span></li>
     <li class='text-muted d-flex justify-content-between'>Total Job Quotation :<span>₦ {{ number_format($totalQuotation, 2) }}</span></li>
-                                        <hr>
+    <hr>
     <li class='d-flex justify-content-between text-danger'>Less Booking Fee :<span>- ₦ {{ number_format($bookingFee, 2) }}</span></li>
     <li class='d-flex justify-content-between mt-2'>Amount Due :<span>₦ {{ number_format($amountDue, 2) }}</span></li>
-                                        <hr>
+    <hr>
+    @if($invoice['serviceRequest']['client_discount_id'] != null)
     <li class='text-muted d-flex justify-content-between mt-2'>Discounts : </li>
-    <li class='d-flex justify-content-between text-danger mb-2'>First Booking Discount :<span>- ₦ {{ number_format($discount, 2) }}</span></li>
+    <li class='d-flex justify-content-between text-danger mb-2'>First Booking Discount (50%) :<span>- ₦ {{ number_format($discount, 2) }}</span></li>
+    @endif
 
     <li class='text-muted d-flex justify-content-between mt-2'>Warranty : </li>
     <li class='text-muted d-flex justify-content-between mb-2'>{{ $warranty['name'] }} :<span>₦ {{ number_format($warrantyCost, 2) }}</span></li>
@@ -353,33 +357,49 @@
                             <form method="POST" action="{{ route('client.invoice.payment', app()->getLocale()) }}">
                                 @csrf
                                 {{-- REQUIREMENTS FOR PAYMENT GATWAYS  --}}
-                                <input type="hidden" class="d-none" value="{{$totalAmount}}" name="booking_fee">
-
                                 <input type="hidden" class="d-none" value="paystack" id="payment_channel" name="payment_channel">
+                                <input type="hidden" class="d-none" value="{{$totalAmount}}" name="booking_fee">
+                                <input type="hidden" class="d-none" value="{{$service_request_assigned['user_id']}}" name="cse_assigned">
+                                <input type="hidden" class="d-none" value="{{$technician_assigned['user_id']}}" name="technician_assigned">
+                                <input type="hidden" class="d-none" value="{{$qa_assigned['user_id'] ?? null}}" name="qa_assigned">
 
+                                <input type="hidden" class="d-none" value="{{$logistics}}" id="logistics_cost" name="logistics_cost">
+                                <input type="hidden" class="d-none" value="{{$retention_fee}}" id="retention_fee" name="retention_fee">
+                                <input type="hidden" class="d-none" value="{{$vat}}" id="tax" name="tax">
+                                <input type="hidden" class="d-none" value="{{$actual_labour_cost}}" id="actual_labour_cost" name="actual_labour_cost">
+                                <input type="hidden" class="d-none" value="{{$actual_material_cost}}" id="actual_material_cost" name="actual_material_cost">
+                                <input type="hidden" class="d-none" value="{{$labour_markup}}" id="labour_markup" name="labour_markup">
+                                <input type="hidden" class="d-none" value="{{$material_markup}}" id="material_markup" name="material_markup">
+                                <input type="hidden" class="d-none" value="{{$fixMasterRoyalty}}" id="fixMasterRoyalty" name="fixMasterRoyalty">
+
+                                <input type="hidden" class="d-none" value="service-request" id="payment_for" name="payment_for">
                                 <input type="hidden" class="d-none" value="{{ $invoice['unique_id'] }}" id="unique_id" name="unique_id">
-
                                 <input type="hidden" class="d-none" value="{{ $invoice['invoice_type'] }}" id="invoice_type" name="invoice_type">
-
                                 <input type="hidden" class="d-none" value="{{ $invoice['uuid'] }}" id="uuid" name="uuid">
-
                                 <button type="submit" id="paystack_option"  class="btn btn-outline-success">Pay with paystack</button>
                             </form>
                                 <form method="POST" action="{{ route('flutterwave-submit', app()->getLocale()) }}">
                                     @csrf
                                     {{-- REQUIREMENTS FOR PAYMENT GATWAYS  --}}
-                                    <input type="hidden" class="d-none" value="{{$totalAmount}}" name="booking_fee">
-
                                     <input type="hidden" class="d-none" value="flutterwave" id="payment_channel" name="payment_channel">
+                                    <input type="hidden" class="d-none" value="{{$totalAmount}}" name="booking_fee">
+                                    <input type="hidden" class="d-none" value="{{$service_request_assigned['user_id']}}" name="cse_assigned">
+                                    <input type="hidden" class="d-none" value="{{$technician_assigned['user_id']}}" name="technician_assigned">
+                                    <input type="hidden" class="d-none" value="{{$qa_assigned['user_id'] ?? null}}" name="qa_assigned">
+
+                                    <input type="hidden" class="d-none" value="{{$logistics}}" id="logistics_cost" name="logistics_cost">
+                                    <input type="hidden" class="d-none" value="{{$retention_fee}}" id="retention_fee" name="retention_fee">
+                                    <input type="hidden" class="d-none" value="{{$vat}}" id="tax" name="tax">
+                                    <input type="hidden" class="d-none" value="{{$actual_labour_cost}}" id="actual_labour_cost" name="actual_labour_cost">
+                                    <input type="hidden" class="d-none" value="{{$actual_material_cost}}" id="actual_material_cost" name="actual_material_cost">
+                                    <input type="hidden" class="d-none" value="{{$labour_markup}}" id="labour_markup" name="labour_markup">
+                                    <input type="hidden" class="d-none" value="{{$material_markup}}" id="material_markup" name="material_markup">
+                                    <input type="hidden" class="d-none" value="{{$fixMasterRoyalty}}" id="fixMasterRoyalty" name="fixMasterRoyalty">
 
                                     <input type="hidden" class="d-none" value="service-request" id="payment_for" name="payment_for">
-
                                     <input type="hidden" class="d-none" value="{{ $invoice['unique_id'] }}" id="unique_id" name="unique_id">
-
                                     <input type="hidden" class="d-none" value="{{ $invoice['invoice_type'] }}" id="invoice_type" name="invoice_type">
-
                                     <input type="hidden" class="d-none" value="{{ $invoice['uuid'] }}" id="uuid" name="uuid">
-
                                     <button type="submit" id="flutterwave_option"  class="btn btn-outline-success">Pay with flutterwave</button>
                                 </form>
                             @elseif($invoice['status'] === '2' && $invoice['phase'] == '2')

@@ -7,6 +7,7 @@ use App\Models\Client;
 use App\Models\Payment;
 use App\Models\Category;
 use App\Models\PaymentGateway;
+use App\Models\ServiceRequest;
 use App\Models\SubService;
 use App\Models\ServiceRequestWarranty;
 use App\Models\ServiceRequestAssigned;
@@ -53,17 +54,22 @@ class InvoiceController extends Controller
     public function invoice($language, Invoice $invoice)
     {
         $service_request_assigned = ServiceRequestAssigned::where('service_request_id', $invoice['serviceRequest']['id'])->where('assistive_role', 'CSE')->firstOrFail();
+        $technician_assigned = ServiceRequestAssigned::where('service_request_id', $invoice['serviceRequest']['id'])->where('assistive_role', 'Technician')->firstOrFail();
+        $get_qa_assigned = ServiceRequestAssigned::where('service_request_id', $invoice['serviceRequest']['id'])->where('assistive_role', 'Consultant')->first();
+        $qa_assigned = $get_qa_assigned ?? null;
+
         $getCategory = $invoice['serviceRequest']['service']['category'];
         $labourMarkup = $getCategory['labour_markup'];
         $materialsMarkup = $getCategory['material_markup'];
         $get_logistics = Income::select('amount', 'percentage')->where('income_name', 'Logistics Cost')->first();
         $get_fixMaster_royalty = Income::select('amount', 'percentage')->where('income_name', 'FixMaster Royalty')->first();
+        $get_retention_fee = Income::select('percentage')->where('income_name', 'Retention Fee')->first();
         $fixMasterRoyaltyValue = $get_fixMaster_royalty['percentage'];
         $logistics = $get_logistics['amount'];
+        $retentionFee = $get_retention_fee['percentage'];
         $bookingFee = $invoice['serviceRequest']['price']['amount'];
         $warranty = $invoice['warranty_id'] === null ? 0 : Warranty::where('id', $invoice['warranty_id'])->firstOrFail();
         $warrantyValue = $warranty['percentage']/100;
-//        $ActiveWarranties = Warranty::where('name', '!=', 'Free Warranty')->orderBy('id', 'ASC')->get();
         $ActiveWarranties = Warranty::orderBy('id', 'ASC')->get();
 
         $total = 0;
@@ -78,13 +84,23 @@ class InvoiceController extends Controller
         $vat = '';
         $totalAmount = '';
         $warrantyCost = '';
+        $materialsMarkupPrice = '';
+        $actual_labour_cost = '';
+        $newTotal='';
 
 
-        foreach ($invoice['rfqs']['rfqBatches'] as $item) {
-            $total += $item['amount'];
+        if($invoice['rfq_id'])
+        {
+            foreach ($invoice['rfqs']['rfqBatches'] as $item) {
+                $total += $item['amount'];
+            }
+            $markupPrice = $total*$materialsMarkup;
+            $materialsMarkupPrice = $total+$markupPrice;
         }
-        $markupPrice = $total*$materialsMarkup;
-        $materialsMarkupPrice = $total+$markupPrice;
+        else
+        {
+            $materialsMarkupPrice = 0;
+        }
 
 
         (array) $sub_services = $invoice['serviceRequest']['sub_services'];
@@ -122,8 +138,9 @@ class InvoiceController extends Controller
                 $quan = $element['num'];
                 $amount = '';
                 if($subs['cost_type'] === 'Fixed'){
-                    $labourMarkupPrice = ($subs['labour_cost'] * $quan['quantity']) * $labourMarkup;
-                    $amount = ($subs['labour_cost'] * $quan['quantity']) + $labourMarkupPrice;
+                    $actual_labour_cost = $subs['labour_cost'] * $quan['quantity'];
+                    $labourMarkupPrice = $actual_labour_cost * $labourMarkup;
+                    $amount = $actual_labour_cost + $labourMarkupPrice;
                 }
                 elseif($subs['cost_type'] === 'Variable')
                 {
@@ -132,25 +149,26 @@ class InvoiceController extends Controller
 
                     if($quantity === '1')
                     {
-                        $labourMarkupPrice = ($subs['labour_cost'] * $quan['quantity']) * $labourMarkup;
-                        $amount = ($subs['labour_cost'] * $quan['quantity']) + $labourMarkupPrice;
+                        $actual_labour_cost = $subs['labour_cost'] * $quan['quantity'];
+                        $labourMarkupPrice = $actual_labour_cost * $labourMarkup;
+                        $amount = $actual_labour_cost + $labourMarkupPrice;
                     }
 
                     elseif($quantity === '2' || $quantity <= '10')
                     {
                         $percentageValue = $unitPrice*0.5;
                         if($quantity === '2') {
-                            $newTotal = $percentageValue + $unitPrice;
-                            $labourMarkupPrice = $newTotal * $labourMarkup;
-                            $amount = $newTotal + $labourMarkupPrice;
+                            $actual_labour_cost = $percentageValue + $unitPrice;
+                            $labourMarkupPrice = $actual_labour_cost * $labourMarkup;
+                            $amount = $actual_labour_cost + $labourMarkupPrice;
                         }
                         else
                         {
                             $oldTotal = $percentageValue + $unitPrice;
                             $newAmount = $percentageValue * ($quantity-2);
-                            $newTotal = $oldTotal + $newAmount;
-                            $labourMarkupPrice = $newTotal * $labourMarkup;
-                            $amount = $newTotal + $labourMarkupPrice;
+                            $actual_labour_cost = $oldTotal + $newAmount;
+                            $labourMarkupPrice = $actual_labour_cost * $labourMarkup;
+                            $amount = $actual_labour_cost + $labourMarkupPrice;
                         }
                     }
 
@@ -163,16 +181,16 @@ class InvoiceController extends Controller
 
                         if($quantity === '11')
                         {
-                            $newTotal = $percentageValue + $oldTotal;
-                            $labourMarkupPrice = $newTotal * $labourMarkup;
-                            $amount = $newTotal + $labourMarkupPrice;
+                            $actual_labour_cost = $percentageValue + $oldTotal;
+                            $labourMarkupPrice = $actual_labour_cost * $labourMarkup;
+                            $amount = $actual_labour_cost + $labourMarkupPrice;
                         }
                         else
                         {
                             $newAmount = $percentageValue * ($quantity-10);
-                            $newTotal = $oldTotal + $newAmount;
-                            $labourMarkupPrice = $newTotal * $labourMarkup;
-                            $amount = $newTotal + $labourMarkupPrice;
+                            $actual_labour_cost = $oldTotal + $newAmount;
+                            $labourMarkupPrice = $actual_labour_cost * $labourMarkup;
+                            $amount = $actual_labour_cost + $labourMarkupPrice;
                         }
 
                     }
@@ -186,16 +204,16 @@ class InvoiceController extends Controller
 
                         if($quantity === '21')
                         {
-                            $newTotal = $percentageValue + $oldTotal;
-                            $labourMarkupPrice = $newTotal * $labourMarkup;
-                            $amount = $newTotal + $labourMarkupPrice;
+                            $actual_labour_cost = $percentageValue + $oldTotal;
+                            $labourMarkupPrice = $actual_labour_cost * $labourMarkup;
+                            $amount = $actual_labour_cost + $labourMarkupPrice;
                         }
                         else
                         {
                             $newAmount = $percentageValue * ($quantity-20);
-                            $newTotal = $oldTotal + $newAmount;
-                            $labourMarkupPrice = $newTotal * $labourMarkup;
-                            $amount = $newTotal + $labourMarkupPrice;
+                            $actual_labour_cost = $oldTotal + $newAmount;
+                            $labourMarkupPrice = $actual_labour_cost * $labourMarkup;
+                            $amount = $actual_labour_cost + $labourMarkupPrice;
                         }
 
                     }
@@ -208,16 +226,16 @@ class InvoiceController extends Controller
 
                         if($quantity === '51')
                         {
-                            $newTotal = $percentageValue + $oldTotal;
-                            $labourMarkupPrice = $newTotal * $labourMarkup;
-                            $amount = $newTotal + $labourMarkupPrice;
+                            $actual_labour_cost = $percentageValue + $oldTotal;
+                            $labourMarkupPrice = $actual_labour_cost * $labourMarkup;
+                            $amount = $actual_labour_cost + $labourMarkupPrice;
                         }
                         else
                         {
                             $newAmount = $percentageValue * ($quantity - 50);
-                            $newTotal = $oldTotal + $newAmount;
-                            $labourMarkupPrice = $newTotal * $labourMarkup;
-                            $amount = $newTotal + $labourMarkupPrice;
+                            $actual_labour_cost = $oldTotal + $newAmount;
+                            $labourMarkupPrice = $actual_labour_cost * $labourMarkup;
+                            $amount = $actual_labour_cost + $labourMarkupPrice;
                         }
                     }
 
@@ -239,8 +257,11 @@ class InvoiceController extends Controller
             $amountDue = $totalQuotation - $bookingFee;
             if($invoice['serviceRequest']['client_discount_id'] != null)
             {
-                $discountValue = 0.5;
                 $discount = $amountDue * 0.5;
+            }
+            else
+            {
+                $discount = $amountDue * 0;
             }
             $warrantyCost = $subTotal * $warrantyValue;
             $tax = 0.075;
@@ -254,6 +275,8 @@ class InvoiceController extends Controller
             'labourMarkup' => $labourMarkup,
             'materialsMarkup' => $materialsMarkup,
             'service_request_assigned' => $service_request_assigned,
+            'technician_assigned' => $technician_assigned,
+            'qa_assigned' => $qa_assigned,
             'materialsMarkupPrice' => $materialsMarkupPrice,
             'labourCosts' => $labourCosts,
             'logistics' => $logistics,
@@ -268,6 +291,11 @@ class InvoiceController extends Controller
             'discount' => $discount,
             'amountDue' => $amountDue,
             'vat' => $vat,
+            'material_markup' => $materialsMarkup*$total,
+            'actual_material_cost' => $total,
+            'labour_markup' => $labourMarkup*$actual_labour_cost,
+            'actual_labour_cost' => $actual_labour_cost,
+            'retention_fee' => $retentionFee,
             'totalAmount' => $totalAmount
         ]);
     }
