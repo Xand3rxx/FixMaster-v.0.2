@@ -23,12 +23,12 @@ class InvoiceBuilder
     public static function handle(Request $request, ServiceRequest $service_request, array $actionable)
     {
         // Handle RFQ
-        if ($request->filled('intiate_rfq') && $request->input('intiate_rfq') == 'yes') {
+        if ($request->filled('intiate_rfq') && ($request->input('intiate_rfq') == 'yes')) {
             array_push($actionable, self::build_new_rfq($request, $service_request));
         }
 
         // Handle Tool Request
-        if ($request->filled('intiate_trf') && $request->input('intiate_trf') == 'yes') {
+        if ($request->filled('intiate_trf') && ($request->input('intiate_trf') == 'yes')) {
             array_push($actionable, self::build_new_trf($request, $service_request));
         }
 
@@ -44,18 +44,13 @@ class InvoiceBuilder
      */
     protected static function build_invoice(Request $request, ServiceRequest $service_request)
     {
-        try {
-            (array) $valid = $request->validate([
-                'estimated_work_hours'  => 'required|numeric',
-                'quantity'              => 'required|array',
-                'quantity.*'            => 'sometimes',
-                'root_cause'            => 'required|string',
-                'other_comments'        => 'nullable',
-            ]);
-        } catch (\Throwable $th) {
-            dd($th);
-        }
-
+        (array) $valid = $request->validate([
+            'estimated_work_hours'  => 'required|numeric',
+            'quantity'              => 'required|array',
+            'quantity.*'            => 'sometimes',
+            'root_cause'            => 'required|string',
+            'other_comments'        => 'nullable',
+        ]);
 
         // Each Key should match table names, value match accepted parameter in each table name stated
         $sub_status = SubStatus::where('uuid', 'f95c31c6-6667-4a64-bee3-8aa4b5b943d3')->firstOrFail();

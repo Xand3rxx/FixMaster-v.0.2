@@ -132,7 +132,7 @@
     <div class="form-row">
         <div class="form-group col-md-12">
             <label for="status">Status</label>
-            <select class="form-control custom-select" id="status" name="status">
+            <select class="form-control custom-select" id="status" name="material_status">
                 <option selected disabled value="" selected>Select...</option>
                 <option value="Awaiting" value="{{ old('Awaiting') }}"
                     {{ old('status') == 'Awaiting' ? 'selected' : '' }}>Awaiting</option>
@@ -154,7 +154,7 @@
     <div class="form-row">
         <div class="form-group col-md-12">
             <label for="accepted">Accept Delivery</label>
-            <select class="form-control custom-select" id="accepted" name="accepted">
+            <select class="form-control custom-select" id="accepted" name="material_accepted">
                 <option selected disabled value="" selected>Select...</option>
                 <option value="Yes" value="{{ old('Yes') }}"
                     {{ old('accepted') == 'Yes' ? 'selected' : '' }}>Yes, all ordered components were

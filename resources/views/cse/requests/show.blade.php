@@ -101,21 +101,27 @@
                                                         @include('cse.requests.includes.categorization')
                                                         {{-- End of Stage 1 --}}
                                                     @else
-                                                        {{-- Stage 2 --}}
-                                                        @if (CustomHelpers::existRole($service_request->service_request_assignees, 'technician-artisans'))
+                                                        @if (!CustomHelpers::existRole($service_request->service_request_assignees, 'technician-artisans'))
+                                                            {{-- Stage 2 --}}
+
                                                             @include('cse.requests.includes.initial-technician')
+                                                            {{-- End of Stage 2 --}}
+
+                                                        @else
+
+                                                            {{-- Stage 3 --}}
+                                                            @if (collect($service_request->invoice)->isEmpty())
+                                                                @include('cse.requests.includes.invoice-building')
+                                                            @endif
+                                                            {{-- End of Stage 3 --}}
+                                                            {{-- Stage 4 --}}
+                                                            @if (!empty($materials_accepted))
+                                                                @include('cse.requests.includes.materials-acceptance')
+                                                            @endif
+                                                            {{-- End of Stage 4 --}}
+                                                            @include('cse.requests.includes.reoccuring-actions')
+                                                            @include('cse.requests.includes.project-progresses')
                                                         @endif
-                                                        {{-- End of Stage 2 --}}
-                                                        {{-- Stage 3 --}}
-                                                        @if (collect($service_request->invoice)->isEmpty())
-                                                            @include('cse.requests.includes.invoice-building')
-                                                        @endif
-                                                        {{-- End of Stage 3 --}}
-                                                        @include('cse.requests.includes.reoccuring-actions')
-                                                        @if (!empty($materials_accepted))
-                                                            @include('cse.requests.includes.materials-acceptance')
-                                                        @endif
-                                                        @include('cse.requests.includes.project-progresses')
                                                     @endif
 
                                                 </div>
@@ -132,9 +138,9 @@
                             {{-- End of Service Request Actions --}}
 
                             {{-- Job Description --}}
-                            @if (!empty($materials_accepted))
-                                @include('cse.requests.includes.job_description')
-                            @endif
+                            {{-- @if (!empty($materials_accepted)) --}}
+                            @include('cse.requests.includes.job_description')
+                            {{-- @endif --}}
 
                             {{-- End of Job Description --}}
 
