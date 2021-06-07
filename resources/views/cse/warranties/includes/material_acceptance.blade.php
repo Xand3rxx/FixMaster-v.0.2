@@ -1,29 +1,49 @@
-<h5>JOB: {{ $rfqDetails->serviceRequest->unique_id }} <br>RFQ: {{ $rfqDetails->unique_id }}</h5>
-            <div class="table-responsive mt-4">
-              <table class="table table-striped table-sm mg-b-0">
+
+                            <h5>Update RFQ Status</h5>
+                            <div class="form-row">
+                                <div class="form-group col-md-12">
+                                    <label for="status">Status</label>
+                                    <select class="form-control custom-select" id="status" name="status">
+                                        <option selected disabled value="" selected>Select...</option>
+                                        <option value="Awaiting" value="{{ old('Awaiting') }}" {{ old('status') == 'Awaiting' ? 'selected' : ''}}>Awaiting</option>
+                                        <option value="Shipped" value="{{ old('Shipped') }}" {{ old('status') == 'Shipped' ? 'selected' : ''}}>Shipped</option>
+                                        <option value="Delivered" value="{{ old('Shipped') }}" {{ old('status') == 'Delivered' ? 'selected' : ''}}>Delivered</option>
+                                    </select>
+                                    @error('status')
+                                    <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $message }}</strong>
+                                    </span>
+                                    @enderror
+                                </div>
+                            </div>
+
+                            <div class="table-responsive mt-4">
+                              
+
+                                <table class="table table-striped table-sm mg-b-0">
                 <tbody>
-               
                   <tr>
                     <td class="tx-medium">Supplier's Name</td>
                     <td class="tx-color-03">
                       {{ !empty($rfqDetails['rfqSupplier']['supplier']['account']['first_name']) ? Str::title($rfqDetails['rfqSupplier']['supplier']['account']['first_name'] ." ". $rfqDetails['rfqSupplier']['supplier']['account']['last_name']) : 'UNAVAILABLE' }}</td>
                   </tr>
                   <tr>
+                    <td class="tx-medium">Dispatch Status</td>
+                    <td class="text-info">In-Transit</td>
+                </tr>
+                <tr>
+                <td class="tx-medium">Delivery Status</td>
+                <td class="text-warning">Pending</td>
+            </tr>
+                  <tr>
                     <td class="tx-medium">Delivery Fee</td>
-                    <td class="tx-color-03">₦{{ number_format($rfqDetails['rfqSupplier']['devlivery_fee'] ?? '0') }}</td>
+                    <td class="tx-color-03">₦{{ number_format($rfqDetails->rfqSupplier->devlivery_fee ?? '0') }}</td>
                   </tr>
                   <tr>
                     <td class="tx-medium">Delivery Time</td>
-                    <td class="tx-color-03">{{ !empty($rfqDetails['rfqSupplier']['delivery_time']) ? Carbon\Carbon::parse($rfqDetails['rfqSupplier']['delivery_time'], 'UTC')->isoFormat('MMMM Do YYYY, h:mm:ssa') : 'UNAVAILABLE' }}</td>
+                    <td class="tx-color-03">{{ Carbon\Carbon::parse($rfqDetails->created_at, 'UTC')->isoFormat('MMMM Do YYYY, h:mm:ssa') }}</td>
                   </tr>
-                  <tr>
-                    <td class="tx-medium">Issued By</td>
-                    <td class="tx-color-03">{{ !empty($rfqDetails['issuer']['account']['first_name']) ? Str::title($rfqDetails['issuer']['account']['first_name'] ." ". $rfqDetails['issuer']['account']['last_name']) : 'UNAVAILABLE' }}</td>
-                  </tr>
-                  <tr>
-                    <td class="tx-medium">Client Name</td>
-                    <td class="tx-color-03">{{ !empty($rfqDetails['client']['account']['first_name']) ? Str::title($rfqDetails['client']['account']['first_name'] ." ". $rfqDetails['client']['account']['last_name']) : 'UNAVAILABLE' }}</td>
-                  </tr>
+               
                   
                   <tr>
                     <td class="tx-medium">CSE Acceptance</td>
@@ -32,7 +52,7 @@
                     @elseif($rfqDetails->accepted == 'No')
                       <td class="tx-color-03">No, all ordered components were not delivered</td>
                     @else
-                      <td class="tx-color-03">UNAVAILABLE</td>
+                      <td class="tx-color-03">Pending payment</td>
                     @endif
                     <td class="tx-color-03"></td>
                   </tr>
@@ -44,10 +64,10 @@
 
                 </tbody>
               </table>
-            </div>
-
-            <div class="table-responsive mt-4">
-                <table class="table table-hover mg-b-0" id="basicExample">
+                                </div>
+                                
+                            <div class="table-responsive mt-4">
+                            <table class="table table-hover mg-b-0" id="basicExample">
                   <thead class="thead-primary">
                     <tr>
                       <th class="text-center">#</th>
@@ -62,7 +82,6 @@
                     </tr>
                   </thead>
                   <tbody>
-               
                       @foreach ($rfqDetails->rfqBatches as $item)
                         <tr>
                             <td class="tx-color-03 tx-center">{{ $loop->iteration }}</td>
@@ -84,4 +103,8 @@
                       @endforeach
                   </tbody>
                 </table>
-            </div><!-- table-responsive -->
+                            </div><!-- table-responsive -->
+
+                            
+                    
+                        </section>

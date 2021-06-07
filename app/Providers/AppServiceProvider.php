@@ -57,6 +57,8 @@ class AppServiceProvider extends ServiceProvider
         view()->composer('layouts.partials._supplier_sidebar', function ($view) {
             $view->with([
                 'newQuotes' =>  \App\Models\Rfq::PendingQuotes()->get()->count(),
+                'warrantyQuotes' =>  \App\Models\Rfq::orderBy('created_at', 'DESC')->where('type', '=', 'warranty')->count(),
+
             ]);
         });
     }

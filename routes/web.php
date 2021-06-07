@@ -59,6 +59,7 @@ use App\Http\Controllers\ServiceRequest\WarrantClaimController;
 use App\Http\Controllers\Messaging\Template;
 use App\Http\Controllers\CSE\CseWarrantyClaimController;
 use App\Http\Controllers\Technician\ServiceRequestController as TechnicianServiceRequestController;
+use App\Http\Controllers\Supplier\SupplierRfqWarrantyController;
 
 
 
@@ -541,7 +542,12 @@ Route::prefix('/supplier')->name('supplier.')->group(function () {
     Route::get('/dispatch/returned',                          [SupplierDispatchController::class, 'dispatchReturned'])->name('dispatches_returned');
     Route::post('/warranty/replacement/notify/{dispatch:id}',                          [SupplierRfqController::class, 'warrantyReplacementNotify'])->name('warranty_replacement_notify');
     Route::get('/requests-for-quote/details/image/{image:id}',            [SupplierRfqController::class, 'rfqDetailsImage'])->name('rfq_details_image');
-
+    Route::get('/requests/warranty/claims/quote',                               [SupplierRfqWarrantyController::class, 'index'])->name('rfq.warranty');
+    Route::post('/rfqs/warranty/claims/store',                               [SupplierRfqWarrantyController::class, 'store'])->name('rfq_store_ supplier_warranty_claim');
+    Route::get('/warranty-claim/requests-for-quote/send-invoice/{rfq:uuid}',       [SupplierRfqWarrantyController::class, 'sendInvoice'])->name('rfq_warranty_send_supplier_invoice');
+    
+    Route::get('/requests-for-quote/warranty/details/{rfq:uuid}',            [SupplierRfqController::class, 'rfqDetails'])->name('rfq_warranty_details');
+   
 
 });
 

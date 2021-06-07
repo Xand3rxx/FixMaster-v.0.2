@@ -1188,9 +1188,8 @@ class ClientController extends Controller
         ]);
 
         $admin = User::where('id', 1)->with('account')->first();
-        $requestExists = ServiceRequest::where('uuid', $id)->first();
-        $account = Account::where('user_id', auth()->user()->id)->first();
-        $cses  = \App\Models\Cse::with('user', 'user.account', 'user.contact', 'user.roles')->withCount('service_request_assgined')->get();
+        $requestExists = ServiceRequest::where('uuid', $id)->with('client')->first();
+        $cses  = \App\Models\Cse::with('user', 'user.account', 'user.contact', 'user.roles')->get();
         $mail1 = '';  $mail2= '';
 
         $initateWarranty = ServiceRequestWarranty::where('service_request_id',  $requestExists->id)->update([
@@ -1202,6 +1201,7 @@ class ClientController extends Controller
 
         //send mail 1, admin, 2, client, 3 cse
        if($initateWarranty) { 
+
         $mail_data_admin = collect([
             'email' =>  $admin->email,
             'template_feature' => 'ADMIN_WARRANTY_CLAIM_NOTIFICATION',
@@ -1210,23 +1210,22 @@ class ClientController extends Controller
             'customer_email' => Auth::user()->email,
             'job_ref' =>  $requestExists->unique_id
           ]);
-          $this->mailAction($mail_data_admin);
-            $mail1 = '1';
+          $mail1 =$this->mailAction($mail_data_admin);
+       
         }
-
+ 
       
-        if($mail1 == '1') { 
+        if($mail1) { 
           $mail_data_client = collect([
             'email' =>  Auth::user()->email,
             'template_feature' => 'CUSTOMER_WARRANTY_CLAIM_NOTIFICATION',
             'customer_name' => Auth::user()->account->first_name.' '.Auth::user()->account->last_name,
             'job_ref' =>  $requestExists->unique_id
           ]);
-          $this->mailAction($mail_data_client);
-          $mail2 ='1';
+          $mail2 = $this->mailAction($mail_data_client);
         }
 
-        if($mail2 == '1') { 
+        if($mail2) { 
           foreach($cses as $cse){
           
             $mail_data_cse = collect([

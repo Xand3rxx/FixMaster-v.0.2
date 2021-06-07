@@ -9,7 +9,7 @@
       </tr>
       <tr>
         <td class="tx-medium">Client Name</td>
-        <td class="tx-color-03">{{ Str::title($rfqDetails['rfq']['serviceRequest']['client']['account']['first_name'] ." ". $rfqDetails['rfq']['serviceRequest']['client']['account']['last_name']) }}</td>
+        <td class="tx-color-03">{{ Str::title($rfqDetails['rfq']['client']['account']['first_name'] ." ". $rfqDetails['rfq']['client']['account']['last_name']) }}</td>
       </tr>
       <tr>
         <td class="tx-medium">Delivery Fee</td>

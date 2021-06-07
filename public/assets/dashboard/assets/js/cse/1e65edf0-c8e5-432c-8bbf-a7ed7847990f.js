@@ -79,6 +79,23 @@ $(document).on('change', '.custom-file-input', function() {
                     
 });
 
+$(document).on('change', '.new-supplier', function() {
+    if ($(this).prop('checked')) {
+         $('.old-supplier').prop('checked', false)
+      
+    }
+         
+});
+
+$(document).on('change', '.old-supplier', function() {
+    if ($(this).prop('checked')) {
+         $('.new-supplier').prop('checked', false)
+      
+    }
+         
+});
+
+
 
 
 

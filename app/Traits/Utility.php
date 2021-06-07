@@ -425,7 +425,9 @@ trait Utility
               'job_ref' =>  $requestExists->unique_id
             ]);
             $mail1 = $this->mailAction($mail_data_admin);
-            if($mail1 == 0)
+      
+            $mail2 ="";
+            if($mail1)
             {
 
               $mail_data_client = collect([
@@ -436,8 +438,9 @@ trait Utility
             ]);
             $mail2 = $this->mailAction($mail_data_client);
             }
+          
         
-            if($mail2 == 0)
+            if($mail2)
             {
             foreach ($cse as $value) {
             $mail_data_cse = collect([

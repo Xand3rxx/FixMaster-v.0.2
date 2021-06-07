@@ -248,11 +248,12 @@
                                                 <div class="form-group col-1 col-md-1 col-sm-1">
                                                         <div class="custom-control custom-radio mt-2">
                                                             <div class="custom-control custom-radio">
-                                                                <input type="radio" class="custom-control-input" id="initial_supplier" name="supplier_id" value="{{$item->warranty_claim_supplier->user_id}}">
-                                                                <input type="hidden" class="custom-control-input" id="add_inital_supplier" name="initial_supplier" value="{{$item->warranty_claim_supplier->user_id}}">
+                                                                <input type="checkbox" class="custom-control-input old-supplier" id="initial_supplier" name="supplier_id[]" value="{{$item->warranty_claim_supplier->user_id}}">
+                                                                <input type="hidden" class="custom-control-input" id="add_inital_supplier" name="initial_supplier[]" value="{{$item->warranty_claim_supplier->user_id}}">
                                                                 <input type="hidden" class="custom-control-input" id="" name="supplier_email" value="{{$item->warranty_claim_supplier->user->email}}">
                                                                 <input type="hidden" class="custom-control-input" id="" name="supplier_fname" value="{{$item->warranty_claim_supplier->user->account->first_name}}">
                                                                 <input type="hidden" class="custom-control-input" id="" name="supplier_lname" value="{{$item->warranty_claim_supplier->user->account->last_name}}">
+
 
                                                                 <label class="custom-control-label" for="{{ $loop->iteration }}"></label>
                                                             </div>
@@ -270,88 +271,43 @@
                                  
      
                             
-                            <h4 id="section1" class="mt-4 mb-2">Initiate RFQ To Other Initial Supplier?</h4>
+                            <h4 id="section1" class="mt-4 mb-2">Initiate RFQ To Other Supplier?</h4>
                              <div class="form-row mt-4">
                                 <div class="form-group col-md-4">
                                     <div class="custom-control custom-radio">
-                                        <input type="radio" class="custom-control-input"  name="supplier_id" value="all" 
+                                        <input type="checkbox" class="custom-control-input new-supplier"  name="new_supplier_id" value="all" 
                                      
                                          >
-                                        <label class="custom-control-label" for="rfqYes">Yes</label><br>
+                                        <label class="custom-control-label" for="">Yes</label><br>
                                     </div>
                                 </div>
                                 
                             </div>
 
 
+                            @include('cse.warranties.includes.make_request')
                               @if(!empty($suppliers->rfqSuppliesInvoices))
                               @foreach($suppliers->rfqSuppliesInvoices as $item)
                               @if($item->accepted == 'Pending')
                             
-                            @include('cse.warranties.includes.suppliers_contact')
-
-
-                           
+                              @include('cse.warranties.includes.suppliers_contact')
+                          
                             @endif    
-                @endforeach
-                <input type="hidden" value="{{$suppliers->id}}" name="rfq_id">
-              
-             
-                @endif
+                            @endforeach
+                           <input type="hidden" value="{{$suppliers->id}}" name="rfq_id">
+                        @endif
                             </div><!-- end the d-none -->
                         
                         </section>
                         @endif
                         
 
-                        @if(is_null($RfqDispatchNotification))
+                        @if(!is_null($RfqDispatchNotification))
                         <h3>Material Acceptance</h3>
                         <section>
                         <small class="text-danger">This portion will display only if the CSE initially executed a RFQ, the Client paid for the components and the Supplier has made the delivery.</small>
 
-                            <span  class="d-rfq2">
-                            <h5>Update RFQ Status</h5>
-                            <div class="form-row">
-                                <div class="form-group col-md-12">
-                                    <label for="status">Material Status</label>
-                                    <select class="form-control custom-select" id="status" name="status">
-                                        <option selected disabled value="" selected>Select...</option>
-                                        <option value="Approved" value="{{ old('Approved') }}" {{ old('status') == 'Approved' ? 'selected' : ''}}>Approved</option>
-                                        <option value="Declined" value="{{ old('') }}" {{ old('status') == 'Declined' ? 'selected' : ''}}>Declined</option>
-                                    </select>
-                                    @error('status')
-                                    <span class="invalid-feedback" role="alert">
-                                        <strong>{{ $message }}</strong>
-                                    </span>
-                                    @enderror
-                                </div>
-                            </div>
-
-                         
-
-                            
-                            
-                            <!-- <h5>Accept Materials Delivery</h5>
-                            <div class="form-row">
-                                <div class="form-group col-md-12">
-                                    <label for="accept_materials">Accept Delivery</label>
-                                    <select class="form-control custom-select" id="accept_materials" name="accept_materials">
-                                        <option selected disabled value="" selected>Select...</option>
-                                        <option value="Yes" value="{{ old('Yes') }}" {{ old('accept_materials') == 'Yes' ? 'selected' : ''}}>Yes, all ordered components were delivered</option>
-                                        <option value="No" value="{{ old('No') }}" {{ old('accept_materials') == 'No' ? 'selected' : ''}}>No, all ordered components were not delivered</option>
-                                    </select>
-                                    @error('accept_materials')
-                                    <span class="invalid-feedback" role="alert">
-                                        <strong>{{ $message }}</strong>
-                                    </span>
-                                    @enderror
-                                </div>
-                                <div class="form-group decline-rfq-reason col-md-12">
-                                    <label for="reason">Reason</label>
-                                    <textarea rows="3" class="form-control @error("reason") is-invalid @enderror" id="reason" name="reason"></textarea>
-                                </div>
-                            </div> -->
-                            </span>
+                        @include('cse.warranties.includes.material_acceptance')
                         </section>
                         @endif
                      
@@ -440,6 +396,8 @@ function newImageRow(count){
     $('.add-image-row').append(html);
 
 }
+
+
 </script>
 @endpush
 
