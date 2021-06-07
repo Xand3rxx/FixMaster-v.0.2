@@ -73,7 +73,7 @@
                   <td class="text-center">
                     <div class="form-group col-md-12">
                       {{-- <label for="delivery_medium">Update Satus</label> --}}
-                      <select name="supplier_status" @if($dispatch->supplier_status != 'Delivered') id="supplier-status" @endif class="form-control @error('supplier_status') is-invalid @enderror supplier-status" required data-url="{{ route('supplier.update_dispatch_status', ['dispatch'=>$dispatch->id, 'locale'=>app()->getLocale()]) }}" data-batch-number="{{ $dispatch->unique_id}}" @if($dispatch->supplier_status == 'Delivered') disabled @endif>
+                      <select name="supplier_status" @if($dispatch->supplier_status != 'Delivered') id="supplier-status" data-url="{{ route('supplier.update_dispatch_status', ['dispatch'=>$dispatch->id, 'locale'=>app()->getLocale()]) }}" data-batch-number="{{ $dispatch->unique_id}}" @endif class="form-control @error('supplier_status') is-invalid @enderror supplier-status" required  @if($dispatch->supplier_status == 'Delivered') disabled @endif>
                         @if($dispatch->supplier_status == 'Delivered')
                           <option selected>Delivered</option>
                         @else

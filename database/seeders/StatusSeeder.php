@@ -369,6 +369,15 @@ class StatusSeeder extends Seeder
             ),
             array(
                 'user_id'       =>  1,
+                'uuid'          =>  'ee55201e-75a3-461a-b174-3a0537ee8e0c',
+                'status_id'     =>  2,
+                'name'          =>  'Supplier Dispatch: Materials are being Processed',
+                'phase'         =>  $phaseOngoing++,
+                'recurrence'    =>  'Yes',
+                'status'        =>  'active',
+            ),
+            array(
+                'user_id'       =>  1,
                 'uuid'          =>  '6e266cf8-7eeb-49be-86ad-375c7c7416fa',
                 'status_id'     =>  2,
                 'name'          =>  'Supplier Dispatch: Materials are In-transit',
