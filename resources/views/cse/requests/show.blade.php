@@ -115,7 +115,7 @@
                                                             @endif
                                                             {{-- End of Stage 3 --}}
                                                             {{-- Stage 4 --}}
-                                                            @if (!empty($materials_accepted))
+                                                            @if (!empty($materials_accepted) && ($materials_accepted['rfqSupplierInvoice']['supplierDispatch']['cse_material_acceptance'] !== 'Yes'))
                                                                 @include('cse.requests.includes.materials-acceptance')
                                                             @endif
                                                             {{-- End of Stage 4 --}}
@@ -138,10 +138,7 @@
                             {{-- End of Service Request Actions --}}
 
                             {{-- Job Description --}}
-                            {{-- @if (!empty($materials_accepted)) --}}
                             @include('cse.requests.includes.job_description')
-                            {{-- @endif --}}
-
                             {{-- End of Job Description --}}
 
                             {{-- Service Request Summary --}}

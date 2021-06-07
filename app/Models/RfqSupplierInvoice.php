@@ -45,7 +45,7 @@ class RfqSupplierInvoice extends Model
 
     public function supplierDispatch()
     {
-        return $this->hasOne(RfqSupplierDispatch::class, 'rfq_supplier_invoice');
+        return $this->hasOne(RfqSupplierDispatch::class, 'rfq_supplier_invoice')->latest('created_at');
     }
 
 }

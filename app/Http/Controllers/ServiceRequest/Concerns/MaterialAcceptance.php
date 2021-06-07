@@ -25,6 +25,11 @@ class MaterialAcceptance
             array_push($actionable, self::update_material_status($request, $service_request));
         }
 
+        // Handle Accept Materials 
+        if ($request->filled('material_accepted')) {
+            array_push($actionable, self::update_accept_materials($request, $service_request));
+        }
+
         return $actionable;
     }
 
@@ -40,29 +45,71 @@ class MaterialAcceptance
         (array) $valid = $request->validate([
             'material_status'               =>  'bail|string|in:Awaiting,Shipped,Delivered',
         ]);
-
-        dd($valid);
-
         // Updating rfq_supplier_dispatches to $valid['material_status']
+        // Update RFQ Table Status colum with $valid['material_status']
 
-        // Each Key should match table names, value match accepted parameter in each table name stated
         // $sub_status = SubStatus::where('uuid', '1abe702c-e6b1-422f-9145-810394f92e1d')->firstOrFail();
         $service_request->rfq->loadMissing(['rfqBatches.supplierInvoiceBatches', 'rfqSupplierInvoice.supplierDispatch']);
+
         return [
-            'rfq_supplier_dispatches' => [
+            'update_rfq_supplier_dispatches' => [
+                'rfq_supplier_dispatches' => $service_request['rfq']['rfqSupplierInvoice']['supplierDispatch'],
                 'cse_status'          => $valid['material_status'],
             ],
-            // 'service_request_progresses' => [
-            //     'user_id'              => $request->user()->id,
-            //     'service_request_id'   => $service_request->id,
-            //     'status_id'            => $sub_status->status_id,
-            //     'sub_status_id'        => $sub_status->id,
-            // ],
+            'update_rfqs' => [
+                'rfq'       => $service_request['rfq'],
+                'status'    => $valid['material_status']
+            ],
             'log' => [
                 'type'                      =>  'request',
                 'severity'                  =>  'informational',
                 'action_url'                =>  \Illuminate\Support\Facades\Route::currentRouteAction(),
                 'message'                   =>  $request->user()->account->last_name . ' ' . $request->user()->account->first_name . ' updated of the status of the Supplier Dispatch' . $service_request['rfq']['rfqSupplierInvoice']['supplierDispatch']['unique_id'] . ' for Service Request:' . $service_request->unique_id . ' Job',
+            ]
+        ];
+    }
+
+    /**
+     * Update Material Acceptance
+     * 
+     * @throws \Illuminate\Validation\ValidationException
+     * @return array
+     */
+    protected static function update_accept_materials(Request $request, ServiceRequest $service_request)
+    {
+        // validate Request
+        (array) $valid = $request->validate([
+            'material_accepted'               =>  'bail|string|in:Yes,No',
+            'material_reason'               =>  'bail|required|string',
+        ]);
+
+        // Updating rfq_supplier_dispatches to $valid['material_status']
+        // Update RFQ Table Status colum with $valid['material_status']
+
+        $sub_status = SubStatus::where('uuid', $valid['material_accepted'] == 'Yes' ? '73c2b038-4127-4085-a407-f75152a02315' : '1d3baa2b-25ec-4790-937e-90cc6a625178')->firstOrFail();
+        $service_request->rfq->loadMissing(['rfqBatches.supplierInvoiceBatches', 'rfqSupplierInvoice.supplierDispatch']);
+
+        return [
+            'update_rfq_supplier_dispatches' => [
+                'rfq_supplier_dispatches' => $service_request['rfq']['rfqSupplierInvoice']['supplierDispatch'],
+                'cse_material_acceptance'   => $valid['material_accepted'],
+                'cse_comment'               => $valid['material_reason']
+            ],
+            'update_rfqs' => [
+                'rfq'       => $service_request['rfq'],
+                'accepted'    => $valid['material_accepted']
+            ],
+            'service_request_progresses' => [
+                'user_id'              => $request->user()->id,
+                'service_request_id'   => $service_request->id,
+                'status_id'            => $sub_status->status_id,
+                'sub_status_id'        => $sub_status->id,
+            ],
+            'log' => [
+                'type'                      =>  'request',
+                'severity'                  =>  'informational',
+                'action_url'                =>  \Illuminate\Support\Facades\Route::currentRouteAction(),
+                'message'                   =>  $request->user()->account->last_name . ' ' . $request->user()->account->first_name . $valid['material_accepted'] == 'Yes' ? ' Accepted' : ' Declined' . '  the Supplier Dispatch' . $service_request['rfq']['rfqSupplierInvoice']['supplierDispatch']['unique_id'] . ' for Service Request:' . $service_request->unique_id . ' Job',
             ]
         ];
     }

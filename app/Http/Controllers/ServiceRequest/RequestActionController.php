@@ -49,7 +49,7 @@ class RequestActionController extends Controller
             $to_be_stored = \App\Http\Controllers\ServiceRequest\Concerns\Invoicebuilder::handle($request, $service_request, $to_be_stored);
         }
 
-        if ($request->filled('material_status')) {
+        if ($request->hasAny(['material_status','material_accepted'])) {
             $to_be_stored = \App\Http\Controllers\ServiceRequest\Concerns\MaterialAcceptance::handle($request, $service_request, $to_be_stored);
         }
 

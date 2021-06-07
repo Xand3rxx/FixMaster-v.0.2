@@ -63,6 +63,7 @@ class RequestController extends Controller
         $materials_accepted = \App\Models\Rfq::where('service_request_id', $service_request->id)
         ->where('type', 'Request')
         ->with('rfqBatches.supplierInvoiceBatches', 'rfqSupplierInvoice.supplierDispatch')->first();
+        // dd($materials_accepted);
 
         $service_request_progresses = \App\Models\ServiceRequestProgress::where('user_id', auth()->user()->id)->latest('created_at')->first();
         

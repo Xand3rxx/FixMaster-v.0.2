@@ -69,7 +69,7 @@ trait StoreInDatabase
                             'manufacturer_name'     => $table['rfqs']['rfq_batches']['manufacturer_name'][$key],
                             'model_number'          => $table['rfqs']['rfq_batches']['model_number'][$key],
                             'quantity'              => $table['rfqs']['rfq_batches']['quantity'][$key],
-                            'image'                 => $table['rfqs']['rfq_batches']['image'][$key]->store('assets/rfq-images', 'public'),
+                            'image'                 => \App\Traits\ImageUpload::imageUploader($table['rfqs']['rfq_batches']['image'][$key],'assets/rfq-images'),
                             'unit_of_measurement'   => $table['rfqs']['rfq_batches']['unit_of_measurement'][$key] ?? "",
                             'size'                  => $table['rfqs']['rfq_batches']['size'][$key]
                         ]);
@@ -77,7 +77,6 @@ trait StoreInDatabase
                 }
 
                 if (!empty($table['invoice_building'])) {
-                    // $table['invoice_building'] ==>  array of 1. $table['invoice_building']['estimated_work_hours'] 2. $table['invoice_building']['service_request']
                     \App\Traits\Invoices::completedServiceInvoice($table['invoice_building']['service_request'], $table['invoice_building']['estimated_work_hours']);
                 }
 
@@ -91,6 +90,13 @@ trait StoreInDatabase
                     }
                 }
 
+                if (!empty($table['update_rfq_supplier_dispatches'])) {
+                    // dd($table['update_rfq_supplier_dispatches']['rfq_supplier_dispatches']);
+                    $table['update_rfq_supplier_dispatches']['rfq_supplier_dispatches']->update($table['update_rfq_supplier_dispatches']);
+                }
+                if (!empty($table['update_rfqs'])) {
+                    $table['update_rfqs']['rfq']->update($table['update_rfqs']);
+                }
 
                 if (!empty($table['service_request_table'])) {
                     $table['service_request_table']['service_request']->update($table['service_request_table']);
@@ -104,11 +110,6 @@ trait StoreInDatabase
                     foreach ($table['add_technicians'] as $key => $technician) {
                         ServiceRequestAssigned::create($technician);
                     }
-                }
-
-                if (!empty($table['invoice_building'])) {
-                    // $table['invoice_building'] ==>  array of 1. $table['invoice_building']['estimated_work_hours'] 2. $table['invoice_building']['service_request']
-                    // \App\Traits\Invoices::completedServiceInvoice($table['invoice_building']['service_request'], $table['invoice_building']['estimated_work_hours']);
                 }
 
                 if (!empty($table['log'])) {
