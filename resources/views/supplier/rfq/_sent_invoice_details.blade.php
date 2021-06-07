@@ -1,15 +1,18 @@
 <h5>JOB: {{ $rfqDetails->rfq->serviceRequest->unique_id }} <br>RFQ: {{ $rfqDetails->rfq->unique_id }}</h5>
-{{-- {{dd($supplierInvoice->supplierInvoiceBatches->count())}} --}}
 <div class="table-responsive mt-4">
   <table class="table table-striped table-sm mg-b-0">
     <tbody>
       <tr>
-        <td class="tx-medium">Issued By</td>
-        <td class="tx-color-03">{{ Str::title($rfqDetails['rfq']['issuer']['account']['first_name'] ." ". $rfqDetails['rfq']['issuer']['account']['last_name']) }}(Client Service Executive)</td>
+        <td class="tx-medium">Client Service Executive Name</td>
+        <td class="tx-color-03">{{ Str::title($rfqDetails['rfq']['issuer']['account']['first_name'] ." ". $rfqDetails['rfq']['issuer']['account']['last_name']) }}</td>
       </tr>
-      <tr>
+      {{-- <tr>
         <td class="tx-medium">Client Name</td>
-        <td class="tx-color-03">{{ Str::title($rfqDetails['rfq']['client']['account']['first_name'] ." ". $rfqDetails['rfq']['client']['account']['last_name']) }}</td>
+        <td class="tx-color-03">{{ Str::title($rfqDetails['rfq']['serviceRequest']['client']['account']['first_name'] ." ". $rfqDetails['rfq']['serviceRequest']['client']['account']['last_name']) }}</td>
+      </tr> --}}
+      <tr>
+        <td class="tx-medium">Delivery Address</td>
+        <td class="tx-color-03">{{ !empty($rfqDetails['rfq']['serviceRequest']['client']['contact']['address']) ? $rfqDetails['rfq']['serviceRequest']['client']['contact']['address'] : 'UNAVAILABLE' }}</td>
       </tr>
       <tr>
         <td class="tx-medium">Delivery Fee</td>
@@ -47,7 +50,7 @@
     <tbody>
         @foreach ($rfqDetails->supplierInvoiceBatches as $item)
           <tr>
-              <td class="tx-color-03 tx-center">{{ ++$i }}</td>
+              <td class="tx-color-03 tx-center">{{ $loop->iteration }}</td>
               <td class="tx-medium">{{ !empty($item->rfqBatch->manufacturer_name) ? $item->rfqBatch->manufacturer_name : 'UNAVAILABLE' }}</td>
               <td class="tx-medium">{{ !empty($item->rfqBatch->model_number) ? $item->rfqBatch->model_number : 'UNAVAILABLE' }}</td>
               <td class="tx-medium">{{ !empty($item->rfqBatch->component_name) ? $item->rfqBatch->component_name : 'UNAVAILABLE' }}</td>

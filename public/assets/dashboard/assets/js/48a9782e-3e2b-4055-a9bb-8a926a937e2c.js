@@ -42,7 +42,7 @@ $(document).ready(function() {
             // inline: true,
             // sideBySide: true,
             timepicker:true,
-            format: 'Y/m/d',
+            format: 'Y/m/d H:i',
             formatDate: 'Y/m/d',
             minDate: '-1970/01/02', // yesterday is minimum date
             mask: true,

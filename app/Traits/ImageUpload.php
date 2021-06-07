@@ -46,7 +46,7 @@ trait ImageUpload
         return null;
     }
 
-    public static function imageUploader(\Illuminate\Http\UploadedFile|\Illuminate\Http\UploadedFile $image, string $directory, int $width = 500, int $height = 500)
+    public static function imageUploader(\Illuminate\Http\UploadedFile $image, string $directory, int $width = 500, int $height = 500)
     {
         if (!request()->file($image)->isValid()) {
             request()->session()->flash('error', 'Invalid Image');

@@ -52,8 +52,8 @@
                         <td>{{ $item->model_number }}</td>
                         <td class="tx-medium text-center quantity-{{$item->id}}">{{ $item->quantity }}</td>
                         <td class="tx-medium text-center">
-                        <input type="number" maxlength="7" min="1" name="unit_price[]" class="form-control @error('unit_price') is-invalid @enderror" id="unit-price-{{$item->id}}" value="{{ old('unit_price[]') }}" onkeyup="individualAmount({{ $item->id }})" autocomplete="off">
-                        @error('unit_price')
+                        <input type="number" maxlength="7" min="1" name="unit_price[]" class="form-control @error('unit_price[0]') is-invalid @enderror" id="unit-price-{{$item->id}}" value="{{ old('unit_price[0]') }}" onkeyup="individualAmount({{ $item->id }})" autocomplete="off">
+                        @error('unit_price[0]')
                         <x-alert :message="$message" />
                         @enderror
                         <input type="hidden" class="each-amount" id="unit-amount-{{$item->id}}">
