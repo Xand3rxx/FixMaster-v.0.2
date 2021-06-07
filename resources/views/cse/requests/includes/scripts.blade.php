@@ -24,5 +24,8 @@
             // User service requuest client_id
             // return respose of either success or failed
         });
+
+        //Initiate light gallery plugin
+        $('#lightgallery').lightGallery();
     });
 </script>

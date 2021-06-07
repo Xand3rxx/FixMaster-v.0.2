@@ -57,7 +57,9 @@ class RequestController extends Controller
     public function show($language, string $uuid)
     {
         // find the service request using the uuid and relations
-        $service_request = ServiceRequest::where('uuid', $uuid)->with(['price', 'service', 'service.subServices', 'client', 'service_request_cancellation', 'invoice'])->firstOrFail();
+        $service_request = ServiceRequest::where('uuid', $uuid)->with(['price', 'service', 'service.subServices', 'client', 'service_request_cancellation', 'invoice', 'serviceRequestMedias', 'serviceRequestProgresses'])->firstOrFail();
+
+        // return $service_request;
 
         // Refactor this to be eager loaded with service request, use with and callback function
         $materials_accepted = \App\Models\Rfq::where('service_request_id', $service_request->id)

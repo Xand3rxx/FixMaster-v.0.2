@@ -220,6 +220,12 @@ class ServiceRequest extends Model
         return $this->belongsToMany(Media::class, 'service_request_medias');
     }
 
+    public function serviceRequestProgresses()
+    {
+        return $this->hasMany(ServiceRequestProgress::class, 'service_request_id')->with('user', 'subStatus');
+    }
+
+
     /**
      * Scope a query to only include all pending requests
      *

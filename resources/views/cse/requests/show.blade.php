@@ -142,7 +142,7 @@
                             {{-- End of Job Description --}}
 
                             {{-- Service Request Summary --}}
-                            {{-- @include('cse.requests.includes.service_request_summary') --}}
+                            @include('cse.requests.includes.service_request_summary')
                             {{-- End Service Request Summary --}}
 
                         </div>
@@ -200,6 +200,7 @@
                     $('#update-progress').trigger('click');
                 },
             });
+
 
         </script>
         @include('cse.requests.includes.scripts')

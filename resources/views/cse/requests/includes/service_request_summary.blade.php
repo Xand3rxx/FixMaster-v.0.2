@@ -1,5 +1,5 @@
 <div id="serviceRequestSummary" class="tab-pane pd-20 pd-xl-25">
-    <div class="divider-text">Diagnostic Reports</div>
+    {{-- <div class="divider-text">Diagnostic Reports</div>
     <div class="card-group">
         <div class="card">
             <div class="card-body shadow-none bd-primary overflow-hidden">
@@ -33,7 +33,7 @@
                         {{ \Carbon\Carbon::now('UTC') }}</small></p>
             </div>
         </div>
-    </div>
+    </div> --}}
 
     <div class="divider-text">Service Request Progress</div>
     <h5 class="mt-4">Service Request Progress</h5>
@@ -48,7 +48,7 @@
                 </tr>
             </thead>
             <tbody>
-                @foreach ($request_progress as $key => $progress)
+                @foreach ($service_request['serviceRequestProgresses'] as $progress)
                     <tr>
                         <td class="tx-color-03 tx-center">{{ $loop->iteration }}</td>
                         <td class="tx-medium">
@@ -65,7 +65,7 @@
         </table>
     </div><!-- table-responsive -->
 
-    <div class="divider-text">Tools Request</div>
+    {{-- <div class="divider-text">Tools Request</div>
     <h5 class="mt-4">Tools Requests</h5>
     <div class="table-responsive mb-4">
         <table class="table table-hover mg-b-0">
@@ -150,5 +150,5 @@
                 </tr>
             </tbody>
         </table>
-    </div><!-- table-responsive -->
+    </div><!-- table-responsive --> --}}
 </div>
