@@ -234,6 +234,11 @@ class ServiceRequest extends Model
     {
         return $this->hasOne(ToolRequest::class, 'service_request_id')->with('approver', 'requester');
     }
+    public function rfqDispatchNotification()
+    {
+        return $this->hasOne(RfqDispatchNotification::class, 'service_request_id', 'id');
+    }
+
 
     /**
      * Scope a query to only include all pending requests

@@ -1,3 +1,4 @@
+
 <aside class="aside aside-fixed">
   <div class="aside-header">
     <a href="#" class="aside-logo"></a>
@@ -47,6 +48,11 @@
           <li class="{{ Route::currentRouteNamed('supplier.rfq_sent_invoices') ? 'active' : '' }}"><a href="{{ route('supplier.rfq_sent_invoices', app()->getLocale()) }}">Sent Quotes</a></li>
           <li class="{{ Route::currentRouteNamed('supplier.rfq_declined_invoices') ? 'active' : '' }}"><a href="{{ route('supplier.rfq_declined_invoices', app()->getLocale()) }}">Declined Quotes</a></li>
           <li class="{{ Route::currentRouteNamed('supplier.rfq_approved_invoices') ? 'active' : '' }}"><a href="{{ route('supplier.rfq_approved_invoices', app()->getLocale()) }}">Won Quotes</a></li>
+          
+ 
+          @if(count($RfqDispatchNotification) > 0)
+          <li class="{{ Route::currentRouteNamed('supplier.rfq.warranty') ? 'active' : '' }}"><a href="{{ route('supplier.rfq.warranty', app()->getLocale()) }}">Warranty Claim Quotes<span class="badge badge-primary">{{ $warrantyQuotes }}</span></span></a></li>
+           @endif
         </ul>
       </li>
 

@@ -41,6 +41,8 @@
 </head>
 
 <body>
+
+
     <style>
         div.dt-buttons {
             margin-top: 1em;
@@ -83,8 +85,50 @@
             background: linear-gradient(to bottom, rgb(233 125 31) 0%, rgb(233 125 31) 100%);
             border-color: #E97D1F !important;
         }
+        
+        .position-top{
+            position:fixed;
+            left:0;
+            width:60%;
+        z-index: 30000;        
+        background: #8392a5;;
+        border-color: #8392a5;;
+        border-radius: 0;
+        color:#fff;
+            display: flex;
+            justify-content: space-evenly;
+            top:0px
+        }
+
 
     </style>
+  
+
+   @if(!empty($RfqDispatchNotification) && Auth::user()->type->url == 'supplier'))
+   @if(!empty($RfqDispatchNotification[0]))
+   @if(Auth::user()->id == $RfqDispatchNotification[0]->supplier_id ))
+   @if($RfqDispatchNotification[0]->notification == 'On')))
+    <div class="alert alert-primary alert-dismissible position-top" role="alert">
+                <span type="button" class="close" data-dismiss="alert" aria-label="Close" style="cursor:pointer">
+                <!-- <span class="close-alert" aria-hidden="true">&times;</span> -->
+                </span>
+                <span class="">An urgent dispatch for warrant claim for job reference {{$RfqDispatchNotification[0]->service_request->unique_id}} is required .</span>
+               {{-- <input type="checkbox" class="custom-control-inpu"  name="warranty_replacement_notify" value="Yes" 
+                onclick="event.preventDefault();
+                    document.getElementById('notify-form').submit();" 
+                    href="{{ route('supplier.warranty_replacement_notify',  ['dispatch'=>$RfqDispatchNotification[0]->id, 'locale'=>app()->getLocale()]) }}"
+                    >
+                    <form id="notify-form" class="form-data" method="POST" style="display: none;"
+                    action="{{route('supplier.warranty_replacement_notify', ['dispatch'=>$RfqDispatchNotification[0]->id, 'locale'=>app()->getLocale()])}}"  
+                    enctype="multipart/form-data">
+                    @csrf
+                   </form>--}}
+            </div>
+            @endif
+            @endif
+            @endif
+            @endif
+   
     <input type="hidden" id="path_admin" value="{{url('/')}}">
     @include('layouts.partials._dashboard_sidebar')
 

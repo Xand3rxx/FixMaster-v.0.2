@@ -92,12 +92,13 @@ class DispatchController extends Controller
             'comment'               =>  'sometimes',
         ]);
 
+
         //Set `createDispatch` to false before Db transaction and pass by reference
         (bool) $createDispatch  = false;
 
         // Set DB to rollback DB transacations if error occurs
         DB::transaction(function () use ($request, &$createDispatch) {
-            RfqSupplierDispatch::create([
+             RfqSupplierDispatch::create([
                 'rfq_id'                =>  $request->rfq_id,
                 'rfq_supplier_invoice'  =>  $request->rfq_supplier_invoice,
                 'supplier_id'           =>  Auth::id(),
@@ -113,8 +114,13 @@ class DispatchController extends Controller
 
             //Set variables as true to be validated outside the DB transaction
             $createDispatch =  true;
-
-        }, 3);
+        });
+    
+        $serviceRquest = \App\Models\Rfq::where(['id'=>$request->rfq_id, 'type'=> 'Warranty' ])->first()->service_request_id;
+         if($serviceRquest)
+         {
+        $updateWArrantyDispatch = $this->updateRfqDispatchNotify($request,$serviceRquest);
+         }
 
         if($createDispatch){
 
@@ -225,5 +231,15 @@ class DispatchController extends Controller
                 return back()->with('error', 'An error occurred while trying to update dispatch code for '.$request->dispatch_code);
             }
         }
+    }
+
+    public function updateRfqDispatchNotify($request,$serviceRquest){
+    
+        $updateOldSupplierRfqDispatch = \App\Models\RfqDispatchNotification::where(['service_request_id'=>$serviceRquest ,  'supplier_id' => Auth::user()->id ])->update([
+             'notification' => 'Off',
+            'dispatch' => 'Yes',
+        ]);
+
+        return $updateOldSupplierRfqDispatch ;
     }
 }

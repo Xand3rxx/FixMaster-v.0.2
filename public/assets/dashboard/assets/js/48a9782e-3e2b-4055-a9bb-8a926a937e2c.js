@@ -49,7 +49,6 @@ $(document).ready(function() {
         });
     });
 
-
     //Prevent characters or string asides number in phone number input field
     $("#phone_number, #other_phone_number, #account_number, .amount").on("keypress keyup blur", function(event) {
         $(this).val($(this).val().replace(/[^\d].+/, ""));

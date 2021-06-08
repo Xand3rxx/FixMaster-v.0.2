@@ -692,6 +692,7 @@ class DiscountEditController extends Controller
              ClientDiscount::create([
                 'discount_id' => $discount->id,
                 'service_id' =>  $service->serviceid,
+                'client_id' => 0,
                     ]);
             
             }

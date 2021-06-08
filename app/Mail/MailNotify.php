@@ -10,16 +10,17 @@ use Illuminate\Queue\SerializesModels;
 class MailNotify extends Mailable
 {
     use Queueable, SerializesModels;
-    public $user;
+    public $data;
 
     /**
      * Create a new message instance.
      *
      * @return void
      */
-    public function __construct($user)
+    public function __construct($data)
     {
-        $this->user = $user;
+        $this->data = (object) $data;
+    
         //
     }
 
@@ -30,6 +31,7 @@ class MailNotify extends Mailable
      */
     public function build()
     {
-       return  $this->subject('Referral Details')->from('test@ninthbinary.com')->view('emails.notify');
+   
+       return  $this->subject($this->data->subject)->from('postmaster@sendmail.fixmaster.com.ng')->view('emails.message', ['mail_message' => $this->data->content], );
     }
 }

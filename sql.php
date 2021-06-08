@@ -1,0 +1,1 @@
+ALTER TABLE `medias` ADD `service_request_id` BIGINT(20) NOT NULL AFTER `id`; 

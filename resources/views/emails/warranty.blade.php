@@ -36,36 +36,62 @@
   <body>
     <div class="container">
             <!-- Logo container-->
-            <div>
+            <!-- <div>
                 {{-- <a class="logo" href="{{ route('frontend.index') }}">
-                <img src="{{ asset('assets/images/home-fix-logo.png') }}" class="l-dark" height="70" alt="">
-                <img src="{{ asset('assets/images/home-fix-logo-new.png') }}" class="l-light" height="70" alt="">
+                <img src="https://fixmaster.com.ng/wp-content/uploads/2020/11/fix-master-logo-straight.png" class="l-dark" height="70" alt="">
+                <img src="https://fixmaster.com.ng/wp-content/uploads/2020/11/fix-master-logo-straight.png" class="l-light" height="70" alt="">
                 </a> --}}
                 <a class="logo" href="{{ route('frontend.index', app()->getLocale()) }}">
                     {{-- <img src="{{ asset('assets/images/home-fix-logo.png') }}" class="l-dark" height="160" style="margin-top: -38px !important; margin-bottom: -38px !important;" alt="FixMaster Logo"> --}}
 
-                    <img src="{{ asset('assets/images/home-fix-logo-new.png') }}" style="margin-top: -90px !important; margin-bottom: -38px !important;" class="l-light" height="250" alt="FixMaster Logo">
+                    <img src="https://fixmaster.com.ng/wp-content/uploads/2020/11/fix-master-logo-straight.png" style="margin-top: -90px !important; margin-bottom: -38px !important;" class="l-light" height="250" alt="FixMaster Logo">
 
-                    <img src="{{ asset('assets/images/home-fix-logo-colored.png') }}" style="margin-top: -40px !important; margin-bottom: -38px !important; margin-left: 50px !important" class="l-dark" height="70" alt="FixMaster Logo">
+                    <img src="https://fixmaster.com.ng/wp-content/uploads/2020/11/fix-master-logo-straight.png" style="margin-top: -40px !important; margin-bottom: -38px !important; margin-left: 50px !important" class="l-dark" height="70" alt="FixMaster Logo">
 
                 </a>
-            </div>
+            </div> -->
         <div style="margin-top: 2em; padding:1em;">
-       
-        @if($user->type=='client')
-        <h1> Dear {{ ucfirst($user->name) }}</h1>
-      <p>You have just initiated a warranty for service request {{$user->service_request_unique}}</p>
-      <p>Please our Admin will reach out to soon</p>
-      <p>Thank you</p>
-      <p>Regards</p>
-            @else
-            <p>Dear {{ ucfirst($user->name) }} </p>
-          <p>Please be informed that Client {{ ucfirst($user->client) }} with email {{ $user->client_email }} has just initiated a warranty for service request {{$user->service_request_unique}} </p>
-          <p>Kindly Login to verify</p>
-          <p>Thank you</p>
-      <p>Regards</p>
-        @endif
+        <table style="box-sizing: border-box; width: 100%; border-radius: 6px; overflow: hidden; background-color: #fff; box-shadow: 0 0 3px rgba(60, 72, 88, 0.15);">
+                    <thead>
+                        <tr style="background-color: #E97D1F; text-align: center; color: #fff; font-size: 24px; font-weight: 700; letter-spacing: 1px;">
+                            <th scope="col">
+                            <img src="{{ asset('assets/images/home-fix-logo-new.png') }}" height="170" style="margin-top: -50px !important; margin-bottom: -50px !important;" alt=""></th>
+                        </tr>
+                    </thead>
 
+                    <tbody>
+                        <!-- <tr>
+                            <td style="padding: 48px 24px 0; color: #161c2d; font-size: 18px; font-weight: 600;">
+                                Hello,
+                            </td>
+                        </tr> -->
+                        <tr>
+                            <td style="padding: 15px 24px 15px; color: #8492a6;">
+                            {!! $mail_message !!}
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td style="padding: 15px 24px 15px; color: #8492a6;">
+                             
+                            </td>
+                           
+                        </tr>
+
+
+                        <tr>
+                            <td style="padding: 15px 24px 15px; color: #8492a6;">
+                                Thanks, <br> FixMaster Management
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td style="padding: 16px 8px; color: #8492a6; background-color: #f8f9fc; text-align: center;">
+                                © {{ date('Y') }} FixMaster. All Rights Reserved.
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
         </div>
     </div>
     <!-- javascript -->
