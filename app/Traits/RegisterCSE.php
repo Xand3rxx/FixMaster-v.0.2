@@ -92,7 +92,7 @@ trait RegisterCSE
                 'email' => $valid['email'],
                 'password' => $valid['password'],
             ]);
-            $messanger->sendNewMessage('email', Str::title(Str::of($template_feature)->replace('_', ' ',)), 'dev@fix-master.com', $mail_data['email'], $mail_data, $template_feature);
+            $messanger->sendNewMessage('', 'dev@fix-master.com', $mail_data['email'], $mail_data, $template_feature);
         }
     }
 }

@@ -109,7 +109,7 @@ class RequestController extends Controller
         ]);
         // Instantiate Contoller
         $messanger = new \App\Http\Controllers\Messaging\MessageController();
-        return $messanger->sendNewMessage('email', \Illuminate\Support\Str::title(\Illuminate\Support\Str::of($template_feature)->replace('_', ' ',)), 'dev@fix-master.com', $mail_data['email'], $mail_data, $template_feature);
+        return $messanger->sendNewMessage('', 'dev@fix-master.com', $mail_data['email'], $mail_data, $template_feature);
     }
 
     public function getServiceRequestsByTechnician(Request $request)
