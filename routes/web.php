@@ -57,7 +57,7 @@ use App\Http\Controllers\Admin\Prospective\SupplierController as ProspectiveSupp
 use App\Http\Controllers\Admin\Prospective\TechnicianArtisanController as ProspectiveTechnicianArtisanController;
 use App\Http\Controllers\ServiceRequest\WarrantClaimController;
 use App\Http\Controllers\Messaging\Template;
-
+use App\Http\Controllers\Admin\CollaboratorsPaymentController;
 
 use App\Http\Controllers\Technician\ServiceRequestController as TechnicianServiceRequestController;
 
@@ -86,7 +86,7 @@ use App\Http\Controllers\Technician\ServiceRequestController as TechnicianServic
 
 Route::prefix('admin')->name('admin.')->group(function () {
     Route::view('/', 'admin.index')->name('index'); //Take me to Admin Dashboard
-    
+
     Route::get('/ratings/cse-diagnosis', [AdminRatingController::class, 'cseDiagnosis'])->name('category');
     Route::get('/ratings/services',      [AdminRatingController::class, 'getServiceRatings'])->name('job');
     Route::get('/ratings/service_reviews',      [AdminReviewController::class, 'getServiceReviews'])->name('category_reviews');
@@ -328,8 +328,11 @@ Route::prefix('admin')->name('admin.')->group(function () {
     Route::get('/reports/supplier',             [SupplierReportController::class, 'index'])->name('supplier_reports');
     Route::post('/reports/supplier/item-delivered-sorting', [SupplierReportController::class, 'itemDeliveredSorting'])->name('supplier_report_first_sorting');
 
-    //Admin Payments
-    Route::view('/payments/pending', 'admin.payments.pending')->name('payments.pending');
+    //Admin Payments get_checkbox
+    Route::get('/payments/pending', [CollaboratorsPaymentController::class, 'getPendingPayments'])->name('payments.pending');
+    Route::get('/payments/disbursed', [CollaboratorsPaymentController::class, 'getdisbursedPayments'])->name('payments.disbursed');
+    Route::post('payments.get_checkbox', [CollaboratorsPaymentController::class, 'getCheckbox'])->name('payments.get_checkbox');
+    Route::post('/payment_sorting', [CollaboratorsPaymentController::class, 'sortPayments'])->name('payment_sorting');
 
 });
 

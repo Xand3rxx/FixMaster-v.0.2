@@ -103,7 +103,7 @@
         <li class="{{ Route::currentRouteNamed('admin.add_loyalty') ? 'active' : '' }}"><a href="{{ route('admin.add_loyalty',  app()->getLocale()) }}">Add</a></li>
         <li class="{{ Route::currentRouteNamed('admin.loyalty_list') ? 'active' : '' }}"><a href="{{ route('admin.loyalty_list',  app()->getLocale()) }}">List</a></li>
         <li class="{{ Route::currentRouteNamed('admin.loyalty_history') ? 'active' : '' }}"><a href="{{ route('admin.loyalty_history',  app()->getLocale()) }}">History</a></li>
-     
+
 
         </ul>
       </li>
@@ -127,10 +127,10 @@
         </ul>
       </li> --}}
 
-      <li class="nav-item with-sub {{ Route::currentRouteNamed('admin.disbursed_payments', 'admin.received_payments','admin.payments.pending') ? 'active show' : '' }}">
+      <li class="nav-item with-sub {{ Route::currentRouteNamed('admin.payments.disbursed', 'admin.received_payments','admin.payments.pending') ? 'active show' : '' }}">
         <a href="" class="nav-link"><i data-feather="credit-card"></i> <span>Payments</span></a>
         <ul>
-          <li class="{{ Route::currentRouteNamed('') ? 'active' : '' }}"><a href="#">Disbursed</a></li>
+          <li class="{{ Route::currentRouteNamed('admin.payments.disbursed') ? 'active' : '' }}"><a href="{{ route('admin.payments.disbursed',  app()->getLocale()) }}">Disbursed</a></li>
           <li class="{{ Route::currentRouteNamed('') ? 'active' : '' }}"><a href="#">Received</a></li>
           <li class="{{ Route::currentRouteNamed('') ? 'active' : '' }}"><a href="#">Verify</a></li>
           <li class="{{ Route::currentRouteNamed('admin.payments.pending') ? 'active' : '' }}"><a href="{{ route('admin.payments.pending',  app()->getLocale()) }}">Pending Payments</a></li>
@@ -220,7 +220,7 @@
 
       <li class="nav-item with-sub {{ Route::currentRouteNamed('admin.warranty_list', 'admin.issued_warranty', 'admin.warranty_summary', 'admin.edit_warranty') ? 'active show' : '' }}">
         <a href="" class="nav-link"><i data-feather="award"></i> <span>Warranty Management</span><span class="badge badge-primary">{{ $unresolvedWarranties }}</suspan></span> </a>
-        
+
         <ul>
           <li class="{{ Route::currentRouteNamed('admin.warranty_list', 'admin.warranty_summary', 'admin.edit_warranty') ? 'active' : '' }}"><a href="{{route('admin.warranty_list', app()->getLocale())}}">List</a></li>
           <li class="{{ Route::currentRouteNamed('admin.issued_warranty') ? 'active' : '' }}"><a href="{{route('admin.issued_warranty', app()->getLocale())}}">Issued <sup class="font-weight-bold text-danger">{{ $unresolvedWarranties }}</sup></a></li>

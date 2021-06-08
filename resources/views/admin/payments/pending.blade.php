@@ -1,6 +1,21 @@
 @extends('layouts.dashboard')
 @section('title', 'Pending Payments')
 @include('layouts.partials._messages')
+<style>
+table thead th:nth-child(23), table tbody td:nth-child(23) {
+    position: sticky;
+    right: 0;
+}
+
+table thead th:nth-child(23) {
+    background: #e97d1f;
+	}
+
+table tbody td:nth-child(23) {
+    background: #ffffff;
+	}
+
+</style>
 @section('content')
 
 <div class="content-body">
@@ -35,7 +50,7 @@
                 </div>
                 <div class="media-body">
                   <h6 class="tx-sans tx-uppercase tx-10 tx-spacing-1 tx-color-03 tx-semibold tx-nowrap mg-b-5 mg-md-b-8">Total Payments</h6>
-                  <h4 class="tx-20 tx-sm-18 tx-md-20 tx-normal tx-rubik mg-b-0">20</h4>
+                  <h4 class="tx-20 tx-sm-18 tx-md-20 tx-normal tx-rubik mg-b-0">{{$pendingPayments->count()}}</h4>
                 </div>
               </div>
 
@@ -44,15 +59,15 @@
           <div class="table-responsive">
             <div class="row mt-1 mb-1 ml-1 mr-1">
                 <div class="col-md-4">
-                    <input value="{{ route("quality-assurance.disbursed_payments_sorting", app()->getLocale()) }}" type="hidden" id="route">
+                    <input value="{{ route("admin.payment_sorting", app()->getLocale()) }}" type="hidden" id="route">
                     <div class="form-group">
                         <label>Sort</label>
                         <select class="custom-select" id="sort_by_range">
                             <option value="None">Select...</option>
                             <option value="Date">Date</option>
-                            <option value="Month">Month</option>
-                            <option value="Year">Year</option>
-                            <option value="Date Range">Date Range</option>
+                            <option value="service_request">Service Request</option>
+                            <option value="type">Service Type</option>
+
                         </select>
                     </div>
                 </div><!--end col-->
@@ -66,33 +81,30 @@
 
                 <div class="col-md-4 sort-by-year d-none">
                     <div class="form-group position-relative">
-                        <label>Specify Year <span class="text-danger">*</span></label>
+                        <label>Service Type <span class="text-danger">*</span></label>
                         <select class="form-control custom-select" id="sort_by_year">
                             <option value="">Select...</option>
-                            {{-- @foreach ($years as $year)
-                              <option value="{{ $year }}">{{ $year }}</option>
-                            @endforeach --}}
+                            @foreach ($pendingPayments as $data)
+                              <option value="{{ $data->service_type }}">{{ $data->service_type }}</option>
+                            @endforeach
                         </select>
                     </div>
                 </div>
 
-                <div class="col-md-4 sort-by-year d-none" id="sort-by-month">
+                <div class="col-md-4 sort-by-month d-none" id="sort-by-month">
                     <div class="form-group position-relative">
-                        <label>Specify Month <span class="text-danger">*</span></label>
+                        <label>Select Service Request <span class="text-danger">*</span></label>
                         <select class="form-control custom-select" id="sort_by_month">
                             <option value="">Select...</option>
-                            <option value="January">January</option>
-                            <option value="February">February</option>
-                            <option value="March">March</option>
-                            <option value="April">April</option>
-                            <option value="May">May</option>
-                            <option value="June">June</option>
-                            <option value="July">July</option>
-                            <option value="August">August</option>
-                            <option value="September">September</option>
-                            <option value="October">October</option>
-                            <option value="November">November</option>
-                            <option value="December">December</option>
+                           @if($serve->count() == 1)
+                                @foreach($serve as $ken)
+                                <option value="{{$ken['service_request_id']}}">{{$ken['service_request']['unique_id']}}</option>
+                                @endforeach
+                           @else
+                                @foreach ($pendingPayments as $output)
+                                   <option value="{{ $output->service_request_id }}">{{ $output->service_request->unique_id }}</option>
+                                @endforeach
+                           @endif
                         </select>
                     </div>
                   </div>
@@ -113,66 +125,7 @@
               </div>
 
               <div id="sort_table">
-              {{-- @include('quality-assurance._disbursed_table') --}}
-
-              {{-- <div class="d-flex ml-4"><h4 class="text-success">{{ !empty($message)? $message: '' }}</h4></div> --}}
-<table class="table table-hover mg-b-0" id="basicExample">
-    <thead class="thead-primary">
-      <tr>
-        <th class="text-center">#</th>
-        <th>Job Reference</th>
-        <th>Service Category</th>
-        <th>Service Type</th>
-        <th>CSE Name</th>
-        <th>CSE Nuban</th>
-        <th>CSE Bank</th>
-        <th>CSE Amount</th>
-        <th>QA Name</th>
-        <th>QA Nuban</th>
-        <th>QA Bank</th>
-        <th>QA Amount</th>
-        <th>Technician Name</th>
-        <th>Technician Nuban</th>
-        <th>Technician Bank</th>
-        <th>Technician Amount</th>
-        <th>Supplier Name</th>
-        <th>Supplier Nuban</th>
-        <th>Supplier Bank</th>
-        <th>Supplier Amount</th>
-        <th class="text-center">Date of Completion</th>
-        <th>Action</th>
-      </tr>
-    </thead>
-    <tbody>
-      
-      <tr>
-        <td class="tx-color-03 tx-center">1</td>
-        <td class="tx-medium">QAR-34567</td>
-          <td class="tx-medium">Electronics</td>
-          <td class="tx-medium">Unknown</td>
-          <td class="tx-medium">Kenny Smith</td>
-          <td class="tx-medium">0002223456</td>
-          <td class="tx-medium">Diamond Bank</td>
-          <td class="tx-medium">#5,000</td>
-          <td class="tx-medium">Chris Doe</td>
-          <td class="tx-medium">0002223456</td>
-          <td class="tx-medium">Access Bank</td>
-          <td class="tx-medium">#6,000</td>
-          <td class="tx-medium">Jason Brown</td>
-          <td class="tx-medium">0002223456</td>
-          <td class="tx-medium">Diamond Bank</td>
-          <td class="tx-medium">#5,000</td>
-          <td class="tx-medium">Tonia Sade</td>
-          <td class="tx-medium">0002223456</td>
-          <td class="tx-medium">Diamond Bank</td>
-          <td class="tx-medium">#5,000</td>
-          <td class="text-medium tx-center">{{ Carbon\Carbon::parse('2021-05-06', 'UTC')->isoFormat('MMMM Do YYYY, h:mm:ssa') }}</td>
-          {{-- <td><a href="#" data-toggle="modal" data-target="#transactionDetails" data-payment-ref="{{ $result->unique_id }}" data-url="{{ route('quality-assurance.payment_details', ['payment' => $result->id, 'locale' => app()->getLocale()]) }}" id="payment-details" class="btn btn-primary btn-sm ">Details</a></td> --}}
-           <td><a href="#" id="" class="btn btn-primary btn-sm ">Details</a></td>
-        </tr>
-    </tbody>
-  </table>
-
+              @include('admin.payments._payment_table')
               </div>
           </div><!-- table-responsive -->
         </div><!-- card -->
@@ -200,41 +153,55 @@
 </div>
 @endsection
 @section('scripts')
-<script src="{{ asset('assets/dashboard/assets/js/qa-payments-sortings.js') }}"></script>
+<script src="{{ asset('assets/dashboard/assets/js/admin-payments-sortings.js') }}"></script>
 
 <script>
     $(document).ready(function() {
-        $(document).on('click', '#payment-details', function(event) {
-            event.preventDefault();
-            let route = $(this).attr('data-url');
-            let paymentRef = $(this).attr('data-payment-ref');
+      $(".selectAllBoxes").click(function(event){
 
-            $.ajax({
-                url: route,
-                beforeSend: function() {
-                    $("#modal-body").html('<div class="d-flex justify-content-center mt-4 mb-4"><span class="loadingspinner"></span></div>');
-                },
-                // return the result
-                success: function(result) {
-                    $('#modal-body').modal("show");
-                    $('#modal-body').html('');
-                    $('#modal-body').html(result).show();
-                },
-                complete: function() {
-                    $("#spinner-icon").hide();
-                },
-                error: function(jqXHR, testStatus, error) {
-                    var message = error+ ' An error occured while trying to retireve '+ paymentRef +' record.';
-                    var type = 'error';
-                    displayMessage(message, type);
-                    $("#spinner-icon").hide();
-                },
-                timeout: 8000
-            })
-        });
-        $('.close').click(function (){
-            $(".modal-backdrop").remove();
-        });
+          if(this.checked){
+              $(".checkBoxes").each(function(){
+                  this.checked = true;
+              })
+          }else{
+            $(".checkBoxes").each(function(){
+                  this.checked = false;
+              })
+          }
+      })
+
+
+        // $(document).on('click', '#payment-details', function(event) {
+        //     event.preventDefault();
+        //     let route = $(this).attr('data-url');
+        //     let paymentRef = $(this).attr('data-payment-ref');
+
+        //     $.ajax({
+        //         url: route,
+        //         beforeSend: function() {
+        //             $("#modal-body").html('<div class="d-flex justify-content-center mt-4 mb-4"><span class="loadingspinner"></span></div>');
+        //         },
+        //         // return the result
+        //         success: function(result) {
+        //             $('#modal-body').modal("show");
+        //             $('#modal-body').html('');
+        //             $('#modal-body').html(result).show();
+        //         },
+        //         complete: function() {
+        //             $("#spinner-icon").hide();
+        //         },
+        //         error: function(jqXHR, testStatus, error) {
+        //             var message = error+ ' An error occured while trying to retireve '+ paymentRef +' record.';
+        //             var type = 'error';
+        //             displayMessage(message, type);
+        //             $("#spinner-icon").hide();
+        //         },
+        //         timeout: 8000
+        //     })
+        // });
+        // $('.close').click(function (){
+        //     $(".modal-backdrop").remove();
+        // });
     });
 </script>
 @endsection

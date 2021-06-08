@@ -11,6 +11,29 @@ class CollaboratorsPayment extends Model
     use HasFactory, SoftDeletes;
 
     protected $fillable = [
-        'service_request_id', 'user_id', 'service_type', 'flat_rate', 'actual_labour_cost', 'actual_materials_cost', 'retention_fee', 'labour_markup_cost', 'material_markup_cost', 'royalty_fee', 'logistics_cost', 'tax_fee'
+        'service_request_id', 
+        'user_id', 
+        'service_type', 
+        'flat_rate', 
+        'actual_labour_cost', 
+        'actual_materials_cost', 
+        'retention_fee', 
+        'labour_markup_cost', 
+        'material_markup_cost', 
+        'royalty_fee', 
+        'logistics_cost', 
+        'tax_fee'
     ];
+ 
+     public function service_request()
+     {
+         return $this->belongsTo(ServiceRequest::class);
+     }
+
+    public function users()
+    {
+        return $this->belongsTo(User::class, 'user_id')->with('roles', 'account');
+    }
+
+
 }

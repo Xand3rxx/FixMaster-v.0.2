@@ -27,6 +27,7 @@ class CreateCollaboratorsPaymentsTable extends Migration
             $table->integer('royalty_fee')->nullable();
             $table->integer('logistics_cost')->nullable();
             $table->integer('tax_fee')->nullable();
+            $table->enum('status', ['Pending', 'Paid']);
             $table->timestamps();
             $table->softDeletes();
         });

@@ -31,10 +31,6 @@ class CheckClientRating
                $serviceRequestTotalAmt = $clientServiceRequest->total_amount;
                $serviceRequestClientId = $clientServiceRequest->client_id; // Service Request Client Id
                
-                // foreach($response as $user){
-                //   $res2 = $user->account->first_name." ".$user->account->last_name; // Users Account Name
-                // }
-
                 //trigger modal when this is true
                 if ($clientServiceRequest->status_id == 4 && $clientServiceRequest->has_client_rated == "No") {
                            $request->merge([
