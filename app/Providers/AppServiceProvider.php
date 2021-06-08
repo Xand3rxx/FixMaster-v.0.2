@@ -42,6 +42,7 @@ class AppServiceProvider extends ServiceProvider
                 'pendingRequests'   => \App\Models\ServiceRequest::PendingRequests()->get()->count(),
                 'unresolvedWarranties'  =>  \App\Models\ServiceRequestWarranty::UnresolvedWarranties()->get()->count(),
                 'newQuotes' =>  \App\Models\Rfq::PendingQuotes()->get()->count(),
+                'toolRequests'  =>  \App\Models\ToolRequest::PendingRequests()->get()->count(),
 
             ]);
         });

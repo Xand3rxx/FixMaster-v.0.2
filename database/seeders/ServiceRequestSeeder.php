@@ -52,7 +52,7 @@ class ServiceRequestSeeder extends Seeder
             array(
                 'uuid'                  => Str::uuid('uuid'),      
                 'client_id'             => 5, 
-                'service_id'            => 13, 
+                'service_id'            => 25, 
                 'unique_id'             => 'REF-66EB5A26', 
                 // 'state_id'              => 24, 
                 // 'lga_id'                => 500, 
@@ -73,7 +73,7 @@ class ServiceRequestSeeder extends Seeder
             array(
                 'uuid'                  => Str::uuid('uuid'),      
                 'client_id'             => 5, 
-                'service_id'            => 9, 
+                'service_id'            => 10, 
                 'unique_id'             => 'REF-330CB862', 
                 // 'state_id'              => 24, 
                 // 'lga_id'                => 505, 
@@ -115,7 +115,7 @@ class ServiceRequestSeeder extends Seeder
             array(
                 'uuid'                  => Str::uuid('uuid'),      
                 'client_id'             => 6, 
-                'service_id'            => 1, 
+                'service_id'            => 2, 
                 'unique_id'             => 'REF-EEE7FD14', 
                 // 'state_id'              => 24, 
                 // 'lga_id'                => 510, 
@@ -157,7 +157,7 @@ class ServiceRequestSeeder extends Seeder
             array(
                 'uuid'                  => Str::uuid('uuid'),      
                 'client_id'             => 8, 
-                'service_id'            => 22, 
+                'service_id'            => 1, 
                 'unique_id'             => 'REF-131D985E', 
                 // 'state_id'              => 24, 
                 // 'lga_id'                => 505, 

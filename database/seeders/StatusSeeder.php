@@ -207,6 +207,15 @@ class StatusSeeder extends Seeder
             ),
             array(
                 'user_id'       =>  1,
+                'uuid'          =>  '0b8b6887-7cff-4eca-9cb1-5a5db693332d',
+                'status_id'     =>  2,
+                'name'          =>  'Job is fully completed',
+                'phase'         =>  $phaseOngoing++,
+                'recurrence'    =>  'No',
+                'status'        =>  'active',
+            ),
+            array(
+                'user_id'       =>  1,
                 'uuid'          =>  'b8abbe05-209f-4eeb-8cdb-cef0a354f160',
                 'status_id'     =>  2,
                 'name'          =>  'Perfoming diagnosis',
@@ -398,20 +407,12 @@ class StatusSeeder extends Seeder
                 'user_id'       =>  1,
                 'uuid'          =>  'bd2ab8b8-9f0b-4b8e-afa9-130c837ecbd1',
                 'status_id'     =>  2,
-                'name'          =>  'CSE aknowledge Supplier\'s dispatch delivery',
+                'name'          =>  'CSE aknowledged Supplier\'s dispatch delivery',
                 'phase'         =>  $phaseOngoing++,
                 'recurrence'    =>  'Yes',
                 'status'        =>  'active',
             ),
-            array(
-                'user_id'       =>  1,
-                'uuid'          =>  '0b8b6887-7cff-4eca-9cb1-5a5db693332d',
-                'status_id'     =>  2,
-                'name'          =>  'Job is fully completed',
-                'phase'         =>  $phaseOngoing++,
-                'recurrence'    =>  'No',
-                'status'        =>  'active',
-            ),
+            
             array(
                 'user_id'       =>  1,
                 'uuid'          =>  '06dda2af-3831-41af-854d-595e4f6f6b77',

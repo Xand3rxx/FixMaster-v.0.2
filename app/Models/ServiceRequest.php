@@ -225,6 +225,15 @@ class ServiceRequest extends Model
         return $this->hasMany(ServiceRequestProgress::class, 'service_request_id')->with('user', 'subStatus');
     }
 
+    public function serviceRequestReports()
+    {
+        return $this->hasMany(ServiceRequestReport::class, 'service_request_id');
+    }
+
+    public function toolRequest()
+    {
+        return $this->hasOne(ToolRequest::class, 'service_request_id')->with('approver', 'requester');
+    }
 
     /**
      * Scope a query to only include all pending requests

@@ -21,7 +21,7 @@
                 <a href="" class="dropdown-link" data-toggle="dropdown"><i
                         data-feather="more-vertical"></i></a>
                 <div class="dropdown-menu dropdown-menu-right">
-                    <a href="{{ asset('assets/service-request-media-files/'.$item['unique_name']) }}" class="dropdown-item download"><i data-feather="download"></i>Download</a>
+                    <a href="{{ asset('assets/service-request-media-files/'.$item['unique_name']) }}" class="dropdown-item" download><i data-feather="download"></i>Download</a>
                 </div>
             </div><!-- dropdown -->
             <div class="card-file-thumb">

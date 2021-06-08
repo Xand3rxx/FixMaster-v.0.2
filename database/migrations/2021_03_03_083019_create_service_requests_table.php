@@ -27,7 +27,7 @@ class CreateServiceRequestsTable extends Migration
             $table->string('client_security_code')->unique();
             $table->dateTime('preferred_time')->nullable();
 
-            $table->char('contactme_status', 1)->comment('I.e. 0 => Do not contact me, 1 => I can be contacted.')->default('1');
+            $table->boolean('contactme_status', 1)->comment('I.e. 0 => Do not contact me, 1 => I can be contacted.')->default(1);
             $table->foreignId('contact_id');
             $table->longText('description');
 

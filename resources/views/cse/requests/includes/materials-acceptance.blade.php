@@ -38,6 +38,7 @@
             </tbody>
         </table>
 
+        @if(!empty($materials_accepted['rfqSupplierInvoice']['supplierDispatch']))
         <h5 class="mt-4">Dispatch Details</h5>
         <table class="table table-striped table-sm mg-b-0">
             <tbody>
@@ -75,6 +76,7 @@
 
             </tbody>
         </table>
+        @endif
     </div>
 
     <div class="table-responsive mt-4">
@@ -126,7 +128,9 @@
             </tbody>
         </table>
     </div><!-- table-responsive -->
-    @if($materials_accepted['rfqSupplierInvoice']['supplierDispatch']['cse_status'] !== 'Delivered')
+    {{-- {{ dd($materials_accepted['rfqSupplierInvoice']['supplierDispatch']['cse_status']) }} --}}
+    @if(!empty($materials_accepted['rfqSupplierInvoice']['supplierDispatch'])) 
+    @if($materials_accepted['rfqSupplierInvoice']['supplierDispatch']['cse_status'] !== 'Delivered'))
     <h5 class="mt-4">Update RFQ Status</h5>
     <div class="form-row">
         <div class="form-group col-md-12">
@@ -172,6 +176,7 @@
                 name="material_reason"></textarea>
         </div>
     </div>
+    @endif
     @endif
 
 

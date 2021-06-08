@@ -1,7 +1,7 @@
 <h3>Invoice building</h3>
 <section>
-    <small class="text-danger">This portion will be displayed only if the CSE selects "Completed Diganosis" and the
-        Client chooses to continue with the Service Request</small>
+    {{-- <small class="text-danger">This portion will be displayed only if the CSE selects "Completed Diganosis" and the
+        Client chooses to continue with the Service Request</small> --}}
     <div class="mt-4 form-row">
         <div class="form-group col-md-6">
             <label for="estimated_hours">Estimated Work Hours</label>
@@ -89,7 +89,7 @@
         </div>
         <div class="form-group col-md-4 d-flex align-items-end">
             <div class="custom-control custom-radio">
-                <input type="radio" class="custom-control-input" id="rfqNo" name="intiate_rfq" value="">
+                <input type="radio" class="custom-control-input" id="rfqNo" name="intiate_rfq" value="" checked>
                 <label class="custom-control-label" for="rfqNo">No</label><br>
             </div>
         </div>
@@ -205,7 +205,7 @@
         </div>
         <div class="form-group col-md-4 d-flex align-items-end">
             <div class="custom-control custom-radio">
-                <input type="radio" class="custom-control-input" id="trfNo" name="intiate_trf" value="no">
+                <input type="radio" class="custom-control-input" id="trfNo" name="intiate_trf" value="no" checked>
                 <label class="custom-control-label" for="trfNo">No</label><br>
             </div>
         </div>
