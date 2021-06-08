@@ -1,4 +1,5 @@
 <div id="serviceRequestSummary" class="tab-pane pd-20 pd-xl-25">
+    @if(count($service_request['serviceRequestReports']) > 0)
     <div class="divider-text"> Reports/Comments</div>
     <div class="card-group">
         @foreach ($service_request['serviceRequestReports'] as $report)
@@ -14,6 +15,7 @@
         @endforeach
         
     </div>
+    @endif
 
     <div class="divider-text">Service Request Progress</div>
     <h5 class="mt-4">Service Request Progress</h5>
