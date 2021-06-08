@@ -77,6 +77,8 @@ class DispatchController extends Controller
      */
     public function store(Request $request)
     {
+
+        // $supplier['rfq']['service_request_id']
         //Label and dispacth materials for a RFQ issued
         //Validate user input fields
         $request->validate([
@@ -105,10 +107,14 @@ class DispatchController extends Controller
                 'delivery_medium'       =>  $request->delivery_medium,
                 'comment'               =>  $request->comment,
             ]);
+            
+            //Record service request progress of `A supplier sent an invoice`
+            \App\Models\ServiceRequestProgress::storeProgress(auth()->user()->id, \App\Models\Rfq::where('id', $request->rfq_id)->firstOrFail()->service_request_id, 2, \App\Models\SubStatus::where('uuid', 'ef8c69e8-5634-4bd0-a7e6-b73a89ae034f')->firstOrFail()->id);
 
             //Set variables as true to be validated outside the DB transaction
             $createDispatch =  true;
-        });
+
+        }, 3);
 
         if($createDispatch){
 
@@ -164,22 +170,33 @@ class DispatchController extends Controller
 
         if($request->ajax()){
 
-            // return [$id, $request->supplier_status];
+            $serviceRequestId =  RfqSupplierDispatch::where('id', $id)->with('supplierInvoice.rfq')->firstOrFail();
+
             //Validate user input fields
             $request->validate([
                 'supplier_status'   =>  'required',
             ]);
 
+            if($request->supplier_status == 'In-Transit'){
+                $progressUUID = '6e266cf8-7eeb-49be-86ad-375c7c7416fa';
+            }elseif($request->supplier_status == 'Processing'){
+                $progressUUID = 'ee55201e-75a3-461a-b174-3a0537ee8e0c';
+            }else{
+                $progressUUID = '3ec28d52-2bd3-446a-985c-3bf622f9f445';
+            }
+
             //Set `updateDispatchStatus` to false before Db transaction and pass by reference
             (bool) $updateDispatchStatus  = false;
-
+            
             // Set DB to rollback DB transacations if error occurs
-            DB::transaction(function () use ($id, $request, &$updateDispatchStatus) {
+            DB::transaction(function () use ($id, $request, $serviceRequestId,  $progressUUID, &$updateDispatchStatus) {
 
                 RfqSupplierDispatch::where('id', $id)->update([
                     'supplier_status'   =>  $request->supplier_status
                 ]);
-
+                
+                \App\Models\ServiceRequestProgress::storeProgress(auth()->user()->id, $serviceRequestId['supplierInvoice']['rfq']['service_request_id'], 2, \App\Models\SubStatus::where('uuid', $progressUUID)->firstOrFail()->id);
+                
                 $updateDispatchStatus  = true;
             });
 

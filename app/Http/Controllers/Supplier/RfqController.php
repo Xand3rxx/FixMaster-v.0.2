@@ -82,7 +82,6 @@ class RfqController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request){
-
         //Send Quote for a specific RFQ
         //Validate user input fields
         $this->validateRequest();
@@ -95,12 +94,11 @@ class RfqController extends Controller
 
         $rfqUniqueId = Rfq::where('id', $request->rfq_id)->firstOrFail()->unique_id;
 
-        (bool) $supplierinvoice = false;
-        (bool) $supplierInvoiceBatch = false;
+        (bool) $supplierinvoiceBatch = false;
 
-        DB::transaction(function () use ($request, &$supplierinvoice, &$supplierInvoiceBatch) {
+        DB::transaction(function () use ($request, &$supplierinvoiceBatch) {
 
-            $newRecord = RfqSupplierInvoice::create([
+            $supplierinvoice = RfqSupplierInvoice::create([
                 'rfq_id'        =>  $request->rfq_id,
                 'supplier_id'   =>  Auth::id(),
                 'delivery_fee' =>  $request->delivery_fee,  
@@ -114,7 +112,7 @@ class RfqController extends Controller
                 $totalAmount = ($request->unit_price[$item] * $request->quantity[$item]);
 
                 RfqSupplierInvoiceBatch::create([
-                    'rfq_supplier_invoice_id'   =>  $newRecord->id,
+                    'rfq_supplier_invoice_id'   =>  $supplierinvoice->id,
                     'rfq_batch_id'              =>  $request->rfq_batch_id[$item],
                     'quantity'                  =>  $request->quantity[$item],  
                     'unit_price'                =>  $request->unit_price[$item],
@@ -122,13 +120,15 @@ class RfqController extends Controller
                 ]);
             }
 
+            //Record service request progress of `A supplier sent an invoice`
+            \App\Models\ServiceRequestProgress::storeProgress($request->user()->id, Rfq::where('id', $request->rfq_id)->firstOrFail()->service_request_id, 2, \App\Models\SubStatus::where('uuid', 'c615f5ce-fe3b-43f7-9125-d6568eddf1c5')->firstOrFail()->id);
+
             //Set variables as true to be validated outside the DB transaction
-            $supplierInvoice = true;
-            $supplierInvoiceBatch = true;
+            $supplierinvoiceBatch = true;
 
-        });
+        }, 3);
 
-        if($supplierInvoiceBatch){
+        if($supplierinvoiceBatch){
 
             //Code to send mail to FixMaster, CSE and Supplier who sent the quote
 
@@ -159,13 +159,17 @@ class RfqController extends Controller
      */
     private function validateRequest(){
         return request()->validate([
-            'rfq_id'            =>   'required|numeric',
-            'rfq_batch_id'    =>   'required|array',
-            'quantity'        =>   'required|array',
-            'unit_price'      =>   'required|array',
-            'delivery_fee'      =>   'required|numeric',
-            'delivery_time'     =>   'required',
+            'rfq_id'        =>   'required|numeric',
+            'rfq_batch_id'  =>   'required|array',
+            'quantity'      =>   'required|array',
+            'quantity.*'    =>   'bail|required|numeric|min:1',
+            'unit_price'    =>   'required|array',
+            'unit_price.*'  =>   'bail|required|numeric|min:1',
+            'delivery_fee'  =>   'required|numeric',
+            'delivery_time' =>   'required',
         ]);
+
+        // return $validator->errors()->keys();
     }
 
     public function sentInvoices(){
@@ -177,13 +181,9 @@ class RfqController extends Controller
 
     public function sentInvoiceDetails($language, $id){
 
-        $rfqDetails =  RfqSupplierInvoice::where('id', $id)->firstOrFail();
-
-        // return $rfqDetails;
-
         return view('supplier.rfq._sent_invoice_details', [
             'rfqDetails'    =>  RfqSupplierInvoice::where('id', $id)->firstOrFail(),
-        ])->with('i');
+        ]);
     }
 
     public function approvedInvoices(){

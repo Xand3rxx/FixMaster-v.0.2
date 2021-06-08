@@ -41,6 +41,9 @@ class AppServiceProvider extends ServiceProvider
                 'profile'   =>  auth()->user()->account,
                 'pendingRequests'   => \App\Models\ServiceRequest::PendingRequests()->get()->count(),
                 'unresolvedWarranties'  =>  \App\Models\ServiceRequestWarranty::UnresolvedWarranties()->get()->count(),
+                'newQuotes' =>  \App\Models\Rfq::PendingQuotes()->get()->count(),
+                'toolRequests'  =>  \App\Models\ToolRequest::PendingRequests()->get()->count(),
+
             ]);
         });
 
@@ -51,10 +54,10 @@ class AppServiceProvider extends ServiceProvider
             ]);
         });
 
-        view()->composer('layouts.partials._supplier_sidebar', function ($view) {
-            $view->with([
-                'newQuotes' =>  \App\Models\Rfq::PendingQuotes()->get()->count(),
-            ]);
-        });
+        // view()->composer('layouts.partials._supplier_sidebar', function ($view) {
+        //     $view->with([
+        //         'newQuotes' =>  \App\Models\Rfq::PendingQuotes()->get()->count(),
+        //     ]);
+        // });
     }
 }

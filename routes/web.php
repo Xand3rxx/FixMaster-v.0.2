@@ -86,7 +86,7 @@ use App\Http\Controllers\Technician\ServiceRequestController as TechnicianServic
 
 Route::prefix('admin')->name('admin.')->group(function () {
     Route::view('/', 'admin.index')->name('index'); //Take me to Admin Dashboard
-    
+
     Route::get('/ratings/cse-diagnosis', [AdminRatingController::class, 'cseDiagnosis'])->name('category');
     Route::get('/ratings/services',      [AdminRatingController::class, 'getServiceRatings'])->name('job');
     Route::get('/ratings/service_reviews',      [AdminReviewController::class, 'getServiceReviews'])->name('category_reviews');
@@ -395,6 +395,9 @@ Route::prefix('/client')->middleware('monitor.clientservice.request.changes')->g
         Route::get('/requests/edit/{id}',          [ClientController::class, 'editRequest'])->name('client.edit_request');
         Route::put('/requests/update/{id}',        [ClientController::class, 'update'])->name('client.update_request');
 
+        // Client Warranty Invoice Decision
+        Route::put('/update-warranty/{invoice:uuid}', [InvoiceController::class, 'updateInvoice'])->name('decision');
+
 
         Route::post('servicesRequest',              [ClientController::class, 'serviceRequest'])->name('services.serviceRequest');
         // add my new contact to DB
@@ -484,6 +487,8 @@ Route::prefix('cse')->name('cse.')->middleware('monitor.cseservice.request.chang
     Route::get('/requests-for-quote/details/image/{image:id}',            [SupplierRfqController::class, 'rfqDetailsImage'])->name('rfq_details_image');
 
     Route::get('/sub-service-dynamic-feilds',  [CseController::class, 'subServiceDynamicFields'])->name('sub_service_dynamic_fields');
+
+    Route::get('/tools-request/details/{tool_request:uuid}',           [RequestController::class, 'toolRequestDetails'])->name('tool_request_details');
 
 //        Route::view('/location-request',    'cse.location_request')->name('location_request');
 //        Route::view(

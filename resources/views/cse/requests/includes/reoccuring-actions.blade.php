@@ -130,6 +130,10 @@
                             </div>
                         </div>
                     </div>
+                    <br>
+                    <div class="form-row">
+                        <button class="btn btn-sm btn-danger mg-l-5 mt-4 remove-trf" type="button">Remove Technician </button>
+                    </div>
                 </li>
             @endforeach
         </ul>
