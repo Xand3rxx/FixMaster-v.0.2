@@ -1,5 +1,5 @@
 @extends('layouts.dashboard')
-@section('title', 'Customer Service Executive Dashboard')
+@section('title', 'Quality Assurance Manager Dashboard')
 
 @include('layouts.partials._messages')
 @section('content')
