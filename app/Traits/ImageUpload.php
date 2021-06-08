@@ -48,14 +48,14 @@ trait ImageUpload
 
     public static function imageUploader(\Illuminate\Http\UploadedFile $image, string $directory, int $width = 500, int $height = 500)
     {
-        if (!request()->file($image)->isValid()) {
+        if (!request()->file($image)) {
             request()->session()->flash('error', 'Invalid Image');
             return back()->withInput();
         }
 
         //Generate uuid as name appended to the image extension
         $imageName = (string) Str::uuid() . '.' . $image->getClientOriginalExtension();
-
+        dd($imageName);
         //Reduce image size and save to directory
         Image::make($image->getRealPath())->resize($width, $height)->save($directory . $imageName);
 
