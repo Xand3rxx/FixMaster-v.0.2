@@ -101,6 +101,7 @@ class SupplierRfqWarrantyController extends Controller
 
         (bool) $supplierinvoice = false;
         (bool) $supplierInvoiceBatch = false;
+        (bool) $supplier = false;
         
 
         DB::transaction(function () use ($request, &$supplierinvoice, &$supplierInvoiceBatch) {
@@ -113,6 +114,14 @@ class SupplierRfqWarrantyController extends Controller
                 'total_amount'  =>  $request->total_amount,
             ]);
 
+
+            \App\Models\RfqSupplier::create([
+                'rfq_id'        =>  $request->rfq_id,
+                'supplier_id'   =>  Auth::id(),
+                'devlivery_fee' =>  $request->delivery_fee,  
+                'delivery_time' =>  $request->delivery_time,
+               
+            ]);
 
             foreach ($request->rfq_batch_id as $item => $value){
 
@@ -130,6 +139,7 @@ class SupplierRfqWarrantyController extends Controller
             //Set variables as true to be validated outside the DB transaction
             $supplierInvoice = true;
             $supplierInvoiceBatch = true;
+            $supplier = true;
 
         });
 
@@ -184,8 +194,6 @@ class SupplierRfqWarrantyController extends Controller
     public function sentInvoiceDetails($language, $id){
 
         $rfqDetails =  RfqSupplierInvoice::where('id', $id)->with('rfq', 'issuer')->firstOrFail();
-
-        dd($rfqDetails);
         // return $rfqDetails;
 
         return view('supplier.rfq._sent_invoice_details', [

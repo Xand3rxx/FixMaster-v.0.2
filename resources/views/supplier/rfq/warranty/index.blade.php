@@ -47,6 +47,7 @@
               {{-- Status: 0 => Awaiting total amount, 1 => Awaiting Client's payment, 2 => Payment received --}}
               <tbody>
                 @foreach ($rfqs as $rfq)
+             
                 <tr>
                   <td class="tx-color-03 tx-center">{{ $loop->iteration }}</td>
                   <td class="tx-medium">{{ $rfq->serviceRequest->unique_id }}</td>

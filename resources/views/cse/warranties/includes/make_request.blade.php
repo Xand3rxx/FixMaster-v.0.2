@@ -1,7 +1,7 @@
 
 
   <div class="divider-text">Update Request  </div>
-  
+
   @foreach ($suppliers->rfqBatches as $item)
                                  
   <p class="invalid-feedback">All fields are required</p>

@@ -112,13 +112,13 @@
               @if($warranty->has_been_attended_to == 'Yes')
             
             <a href="#resolvedDetails" data-toggle="modal" class="dropdown-item details text-primary" 
-             data-url="{{ route('admin.warranty_resolved_details', ['warranty'=>$warranty->uuid, 'locale'=>app()->getLocale()]) }}" 
+             data-url="{{ route('cse.warranty_resolved_details', ['warranty'=>$warranty->uuid, 'locale'=>app()->getLocale()]) }}" 
              id="resolved-details" data-job="{{ $warranty['service_request']['unique_id']}}">
             <i class="far fa-clipboard"></i> Resolved Details</a>
             @endif
             @endif
             @if($warranty->expiration_date <  Carbon\Carbon::now())
-            <a href="{{ route('admin.warranty_details', ['warranty'=>$warranty->service_request->uuid, 'locale'=>app()->getLocale()]) }}" class="dropdown-item details text-primary"><i class="far fa-clipboard"></i> Details</a>
+            <a href="{{ route('cse.warranty_details', ['warranty'=>$warranty->service_request->uuid, 'locale'=>app()->getLocale()]) }}" class="dropdown-item details text-primary"><i class="far fa-clipboard"></i> Details</a>
 
               @endif
               </div>

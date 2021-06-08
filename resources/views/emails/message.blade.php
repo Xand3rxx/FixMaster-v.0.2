@@ -28,87 +28,114 @@
     <!-- Main Css -->
     <link href="{{ asset('assets/client/css/style.css') }}" rel="stylesheet" type="text/css" id="theme-opt" />
     <link href="{{ asset('assets/client/css/colors/default.css') }}" rel="stylesheet" id="color-opt">
-
-
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 
   </head>
 
-  <body>
-    <div class="container">
-            <!-- Logo container-->
-            <!-- <div>
-                {{-- <a class="logo" href="{{ route('frontend.index') }}">
-                <img src="https://fixmaster.com.ng/wp-content/uploads/2020/11/fix-master-logo-straight.png" class="l-dark" height="70" alt="">
-                <img src="https://fixmaster.com.ng/wp-content/uploads/2020/11/fix-master-logo-straight.png" class="l-light" height="70" alt="">
-                </a> --}}
-                <a class="logo" href="{{ route('frontend.index', app()->getLocale()) }}">
-                    {{-- <img src="{{ asset('assets/images/home-fix-logo.png') }}" class="l-dark" height="160" style="margin-top: -38px !important; margin-bottom: -38px !important;" alt="FixMaster Logo"> --}}
+<body marginheight="0" topmargin="0" marginwidth="0" style="margin: 0px; background-color: #fff;" leftmargin="0">
+    <!--100% body table-->
+    <table cellspacing="0" border="0" cellpadding="0" width="100%" bgcolor="#fff" 
+        style="@import url(https://fonts.googleapis.com/css?family=Rubik:300,400,500,700|Open+Sans:300,400,600,700); font-family: 'Open Sans', sans-serif; 
+         ">
+        <tr>
+            <td>
+                <table style="background-color: #fff; max-width:670px;  margin:0 auto;" width="100%" border="0"
+                    align="center" cellpadding="0" cellspacing="0">
+                    <tr>
+                        <td style="height:80px;">&nbsp;</td>
+                    </tr>
+                    <tr>
+                        <td style="text-align:center;">
+                          <a href="https://rakeshmandal.com" title="logo" target="_blank">
+                      
+                          </a>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="height:20px;">&nbsp;</td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <table width="95%" border="0" align="center" cellpadding="0" cellspacing="0"
+                                style="max-width:670px;background:#fff; border-radius:3px; -webkit-box-shadow:0 6px 18px 0 rgba(0,0,0,.06);-moz-box-shadow:0 6px 18px 0 rgba(0,0,0,.06);box-shadow:0 6px 18px 0 rgba(0,0,0,.06);">
+                                <tr>
+                                    <td style="height:40px;">&nbsp;</td>
+                                </tr>
 
-                    <img src="https://fixmaster.com.ng/wp-content/uploads/2020/11/fix-master-logo-straight.png" style="margin-top: -90px !important; margin-bottom: -38px !important;" class="l-light" height="250" alt="FixMaster Logo">
-
-                    <img src="https://fixmaster.com.ng/wp-content/uploads/2020/11/fix-master-logo-straight.png" style="margin-top: -40px !important; margin-bottom: -38px !important; margin-left: 50px !important" class="l-dark" height="70" alt="FixMaster Logo">
-
-                </a>
-            </div> -->
-        <div style="margin-top: 2em; padding:1em;">
-        <table style="box-sizing: border-box; width: 100%; border-radius: 6px; overflow: hidden; background-color: #fff; box-shadow: 0 0 3px rgba(60, 72, 88, 0.15);">
-                    <thead>
-                        <tr style="background-color: #E97D1F; text-align: center; color: #fff; font-size: 24px; font-weight: 700; letter-spacing: 1px;">
-                            <th scope="col"><img src="{{ asset('assets/images/home-fix-logo-new.png') }}" height="170" style="margin-top: -50px !important; margin-bottom: -50px !important;" alt=""></th>
-                        </tr>
-                    </thead>
-
-                    <tbody>
-                        <!-- <tr>
-                            <td style="padding: 48px 24px 0; color: #161c2d; font-size: 18px; font-weight: 600;">
-                                Hello,
-                            </td>
-                        </tr> -->
-                        <tr>
-                            <td style="padding: 15px 24px 15px; color: #8492a6;">
-                            {!! $mail_message !!}
-                            </td>
-                        </tr>
-
-                        <tr>
-                            <td style="padding: 15px 24px 15px; color: #8492a6;">
-                             
-                            </td>
+                                <tr>
+                                <td>    
+                                <div style="text-align:right" >
+                    
+                                    <span style="color: #8492a6"> <?= date('Y-m-d')?> </span>
+                                </div>
                            
-                        </tr>
+                                <span
+                                            style="display:inline-block; vertical-align:middle; margin:14px 0 26px; border-bottom:3px solid #cecece; width:100%;"></span></td>
+                                
+                                  
+                                    &nbsp;</td>
+                                </tr>
+                                <tr>
+                                    <td style="padding:0 35px;">
+                                
+        
 
+                                    <div style="padding: 15px 15px; color: #8492a6;">
+                            {!! $mail_message !!}
+                            </div>
 
-                        <tr>
-                            <td style="padding: 15px 24px 15px; color: #8492a6;">
-                                Thanks, <br> FixMaster Management
-                            </td>
-                        </tr>
+                                                                                    
+                                        
+                                         
+                                    </td>
+                                    
+                                </tr>
+                                <tr>
+                                <td>    
+                                <span
+                                            style="display:inline-block; vertical-align:middle; margin:14px 0 26px; border-bottom:3px solid #cecece; width:100%;"></span>
 
-                        <tr>
-                            <td style="padding: 16px 8px; color: #8492a6; background-color: #f8f9fc; text-align: center;">
-                                © {{ date('Y') }} FixMaster. All Rights Reserved.
-                            </td>
-                        </tr>
-                    </tbody>
+                                            <div style="float:right; text-align: right;padding:0 10px;">
+                                            <img src="{{ asset('assets/images/home-fix-logo-colored.png') }}" height="45" alt="FixMaster Logo">
+                                             <p style="margin-top: 5px; font-size: 13px; color: #8492a6">(+234) 0813-286-3878</p>
+                                             <p style="margin-top: -15px; font-size: 13px;color: #8492a6">info@fixmaster.com.ng</p>
+                                             <p style="margin-top: -15px; font-size: 13px; color: #8492a6">www.fixmaster.com.ng</p>
+                                             <p style="margin-top: -15px; font-size: 13px;color: #8492a6">FixMaster ,Ajose Adeogun, Lagos, Nigeria</p>
+
+                                     </div>
+
+                                     <div style="float:left; padding:0 10px">
+                                        <br/>
+                                        <p style="color: #8492a6; margin:5px 0px -6px; font-size:14px"> Connect With Us</p>
+                        
+                    <a href="javascript:void(0)" class="fa fa-twitter" style="background-color: #fff;color: #55ACEE; font-size: 20px;   margin: 5px 2px;"></a>
+                    <a href="javascript:void(0)" class="fa fa-facebook" style="background-color: #007bb5;color: white; padding: 2px 5px;border-radius: 50%;  margin: 5px 2px;"></a>
+                    <a href="javascript:void(0)" class="fa fa-instagram" style="background-color: #007bb5;color: white; padding: 2px 5px;border-radius: 50%;   margin: 5px 2px;"></a>
+                    <a href="javascript:void(0)" class="fa fa-linkedin" style="background-color: #007bb5;color: white; padding: 2px 5px;border-radius: 50%;   margin: 5px 2px;"></a>
+
+                                     </div>
+
+                                            </td>
+                                
+
+                           
+                                    <td style="height:40px;">
+                                    &nbsp;</td>
+                                </tr>
+                            </table>
+                        </td>
+                    <tr>
+                        <td style="height:20px;">&nbsp;</td>
+                    </tr>
+                
+                    <tr>
+                        <td style="height:80px;">&nbsp;</td>
+                    </tr>
                 </table>
-        </div>
-    </div>
-    <!-- javascript -->
-    <script src="{{asset('assets/frontend/js/jquery-3.5.1.min.js')}}"></script>
-    <script src="{{asset('assets/frontend/js/bootstrap.bundle.min.js')}}"></script>
-    <script src="{{asset('assets/frontend/js/jquery.easing.min.js')}}"></script>
-    <script src="{{asset('assets/frontend/js/scrollspy.min.js')}}"></script>
-    <!-- SLIDER -->
-    <script src="{{asset('assets/frontend/js/owl.carousel.min.js')}}"></script>
-    <script src="{{asset('assets/frontend/js/owl.init.js')}}"></script>
-    <!-- Icons -->
-    <script src="{{asset('assets/frontend/js/feather.min.js')}}"></script>
-    <!-- Switcher -->
-    <script src="{{asset('assets/frontend/js/switcher.js')}}"></script>
-    <!-- Main Js -->
-    <script src="{{asset('assets/frontend/js/app.js')}}"></script>
-    <!-- scroll -->
-    <script src="{{asset('assets/frontend/js/scroll.js')}}"></script>
-    <script src="{{asset('assets/frontend/js/typed/lib/typed.js')}}"></script>
+            </td>
+        </tr>
+    </table>
+    <!--/100% body table-->
 </body>
+
 </html>

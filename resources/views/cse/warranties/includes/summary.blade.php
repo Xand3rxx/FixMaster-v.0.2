@@ -101,6 +101,9 @@
                             <div class="table-responsive">
                              
                             @if(!empty($suppliers))
+                           
+                           @foreach($rfqs as $item)
+                        
                                 <table class="table table-hover mg-b-0 mt-4">
                                     <thead class="">
                                         <tr>
@@ -111,26 +114,31 @@
                                             <th>Status</th>
                                             <th class="text-center">Total Amount</th>
                                             <th>Date Created</th>
-                                            <th>Action</th>
+                                            <!-- <th>Action</th> -->
                                         </tr>
                                     </thead>
 
                                     <tbody>
-                                        @php $y = 0; @endphp
+                                     
                                         <tr>
-                                            <td class="tx-color-03 tx-center">{{ '1' }}</td>
-                                            <td class="tx-medium">{{$suppliers->unique_id}} </td>
-                                            <td class="tx-medium">{{CustomHelpers::getWarrantTechnician($suppliers->client_id )}}</td>
-                                            <td class="tx-medium">{{CustomHelpers::getWarrantTechnician($suppliers->issued_by )}}</td>
-                                            <td class="text-medium text-success">{{$suppliers->status}}</td>
-                                            <td class="tx-medium text-center">₦{{ number_format($suppliers->total_amount) ?? 'Null'}}</td>
-                                            <td class="text-medium">{{ Carbon\Carbon::parse($suppliers->updated_at, 'UTC')->isoFormat('MMMM Do YYYY, h:mm:ssa') }}</td>
+                                            <td class="tx-color-03 tx-center">{{  $loop->iteration }}</td>
+                                            <td class="tx-medium">{{$item->unique_id}} </td>
+                                            <td class="tx-medium">{{ ucfirst($item->serviceRequest->client->account->first_name)}}
+                                            {{ucfirst($item->serviceRequest->client->account->last_name)}}
+                                            </td>
+                                            <td class="tx-medium">{{$item['issuer']['account']['first_name']}}
+                                            {{$item['issuer']['account']['last_name']}}
+                                            </td>
+                                            <td class="text-medium text-success">{{$item->status}}</td>
+                                            <td class="tx-medium text-center">₦{{ number_format($item->total_amount) ?? 'Null'}}</td>
+                                            <td class="text-medium">{{ Carbon\Carbon::parse($item->created_at, 'UTC')->isoFormat('MMMM Do YYYY, h:mm:ssa') }}</td>
                                             <td class=" text-center">
-                                                <a href="#rfqDetails" data-toggle="modal" class="btn btn-sm btn-primary" title="View RFQ-C85BEA04 details" data-batch-number="RFQ-C85BEA04" data-url="#" id="rfq-details"></i> Details</a>
+                                                <!-- <a href="#rfqDetails" data-toggle="modal" class="btn btn-sm btn-primary" title="View RFQ-C85BEA04 details" data-batch-number="RFQ-C85BEA04" data-url="#" id="rfq-details"></i> Details</a> -->
                                             </td>
                                         </tr>
                                     </tbody>
                                 </table>
+                                @endforeach
                                 @endif
                             </div><!-- table-responsive -->
 

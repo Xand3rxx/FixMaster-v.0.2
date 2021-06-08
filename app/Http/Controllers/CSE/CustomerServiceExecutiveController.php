@@ -175,6 +175,10 @@ class CustomerServiceExecutiveController extends Controller
 
         $technicainsRole = \App\Models\Role::where('slug', 'technician-artisans')->first();
         $rfq        = \App\Models\Rfq::where('service_request_id', $service_request->id)->first();
+        $rfqWarranty        = \App\Models\Rfq::where(['issued_by'=> Auth::user()->id, 'service_request_id' => $service_request->id, 'type'=> 'Warranty'])->latest()->first();
+        $rfqSupplierDispatch =   $rfqWarranty ? \App\Models\RfqSupplierDispatch::where(['rfq_id'=> $rfqWarranty->id, 'cse_status'=> 'Pending' ])->get(): null;
+
+   
 
         $scheduleDate =!empty($service_request->service_request_warranty->service_request_warranty_issued) ? 
         $service_request->service_request_warranty->service_request_warranty_issued->scheduled_datetime: '';
@@ -206,16 +210,21 @@ class CustomerServiceExecutiveController extends Controller
             'technician_list'  =>  \App\Models\Technician::all(),
             'suppliers'        =>  \App\Models\Rfq::where('service_request_id', $service_request->id)->with('rfqSupplies', 'rfqSuppliesInvoices','rfqBatches', 'rfqSupplierDispatches', 'serviceRequest')->first(),
             'requestReports'  => \App\Models\ServiceRequestReport::where('service_request_id', $service_request->id)->latest('created_at')->get(),
-            'RfqDispatchNotification' =>\App\Models\RfqDispatchNotification::where(['service_request_id' => $service_request->id, 'rfq_id'=>  $rfq->id ])->first(),
+            'RfqDispatchNotification' => $rfqWarranty? \App\Models\RfqDispatchNotification::where(['service_request_id' => $service_request->id, 'rfq_id'=>  $rfq->id ])->get(): [],
             'causalAgent'  =>  $issued_id != '' ? \App\Models\ServiceRequestWarrantyReport::where([
                 'service_request_warranties_issued_id' => $issued_id ])
                 ->get(): [],
             'technicianExist' =>  $technicianExist,
+             'rfqSupplierDispatch' => $rfqSupplierDispatch ,
             'causalTechnician' =>  count($causalTechnician) > 0 AND count($causalSuppliers) == 0 ? $causalTechnician: '0',
-            'rfqDetails'    =>   \App\Models\Rfq::where(['issued_by'=> Auth::user()->id, 'service_request_id' => $service_request->id, 'type'=> 'Warranty'])->with('rfqSupplier','rfqBatches','rfqSuppliesInvoices')->firstOrFail(),
+            'rfqDetails'    => $rfqWarranty? \App\Models\RfqSupplierInvoice::where(['rfq_id'=> $rfqWarranty->id])->where('accepted', '<>', 'No')
+                            ->with('rfq', 'rfqBatches', 'supplier', 'supplierInvoiceBatches', 'supplierDispatch')->get(): null,
+            'rfqWarranty' => $rfqWarranty,
+            'rfqs'        =>  \App\Models\Rfq::where('service_request_id', $service_request->id)->with('rfqSupplies', 'rfqSuppliesInvoices','rfqBatches', 'rfqSupplierDispatches', 'serviceRequest')->get(),
+
         ];
 
-      //dd( $variables['rfqDetails']);
+        //dd( $variables['rfqDetails'] );
       
  
        
@@ -253,5 +262,12 @@ class CustomerServiceExecutiveController extends Controller
                 'results'   =>  $filters ? \App\Models\SubService::select('name','uuid')->whereIn('uuid', $filters['sub_service_list'][0])->orderBy('name', 'ASC')->get() : []
             ]);
         }
+
+    }
+
+    public function see()
+    {
+   
+        return view('emails.message',['mail_message' => '<p>nnnnnnnnnnnnnn</p>']);
     }
 }

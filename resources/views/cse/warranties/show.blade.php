@@ -173,8 +173,7 @@
                          </section>
                          @endif 
 
-                     
-                         @if(is_null($RfqDispatchNotification))
+                         @if(count($RfqDispatchNotification) < 1)
                         <h3>New RFQ</h3>
                         <section>
                         <p class="mg-b-0">A request for quotation is a business process in which a company or public entity requests a quote from a supplier for the purchase of specific products or services.</p>
@@ -218,11 +217,12 @@
                             <div class="d-none d-rfq">
                             <small class="text-danger">This portion will display only if the CSE initially executed a RFQ, the Client paid for the components and the Supplier has made the delivery.</small>
                            
+                   
+                    @if(!empty($suppliers->rfqSuppliesInvoices))
                     <div class="divider-text">Initial Supplier </div>
-
                     <h4 id="section1" class="mt-4 mb-2">Initiate RFQ To Initial Supplier?</h4>
                     <ul class="list-group wd-md-100p">
-                                @if(!empty($suppliers->rfqSuppliesInvoices))
+                              
                                 @foreach($suppliers->rfqSuppliesInvoices as $item)
                                 @if($item->accepted == 'Yes')
                                     <li class="list-group-item d-flex align-items-center">
@@ -284,9 +284,12 @@
                                 
                             </div>
 
-
+                            @if(!empty($suppliers))
                             @include('cse.warranties.includes.make_request')
+                            @endif  
+                            
                               @if(!empty($suppliers->rfqSuppliesInvoices))
+                             
                               @foreach($suppliers->rfqSuppliesInvoices as $item)
                               @if($item->accepted == 'Pending')
                             
@@ -302,14 +305,32 @@
                         @endif
                         
 
-                        @if(!is_null($RfqDispatchNotification))
+
+
+                    
+                        @if(!is_null($rfqDetails))
+                        @if(count($rfqDetails) > 0 )
+            
+                        @include('cse.warranties.includes.select_supplier_quote')
+                       
+                        @endif
+                        @endif
+                     
+                         
+                      
+                        @if(!is_null($rfqDetails))
+                        @if(count($rfqSupplierDispatch)> 0)
+                       
                         <h3>Material Acceptance</h3>
                         <section>
                         <small class="text-danger">This portion will display only if the CSE initially executed a RFQ, the Client paid for the components and the Supplier has made the delivery.</small>
 
                         @include('cse.warranties.includes.material_acceptance')
                         </section>
+                      
                         @endif
+                        @endif
+                     
                      
                          
                          @if(is_null($technicianExist))
@@ -339,6 +360,8 @@
             <input type="hidden" value="{{$service_request->unique_id}}" name="service_request_unique_id">
             <input type="hidden" value="{{$service_request->service_request_warranty->uuid}}" name="service_request_warranty_uuid">
             <input type="hidden" value="{{$service_request->service_request_warranty->id}}" name="service_request_warranty_id">
+            <input type="hidden" value="{{$service_request->service_request_warranty->id}}" name="service_request_warranty_id">
+
 
             <button type="submit" class="btn btn-primary d-none" id="update-progress">Update Progress</button>
         

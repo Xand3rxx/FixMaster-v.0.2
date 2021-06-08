@@ -58,6 +58,8 @@ class AppServiceProvider extends ServiceProvider
             $view->with([
                 'newQuotes' =>  \App\Models\Rfq::PendingQuotes()->get()->count(),
                 'warrantyQuotes' =>  \App\Models\Rfq::orderBy('created_at', 'DESC')->where('type', '=', 'warranty')->count(),
+                'RfqDispatchNotification' =>\App\Models\RfqDispatchNotification::where(['supplier_id' => auth()->user()->id ])->with('rfq', 'service_request')->latest('created_at')->get(),
+
 
             ]);
         });

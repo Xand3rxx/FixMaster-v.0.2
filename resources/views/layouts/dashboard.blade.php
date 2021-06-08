@@ -87,7 +87,7 @@
         .position-top{
             position:fixed;
             left:0;
-            width:80%;
+            width:60%;
         z-index: 30000;        
         background: #8392a5;;
         border-color: #8392a5;;

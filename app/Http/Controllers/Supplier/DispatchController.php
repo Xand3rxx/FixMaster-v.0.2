@@ -90,12 +90,13 @@ class DispatchController extends Controller
             'comment'               =>  'sometimes',
         ]);
 
+
         //Set `createDispatch` to false before Db transaction and pass by reference
         (bool) $createDispatch  = false;
 
         // Set DB to rollback DB transacations if error occurs
         DB::transaction(function () use ($request, &$createDispatch) {
-            RfqSupplierDispatch::create([
+             RfqSupplierDispatch::create([
                 'rfq_id'                =>  $request->rfq_id,
                 'rfq_supplier_invoice'  =>  $request->rfq_supplier_invoice,
                 'supplier_id'           =>  Auth::id(),
@@ -109,8 +110,14 @@ class DispatchController extends Controller
             //Set variables as true to be validated outside the DB transaction
             $createDispatch =  true;
         });
-        $updateWArrantyDispatch = $this->updateRfqDispatchNotify($request->rfq_id);
-        if($createDispatch AND $updateWArrantyDispatch){
+    
+        $serviceRquest = \App\Models\Rfq::where(['id'=>$request->rfq_id, 'type'=> 'Warranty' ])->first()->service_request_id;
+         if($serviceRquest)
+         {
+        $updateWArrantyDispatch = $this->updateRfqDispatchNotify($request,$serviceRquest);
+         }
+
+        if($createDispatch){
 
             //Code to send mail to FixMaster, CSE and Supplier who sent the quote
 
@@ -170,6 +177,7 @@ class DispatchController extends Controller
                 'supplier_status'   =>  'required',
             ]);
 
+            
             //Set `updateDispatchStatus` to false before Db transaction and pass by reference
             (bool) $updateDispatchStatus  = false;
 
@@ -210,8 +218,9 @@ class DispatchController extends Controller
         }
     }
 
-    public function updateRfqDispatchNotify($rfq_id){
-        $updateOldSupplierRfqDispatch = \App\Models\RfqDispatchNotification::where(['rfq_id'=>$rfq_id ,  'supplier_id' => Auth::user()->id ])->update([
+    public function updateRfqDispatchNotify($request,$serviceRquest){
+    
+        $updateOldSupplierRfqDispatch = \App\Models\RfqDispatchNotification::where(['service_request_id'=>$serviceRquest ,  'supplier_id' => Auth::user()->id ])->update([
              'notification' => 'Off',
             'dispatch' => 'Yes',
         ]);

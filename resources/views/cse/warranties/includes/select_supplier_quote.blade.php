@@ -1,18 +1,16 @@
 
+            <h3>Supplier's Invoice</h3>
+         
+                        <section>
+                        <small class="text-danger">This portion will display only if the CSE initially executed a RFQ, the Client paid for the components and the Supplier has made the delivery.</small>
 
-
-
-                            <h5>Update RFQ Status</h5>
                             <div class="form-row">
                                 <div class="form-group col-md-12">
-                                    <label for="status">Status</label>
-                                    <select class="form-control custom-select" id="status" name="delivery_status">
+                                    <label for="status">Invoice Status</label>
+                                    <select class="form-control custom-select" id="status" name="approve_invoice">
                                         <option selected disabled value="" selected>Select...</option>
-                                        <option value="Awaiting" value="{{ old('Awaiting') }}" {{ old('status') == 'Awaiting' ? 'selected' : ''}}>Awaiting</option>
-                                        <option value="Shipped" value="{{ old('Shipped') }}" {{ old('status') == 'Shipped' ? 'selected' : ''}}>Shipped</option>
-                                        <option value="Delivered" value="{{ old('Shipped') }}" {{ old('status') == 'Delivered' ? 'selected' : ''}}>Delivered</option>
-                                        <option value="Rejected" value="{{ old('Rejected') }}" {{ old('status') == 'Rejected' ? 'selected' : ''}}>Rejected</option>
-
+                                        <option value="Approved" value="{{ old('Approved') }}" {{ old('status') == 'Approved' ? 'selected' : ''}}>Approved</option>
+                                        <option value="Declined" value="{{ old('') }}" {{ old('status') == 'Declined' ? 'selected' : ''}}>Declined</option>
                                     </select>
                                     @error('status')
                                     <span class="invalid-feedback" role="alert">
@@ -23,8 +21,11 @@
                                 <input type="hidden" value="{{$rfqWarranty?$rfqWarranty->id: 0}}" name="rfqWarranty_id">
 
                             </div>
+                      
 
  @foreach($rfqDetails as $rfqDetail)
+
+ @if($rfqDetail->accepted != 'Yes')
 
  <ul class="list-group wd-md-100p">
              
@@ -90,18 +91,7 @@
             </tr>
             @endif
 
-            @if(!is_null($rfqDetail->supplierDispatch ))
-                  <tr>
-                    <td class="tx-medium">Dispatch Status</td>
-                  
-                    <td class="text-info">{{$rfqDetail->supplierDispatch->supplier_status}}</td>
-                 
-                </tr>
-                <tr>
-                <td class="tx-medium">Delivery Status</td>
-                <td class="text-warning">{{$rfqDetail->rfq->status}}</td>
-            </tr>
-            @endif
+       
                   <tr>
                     <td class="tx-medium">Delivery Fee</td>
                     <td class="tx-color-03">₦{{ number_format($rfqDetail->delivery_fee ?? '0') }}</td>
@@ -160,34 +150,9 @@
                       @endforeach
                   </tbody>
                 </table>
-                            </div><!-- table-responsive -->
+                       </div><!-- table-responsive -->
+                       @endif 
          @endforeach
-
-
-
-            <div class="divider-text">Accept Materials Delivery  </div>
-                            <h5></h5>
-                            <div class="form-row">
-                                <div class="form-group col-md-12">
-                                    <label for="accept_materials">Accept Delivery</label>
-                                    <select class="form-control custom-select" id="accept_materials" name="accept_materials">
-                                        <option selected disabled value="" selected>Select...</option>
-                                        <option value="Yes" value="{{ old('Yes') }}" {{ old('accept_materials') == 'Yes' ? 'selected' : ''}}>Yes, all ordered components were delivered</option>
-                                        <option value="No" value="{{ old('No') }}" {{ old('accept_materials') == 'No' ? 'selected' : ''}}>No, all ordered components were not delivered</option>
-                                    </select>
-                                    @error('accept_materials')
-                                    <span class="invalid-feedback" role="alert">
-                                        <strong>{{ $message }}</strong>
-                                    </span>
-                                    @enderror
-                                </div>
-                                <div class="form-group decline-rfq-reason col-md-12">
-                                    <label for="reason">Reason</label>
-                                    <textarea rows="3" class="form-control @error("reason") is-invalid @enderror" id="reason" name="accept_reason"></textarea>
-                                </div>
-                            </div>
-
-
-                            
-                    
-                       
+     
+                            </section>
+                         
