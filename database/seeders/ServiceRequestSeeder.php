@@ -73,7 +73,7 @@ class ServiceRequestSeeder extends Seeder
             array(
                 'uuid'                  => Str::uuid('uuid'),      
                 'client_id'             => 5, 
-                'service_id'            => 10, 
+                'service_id'            => 13, 
                 'unique_id'             => 'REF-330CB862', 
                 // 'state_id'              => 24, 
                 // 'lga_id'                => 505, 
@@ -84,7 +84,7 @@ class ServiceRequestSeeder extends Seeder
                 'client_security_code'  => 'SEC-88AC1B19', 
                 'status_id'             => 2, 
                 'contactme_status'      => 1,
-                'description'           => 'Washing machine plug is sparking. the cable appears melted. Thermocool washing machine.', 
+                'description'           => 'Washing machine plug is sparking, the cable appears melted. Thermocool washing machine.', 
                 'total_amount'          => 1000, 
                 'preferred_time'        => \Carbon\Carbon::now('UTC'),
                 'has_client_rated'      => 'No',
@@ -136,7 +136,7 @@ class ServiceRequestSeeder extends Seeder
             array(
                 'uuid'                  => Str::uuid('uuid'),      
                 'client_id'             => 7, 
-                'service_id'            => 8, 
+                'service_id'            => 3, 
                 'unique_id'             => 'REF-1FC50FCC', 
                 // 'state_id'              => 24, 
                 // 'lga_id'                => 515, 
@@ -157,7 +157,7 @@ class ServiceRequestSeeder extends Seeder
             array(
                 'uuid'                  => Str::uuid('uuid'),      
                 'client_id'             => 8, 
-                'service_id'            => 1, 
+                'service_id'            => 22, 
                 'unique_id'             => 'REF-131D985E', 
                 // 'state_id'              => 24, 
                 // 'lga_id'                => 505, 
