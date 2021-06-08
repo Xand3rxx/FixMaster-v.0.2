@@ -21,16 +21,7 @@ class Category extends Model
     public $incrementing = false;
 
     public $fillable = [
-        'uuid', 'user_id', 'name',
-    ];
-
-    /**
-     * The attributes that should be hidden for arrays.
-     *
-     * @var array
-     */
-    protected $hidden = [
-        'id'
+        'uuid', 'user_id', 'name', 'labour_markup', 'material_markup',
     ];
 
     /**

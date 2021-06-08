@@ -19,7 +19,7 @@ class Service extends Model
     // public $incrementing = false;
 
     protected $fillable = [
-        'user_id', 'category_id', 'name', 'service_charge', 'description', 'status', 'image'
+        'user_id', 'category_id', 'name', 'service_charge', 'diagnosis_subsequent_hour_charge', 'description', 'status', 'image'
     ];
 
     /**
@@ -69,6 +69,11 @@ class Service extends Model
             ->where('status', '=', 1)
             // ->whereNull('deleted_at')
             ->orderBy('name', 'ASC');
+    }
+
+    
+    public static function getServiceNameById(int $id){
+        return Service::where('id', $id)->value('name');
     }
 
     public function user()

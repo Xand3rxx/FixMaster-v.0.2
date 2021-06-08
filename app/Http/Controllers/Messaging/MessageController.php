@@ -25,7 +25,7 @@ use Auth;
 class MessageController extends Controller
 {
     use Loggable;
-  
+
     public function getInbox(Request $request)
     {
         $emails = DB::table('messages')
@@ -34,48 +34,45 @@ class MessageController extends Controller
             ->select('messages.*', 'accounts.first_name',  'accounts.last_name', 'accounts.middle_name')
             ->where('messages.recipient',  $request->input('userid'))
             ->get();
-       
-            if(!empty($emails)){
-                return response()->json(["data" => $emails], 200);
-             }
-             return response()->json(["message" => "Inbox is empty!"], 404);
-     
+
+        if (!empty($emails)) {
+            return response()->json(["data" => $emails], 200);
+        }
+        return response()->json(["message" => "Inbox is empty!"], 404);
     }
 
     public function getOutBox(Request $request)
     {
-      
+
         $emails = DB::table('messages')
             ->join('accounts', 'messages.recipient', '=', 'accounts.user_id')
             ->orderBy('messages.created_at', 'DESC')
             ->select('messages.*', 'accounts.first_name',  'accounts.last_name', 'accounts.middle_name')
             ->where('messages.sender', $request->input('userid'))
             ->get();
-        
-            if(!empty($emails)){
-                return response()->json(["data" => $emails], 200);
-             }
-             return response()->json(["message" => "Inbox is empty!"], 404);
-     
+
+        if (!empty($emails)) {
+            return response()->json(["data" => $emails], 200);
+        }
+        return response()->json(["message" => "Inbox is empty!"], 404);
     }
 
     public function getMessage(Request $request)
     {
-       $message_id = $request->input('message_id');
+        $message_id = $request->input('message_id');
         $email = DB::table('messages')
             ->join('accounts', 'messages.recipient', '=', 'accounts.user_id')
             ->where('messages.uuid', $message_id)
             ->select('messages.*', 'accounts.first_name',  'accounts.last_name', 'accounts.middle_name')
             ->first();
-        
-        $message = Message::find($email->id);  
+
+        $message = Message::find($email->id);
         $message->mail_status = 'read';
         $message->save();
-            if(!empty($email)){
-                return response()->json(["data" => $email], 200);
-             }
-             return response()->json(["message" => "Message is empty!"], 404);
-     
+        if (!empty($email)) {
+            return response()->json(["data" => $email], 200);
+        }
+        return response()->json(["message" => "Message is empty!"], 404);
     }
 
     public function getRecipients(Request $request)
@@ -83,19 +80,18 @@ class MessageController extends Controller
         $searchVal = $request->input('search_val');
         $recipients = DB::table('users')
             ->join('accounts', 'users.id', '=', 'accounts.user_id')
-            ->where('users.email','LIKE', "%{$searchVal}%")
+            ->where('users.email', 'LIKE', "%{$searchVal}%")
             ->orWhere('accounts.first_name', 'LIKE', "%{$searchVal}%")
             ->orWhere('accounts.middle_name', 'LIKE', "%{$searchVal}%")
             ->orWhere('accounts.last_name', 'LIKE', "%{$searchVal}%")
-            ->select('accounts.user_id','accounts.first_name',  'accounts.last_name', 'accounts.middle_name', 'users.email')
+            ->select('accounts.user_id', 'accounts.first_name',  'accounts.last_name', 'accounts.middle_name', 'users.email')
             ->get();
         Log::debug($recipients);
-       
-            if(!empty($recipients)){
-                return response()->json(["data" => $recipients], 200);
-             }
-             return response()->json(["message" => "data not found!"], 404);
-     
+
+        if (!empty($recipients)) {
+            return response()->json(["data" => $recipients], 200);
+        }
+        return response()->json(["message" => "data not found!"], 404);
     }
 
     public function saveEmail(Request $request)
@@ -111,34 +107,35 @@ class MessageController extends Controller
 
         $senderDetails = $this->getUser($sender);
         Log::debug($recipients);
-        foreach($recipients as $recipient){
+        foreach ($recipients as $recipient) {
             array_push($receivers, $recipient['value']);
         }
 
         $users = DB::table('users')
-        ->join('accounts', 'users.id', '=', 'accounts.user_id')
-        ->whereIn('users.id', $receivers )
-        ->select('users.id','users.email', 'accounts.first_name',  'accounts.last_name', 'accounts.middle_name')
-        ->get();
-         
+            ->join('accounts', 'users.id', '=', 'accounts.user_id')
+            ->whereIn('users.id', $receivers)
+            ->select('users.id', 'users.email', 'accounts.first_name',  'accounts.last_name', 'accounts.middle_name')
+            ->get();
 
-      
-        foreach($users as $user){
+
+
+        foreach ($users as $user) {
             $mail_objects[] = [
-                'title'=>$subject, 
-                'content'=>$mail_content, 
-                'recipient'=>$user->id, 
-                'sender'=>$sender,
-                'uuid'=>Str::uuid()->toString(),
+                'title' => $subject,
+                'content' => $mail_content,
+                'recipient' => $user->id,
+                'sender' => $sender,
+                'uuid' => Str::uuid()->toString(),
                 'created_at'        => Carbon::now(),
                 'updated_at'        => Carbon::now(),
-                'mail_status'=>'Not Sent',
+                'mail_status' => 'Not Sent',
             ];
-            $this->sendNewMessage("mail",$subject, $senderDetails->email, $user->email, $mail_content, "");
+            $this->sendNewMessage( $subject, $senderDetails->email, $user->email, $mail_content, "");
         }
-      //  Message::insert($mail_objects);
+         Message::insert($mail_objects);
         return response()->json([
-            "message" => "Messages sent successfully!"], 201);
+            "message" => "Messages sent successfully!"
+        ], 201);
     }
 
 
@@ -155,61 +152,107 @@ class MessageController extends Controller
         $receiverDetails = [];
 
         $senderDetails = $this->getUser($sender);
-        Log::debug($recipients);
         foreach($recipients as $recipient){
             array_push($receivers, $recipient['value']);
         }
 
         $users = DB::table('user_types')
-        ->join('accounts', 'user_types.user_id', '=', 'accounts.user_id')
-        ->join('users', 'users.id', '=', 'user_types.user_id')
-        ->whereIn('role_id', $receivers )
-        ->select('user_types.user_id','users.email', 'accounts.first_name',  'accounts.last_name', 'accounts.middle_name')
-        ->get();
-         
+            ->join('accounts', 'user_types.user_id', '=', 'accounts.user_id')
+            ->join('users', 'users.id', '=', 'user_types.user_id')
+            ->whereIn('role_id', $receivers)
+            ->select('user_types.user_id', 'users.email', 'accounts.first_name',  'accounts.last_name', 'accounts.middle_name')
+            ->get();
 
-      
-        foreach($users as $user){
+
+
+        foreach ($users as $user) {
             $mail_objects[] = [
-                'title'=>$subject, 
-                'content'=>$mail_content, 
-                'recipient'=>$user->user_id, 
-                'sender'=>$sender,
-                'uuid'=>Str::uuid()->toString(),
+                'title' => $subject,
+                'content' => $mail_content,
+                'recipient' => $user->user_id,
+                'sender' => $sender,
+                'uuid' => Str::uuid()->toString(),
                 'created_at'        => Carbon::now(),
                 'updated_at'        => Carbon::now(),
-                'mail_status'=>'Not Sent',
+                'mail_status' => 'Not Sent',
             ];
-            $this->sendNewMessage("mail",$subject, $senderDetails->email, $user->email, $mail_content, "");
+            $this->sendNewMessage("mail", $subject, $senderDetails->email, $user->email, $mail_content, "");
         }
-       // Message::insert($mail_objects);
+        // Message::insert($mail_objects);
         return response()->json([
-            "message" => "Messages sent successfully!"], 201);
+            "message" => "Messages sent successfully!"
+        ], 201);
     }
 
 
     public function sendMessage(Request $request)
     {
-        
+
         $subject = $request->input('subject');
         $to = $request->input('recipient');
         $mail_data = $request->input('mail_data');
         $from = $request->input('sender');
         $feature = $request->input('feature');
-        $type = $request->input('type');
+        
 
-        $this->sendNewMessage( $type, $subject, $from, $to, $mail_data, $feature);
+        $this->sendNewMessage($subject, $from, $to, $mail_data, $feature);
     }
 
-    
+    /**
+     * Send message using Available Template Design
+     * 
+     * @param string $template_name ...use \App\Models\MessageTemplate::Feature
+     * @param mixed $parameters 
+     * 
+     * @return \Illuminate\Http\Response
+     */
+    // public static function usingTemplate(string $template_name, mixed $parameters)
+    // {
+    //     if (!in_array($template_name, \App\Models\MessageTemplate::FEATURES)) {
+    //         return response()->json(["message" => "Message Template not found!"], 404);
+    //     }
+    //     // Find needed Template
+    //     $messageTemplate = MessageTemplate::select('content')->where('feature', $template_name)->first();
+    //     // Build Message Body
+    //     $message_body = self::buildMessageBody($parameters, $messageTemplate->content);
+    // }
 
-    public function sendNewMessage( $type, $subject, $from, $to, $mail_data,$feature=""){
+    /**
+     * Build Message Body
+     * 
+     * @param string $template_name ...use \App\Models\MessageTemplate::Feature
+     * @param mixed $parameters 
+     * 
+     * @return \Illuminate\Http\Response
+     */
+    // protected static function buildMessageBody($variables, $messageTemp)
+    // {
+    //     (array) $builtBody = [];
+    //     foreach ($variables as $key => $value) {
+    //         $builtBody = str_replace('{' . $key . '}', $value, $messageTemp);
+    //     }
+    //     return $builtBody;
+    // }
+
+    /**
+     * Send message using feature
+     * 
+     * @return \Illuminate\Http\Response
+     */
+    public function sendNewMessage($subject="", $from="", $to, $mail_data,$feature=""){
+
+        Log::debug("Subject:  ".$subject.", From:".$from.", To: ".$to.", Feature: ".$feature);
+        Log::debug("Message Data: ".$mail_data);
+    
        $message = $mail_data;
+       $sms = "";
        $message_array = [];
+       $template = null;
+       $sender = null;
+       $recipient = null;
         if(!empty($feature)){
             $template = MessageTemplate::select('content')
             ->where('feature', $feature)
-            ->where('type', $type)
             ->first();
             
             if(empty($template)){
@@ -217,65 +260,74 @@ class MessageController extends Controller
     
             }
             $message = $this->replacePlaceHolders($mail_data, $template->content);
+            $sms = $this->replacePlaceHolders($mail_data, $template->sms);
+            $subject = $template->title;
         }
 
-    
+    if($from!="")
+        $sender = DB::table('users')->where('users.email', $from)->first();
+    else
+       $from = "noreply@fixmaster.com";
 
-        $recipient = DB::table('users')
-        ->where('users.email', $to )
-        ->first();
+       $recipient = DB::table('users')->where('users.email', $to )->first();
 
-        $sender = DB::table('users')
-        ->where('users.email', $from )
-        ->first();
+
       
-         if(is_object($recipient)){
+         if($from!="" && is_object($recipient)){
             $mail_objects[] = [
-                'title'=>$subject, 
-                'content'=>$message, 
-                'recipient'=>$recipient->id, 
-                'sender'=>$sender->id,
-                'uuid'=>Str::uuid()->toString(),
+                'title' => $subject,
+                'content' => $message,
+                'recipient' => $recipient->id,
+                'sender' => $sender->id,
+                'uuid' => Str::uuid()->toString(),
                 'created_at'        => Carbon::now(),
                 'updated_at'        => Carbon::now(),
-                'mail_status'=>'Not Sent',
+                'mail_status' => 'Not Sent',
             ];
-        
+          
+
         Message::insert($mail_objects);
+     
          }
             
 
         $message_array = ['to'=>$to, 'from'=>$from, 'subject'=>$subject, 'content'=>$message];
-        if($type=='mail')
-            $this->dispatch(new PushEmails($message_array));
-        elseif($type=='sms')
-           $this->dispatch(new PushSMS($message_array));
         
-
+        $this->dispatch(new PushEmails($message_array));
+        
+        
+           
+        // if(!empty($feature) && $sms!=""){
+        //     $this->dispatch(new PushSMS($sms));
+        // }
+           
+        
     }
 
-    
 
-    private function replacePlaceHolders($variables, $messageTemp){
-        foreach($variables as $key => $value){
-            $messageTemp = str_replace('{'.$key.'}', $value, $messageTemp);
+
+    private function replacePlaceHolders($variables, $messageTemp)
+    {
+        foreach ($variables as $key => $value) {
+            $messageTemp = str_replace('{' . $key . '}', $value, $messageTemp);
         }
 
         return $messageTemp;
     }
 
-    private function getUser($userId){
+    private function getUser($userId)
+    {
         $user = DB::table('users')
-        ->join('accounts', 'users.id', '=', 'accounts.user_id')
-        ->where('users.id', $userId)
-        ->select('users.id','users.email', 'accounts.first_name',  'accounts.last_name', 'accounts.middle_name')
-        ->first();
+            ->join('accounts', 'users.id', '=', 'accounts.user_id')
+            ->where('users.id', $userId)
+            ->select('users.id', 'users.email', 'accounts.first_name',  'accounts.last_name', 'accounts.middle_name')
+            ->first();
 
         return $user;
     }
 
-    public function userRoles(){
+    public function userRoles()
+    {
         return Role::all();
     }
-    
 }

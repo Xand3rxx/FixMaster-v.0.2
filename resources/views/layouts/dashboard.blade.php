@@ -33,6 +33,8 @@
     <link href="{{ asset('assets/dashboard/lib/prismjs/themes/prism-vs.css') }}" rel="stylesheet">
     <link rel="stylesheet" href="{{ asset('assets/client/css/jquery.datetimepicker.min.css') }}">
     <link rel="stylesheet" href="https://cdn.datatables.net/buttons/1.6.5/css/buttons.dataTables.min.css">
+    <link rel="stylesheet" href="{{ asset('assets/dashboard/assets/css/lightgallery.css') }}" />
+
     @yield('css')
     @yield('styles')
 
@@ -158,6 +160,7 @@
     <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDeDLVAiaU13p2O0d3jfcPjscsbVsCQUzc&v=3.exp&libraries=places">
     </script>
     <script src="{{ asset('assets/dashboard/assets/js/48a9782e-3e2b-4055-a9bb-8a926a937e2c.js') }}"></script>
+    <script src="{{ asset('assets/dashboard/assets/js/lightgallery-all.min.js') }}"></script>
 
     @yield('scripts')
     @stack('scripts')

@@ -43,4 +43,14 @@ class RfqSupplierInvoice extends Model
         return $this->hasMany(RfqSupplierInvoiceBatch::class);
     }
 
+    public function supplierDispatch()
+    {
+        return $this->hasOne(RfqSupplierDispatch::class, 'rfq_supplier_invoice')->latest('created_at');
+    }
+
+    public function selectedSupplier()
+    {
+        return $this->belongsTo(RfqSupplier::class, 'supplier_id', 'supplier_id');
+    }
+
 }

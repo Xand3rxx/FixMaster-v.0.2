@@ -37,14 +37,17 @@ class SchedulingDate
         $sub_status = SubStatus::where('uuid', '22821883-fc00-4366-9c29-c7360b7c2efc')->firstOrFail();
         return [
             'service_request_table' => [
-                'service_request'   => $service_request,
-                'preferred_time'              => $request->input('preferred_time'),
+                'service_request'       => $service_request,
+                'preferred_time'        => $request->input('preferred_time'),
             ],
             'service_request_progresses' => [
                 'user_id'              => $request->user()->id,
                 'service_request_id'   => $service_request->id,
                 'status_id'            => $sub_status->status_id,
                 'sub_status_id'        => $sub_status->id,
+            ],
+            'notification' => [
+                'feature' => 'CUSTOMER_JOB_SCHEDULED_TIME_NOTIFICATION',
             ],
             'log' => [
                 'type'                      =>  'request',

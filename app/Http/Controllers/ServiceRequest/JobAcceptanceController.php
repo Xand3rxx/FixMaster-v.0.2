@@ -10,6 +10,7 @@ use App\Http\Controllers\Controller;
 use App\Models\ServiceRequestSetting;
 use App\Models\ServiceRequestAssigned;
 use App\Models\ServiceRequestProgress;
+use App\Http\Controllers\Messaging\MessageController;
 
 class JobAcceptanceController extends Controller
 {
@@ -76,16 +77,19 @@ class JobAcceptanceController extends Controller
         (bool) $assigned = false;
         DB::transaction(function () use ($sub_status, &$assigned) {
             // 1. Service Request Assigned Table create record: user_id, service_request_id, job_acceptance_time, status == active
-            ServiceRequestAssigned::assignUserOnServiceRequest($this->user->id, $this->service_request->id, ServiceRequestAssigned::JOB_ACCEPTED[0], now(), ServiceRequestAssigned::STATUS[0]);
+            ServiceRequestAssigned::assignUserOnServiceRequest($this->user->id, $this->service_request->id, ServiceRequestAssigned::JOB_ACCEPTED[0], now(), ServiceRequestAssigned::STATUS[0], null,null,null,ServiceRequestAssigned::ASSISTIVE_ROLE[2]);
             // 2. Store Service request progress
             ServiceRequestProgress::storeProgress($this->user->id, $this->service_request->id, $sub_status->status_id, $sub_status->id);
             // 3. Update Service Request to Ongoing
             $this->service_request->update(['status_id' => $sub_status->status_id]);
+            // CSE_JOB_COMPLETED_NOTIFICATION ADMIN_CSE_JOB_ACCEPTANCE_NOTIFICATION
+            // $messager = new MessageController();
+            // $messager->sendNewMessage(\App\Models\MessageTemplate::TYPES[1], )
             // update registered to be true
             $assigned = true;
         });
         return $assigned == true
-            ? back()->with('success', 'Job Accepted Successfully!')
+            ? redirect()->route('cse.requests.show', ['locale' => app()->getLocale(), 'request' => $this->service_request->uuid])->with('success', 'Job Accepted Successfully!')
             : back()->with('error', 'Error Aceepting this Job');
     }
 }

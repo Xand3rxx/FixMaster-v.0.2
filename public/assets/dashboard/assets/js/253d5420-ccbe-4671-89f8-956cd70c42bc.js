@@ -67,6 +67,8 @@
         let route = $(this).attr('data-url');
         let id = $(this).attr('data-id');
         let serviceName = $(this).attr('data-service-name');
+        let labourMarkup = $(this).attr('data-labour-markup');
+        let materialMarkup = $(this).attr('data-material-markup');
 
         $.ajaxSetup({
             headers: {
@@ -77,7 +79,7 @@
         $.ajax({
         url: route,
         method: 'GET',
-        data: {"id": id, "serviceName": serviceName },
+        data: {"id": id, "serviceName": serviceName, "labourMarkup": labourMarkup, "materialMarkup": materialMarkup},
         beforeSend : function(){
             $("#modal-edit-body").html('<div class="d-flex justify-content-center mt-4 mb-4"><span class="loadingspinner"></span></div>'); 
         },

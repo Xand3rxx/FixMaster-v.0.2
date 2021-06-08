@@ -80,7 +80,7 @@
       </li>
 
         <li class="nav-item with-sub {{ Route::currentRouteNamed('admin.earnings', 'admin.income', 'admin.income_history') ? 'active show' : '' }}">
-            <a href="" class="nav-link"><i data-feather="home"></i> <span>Income/Commission</span></a>
+            <a href="" class="nav-link"><i data-feather="download"></i> <span>Income/Commission</span></a>
             <ul>
                 <li class="{{ Route::currentRouteNamed('admin.earnings') ? 'active' : '' }}"><a href="{{ route('admin.earnings', app()->getLocale()) }}">Earnings</a></li>
                 <li class="{{ Route::currentRouteNamed('admin.income') ? 'active' : '' }}"><a href="{{ route('admin.income', app()->getLocale()) }}">Income</a></li>
@@ -94,7 +94,7 @@
 
 
 
-      <li class="nav-item {{ Route::currentRouteNamed('admin.location_request') ? 'active' : '' }}"><a href="{{ route('admin.location_request', app()->getLocale()) }}" class="nav-link"><i data-feather="map-pin"></i> <span>Location Request</span></a></li>
+      {{-- <li class="nav-item {{ Route::currentRouteNamed('admin.location_request') ? 'active' : '' }}"><a href="{{ route('admin.location_request', app()->getLocale()) }}" class="nav-link"><i data-feather="map-pin"></i> <span>Location Request</span></a></li> --}}
       <li class="nav-item {{ Route::currentRouteNamed('admin.seviced-areas.index') ? 'active' : '' }}"><a href="{{ route('admin.seviced-areas.index', app()->getLocale()) }}" class="nav-link"><i data-feather="check-circle"></i> <span>Serviced Areas</span></a></li>
 
       <li class="nav-item with-sub {{ Route::currentRouteNamed('admin.add_loyalty', 'admin.loyalty_list', 'admin.loyalty_history') ? 'active show' : '' }}">
@@ -103,7 +103,7 @@
         <li class="{{ Route::currentRouteNamed('admin.add_loyalty') ? 'active' : '' }}"><a href="{{ route('admin.add_loyalty',  app()->getLocale()) }}">Add</a></li>
         <li class="{{ Route::currentRouteNamed('admin.loyalty_list') ? 'active' : '' }}"><a href="{{ route('admin.loyalty_list',  app()->getLocale()) }}">List</a></li>
         <li class="{{ Route::currentRouteNamed('admin.loyalty_history') ? 'active' : '' }}"><a href="{{ route('admin.loyalty_history',  app()->getLocale()) }}">History</a></li>
-     
+
 
         </ul>
       </li>
@@ -116,7 +116,7 @@
         </ul>
       </li>
 
-      <li class="nav-item {{ Route::currentRouteNamed('admin.template') ? 'active' : '' }}"><a href="{{ route('admin.template', app()->getLocale()) }}" class="nav-link"><i data-feather="bell"></i> <span>Notification Management</span></a></li>
+      <li class="nav-item {{ Route::currentRouteNamed('admin.message_template') ? 'active' : '' }}"><a href="{{ route('admin.message_template', app()->getLocale()) }}" class="nav-link"><i data-feather="bell"></i> <span>Notification Management</span></a></li>
 
       {{-- <li class="nav-item with-sub {{ Route::currentRouteNamed('admin.template') ? 'active show' : '' }}">
         <a href="" class="nav-link"><i data-feather="bell"></i> <span>Notification Management</span></a>
@@ -127,12 +127,13 @@
         </ul>
       </li> --}}
 
-      <li class="nav-item with-sub {{ Route::currentRouteNamed('admin.disbursed_payments', 'admin.received_payments') ? 'active show' : '' }}">
+      <li class="nav-item with-sub {{ Route::currentRouteNamed('admin.payments.disbursed', 'admin.received_payments','admin.payments.pending') ? 'active show' : '' }}">
         <a href="" class="nav-link"><i data-feather="credit-card"></i> <span>Payments</span></a>
         <ul>
-          <li class="{{ Route::currentRouteNamed('') ? 'active' : '' }}"><a href="#">Disbursed</a></li>
+          <li class="{{ Route::currentRouteNamed('admin.payments.disbursed') ? 'active' : '' }}"><a href="{{ route('admin.payments.disbursed',  app()->getLocale()) }}">Disbursed</a></li>
           <li class="{{ Route::currentRouteNamed('') ? 'active' : '' }}"><a href="#">Received</a></li>
           <li class="{{ Route::currentRouteNamed('') ? 'active' : '' }}"><a href="#">Verify</a></li>
+          <li class="{{ Route::currentRouteNamed('admin.payments.pending') ? 'active' : '' }}"><a href="{{ route('admin.payments.pending',  app()->getLocale()) }}">Pending Payments</a></li>
         </ul>
       </li>
 
@@ -160,7 +161,7 @@
         </ul>
       </li>
 
-      <li class="nav-item with-sub {{ Route::currentRouteNamed('admin.cse_reports', 'admin.supplier_reports') ? 'active show' : '' }}">
+      <li class="nav-item with-sub {{ Route::currentRouteNamed('admin.cse_reports','admin.technician_reports','admin.supplier_reports') ? 'active show' : '' }}">
         <a href="" class="nav-link"><i data-feather="bar-chart-2"></i> <span>Reports</span></a>
         <ul>
 
@@ -169,44 +170,43 @@
           <li class=""><a href="#">Job Management</a></li>
           <li class=""><a href="#">Marketing</a></li>
           <li class="nav-item {{ Route::currentRouteNamed('admin.supplier_reports') ? 'active' : '' }}"><a href="{{ route('admin.supplier_reports', app()->getLocale()) }}">Supplier</a></li>
-          <li class=""><a href="#">Technician</a></li>
+          <li class="nav-item {{ Route::currentRouteNamed('admin.technician_reports') ? 'active' : '' }}"><a href="{{ route('admin.technician_reports', app()->getLocale()) }}">Technician</a></li>
         </ul>
       </li>
 
-    <li class="nav-item with-sub {{ Route::currentRouteNamed('admin.requests.index', 'admin.requests.show') ? 'active show' : '' }}">
-      <a href="" class="nav-link"><i data-feather="git-pull-request"></i> <span>Requests</span><span class="badge badge-primary">{{ $pendingRequests }}</suspan></span></a>
-      <ul>
-        <li class="{{ Route::currentRouteNamed('admin.requests.index', 'admin.requests.show') ? 'active' : '' }}"><a href="{{ route('admin.requests.index', app()->getLocale()) }}">Pending <sup class="font-weight-bold text-primary">{{ $pendingRequests }}</sup></a></li>
-        <li class=""><a href="#">Ongoing</a></li>
-        <li class=""><a href="#">Completed</a></li>
-        <li class=""><a href="#">Cancelled</a></li>
-
-      </ul>
-    </li>
+      <li class="nav-item with-sub {{ Route::currentRouteNamed('admin.requests.index', 'admin.requests.show') ? 'active show' : '' }}">
+        <a href="" class="nav-link"><i data-feather="git-pull-request"></i> <span>Requests</span><span class="badge badge-primary">{{ $pendingRequests }}</suspan></span></a>
+        <ul>
+          <li class="{{ Route::currentRouteNamed('admin.requests.index', 'admin.requests.show') ? 'active' : '' }}"><a href="{{ route('admin.requests.index', app()->getLocale()) }}">Pending <sup class="font-weight-bold text-primary">{{ $pendingRequests }}</sup></a></li>
+          <li class=""><a href="#">Ongoing</a></li>
+          <li class=""><a href="#">Completed</a></li>
+          <li class=""><a href="#">Cancelled</a></li>
+        </ul>
+      </li>
 
       <li class="nav-item with-sub {{ Route::currentRouteNamed('admin.rfq', 'admin.supplier_invoices') ? 'active show' : '' }}">
-        <a href="" class="nav-link"><i data-feather="file-text"></i> <span>RFQ's</span></a>
+        <a href="" class="nav-link"><i data-feather="file-text"></i> <span>RFQ's @if($newQuotes > 0)<span class="badge badge-primary">{{ $newQuotes }}</span> @endif</a>
         <ul>
-          <li class="{{ Route::currentRouteNamed('admin.rfq') ? 'active' : '' }}"><a href="{{ route('admin.rfq', app()->getLocale()) }}">Requests</a></li>
+          <li class="{{ Route::currentRouteNamed('admin.rfq') ? 'active' : '' }}"><a href="{{ route('admin.rfq', app()->getLocale()) }}">Requests @if($newQuotes > 0)<sup class="font-weight-bold text-primary">{{ $newQuotes }}</sup>@endif</a></li>
         <li class="{{ Route::currentRouteNamed('admin.supplier_invoices') ? 'active' : '' }}"><a href="{{ route('admin.supplier_invoices', app()->getLocale()) }}">Supplier's invoices</a></li>
         </ul>
       </li>
 
-      <li class="nav-item with-sub">
+      {{-- <li class="nav-item with-sub">
         <a href="" class="nav-link"><i data-feather="git-pull-request"></i> <span>Special Project</span></a>
         <ul>
           <li class=""><a href="#">Inventory</a></li>
           <li class=""><a href="#">Requests</a></li>
         </ul>
-      </li>
+      </li> --}}
 
       <li class="nav-item {{ Route::currentRouteNamed('admin.taxes.index') ? 'active' : '' }}"><a href="{{ route('admin.taxes.index', app()->getLocale()) }}" class="nav-link"><i data-feather="percent"></i> <span>Tax Management</span></a></li>
 
       <li class="nav-item with-sub {{ Route::currentRouteNamed('admin.tools.index', 'admin.tools_request') ? 'active show' : '' }}">
-        <a href="" class="nav-link"><i data-feather="box"></i> <span>Tools</span></a>
+        <a href="" class="nav-link"><i data-feather="box"></i> <span>Tools @if($toolRequests > 0)<span class="badge badge-primary">{{ $toolRequests }}</span> @endif</span></a>
         <ul>
         <li class="{{ Route::currentRouteNamed('admin.tools.index') ? 'active' : '' }}"><a href="{{ route('admin.tools.index', app()->getLocale()) }}">Inventory</a></li>
-        <li class="{{ Route::currentRouteNamed('admin.tools_request') ? 'active' : '' }}"><a href="{{ route('admin.tools_request', app()->getLocale()) }}">Requests</a></li>
+        <li class="{{ Route::currentRouteNamed('admin.tools_request') ? 'active' : '' }}"><a href="{{ route('admin.tools_request', app()->getLocale()) }}">Requests @if($toolRequests > 0)<sup class="font-weight-bold text-danger">{{ $toolRequests }}</sup> @endif</a></li>
         </ul>
       </li>
 
@@ -219,10 +219,11 @@
       </li> --}}
 
       <li class="nav-item with-sub {{ Route::currentRouteNamed('admin.warranty_list', 'admin.issued_warranty', 'admin.warranty_summary', 'admin.edit_warranty') ? 'active show' : '' }}">
-        <a href="" class="nav-link"><i data-feather="award"></i> <span>Warranty Management <sup class="font-weight-bold text-danger">{{ $unresolvedWarranties }}</sup></span> </a>
+        <a href="" class="nav-link"><i data-feather="award"></i> <span>Warranty Management</span>@if($unresolvedWarranties > 0)<span class="badge badge-primary">{{ $unresolvedWarranties }}</span>@endif</span> </a>
+
         <ul>
           <li class="{{ Route::currentRouteNamed('admin.warranty_list', 'admin.warranty_summary', 'admin.edit_warranty') ? 'active' : '' }}"><a href="{{route('admin.warranty_list', app()->getLocale())}}">List</a></li>
-          <li class="{{ Route::currentRouteNamed('admin.issued_warranty') ? 'active' : '' }}"><a href="{{route('admin.issued_warranty', app()->getLocale())}}">Issued <sup class="font-weight-bold text-danger">{{ $unresolvedWarranties }}</sup></a></li>
+          <li class="{{ Route::currentRouteNamed('admin.issued_warranty') ? 'active' : '' }}"><a href="{{route('admin.issued_warranty', app()->getLocale())}}">Issued @if($unresolvedWarranties > 0)<sup class="font-weight-bold text-danger">{{ $unresolvedWarranties }}</sup>@endif</a></li>
         </ul>
       </li>
 
@@ -276,10 +277,10 @@
         </ul>
       </li>
 
-{{--      <li class="nav-label mg-t-25">Prospective FixMaster Users</li>--}}
-{{--      <li class="nav-item"><a href="{{route('admin.prospective.cse.index', app()->getLocale())}}" class="nav-link"><i data-feather="wind"></i> <span>CSE</span></a></li>--}}
-{{--      <li class="nav-item"><a href="{{route('admin.prospective.supplier.index', app()->getLocale())}}" class="nav-link"><i data-feather="hard-drive"></i> <span>Supplier</span></a></li>--}}
-{{--      <li class="nav-item"><a href="{{route('admin.prospective.technician-artisan.index', app()->getLocale())}}" class="nav-link"><i data-feather="zap"></i> <span>Technicians</span></a></li>--}}
+      <li class="nav-label mg-t-25">Prospective FixMaster Users</li>
+      <li class="nav-item"><a href="{{route('admin.prospective.cse.index', app()->getLocale())}}" class="nav-link"><i data-feather="wind"></i> <span>CSE</span></a></li>
+      <li class="nav-item"><a href="{{route('admin.prospective.supplier.index', app()->getLocale())}}" class="nav-link"><i data-feather="hard-drive"></i> <span>Supplier</span></a></li>
+      <li class="nav-item"><a href="{{route('admin.prospective.technician-artisan.index', app()->getLocale())}}" class="nav-link"><i data-feather="zap"></i> <span>Technicians</span></a></li>
 
 
     </ul>

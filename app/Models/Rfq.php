@@ -10,8 +10,12 @@ class Rfq extends Model
 {
     use Generator;
 
+    const TYPES = ['Request', 'Warranty'];
+    const ACCEPTABLE = ['None', 'Yes', 'No'];
+    const STATUSES = ['Pending', 'Awaiting', 'Shipped', 'Delivered', 'Rejected'];
+
     protected $fillable = [
-        'uuid', 'unique_id', 'issued_by', 'client_id', 'invoice_id', 'service_request_id', 'type', 'status', 'accepted', 'total_amount', 'created_at', 'updated_at'
+        'uuid', 'unique_id', 'issued_by', 'invoice_id', 'service_request_id', 'type', 'status', 'accepted', 'total_amount', 'created_at', 'updated_at'
     ];
 
     /**
@@ -68,6 +72,16 @@ class Rfq extends Model
         return $this->hasMany(RfqSupplier::class, 'rfq_id');
     }
 
+    public function rfqSupplierInvoice()
+    {
+        return $this->hasOne(RfqSupplierInvoice::class, 'rfq_id');
+    }
+
+    public function rfqSuppliesInvoices()
+    {
+        return $this->hasMany(RfqSupplierInvoice::class, 'rfq_id');
+    }
+
     public function issuer()
     {
         return $this->belongsTo(User::class, 'issued_by')->with('account');
@@ -99,7 +113,19 @@ class Rfq extends Model
     public function scopePendingQuotes($query)
     {
         return $query->select('*')
-        ->where('status', 'Pending');
+            ->where('status', 'Pending');
     }
-    
+
+    /** 
+     * Scope a query to only include all pending requests
+     * 
+     * @param \Illuminate\Database\Eloquent\Builder $query
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    //Scope to return all services  
+    public function scopeOpenedRfqs($query)
+    {
+        return $query->select('*')
+            ->where('status', 'Pending');
+    }
 }

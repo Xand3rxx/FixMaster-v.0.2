@@ -144,7 +144,6 @@ function ValidateSize(file) {
         //     '<label class="custom-file-label" for="custom_file_'+count+'">file here</label>'+
         //     '<input type="file" name="filename[]" accept="application/pdf, image/gif, image/jpeg, image/png" class="custom-file-input" size="20" onchange="ValidateSize(this);" id="custom_file_'+count+'">'+
         //     '</div>')
-
             $('.attachments').append('<div class="form-group position-relative custom-file">'+
                 '<input type="file" name="media_file[]" accept="image/*,.txt,.doc,.docx,.pdf" class="form-control-file btn btn-primary btn-sm" onchange="ValidateSize(this);" id="custom_file_'+count+'"  />'+
                 '<small style="font-size: 10px;" class="text-muted">File must not be more than 2MB</small>'+

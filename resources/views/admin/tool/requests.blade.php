@@ -50,7 +50,7 @@
                     <td class="tx-color-03 tx-center">{{ ++$i }}</td>
                     <td class="tx-medium">{{ $toolRequest->serviceRequest->unique_id }}</td>
                     <td class="tx-medium">{{ $toolRequest->unique_id }}</td>
-                    <td class="tx-medium">{{ Str::title($toolRequest['serviceRequest']['clientAccount']['first_name'] ." ". $toolRequest['serviceRequest']['clientAccount']['last_name']) }}</td>
+                    <td class="tx-medium">{{ Str::title($toolRequest['serviceRequest']['client']['first_name'] ." ". $toolRequest['serviceRequest']['client']['last_name']) }}</td>
                     <td class="tx-medium">{{ Str::title($toolRequest['approver']['account']['first_name'] ." ". $toolRequest['approver']['account']['last_name']) }}</td>
                     <td class="tx-medium">{{ Str::title($toolRequest['requester']['account']['first_name'] ." ". $toolRequest['requester']['account']['last_name']) }}</td>
                     @if($toolRequest->status == 'Pending')

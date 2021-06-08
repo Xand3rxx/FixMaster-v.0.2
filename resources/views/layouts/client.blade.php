@@ -87,6 +87,8 @@
 
   <body>
 
+
+
     {{-- <div id="preloader">
       <div id="status">
           <div class="spinner">
@@ -100,7 +102,6 @@
     @include('layouts.partials._client_header')
     @include('layouts.partials._client_sidebar')
     @include('layouts.partials._client_footer')
-
 
     <script src="{{asset('assets/frontend/js/jquery-3.5.1.min.js')}}"></script>
     {{-- <script src="{{asset('assets/client/js/jquery.min.js')}}"></script> --}}
@@ -136,6 +137,7 @@
     <script src="https://unicons.iconscout.com/release/v2.1.9/script/monochrome/bundle.js"></script>
     <script src="{{ asset('assets/client/js/sweetalert2.min.js') }}"></script>
     <script src="{{ asset('assets/dashboard/assets/js/jquery.tinymce.min.js') }}"></script>
+
 
     <div class="modal fade" id="modalDetails" tabindex="-1" role="dialog" aria-hidden="true" data-backdrop="static">
         <div class="modal-dialog modal-dialog-centered modal-lg wd-sm-650" role="document">
@@ -174,7 +176,7 @@
 
 
 
-    @if (\Request::filled('users') && \Request::filled('role') && \Request::filled('serviceRequestId') && \Request::filled('totalAmount') && \Request::filled('serviceId') && \Request::filled('unique_id'))
+    @if (\Request::filled('users') && \Request::filled('serviceRequestId') && \Request::filled('totalAmount') && \Request::filled('serviceId') && \Request::filled('unique_id'))
 
     @yield('scripts')
     @stack('scripts')
@@ -186,10 +188,11 @@
       const service_request_id = @json(\Request::get('serviceRequestId'));
       const unique_id = @json(\Request::get('unique_id'));
       //console.log(totalAmount);
-      const role = @json(\Request::get('role'));
+      //const role = @json(\Request::get('role'));
+      //console.log(role);
       let ratings_row = `<div class="row">
                                         <div class="col-md-4 col-lg-4 col-4">
-                                            <p id="user0" style="margin-top:20px;"> Rate CSE Job Diagnosis </p>
+                                            <p id="user0" style="margin-top:20px;"> Rate Job Performance </p>
                                         </div>
                                         <div class="col-md-8 col-lg-8 col-8">
                                             <div class="tx-40 text-center rate">
@@ -211,7 +214,7 @@
            //console.log(user.roles[0].name);
            let ratings_row = `<div class="row">
                                         <div class="col-md-4 col-lg-4 col-4">
-                                            <p id="user0" style="margin-top:20px;">` + user.account.first_name + " " + user.account.last_name + " " + "(" + user.roles[0].name + ")" + `</p>
+                                            <p id="user0" style="margin-top:20px;">Rate ` + user.account.first_name + " " + user.account.last_name + " " + "(" + user.roles[0].name + ")" + `</p>
                                         </div>
                                         <div class="col-md-8 col-lg-8 col-8">
                                             <div class="tx-40 text-center rate">
@@ -306,6 +309,8 @@
         }
     </script>
 
+
+
  @yield('scripts')
  @stack('scripts')
 
@@ -368,7 +373,10 @@
 
 
       });
+
     </script>
+
+
 
 
   </body>

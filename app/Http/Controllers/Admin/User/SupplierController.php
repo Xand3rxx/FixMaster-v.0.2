@@ -35,7 +35,8 @@ class SupplierController extends Controller
             'states' => \App\Models\State::select('id', 'name')->orderBy('name', 'ASC')->get(),
             'banks' => \App\Models\Bank::select('id', 'name')->orderBy('name', 'ASC')->get(),
             'education_levels' => Supplier::EDUCATIONLEVEL,
-            'services' => $service['services']
+            'services' => $service['services'],
+            'applicant' => request()->session()->get('applicant')
         ]);
     }
 
@@ -51,6 +52,8 @@ class SupplierController extends Controller
         (array) $valid = $this->validateCreateSupplier($request);
         // Register a Supplier
         (bool) $registered = $this->register($valid);
+        // Forget a single key...
+        $request->session()->forget('applicant');
         return ($registered == true)
             ? redirect()->route('admin.users.supplier.index', app()->getLocale())->with('success', "A Supplier Created Successfully!!")
             : back()->with('error', "An error occurred while creating User");
