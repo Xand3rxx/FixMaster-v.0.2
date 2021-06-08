@@ -27,6 +27,7 @@ class CreateServiceRequestsTable extends Migration
             // $table->foreignId('state_id');
             // $table->foreignId('lga_id');
             // $table->foreignId('town_id')->nullable();
+            $table->smallInteger('contactme_status')->comment('0 = Do not contact me, 1 = I can be contacted');
             $table->foreignId('price_id');
             $table->foreignId('contact_id');
             $table->foreignId('client_discount_id')->nullable();
