@@ -56,7 +56,7 @@
                                 {{ ucfirst($service_request['client']['account']['first_name']) }}
                                 {{ ucfirst($service_request['client']['account']['last_name']) }}
                                 <a class="btn btn-sm btn-primary btn-icon" title="Call Client"
-                            @if($service_request['contactme_status'] == 1) href="tel:{{ $service_request['client']['account']['contact']['phone_number'] }}" @else href="#" @endif id="contact-me" data-contact-me="{{ $service_request['contactme_status'] }}"><i
+                                    href="tel:{{ $service_request['client']['account']['contact']['phone_number'] }}"><i
                                         class="fas fa-phone"></i> </a>
 
                                 @if (empty($service_request['preferred_time']))
@@ -85,46 +85,6 @@
 
                     <div class="contact-content-body">
                         <div class="tab-content">
-<<<<<<< HEAD
-
-                            {{-- Service Request Actions --}}
-                            <form id="service_request_form" class="form-data" enctype="multipart/form-data" method="POST"
-                                action="{{ route('cse.service.request.action', ['locale' => app()->getLocale(), 'service_request' => $service_request->uuid]) }}">
-                                @csrf
-                                <div id="serviceRequestActions" class="tab-pane show active pd-20 pd-xl-25">
-
-                                    @include('cse.requests.includes.reoccuring_actions')
-
-                                    <div class="mt-4">
-                                        <div class="tx-13 mg-b-25">
-                                            <div id="wizard3">
-                                                @if ($stage == \App\Models\ServiceRequest::CSE_ACTIVITY_STEP['schedule_categorization'])
-                                                    {{-- Stage 1 --}}
-                                                    {{-- @if (is_null($service_request['preferred_time'])) --}}
-                                                    @include('cse.requests.includes.schedule_date')
-                                                    {{-- @endif --}}
-                                                    @include('cse.requests.includes.categorization')
-                                                    {{-- End of Stage 1 --}}
-                                                @else
-                                                    {{-- Stage 2 --}}
-                                                    {{-- @include('cse.requests.includes.initial-technician') --}}
-                                                    {{-- End of Stage 2 --}}
-                                                    {{-- Stage 3 --}}
-                                                    {{-- @include('cse.requests.includes.invoice-building') --}}
-
-                                                    {{-- End of Stage 3 --}}
-                                                    @include('cse.requests.includes.reoccuring-actions')
-                                                    @include('cse.requests.includes.materials-acceptance')
-                                                    @include('cse.requests.includes.project-progresses')
-                                                    @include('cse.requests.includes.invoice-building')
-
-                                                    {{-- End of Stage 3 --}}
-                                                    {{-- @include('cse.requests.includes.reoccuring-actions') --}}
-                                                    {{-- @include('cse.requests.includes.materials-acceptance') --}}
-                                                    {{-- @include('cse.requests.includes.project-progresses') --}
-                                                @endif
-
-=======
                             <div id="serviceRequestActions" class="tab-pane show active pd-20 pd-xl-25">
                                 {{-- Service Request Actions --}}
                                 <form id="service_request_form" class="form-data" enctype="multipart/form-data"
@@ -165,7 +125,6 @@
                                                     @endif
 
                                                 </div>
->>>>>>> 3be1ad16b6361539444d1d085ee5837c39366ad4
                                             </div>
                                         </div><!-- df-example -->
 
@@ -241,8 +200,6 @@
                     $('#update-progress').trigger('click');
                 },
             });
-
-
         </script>
         @include('cse.requests.includes.scripts')
     @endpush
