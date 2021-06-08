@@ -59,8 +59,6 @@ class RequestController extends Controller
         // find the service request using the uuid and relations
         $service_request = ServiceRequest::where('uuid', $uuid)->with(['price', 'service', 'service.subServices', 'client', 'service_request_cancellation', 'invoice', 'serviceRequestMedias', 'serviceRequestProgresses', 'serviceRequestReports', 'toolRequest'])->firstOrFail();
 
-        // return $service_request;
-
         // Refactor this to be eager loaded with service request, use with and callback function
         $materials_accepted = \App\Models\Rfq::where('service_request_id', $service_request->id)
         ->where('type', 'Request')
@@ -109,7 +107,7 @@ class RequestController extends Controller
         ]);
         // Instantiate Contoller
         $messanger = new \App\Http\Controllers\Messaging\MessageController();
-        return $messanger->sendNewMessage('email', \Illuminate\Support\Str::title(\Illuminate\Support\Str::of($template_feature)->replace('_', ' ',)), 'dev@fix-master.com', $mail_data['email'], $mail_data, $template_feature);
+        return $messanger->sendNewMessage('', 'dev@fix-master.com', $mail_data['email'], $mail_data, $template_feature);
     }
 
     public function getServiceRequestsByTechnician(Request $request)
