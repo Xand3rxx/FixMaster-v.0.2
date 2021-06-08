@@ -265,10 +265,10 @@ class FlutterwaveController extends Controller
                         if($invoice) {
                             (bool)$status = false;
                             DB::transaction(function () use ($invoice, $paymentDetails, $serviceRequest, $serviceRequestPayment, $booking_fee, $cse_assigned, $qa_assigned, $technician_assigned, $supplier_assigned, $paymentRecord, $labour_retention_fee, $material_retention_fee, $actual_labour_cost, $actual_material_cost, $labour_cost_after_retention, $material_cost_after_retention, $labourMarkup, $materialMarkup, $royaltyFee, $logistics, $tax, &$status){
-                                $this->addCollaboratorPayment($invoice['service_request_id'],$cse_assigned,'Regular',\App\Models\Earning::where('role_name', 'CSE')->first()->earnings,null,null,null, null, null, null, null, $royaltyFee, $logistics, $tax);
+                                $this->addCollaboratorPayment($invoice['service_request_id'],$cse_assigned,'Regular',\App\Models\Earning::where('role_name', 'CSE')->first()->earnings,null,null,\App\Models\Earning::where('role_name', 'CSE')->first()->earnings, null, null, null, null, $royaltyFee, $logistics, $tax);
                                 if($qa_assigned !== null)
                                 {
-                                    $this->addCollaboratorPayment($invoice['service_request_id'], $qa_assigned, 'Regular', \App\Models\Earning::where('role_name', 'QA')->first()->earnings, null, null, null, null, null, null, null, $royaltyFee, $logistics, $tax);
+                                    $this->addCollaboratorPayment($invoice['service_request_id'], $qa_assigned, 'Regular', \App\Models\Earning::where('role_name', 'QA')->first()->earnings, null, null, \App\Models\Earning::where('role_name', 'QA')->first()->earnings, null, null, null, null, $royaltyFee, $logistics, $tax);
                                 }
                                 $this->addCollaboratorPayment($invoice['service_request_id'],$technician_assigned,'Regular',null,$actual_labour_cost,null, $labour_cost_after_retention, $labour_cost_after_retention,$labour_retention_fee, $labourMarkup, null, $royaltyFee, $logistics, $tax);
                                 if($invoice['rfq_id'] !== null)
