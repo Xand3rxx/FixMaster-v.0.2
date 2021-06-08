@@ -21,8 +21,8 @@ class AdminRatingController extends Controller
 
             $cards = Rating::select([
                 'service_request_id',
-                \DB::raw('COUNT(id) as id'),
-                \DB::raw('AVG(star) as starAvg')
+                DB::raw('COUNT(id) as id'),
+                DB::raw('AVG(star) as starAvg')
             ])->with('clientAccount', 'service_request')
             ->where('service_id', '!=', null)
             ->where('service_diagnosis_by', null)

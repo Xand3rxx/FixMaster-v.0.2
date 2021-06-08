@@ -2,20 +2,20 @@
 @section('title', 'Pending Payments')
 @include('layouts.partials._messages')
 <style>
-table thead th:nth-child(23), table tbody td:nth-child(23) {
-    position: sticky;
-    right: 0;
-}
+    table thead th:nth-child(27), table tbody td:nth-child(27) {
+        position: sticky;
+        right: 0;
+    }
 
-table thead th:nth-child(23) {
-    background: #e97d1f;
-	}
+    table thead th:nth-child(27) {
+        background: #e97d1f;
+        }
 
-table tbody td:nth-child(23) {
-    background: #ffffff;
-	}
+    table tbody td:nth-child(27) {
+        background: #ffffff;
+        }
 
-</style>
+    </style>
 @section('content')
 
 <div class="content-body">
