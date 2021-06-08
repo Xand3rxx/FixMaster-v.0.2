@@ -71,6 +71,7 @@ class InvoiceController extends Controller
         $warranty = $invoice['warranty_id'] === null ? 0 : Warranty::where('id', $invoice['warranty_id'])->firstOrFail();
         $warrantyValue = $warranty['percentage']/100;
         $ActiveWarranties = Warranty::orderBy('id', 'ASC')->get();
+        $supplierDeliveryFee = $invoice['rfqs']['rfqSupplierInvoice']['delivery_fee'] ?? 0;
 
         $total = 0;
         $amount = '';
@@ -251,7 +252,7 @@ class InvoiceController extends Controller
                 $totalLabourCost = array_sum($totalFig);
             }
 
-            $subTotal = $materialsMarkupPrice + $totalLabourCost;
+            $subTotal = $materialsMarkupPrice + $supplierDeliveryFee + $totalLabourCost;
             $fixMasterRoyalty = $fixMasterRoyaltyValue * $subTotal;
             $totalQuotation = $subTotal + $logistics + $fixMasterRoyalty;
             $amountDue = $totalQuotation - $bookingFee;
@@ -270,6 +271,7 @@ class InvoiceController extends Controller
 //            dd($totalAmount);
 
         }
+//        dd(\App\Models\Earning::where('role_name', 'QA')->first()->earnings);
         return view('frontend.invoices.invoice')->with([
             'invoice'   => $invoice,
             'labourMarkup' => $labourMarkup,
@@ -281,6 +283,7 @@ class InvoiceController extends Controller
             'labourCosts' => $labourCosts,
             'logistics' => $logistics,
             'bookingFee' => $bookingFee,
+            'supplierDeliveryFee' => $supplierDeliveryFee,
             'subTotal' => $subTotal,
             'warranty' => $warranty,
             'ActiveWarranties' => $ActiveWarranties,
@@ -292,7 +295,7 @@ class InvoiceController extends Controller
             'amountDue' => $amountDue,
             'vat' => $vat,
             'material_markup' => $materialsMarkup*$total,
-            'actual_material_cost' => $total,
+            'actual_material_cost' => $total+$supplierDeliveryFee,
             'labour_markup' => $labourMarkup*$actual_labour_cost,
             'actual_labour_cost' => $actual_labour_cost,
             'retention_fee' => $retentionFee,

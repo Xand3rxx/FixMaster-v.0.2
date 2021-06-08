@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Payment;
 
 use App\Http\Controllers\Controller;
+use App\Models\CollaboratorsPayment;
 use App\Models\Invoice;
 use App\Models\ServiceRequest;
 use App\Models\ServiceRequestPayment;
@@ -46,7 +47,7 @@ class FlutterwaveController extends Controller
      */
     public function store(Request $request)
     {
-        // return $request;
+//         return $request;
         $valid = $this->validate($request, [
             // List of things needed from the request like
             'booking_fee'      => 'required',
@@ -90,6 +91,7 @@ class FlutterwaveController extends Controller
             'material_markup' => $request['material_markup'],
             'cse_assigned' => $request['cse_assigned'],
             'technician_assigned' => $request['technician_assigned'],
+            'supplier_assigned' => $request['supplier_assigned'],
             'qa_assigned' => $request['qa_assigned'],
             'royalty_fee' => $request['fixMasterRoyalty'],
             'booking_fee' => $request['booking_fee']
@@ -189,20 +191,22 @@ class FlutterwaveController extends Controller
         $paymentRecord = Session::get('collaboratorPayment');
 
         $booking_fee = $paymentRecord['booking_fee'];
+        $actual_labour_cost = $paymentRecord['actual_labour_cost'];
         $labour_retention_fee = $paymentRecord['retention_fee'] * $paymentRecord['actual_labour_cost'];
         $labour_cost_after_retention = $paymentRecord['actual_labour_cost'] - $labour_retention_fee;
         $labourMarkup = $paymentRecord['labour_markup'];
+        $actual_material_cost = $paymentRecord['actual_material_cost'];
         $material_retention_fee = $paymentRecord['retention_fee'] * $paymentRecord['actual_material_cost'];
         $material_cost_after_retention = $paymentRecord['actual_material_cost'] - $material_retention_fee;
         $materialMarkup = $paymentRecord['material_markup'];
         $cse_assigned = $paymentRecord['cse_assigned'];
         $technician_assigned = $paymentRecord['technician_assigned'];
+        $supplier_assigned = $paymentRecord['supplier_assigned'];
         $qa_assigned = $paymentRecord['qa_assigned'];
 
         $royaltyFee = $paymentRecord['royalty_fee'];
         $logistics = $paymentRecord['logistics_cost'];
         $tax = $paymentRecord['tax'];
-
 
         $invoice = Invoice::where('uuid', $invoiceUUID)->first();
 
@@ -212,7 +216,6 @@ class FlutterwaveController extends Controller
         $trans_id = $request->get('tx_ref', '');
 
         $paymentDetails = Payment::where('reference_id', $trans_id)->orderBy('id', 'DESC')->first();
-
 
         if( $input_data['status']  == 'successful'){
 
@@ -261,12 +264,16 @@ class FlutterwaveController extends Controller
 
                         if($invoice) {
                             (bool)$status = false;
-                            DB::transaction(function () use ($invoice, $paymentDetails, $serviceRequest, $serviceRequestPayment, $booking_fee, $cse_assigned, $qa_assigned, $technician_assigned, $paymentRecord, $labour_retention_fee, $material_retention_fee, $labour_cost_after_retention, $material_cost_after_retention,$labourMarkup, $materialMarkup, $royaltyFee, $logistics, $tax, &$status){
-                                $this->addCollaboratorPayment($invoice['service_request_id'], $cse_assigned, 'Regular', 1000, null, null, null, null, null, $royaltyFee, $logistics, $tax);
-                                $this->addCollaboratorPayment($invoice['service_request_id'], $technician_assigned, 'Regular', null, $labour_cost_after_retention, null, $labour_retention_fee, $labourMarkup, null);
+                            DB::transaction(function () use ($invoice, $paymentDetails, $serviceRequest, $serviceRequestPayment, $booking_fee, $cse_assigned, $qa_assigned, $technician_assigned, $supplier_assigned, $paymentRecord, $labour_retention_fee, $material_retention_fee, $actual_labour_cost, $actual_material_cost, $labour_cost_after_retention, $material_cost_after_retention, $labourMarkup, $materialMarkup, $royaltyFee, $logistics, $tax, &$status){
+                                $this->addCollaboratorPayment($invoice['service_request_id'],$cse_assigned,'Regular',\App\Models\Earning::where('role_name', 'CSE')->first()->earnings,null,null,null, null, null, null, null, $royaltyFee, $logistics, $tax);
                                 if($qa_assigned !== null)
                                 {
-                                    $this->addCollaboratorPayment($invoice['service_request_id'], $qa_assigned, 'Regular', null, null, $material_cost_after_retention, null, null, $materialMarkup);
+                                    $this->addCollaboratorPayment($invoice['service_request_id'], $qa_assigned, 'Regular', \App\Models\Earning::where('role_name', 'QA')->first()->earnings, null, null, null, null, null, null, null, $royaltyFee, $logistics, $tax);
+                                }
+                                $this->addCollaboratorPayment($invoice['service_request_id'],$technician_assigned,'Regular',null,$actual_labour_cost,null, $labour_cost_after_retention, $labour_cost_after_retention,$labour_retention_fee, $labourMarkup, null, $royaltyFee, $logistics, $tax);
+                                if($invoice['rfq_id'] !== null)
+                                {
+                                    $this->addCollaboratorPayment($invoice['service_request_id'], $supplier_assigned, 'Regular', null, null, $actual_material_cost, $material_cost_after_retention, $material_cost_after_retention, $material_retention_fee, null, $materialMarkup, $royaltyFee, $logistics, $tax);
                                 }
 
                                 $serviceRequest->update([
@@ -276,10 +283,14 @@ class FlutterwaveController extends Controller
                                 if($invoice['invoice_type'] === 'Diagnosis Invoice')
                                 {
                                     $paymentType = 'diagnosis-fee';
+                                    \App\Models\ServiceRequestProgress::storeProgress(auth()->user()->id, $invoice['service_request_id'], '2', \App\Models\SubStatus::where('uuid', '17e3ce54-2089-4ff7-a2c1-7fea407df479')->firstOrFail()->id);
+                                    \App\Models\ServiceRequestProgress::storeProgress(auth()->user()->id, $invoice['service_request_id'], '2', \App\Models\SubStatus::where('uuid', '8936191d-03ad-4bfa-9c71-e412ee984497')->firstOrFail()->id);
                                 }
                                 elseif ($invoice['invoice_type'] === 'Final Invoice')
                                 {
                                     $paymentType = 'final-invoice-fee';
+                                    \App\Models\ServiceRequestProgress::storeProgress(auth()->user()->id, $invoice['service_request_id'], '2', \App\Models\SubStatus::where('uuid', 'c0cce9c8-1fce-47c4-9529-204f403cdb1f')->firstOrFail()->id);
+                                    \App\Models\ServiceRequestProgress::storeProgress(auth()->user()->id, $invoice['service_request_id'], '2', \App\Models\SubStatus::where('uuid', 'b82ea1c6-fc12-46ec-8138-a3ed7626e0a4')->firstOrFail()->id);
                                 }
 
                                 ServiceRequestPayment::create([
@@ -307,6 +318,7 @@ class FlutterwaveController extends Controller
                             {
                                 return redirect()->route('invoice', [app()->getLocale(), $invoiceUUID])->with('error', 'Invoice payment was unsuccessful!');
                             }
+
 
                         }else{
                             $client_controller->saveRequest( $request->session()->get('order_data') );

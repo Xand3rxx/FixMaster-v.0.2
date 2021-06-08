@@ -21,6 +21,8 @@ class CreateCollaboratorsPaymentsTable extends Migration
             $table->float('flat_rate')->nullable();
             $table->float('actual_labour_cost')->nullable();
             $table->float('actual_material_cost')->nullable();
+            $table->float('amount_to_be_paid')->nullable();
+            $table->float('amount_after_retention')->nullable();
             $table->float('retention_fee')->nullable();
             $table->float('labour_markup_cost')->nullable();
             $table->float('material_markup_cost')->nullable();

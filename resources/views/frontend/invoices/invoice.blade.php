@@ -227,8 +227,8 @@
                                             <td class="text-left">{{ $item->component_name }}</td>
                                             <td class="text-left">{{ $item->quantity }}</td>
                                             <td class="text-left">{{ $item->unit_of_measurement }}</td>
-                                            <td class="text-left">{{ $item->amount/$item->quantity + $item->amount/$item->quantity*$materialsMarkup }}</td>
-                                            <td class="text-left">{{ $item['amount'] + $item['amount']*$materialsMarkup }}</td>
+                                            <td class="text-left">₦ {{ number_format($item->amount/$item->quantity + $item->amount/$item->quantity*$materialsMarkup, 2) }}</td>
+                                            <td class="text-left">₦ {{ number_format($item['amount'] + $item['amount']*$materialsMarkup, 2)}}</td>
                                         </tr>
                                     @endforeach
                                     <tr>
@@ -237,11 +237,22 @@
                                         <td class="text-left">-</td>
                                         <td class="text-left">-</td>
                                         <td class="text-left">-</td>
-                                        <td class="text-left">{{ $materialsMarkupPrice }}</td>
+                                        <td class="text-left">₦ {{ number_format($materialsMarkupPrice, 2) }}</td>
                                     </tr>
                                     </tbody>
                                 </table>
                             </div>
+
+                                <div class="table-responsive bg-white shadow rounded mt-3">
+                                    <table class="table mb-0 table-center invoice-tb">
+                                        <tbody>
+                                        <tr>
+                                            <th scope="col" class="text-left" colspan="5">Supplier Delivery Fee:</th>
+                                            <th scope="col" class="text-left">{{ number_format($supplierDeliveryFee, 2) }}</th>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
                             @endif
 
 
@@ -262,8 +273,8 @@
                                                 <td class="text-left">{{$loop->iteration }}</td>
                                                 <td class="text-left">{{$labourCost['subService']['name']}}</td>
                                                 <td class="text-left">{{$labourCost['quantity']['quantity']}}</td>
-                                                <td class="text-left">₦ {{$labourCost['subService']['labour_cost'] + $labourCost['subService']['labour_cost'] * $labourMarkup}}</td>
-                                                <td class="text-left">₦ {{$labourCost['amount']}}</td>
+                                                <td class="text-left">₦ {{number_format($labourCost['subService']['labour_cost'] + $labourCost['subService']['labour_cost'] * $labourMarkup, 2)}}</td>
+                                                <td class="text-left">₦ {{number_format($labourCost['amount'], 2)}}</td>
                                             </tr>
                                         @endforeach
                                         <tr>
@@ -271,7 +282,7 @@
                                             <td class="text-left">-</td>
                                             <td class="text-left">-</td>
                                             <td class="text-left">-</td>
-                                            <td class="text-left">₦ {{$totalLabourCost}}</td>
+                                            <td class="text-left">₦ {{number_format($totalLabourCost, 2)}}</td>
                                         </tr>
                                         </tbody>
                                     </table>
@@ -361,6 +372,7 @@
                                 <input type="hidden" class="d-none" value="{{$totalAmount}}" name="booking_fee">
                                 <input type="hidden" class="d-none" value="{{$service_request_assigned['user_id']}}" name="cse_assigned">
                                 <input type="hidden" class="d-none" value="{{$technician_assigned['user_id']}}" name="technician_assigned">
+                                <input type="hidden" class="d-none" value="{{$invoice['rfqs']['rfqSupplier']['supplier_id'] ?? null}}" name="supplier_assigned">
                                 <input type="hidden" class="d-none" value="{{$qa_assigned['user_id'] ?? null}}" name="qa_assigned">
 
                                 <input type="hidden" class="d-none" value="{{$logistics}}" id="logistics_cost" name="logistics_cost">
@@ -385,6 +397,7 @@
                                     <input type="hidden" class="d-none" value="{{$totalAmount}}" name="booking_fee">
                                     <input type="hidden" class="d-none" value="{{$service_request_assigned['user_id']}}" name="cse_assigned">
                                     <input type="hidden" class="d-none" value="{{$technician_assigned['user_id']}}" name="technician_assigned">
+                                    <input type="hidden" class="d-none" value="{{$invoice['rfqs']['rfqSupplier']['supplier_id'] ?? null}}" name="supplier_assigned">
                                     <input type="hidden" class="d-none" value="{{$qa_assigned['user_id'] ?? null}}" name="qa_assigned">
 
                                     <input type="hidden" class="d-none" value="{{$logistics}}" id="logistics_cost" name="logistics_cost">
