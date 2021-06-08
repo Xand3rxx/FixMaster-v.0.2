@@ -365,7 +365,7 @@
                                 <input id="client-return" type="hidden" name="route" value="{{ route('client.return', app()->getLocale()) }}">
                                 <button id="return-btn" href="{{route('client.service.all', app()->getLocale())}}" class="btn btn-outline-primary mr-2">Go Back</button>
 {{--                            @endif--}}
-                            <form method="POST" action="{{ route('client.invoice.payment', app()->getLocale()) }}">
+                            <form method="POST" action="{{ route('paystack-submit', app()->getLocale()) }}">
                                 @csrf
                                 {{-- REQUIREMENTS FOR PAYMENT GATWAYS  --}}
                                 <input type="hidden" class="d-none" value="paystack" id="payment_channel" name="payment_channel">
