@@ -7,6 +7,7 @@ use App\Models\Client;
 use App\Models\Payment;
 use App\Models\Category;
 use App\Models\PaymentGateway;
+use App\Models\ServiceRequest;
 use App\Models\SubService;
 use App\Models\ServiceRequestWarranty;
 use App\Models\ServiceRequestAssigned;
@@ -52,95 +53,271 @@ class InvoiceController extends Controller
 
     public function invoice($language, Invoice $invoice)
     {
-        $service_request_assigneed = ServiceRequestAssigned::where('service_request_id', $invoice['serviceRequest']['id'])
-            ->where('assistive_role', 'CSE')->firstOrFail();
-        
-        // Get the values for calculation
-        $get_fixMaster_royalty = Income::select('amount', 'percentage')->where('income_name', 'FixMaster Royalty')->first();
-        $get_logistics = Income::select('amount', 'percentage')->where('income_name', 'Logistics Cost')->first();
-        $get_taxes = Tax::select('percentage')->where('name', 'VAT')->first();
-        $warranty = Warranty::where('name', 'Free Warranty')->first();
-        $ActiveWarranties = Warranty::ActiveExtendedWarranties()->get();
-        $WarrantyAmount = ServiceRequestWarranty::where('service_request_id', $invoice->serviceRequest->id)->first();
-        $getLabourMakup = 0;
+        $service_request_assigned = ServiceRequestAssigned::where('service_request_id', $invoice['serviceRequest']['id'])->where('assistive_role', 'CSE')->firstOrFail();
+        $technician_assigned = ServiceRequestAssigned::where('service_request_id', $invoice['serviceRequest']['id'])->where('assistive_role', 'Technician')->firstOrFail();
+        $get_qa_assigned = ServiceRequestAssigned::where('service_request_id', $invoice['serviceRequest']['id'])->where('assistive_role', 'Consultant')->first();
+        $qa_assigned = $get_qa_assigned ?? null;
+
         $getCategory = $invoice['serviceRequest']['service']['category'];
         $labourMarkup = $getCategory['labour_markup'];
         $materialsMarkup = $getCategory['material_markup'];
-
-        $sub_services = '';
-
+        $get_logistics = Income::select('amount', 'percentage')->where('income_name', 'Logistics Cost')->first();
+        $get_fixMaster_royalty = Income::select('amount', 'percentage')->where('income_name', 'FixMaster Royalty')->first();
+        $get_retention_fee = Income::select('percentage')->where('income_name', 'Retention Fee')->first();
+        $fixMasterRoyaltyValue = $get_fixMaster_royalty['percentage'];
         $logistics = $get_logistics['amount'];
-        $fixmasterRoyalty = $get_fixMaster_royalty['percentage'];
+        $retentionFee = $get_retention_fee['percentage'];
+        $bookingFee = $invoice['serviceRequest']['price']['amount'];
+        $warranty = $invoice['warranty_id'] === null ? 0 : Warranty::where('id', $invoice['warranty_id'])->firstOrFail();
+        $warrantyValue = $warranty['percentage']/100;
+        $ActiveWarranties = Warranty::orderBy('id', 'ASC')->get();
+        $supplierDeliveryFee = $invoice['rfqs']['rfqSupplierInvoice']['delivery_fee'] ?? 0;
+
+        $total = 0;
+        $amount = '';
+        $subTotal = '';
+        $diagnosisCharge = '';
+        $fixMasterRoyalty = '';
+        $totalQuotation ='';
+        $totalLabourCost ='';
+        $discount = '';
+        $amountDue = '';
+        $vat = '';
+        $totalAmount = '';
+        $warrantyCost = '';
+        $materialsMarkupPrice = '';
+        $actual_labour_cost = '';
+        $newTotal='';
+
+
+        if($invoice['rfq_id'])
+        {
+            foreach ($invoice['rfqs']['rfqBatches'] as $item) {
+                $total += $item['amount'];
+            }
+            $markupPrice = $total*$materialsMarkup;
+            $materialsMarkupPrice = $total+$markupPrice;
+        }
+        else
+        {
+            $materialsMarkupPrice = 0;
+        }
+
 
         (array) $sub_services = $invoice['serviceRequest']['sub_services'];
-        $subService = array();
-
-        foreach ($sub_services as $sub_service) {
-            // echo $sub_service['uuid']."<br>";
-            // echo $sub_service['uuid']."<br>";
-            // echo $sub_service['quantity']."<hr>";
-            $subService[] = SubService::where('uuid', $sub_service['uuid'])->firstOrFail();        
-        }
-        // return;
-
-        $fixMasterRoyalty = '';
-        $subTotal = '';
-        $bookingCost = '';
-        $tax_cost = '';
-        $discount = '';
-        $discountValue = 5/100;
-        $total_cost = '';        
-        $fixedAmount = '';
-        $totalLabourCost = array();
-        
-
-        foreach($subService as $item) {
-            // echo $item['first_hour_charge']."<br>";
-            if($invoice['hours_spent'] == 1)
-            {
-                $labourCost = $item['first_hour_charge'] * $labourMarkup;
-                $totalLabourCost[] = $item['first_hour_charge'] + $labourCost."<br>";
+        $subServices = array();
+        $labourCosts = array();
+        if ($invoice->invoice_type == 'Diagnosis Invoice') {
+            if($invoice['hours_spent'] === 1) {
+                $charge = $invoice['serviceRequest']['service']['service_charge'];
+                $subTotal = $charge;
             }
             else
             {
-                $labourCost = ($item['first_hour_charge'] + $item['subsequent_hour_charge'] * ($invoice['hours_spent']-1)) * $labourMarkup;
-                $totalLabourCost[] = ($item['first_hour_charge'] + $item['subsequent_hour_charge'] * ($invoice['hours_spent']-1)) + $labourCost."<br>";
+                $first_hour_charge = $invoice['serviceRequest']['service']['service_charge'];
+                $sub_hour_charge = $invoice['serviceRequest']['service']['diagnosis_subsequent_hour_charge'];
+
+                $subTotal = $first_hour_charge + ($sub_hour_charge * ($invoice['hours_spent'] -1));
             }
-        }
 
-
-        
-        
-
-        $total = 0;        
-        foreach ($invoice['rfqs']['rfqBatches'] as $item) {
-            $total += $item['amount'];
-        }
-        $markupPrice = $total*$materialsMarkup;
-        $materialsMarkupPrice = $total+$markupPrice;
-    
-        if ($invoice->invoice_type == 'Diagnosis Invoice') {
-            
+            $fixMasterRoyalty = $fixMasterRoyaltyValue * $subTotal;
+            $amountDue = $subTotal + $fixMasterRoyalty - $bookingFee;
+            $tax = 0.075;
+            $vat = $tax * $amountDue;
+            $totalAmount = $amountDue + $vat;
 
         } else if($invoice->invoice_type == 'Final Invoice') {
 
-            $sub_services = $invoice['serviceRequest']['sub_services'];
-            
-        }
+            foreach ($sub_services as $sub_service)
+            {
+                $subServices = SubService::where('uuid', $sub_service['uuid'])->firstOrFail();
+                $data[] = ['sub_service' => $subServices, 'num' => $sub_service];
+            }
+            foreach ($data as $element)
+            {
+                $subs = $element['sub_service'];
+                $quan = $element['num'];
+                $amount = '';
+                if($subs['cost_type'] === 'Fixed'){
+                    $actual_labour_cost = $subs['labour_cost'] * $quan['quantity'];
+                    $labourMarkupPrice = $actual_labour_cost * $labourMarkup;
+                    $amount = $actual_labour_cost + $labourMarkupPrice;
+                }
+                elseif($subs['cost_type'] === 'Variable')
+                {
+                    $unitPrice = $subs['labour_cost'];
+                    $quantity = $quan['quantity'];
 
+                    if($quantity === '1')
+                    {
+                        $actual_labour_cost = $subs['labour_cost'] * $quan['quantity'];
+                        $labourMarkupPrice = $actual_labour_cost * $labourMarkup;
+                        $amount = $actual_labour_cost + $labourMarkupPrice;
+                    }
+
+                    elseif($quantity === '2' || $quantity <= '10')
+                    {
+                        $percentageValue = $unitPrice*0.5;
+                        if($quantity === '2') {
+                            $actual_labour_cost = $percentageValue + $unitPrice;
+                            $labourMarkupPrice = $actual_labour_cost * $labourMarkup;
+                            $amount = $actual_labour_cost + $labourMarkupPrice;
+                        }
+                        else
+                        {
+                            $oldTotal = $percentageValue + $unitPrice;
+                            $newAmount = $percentageValue * ($quantity-2);
+                            $actual_labour_cost = $oldTotal + $newAmount;
+                            $labourMarkupPrice = $actual_labour_cost * $labourMarkup;
+                            $amount = $actual_labour_cost + $labourMarkupPrice;
+                        }
+                    }
+
+                    elseif($quantity === '11' || $quantity <= '20')
+                    {
+                        $percentageValue = $unitPrice * 0.4;
+                        $oldAmount = ($unitPrice*0.5) * (10-2);
+                        $oldCount = ($unitPrice*0.5) + $unitPrice;
+                        $oldTotal = $oldCount + $oldAmount;
+
+                        if($quantity === '11')
+                        {
+                            $actual_labour_cost = $percentageValue + $oldTotal;
+                            $labourMarkupPrice = $actual_labour_cost * $labourMarkup;
+                            $amount = $actual_labour_cost + $labourMarkupPrice;
+                        }
+                        else
+                        {
+                            $newAmount = $percentageValue * ($quantity-10);
+                            $actual_labour_cost = $oldTotal + $newAmount;
+                            $labourMarkupPrice = $actual_labour_cost * $labourMarkup;
+                            $amount = $actual_labour_cost + $labourMarkupPrice;
+                        }
+
+                    }
+
+                    elseif($quantity === '21' || $quantity <= '50')
+                    {
+                        $percentageValue = $unitPrice * 0.3;
+                        $oldAmount = ($unitPrice * 0.4) * 10;
+                        $oldCount = $oldAmount + (($unitPrice * 0.5) + $unitPrice);
+                        $oldTotal = $oldCount + $oldAmount;
+
+                        if($quantity === '21')
+                        {
+                            $actual_labour_cost = $percentageValue + $oldTotal;
+                            $labourMarkupPrice = $actual_labour_cost * $labourMarkup;
+                            $amount = $actual_labour_cost + $labourMarkupPrice;
+                        }
+                        else
+                        {
+                            $newAmount = $percentageValue * ($quantity-20);
+                            $actual_labour_cost = $oldTotal + $newAmount;
+                            $labourMarkupPrice = $actual_labour_cost * $labourMarkup;
+                            $amount = $actual_labour_cost + $labourMarkupPrice;
+                        }
+
+                    }
+                    elseif($quantity > '50')
+                    {
+                        $percentageValue = $unitPrice * 0.25;
+                        $oldAmount = ($unitPrice * 0.4) * 10;
+                        $oldCount = $oldAmount + (($unitPrice * 0.5) + $unitPrice);
+                        $oldTotal = $oldCount + $oldAmount + 9000;
+
+                        if($quantity === '51')
+                        {
+                            $actual_labour_cost = $percentageValue + $oldTotal;
+                            $labourMarkupPrice = $actual_labour_cost * $labourMarkup;
+                            $amount = $actual_labour_cost + $labourMarkupPrice;
+                        }
+                        else
+                        {
+                            $newAmount = $percentageValue * ($quantity - 50);
+                            $actual_labour_cost = $oldTotal + $newAmount;
+                            $labourMarkupPrice = $actual_labour_cost * $labourMarkup;
+                            $amount = $actual_labour_cost + $labourMarkupPrice;
+                        }
+                    }
+
+
+                }
+
+                $labourCosts[] = ['subService' => $subs, 'quantity' => $quan, 'amount' => $amount];
+
+            }
+            foreach ($labourCosts as $totalCost)
+            {
+                $totalFig[] = $totalCost['amount'];
+                $totalLabourCost = array_sum($totalFig);
+            }
+
+            $subTotal = $materialsMarkupPrice + $supplierDeliveryFee + $totalLabourCost;
+            $fixMasterRoyalty = $fixMasterRoyaltyValue * $subTotal;
+            $totalQuotation = $subTotal + $logistics + $fixMasterRoyalty;
+            $amountDue = $totalQuotation - $bookingFee;
+            if($invoice['serviceRequest']['client_discount_id'] != null)
+            {
+                $discount = $amountDue * 0.5;
+            }
+            else
+            {
+                $discount = $amountDue * 0;
+            }
+            $warrantyCost = $subTotal * $warrantyValue;
+            $tax = 0.075;
+            $vat = ($amountDue - $discount) * $tax;
+            $totalAmount = $amountDue - $discount + $vat + $warrantyCost;
+//            dd($totalAmount);
+
+        }
+//        dd(\App\Models\Earning::where('role_name', 'QA')->first()->earnings);
         return view('frontend.invoices.invoice')->with([
-            'invoice' => $invoice,
-            'service_request_assigneed' => $service_request_assigneed,
-            'logistics' => $logistics,
-            'subService' => $subService,
-            'totalLabourCost' => $totalLabourCost,
-            'fixmasterRoyalty' => $fixmasterRoyalty,
-            'materialsMarkup' => $materialsMarkup,
+            'invoice'   => $invoice,
             'labourMarkup' => $labourMarkup,
-            'materialsMarkupPrice' => $materialsMarkupPrice
-            
+            'materialsMarkup' => $materialsMarkup,
+            'service_request_assigned' => $service_request_assigned,
+            'technician_assigned' => $technician_assigned,
+            'qa_assigned' => $qa_assigned,
+            'materialsMarkupPrice' => $materialsMarkupPrice,
+            'labourCosts' => $labourCosts,
+            'logistics' => $logistics,
+            'bookingFee' => $bookingFee,
+            'supplierDeliveryFee' => $supplierDeliveryFee,
+            'subTotal' => $subTotal,
+            'warranty' => $warranty,
+            'ActiveWarranties' => $ActiveWarranties,
+            'warrantyCost' => $warrantyCost,
+            'totalLabourCost' => $totalLabourCost,
+            'fixMasterRoyalty' => $fixMasterRoyalty,
+            'totalQuotation' => $totalQuotation,
+            'discount' => $discount,
+            'amountDue' => $amountDue,
+            'vat' => $vat,
+            'material_markup' => $materialsMarkup*$total,
+            'actual_material_cost' => $total+$supplierDeliveryFee,
+            'labour_markup' => $labourMarkup*$actual_labour_cost,
+            'actual_labour_cost' => $actual_labour_cost,
+            'retention_fee' => $retentionFee,
+            'totalAmount' => $totalAmount
         ]);
-//        return view('frontend.invoices.invoice');
+    }
+
+    public function updateInvoice($language, Request $request, Invoice $invoice)
+    {
+//        dd($invoice['uuid'], $request);
+        $updateWarranty = $invoice->update([
+            'warranty_id'  => $request->input('warranty_id'),
+            'phase' => '2'
+        ]);
+        if($updateWarranty)
+        {
+            return redirect()->route('invoice', ['invoice' => $invoice['uuid'], 'locale' => app()->getLocale()])->with('success', 'Warranty selected successfully.');
+        }
+        else
+        {
+            return redirect()->route('invoice', ['invoice' => $invoice['uuid'], 'locale' => app()->getLocale()])->with('error', 'An unknown error occurred.');
+        }
     }
 
     public function savePayment(Request $request)
@@ -310,163 +487,4 @@ class InvoiceController extends Controller
         return redirect()->route('invoice', [app()->getLocale(), $invoiceUUID])->with('success', 'Invoice payment was successful!');
     }
 
-//    public function saveFlutterwavePayment(Request $request)
-//    {
-//        $valid = $this->validate($request, [
-//            // List of things needed from the request like
-//            'booking_fee'      => 'required',
-//            'payment_channel'  => 'required',
-//            'payment_for'     => 'required',
-//        ]);
-//        $all = $request->all();
-//        // dd($all);
-//        // Session::put('order_data', $all);
-//        $request->session()->put('order_data', $all);
-//
-//
-//        // fetch the Client Table Record
-//        $client = Client::where('user_id', $request->user()->id)->with('user')->firstOrFail();
-//        // generate reference ID
-//        $generatedVal = $this->generateReference();
-//        // save ordered items
-//        $payment = $this->payment($valid['booking_fee'], $valid['payment_channel'], $valid['payment_for'], $client['unique_id'], 'pending', $generatedVal);
-//
-//        $payment_id = $payment->id;
-//
-//        $curl = curl_init();
-//
-//        $payment = Payment::find($payment_id);
-//
-//        $request = [
-//            'tx_ref' => $payment->reference_id,
-//            'amount' => $payment->amount,
-//            'currency' => 'NGN',
-//            'payment_options' => 'card',
-//            'redirect_url' => route('client.invoice.verifyflutterwavePayment', app()->getLocale() ),
-//            'customer' => [
-//                'email' => auth()->user()->email,
-//            ],
-//            'meta' => [
-//                'price' => $payment->amount
-//            ],
-//            // 'customizations' => [
-//            //     'title' => 'Paying for a sample product',
-//            //     'description' => 'sample',
-//            //     'logo' => 'https://assets.piedpiper.com/logo.png'
-//            // ]
-//        ];
-//
-//        //* Call fluterwave initiate payment endpoint
-//        $curl = curl_init();
-//
-//        curl_setopt_array($curl, array(
-//            CURLOPT_URL => 'https://api.flutterwave.com/v3/payments',
-//            CURLOPT_RETURNTRANSFER => true,
-//            CURLOPT_ENCODING => '',
-//            CURLOPT_MAXREDIRS => 10,
-//            CURLOPT_TIMEOUT => 0,
-//            CURLOPT_FOLLOWLOCATION => true,
-//            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-//            CURLOPT_CUSTOMREQUEST => 'POST',
-//            CURLOPT_POSTFIELDS => json_encode($request),
-//            CURLOPT_HTTPHEADER => array(
-//                'Authorization: Bearer '.$this->private_key,
-//                'Content-Type: application/json'
-//            ),
-//        ));
-//
-//        $response = curl_exec($curl);
-//
-//        curl_close($curl);
-//
-//        $res = json_decode($response);
-//
-//        if($res->status == 'success')
-//        {
-//            return redirect($res->data->link);
-//        }else
-//        {
-//            return back()->with('error', 'We can not process your payment: Curl returned error: ');
-//        }
-//    }
-//
-//    public function verifyFlutterwavePayment(Request $request)
-//    {
-//        $input_data = $request->all();
-//
-//        $trans_id = $request->get('tx_ref', '');
-//
-//        $paymentDetails = Payment::where('reference_id', $trans_id)->orderBy('id', 'DESC')->first();
-//
-//
-//        if( $input_data['status']  == 'successful'){
-//
-//            $txid = $request->get('transaction_id', '');
-//            $curl = curl_init();
-//
-//            //* Call fluterwave verify endpoint
-//            curl_setopt_array($curl, array(
-//                CURLOPT_URL => "https://api.flutterwave.com/v3/transactions/{$txid}/verify",
-//                CURLOPT_RETURNTRANSFER => true,
-//                CURLOPT_ENCODING => "",
-//                CURLOPT_MAXREDIRS => 10,
-//                CURLOPT_TIMEOUT => 0,
-//                CURLOPT_FOLLOWLOCATION => true,
-//                CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-//                CURLOPT_CUSTOMREQUEST => "GET",
-//                CURLOPT_HTTPHEADER => array(
-//                    "Content-Type: application/json",
-//                    "Authorization: Bearer ".$this->public_key
-//                ),
-//            ));
-//
-//            $response = curl_exec($curl);
-//
-//            curl_close($curl);
-//
-//            $resp = \json_decode($response);
-//
-//            // return dd($resp);
-//
-//            if(($resp->status ?? '') == "success"){
-//                $paymentDetails['transaction_id'] = $resp->data->flw_ref ?? '';
-//                $paymentDetails['status']         = 'success';
-//                //if the payment was updated to success
-//
-//                /*************************************************************************************************
-//                 * Things to do if you want to use this function(Number 1 to 5) Not important if you don't need it
-//                 *************************************************************************************************/
-//
-//                // NUMBER 1: Instantiate the clientcontroller class in this controller's method in order to save request
-//                $client_controller = new ClientController;
-//
-//                if($paymentDetails->update()){
-//                    // NUMBER 2: add more for other payment process
-//                    if($paymentDetails['payment_for'] = 'service-request' ){
-//
-//                        $client_controller->saveRequest( $request->session()->get('order_data') );
-//
-//                        return redirect()->route('client.service.all' , app()->getLocale() )->with('success', 'payment was successful');
-//                    }
-//                }
-//            }else {
-//                // NUMBER 3: add more for other payment process
-//                if($paymentDetails['payment_for'] = 'service-request' ){
-//                    return redirect()->route('client.services.list', app()->getLocale() )->with('error', 'Verification not successful, try again!');
-//                }
-//
-//            }
-//
-//        }else {
-//            // NUMBER 4: add more for other payment process
-//            if($paymentDetails['payment_for'] = 'service-request' ){
-//                return redirect()->route('client.services.list', app()->getLocale() )->with('error', 'Could not initiate payment process because payment was cancelled, try again!');
-//            }
-//        }
-//
-//        // NUMBER 5: add more for other payment process
-//        if($paymentDetails['payment_for'] = 'service-request' ){
-//            return redirect()->route('client.services.list', app()->getLocale() )->with('error', 'there was an error, please try again!');
-//        }
-//    }
 }

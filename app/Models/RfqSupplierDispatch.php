@@ -10,7 +10,7 @@ class RfqSupplierDispatch extends Model
     use HasFactory;
 
     protected $fillable = [
-        'rfq_id', 'rfq_supplier_invoice', 'supplier_id', 'unique_id', 'courier_name', 'courier_phone_number', 'delivery_medium', 'cse_status', 'supplier_status', 'comment',
+        'rfq_id', 'rfq_supplier_invoice', 'supplier_id', 'unique_id', 'courier_name', 'courier_phone_number', 'delivery_medium', 'cse_status', 'supplier_status', 'cse_comment', 'comment',
     ];
 
     public function rfq()

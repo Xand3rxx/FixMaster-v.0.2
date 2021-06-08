@@ -9,9 +9,8 @@ use App\Http\Controllers\ServiceRequest\Concerns\StoreInDatabase;
 
 class RequestActionController extends Controller
 {
-    use StoreInDatabase;
-
     public $to_be_stored;
+
     /**
      * Handle the incoming request for service request action.
      *
@@ -46,12 +45,12 @@ class RequestActionController extends Controller
         }
 
         if($request->hasAny(['estimated_work_hours','root_cause', 'intiate_rfq', 'intiate_trf', ])){
-            $to_be_stored = \App\Http\Controllers\ServiceRequest\Concerns\InvoiceBuilder::handle($request, $service_request, $to_be_stored);
+            $to_be_stored = \App\Http\Controllers\ServiceRequest\Concerns\Invoicebuilder::handle($request, $service_request, $to_be_stored);
         }
 
         // call the storage 
         return !empty($to_be_stored)
-            ? ($this->saveAction($to_be_stored)
+            ? (StoreInDatabase::interactWithSaving($to_be_stored)
                 ? back()->with('success', 'Project Progress updated Successfully!!')
                 : back()->with('error', 'Error occured while updating project progress'))
             : back()->with('error', 'Error Generating Request Content');

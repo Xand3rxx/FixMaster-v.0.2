@@ -111,6 +111,8 @@ Route::prefix('admin')->name('admin.')->group(function () {
         Route::resource('cse', ProspectiveCSEController::class);
         Route::resource('supplier', ProspectiveSupplierController::class);
         Route::resource('technician-artisan', ProspectiveTechnicianArtisanController::class);
+        Route::post('supplier-decision', [ProspectiveSupplierController::class, 'decision'])->name('supplier.decision');
+        Route::post('cse-decision', [ProspectiveCSEController::class, 'decision'])->name('cse.decision');
     });
 
     //Routes for estate management
@@ -399,6 +401,9 @@ Route::prefix('/client')->middleware('monitor.clientservice.request.changes')->g
         Route::get('/requests/edit/{id}',          [ClientController::class, 'editRequest'])->name('client.edit_request');
         Route::put('/requests/update/{id}',        [ClientController::class, 'update'])->name('client.update_request');
 
+        // Client Warranty Invoice Decision
+        Route::put('/update-warranty/{invoice:uuid}', [InvoiceController::class, 'updateInvoice'])->name('decision');
+
 
         Route::post('servicesRequest',              [ClientController::class, 'serviceRequest'])->name('services.serviceRequest');
         // add my new contact to DB
@@ -461,6 +466,7 @@ Route::prefix('cse')->name('cse.')->middleware('monitor.cseservice.request.chang
         Route::post('project-progress', [ProjectProgressController::class, '__invoke'])->name('project.progress.update');
         Route::post('/submit_ratings',  [CseController::class, 'user_rating'])->name('handle.ratings');
         Route::post('/update_service_request',  [CseController::class, 'update_cse_service_rating'])->name('update_service_request');
+        
     });
 
 
@@ -507,7 +513,6 @@ Route::prefix('cse')->name('cse.')->middleware('monitor.cseservice.request.chang
 //        Route::get('/mark/warrant/claims/resolved/{warranty:uuid}',      [WarrantyController::class, 'resolvedWarranty'])->name('mark_warranty_resolved');
 //
 //  });
-
 });
 
 

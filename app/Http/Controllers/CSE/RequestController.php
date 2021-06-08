@@ -57,19 +57,21 @@ class RequestController extends Controller
     public function show($language, string $uuid)
     {
         // find the service request using the uuid and relations
-        $service_request = ServiceRequest::where('uuid', $uuid)->with(['price', 'service', 'service.subServices', 'client'])->firstOrFail();
+        $service_request = ServiceRequest::where('uuid', $uuid)->with(['price', 'service', 'service.subServices', 'client', 'service_request_cancellation', 'invoice'])->firstOrFail();
 
-        $technicians = \App\Models\Technician::with('services', 'user', 'user.contact')->get();
+        // Refactor this to be eager loaded with service request, use with and callback function
+        $materials_accepted = \App\Models\Rfq::where('service_request_id', $service_request->id)
+        ->where('type', 'Request')
+        ->with('rfqBatches.supplierInvoiceBatches', 'rfqSupplierInvoice.supplierDispatch')->first();
 
-        $materials_accepted = \App\Models\Rfq::where('service_request_id', $service_request->id)->with('rfqBatches', 'rfqSupplier', 'rfqSupplierInvoice');
         $service_request_progresses = \App\Models\ServiceRequestProgress::where('user_id', auth()->user()->id)->latest('created_at')->first();
         
         (array) $variables = [
             'contents'              => $this->path(base_path('contents/cse/service_request_action.json')),
             'service_request'       => $service_request,
             'tools'                 => \App\Models\ToolInventory::all(),
-            'qaulity_assurances'    => \App\Models\Role::where('slug', 'quality-assurance-user')->with('users', 'users.account')->firstOrFail(),
-            'technicians'           => $technicians,
+            'qaulity_assurances'    => \App\Models\Role::where('slug', 'quality-assurance-user')->with('users', 'users.account')->first(),
+            'technicians'           => \App\Models\Technician::with('services', 'user', 'user.contact')->get(),
             'categories'            => \App\Models\Category::where('id', '!=', 1)->get(),
             'services'              => \App\Models\Service::all(),
             'ongoingSubStatuses' => \App\Models\SubStatus::where('status_id', 2)
@@ -78,9 +80,9 @@ class RequestController extends Controller
                     }, function ($query) {
                         return $query->whereBetween('phase', [20, 27]);
                     })->get(['id', 'uuid', 'name']),
-            'stage'                 => collect($service_request['sub_services'])->isEmpty() ? ServiceRequest::CSE_ACTIVITY_STEP['schedule_categorization'] : ServiceRequest::CSE_ACTIVITY_STEP['add_technician'],
+            'materials_accepted'    => $materials_accepted,
         ];
-        // dd($service_request);
+
         return view('cse.requests.show', $variables);
     }
 
@@ -158,5 +160,17 @@ class RequestController extends Controller
             return response()->json(["data" => $users], 200);
         }
         return response()->json(["message" => "No Users"], 404);
+    }
+
+    /**
+     * Display the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function rfqDetailsImage($language, $id){
+        return view('cse.requests.includes._details_image', [
+            'rfqDetails'    =>  \App\Models\RfqBatch::select('image')->where('id', $id)->first(),
+        ]);
     }
 }

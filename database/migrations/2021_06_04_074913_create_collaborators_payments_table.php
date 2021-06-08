@@ -18,6 +18,7 @@ class CreateCollaboratorsPaymentsTable extends Migration
             $table->foreignId('service_request_id');
             $table->foreignId('user_id');
             $table->enum('service_type', ['Regular', 'Warranty']);
+<<<<<<< HEAD
             $table->integer('flat_rate')->nullable();
             $table->integer('actual_labour_cost')->nullable();
             $table->integer('actual_material_cost')->nullable();
@@ -28,6 +29,19 @@ class CreateCollaboratorsPaymentsTable extends Migration
             $table->integer('logistics_cost')->nullable();
             $table->integer('tax_fee')->nullable();
             $table->enum('status', ['Pending', 'Paid']);
+=======
+            $table->float('flat_rate')->nullable();
+            $table->float('actual_labour_cost')->nullable();
+            $table->float('actual_material_cost')->nullable();
+            $table->float('amount_to_be_paid')->nullable();
+            $table->float('amount_after_retention')->nullable();
+            $table->float('retention_fee')->nullable();
+            $table->float('labour_markup_cost')->nullable();
+            $table->float('material_markup_cost')->nullable();
+            $table->float('royalty_fee')->nullable();
+            $table->float('logistics_cost')->nullable();
+            $table->float('tax_fee')->nullable();
+>>>>>>> 3be1ad16b6361539444d1d085ee5837c39366ad4
             $table->timestamps();
             $table->softDeletes();
         });

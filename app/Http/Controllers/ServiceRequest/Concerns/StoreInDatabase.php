@@ -16,6 +16,18 @@ trait StoreInDatabase
     use Loggable;
 
     /**
+     * Interact with savings of all action done inservice requests
+     *
+     * @param  array $parameters
+     * 
+     * @return boolean
+     */
+    public static function interactWithSaving(array $params)
+    {
+        return self::saveAction($params);
+    }
+
+    /**
      * Store details filled by the cse in the service request
      *
      * @param  array $parameters
@@ -65,7 +77,6 @@ trait StoreInDatabase
                 }
 
                 if (!empty($table['invoice_building'])) {
-                    // dd($table['invoice_building']);
                     // $table['invoice_building'] ==>  array of 1. $table['invoice_building']['estimated_work_hours'] 2. $table['invoice_building']['service_request']
                     \App\Traits\Invoices::completedServiceInvoice($table['invoice_building']['service_request'], $table['invoice_building']['estimated_work_hours']);
                 }
@@ -73,6 +84,13 @@ trait StoreInDatabase
                 if (!empty($table['service_request_reports'])) {
                     ServiceRequestReport::create($table['service_request_reports']);
                 }
+
+                if (!empty($table['service_request_report'])) {
+                    foreach ($table['service_request_report'] as $key => $report) {
+                        ServiceRequestReport::create($report);
+                    }
+                }
+
 
                 if (!empty($table['service_request_table'])) {
                     $table['service_request_table']['service_request']->update($table['service_request_table']);
@@ -86,6 +104,11 @@ trait StoreInDatabase
                     foreach ($table['add_technicians'] as $key => $technician) {
                         ServiceRequestAssigned::create($technician);
                     }
+                }
+
+                if (!empty($table['invoice_building'])) {
+                    // $table['invoice_building'] ==>  array of 1. $table['invoice_building']['estimated_work_hours'] 2. $table['invoice_building']['service_request']
+                    // \App\Traits\Invoices::completedServiceInvoice($table['invoice_building']['service_request'], $table['invoice_building']['estimated_work_hours']);
                 }
 
                 if (!empty($table['log'])) {

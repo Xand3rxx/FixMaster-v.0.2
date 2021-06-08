@@ -18,13 +18,6 @@ class ServiceRequest extends Model
         'Completed' => 4
     ];
 
-    const ONGOING_VIEW_STAGES = ['assigned_cse', 'categorized', 'assigned_technician', 'generate_invoice','after_diagnosis'];
-
-    const CSE_ACTIVITY_STEP = [
-        'schedule_categorization' => 1,
-        'add_technician'          => 2
-    ];
-
     /**
      * The attributes that aren't mass assignable.
      *
