@@ -38,11 +38,13 @@
                   <th>Job Ref.</th>
                   <th>Batch Number</th>
                   <th>Issued By</th>
+                  <th>Type</th>
                   <th>Supplier</th>
                   {{-- <th>Delivery Fee(₦)</th> --}}
                   <th class="tx-center">Total Amount(₦)</th>
                   <th>Delivery Time</th>
                   <th class="tx-center">Distance</th>
+                  <th class="tx-center">Acceptance Status</th>
                   <th>Action</th>
                 </tr>
               </thead>
@@ -54,12 +56,19 @@
                       <td class="tx-medium">{{ $rfq['rfq']['serviceRequest']['unique_id'] }}</td>
                       <td class="tx-medium">{{ $rfq['rfq']['unique_id'] }}</td>
                       <td class="tx-medium">{{ Str::title($rfq['rfq']['issuer']['account']['first_name'] ." ". $rfq['rfq']['issuer']['account']['last_name']) }}</td>
+                      <td class="tx-medium">{{ $rfq['rfq']['type'] }}</td>
                       <td class="tx-medium">{{ Str::title($rfq['supplier']['account']['first_name'] ." ". $rfq['supplier']['account']['last_name']) }}</td>
                       {{-- <td class="tx-medium tx-center">{{ $rfq->delivery_fee }}</td> --}}
                       <td class="tx-medium tx-center">{{ $rfq->total_amount }}</td>
                       <td class="text-medium">{{ Carbon\Carbon::parse($rfq->delivery_time, 'UTC')->isoFormat('MMMM Do YYYY, h:mm:ssa') }}</td>
-                     {{-- <td class="text-center text-success">{{ App\Http\Controllers\Admin\RfqController::getDistanceBetweenPoints($rfq['rfq']['serviceRequest']['client']['contact']['address_latitude'], $rfq['rfq']['serviceRequest']['client']['contact']['address_longitude'], $rfq['supplier']['contact']['address_latitude'], $rfq['supplier']['contact']['address_longitude']) }}km</td>--}}
-                     <td class="text-center text-success">10km</td>
+                      <td class="text-center text-success">{{ App\Http\Controllers\Admin\RfqController::getDistanceBetweenPoints($rfq['rfq']['serviceRequest']['client']['contact']['address_latitude'], $rfq['rfq']['serviceRequest']['client']['contact']['address_longitude'], $rfq['supplier']['contact']['address_latitude'], $rfq['supplier']['contact']['address_longitude']) }}km</td>
+                      @if($rfq['accepted'] == 'Yes')
+                        <td class="tx-center text-success">Accepted</td>
+                      @elseif($rfq['accepted'] == 'No'))
+                        <td class="tx-center text-danger">Declined</td>
+                      @else
+                        <td class="tx-center text-warning">Pending</td>
+                      @endif
                       <td class="text-center">
                         <div class="dropdown-file">
                           <a href="" class="dropdown-link" data-toggle="dropdown"><i data-feather="more-vertical"></i></a>

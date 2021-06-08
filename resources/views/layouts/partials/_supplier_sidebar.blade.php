@@ -41,10 +41,15 @@
       <li class="nav-label">Components</li>
       <li class="nav-item {{ Route::currentRouteNamed('supplier.index') ? 'active' : '' }}"><a href="{{ route('supplier.index', app()->getLocale()) }}" class="nav-link"><i data-feather="airplay"></i> <span>Home</span></a></li>
 
+<<<<<<< HEAD
       <li class="nav-item with-sub {{ Route::currentRouteNamed('supplier.rfq', 'supplier.rfq_send_supplier_invoice', 'supplier.rfq_sent_invoices', 'supplier.rfq_approved_invoices', 'supplier.rfq_declined_invoices', 'supplier.rfq_link_details' ,'supplier.rfq.warranty') ? 'active show' : '' }}">
         <a href="" class="nav-link"><i data-feather="git-pull-request"></i> <span>Requests For Quote <span class="badge badge-primary">{{ $newQuotes }}</span></span></a>
+=======
+      <li class="nav-item with-sub {{ Route::currentRouteNamed('supplier.rfq', 'supplier.rfq_send_supplier_invoice', 'supplier.rfq_sent_invoices', 'supplier.rfq_approved_invoices', 'supplier.rfq_declined_invoices', 'supplier.rfq_link_details') ? 'active show' : '' }}">
+        <a href="" class="nav-link"><i data-feather="git-pull-request"></i> <span>Requests For Quote @if($newQuotes > 0)<span class="badge badge-primary">{{ $newQuotes }}</span>@endif</span></a>
+>>>>>>> baaa1aed40a40b3fec64f4e0998f51dbcb9607a6
         <ul>
-          <li class="{{ Route::currentRouteNamed('supplier.rfq', 'supplier.rfq_send_supplier_invoice', 'supplier.rfq_link_details') ? 'active' : '' }}"><a href="{{ route('supplier.rfq', app()->getLocale()) }}">New Quotes <sup class="font-weight-bold text-primary">{{ $newQuotes }}</sup></a></li>
+          <li class="{{ Route::currentRouteNamed('supplier.rfq', 'supplier.rfq_send_supplier_invoice', 'supplier.rfq_link_details') ? 'active' : '' }}"><a href="{{ route('supplier.rfq', app()->getLocale()) }}">New Quotes @if($newQuotes > 0)<sup class="font-weight-bold text-primary">{{ $newQuotes }}</sup>@endif</a></li>
           <li class="{{ Route::currentRouteNamed('supplier.rfq_sent_invoices') ? 'active' : '' }}"><a href="{{ route('supplier.rfq_sent_invoices', app()->getLocale()) }}">Sent Quotes</a></li>
           <li class="{{ Route::currentRouteNamed('supplier.rfq_declined_invoices') ? 'active' : '' }}"><a href="{{ route('supplier.rfq_declined_invoices', app()->getLocale()) }}">Declined Quotes</a></li>
           <li class="{{ Route::currentRouteNamed('supplier.rfq_approved_invoices') ? 'active' : '' }}"><a href="{{ route('supplier.rfq_approved_invoices', app()->getLocale()) }}">Won Quotes</a></li>

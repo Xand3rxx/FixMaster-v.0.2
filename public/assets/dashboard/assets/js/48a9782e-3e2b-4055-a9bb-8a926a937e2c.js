@@ -36,11 +36,13 @@ $(document).ready(function() {
         });
     });
 
-    //for dates alone
-    $(document).on('click', '#service-date-time2', function() {
-        $('#service-date-time2').datetimepicker({
-            timepicker:false,
-            format: 'Y/m/d',
+    $(document).on('click', '#supplier-delivery-date', function() {
+        $('#supplier-delivery-date').datetimepicker({
+            // format: 'L', //LT for time only
+            // inline: true,
+            // sideBySide: true,
+            timepicker:true,
+            format: 'Y/m/d H:i',
             formatDate: 'Y/m/d',
             minDate: '-1970/01/02', // yesterday is minimum date
             mask: true,

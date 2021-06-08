@@ -38,6 +38,7 @@
                   <th>Batch Number</th>
                   <th>Client</th>
                   <th>Issued By</th>
+                  <th>Type</th>
                   <th>Status</th>
                   <th class="text-center">Total Amount(₦)</th>
                   <th>Date Created</th>
@@ -48,19 +49,18 @@
               <tbody>
                 @foreach ($rfqs as $rfq)
                 <tr>
-                  <td class="tx-color-03 tx-center">{{ ++$i }}</td>
+                  <td class="tx-color-03 tx-center">{{ $loop->iteration }}</td>
                   <td class="tx-medium">{{ $rfq->serviceRequest->unique_id }}</td>
                   <td class="tx-medium">{{ $rfq->unique_id }}</td>
-                  <td class="tx-medium">{{ $rfq->unique_id }}</td>
-                  <td class="tx-medium">{{ $rfq->unique_id }}</td>
-                  {{--<td class="tx-medium">{{ Str::title($rfq['client']['account']['first_name'] ." ". $rfq['client']['account']['last_name']) }}</td>
-                  <td class="tx-medium">{{Str::title($rfq['issuer']['account']['first_name'] ." ". $rfq['issuer']['account']['last_name'])}}</td>--}}
+                  <td class="tx-medium">{{ Str::title($rfq['client']['account']['first_name'] ." ". $rfq['client']['account']['last_name']) }}</td>
+                  <td class="tx-medium">{{ Str::title($rfq['issuer']['account']['first_name'] ." ". $rfq['issuer']['account']['last_name']) }}</td>
+                  <td class="tx-medium">{{ $rfq->type }}</td>
                   @if($rfq->status == 'Pending')
                     <td class="text-medium text-warning">Awaiting Supplier's invoices</td>
                   @elseif($rfq->status == 'Awaiting')
                     <td class="text-medium text-info">Awaiting Supplier's delivery</td>
                   @elseif($rfq->status == 'Delivered')
-                    <td class="text-medium text-success">RFQ Delivered</td>
+                    <td class="text-medium text-success">RFQ has been Delivered</td>
                   @elseif($rfq->status == 'Rejected')
                     <td class="text-medium text-success">RFQ was rejected</td>
                   @endif

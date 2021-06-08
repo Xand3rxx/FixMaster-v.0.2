@@ -16,6 +16,18 @@ trait StoreInDatabase
     use Loggable;
 
     /**
+     * Interact with savings of all action done inservice requests
+     *
+     * @param  array $parameters
+     * 
+     * @return boolean
+     */
+    public static function interactWithSaving(array $params)
+    {
+        return self::saveAction($params);
+    }
+
+    /**
      * Store details filled by the cse in the service request
      *
      * @param  array $parameters
@@ -57,7 +69,8 @@ trait StoreInDatabase
                             'manufacturer_name'     => $table['rfqs']['rfq_batches']['manufacturer_name'][$key],
                             'model_number'          => $table['rfqs']['rfq_batches']['model_number'][$key],
                             'quantity'              => $table['rfqs']['rfq_batches']['quantity'][$key],
-                            'image'                 => $table['rfqs']['rfq_batches']['image'][$key]->store('assets/rfq-images', 'public'),
+                            'image'                 => $table['rfqs']['rfq_batches']['image'][$key]->store('assets/rfq-images'),
+                            // 'image'                 => \App\Traits\ImageUpload::imageUploader($table['rfqs']['rfq_batches']['image'][$key],'assets/rfq-images'),
                             'unit_of_measurement'   => $table['rfqs']['rfq_batches']['unit_of_measurement'][$key] ?? "",
                             'size'                  => $table['rfqs']['rfq_batches']['size'][$key]
                         ]);
@@ -65,12 +78,25 @@ trait StoreInDatabase
                 }
 
                 if (!empty($table['invoice_building'])) {
-                    // $table['invoice_building'] ==>  array of 1. $table['invoice_building']['estimated_work_hours'] 2. $table['invoice_building']['service_request']
-                    // \App\Traits\Invoices::completedServiceInvoice($table['invoice_building']['service_request'], $table['invoice_building']['estimated_work_hours']);
+                    \App\Traits\Invoices::completedServiceInvoice($table['invoice_building']['service_request'], $table['invoice_building']['estimated_work_hours']);
                 }
 
                 if (!empty($table['service_request_reports'])) {
                     ServiceRequestReport::create($table['service_request_reports']);
+                }
+
+                if (!empty($table['service_request_report'])) {
+                    foreach ($table['service_request_report'] as $key => $report) {
+                        ServiceRequestReport::create($report);
+                    }
+                }
+
+                if (!empty($table['update_rfq_supplier_dispatches'])) {
+                    // dd($table['update_rfq_supplier_dispatches']['rfq_supplier_dispatches']);
+                    $table['update_rfq_supplier_dispatches']['rfq_supplier_dispatches']->update($table['update_rfq_supplier_dispatches']);
+                }
+                if (!empty($table['update_rfqs'])) {
+                    $table['update_rfqs']['rfq']->update($table['update_rfqs']);
                 }
 
                 if (!empty($table['service_request_table'])) {

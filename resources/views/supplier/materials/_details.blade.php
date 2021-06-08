@@ -14,7 +14,7 @@
             <td class="tx-color-03" width="75%">{{ $dispatch->unique_id }}</td>
         </tr>
         <tr>
-            <td class="tx-medium" width="25%">CSE Status</td>
+            <td class="tx-medium" width="25%">Client Service Executive Status</td>
             @if($dispatch->cse_status == 'Pending')
                 <td width="75%" class="text-medium text-warning">Pending</td>
             @elseif($dispatch->cse_status == 'Yes')
@@ -22,6 +22,14 @@
             @else
                 <td width="75%" class="text-medium text-danger">Declined</td>
             @endif
+        </tr>
+        <tr>
+            <td class="tx-medium" width="25%">Client Service Executive Acceptance</td>
+            <td class="tx-color-03" width="75%">{{ (!empty($dispatch->cse_material_acceptance)) ? ($dispatch->cse_material_acceptance == 'Yes' ? 'Yes, all ordered materials were delivered' : 'No, all ordered materials were not delivered as specified') : 'UNAVAILABLE' }}</td>
+        </tr>
+        <tr>
+            <td class="tx-medium" width="25%">Client Service Executive Comment</td>
+            <td class="tx-color-03" width="75%">{{ $dispatch->cse_comment ?? 'UNAVAILABLE' }}</td>
         </tr>
         <tr>
             <td class="tx-medium" width="25%">Supplier Status</td>
@@ -50,9 +58,10 @@
             <td class="tx-color-03" width="75%">{{ $dispatch->delivery_medium }}</td>
         </tr>
         <tr>
-            <td class="tx-medium" width="25%">Supplier Comment</td>
+            <td class="tx-medium" width="25%"> Comment</td>
             <td class="tx-color-03" width="75%">{{ $dispatch->comment }}</td>
         </tr>
+        
     </tbody>
     </table>
 </div>

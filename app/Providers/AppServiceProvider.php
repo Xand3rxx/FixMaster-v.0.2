@@ -42,6 +42,8 @@ class AppServiceProvider extends ServiceProvider
                 'pendingRequests'   => \App\Models\ServiceRequest::PendingRequests()->get()->count(),
                 'unresolvedWarranties'  =>  \App\Models\ServiceRequestWarranty::UnresolvedWarranties()->get()->count(),
                 'RfqDispatchNotification' =>\App\Models\RfqDispatchNotification::where(['supplier_id' => auth()->user()->id, 'notification'=> 'On' ])->with('rfq', 'service_request')->latest('created_at')->get(),
+                'newQuotes' =>  \App\Models\Rfq::PendingQuotes()->get()->count(),
+                'toolRequests'  =>  \App\Models\ToolRequest::PendingRequests()->get()->count(),
 
             ]);
         });
@@ -63,5 +65,10 @@ class AppServiceProvider extends ServiceProvider
 
             ]);
         });
+        // view()->composer('layouts.partials._supplier_sidebar', function ($view) {
+        //     $view->with([
+        //         'newQuotes' =>  \App\Models\Rfq::PendingQuotes()->get()->count(),
+        //     ]);
+        // });
     }
 }

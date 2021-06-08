@@ -169,7 +169,7 @@
                                         <li><a href="{{ route('frontend.careers', app()->getLocale()) }}">CSE</a></li>
                                         <li><a href="{{ route('frontend.careers', app()->getLocale()) }}">Supplier</a></li>
                                         <li><a href="{{ route('frontend.careers', app()->getLocale()) }}">Technician</a></li>
-                                        <li><a href="{{ route('frontend.careers', app()->getLocale()) }}">Add Estate</a></li>
+                                        {{-- <li><a href="{{ route('frontend.careers', app()->getLocale()) }}">Add Estate</a></li> --}}
                                     </ul>
                             </li>
                         </ul>

@@ -57,9 +57,11 @@ use App\Http\Controllers\Admin\Prospective\SupplierController as ProspectiveSupp
 use App\Http\Controllers\Admin\Prospective\TechnicianArtisanController as ProspectiveTechnicianArtisanController;
 use App\Http\Controllers\ServiceRequest\WarrantClaimController;
 use App\Http\Controllers\Messaging\Template;
-use App\Http\Controllers\CSE\CseWarrantyClaimController;
+use App\Http\Controllers\Admin\CollaboratorsPaymentController;
+
 use App\Http\Controllers\Technician\ServiceRequestController as TechnicianServiceRequestController;
 use App\Http\Controllers\Supplier\SupplierRfqWarrantyController;
+use App\Http\Controllers\CSE\CseWarrantyClaimController;
 
 
 
@@ -87,7 +89,7 @@ use App\Http\Controllers\Supplier\SupplierRfqWarrantyController;
 
 Route::prefix('admin')->name('admin.')->group(function () {
     Route::view('/', 'admin.index')->name('index'); //Take me to Admin Dashboard
-    
+
     Route::get('/ratings/cse-diagnosis', [AdminRatingController::class, 'cseDiagnosis'])->name('category');
     Route::get('/ratings/services',      [AdminRatingController::class, 'getServiceRatings'])->name('job');
     Route::get('/ratings/service_reviews',      [AdminReviewController::class, 'getServiceReviews'])->name('category_reviews');
@@ -334,6 +336,12 @@ Route::prefix('admin')->name('admin.')->group(function () {
     Route::get('/reports/supplier',             [SupplierReportController::class, 'index'])->name('supplier_reports');
     Route::post('/reports/supplier/item-delivered-sorting', [SupplierReportController::class, 'itemDeliveredSorting'])->name('supplier_report_first_sorting');
 
+    //Admin Payments get_checkbox
+    Route::get('/payments/pending', [CollaboratorsPaymentController::class, 'getPendingPayments'])->name('payments.pending');
+    Route::get('/payments/disbursed', [CollaboratorsPaymentController::class, 'getdisbursedPayments'])->name('payments.disbursed');
+    Route::post('payments.get_checkbox', [CollaboratorsPaymentController::class, 'getCheckbox'])->name('payments.get_checkbox');
+    Route::post('/payment_sorting', [CollaboratorsPaymentController::class, 'sortPayments'])->name('payment_sorting');
+
 });
 
 //All routes regarding clients should be in here
@@ -398,6 +406,9 @@ Route::prefix('/client')->middleware('monitor.clientservice.request.changes')->g
         Route::get('/requests/details/{ref}',      [ClientController::class, 'requestDetails'])->name('client.request_details');
         Route::get('/requests/edit/{id}',          [ClientController::class, 'editRequest'])->name('client.edit_request');
         Route::put('/requests/update/{id}',        [ClientController::class, 'update'])->name('client.update_request');
+
+        // Client Warranty Invoice Decision
+        Route::put('/update-warranty/{invoice:uuid}', [InvoiceController::class, 'updateInvoice'])->name('decision');
 
 
         Route::post('servicesRequest',              [ClientController::class, 'serviceRequest'])->name('services.serviceRequest');
@@ -490,6 +501,8 @@ Route::prefix('cse')->name('cse.')->middleware('monitor.cseservice.request.chang
     Route::get('/requests-for-quote/details/image/{image:id}',            [SupplierRfqController::class, 'rfqDetailsImage'])->name('rfq_details_image');
 
     Route::get('/sub-service-dynamic-feilds',  [CseController::class, 'subServiceDynamicFields'])->name('sub_service_dynamic_fields');
+
+    Route::get('/tools-request/details/{tool_request:uuid}',           [RequestController::class, 'toolRequestDetails'])->name('tool_request_details');
 
 //        Route::view('/location-request',    'cse.location_request')->name('location_request');
 //        Route::view(

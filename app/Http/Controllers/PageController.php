@@ -62,7 +62,7 @@ class PageController extends Controller
             'email' => 'woorad7@gmail.com',
             'url' => $url
         ]);
-        $messanger->sendNewMessage('email', Str::title(Str::of($template_feature)->replace('_', ' ',)), 'dev@fix-master.com', $mail_data['email'], $mail_data, $template_feature);
+        $messanger->sendNewMessage('', 'dev@fix-master.com', $mail_data['email'], $mail_data, $template_feature);
 
     }
 

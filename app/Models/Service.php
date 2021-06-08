@@ -71,6 +71,11 @@ class Service extends Model
             ->orderBy('name', 'ASC');
     }
 
+    
+    public static function getServiceNameById(int $id){
+        return Service::where('id', $id)->value('name');
+    }
+
     public function user()
     {
         return $this->belongsTo(User::class, 'user_id')->withDefault();

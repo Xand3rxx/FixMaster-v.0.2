@@ -18,13 +18,6 @@ class ServiceRequest extends Model
         'Completed' => 4
     ];
 
-    const ONGOING_VIEW_STAGES = ['assigned_cse', 'categorized', 'assigned_technician', 'generate_invoice','after_diagnosis'];
-
-    const CSE_ACTIVITY_STEP = [
-        'schedule_categorization' => 1,
-        'add_technician'          => 2
-    ];
-
     /**
      * The attributes that aren't mass assignable.
      *
@@ -227,10 +220,25 @@ class ServiceRequest extends Model
         return $this->belongsToMany(Media::class, 'service_request_medias');
     }
 
+    public function serviceRequestProgresses()
+    {
+        return $this->hasMany(ServiceRequestProgress::class, 'service_request_id')->with('user', 'subStatus');
+    }
+
+    public function serviceRequestReports()
+    {
+        return $this->hasMany(ServiceRequestReport::class, 'service_request_id');
+    }
+
+    public function toolRequest()
+    {
+        return $this->hasOne(ToolRequest::class, 'service_request_id')->with('approver', 'requester');
+    }
     public function rfqDispatchNotification()
     {
         return $this->hasOne(RfqDispatchNotification::class, 'service_request_id', 'id');
     }
+
 
     /**
      * Scope a query to only include all pending requests

@@ -240,8 +240,11 @@ class MessageController extends Controller
      * 
      * @return \Illuminate\Http\Response
      */
-    public function sendNewMessage($subject="", $from="", $to='', $mail_data=[],$feature=""){
-      
+    public function sendNewMessage($subject="", $from="", $to, $mail_data,$feature=""){
+
+        Log::debug("Subject:  ".$subject.", From:".$from.", To: ".$to.", Feature: ".$feature);
+        Log::debug("Message Data: ".$mail_data);
+    
        $message = $mail_data;
        $sms = "";
        $message_array = [];
