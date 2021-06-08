@@ -76,7 +76,7 @@
                                     &nbsp;</td>
                                 </tr>
                                 <tr>
-                                    <td style="padding:0 35px;">
+                                    <td style="padding:0 35px 100px;">
                                 
         
 
@@ -91,7 +91,7 @@
                                     
                                 </tr>
                                 <tr>
-                                <td>    
+                                <td style="height:140px;">    
                                 <span
                                             style="display:inline-block; vertical-align:middle; margin:14px 0 26px; border-bottom:3px solid #cecece; width:100%;"></span>
 
