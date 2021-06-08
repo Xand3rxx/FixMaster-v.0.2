@@ -78,7 +78,7 @@
   <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
     <div class="modal-content tx-14">
       <div class="modal-header">
-        <h6 class="modal-title" id="exampleModalLabel2"></h6>
+        <h6 class="modal-title" id="exampleModalLabel2">Total Ratings for {{$rating->service_request->service->name}}</h6>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
@@ -128,7 +128,7 @@ $(document).ready(function(){
                         // return the result
                         success: function(data) {
                             if (data) {
-                            console.log(data);
+                            //console.log(data);
                             var sn = 1;
                                 $.each(data, function(key, rating) { //+rating.service_request.unique_id+
                                 var date = new Date(rating.created_at);

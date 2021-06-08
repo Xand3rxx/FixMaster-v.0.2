@@ -36,7 +36,7 @@
                                     @enderror
                                 </div>
                                 <div class="form-group col-md-12">
-                                    <label for="earnings">Earnings (%) <span class="text-danger">*</span></label>
+                                    <label for="earnings">Earnings <span class="text-danger">*</span></label>
                                     <input type="number" class="form-control @error('earnings') is-invalid @enderror" id="earnings" name="earnings" placeholder="Earnings" value="{{ $earnings['earnings'] * 100 }}">
                                     @error('earnings')
                                     <span class="invalid-feedback" role="alert">

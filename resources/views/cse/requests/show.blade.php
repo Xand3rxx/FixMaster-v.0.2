@@ -56,7 +56,7 @@
                                 {{ ucfirst($service_request['client']['account']['first_name']) }}
                                 {{ ucfirst($service_request['client']['account']['last_name']) }}
                                 <a class="btn btn-sm btn-primary btn-icon" title="Call Client"
-                            @if($service_request['contactme_status'] == 1) href="tel:{{ $service_request['client']['account']['contact']['phone_number'] }}" @else href="#" @endif id="contact-me" data-contact-me="{{ $service_request['contactme_status'] }}"><i
+                                    href="tel:{{ $service_request['client']['account']['contact']['phone_number'] }}"><i
                                         class="fas fa-phone"></i> </a>
 
                                 @if (empty($service_request['preferred_time']))
@@ -200,8 +200,6 @@
                     $('#update-progress').trigger('click');
                 },
             });
-
-
         </script>
         @include('cse.requests.includes.scripts')
     @endpush

@@ -47,6 +47,7 @@
         </table>
     </div><!-- table-responsive -->
 
+    @if($service_request['toolRequest'])
      <div class="divider-text">Tools Request</div>
     <h5 class="mt-4">Tools Requests</h5>
     <div class="table-responsive mb-4">
@@ -85,7 +86,7 @@
             </tbody>
         </table>
     </div><!-- table-responsive -->
-
+    @endif
     {{-- <div class="divider-text">RFQ's</div>
     <h5 class="mt-4">Request For Quotation</h5>
     <div class="table-responsive">
