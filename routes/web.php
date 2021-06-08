@@ -494,6 +494,8 @@ Route::prefix('cse')->name('cse.')->middleware('monitor.cseservice.request.chang
 
     Route::get('/sub-service-dynamic-feilds',  [CseController::class, 'subServiceDynamicFields'])->name('sub_service_dynamic_fields');
 
+    Route::get('/tools-request/details/{tool_request:uuid}',           [RequestController::class, 'toolRequestDetails'])->name('tool_request_details');
+
 //        Route::view('/location-request',    'cse.location_request')->name('location_request');
 //        Route::view(
 //            '/request/details',

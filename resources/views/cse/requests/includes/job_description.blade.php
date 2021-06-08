@@ -98,100 +98,17 @@
             </table>
 
             <div class="divider-text">Media Files</div>
+            @if (!empty($service_request['serviceRequestMedias']))
             <div class="row row-xs">
-                <div class="col-6 col-sm-4 col-md-3 col-xl">
-                    <div class="card card-file">
-                        <div class="dropdown-file">
-                            <a href="" class="dropdown-link" data-toggle="dropdown"><i
-                                    data-feather="more-vertical"></i></a>
-                            <div class="dropdown-menu dropdown-menu-right">
-                                <a href="#" class="dropdown-item download"><i
-                                        data-feather="download"></i>Download</a>
-                            </div>
-                        </div><!-- dropdown -->
-                        <div class="card-file-thumb tx-danger">
-                            <i class="far fa-file-pdf"></i>
-                        </div>
-                        <div class="card-body">
-                            <h6><a href=""
-                                    class="link-02">{{ substr('54c2a6f3-8a9c-411a-bd68-96a3a37617b2', 0, 15) }}.pdf</a>
-                            </h6>
-                        </div>
-                        <div class="card-footer"><span class="d-none d-sm-inline">Date Created:
-                            </span>{{ \Carbon\Carbon::now('UTC')->isoFormat('MMMM Do YYYY, h:mm:ssa') }}
-                        </div>
-                    </div>
-                </div><!-- col -->
-                <div class="col-6 col-sm-4 col-md-3 col-xl">
-                    <div class="card card-file">
-                        <div class="dropdown-file">
-                            <a href="" class="dropdown-link" data-toggle="dropdown"><i
-                                    data-feather="more-vertical"></i></a>
-                            <div class="dropdown-menu dropdown-menu-right">
-                                <a href="#" class="dropdown-item download"><i
-                                        data-feather="download"></i>Download</a>
-                            </div>
-                        </div><!-- dropdown -->
-                        <div class="card-file-thumb tx-primary">
-                            <i class="far fa-file-word"></i>
-                        </div>
-                        <div class="card-body">
-                            <h6><a href=""
-                                    class="link-02">{{ substr('1c160a9b-8f52-46f5-a687-1dd608da48b3', 0, 15) }}.docx</a>
-                            </h6>
-                        </div>
-                        <div class="card-footer"><span class="d-none d-sm-inline">Date Created:
-                            </span>{{ \Carbon\Carbon::now('UTC')->isoFormat('MMMM Do YYYY, h:mm:ssa') }}
-                        </div>
-                    </div>
-                </div><!-- col -->
-                <div class="col-6 col-sm-4 col-md-3 col-xl mg-t-10 mg-sm-t-0">
-                    <div class="card card-file">
-                        <div class="dropdown-file">
-                            <a href="" class="dropdown-link" data-toggle="dropdown"><i
-                                    data-feather="more-vertical"></i></a>
-                            <div class="dropdown-menu dropdown-menu-right">
-                                <a href="#" class="dropdown-item download"><i
-                                        data-feather="download"></i>Download</a>
-                            </div>
-                        </div><!-- dropdown -->
-                        <div class="card-file-thumb tx-indigo">
-                            <i class="far fa-file-image"></i>
-                        </div>
-                        <div class="card-body">
-                            <h6><a href=""
-                                    class="link-02">{{ substr('ff9c0bfa-aeed-4724-a8e4-790cf04a9fdd', 0, 15) }}.jpg</a>
-                            </h6>
-                        </div>
-                        <div class="card-footer"><span class="d-none d-sm-inline">Date Created:
-                            </span>{{ \Carbon\Carbon::now('UTC')->isoFormat('MMMM Do YYYY, h:mm:ssa') }}
-                        </div>
-                    </div>
-                </div><!-- col -->
-                <div class="col-6 col-sm-4 col-md-3 col-xl mg-t-10 mg-md-t-0">
-                    <div class="card card-file">
-                        <div class="dropdown-file">
-                            <a href="" class="dropdown-link" data-toggle="dropdown"><i
-                                    data-feather="more-vertical"></i></a>
-                            <div class="dropdown-menu dropdown-menu-right">
-                                <a href="#" class="dropdown-item download"><i
-                                        data-feather="download"></i>Download</a>
-                            </div>
-                        </div><!-- dropdown -->
-                        <div class="card-file-thumb tx-info">
-                            <i class="far fa-file-video"></i>
-                        </div>
-                        <div class="card-body">
-                            <h6><a href=""
-                                    class="link-02">{{ substr('d886204a-a376-4924-a83b-2d7a7f84df7d', 0, 15) }}.mp4</a>
-                            </h6>
-                        </div>
-                        <div class="card-footer"><span class="d-none d-sm-inline">Date Created:
-                            </span>{{ \Carbon\Carbon::now('UTC')->isoFormat('MMMM Do YYYY, h:mm:ssa') }}
-                        </div>
-                    </div>
-                </div><!-- col -->
-            </div><!-- row -->
+                <ul id="lightgallery" class="list-unstyled row">
+                    @foreach ($service_request['serviceRequestMedias'] as $item)
+                        @include('cse.requests.includes._media_file')
+                    @endforeach
+                </ul>
+            </div>
+            @else
+            <h3>Files have not been uploaded for this request.</h3>
+            @endif
         </div><!-- df-example -->
     </div>
 </div>

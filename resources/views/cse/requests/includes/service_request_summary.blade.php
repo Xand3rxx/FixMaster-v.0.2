@@ -1,44 +1,24 @@
 <div id="serviceRequestSummary" class="tab-pane pd-20 pd-xl-25">
-    <div class="divider-text">Diagnostic Reports</div>
+    <div class="divider-text"> Reports/Comments</div>
     <div class="card-group">
-        <div class="card">
-            <div class="card-body shadow-none bd-primary overflow-hidden">
-                <div class="marker-primary marker-ribbon pos-absolute t-10 l-0">1</div>
-
-                <p class="card-text">After discussion with Mr Kelvin Adesanya, tentatively I
-                    beleive his laptop has overheating issues. On-premise diagnosis has to be
-                    carried out.</p>
-                <p class="card-text"><small class="text-muted">Date Created:
-                        {{ \Carbon\Carbon::now('UTC') }}</small></p>
+        @foreach ($service_request['serviceRequestReports'] as $report)
+            <div class="card">
+                <div class="card-body shadow-none bd-primary overflow-hidden">
+                <div class="marker-primary marker-ribbon pos-absolute t-10 l-0">{{ $loop->iteration }}</div>
+                <h4>{{ $report['type'] }}</h4>
+                    <p class="card-text">{{ $report['report'] }}</p>
+                    <p class="card-text"><small class="text-muted">Date Created:
+                            {{ \Carbon\Carbon::parse($report['created_at'], 'UTC')->isoFormat('MMMM Do YYYY, h:mm:ssa') }}</small></p>
+                </div>
             </div>
-        </div>
-        <div class="card">
-            <div class="card-body shadow-none bd-primary overflow-hidden">
-                <div class="marker-primary marker-ribbon pos-absolute t-10 l-0">2</div>
-                <p class="card-text">After discussion with Mr Kelvin Adesanya, tentatively I
-                    beleive his laptop has overheating issues. On-premise diagnosis has to be
-                    carried out.</p>
-                <p class="card-text"><small class="text-muted">Date Created:
-                        {{ \Carbon\Carbon::now('UTC') }}</small></p>
-            </div>
-        </div>
-        <div class="card">
-            <div class="card-body shadow-none bd-primary overflow-hidden">
-                <div class="marker-primary marker-ribbon pos-absolute t-10 l-0">3</div>
-
-                <p class="card-text">After discussion with Mr Kelvin Adesanya, tentatively I
-                    beleive his laptop has overheating issues. On-premise diagnosis has to be
-                    carried out.</p>
-                <p class="card-text"><small class="text-muted">Date Created:
-                        {{ \Carbon\Carbon::now('UTC') }}</small></p>
-            </div>
-        </div>
+        @endforeach
+        
     </div>
 
     <div class="divider-text">Service Request Progress</div>
     <h5 class="mt-4">Service Request Progress</h5>
     <div class="table-responsive mb-4">
-        <table class="table table-hover mg-b-0">
+        <table class="table table-hover mg-b-0" id="basicExample">
             <thead class="">
                 <tr>
                     <th class="text-center">#</th>
@@ -48,12 +28,14 @@
                 </tr>
             </thead>
             <tbody>
-                @foreach ($request_progress as $key => $progress)
+                @foreach ($service_request['serviceRequestProgresses'] as $progress)
                     <tr>
                         <td class="tx-color-03 tx-center">{{ $loop->iteration }}</td>
-                        <td class="tx-medium">
-                            {{ Str::title($progress['user']['account']['last_name'] . ' ' . $progress['user']['account']['first_name']) }}
-                            ({{ $progress['user']['roles'][0]['name'] }})</td>
+                         {{-- <td class="tx-medium">
+                           {{ Str::title($progress['user']['account']['last_name'] . ' ' . $progress['user']['account']['first_name']) }} 
+                            ({{ $progress['user']['roles'][0]['name'] }})</td> --}}
+                            <td class="tx-medium">
+                                {{ Str::title($progress['user']['account']['first_name'] . ' ' . $progress['user']['account']['last_name']) }}</td>
                         <td class="tx-medium text-success">
                             {{ $progress['substatus']['name'] }} </td>
                         <td class="text-center">
@@ -65,7 +47,7 @@
         </table>
     </div><!-- table-responsive -->
 
-    <div class="divider-text">Tools Request</div>
+     <div class="divider-text">Tools Request</div>
     <h5 class="mt-4">Tools Requests</h5>
     <div class="table-responsive mb-4">
         <table class="table table-hover mg-b-0">
@@ -73,9 +55,8 @@
                 <tr>
                     <th class="text-center">#</th>
                     <th>Batch Number</th>
-                    <th>Client</th>
-                    <th>Approved By</th>
                     <th>Requested By</th>
+                    <th>Approved By</th>
                     <th>Status</th>
                     <th>Date Requested</th>
                     <th>Action</th>
@@ -84,23 +65,20 @@
             </thead>
             <tbody>
 
-                @php $z = 0; @endphp
                 <tr>
-                    <td class="tx-color-03 tx-center">{{ ++$z }}</td>
-                    <td class="tx-medium">TRF-C85BEA04</td>
-                    <td class="tx-medium">Kelvin Adesanya</td>
-                    <td class="tx-medium">Charles Famoriyo</td>
-                    <td class="tx-medium">David Akinsola (CSE)</td>
-                    <td class="text-medium text-success">Approved</td>
+                    <td class="tx-color-03 tx-center">1</td>
+                    <td class="tx-medium">{{ $service_request['toolRequest']['unique_id'] }}</td>
+                    <td class="tx-medium">{{ Str::title($service_request['toolRequest']['requester']['account']['first_name'] ." ". $service_request['toolRequest']['requester']['account']['last_name']) }}</td>
+                    <td class="tx-medium">{{ Str::title($service_request['toolRequest']['approver']['account']['first_name'] ." ". $service_request['toolRequest']['approver']['account']['last_name']) }}</td>
+                    <td class="text-medium {{ (($service_request['toolRequest']['status'] == 'Pending') ? 'text-warning' : (($service_request['toolRequest']['status'] == 'Approved') ? 'text-success' : 'text-danger')) }}">{{ $service_request['toolRequest']['status'] }}</td>
+
+                    
 
                     <td class="text-medium">
-                        {{ Carbon\Carbon::parse('2020-12-28 16:58:54', 'UTC')->isoFormat('MMMM Do YYYY, h:mm:ssa') }}
+                        {{ Carbon\Carbon::parse($service_request['toolRequest']['created_at'], 'UTC')->isoFormat('MMMM Do YYYY, h:mm:ssa') }}
                     </td>
                     <td class=" text-center">
-                        <a href="#toolsRequestDetails" data-toggle="modal"
-                            class="btn btn-sm btn-primary" title="View TRF-C85BEA04 details"
-                            data-batch-number="TRF-C85BEA04" data-url="#"
-                            id="tool-request-details">Details</a>
+                        <a href="#toolsRequestDetails" data-toggle="modal" class="btn btn-sm btn-primary" title="View {{ $service_request['toolRequest']['unique_id'] }} details" data-batch-number="{{ $service_request['toolRequest']['unique_id'] }}" data-url="{{ route('cse.tool_request_details', ['tool_request'=>$service_request['toolRequest']['uuid'], 'locale'=>app()->getLocale()]) }}" id="tool-request-details">Details</a>
                     </td>
 
                 </tr>
@@ -108,7 +86,7 @@
         </table>
     </div><!-- table-responsive -->
 
-    <div class="divider-text">RFQ's</div>
+    {{-- <div class="divider-text">RFQ's</div>
     <h5 class="mt-4">Request For Quotation</h5>
     <div class="table-responsive">
 
@@ -150,5 +128,6 @@
                 </tr>
             </tbody>
         </table>
-    </div><!-- table-responsive -->
+    </div><!-- table-responsive --> --}}
 </div>
+

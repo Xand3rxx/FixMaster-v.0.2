@@ -55,7 +55,7 @@ class ToolRequest extends Model
 
     public function serviceRequest()
     {
-        return $this->belongsTo(ServiceRequest::class, 'service_request_id')->with('clientAccount');
+        return $this->belongsTo(ServiceRequest::class, 'service_request_id')->with('client');
     }
 
     public function serviceRequests()
@@ -76,5 +76,18 @@ class ToolRequest extends Model
     public function toolRequestBatchess()
     {
         return $this->belongsToMany(ToolRequestBatch::class, 'id', 'tool_request_id');
+    }
+
+    /** 
+     * Scope a query to only include all pending requests
+     * 
+     * @param \Illuminate\Database\Eloquent\Builder $query
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    //Scope to return all services  
+    public function scopePendingRequests($query)
+    {
+        return $query->select('*')
+            ->where('status', 'Pending');
     }
 }

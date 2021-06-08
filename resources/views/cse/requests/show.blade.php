@@ -56,7 +56,7 @@
                                 {{ ucfirst($service_request['client']['account']['first_name']) }}
                                 {{ ucfirst($service_request['client']['account']['last_name']) }}
                                 <a class="btn btn-sm btn-primary btn-icon" title="Call Client"
-                                    href="tel:{{ $service_request['client']['account']['contact']['phone_number'] }}"><i
+                            @if($service_request['contactme_status'] == 1) href="tel:{{ $service_request['client']['account']['contact']['phone_number'] }}" @else href="#" @endif id="contact-me" data-contact-me="{{ $service_request['contactme_status'] }}"><i
                                         class="fas fa-phone"></i> </a>
 
                                 @if (empty($service_request['preferred_time']))
@@ -141,21 +141,27 @@
                                                         @include('cse.requests.includes.categorization')
                                                         {{-- End of Stage 1 --}}
                                                     @else
-                                                        {{-- Stage 2 --}}
-                                                        @if (CustomHelpers::existRole($service_request->service_request_assignees, 'technician-artisans'))
+                                                        @if (!CustomHelpers::existRole($service_request->service_request_assignees, 'technician-artisans'))
+                                                            {{-- Stage 2 --}}
+
                                                             @include('cse.requests.includes.initial-technician')
+                                                            {{-- End of Stage 2 --}}
+
+                                                        @else
+
+                                                            {{-- Stage 3 --}}
+                                                            @if (collect($service_request->invoice)->isEmpty())
+                                                                @include('cse.requests.includes.invoice-building')
+                                                            @endif
+                                                            {{-- End of Stage 3 --}}
+                                                            {{-- Stage 4 --}}
+                                                            @if (!empty($materials_accepted) && ($materials_accepted['rfqSupplierInvoice']['supplierDispatch']['cse_material_acceptance'] !== 'Yes'))
+                                                                @include('cse.requests.includes.materials-acceptance')
+                                                            @endif
+                                                            {{-- End of Stage 4 --}}
+                                                            @include('cse.requests.includes.reoccuring-actions')
+                                                            @include('cse.requests.includes.project-progresses')
                                                         @endif
-                                                        {{-- End of Stage 2 --}}
-                                                        {{-- Stage 3 --}}
-                                                        @if (collect($service_request->invoice)->isEmpty())
-                                                            @include('cse.requests.includes.invoice-building')
-                                                        @endif
-                                                        {{-- End of Stage 3 --}}
-                                                        @include('cse.requests.includes.reoccuring-actions')
-                                                        @if (!empty($materials_accepted))
-                                                            @include('cse.requests.includes.materials-acceptance')
-                                                        @endif
-                                                        @include('cse.requests.includes.project-progresses')
                                                     @endif
 
                                                 </div>
@@ -173,14 +179,11 @@
                             {{-- End of Service Request Actions --}}
 
                             {{-- Job Description --}}
-                            @if (!empty($materials_accepted))
-                                @include('cse.requests.includes.job_description')
-                            @endif
-
+                            @include('cse.requests.includes.job_description')
                             {{-- End of Job Description --}}
 
                             {{-- Service Request Summary --}}
-                            {{-- @include('cse.requests.includes.service_request_summary') --}}
+                            @include('cse.requests.includes.service_request_summary')
                             {{-- End Service Request Summary --}}
 
                         </div>
@@ -238,6 +241,7 @@
                     $('#update-progress').trigger('click');
                 },
             });
+
 
         </script>
         @include('cse.requests.includes.scripts')

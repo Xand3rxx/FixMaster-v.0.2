@@ -115,4 +115,17 @@ class Rfq extends Model
         return $query->select('*')
             ->where('status', 'Pending');
     }
+
+    /** 
+     * Scope a query to only include all pending requests
+     * 
+     * @param \Illuminate\Database\Eloquent\Builder $query
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    //Scope to return all services  
+    public function scopeOpenedRfqs($query)
+    {
+        return $query->select('*')
+            ->where('status', 'Pending');
+    }
 }

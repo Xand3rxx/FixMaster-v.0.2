@@ -436,7 +436,7 @@ trait Utility
 
   public function mailAction($data){
       $messanger = new MessageController();
-     return  $jsonResponse = $messanger->sendNewMessage('email', Str::title(Str::of($data['template_feature'])->replace('_', ' ',)), 'dev@fix-master.com', $data['email'], $data, $data['template_feature']);
+     return  $jsonResponse = $messanger->sendNewMessage('', 'dev@fix-master.com', $data['email'], $data, $data['template_feature']);
 
 
   }

@@ -38,6 +38,7 @@
             </tbody>
         </table>
 
+        @if(!empty($materials_accepted['rfqSupplierInvoice']['supplierDispatch']))
         <h5 class="mt-4">Dispatch Details</h5>
         <table class="table table-striped table-sm mg-b-0">
             <tbody>
@@ -75,6 +76,7 @@
 
             </tbody>
         </table>
+        @endif
     </div>
 
     <div class="table-responsive mt-4">
@@ -94,7 +96,6 @@
                 </tr>
             </thead>
             <tbody>
-                {{-- {{ddd($materials_accepted['rfqBatches'])}} --}}
                
                 @foreach ($materials_accepted['rfqBatches'] as $item)
                     <tr>
@@ -127,12 +128,14 @@
             </tbody>
         </table>
     </div><!-- table-responsive -->
-
+    {{-- {{ dd($materials_accepted['rfqSupplierInvoice']['supplierDispatch']['cse_status']) }} --}}
+    @if(!empty($materials_accepted['rfqSupplierInvoice']['supplierDispatch'])) 
+    @if($materials_accepted['rfqSupplierInvoice']['supplierDispatch']['cse_status'] !== 'Delivered'))
     <h5 class="mt-4">Update RFQ Status</h5>
     <div class="form-row">
         <div class="form-group col-md-12">
             <label for="status">Status</label>
-            <select class="form-control custom-select" id="status" name="status">
+            <select class="form-control custom-select" id="status" name="material_status">
                 <option selected disabled value="" selected>Select...</option>
                 <option value="Awaiting" value="{{ old('Awaiting') }}"
                     {{ old('status') == 'Awaiting' ? 'selected' : '' }}>Awaiting</option>
@@ -149,19 +152,17 @@
         </div>
     </div>
 
-    @if($materials_accepted['status'] == 'Delivered')
+    @else
     <h5 class="mt-4">Accept Materials Delivery</h5>
     <div class="form-row">
         <div class="form-group col-md-12">
             <label for="accepted">Accept Delivery</label>
-            <select class="form-control custom-select" id="accepted" name="accepted">
+            <select class="form-control custom-select" id="accepted" name="material_accepted">
                 <option selected disabled value="" selected>Select...</option>
-                <option value="Yes" value="{{ old('Yes') }}"
-                    {{ old('accepted') == 'Yes' ? 'selected' : '' }}>Yes, all ordered components were
-                    delivered</option>
-                <option value="No" value="{{ old('No') }}"
-                    {{ old('accepted') == 'No' ? 'selected' : '' }}>No, all ordered components were not
-                    delivered</option>
+                <option value="Yes" value="{{ old('Yes') }}" {{ old('material_accepted') == 'Yes' ? 'selected' : '' }}>
+                    Yes, all ordered components were delivered </option>
+                <option value="No" value="{{ old('No') }}" {{ old('material_accepted') == 'No' ? 'selected' : '' }}>
+                    No, all ordered components were not delivered </option>
             </select>
             @error('accepted')
                 <span class="invalid-feedback" role="alert">
@@ -171,10 +172,11 @@
         </div>
         <div class="form-group decline-rfq-reason col-md-12">
             <label for="reason">Reason</label>
-            <textarea rows="3" class="form-control @error('reason') is-invalid @enderror" id="reason"
-                name="reason"></textarea>
+            <textarea required rows="3" class="form-control @error('reason') is-invalid @enderror" id="reason"
+                name="material_reason"></textarea>
         </div>
     </div>
+    @endif
     @endif
 
 

@@ -57,7 +57,9 @@ class RequestController extends Controller
     public function show($language, string $uuid)
     {
         // find the service request using the uuid and relations
-        $service_request = ServiceRequest::where('uuid', $uuid)->with(['price', 'service', 'service.subServices', 'client', 'service_request_cancellation', 'invoice'])->firstOrFail();
+        $service_request = ServiceRequest::where('uuid', $uuid)->with(['price', 'service', 'service.subServices', 'client', 'service_request_cancellation', 'invoice', 'serviceRequestMedias', 'serviceRequestProgresses', 'serviceRequestReports', 'toolRequest'])->firstOrFail();
+
+        // return $service_request;
 
         // Refactor this to be eager loaded with service request, use with and callback function
         $materials_accepted = \App\Models\Rfq::where('service_request_id', $service_request->id)
@@ -74,12 +76,13 @@ class RequestController extends Controller
             'technicians'           => \App\Models\Technician::with('services', 'user', 'user.contact')->get(),
             'categories'            => \App\Models\Category::where('id', '!=', 1)->get(),
             'services'              => \App\Models\Service::all(),
-            'ongoingSubStatuses' => \App\Models\SubStatus::where('status_id', 2)
-                    ->when($service_request_progresses->sub_status_id <= 13, function ($query, $sub_status) {
-                        return $query->whereBetween('phase', [4, 9]);
-                    }, function ($query) {
-                        return $query->whereBetween('phase', [20, 27]);
-                    })->get(['id', 'uuid', 'name']),
+            // 'ongoingSubStatuses' => \App\Models\SubStatus::where('status_id', 2)
+            //         ->when($service_request_progresses->sub_status_id <= 13, function ($query, $sub_status) {
+            //             return $query->whereBetween('phase', [4, 9]);
+            //         }, function ($query) {
+            //             return $query->whereBetween('phase', [20, 27]);
+            //         })->get(['id', 'uuid', 'name']),
+            'ongoingSubStatuses' => \App\Models\SubStatus::where('status_id', 2)->whereBetween('phase', [9, 13])->get(),
             'materials_accepted'    => $materials_accepted,
         ];
 
@@ -106,7 +109,7 @@ class RequestController extends Controller
         ]);
         // Instantiate Contoller
         $messanger = new \App\Http\Controllers\Messaging\MessageController();
-        return $messanger->sendNewMessage('email', \Illuminate\Support\Str::title(\Illuminate\Support\Str::of($template_feature)->replace('_', ' ',)), 'dev@fix-master.com', $mail_data['email'], $mail_data, $template_feature);
+        return $messanger->sendNewMessage('', 'dev@fix-master.com', $mail_data['email'], $mail_data, $template_feature);
     }
 
     public function getServiceRequestsByTechnician(Request $request)
@@ -172,5 +175,19 @@ class RequestController extends Controller
         return view('cse.requests.includes._details_image', [
             'rfqDetails'    =>  \App\Models\RfqBatch::select('image')->where('id', $id)->first(),
         ]);
+    }
+
+    /**
+     * Display the specified resource.
+     *
+     * @param  uuid  $uuid
+     * @return \Illuminate\Http\Response
+     */
+    public function toolRequestDetails($language, $uuid){
+
+        return view('cse.requests.includes._tool_request_details', [
+            'toolRequestDetails'    =>  \App\Models\ToolRequest::where('uuid', $uuid)->firstOrFail(),
+        ]);
+
     }
 }
