@@ -362,10 +362,14 @@ trait Utility
 
   public function markCompletedRequestTrait($user, $id){
 
-    $requestExists = ServiceRequest::where('uuid', $id)->firstOrFail();
+    $admin = User::where('id', 1)->with('account')->first();
+    $requestExists = ServiceRequest::where('uuid', $id)->with('service_request_assignees')->firstOrFail();
     $ifWarrantyExists =  \App\Models\ServiceRequestWarranty::where(['service_request_id'=> $requestExists->id])
      ->first();
+     $cse = [];
 
+    
+      //$requestExists->cses[0]->account->user->email
     $newDateTime = Carbon::now()->addDay((int)$ifWarrantyExists->warranty->duration);
     //ask for how warranties are assigned to client
 
@@ -388,11 +392,72 @@ trait Utility
           'status_id'                     => '4',
           'sub_status_id'                 =>  Auth::user()->type == 'admin'? '36':'35'
       ]);
+
+      if($requestExists->service_request_assignees){
+        foreach($requestExists->service_request_assignees as $item){
+          if($item->user->roles[0]->url == 'cse'){
+            $cse[] = [
+              'email'=>$item->user->email,
+               'first_name'=>$item->user->account->first_name,
+               'last_name'=>$item->user->account->last_name
+            ];
+           
+          }
+        }
       
+      }
+
+   
+
 
          if( $updateRequest AND $recordServiceProgress AND $updateServiceRequestWarranty){
 
            //send mails to 1.admin, 2.client, 3.cse for mark as completed;
+
+             //email for client
+            $mail_data_admin = collect([
+              'email' =>  $admin->email,
+              'template_feature' => 'CUSTOMER_JOB_COMPLETED_NOTIFICATION',
+              'firstname' =>  $admin->account->first_name,
+              'lastname' =>  $admin->account->last_name,
+              'customer_name' => Auth::user()->account->first_name.' '.Auth::user()->account->last_name,
+              'customer_email' => Auth::user()->email,
+              'job_ref' =>  $requestExists->unique_id
+            ]);
+            $mail1 = $this->mailAction($mail_data_admin);
+      
+            $mail2 ="";
+            if($mail1)
+            {
+
+              $mail_data_client = collect([
+              'email' =>  Auth::user()->email,
+              'template_feature' => 'CUSTOMER_JOB_COMPLETED_NOTIFICATION',
+              'customer_name' => Auth::user()->account->first_name.' '.Auth::user()->account->last_name,
+              'job_ref' =>  $requestExists->unique_id
+            ]);
+            $mail2 = $this->mailAction($mail_data_client);
+            }
+          
+        
+            if($mail2)
+            {
+            foreach ($cse as $value) {
+            $mail_data_cse = collect([
+              'email' =>  $value['email'],
+              'template_feature' => 'CUSTOMER_JOB_COMPLETED_NOTIFICATION',
+              'firstname' =>   $value['first_name'],
+              'lastname' =>   $value['last_name'],
+              'customer_name' => Auth::user()->account->first_name.' '.Auth::user()->account->last_name,
+              'customer_email' => Auth::user()->email,
+              'job_ref' =>  $requestExists->unique_id
+            ]);
+            $mail3 = $this->mailAction($mail_data_cse);
+
+            }
+
+            }
+            
           return $requestExists ;
          }else{
            return false;
@@ -420,7 +485,7 @@ trait Utility
       if($client AND $discountHistory){
            $mail_data = collect([
             'email' =>  $user->email,
-            'template_feature' => 'CLIENT_FIRSTTIME_DISCOUNT_NOTIFICATION',
+            'template_feature' => 'CUSTOMER_WELCOME_DISCOUNT',
             'discount' => $discountDetails->rate,
             'firstname' =>  $userDetails->first_name,
          ]);
@@ -443,5 +508,6 @@ trait Utility
 
 }
 
+}
 
 

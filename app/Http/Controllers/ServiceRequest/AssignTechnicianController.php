@@ -175,7 +175,7 @@ class AssignTechnicianController extends Controller
         foreach ($request->file('upload_image') as $file) {
             $image = $file;
             $imageName = (string) Str::uuid() .'.'.$file->getClientOriginalExtension();
-            $imageDirectory = public_path('assets/warranty-images').'/';
+            $imageDirectory = public_path('assets/warranty-claim-images').'/';
             $width = 350; $height = 259;
             Image::make($image->getRealPath())->resize($width, $height)->save($imageDirectory.$imageName);
 

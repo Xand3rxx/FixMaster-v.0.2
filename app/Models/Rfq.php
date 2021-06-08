@@ -72,6 +72,17 @@ class Rfq extends Model
         return $this->hasMany(RfqSupplier::class, 'rfq_id');
     }
 
+    public function rfqSupplierDispatch()
+    {
+        return $this->hasOne(RfqSupplierDispatch::class, 'rfq_id');
+    }
+
+    public function rfqSupplierDispatches()
+    {
+        return $this->hasMany(RfqSupplierDispatch::class, 'rfq_id');
+    }
+
+
     public function rfqSupplierInvoice()
     {
         return $this->hasOne(RfqSupplierInvoice::class, 'rfq_id');
@@ -80,6 +91,10 @@ class Rfq extends Model
     public function rfqSuppliesInvoices()
     {
         return $this->hasMany(RfqSupplierInvoice::class, 'rfq_id');
+    }
+    public function rfqDispatchNotification()
+    {
+        return $this->hasOne(RfqDispatchNotification::class, 'rfq_id');
     }
 
     public function issuer()

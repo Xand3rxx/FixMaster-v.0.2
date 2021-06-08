@@ -43,6 +43,20 @@ class RfqSupplierInvoice extends Model
         return $this->hasMany(RfqSupplierInvoiceBatch::class);
     }
 
+    public function warranty_claim_supplier()
+    {
+        return $this->belongsTo(Supplier::class, 'supplier_id', 'user_id');
+    }
+
+    public function rfqBatches()
+    {
+        return $this->hasMany(RfqBatch::class,'rfq_id', 'rfq_id');
+    }
+
+    public function warrantyIssued()
+    {
+        return $this->hasMany(ServiceRequestWarrantyReport::class,'supplier_id','causal_agent_id');
+    }
     public function supplierDispatch()
     {
         return $this->hasOne(RfqSupplierDispatch::class, 'rfq_supplier_invoice')->latest('created_at');
@@ -52,5 +66,10 @@ class RfqSupplierInvoice extends Model
     {
         return $this->belongsTo(RfqSupplier::class, 'supplier_id', 'supplier_id');
     }
+
+    // public function supplierDispatches()
+    // {
+    //     return $this->hasMany(RfqSupplierDispatch::class, 'rfq_supplier_invoic');
+    // }
 
 }

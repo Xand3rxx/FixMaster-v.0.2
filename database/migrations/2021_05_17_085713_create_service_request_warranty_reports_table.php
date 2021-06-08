@@ -18,10 +18,12 @@ class CreateServiceRequestWarrantyReportsTable extends Migration
             $table->charset = 'utf8mb4';
             $table->collation = 'utf8mb4_unicode_ci';
 
-            $table->id();
+            $table->increments('id');
             $table->foreignId('user_id');
             $table->foreignId('service_request_warranties_issued_id');
-            $table->text('report');
+            $table->foreignId('causal_agent_id')->nullable();
+            $table->text('causal_reason')->nullable();
+            $table->text('report')->nullable();
             $table->timestamps();
         });
     }
