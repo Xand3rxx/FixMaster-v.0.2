@@ -55,28 +55,28 @@ class PaystackController extends Controller
             // 'myContact_id'    => 'required',
         ]);
 
-//        $Serviced_areas = ServicedAreas::where('town_id', '=', $request['town_id'])->orderBy('id', 'DESC')->first();
-//        if ($Serviced_areas === null) {
-//            return back()->with('error', 'sorry!, this area you selected is not serviced at the moment, please try another area');
-//        }
-//
-//        // upload multiple media files
-//        foreach($request->media_file as $key => $file)
-//            {
-//                $originalName[$key] = $file->getClientOriginalName();
-//
-//                $fileName = sha1($file->getClientOriginalName() . time()) . '.'.$file->getClientOriginalExtension();
-//                $filePath = public_path('assets/service-request-media-files');
-//                $file->move($filePath, $fileName);
-//                $data[$key] = $fileName;
-//            }
-//                $data['unique_name']   = json_encode($data);
-//                $data['original_name'] = json_encode($originalName);
-//                // return $data;
-//
-//        // $request->session()->put('order_data', $request);
-//        $request->session()->put('order_data', $request->except(['media_file']));
-//        $request->session()->put('medias', $data);
+       $Serviced_areas = ServicedAreas::where('town_id', '=', $request['town_id'])->orderBy('id', 'DESC')->first();
+       if ($Serviced_areas === null) {
+           return back()->with('error', 'sorry!, this area you selected is not serviced at the moment, please try another area');
+       }
+
+       // upload multiple media files
+    //    foreach($request->media_file as $key => $file)
+    //        {
+    //            $originalName[$key] = $file->getClientOriginalName();
+
+    //            $fileName = sha1($file->getClientOriginalName() . time()) . '.'.$file->getClientOriginalExtension();
+    //            $filePath = public_path('assets/service-request-media-files');
+    //            $file->move($filePath, $fileName);
+    //            $uniqueName[$key] = $fileName;
+    //        }
+    //            $uniqueName['unique_name']   = json_encode($uniqueName);
+    //            $uniqueName['original_name'] = json_encode($originalName);
+    //            // return $uniqueName;
+
+    //    // $request->session()->put('order_data', $request);
+    //    $request->session()->put('order_data', $request->except(['media_file']));
+    //    $request->session()->put('medias', $uniqueName);
 
         $data = [
             'logistics_cost' => $request['logistics_cost'],

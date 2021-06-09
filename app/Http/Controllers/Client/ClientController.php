@@ -315,7 +315,7 @@ class ClientController extends Controller
                     // dd($flutter);
                     // return view('client.payment.flutter', compact('flutter', 'client'));
 
-                    $return = $paystack_controller->initiatePayment($request, $generatedVal, $paymentRecord, $user);
+                    $return = $this->initiatePayment($request, $generatedVal, $paymentRecord, $user);
 
                     // $return = redirect()->route('client.ipn.flutter', app()->getLocale());
 
@@ -583,50 +583,50 @@ class ClientController extends Controller
 
     }
 
-            // public function initiatePayment(){
-            //     $track  = Session::get('Track');
-            //     // dd($track);
-            //     $data = Payment::where('reference_id', $track)->orderBy('id', 'DESC')->first();
-            //     //  dd($data);
-            //     $user = User::find($data->user_id);
-            //     if($user){
+            public function initiatePayment(){
+                $track  = Session::get('Track');
+                // dd($track);
+                $data = Payment::where('reference_id', $track)->orderBy('id', 'DESC')->first();
+                //  dd($data);
+                $user = User::find($data->user_id);
+                if($user){
 
-            //         $curl = curl_init();
+                    $curl = curl_init();
 
-            //         curl_setopt_array($curl, array(
-            //             CURLOPT_URL => "https://api.paystack.co/transaction/initialize",
-            //             CURLOPT_RETURNTRANSFER => true,
-            //             CURLOPT_CUSTOMREQUEST => "POST",
-            //             CURLOPT_POSTFIELDS => json_encode([
-            //                 'amount' => $data->amount * 100,
-            //                 'email' => $user->email,
-            //                 'callback_url' => route('client.serviceRequest.verifyPayment', app()->getLocale())
-            //             ]),
-            //             CURLOPT_HTTPHEADER => [
-            //                 "authorization: Bearer sk_test_b612f25bd992c4d84760e312175c7515336b77fc",
-            //                 "content-type: application/json",
-            //                 "cache-control: no-cache"
-            //             ],
-            //         ));
+                    curl_setopt_array($curl, array(
+                        CURLOPT_URL => "https://api.paystack.co/transaction/initialize",
+                        CURLOPT_RETURNTRANSFER => true,
+                        CURLOPT_CUSTOMREQUEST => "POST",
+                        CURLOPT_POSTFIELDS => json_encode([
+                            'amount' => $data->amount * 100,
+                            'email' => $user->email,
+                            'callback_url' => route('client.serviceRequest.verifyPayment', app()->getLocale())
+                        ]),
+                        CURLOPT_HTTPHEADER => [
+                            "authorization: Bearer sk_test_b612f25bd992c4d84760e312175c7515336b77fc",
+                            "content-type: application/json",
+                            "cache-control: no-cache"
+                        ],
+                    ));
 
-            //         $response = curl_exec($curl);
-            //         $err = curl_error($curl);
-            //         if ($err) {
-            //             return back()->with('error', $err);
-            //         }
+                    $response = curl_exec($curl);
+                    $err = curl_error($curl);
+                    if ($err) {
+                        return back()->with('error', $err);
+                    }
 
-            //         $tranx = json_decode($response, true);
+                    $tranx = json_decode($response, true);
 
-            //         if (!$tranx['status']) {
-            //             return back()->with('error', $tranx['message']);
-            //         }
-            //         return redirect($tranx['data']['authorization_url']);
+                    if (!$tranx['status']) {
+                        return back()->with('error', $tranx['message']);
+                    }
+                    return redirect($tranx['data']['authorization_url']);
 
-            //     }else{
-            //         return back()->with('error', 'Error occured while making payment');
-            //     }
+                }else{
+                    return back()->with('error', 'Error occured while making payment');
+                }
 
-            // }
+            }
 
 
 
