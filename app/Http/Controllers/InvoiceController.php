@@ -8,6 +8,7 @@ use App\Models\Payment;
 use App\Models\Category;
 use App\Models\PaymentGateway;
 use App\Models\ServiceRequest;
+use App\Models\ServiceRequestReport;
 use App\Models\SubService;
 use App\Models\ServiceRequestWarranty;
 use App\Models\ServiceRequestAssigned;
@@ -57,6 +58,9 @@ class InvoiceController extends Controller
         $technician_assigned = ServiceRequestAssigned::where('service_request_id', $invoice['serviceRequest']['id'])->where('assistive_role', 'Technician')->firstOrFail();
         $get_qa_assigned = ServiceRequestAssigned::where('service_request_id', $invoice['serviceRequest']['id'])->where('assistive_role', 'Consultant')->first();
         $qa_assigned = $get_qa_assigned ?? null;
+
+//        $root_cause = ServiceRequestReport::where('service_request_id', $invoice['service_request_id'])->where('type', 'Root-Cause')->first()->report;
+//        dd($root_cause);
 
         $getCategory = $invoice['serviceRequest']['service']['category'];
         $labourMarkup = $getCategory['labour_markup'];
@@ -275,6 +279,8 @@ class InvoiceController extends Controller
         return view('frontend.invoices.invoice')->with([
             'invoice'   => $invoice,
             'labourMarkup' => $labourMarkup,
+            'root_cause' => ServiceRequestReport::where('service_request_id', $invoice['service_request_id'])->where('type', 'Root-Cause')->first()->report,
+            'other_comments' => ServiceRequestReport::where('service_request_id', $invoice['service_request_id'])->where('type', 'Other-Comment')->first()->report,
             'materialsMarkup' => $materialsMarkup,
             'service_request_assigned' => $service_request_assigned,
             'technician_assigned' => $technician_assigned,
