@@ -66,6 +66,7 @@ class ServiceRequestWarrantyIssued extends Model
         return $this->belongsTo(Account::class, 'completed_by', 'user_id');
     }
 
+
     /** 
      * Scope a query to only include all pending requests
      * 

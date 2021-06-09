@@ -685,7 +685,7 @@ class DiscountController extends Controller
 
     private function createUsersDiscount($request, $discounts)
     {
-        $accounts = Account::select('first_name', 'last_name', 'user_id')->whereIn('user_id', $request->users)->get();
+        $accounts = Account::select('first_name', 'last_name', 'user_id')->join('users', 'users.id', '=', 'accounts.user_id')->whereIn('user_id', $request->users)->get();
 
        foreach ($request->users as $user)
         {
@@ -703,6 +703,19 @@ class DiscountController extends Controller
             'client_id' => $user->user_id,
 
                 ]);
+        }
+
+        if($request->notify == '1'){
+            foreach ($accounts as $user)
+            {
+            $mail_data_supplier = collect([
+                'email' =>  $user->email,
+                'template_feature' => 'CSE_SENT_SUPPLIER_MESSAGE_NOTIFICATION',
+                'firstname' => $user->first_name.' '.$user->last_name,
+               
+            ]);
+            }
+            $mail1 = $this->mailAction($mail_data_supplier);
         }
 
 

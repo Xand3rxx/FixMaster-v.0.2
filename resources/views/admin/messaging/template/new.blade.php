@@ -13,9 +13,7 @@
  .placeholders{
      padding:10px;
  }
-
 .note-editable { background-color: white !important; }
-
 </style>
     <div class="content-body">
         <div class="container pd-x-0">
@@ -76,11 +74,11 @@
             <button type="button" class="btn btn-xs btn-placeholder btn-secondary" data-val="completed_jobs">Completed Jobs</button>
             <button type="button" class="btn btn-xs btn-placeholder btn-secondary" data-val="technician_rating">Technician Rating</button>
             <button type="button" class="btn btn-xs btn-placeholder btn-secondary" data-val="cse_name">CSE Name</button>
+            <button type="button" class="btn btn-xs btn-placeholder btn-secondary" data-val="discount">Discount</button>
                                  </div>
                                 </div>
 
                             </div>
-                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>&nbsp;&nbsp;&nbsp;&nbsp;
         <button type="button" class="btn btn-primary" id="btn-save">Save message</button>&nbsp;&nbsp;&nbsp;&nbsp;
         <button type="button" class="btn btn-primary" id="btn-update">Update message</button>
                          </div>
@@ -103,6 +101,11 @@
     var editor_disabled = false;
     var checked_value = 'Email';
     $(document).ready(function (){
+        $.get( url+"/api/template/features", function( data ) {
+            $.each(data, function(key, val){
+                $('<option>').val(val).text(val).appendTo('#feature');
+            })
+        });
         $('#email_editor').summernote({height: 150});
        
         let params = (new URL(document.location)).searchParams;
@@ -110,18 +113,14 @@
              const id = params.get("templateid");
              getTemplate(id);
          }
-
         $("#btn-save").show();
             $("#btn-update").hide();
-
             $("#email_editor").summernote({
             height: 150
         });
-
         $(".note-editable").on('focus', function(){
                 editor_disabled = false;
                 })
-
             $("#sms_editor").on('focus', function(){
                 editor_disabled = true;
                 })
@@ -135,7 +134,6 @@
         $('i.note-recent-color').each(function(){
             $(this).attr('style','background-color: transparent;');
         });
-
         $('.btn-placeholder').click(function(){
             var toInsert = '{'+$(this).data('val')+'}';
             if(editor_disabled==true){
@@ -147,36 +145,24 @@
             var newContent = oldContent.substring(0, cursorPos) + toInsert + oldContent.substring(cursorPos);
             selection.anchorNode.nodeValue = newContent;
             }
-
         });
-
         $('#btn-save').click(function(){
             updateMessageTemplate('save');
         });
-
         $('#btn-update').click(function(){
             updateMessageTemplate('update');
         });
-
         $('#rd-email').click(function(){
             editor_disabled = false;
             checked_value = 'Email';
         $('#email_editor').summernote({height: 150});
         });
-
         $('#rd-sms').click(function(){
         editor_disabled = true;
         checked_value = 'SMS';
         $('#email_editor').summernote('destroy');
         });
-
-
-        $.get( url+"/api/template/features", function( data ) {
-            $.each(data, function(key, val){
-                $('<option>').val(val).text(val).appendTo('#feature');
-            })
-        });
-
+       
         $(document).on('click', '.msgedit', function(e){
             e.preventDefault();
             var uuid = $(this).parents('tr').data('id');
@@ -188,15 +174,12 @@
                 }).prop('selected', true);
                 $("#email-title").val(data.title);
                 $('#email_editor').summernote('code', data.content);
-
                 if(data.type=='SMS'){
                     $('#rd-sms').click()
                 }else{
                     $('#rd-email').click()
                 }
-
                 $("#btn-save").hide();
-
                 $("#btn-update").show();
                 $("#messageModal").modal('show');
         });
@@ -243,27 +226,20 @@
                     displayMessage(data.responseJSON.message, 'error');
                 })
     }
-
     function getTemplate(uuid){
         $.get( url+"/api/template/"+uuid, function( data ) {
             data = data.data
             var selected = data.feature;
-            $("#feature").filter(function() {
-            return $(this).text() == selected;
-            }).prop('selected', true);
+            $(`#feature option[value='${selected}']`).prop('selected', true);
             $("#email-title").val(data.title);
             $('#email_editor').summernote('code', data.content);
             $('#sms_editor').val(data.sms);
-
-
             if(data.type=='SMS'){
                 $('#rd-sms').click()
             }else{
                 $('#rd-email').click()
             }
-
             $("#btn-save").hide();
-
             $("#btn-update").show();
             $("#messageModal").modal('show');
       });
@@ -281,7 +257,6 @@
         strPos = range.text.length;
     }
     else if (br == "ff") strPos = txtarea.selectionStart;
-
     var front = (txtarea.value).substring(0,strPos);
     var back = (txtarea.value).substring(strPos,txtarea.value.length);
     txtarea.value=front+text+back;
@@ -301,6 +276,5 @@
     }
     txtarea.scrollTop = scrollPos;
 }
-
 </script>
 @endpush

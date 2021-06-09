@@ -40,7 +40,12 @@ class Message extends Controller
 
     private function replacePlaceHolders($variables, $messageTemp){
         foreach($variables as $key => $value){
-            $messageTemp = str_replace('{'.$key.'}', $value, $messageTemp);
+            if($key == '{url}'){
+                $messageTemp = str_replace('{'.$key.'}', '<button style="background-color:red">'.$value.'<button>', $messageTemp);  
+            }else{
+                $messageTemp = str_replace('{'.$key.'}', $value, $messageTemp);
+            }
+           
         }
 
         return $messageTemp;

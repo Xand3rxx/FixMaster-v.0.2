@@ -70,7 +70,7 @@
                 <li class="{{ Route::currentRouteNamed('cse.messages.sent') ? 'active' : '' }}"><a href="{{ route('cse.requests.status', ['locale' => app()->getLocale(), 'status' => 'Canceled']) }}"> Cancelled </a></li>
                 <li class="{{ Route::currentRouteNamed('cse.messages.sent') ? 'active' : '' }}"><a href="{{ route('cse.requests.status', ['locale' => app()->getLocale(), 'status' => 'Completed']) }}"> Completed </a></li>
                 <li class="{{ Route::currentRouteNamed('cse.requests.index') ? 'active' : '' }}"><a href="{{ route('cse.requests.status', ['locale' => app()->getLocale(), 'status' => 'Pending']) }}"> Pending </a></li>
-                <li class="{{ Route::currentRouteNamed('cse.warranty_claims', 'cse.warranty_claim_details') ? 'active' : '' }}"><a href="{{ route('cse.warranty_claims_list', app()->getLocale()) }}"> Warranty Claims <sup class="font-weight-bold text-primary">{{ CustomHelpers::cse_warranty_claims($unresolvedWarranties) }}</sup></a></li>
+                <li class="{{ Route::currentRouteNamed('cse.warranty_claims', 'cse.warranty_claim_details') ? 'active' : '' }}"><a href="{{ route('cse.warranty_claims_list', app()->getLocale()) }}"> Warranty Claims <sup class="font-weight-bold text-primary">{{$unresolvedWarranties }}</sup></a></li>
             </ul>
         </li>
 
