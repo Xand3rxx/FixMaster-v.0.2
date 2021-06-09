@@ -45,7 +45,7 @@
                             @elseif(!file_exists(public_path('assets/user-avatars/'.$service_request['client']['account']['avatar'])))
                                 <img src="{{ asset('assets/images/' . $genderAvatar) }}" class="avatar rounded-circle"
                                     alt="Profile avatar">
-                            @else
+                            @else   
                                 <img src="{{ asset('assets/user-avatars/' . $service_request['client']['account']['avatar']) }}"
                                     class="avatar rounded-circle" alt="Profile avatar">
                             @endif
