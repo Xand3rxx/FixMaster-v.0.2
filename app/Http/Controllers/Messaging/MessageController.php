@@ -241,9 +241,6 @@ class MessageController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function sendNewMessage($subject="", $from="", $to, $mail_data,$feature=""){
-
-        Log::debug("Subject:  ".$subject.", From:".$from.", To: ".$to.", Feature: ".$feature);
-        Log::debug("Message Data: ".$mail_data);
     
        $message = $mail_data;
        $sms = "";
@@ -251,29 +248,28 @@ class MessageController extends Controller
        $template = null;
        $sender = null;
        $recipient = null;
+
+       
         if(!empty($feature)){
-            $template = MessageTemplate::select('content')
-            ->where('feature', $feature)
-            ->first();
+            $template = MessageTemplate::where('feature', $feature)->first();
             
             if(empty($template)){
             return response()->json(["message" => "Message Template not found!"], 404);
     
             }
             $message = $this->replacePlaceHolders($mail_data, $template->content);
-            $sms = $this->replacePlaceHolders($mail_data, $template->sms);
-            $subject = $template->title??$subject;
+            //$sms = $this->replacePlaceHolders($mail_data, $template->sms);
+            $subject = $template->title;
         }
 
     if($from!="")
        $sender = DB::table('users')->where('users.email', $from)->first();  
     else
-       $from = "noreply@fixmaster.com";
+       $from = "dev@fix-master.com";
 
-      $recipient = DB::table('users')->where('users.email', $to )->first();
+       $recipient = DB::table('users')->where('users.email', $to )->first();
 
-      
-         if($from!="" && is_object($recipient)){
+         if(!is_null($sender) && $from!="" && is_object($recipient)){
             $mail_objects[] = [
                 'title' => $subject,
                 'content' => $message,
@@ -285,7 +281,6 @@ class MessageController extends Controller
                 'mail_status' => 'Not Sent',
             ];
           
-
         Message::insert($mail_objects);
      
          }
