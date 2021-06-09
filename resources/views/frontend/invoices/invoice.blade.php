@@ -384,7 +384,7 @@
                                 <input type="hidden" class="d-none" value="{{$material_markup}}" id="material_markup" name="material_markup">
                                 <input type="hidden" class="d-none" value="{{$fixMasterRoyalty}}" id="fixMasterRoyalty" name="fixMasterRoyalty">
 
-                                <input type="hidden" class="d-none" value="service-request" id="payment_for" name="payment_for">
+                                <input type="hidden" class="d-none" value="invoice" id="payment_for" name="payment_for">
                                 <input type="hidden" class="d-none" value="{{ $invoice['unique_id'] }}" id="unique_id" name="unique_id">
                                 <input type="hidden" class="d-none" value="{{ $invoice['invoice_type'] }}" id="invoice_type" name="invoice_type">
                                 <input type="hidden" class="d-none" value="{{ $invoice['uuid'] }}" id="uuid" name="uuid">
@@ -409,7 +409,7 @@
                                     <input type="hidden" class="d-none" value="{{$material_markup}}" id="material_markup" name="material_markup">
                                     <input type="hidden" class="d-none" value="{{$fixMasterRoyalty}}" id="fixMasterRoyalty" name="fixMasterRoyalty">
 
-                                    <input type="hidden" class="d-none" value="service-request" id="payment_for" name="payment_for">
+                                    <input type="hidden" class="d-none" value="invoice" id="payment_for" name="payment_for">
                                     <input type="hidden" class="d-none" value="{{ $invoice['unique_id'] }}" id="unique_id" name="unique_id">
                                     <input type="hidden" class="d-none" value="{{ $invoice['invoice_type'] }}" id="invoice_type" name="invoice_type">
                                     <input type="hidden" class="d-none" value="{{ $invoice['uuid'] }}" id="uuid" name="uuid">
