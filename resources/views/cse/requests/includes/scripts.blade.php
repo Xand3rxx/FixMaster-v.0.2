@@ -32,7 +32,7 @@
             var contactMe = parseInt($(this).attr('data-contact-me'));
 
             if(contactMe == 0){
-                displayMessage('Sorry! The client chose not to be contacted.', 'error');
+                displayMessage('Sorry! The client does not want to be contacted.', 'error');
                 return;
             }
         });
@@ -49,7 +49,6 @@
                 },
                 // return the result
                 success: function(result) {
-                    alert(result);
                     $('#tool-request-body').modal("show");
                     $('#tool-request-body').html('');
                     $('#tool-request-body').html(result).show();

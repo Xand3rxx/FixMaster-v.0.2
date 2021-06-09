@@ -305,13 +305,20 @@ class MessageController extends Controller
 
     private function replacePlaceHolders($variables, $messageTemp)
     {
-        if($key == '{url}'){
-            $messageTemp = str_replace('{'.$key.'}', '<button style="background-color:red">'.$value.'<button>', $messageTemp);  
-        }else{
-            $messageTemp = str_replace('{'.$key.'}', $value, $messageTemp);
+        foreach ($variables as $key => $value) {
+            $messageTemp = str_replace('{' . $key . '}', $value, $messageTemp);
         }
 
         return $messageTemp;
+    //     foreach ($variables as $key => $value) {
+    //     if($key == '{url}'){
+    //         $messageTemp = str_replace('{'.$key.'}', '<button style="background-color:red">'.$value.'<button>', $messageTemp);  
+    //     }else{
+    //         $messageTemp = str_replace('{'.$key.'}', $value, $messageTemp);
+    //     }
+    // }
+
+    //     return $messageTemp;
     }
 
     private function getUser($userId)
