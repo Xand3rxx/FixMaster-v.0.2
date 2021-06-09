@@ -336,18 +336,18 @@
             }
         });
 
-        // Url for more info on datepicker options https://xdsoft.net/jqplugins/datetimepicker/
-        $(document).on('click', '#service-date-time', function(){
+        $(document).on('click', '#service-date-time', function() {
           $('#service-date-time').datetimepicker({
               // format: 'L', //LT for time only
               // inline: true,
               // sideBySide: true,
-              format:'Y-m-d H:i:s',
-              formatDate:'Y-m-d',
-              minDate:'-1970/01/02', // yesterday is minimum date
+              timepicker:false,
+              format: 'Y/m/d',
+              formatDate: 'Y/m/d',
+              minDate: '-1970/01/02', // yesterday is minimum date
               mask: true,
           });
-        });
+      });
 
 
 
