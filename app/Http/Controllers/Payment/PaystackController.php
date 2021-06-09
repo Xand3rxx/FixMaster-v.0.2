@@ -77,7 +77,7 @@ class PaystackController extends Controller
 
         $request->session()->put('collaboratorPayment', $data);
     }
-    else if($request['payment_for'] === 'invoice'){
+    else if($request['payment_for'] === 'service-request'){
     $Serviced_areas = ServicedAreas::where('town_id', '=', $request['town_id'])->orderBy('id', 'DESC')->first();
        if ($Serviced_areas === null) {
            return back()->with('error', 'sorry!, this area you selected is not serviced at the moment, please try another area');
