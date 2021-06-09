@@ -30,6 +30,7 @@ class SupplierController extends Controller
      */
     public function create()
     {
+        // dd(request()->session()->get('applicant')['form_data']['supplier_category'], in_array('3', request()->session()->get('applicant')['form_data']['supplier_category']));
         $service = $this->categoryAndServices();
         return view('admin.users.supplier.create', [
             'states' => \App\Models\State::select('id', 'name')->orderBy('name', 'ASC')->get(),
