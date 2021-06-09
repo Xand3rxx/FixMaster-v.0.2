@@ -779,7 +779,8 @@ class ClientController extends Controller
             ->with('service_requests.invoices')
             ->whereHas('service_requests', function ($query) {
                         $query->orderBy('created_at', 'ASC');
-            })->firstOrFail();
+            })->get();
+
         return view('client.services.list', [
             'myServiceRequests' =>  $myServiceRequests,
         ]);

@@ -32,7 +32,7 @@
                                 </tr>
                                 </thead>
                                 <tbody>
-
+                                @if($myServiceRequests->isNotEmpty())
                                 @foreach ($myServiceRequests['service_requests'] as $myServiceRequest)
                                 <tr>
 
@@ -174,6 +174,7 @@
 
 
                                 @endforeach
+                                @endif
                                 </tbody>
                             </table>
                         </div><!-- table-responsive -->
@@ -208,7 +209,7 @@
             <form class="p-4" method="GET" id="cancel-request-form">
                 @csrf
                 <div class="row">
-                <input type="hidden" value="{{$myServiceRequest->bookingFee->amount}}" name="amountToRefund"/>
+                <input type="hidden" value="{{ !empty($myServiceRequest) ? $myServiceRequest->bookingFee->amount : 0}}" name="amountToRefund"/>
                     <div class="col-md-12">
                         <div class="form-group position-relative">
                             <label>Reason</label>
