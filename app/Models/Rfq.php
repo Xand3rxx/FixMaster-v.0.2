@@ -72,6 +72,17 @@ class Rfq extends Model
         return $this->hasMany(RfqSupplier::class, 'rfq_id');
     }
 
+    public function rfqSupplierDispatch()
+    {
+        return $this->hasOne(RfqSupplierDispatch::class, 'rfq_id');
+    }
+
+    public function rfqSupplierDispatches()
+    {
+        return $this->hasMany(RfqSupplierDispatch::class, 'rfq_id');
+    }
+
+
     public function rfqSupplierInvoice()
     {
         return $this->hasOne(RfqSupplierInvoice::class, 'rfq_id');
@@ -80,6 +91,10 @@ class Rfq extends Model
     public function rfqSuppliesInvoices()
     {
         return $this->hasMany(RfqSupplierInvoice::class, 'rfq_id');
+    }
+    public function rfqDispatchNotification()
+    {
+        return $this->hasOne(RfqDispatchNotification::class, 'rfq_id');
     }
 
     public function issuer()
@@ -111,6 +126,19 @@ class Rfq extends Model
      */
     //Scope to return all services  
     public function scopePendingQuotes($query)
+    {
+        return $query->select('*')
+            ->where('status', 'Pending');
+    }
+
+    /** 
+     * Scope a query to only include all pending requests
+     * 
+     * @param \Illuminate\Database\Eloquent\Builder $query
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    //Scope to return all services  
+    public function scopeOpenedRfqs($query)
     {
         return $query->select('*')
             ->where('status', 'Pending');

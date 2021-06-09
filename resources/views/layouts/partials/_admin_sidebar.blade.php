@@ -94,7 +94,7 @@
 
 
 
-      <li class="nav-item {{ Route::currentRouteNamed('admin.location_request') ? 'active' : '' }}"><a href="{{ route('admin.location_request', app()->getLocale()) }}" class="nav-link"><i data-feather="map-pin"></i> <span>Location Request</span></a></li>
+      {{-- <li class="nav-item {{ Route::currentRouteNamed('admin.location_request') ? 'active' : '' }}"><a href="{{ route('admin.location_request', app()->getLocale()) }}" class="nav-link"><i data-feather="map-pin"></i> <span>Location Request</span></a></li> --}}
       <li class="nav-item {{ Route::currentRouteNamed('admin.seviced-areas.index') ? 'active' : '' }}"><a href="{{ route('admin.seviced-areas.index', app()->getLocale()) }}" class="nav-link"><i data-feather="check-circle"></i> <span>Serviced Areas</span></a></li>
 
       <li class="nav-item with-sub {{ Route::currentRouteNamed('admin.add_loyalty', 'admin.loyalty_list', 'admin.loyalty_history') ? 'active show' : '' }}">
@@ -103,7 +103,7 @@
         <li class="{{ Route::currentRouteNamed('admin.add_loyalty') ? 'active' : '' }}"><a href="{{ route('admin.add_loyalty',  app()->getLocale()) }}">Add</a></li>
         <li class="{{ Route::currentRouteNamed('admin.loyalty_list') ? 'active' : '' }}"><a href="{{ route('admin.loyalty_list',  app()->getLocale()) }}">List</a></li>
         <li class="{{ Route::currentRouteNamed('admin.loyalty_history') ? 'active' : '' }}"><a href="{{ route('admin.loyalty_history',  app()->getLocale()) }}">History</a></li>
-     
+
 
         </ul>
       </li>
@@ -127,12 +127,13 @@
         </ul>
       </li> --}}
 
-      <li class="nav-item with-sub {{ Route::currentRouteNamed('admin.disbursed_payments', 'admin.received_payments') ? 'active show' : '' }}">
+      <li class="nav-item with-sub {{ Route::currentRouteNamed('admin.payments.disbursed', 'admin.received_payments','admin.payments.pending') ? 'active show' : '' }}">
         <a href="" class="nav-link"><i data-feather="credit-card"></i> <span>Payments</span></a>
         <ul>
-          <li class="{{ Route::currentRouteNamed('') ? 'active' : '' }}"><a href="#">Disbursed</a></li>
+          <li class="{{ Route::currentRouteNamed('admin.payments.disbursed') ? 'active' : '' }}"><a href="{{ route('admin.payments.disbursed',  app()->getLocale()) }}">Disbursed</a></li>
           <li class="{{ Route::currentRouteNamed('') ? 'active' : '' }}"><a href="#">Received</a></li>
           <li class="{{ Route::currentRouteNamed('') ? 'active' : '' }}"><a href="#">Verify</a></li>
+          <li class="{{ Route::currentRouteNamed('admin.payments.pending') ? 'active' : '' }}"><a href="{{ route('admin.payments.pending',  app()->getLocale()) }}">Pending Payments</a></li>
         </ul>
       </li>
 
@@ -184,9 +185,9 @@
       </li>
 
       <li class="nav-item with-sub {{ Route::currentRouteNamed('admin.rfq', 'admin.supplier_invoices') ? 'active show' : '' }}">
-        <a href="" class="nav-link"><i data-feather="file-text"></i> <span>RFQ's</span></a>
+        <a href="" class="nav-link"><i data-feather="file-text"></i> <span>RFQ's @if($newQuotes > 0)<span class="badge badge-primary">{{ $newQuotes }}</span> @endif</a>
         <ul>
-          <li class="{{ Route::currentRouteNamed('admin.rfq') ? 'active' : '' }}"><a href="{{ route('admin.rfq', app()->getLocale()) }}">Requests</a></li>
+          <li class="{{ Route::currentRouteNamed('admin.rfq') ? 'active' : '' }}"><a href="{{ route('admin.rfq', app()->getLocale()) }}">Requests @if($newQuotes > 0)<sup class="font-weight-bold text-primary">{{ $newQuotes }}</sup>@endif</a></li>
         <li class="{{ Route::currentRouteNamed('admin.supplier_invoices') ? 'active' : '' }}"><a href="{{ route('admin.supplier_invoices', app()->getLocale()) }}">Supplier's invoices</a></li>
         </ul>
       </li>
@@ -202,10 +203,10 @@
       <li class="nav-item {{ Route::currentRouteNamed('admin.taxes.index') ? 'active' : '' }}"><a href="{{ route('admin.taxes.index', app()->getLocale()) }}" class="nav-link"><i data-feather="percent"></i> <span>Tax Management</span></a></li>
 
       <li class="nav-item with-sub {{ Route::currentRouteNamed('admin.tools.index', 'admin.tools_request') ? 'active show' : '' }}">
-        <a href="" class="nav-link"><i data-feather="box"></i> <span>Tools</span></a>
+        <a href="" class="nav-link"><i data-feather="box"></i> <span>Tools @if($toolRequests > 0)<span class="badge badge-primary">{{ $toolRequests }}</span> @endif</span></a>
         <ul>
         <li class="{{ Route::currentRouteNamed('admin.tools.index') ? 'active' : '' }}"><a href="{{ route('admin.tools.index', app()->getLocale()) }}">Inventory</a></li>
-        <li class="{{ Route::currentRouteNamed('admin.tools_request') ? 'active' : '' }}"><a href="{{ route('admin.tools_request', app()->getLocale()) }}">Requests</a></li>
+        <li class="{{ Route::currentRouteNamed('admin.tools_request') ? 'active' : '' }}"><a href="{{ route('admin.tools_request', app()->getLocale()) }}">Requests @if($toolRequests > 0)<sup class="font-weight-bold text-danger">{{ $toolRequests }}</sup> @endif</a></li>
         </ul>
       </li>
 
@@ -218,11 +219,11 @@
       </li> --}}
 
       <li class="nav-item with-sub {{ Route::currentRouteNamed('admin.warranty_list', 'admin.issued_warranty', 'admin.warranty_summary', 'admin.edit_warranty') ? 'active show' : '' }}">
-        <a href="" class="nav-link"><i data-feather="award"></i> <span>Warranty Management</span><span class="badge badge-primary">{{ $unresolvedWarranties }}</suspan></span> </a>
-        
+        <a href="" class="nav-link"><i data-feather="award"></i> <span>Warranty Management</span>@if($unresolvedWarranties > 0)<span class="badge badge-primary">{{ $unresolvedWarranties }}</span>@endif</span> </a>
+
         <ul>
           <li class="{{ Route::currentRouteNamed('admin.warranty_list', 'admin.warranty_summary', 'admin.edit_warranty') ? 'active' : '' }}"><a href="{{route('admin.warranty_list', app()->getLocale())}}">List</a></li>
-          <li class="{{ Route::currentRouteNamed('admin.issued_warranty') ? 'active' : '' }}"><a href="{{route('admin.issued_warranty', app()->getLocale())}}">Issued <sup class="font-weight-bold text-danger">{{ $unresolvedWarranties }}</sup></a></li>
+          <li class="{{ Route::currentRouteNamed('admin.issued_warranty') ? 'active' : '' }}"><a href="{{route('admin.issued_warranty', app()->getLocale())}}">Issued @if($unresolvedWarranties > 0)<sup class="font-weight-bold text-danger">{{ $unresolvedWarranties }}</sup>@endif</a></li>
         </ul>
       </li>
 

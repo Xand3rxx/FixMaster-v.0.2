@@ -103,9 +103,10 @@
                                                 <a href="{{ route('invoice', ['locale' => app()->getLocale(), 'invoice' => $invoice['uuid']]) }}" class="dropdown-item details text-info"><i data-feather="file-text" class="fea icon-sm"></i> {{ $invoice['invoice_type'] }}</a>
                                             @endforeach
 
-                                           
+
                                             @if($myServiceRequest->status_id == 4 && !empty($myServiceRequest['warranty']))
-                                            @if(!CustomHelpers::ifDateIsPast($myServiceRequest['warranty']['expiration_date']))
+                                          
+                                            @if($myServiceRequest['warranty']['expiration_date'] >  Carbon\Carbon::now())
                                                 <div class="dropdown-divider"></div>
                                                 
                                                 @if($myServiceRequest['warranty']['initiated'] != 'Yes')

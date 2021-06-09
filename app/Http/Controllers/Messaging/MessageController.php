@@ -21,6 +21,7 @@ use App\Jobs\PushSMS;
 use Mail;
 use Route;
 use Auth;
+use App\Mail\MailNotify;
 
 class MessageController extends Controller
 {
@@ -262,7 +263,7 @@ class MessageController extends Controller
         }
 
     if($from!="")
-        $sender = DB::table('users')->where('users.email', $from)->first();
+       $sender = DB::table('users')->where('users.email', $from)->first();  
     else
        $from = "dev@fix-master.com";
 
@@ -286,11 +287,13 @@ class MessageController extends Controller
             
 
         $message_array = ['to'=>$to, 'from'=>$from, 'subject'=>$subject, 'content'=>$message];
-        
-        $this->dispatch(new PushEmails($message_array));
-        
-        
-           
+  
+         $mail = $this->dispatch(new PushEmails($message_array));
+   
+         return $mail;
+      
+
+    
         // if(!empty($feature) && $sms!=""){
         //     $this->dispatch(new PushSMS($sms));
         // }
@@ -302,8 +305,10 @@ class MessageController extends Controller
 
     private function replacePlaceHolders($variables, $messageTemp)
     {
-        foreach ($variables as $key => $value) {
-            $messageTemp = str_replace('{' . $key . '}', $value, $messageTemp);
+        if($key == '{url}'){
+            $messageTemp = str_replace('{'.$key.'}', '<button style="background-color:red">'.$value.'<button>', $messageTemp);  
+        }else{
+            $messageTemp = str_replace('{'.$key.'}', $value, $messageTemp);
         }
 
         return $messageTemp;

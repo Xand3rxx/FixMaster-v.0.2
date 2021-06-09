@@ -21,9 +21,13 @@
                   </tr>
                   <tr>
                     <td class="tx-medium">Client Name</td>
-                    <td class="tx-color-03">{{ Str::title($supplierInvoice['rfq']['client']['account']['first_name'] ." ". $supplierInvoice['rfq']['client']['account']['last_name']) }}</td>
+                    <td class="tx-color-03">{{ Str::title($supplierInvoice['rfq']['serviceRequest']['client']['account']['first_name'] ." ". $supplierInvoice['rfq']['serviceRequest']['client']['account']['last_name']) }}</td>
                   </tr>
                   
+                  <tr>
+                    <td class="tx-medium">Client Address</td>
+                    <td class="tx-color-03">{{ !empty($supplierInvoice['rfq']['serviceRequest']['client']['contact']['address']) ? $supplierInvoice['rfq']['serviceRequest']['client']['contact']['address'] : 'UNAVAILABLE' }}</td>
+                  </tr>
                   <tr>
                     <td class="tx-medium">Grand Total</td>
                     <td class="tx-color-03">₦{{ number_format($supplierInvoice->total_amount) ?? 0 }}</td>

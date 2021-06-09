@@ -36,6 +36,18 @@ $(document).ready(function() {
         });
     });
 
+    $(document).on('click', '#supplier-delivery-date', function() {
+        $('#supplier-delivery-date').datetimepicker({
+            // format: 'L', //LT for time only
+            // inline: true,
+            // sideBySide: true,
+            timepicker:true,
+            format: 'Y/m/d H:i',
+            formatDate: 'Y/m/d',
+            minDate: '-1970/01/02', // yesterday is minimum date
+            mask: true,
+        });
+    });
 
     //Prevent characters or string asides number in phone number input field
     $("#phone_number, #other_phone_number, #account_number, .amount").on("keypress keyup blur", function(event) {

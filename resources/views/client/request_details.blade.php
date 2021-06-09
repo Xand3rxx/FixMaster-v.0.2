@@ -43,19 +43,19 @@
             </div>
         </div>
 
-        {{-- {{ dd($requestDetail->service_request_assignee) }} --}}
-        
-   
-        @if((!empty($assignedCSE->status) && $assignedCSE->status == 'Active'))
+       
+        @if(!empty($requestExists->service_request_assignees))
+        @foreach($requestExists->service_request_assignees as $item)
+          @if($item->user->roles[0]->url == 'cse' && $item->status == 'Active')
         <h5 class="mt-4">CSE Assigned</h5>
         <div class="col-lg-12 col-12 mt-4">
             <div class="card rounded bg-light overflow-hidden border-0 m-2">
                 <div class="row align-items-center no-gutters">
                     <div class="col-md-5">
-                         @if(!empty($requestDetail->cses[0]->account->avatar) &&
-                        file_exists(public_path().'/assets/user-avatars/'.$requestDetail->cses[0]->account->avatar))
-                            <img src="{{ asset('assets/user-avatars/'.$requestDetail->cses[0]->account->avatar) }}" class="img-fluid" alt="" />
-                        @elseif($requestDetail->cses[0]->gender == 'male')
+                         @if(!empty($item->user->account->avatar) &&
+                        file_exists(public_path().'/assets/user-avatars/'.$item->user->account->avatar))
+                            <img src="{{ asset('assets/user-avatars/'.$item->user->account->avatar) }}" class="img-fluid" alt="" />
+                        @elseif($item->user->account->gender == 'male')
                             <img src="{{ asset('assets/images/default-male-avatar.png') }}" alt="Default male profile avatar" class="img-fluid" />
                         @else
                             <img src="{{ asset('assets/images/default-female-avatar.png') }}" alt="Default female profile avatar" class="img-fluid" />
@@ -65,7 +65,7 @@
 
                     <div class="col-md-7">
                         <div class="card-body">
-                            <h6 class="text-primary font-weight-bold">{{ $requestDetail->cses[0]->account->first_name.' '.$requestDetail->cses[0]->account->last_name }} <small class="text-muted d-block">{{ $requestDetail->cses[0]->roles[0]->name ?? 'Customer Service Executive' }} | FixMaster</small></h6>
+                            <h6 class="text-primary font-weight-bold">{{ $item->user->account->first_name.' '.$item->user->account->avatar->last_name }} <small class="text-muted d-block">{{ $requestDetail->cses[0]->roles[0]->name ?? 'Customer Service Executive' }} | FixMaster</small></h6>
                             <ul class="list-unstyled mb-0">
                                 <li class="list-inline-item"><i class="mdi mdi-star text-warning"></i></li>
                                 <li class="list-inline-item"><i class="mdi mdi-star text-warning"></i></li>
@@ -90,6 +90,8 @@
                 <!--end row-->
             </div>
         </div>
+        @endif
+        @endforeach
         @endif
        
 

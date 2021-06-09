@@ -24,11 +24,16 @@ class ProfileController extends Controller
     public function dashboard()
     {
         // return  \App\Models\User::with('account', 'supplier', 'contact', 'ratings', 'supplierSentInvoices')->findOrFail(Auth::id());
-        
+        $causalAgent  =  \App\Models\ServiceRequestWarrantyReport::where('causal_agent_id', Auth::id())->with('rfqInvoices')->get();
+     
         return view('supplier.index', [
             'profile'   =>  \App\Models\User::with('account', 'contact', 'ratings')->findOrFail(Auth::id()),
-            'rfqs'  =>  \App\Models\Rfq::where('status', 'Pending')->orderBy('created_at', 'DESC')->get()
-        ]);
+            'rfqs'  =>  \App\Models\Rfq::where('status', 'Pending')->orderBy('created_at', 'DESC')->get(),
+            'causalAgentAmt'  => !empty($causalAgent)? $causalAgent: '0',
+      ]);
+
+     
+
     }
 
     /**
@@ -38,9 +43,11 @@ class ProfileController extends Controller
      */
     public function index()
     {
+       
         return view('supplier.view_profile', [
             'profile'   =>  \App\Models\User::with('supplier', 'account', 'contact', 'ratings')->findOrFail(Auth::id())
         ]);
+
     }
 
     /**

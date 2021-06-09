@@ -338,8 +338,7 @@ function insertTextArea(areaId,text) {
             <button type="button" class="btn btn-xs btn-placeholder btn-secondary" data-val="completed_jobs">Completed Jobs</button>
             <button type="button" class="btn btn-xs btn-placeholder btn-secondary" data-val="technician_rating">Technician Rating</button>
             <button type="button" class="btn btn-xs btn-placeholder btn-secondary" data-val="cse_name">CSE Name</button>
-
-
+            <button type="button" class="btn btn-xs btn-placeholder btn-secondary" data-val="discount">Discount</button>
 
 
 

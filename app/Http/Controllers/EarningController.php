@@ -50,7 +50,7 @@ class EarningController extends Controller
 //        dd($request->input('earnings')/100);
 
         $updateEarnings = $earning->update([
-            'earnings' => $request->input('earnings')/100
+            'earnings' => $request->input('earnings')
         ]);
 
         if($updateEarnings)

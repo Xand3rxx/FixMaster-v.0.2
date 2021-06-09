@@ -38,7 +38,7 @@
                                 <tr>
                                     <th class="text-center">#</th>
                                     <th>Roles</th>
-                                    <th class="text-center">Earnings (%)</th>
+                                    <th class="text-center">Earnings</th>
                                     <th class="text-center">Action</th>
                                 </tr>
                                 </thead>
@@ -47,7 +47,7 @@
                                     <tr>
                                         <td class="tx-color-03 tx-center">{{ $loop->iteration }}</td>
                                         <td class="tx-medium">{{ $earning['role_name'] }}</td>
-                                        <td class="tx-medium text-center">{{ $earning['earnings']*100 }}</td>
+                                        <td class="tx-medium text-center">{{ $earning['earnings'] }}</td>
                                         <td class="text-center">
                                             <div class="dropdown-file">
                                                 <a href="" class="dropdown-link" data-toggle="dropdown"><i data-feather="more-vertical"></i></a>

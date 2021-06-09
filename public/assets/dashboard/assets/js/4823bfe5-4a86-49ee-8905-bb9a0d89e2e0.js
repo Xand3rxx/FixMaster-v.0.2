@@ -79,7 +79,42 @@ $(document).ready(function (){
 
     let count = 1;
 
-    $(document).on('click', '#resolved-details', function(event) {
+    $(document).on('click', '#assign-Cse', function(event) {
+      event.preventDefault();
+      let route = $(this).attr('data-url');
+      let job_reference = $(this).attr('data-job');
+      
+      $.ajax({
+          url: route,
+          beforeSend: function() {
+            $("#modal-body-assign").html('<div class="d-flex justify-content-center mt-4 mb-4"><span class="loadingspinner"></span></div>');
+          },
+          // return the result
+          success: function(result) {
+              $('#job').text(job_reference);
+              $('#modal-body-assign').html('');
+              $('#modal-body-assign').modal("show");
+              $('#modal-body-assign').html(result).show();
+          },
+          complete: function() {
+              $("#spinner-icon").hide();
+          },
+          error: function(jqXHR, testStatus, error) {
+              var message = error+ ' An error occured while trying to retireve '+ ' ' +' service details.';
+              var type = 'error';
+              displayMessage(message, type);
+              $("#spinner-icon").hide();
+          },
+          timeout: 8000
+      })
+    });
+    
+
+  });
+
+
+
+ $(document).on('click', '#resolved-details', function(event) {
       event.preventDefault();
       let route = $(this).attr('data-url');
       let job_reference = $(this).attr('data-job');
@@ -107,11 +142,7 @@ $(document).ready(function (){
           },
           timeout: 8000
       })
-    });
+    
     
 
   });
-
-
-
-

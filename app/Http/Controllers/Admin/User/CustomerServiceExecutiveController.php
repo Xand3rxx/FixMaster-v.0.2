@@ -17,7 +17,6 @@ class CustomerServiceExecutiveController extends Controller
      */
     public function index()
     {
-        // dd(\App\Models\Cse::with('user', 'user.account', 'user.contact', 'user.roles')->withCount('service_request_assgined')->get());
         return view('admin.users.cse.index')->with([
             'users' => \App\Models\Cse::with('user', 'user.account', 'user.contact', 'user.roles')->withCount('service_request_assgined')->get(),
         ]);
@@ -35,7 +34,6 @@ class CustomerServiceExecutiveController extends Controller
             'banks' => \App\Models\Bank::select('id', 'name')->orderBy('name', 'ASC')->get(),
             'franchisees' => \App\Models\Franchisee::select('id', 'cac_number')->latest()->get(),
             'applicant' => $request->session()->get('applicant')
-            // 'town' => \App\Models\Town::select('id', 'name')->latest()->get(),
         ]);
     }
 

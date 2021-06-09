@@ -32,25 +32,20 @@ class RfqController extends Controller
 
         return view('admin.rfq.index', [
             'rfqs'   =>  Rfq::orderBy('created_at', 'DESC')->get(),
-        ])->with('i');
+        ]);
     }
 
     public function rfqDetails($language, $uuid){
 
         return view('admin.rfq._details', [
-            'rfqDetails'    =>  Rfq::where('uuid', $uuid)->firstOrFail(),
-        ])->with('i');
+            'rfqDetails'    =>  Rfq::where('uuid', $uuid)->with('rfqBatches.supplierInvoiceBatches', 'rfqSupplierInvoice.supplierDispatch')->first(),
+        ]);
     }
 
     public function supplierInvoices(){
 
-        // return RfqSupplierInvoice::with('rfq', 'supplier')->get()
-        // ->groupBy(function($query) {
-        //     return $query->rfq_id;
-        // });
-
         return view('admin.rfq.supplier_invoices', [
-            'rfqs'   =>  RfqSupplierInvoice::with('rfq', 'supplier')
+            'rfqs'   =>  RfqSupplierInvoice::with('rfq', 'supplier', 'selectedSupplier')
             ->orderBy('total_amount', 'ASC')
             ->orderBy('delivery_time', 'ASC')
             ->orderBy('created_at', 'DESC')
@@ -58,6 +53,7 @@ class RfqController extends Controller
             ->groupBy(function($query) {
                 return $query->rfq_id;
             }),
+
 
         ]);
     }
@@ -138,13 +134,17 @@ class RfqController extends Controller
                 ]);
             }
             
+            //Record service request progress of `A supplier sent an invoice`
+            \App\Models\ServiceRequestProgress::storeProgress(auth()->user()->id, $supplier['rfq']['service_request_id'], 2, \App\Models\SubStatus::where('uuid', '124d3a2d-6efc-4279-a156-438080c33374')->firstOrFail()->id);
 
             $supplierUpdate = true;
 
-        });
+        }, 3);
 
         if($supplierUpdate){
-            $this->supplierInvoice($supplier->rfq->service_request_id, $supplier->rfq_id);
+            //Notification code goes here...
+
+            // $this->supplierInvoice($supplier->rfq->service_request_id, $supplier->rfq_id);
             return back()->with('success', $supplier['supplier']['account']['first_name'] ." ". $supplier['supplier']['account']['last_name'].' invoice has been selected for '.$supplier->rfq->unique_id.' RFQ');
         }
 
@@ -186,7 +186,7 @@ class RfqController extends Controller
         $meters = $kilometers * 1000;
 
         // return compact('miles','feet','yards','kilometers','meters'); 
-        return round($kilometers, 2); 
+        return round($kilometers, 2)??0; 
     }
 
 }

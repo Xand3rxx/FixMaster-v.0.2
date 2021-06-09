@@ -1,3 +1,4 @@
+
 <aside class="aside aside-fixed">
   <div class="aside-header">
     <a href="#" class="aside-logo"></a>
@@ -41,12 +42,17 @@
       <li class="nav-item {{ Route::currentRouteNamed('supplier.index') ? 'active' : '' }}"><a href="{{ route('supplier.index', app()->getLocale()) }}" class="nav-link"><i data-feather="airplay"></i> <span>Home</span></a></li>
 
       <li class="nav-item with-sub {{ Route::currentRouteNamed('supplier.rfq', 'supplier.rfq_send_supplier_invoice', 'supplier.rfq_sent_invoices', 'supplier.rfq_approved_invoices', 'supplier.rfq_declined_invoices', 'supplier.rfq_link_details') ? 'active show' : '' }}">
-        <a href="" class="nav-link"><i data-feather="git-pull-request"></i> <span>Requests For Quote <span class="badge badge-primary">{{ $newQuotes }}</span></span></a>
+        <a href="" class="nav-link"><i data-feather="git-pull-request"></i> <span>Requests For Quote @if($newQuotes > 0)<span class="badge badge-primary">{{ $newQuotes }}</span>@endif</span></a>
         <ul>
-          <li class="{{ Route::currentRouteNamed('supplier.rfq', 'supplier.rfq_send_supplier_invoice', 'supplier.rfq_link_details') ? 'active' : '' }}"><a href="{{ route('supplier.rfq', app()->getLocale()) }}">New Quotes <sup class="font-weight-bold text-primary">{{ $newQuotes }}</sup></a></li>
+          <li class="{{ Route::currentRouteNamed('supplier.rfq', 'supplier.rfq_send_supplier_invoice', 'supplier.rfq_link_details') ? 'active' : '' }}"><a href="{{ route('supplier.rfq', app()->getLocale()) }}">New Quotes @if($newQuotes > 0)<sup class="font-weight-bold text-primary">{{ $newQuotes }}</sup>@endif</a></li>
           <li class="{{ Route::currentRouteNamed('supplier.rfq_sent_invoices') ? 'active' : '' }}"><a href="{{ route('supplier.rfq_sent_invoices', app()->getLocale()) }}">Sent Quotes</a></li>
           <li class="{{ Route::currentRouteNamed('supplier.rfq_declined_invoices') ? 'active' : '' }}"><a href="{{ route('supplier.rfq_declined_invoices', app()->getLocale()) }}">Declined Quotes</a></li>
           <li class="{{ Route::currentRouteNamed('supplier.rfq_approved_invoices') ? 'active' : '' }}"><a href="{{ route('supplier.rfq_approved_invoices', app()->getLocale()) }}">Won Quotes</a></li>
+          
+ 
+          @if(count($RfqDispatchNotification) > 0)
+          <li class="{{ Route::currentRouteNamed('supplier.rfq.warranty') ? 'active' : '' }}"><a href="{{ route('supplier.rfq.warranty', app()->getLocale()) }}">Warranty Claim Quotes<span class="badge badge-primary">{{ $warrantyQuotes }}</span></span></a></li>
+           @endif
         </ul>
       </li>
 

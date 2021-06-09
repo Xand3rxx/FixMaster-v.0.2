@@ -46,7 +46,7 @@
             </div>
             <div class="col-md-6">
               <div class="card-body pd-t-10 pd-b-15 pd-x-20 mt-2">
-                <h6 class="lh-5 mg-b-5">Your ID:<h1 class="tx-normal tx-rubik mg-b-0 mg-r-5"> {{ $profile['supplier']['unique_id'] }} </h1>
+                <h6 class="lh-5 mg-b-5">Your ID:  <h1 class="tx-normal tx-rubik mg-b-0 mg-r-5"> {{ $profile['supplier']['unique_id'] }} </h1>
                 </h6>
               </div>
             </div>
@@ -56,7 +56,7 @@
             <div class="row">
             <x-card cardtitle="Sent Quotes" cardnumber="{{ !empty($profile['supplierSentInvoices']) ? number_format($profile['supplierSentInvoices']->count()) : '0' }}" />
               <x-card cardtitle="Approved Quotes" cardnumber="{{ !empty($profile['supplierSentInvoices']) ? number_format($profile['supplierSentInvoices']->where('accepted', 'Yes')->count()) : '0' }}" />
-              <x-card cardtitle="Amount Earned" cardnumber="₦32,890" />
+              <x-card cardtitle="Amount Earned" cardnumber="₦{{  !empty($profile['supplierSentInvoices']) ?number_format(CustomHelpers::getTotalAmmount($profile, $causalAgentAmt)) : 0}}" />
             </div>
           </div>
           
@@ -87,7 +87,7 @@
               <tbody>
                 @foreach ($rfqs as $rfq)
                 <tr>
-                  <td class="tx-color-03 tx-center">{{ ++$i }}</td>
+                  <td class="tx-color-03 tx-center">{{ $loop->iteration }}</td>
                   <td class="tx-medium">{{ $rfq->serviceRequest->unique_id }}</td>
                   <td class="tx-medium">{{ $rfq->unique_id }}</td>
                   <td class="tx-medium">{{ Str::title($rfq['issuer']['account']['first_name'] ." ". $rfq['issuer']['account']['last_name']) }}</td>
@@ -119,19 +119,14 @@
         </div><!-- card -->
       </div>
 
-      <div class="col-md-12 col-xl-12 mg-t-10">
+      {{-- <div class="col-md-12 col-xl-12 mg-t-10">
         
         <div class="card ht-100p">
           <div class="card-header d-flex align-items-center justify-content-between">
             <h6 class="mg-b-0">Recent Payments</h6>
-            {{-- <div class="d-flex tx-18">
-              <a href="" class="link-03 lh-0"><i class="icon ion-md-refresh"></i></a>
-              <a href="" class="link-03 lh-0 mg-l-10"><i class="icon ion-md-more"></i></a>
-            </div> --}}
+            {
           </div>
-          {{-- @if(Auth::user()->payments->count() > 0) --}}
           <ul class="list-group list-group-flush tx-13">
-       {{-- @foreach(Auth::user()->payments as $payment) --}}
             <li class="list-group-item d-flex pd-sm-x-20">
               <div class="avatar d-none d-sm-block"><span class="avatar-initial rounded-circle bg-teal"><i class="icon ion-md-checkmark"></i></span></div>
               <div class="pd-sm-l-10">
@@ -143,18 +138,13 @@
                 <small class="tx-12 tx-success mg-b-0">Completed</small>
               </div>
             </li>
-        {{-- @endforeach --}}
           </ul>
           <div class="card-footer text-center tx-13">
           <a href="{{ route('quality-assurance.payments',app()->getLocale()) }}" class="link-03">View All Transactions <i class="icon ion-md-arrow-down mg-l-5"></i></a>
           </div><!-- card-footer -->
-          {{-- @else --}}
-          {{-- <div class="card-footer text-center tx-13">
-            <h6 class="text-center">No Recent Payments</h6>
-          </div> --}}
-          {{-- @endif --}}
+          
         </div><!-- card -->
-      </div>
+      </div> --}}
 
 
     </div><!-- row -->

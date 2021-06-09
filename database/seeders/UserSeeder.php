@@ -33,9 +33,9 @@ class UserSeeder extends Seeder
         // Super Admin Account
         $superAdminAccount = \App\Models\Account::create([
             'user_id'       =>  1,
-            'first_name'    => "Ninth Binary",
+            'first_name'    => "FixMaster",
             'middle_name'   => "",
-            'last_name'     => "Developer",
+            'last_name'     => "Admin",
             'gender'        => 'male',
             'avatar'        => 'default-male-avatar.png'
         ]);
