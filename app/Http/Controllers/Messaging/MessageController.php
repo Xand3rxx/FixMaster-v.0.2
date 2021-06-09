@@ -257,8 +257,10 @@ class MessageController extends Controller
             return response()->json(["message" => "Message Template not found!"], 404);
     
             }
+           
             $message = $this->replacePlaceHolders($mail_data, $template->content);
             //$sms = $this->replacePlaceHolders($mail_data, $template->sms);
+            
             $subject = $template->title;
         }
 
@@ -287,6 +289,7 @@ class MessageController extends Controller
             
 
         $message_array = ['to'=>$to, 'from'=>$from, 'subject'=>$subject, 'content'=>$message];
+       
   
          $mail = $this->dispatch(new PushEmails($message_array));
    
@@ -305,10 +308,8 @@ class MessageController extends Controller
 
     private function replacePlaceHolders($variables, $messageTemp)
     {
-        if($key == '{url}'){
-            $messageTemp = str_replace('{'.$key.'}', '<button style="background-color:red">'.$value.'<button>', $messageTemp);  
-        }else{
-            $messageTemp = str_replace('{'.$key.'}', $value, $messageTemp);
+        foreach ($variables as $key => $value) {
+            $messageTemp = str_replace('{' . $key . '}', $value, $messageTemp);
         }
 
         return $messageTemp;
