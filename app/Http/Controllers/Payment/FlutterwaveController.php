@@ -20,6 +20,7 @@ use App\Traits\GenerateUniqueIdentity as Generator;
 //use App\Http\Controllers\Payment\FlutterwaveController;
 
 use App\Http\Controllers\Client\ClientController;
+use App\Http\Controllers\InvoiceController;
 use Illuminate\Support\Facades\DB;
 use Session;
 
@@ -56,49 +57,52 @@ class FlutterwaveController extends Controller
             // 'myContact_id'    => 'required',
         ]);
 
-        // $Serviced_areas = ServicedAreas::where('town_id', '=', $request['town_id'])->orderBy('id', 'DESC')->first();
-        // if ($Serviced_areas === null) {
-        //     return back()->with('error', 'sorry!, this area you selected is not serviced at the moment, please try another area');
-        // }
+        if($request['payment_for'] === 'invoice'){
+            $data = [
+                'logistics_cost' => $request['logistics_cost'],
+                'retention_fee' => $request['retention_fee'],
+                'tax' => $request['tax'],
+                'actual_labour_cost' => $request['actual_labour_cost'],
+                'actual_material_cost' => $request['actual_material_cost'],
+                'labour_markup' => $request['labour_markup'],
+                'material_markup' => $request['material_markup'],
+                'cse_assigned' => $request['cse_assigned'],
+                'technician_assigned' => $request['technician_assigned'],
+                'supplier_assigned' => $request['supplier_assigned'],
+                'qa_assigned' => $request['qa_assigned'],
+                'royalty_fee' => $request['fixMasterRoyalty'],
+                'booking_fee' => $request['booking_fee'],
+                'payment_for' => $request['payment_for'],
+                'invoiceUUID' => $request['uuid']
+            ];
+    
+            $request->session()->put('collaboratorPayment', $data);
+        }
+        else if($request['payment_for'] === 'invoice'){
+            $Serviced_areas = ServicedAreas::where('town_id', '=', $request['town_id'])->orderBy('id', 'DESC')->first();
+               if ($Serviced_areas === null) {
+                   return back()->with('error', 'sorry!, this area you selected is not serviced at the moment, please try another area');
+               }
+        
+               // upload multiple media files
+               foreach($request->media_file as $key => $file)
+                   {
+                       $originalName[$key] = $file->getClientOriginalName();
+        
+                       $fileName = sha1($file->getClientOriginalName() . time()) . '.'.$file->getClientOriginalExtension();
+                       $filePath = public_path('assets/service-request-media-files');
+                       $file->move($filePath, $fileName);
+                       $data[$key] = $fileName;
+                   }
+                       $data['unique_name']   = json_encode($data);
+                       $data['original_name'] = json_encode($originalName);
+                       // return $data;
+        
+               // $request->session()->put('order_data', $request);
+               $request->session()->put('order_data', $request->except(['media_file']));
+               $request->session()->put('medias', $data);
+            }
 
-        // // upload multiple media files
-        // foreach($request->media_file as $key => $file)
-        //     {
-        //         $originalName[$key] = $file->getClientOriginalName();
-
-        //         $fileName = sha1($file->getClientOriginalName() . time()) . '.'.$file->getClientOriginalExtension();
-        //         $filePath = public_path('assets/service-request-media-files');
-        //         $file->move($filePath, $fileName);
-        //         $data[$key] = $fileName;
-        //     }
-        //         $data['unique_name']   = json_encode($data);
-        //         $data['original_name'] = json_encode($originalName);
-        //         // return $data;
-
-        // // $request->session()->put('order_data', $request);
-        // $request->session()->put('order_data', $request->except(['media_file']));
-        // $request->session()->put('medias', $data);
-
-        $request->session()->put('InvoiceUUID', $request->uuid);
-
-        $data = [
-            'logistics_cost' => $request['logistics_cost'],
-            'retention_fee' => $request['retention_fee'],
-            'tax' => $request['tax'],
-            'actual_labour_cost' => $request['actual_labour_cost'],
-            'actual_material_cost' => $request['actual_material_cost'],
-            'labour_markup' => $request['labour_markup'],
-            'material_markup' => $request['material_markup'],
-            'cse_assigned' => $request['cse_assigned'],
-            'technician_assigned' => $request['technician_assigned'],
-            'supplier_assigned' => $request['supplier_assigned'],
-            'qa_assigned' => $request['qa_assigned'],
-            'royalty_fee' => $request['fixMasterRoyalty'],
-            'booking_fee' => $request['booking_fee']
-        ];
-
-
-        $request->session()->put('collaboratorPayment', $data);
 
         // return dd(  );
 
@@ -186,33 +190,8 @@ class FlutterwaveController extends Controller
     public function verify(Request $request)
     {
         $input_data = $request->all();
-
-        $invoiceUUID = Session::get('InvoiceUUID');
         $paymentRecord = Session::get('collaboratorPayment');
-
-        $booking_fee = $paymentRecord['booking_fee'];
-        $actual_labour_cost = $paymentRecord['actual_labour_cost'];
-        $labour_retention_fee = $paymentRecord['retention_fee'] * $paymentRecord['actual_labour_cost'];
-        $labour_cost_after_retention = $paymentRecord['actual_labour_cost'] - $labour_retention_fee;
-        $labourMarkup = $paymentRecord['labour_markup'];
-        $actual_material_cost = $paymentRecord['actual_material_cost'];
-        $material_retention_fee = $paymentRecord['retention_fee'] * $paymentRecord['actual_material_cost'];
-        $material_cost_after_retention = $paymentRecord['actual_material_cost'] - $material_retention_fee;
-        $materialMarkup = $paymentRecord['material_markup'];
-        $cse_assigned = $paymentRecord['cse_assigned'];
-        $technician_assigned = $paymentRecord['technician_assigned'];
-        $supplier_assigned = $paymentRecord['supplier_assigned'];
-        $qa_assigned = $paymentRecord['qa_assigned'];
-
-        $royaltyFee = $paymentRecord['royalty_fee'];
-        $logistics = $paymentRecord['logistics_cost'];
-        $tax = $paymentRecord['tax'];
-
-        $invoice = Invoice::where('uuid', $invoiceUUID)->first();
-
-        $serviceRequestPayment = ServiceRequestPayment::where('service_request_id', $invoice['service_request_id'])->firstOrFail();
-        $serviceRequest = ServiceRequest::where('id', $invoice['service_request_id'])->firstOrFail();
-
+        
         $trans_id = $request->get('tx_ref', '');
 
         $paymentDetails = Payment::where('reference_id', $trans_id)->orderBy('id', 'DESC')->first();
@@ -257,76 +236,27 @@ class FlutterwaveController extends Controller
 
                 // NUMBER 1: Instantiate the clientcontroller class in this controller's method in order to save request
                 $client_controller = new ClientController;
+                $invoice_controller = new InvoiceController;
 
                 if($paymentDetails->update()){
                     // NUMBER 2: add more for other payment process
-                    if($paymentDetails['payment_for'] = 'service-request' ){
+                    if($paymentDetails['payment_for'] = 'invoice')
+                    {
+                        $savePayment = $invoice_controller->saveInvoiceRecord($paymentRecord, $paymentDetails);
+                        if($savePayment){
+                            return redirect()->route('invoice', [app()->getLocale(), $paymentRecord['invoiceUUID']])->with('success', 'Invoice payment was successful!');
+                        }
+                        else
+                        {
+                            return redirect()->route('invoice', [app()->getLocale(), $paymentRecord['invoiceUUID']])->with('error', 'Invoice payment was unsuccessful!');
+                        }
+                    }
+                    else if($paymentDetails['payment_for'] = 'service-request' ){
 
-                        if($invoice) {
-                            (bool)$status = false;
-                            DB::transaction(function () use ($invoice, $paymentDetails, $serviceRequest, $serviceRequestPayment, $booking_fee, $cse_assigned, $qa_assigned, $technician_assigned, $supplier_assigned, $paymentRecord, $labour_retention_fee, $material_retention_fee, $actual_labour_cost, $actual_material_cost, $labour_cost_after_retention, $material_cost_after_retention, $labourMarkup, $materialMarkup, $royaltyFee, $logistics, $tax, &$status){
-                                $this->addCollaboratorPayment($invoice['service_request_id'],$cse_assigned,'Regular',\App\Models\Earning::where('role_name', 'CSE')->first()->earnings,null,null,\App\Models\Earning::where('role_name', 'CSE')->first()->earnings, null, null, null, null, $royaltyFee, $logistics, $tax);
-                                if($qa_assigned !== null)
-                                {
-                                    $this->addCollaboratorPayment($invoice['service_request_id'], $qa_assigned, 'Regular', \App\Models\Earning::where('role_name', 'QA')->first()->earnings, null, null, \App\Models\Earning::where('role_name', 'QA')->first()->earnings, null, null, null, null, $royaltyFee, $logistics, $tax);
-                                }
-                                $this->addCollaboratorPayment($invoice['service_request_id'],$technician_assigned,'Regular',null,$actual_labour_cost,null, $labour_cost_after_retention, $labour_cost_after_retention,$labour_retention_fee, $labourMarkup, null, $royaltyFee, $logistics, $tax);
-                                if($invoice['rfq_id'] !== null)
-                                {
-                                    $this->addCollaboratorPayment($invoice['service_request_id'], $supplier_assigned, 'Regular', null, null, $actual_material_cost, $material_cost_after_retention, $material_cost_after_retention, $material_retention_fee, null, $materialMarkup, $royaltyFee, $logistics, $tax);
-                                }
-
-                                $serviceRequest->update([
-                                    'total_amount' => $booking_fee
-                                ]);
-                                $paymentType='';
-                                if($invoice['invoice_type'] === 'Diagnosis Invoice')
-                                {
-                                    $paymentType = 'diagnosis-fee';
-                                    \App\Models\ServiceRequestProgress::storeProgress(auth()->user()->id, $invoice['service_request_id'], '2', \App\Models\SubStatus::where('uuid', '17e3ce54-2089-4ff7-a2c1-7fea407df479')->firstOrFail()->id);
-                                    \App\Models\ServiceRequestProgress::storeProgress(auth()->user()->id, $invoice['service_request_id'], '2', \App\Models\SubStatus::where('uuid', '8936191d-03ad-4bfa-9c71-e412ee984497')->firstOrFail()->id);
-                                }
-                                elseif ($invoice['invoice_type'] === 'Final Invoice')
-                                {
-                                    $paymentType = 'final-invoice-fee';
-                                    \App\Models\ServiceRequestProgress::storeProgress(auth()->user()->id, $invoice['service_request_id'], '2', \App\Models\SubStatus::where('uuid', 'c0cce9c8-1fce-47c4-9529-204f403cdb1f')->firstOrFail()->id);
-                                    \App\Models\ServiceRequestProgress::storeProgress(auth()->user()->id, $invoice['service_request_id'], '2', \App\Models\SubStatus::where('uuid', 'b82ea1c6-fc12-46ec-8138-a3ed7626e0a4')->firstOrFail()->id);
-                                }
-
-                                ServiceRequestPayment::create([
-                                    'user_id' => $invoice['client_id'],
-                                    'payment_id' => $paymentDetails['id'],
-                                    'service_request_id' => $invoice['service_request_id'],
-                                    'amount' => $booking_fee,
-                                    'unique_id' => static::generate('invoices', 'REF-'),
-                                    'payment_type' => $paymentType,
-                                    'status' => 'success'
-                                ]);
-
-                                $invoice->update([
-                                    'status' => '2',
-                                    'phase' => '2'
-                                ]);
-
-                                $status = true;
-
-                            });
-                            if($status){
-                                return redirect()->route('invoice', [app()->getLocale(), $invoiceUUID])->with('success', 'Invoice payment was successful!');
-                            }
-                            else
-                            {
-                                return redirect()->route('invoice', [app()->getLocale(), $invoiceUUID])->with('error', 'Invoice payment was unsuccessful!');
-                            }
-
-
-                        }else{
                             $client_controller->saveRequest( $request->session()->get('order_data') );
                             // $client_controller->saveRequest( $request->session()->get('medias') );
 
                             return redirect()->route('client.service.all' , app()->getLocale() )->with('success', 'payment was successful');
-                        }
-
                     }
                 }
             }else {
