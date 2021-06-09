@@ -56,28 +56,28 @@ class FlutterwaveController extends Controller
             // 'myContact_id'    => 'required',
         ]);
 
-        // $Serviced_areas = ServicedAreas::where('town_id', '=', $request['town_id'])->orderBy('id', 'DESC')->first();
-        // if ($Serviced_areas === null) {
-        //     return back()->with('error', 'sorry!, this area you selected is not serviced at the moment, please try another area');
-        // }
+        $Serviced_areas = ServicedAreas::where('town_id', '=', $request['town_id'])->orderBy('id', 'DESC')->first();
+        if ($Serviced_areas === null) {
+            return back()->with('error', 'sorry!, this area you selected is not serviced at the moment, please try another area');
+        }
 
-        // // upload multiple media files
-        // foreach($request->media_file as $key => $file)
-        //     {
-        //         $originalName[$key] = $file->getClientOriginalName();
+        // upload multiple media files
+        foreach($request->media_file as $key => $file)
+            {
+                $originalName[$key] = $file->getClientOriginalName();
 
-        //         $fileName = sha1($file->getClientOriginalName() . time()) . '.'.$file->getClientOriginalExtension();
-        //         $filePath = public_path('assets/service-request-media-files');
-        //         $file->move($filePath, $fileName);
-        //         $data[$key] = $fileName;
-        //     }
-        //         $data['unique_name']   = json_encode($data);
-        //         $data['original_name'] = json_encode($originalName);
-        //         // return $data;
+                $fileName = sha1($file->getClientOriginalName() . time()) . '.'.$file->getClientOriginalExtension();
+                $filePath = public_path('assets/service-request-media-files');
+                $file->move($filePath, $fileName);
+                $data[$key] = $fileName;
+            }
+                $uniqueName['unique_name']   = json_encode($uniqueName);
+                $uniqueName['original_name'] = json_encode($originalName);
+                // return $uniqueName;
 
-        // // $request->session()->put('order_data', $request);
-        // $request->session()->put('order_data', $request->except(['media_file']));
-        // $request->session()->put('medias', $data);
+        // $request->session()->put('order_data', $request); 
+        $request->session()->put('order_data', $request->except(['media_file']));
+        $request->session()->put('medias', $uniqueName);
 
         $request->session()->put('InvoiceUUID', $request->uuid);
 
@@ -210,8 +210,8 @@ class FlutterwaveController extends Controller
 
         $invoice = Invoice::where('uuid', $invoiceUUID)->first();
 
-        $serviceRequestPayment = ServiceRequestPayment::where('service_request_id', $invoice['service_request_id'])->firstOrFail();
-        $serviceRequest = ServiceRequest::where('id', $invoice['service_request_id'])->firstOrFail();
+        // $serviceRequestPayment = ServiceRequestPayment::where('service_request_id', $invoice['service_request_id'])->firstOrFail();
+        // $serviceRequest = ServiceRequest::where('id', $invoice['service_request_id'])->firstOrFail();
 
         $trans_id = $request->get('tx_ref', '');
 
@@ -263,6 +263,9 @@ class FlutterwaveController extends Controller
                     if($paymentDetails['payment_for'] = 'service-request' ){
 
                         if($invoice) {
+                            $serviceRequestPayment = ServiceRequestPayment::where('service_request_id', $invoice['service_request_id'])->firstOrFail();
+                            $serviceRequest = ServiceRequest::where('id', $invoice['service_request_id'])->firstOrFail();
+                            
                             (bool)$status = false;
                             DB::transaction(function () use ($invoice, $paymentDetails, $serviceRequest, $serviceRequestPayment, $booking_fee, $cse_assigned, $qa_assigned, $technician_assigned, $supplier_assigned, $paymentRecord, $labour_retention_fee, $material_retention_fee, $actual_labour_cost, $actual_material_cost, $labour_cost_after_retention, $material_cost_after_retention, $labourMarkup, $materialMarkup, $royaltyFee, $logistics, $tax, &$status){
                                 $this->addCollaboratorPayment($invoice['service_request_id'],$cse_assigned,'Regular',\App\Models\Earning::where('role_name', 'CSE')->first()->earnings,null,null,\App\Models\Earning::where('role_name', 'CSE')->first()->earnings, null, null, null, null, $royaltyFee, $logistics, $tax);
@@ -321,9 +324,8 @@ class FlutterwaveController extends Controller
 
 
                         }else{
-                            $client_controller->saveRequest( $request->session()->get('order_data') );
+                            $client_controller->saveRequest( $request->session()->get('order_data'), $request->session()->get('medias') );
                             // $client_controller->saveRequest( $request->session()->get('medias') );
-
                             return redirect()->route('client.service.all' , app()->getLocale() )->with('success', 'payment was successful');
                         }
 
