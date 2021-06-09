@@ -147,7 +147,7 @@
                             <div class="mt-4 form-row">
                                 <div class="form-group col-md-12">
                                     <label for="preferred_time">Scheduled Fix Date</label> <span style="color:red">(required)</span>
-                                    <input id="service-date-time2" type="text" readonly min="{{ \Carbon\Carbon::now()->isoFormat('2021-04-13 00:00:00') }}" class="form-control @error('preferred_time') is-invalid @enderror"
+                                    <input id="service-date-time" type="text" readonly min="{{ \Carbon\Carbon::now()->isoFormat('2021-04-13') }}" class="form-control @error('preferred_time') is-invalid @enderror"
                                      name="preferred_time"
                                       placeholder="Click to Enter Scheduled Date & Time" value="{{ old('preferred_time') }}">
                                     
@@ -402,6 +402,7 @@
 </div>
 {{--@include('cse.warranties.includes.rfq_details_modal')--}}
 
+@include('cse.requests.includes.scripts')
   
 @push('scripts')
 <script src="{{ asset('assets/dashboard/assets/js/cse/1e65edf0-c8e5-432c-8bbf-a7ed7847990f.js') }}"></script>

@@ -344,9 +344,7 @@ Route::prefix('admin')->name('admin.')->group(function () {
 });
 
 //All routes regarding clients should be in here
-
 Route::prefix('/client')->name('client.')->middleware('verified', 'monitor.clientservice.request.changes')->group(function () {
-
     //All routes regarding clients should be in here
     Route::get('/',                                      [ClientController::class, 'index'])->name('index'); //Take me to Supplier Dashboard
 
@@ -355,7 +353,7 @@ Route::prefix('/client')->name('client.')->middleware('verified', 'monitor.clien
     Route::post('/profile/update',                       [ClientController::class, 'update_profile'])->name('updateProfile');
     Route::post('/updatePassword',                       [ClientController::class, 'updatePassword'])->name('updatePassword');
 
-    Route::get('/requests',                              [ClientController::class, 'index'])->name('requests');
+    // Route::get('/requests',                              [ClientController::class, 'index'])->name('requests');
     Route::get('/requests/details/{request:id}',         [ClientController::class, 'clientRequestDetails'])->name('request_details');
     Route::get('/requests/edit/{request:id}',            [ClientController::class, 'editRequest'])->name('edit_request');
     Route::get('/requests/cancel/{request:id}',          [ClientController::class, 'cancelRequest'])->name('cancel_request');

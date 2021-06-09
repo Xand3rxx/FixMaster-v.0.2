@@ -154,7 +154,7 @@
     </div>
 
     {{-- Modals --}}
-    {{-- @include('cse.requests.includes.modals') --}}
+    @include('cse.requests.includes.modals')
     {{-- Modals End --}}
 
     @push('scripts')

@@ -1,9 +1,9 @@
 <div id="serviceRequestSummary" class="tab-pane pd-20 pd-xl-25">
     @if(count($service_request['serviceRequestReports']) > 0)
     <div class="divider-text"> Reports/Comments</div>
-    <div class="card-group">
+    <div class="card-grou">
         @foreach ($service_request['serviceRequestReports'] as $report)
-            <div class="card">
+            <div class="card row">
                 <div class="card-body shadow-none bd-primary overflow-hidden">
                 <div class="marker-primary marker-ribbon pos-absolute t-10 l-0">{{ $loop->iteration }}</div>
                 <h4>{{ $report['type'] }}</h4>
