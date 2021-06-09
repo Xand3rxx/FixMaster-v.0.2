@@ -506,7 +506,6 @@ trait Utility
 
   }
 
-}
 
 }
 
