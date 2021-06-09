@@ -251,11 +251,12 @@ class FlutterwaveController extends Controller
                             return redirect()->route('invoice', [app()->getLocale(), $paymentRecord['invoiceUUID']])->with('error', 'Invoice payment was unsuccessful!');
                         }
                     }
-                    else if($paymentDetails['payment_for'] = 'service-request' ){
 
+                    if($paymentDetails['payment_for'] = 'service-request'){
                             $client_controller->saveRequest( $request->session()->get('order_data') );
-                            // $client_controller->saveRequest( $request->session()->get('medias') );
-                            return redirect()->route('client.service.all' , app()->getLocale() )->with('success', 'payment was successful');
+                    }
+                    if($paymentDetails['payment_for'] = 'e-wallet'){
+                        $client_controller->saveRequest( $request->session()->get('order_data') );
                     }
                 }
             }else {

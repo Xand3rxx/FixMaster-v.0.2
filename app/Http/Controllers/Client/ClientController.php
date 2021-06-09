@@ -42,8 +42,9 @@ use App\Models\ServiceRequestSetting;
 use App\Models\ServiceRequestMedia;
 use App\Models\Media;
 use Image;
-use File;
-use App\Http\Controllers\Client\PaystackController;
+use File; 
+use App\Http\Controllers\Payment\PaystackController;
+use App\Http\Controllers\Payment\FlutterwaveController;
 
 use Illuminate\Support\Facades\Route;
 use App\Models\ClientLoyaltyWithdrawal;
@@ -278,12 +279,17 @@ class ClientController extends Controller
 
         // call the payment Trait and submit record on the payment table
         $payment = $this->payment($valid['amount'], $valid['payment_channel'], $valid['payment_for'], $client['unique_id'], 'pending', $generatedVal);
+        
+        // initiate the paystack controller to use its method
+        $paystack_controller = new PaystackController;
+        // initiate the flutterwave controller to use its method
+        $flutterwave_controller = new FlutterwaveController;
 
         // if a payment record is saved to the payment table
         if ($payment) {
             // get the payment record saved in the DB using the generated Value as refId
             $paymentRecord =  Payment::where('reference_id', $generatedVal)->orderBy('id', 'DESC')->first();
-
+            $payment_id = $payment->id;
             // authenticated user
             $user = User::find($paymentRecord->user_id);
 
@@ -297,9 +303,11 @@ class ClientController extends Controller
             }
             //check the payment method selected
               switch ($paymentRecord->payment_channel) {
+                
                   case 'paystack':
                     // Use paymentcontroller method in this controller
-                    $return = $this->initiatePayment($request, $generatedVal, $paymentRecord, $user);
+                    // $return = $this->initiatePayment($request, $generatedVal, $paymentRecord, $user);
+                    $return = $paystack_controller->initiate($payment_id);
 
                     $return = redirect()->route('client.ipn.paystack', app()->getLocale());
                   break;
@@ -310,14 +318,8 @@ class ClientController extends Controller
                     $flutter['amount'] = $paymentRecord->amount;
                     $flutter['track'] = Session::get('Track');
                     $client = User::find(auth()->user()->id);
-
-                    // return redirect()->route('client.payment-flutterwave-start', app()->getLocale());
-                    // dd($flutter);
-                    // return view('client.payment.flutter', compact('flutter', 'client'));
-
-                    $return = $this->initiatePayment($request, $generatedVal, $paymentRecord, $user);
-
-                    // $return = redirect()->route('client.ipn.flutter', app()->getLocale());
+                    // $return = $this->initiate($request, $generatedVal, $paymentRecord, $user);
+                    $return = $flutterwave_controller->initiate($payment_id);
 
                   break;
 
@@ -892,7 +894,7 @@ class ClientController extends Controller
         return $updateClientRatings->handleUpdateServiceRatings($request);
     }
 
-    public function saveRequest($request){
+    public function saveRequest($request, $media){
         // return dd($request);
 
         $service_request                        = new ServiceRequest();

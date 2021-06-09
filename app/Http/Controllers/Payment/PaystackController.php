@@ -16,7 +16,7 @@ use App\Models\Contact;
 use App\Traits\RegisterPaymentTransaction;
 use App\Traits\GenerateUniqueIdentity as Generator;
 
-use Session;
+use Session; 
 
 use App\Http\Controllers\Client\ClientController;
 use App\Http\Controllers\InvoiceController;
@@ -53,8 +53,10 @@ class PaystackController extends Controller
             'booking_fee'      => 'required',
             'payment_channel'  => 'required',
             'payment_for'     => 'required',
-            // 'myContact_id'    => 'required',
+            'myContact_id'    => 'required',
         ]);
+
+        $selectedContact = Contact::where('id', $request->myContact_id)->first();
 
     if($request['payment_for'] === 'invoice'){
         $data = [
@@ -78,7 +80,7 @@ class PaystackController extends Controller
         $request->session()->put('collaboratorPayment', $data);
     }
     if($request['payment_for'] === 'service-request'){
-    $Serviced_areas = ServicedAreas::where('town_id', '=', $request['town_id'])->orderBy('id', 'DESC')->first();
+    $Serviced_areas = ServicedAreas::where('town_id', '=', $selectedContact['town_id'])->orderBy('id', 'DESC')->first();
        if ($Serviced_areas === null) {
            return back()->with('error', 'sorry!, this area you selected is not serviced at the moment, please try another area');
        }
@@ -97,7 +99,7 @@ class PaystackController extends Controller
                $data['original_name'] = json_encode($originalName);
                // return $data;
 
-       // $request->session()->put('order_data', $request);
+       // $request->session()->put('order_data', $request); 
        $request->session()->put('order_data', $request->except(['media_file']));
        $request->session()->put('medias', $data);
     }
@@ -231,7 +233,7 @@ class PaystackController extends Controller
                 if($paymentDetails->update()){
                     // NUMBER 2: add more for other payment process
 
-                    if($paymentDetails['payment_for'] = 'invoice')
+                    if($paymentDetails['payment_for'] === 'invoice')
                     {
                         $savePayment = $invoice_controller->saveInvoiceRecord($paymentRecord, $paymentDetails);
                         if($savePayment){
@@ -243,10 +245,8 @@ class PaystackController extends Controller
                         }
                     }
 
-                    else if($paymentDetails['payment_for'] = 'service-request'){
-
-                            $client_controller->saveRequest( $request->session()->get('order_data') );
-
+                    if($paymentDetails['payment_for'] === 'service-request'){
+                            $client_controller->saveRequest( $request->session()->get('order_data'), $request->session()->get('medias') );
                     }
                 }
             }else {
@@ -265,9 +265,9 @@ class PaystackController extends Controller
         }
 
         // NUMBER 5: add more for other payment process
-        if($paymentDetails['payment_for'] = 'service-request' ){
-            return redirect()->route('client.services.list', app()->getLocale() )->with('error', 'there was an error, please try again!');
-        }
+        // if($paymentDetails['payment_for'] = 'service-request' ){
+        //     return redirect()->route('client.services.list', app()->getLocale() )->with('error', 'there was an error, please try again!');
+        // }
 
     }
 
