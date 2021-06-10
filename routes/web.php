@@ -266,7 +266,11 @@ Route::prefix('admin')->name('admin.')->group(function () {
     Route::post('/flutter/update',                      [GatewayController::class, 'flutterUpdate'])->name('flutter_update');
 
     // messaging routes messageTemplates
-    Route::get('/messaging/templates',                   [Template::class, 'getAllTemplates'])->name('message_template');
+  
+    Route::get('/see',  [Template::class, 'see'])->name('see');
+    Route::view('/messaging/templates',                   'admin.messaging.template.template')->name('message_template');
+
+    // Route::get('/messaging/templates',                   [Template::class, 'getAllTemplates'])->name('message_template');
      Route::view('/messaging/templates/new',                   'admin.messaging.template.new')->name('new_template');
     Route::view('/messaging/outbox',      'admin.messaging.email.outbox')->name('outbox');
     Route::view('/messaging/inbox',      'admin.messaging.email.inbox')->name('inbox');
@@ -476,7 +480,7 @@ Route::prefix('cse')->name('cse.')->middleware('monitor.cseservice.request.chang
     });
 
 
-    Route::get('/see',  [CseController::class, 'see'])->name('see');
+   
     Route::view('/messages/inbox', 'cse.messages.inbox')->name('messages.inbox');
     Route::view('/messages/sent', 'cse.messages.sent')->name('messages.sent');
     Route::view('/payments', 'cse.payments')->name('payments');

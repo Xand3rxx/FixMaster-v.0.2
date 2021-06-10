@@ -63,20 +63,16 @@
                                 </tr>
 
                                 <tr>
-                                <td>    
-                                <div style="text-align:right" >
-                    
-                                    <span style="color: #8492a6"> <?= date('Y-m-d')?> </span>
+                                <td colspan="2">    
+                                <div style="text-align:right; padding:0 10px" >
+                                <span style="color: #8492a6"> <?= date('Y-m-d')?> </span>
                                 </div>
-                           
-                                <span
-                                            style="display:inline-block; vertical-align:middle; margin:14px 0 26px; border-bottom:3px solid #cecece; width:100%;"></span></td>
-                                
-                                  
-                                    &nbsp;</td>
+                            <span style="display:inline-block; vertical-align:middle; margin:14px 0 26px; border-bottom:3px solid #cecece; width:100%;"></span></td>
+                                 &nbsp;
+                                 </td>
                                 </tr>
                                 <tr>
-                                    <td style="padding:0 35px 100px;">
+                                    <td style="padding:0 35px;" colspan="2">
                                 
         
 
@@ -90,12 +86,39 @@
                                     </td>
                                     
                                 </tr>
-                                <tr>
-                                <td style="height:140px;">    
-                                <span
-                                            style="display:inline-block; vertical-align:middle; margin:14px 0 26px; border-bottom:3px solid #cecece; width:100%;"></span>
 
-                                            <div style="float:right; text-align: right;padding:0 10px;">
+
+                                <tr>
+                                <td colspan="2">    
+                            <span style="display:inline-block; vertical-align:middle; margin:14px 0 26px; border-bottom:3px solid #cecece; width:100%;"></span></td>
+                                 </td>
+                                <tr>
+                                <td style="height:20px; width:50%">
+                                <div style="padding: 0 20px; margin-top: -40px">
+                                        <br/>
+                                        <p style="color: #8492a6; margin:5px 0px -6px; font-size:15px"> Connect With Us</p>
+                        
+ 
+                    <a href="javascript:void(0)">
+                    <img src="{{ asset('assets/images/twitter.png') }}" height="20" alt="twitter"/>
+                    </a>
+                    <a href="javascript:void(0)" style="background-color: #007bb5; padding:0 5px;border-radius: 50%;  display: inline-block;  margin: 5px 3px;">
+                    <img src="{{ asset('assets/images/facebook.png') }}" height="15" alt="twitter" style=""/>
+                    </a>
+
+                    <a href="javascript:void(0)" style="margin: 5px 2px;">
+                    <img src="{{ asset('assets/images/index.jpeg') }}" height="23" alt="twitter" style=""/>
+                    </a>
+                    <a href="javascript:void(0)" style="background-color: #007bb5; padding:0 5px;border-radius: 50%;  display: inline-block;  margin: 5px 3px;">
+                    <img src="{{ asset('assets/images/linkedin.png') }}" height="15" alt="linkedin" style=""/>
+                    </a>
+
+                                     </div>
+                                    
+                                    </td>
+                           
+                                    <td style="height:40px;width:50%">
+                                    <div style=" text-align: right;padding:0 10px;">
                                             <img src="{{ asset('assets/images/home-fix-logo-colored.png') }}" height="45" alt="FixMaster Logo">
                                              <p style="margin-top: 5px; font-size: 13px; color: #8492a6">(+234) 0813-286-3878</p>
                                              <p style="margin-top: -15px; font-size: 13px;color: #8492a6">info@fixmaster.com.ng</p>
@@ -103,23 +126,6 @@
                                              <p style="margin-top: -15px; font-size: 13px;color: #8492a6">FixMaster ,Ajose Adeogun, Lagos, Nigeria</p>
 
                                      </div>
-
-                                     <div style="float:left; padding:0 10px">
-                                        <br/>
-                                        <p style="color: #8492a6; margin:5px 0px -6px; font-size:14px"> Connect With Us</p>
-                        
-                    <a href="javascript:void(0)" class="fa fa-twitter" style="background-color: #fff;color: #55ACEE; font-size: 20px;   margin: 5px 2px;"></a>
-                    <a href="javascript:void(0)" class="fa fa-facebook" style="background-color: #007bb5;color: white; padding: 2px 5px;border-radius: 50%;  margin: 5px 2px;"></a>
-                    <a href="javascript:void(0)" class="fa fa-instagram" style="background-color: #007bb5;color: white; padding: 2px 5px;border-radius: 50%;   margin: 5px 2px;"></a>
-                    <a href="javascript:void(0)" class="fa fa-linkedin" style="background-color: #007bb5;color: white; padding: 2px 5px;border-radius: 50%;   margin: 5px 2px;"></a>
-
-                                     </div>
-
-                                            </td>
-                                
-
-                           
-                                    <td style="height:40px;">
                                     &nbsp;</td>
                                 </tr>
                             </table>
