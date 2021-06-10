@@ -39,7 +39,7 @@
                         @endforeach
                         @foreach ($user['form_data']['supplier_category'] as $key => $service)
                         <tr>
-                            <td class="tx-medium"> Selected Category </td>
+                            <td class="tx-medium"> Selected Service </td>
                             <td class="tx-color-03"> {{ \App\Models\Service::getServiceNameById($service) }}</td>
                         </tr>
                         @endforeach

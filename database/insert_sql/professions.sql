@@ -24,7 +24,7 @@ INSERT INTO `professions` (`id`, `name`, `description`, `created_at`, `updated_a
 (22, 'Fisherman', 'A person that catches fish', '2020-12-09 17:47:53', NULL),
 (23, 'Florist', 'A person that works with flowers.', '2020-12-09 17:51:40', NULL),
 (24, 'Gardener', 'A person that keeps gardens clean and tidy. They take care of the plants in the garden.', '2020-12-09 17:51:40', NULL),
-(25, 'Hairdresser', 'Tthey cut your hair or give it a new style.', '2020-12-09 17:51:40', NULL),
+(25, 'Hairdresser', 'They cut your hair or give it a new style.', '2020-12-09 17:51:40', NULL),
 (26, 'Journalist', 'A person that makes new reports in writing or through television.', '2020-12-09 17:51:40', NULL),
 (27, 'Judge', 'A qualified person that decides cases in a law court.', '2020-12-09 17:51:40', NULL),
 (28, 'Lawyer', 'A person that defends people in court and gives legal advice.', '2020-12-09 17:51:40', NULL),

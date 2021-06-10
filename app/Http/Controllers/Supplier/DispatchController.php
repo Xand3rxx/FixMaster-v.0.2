@@ -77,8 +77,9 @@ class DispatchController extends Controller
      */
     public function store(Request $request)
     {
+        //Validate if RFQ ID exists
+        $rfq = \App\Models\Rfq::where('id', $request->rfq_id)->firstOrFail();
 
-        // $supplier['rfq']['service_request_id']
         //Label and dispacth materials for a RFQ issued
         //Validate user input fields
         $request->validate([
@@ -101,7 +102,7 @@ class DispatchController extends Controller
              RfqSupplierDispatch::create([
                 'rfq_id'                =>  $request->rfq_id,
                 'rfq_supplier_invoice'  =>  $request->rfq_supplier_invoice,
-                'supplier_id'           =>  Auth::id(),
+                'supplier_id'           =>  $request->user()->id,
                 'unique_id'             =>  $request->unique_id,
                 'courier_name'          =>  $request->courier_name,
                 'courier_phone_number'  =>  $request->courier_phone_number,
@@ -115,12 +116,15 @@ class DispatchController extends Controller
             //Set variables as true to be validated outside the DB transaction
             $createDispatch =  true;
         });
-    
-        $serviceRquest = \App\Models\Rfq::where(['id'=>$request->rfq_id, 'type'=> 'Warranty' ])->first()->service_request_id;
-         if($serviceRquest)
-         {
-        $updateWArrantyDispatch = $this->updateRfqDispatchNotify($request,$serviceRquest);
-         }
+
+        if($rfq['type'] == 'Warranty'){
+            $this->updateRfqDispatchNotify($request,$rfq->service_request_id);
+        }
+        // $serviceRquest = \App\Models\Rfq::where(['id'=>$request->rfq_id, 'type'=> 'Warranty' ])->first()->service_request_id;
+        //  if($serviceRquest)
+        //  {
+        // $updateWArrantyDispatch = $this->updateRfqDispatchNotify($request,$serviceRquest);
+        //  }
 
         if($createDispatch){
 

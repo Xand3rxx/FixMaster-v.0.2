@@ -506,7 +506,11 @@ trait Utility
 
   }
 
+<<<<<<< HEAD
 
 }
 
 
+=======
+}
+>>>>>>> b02cce7fbdf4d8710c0d32d80410105f48cef4d3

@@ -349,9 +349,7 @@ Route::prefix('admin')->name('admin.')->group(function () {
 });
 
 //All routes regarding clients should be in here
-
-Route::prefix('/client')->middleware('monitor.clientservice.request.changes')->group(function () {
-    Route::name('client.')->group(function () {
+Route::prefix('/client')->name('client.')->middleware('verified', 'monitor.clientservice.request.changes')->group(function () {
         //All routes regarding clients should be in here
         Route::get('/',                                      [ClientController::class, 'index'])->name('index'); //Take me to Supplier Dashboard
 
@@ -360,7 +358,7 @@ Route::prefix('/client')->middleware('monitor.clientservice.request.changes')->g
         Route::post('/profile/update',                       [ClientController::class, 'update_profile'])->name('updateProfile');
         Route::post('/updatePassword',                       [ClientController::class, 'updatePassword'])->name('updatePassword');
 
-        Route::get('/requests',                              [ClientController::class, 'index'])->name('requests');
+        // Route::get('/requests',                              [ClientController::class, 'index'])->name('requests');
         Route::get('/requests/details/{request:id}',         [ClientController::class, 'clientRequestDetails'])->name('request_details');
         Route::get('/requests/edit/{request:id}',            [ClientController::class, 'editRequest'])->name('edit_request');
         Route::get('/requests/cancel/{request:id}',          [ClientController::class, 'cancelRequest'])->name('cancel_request');
@@ -441,8 +439,6 @@ Route::prefix('/client')->middleware('monitor.clientservice.request.changes')->g
     Route::post('available-tool-quantity', [CseController::class, 'getAvailableToolQuantity'])->name('available.tools');
     Route::post('get-sub-service-list', [CseController::class, 'getSubServices'])->name('needed.sub_service');
 
-
-    });
 });
 
 

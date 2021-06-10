@@ -181,7 +181,6 @@
 
 
 </section>
-@include('cse.requests.includes.modals')
 @push('scripts')
 <script>
 $(document).ready(function() {

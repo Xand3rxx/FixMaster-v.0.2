@@ -191,13 +191,13 @@
                             <div class="card shadow rounded my-2">
                                 <div class="card-body">
                                     <h5 class="card-title">Root Cause:</h5>
-                                    <p class="card-text">Sit tempora ut magnam quisquam sed eius magnam. Aliquam sed quiquia quaerat ipsum tempora. Ipsum dolore quaerat ut. Dolorem non numquam ut tempora modi non porro. Aliquam ut quaerat neque quiquia non sed. </p>
+                                    <p class="card-text">{{ $root_cause }}</p>
                                 </div>
                             </div>
                             <div class="card shadow rounded">
                                 <div class="card-body">
                                     <h5 class="card-title d-flex justify-content-center">Other Comments</h5>
-                                    <p class="card-text">Sit tempora ut magnam quisquam sed eius magnam. Aliquam sed quiquia quaerat ipsum tempora. Ipsum dolore quaerat ut. Dolorem non numquam ut tempora modi non porro. Aliquam ut quaerat neque quiquia non sed. Quaerat est magnam magnam quisquam sit ut dolorem. Amet porro quiquia neque est quiquia porro. Sit porro adipisci quaerat sit. Amet aliquam porro dolorem labore dolorem. Dolor amet ut quiquia dolor quiquia. Tempora velit aliquam tempora dolore etincidunt magnam dolorem. Tempora sed quaerat quisquam dolore est. Dolorem dolor numquam dolor voluptatem. Dolorem sit neque labore. Dolorem neque adipisci magnam dolor. Tempora adipisci amet voluptatem porro labore consectetur. Quiquia est non dolore dolorem adipisci amet non. Numquam neque ut sed. Voluptatem non amet etincidunt adipisci aliquam sit velit. Neque quisquam amet eius tempora. Ut dolorem neque adipisci consectetur. Etincidunt numquam tempora dolor dolor. Etincidunt consectetur aliquam est. Adipisci sed modi neque ut dolor sed.</p>
+                                    <p class="card-text">{{ $other_comments }}</p>
                                 </div>
                             </div>
                             </div>
@@ -384,7 +384,7 @@
                                 <input type="hidden" class="d-none" value="{{$material_markup}}" id="material_markup" name="material_markup">
                                 <input type="hidden" class="d-none" value="{{$fixMasterRoyalty}}" id="fixMasterRoyalty" name="fixMasterRoyalty">
 
-                                <input type="hidden" class="d-none" value="service-request" id="payment_for" name="payment_for">
+                                <input type="hidden" class="d-none" value="invoice" id="payment_for" name="payment_for">
                                 <input type="hidden" class="d-none" value="{{ $invoice['unique_id'] }}" id="unique_id" name="unique_id">
                                 <input type="hidden" class="d-none" value="{{ $invoice['invoice_type'] }}" id="invoice_type" name="invoice_type">
                                 <input type="hidden" class="d-none" value="{{ $invoice['uuid'] }}" id="uuid" name="uuid">
@@ -409,7 +409,7 @@
                                     <input type="hidden" class="d-none" value="{{$material_markup}}" id="material_markup" name="material_markup">
                                     <input type="hidden" class="d-none" value="{{$fixMasterRoyalty}}" id="fixMasterRoyalty" name="fixMasterRoyalty">
 
-                                    <input type="hidden" class="d-none" value="service-request" id="payment_for" name="payment_for">
+                                    <input type="hidden" class="d-none" value="invoice" id="payment_for" name="payment_for">
                                     <input type="hidden" class="d-none" value="{{ $invoice['unique_id'] }}" id="unique_id" name="unique_id">
                                     <input type="hidden" class="d-none" value="{{ $invoice['invoice_type'] }}" id="invoice_type" name="invoice_type">
                                     <input type="hidden" class="d-none" value="{{ $invoice['uuid'] }}" id="uuid" name="uuid">

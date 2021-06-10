@@ -96,7 +96,7 @@
                         <label>Select Service Request <span class="text-danger">*</span></label>
                         <select class="form-control custom-select" id="sort_by_month">
                             <option value="">Select...</option>
-                           @if($serve->count() == 1)
+                           @if($serve->count() > 1)
                                 @foreach($serve as $ken)
                                 <option value="{{$ken['service_request_id']}}">{{$ken['service_request']['unique_id']}}</option>
                                 @endforeach
