@@ -64,10 +64,10 @@
                     <div class="dropdown-file">
                       <a href="" class="dropdown-link" data-toggle="dropdown"><i data-feather="more-vertical"></i></a>
                       <div class="dropdown-menu dropdown-menu-right">
-                      @if(!$rfq->status == 'Pending')
+                      @if(!$rfq->status == 'Awaiting')
                         <a href="#rfqDetails" data-toggle="modal" class="dropdown-item details text-primary" title="View {{ $rfq->unique_id}} details" data-batch-number="{{ $rfq->unique_id}}" data-url="{{ route('supplier.rfq_warranty_details', ['rfq'=>$rfq->uuid, 'locale'=>app()->getLocale()]) }}" id="rfq-details"><i class="far fa-clipboard"></i> Details</a>
                         @endif
-                        @if($rfq->status == 'Pending')
+                        @if($rfq->status == 'Awaiting')
                           <a href="{{ route('supplier.rfq_warranty_send_supplier_invoice', ['rfq'=>$rfq->uuid, 'locale'=>app()->getLocale()]) }}" class="dropdown-item details text-success" title="Send {{ $rfq->unique_id}} invoice"><i class="fas fa-file-medical"></i> Send Invoice</a>
                         @endif
                       </div>

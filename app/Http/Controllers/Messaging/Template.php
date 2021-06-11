@@ -93,4 +93,26 @@ class Template extends Controller
         return response()->json(["message" => "Template not found!"], 404);
 
     }
+
+
+    public function see()
+    {
+   
+      
+            // $mail_data_client = collect([
+            //   'email' =>  'woorad7@gmail.com',
+            //   'template_feature' => 'ADMIN_CUSTOMER_PAYMENT_SUCCESSFUL_NOTIFICATION',
+            //    'url' => 'fixh'
+           
+            // ]);
+        //     $mail2 = $this->mailAction($mail_data_client);
+        //  dd($mail2);
+     
+   
+            return view('emails.message',['mail_message' => '<p>
+            Contrary to popular belief, Lorem Ipsum is not simply random text. It has roots in a piece of 
+</p>']);
+        
+
+    }
 }

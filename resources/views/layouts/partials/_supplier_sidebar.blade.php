@@ -56,6 +56,18 @@
         </ul>
       </li>
 
+
+      <li class="nav-item with-sub {{ Route::currentRouteNamed('supplier.rfq.warranty', 'supplier.rfq_send_supplier_invoice', 'supplier.rfq_sent_invoices', 'supplier.rfq_approved_invoices', 'supplier.rfq_declined_invoices', 'supplier.rfq_link_details') ? 'active show' : '' }}">
+        <a href="" class="nav-link"><i data-feather="git-pull-request"></i> <span>Warranty Claim Quote @if(count($RfqDispatchNotification) > 0)<span class="badge badge-primary">{{count($RfqDispatchNotification) }}</span>@endif</span></a>
+        <ul>
+          <li class="{{ Route::currentRouteNamed('supplier.rfq.warranty', 'supplier.rfq_send_supplier_invoice', 'supplier.rfq_link_details') ? 'active' : '' }}"><a href="{{ route('supplier.rfq.warranty', app()->getLocale()) }}">New Quotes @if($newQuotes > 0)<sup class="font-weight-bold text-primary">{{ $newQuotes }}</sup>@endif</a></li>
+          <li class="{{ Route::currentRouteNamed('supplier.warranty_sent_invoices') ? 'active' : '' }}"><a href="{{ route('supplier.warranty_sent_invoices', app()->getLocale()) }}">Sent Quotes</a></li>
+          <li class="{{ Route::currentRouteNamed('supplier.rfq_declined_invoices') ? 'active' : '' }}"><a href="{{ route('supplier.rfq_declined_invoices', app()->getLocale()) }}">Declined Quotes</a></li>
+          <li class="{{ Route::currentRouteNamed('supplier.rfq_approved_invoices') ? 'active' : '' }}"><a href="{{ route('supplier.rfq_approved_invoices', app()->getLocale()) }}">Won Quotes</a></li>
+          
+        </ul>
+      </li>
+
       {{-- <li class="nav-item {{ Route::currentRouteNamed('supplier.dispatches') ? 'active' : '' }}"><a href="{{ route('supplier.dispatches', app()->getLocale()) }}" class="nav-link"><i data-feather="file-text"></i> <span>Materials Dispatched</span></a></li> --}}
 
       <li class="nav-item with-sub {{ Route::currentRouteNamed('supplier.dispatches', 'supplier.dispatches_returned', 'supplier.dispatches_delivered') ? 'active show' : '' }}">

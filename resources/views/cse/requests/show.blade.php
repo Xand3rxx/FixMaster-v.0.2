@@ -115,8 +115,11 @@
                                                             @endif
                                                             {{-- End of Stage 3 --}}
                                                             {{-- Stage 4 --}}
-                                                            @if (!empty($materials_accepted) && ($materials_accepted['rfqSupplierInvoice']['supplierDispatch']['cse_material_acceptance'] !== 'Yes'))
+                                                         
+                                                            @if (!empty($materials_accepted) && !empty($materials_accepted['rfqSupplierInvoice']['supplierDispatch']))
+                                                            @if($materials_accepted['rfqSupplierInvoice']['supplierDispatch']['cse_material_acceptance'] != 'Yes')
                                                                 @include('cse.requests.includes.materials-acceptance')
+                                                            @endif
                                                             @endif
                                                             {{-- End of Stage 4 --}}
                                                             @include('cse.requests.includes.reoccuring-actions')

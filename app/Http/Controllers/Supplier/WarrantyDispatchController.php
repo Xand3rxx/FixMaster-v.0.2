@@ -12,7 +12,7 @@ use App\Traits\Loggable;
 use App\Traits\GenerateUniqueIdentity;
 use App\Models\RfqSupplierDispatch;
 
-class DispatchController extends Controller
+class WarrantyDispatchController extends Controller
 {
     use Loggable, GenerateUniqueIdentity;
 
@@ -117,8 +117,13 @@ class DispatchController extends Controller
             $createDispatch =  true;
         });
 
-    
-
+       if($rfq){
+        $updateOldSupplierRfqDispatch = \App\Models\RfqDispatchNotification::where(['service_request_id'=>$rfq->service_request_id ,  'supplier_id' => Auth::user()->id ])->update([
+            'notification' => 'Off',
+           'dispatch' => 'Yes',
+       ]);
+        }
+       
         if($createDispatch){
 
             //Code to send mail to FixMaster, CSE and Supplier who sent the quote
@@ -130,7 +135,7 @@ class DispatchController extends Controller
             $message = Auth::user()->email.' created '.$request->unique_id.' dispatch code for '.$request->rfq.' RFQ.';
             $this->log($type, $severity, $actionUrl, $message);
  
-            return redirect()->route('supplier.dispatches', app()->getLocale())->with('success', 'Your '.$request->rfq.' RFQ has been labelled.');
+            return redirect()->route('supplier.warranty_dispatches', app()->getLocale())->with('success', 'Your '.$request->rfq.' RFQ has been labelled.');
  
         }else{
  
@@ -230,5 +235,5 @@ class DispatchController extends Controller
         }
     }
 
- 
+  
 }
