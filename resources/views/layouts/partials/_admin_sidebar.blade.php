@@ -95,7 +95,7 @@
 
 
       {{-- <li class="nav-item {{ Route::currentRouteNamed('admin.location_request') ? 'active' : '' }}"><a href="{{ route('admin.location_request', app()->getLocale()) }}" class="nav-link"><i data-feather="map-pin"></i> <span>Location Request</span></a></li> --}}
-      <li class="nav-item {{ Route::currentRouteNamed('admin.seviced-areas.index') ? 'active' : '' }}"><a href="{{ route('admin.seviced-areas.index', app()->getLocale()) }}" class="nav-link"><i data-feather="check-circle"></i> <span>Serviced Areas</span></a></li>
+
 
       <li class="nav-item with-sub {{ Route::currentRouteNamed('admin.add_loyalty', 'admin.loyalty_list', 'admin.loyalty_history') ? 'active show' : '' }}">
         <a href="" class="nav-link"><i data-feather="crop"></i> <span>Loyalty Management</span></a>
@@ -199,6 +199,8 @@
           <li class=""><a href="#">Requests</a></li>
         </ul>
       </li> --}}
+      
+      <li class="nav-item {{ Route::currentRouteNamed('admin.seviced-areas.index') ? 'active' : '' }}"><a href="{{ route('admin.seviced-areas.index', app()->getLocale()) }}" class="nav-link"><i data-feather="check-circle"></i> <span>Serviced Areas</span></a></li>
 
       <li class="nav-item {{ Route::currentRouteNamed('admin.taxes.index') ? 'active' : '' }}"><a href="{{ route('admin.taxes.index', app()->getLocale()) }}" class="nav-link"><i data-feather="percent"></i> <span>Tax Management</span></a></li>
 

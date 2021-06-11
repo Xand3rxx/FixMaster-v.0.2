@@ -2,15 +2,14 @@
 
 namespace App\Http\Controllers\Admin;
 
-use Auth;
-use Route;
-use Session;
-use Carbon\Carbon;
-use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Route;
 use App\Traits\Utility;
 use App\Traits\Loggable;
+use Illuminate\Http\Request;
 use App\Models\ServiceRequest;
+use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
+use App\Models\ServiceRequestProgress;
 
 class ServiceRequestController extends Controller
 {
@@ -23,10 +22,8 @@ class ServiceRequestController extends Controller
     public function index()
     {
 
-        // return  ServiceRequest::with('users', 'client', 'price')->where('status_id', 1)->get();
-
         return view('admin.requests.pending.index', [
-            'requests'  =>  ServiceRequest::with('users', 'client', 'price')->where('status_id', 1)->latest('created_at')->get()
+            'requests'  =>  ServiceRequest::with('client', 'price')->where('status_id', ServiceRequest::SERVICE_REQUEST_STATUSES['Pending'])->latest('created_at')->get()
         ]);
     }
 
@@ -39,6 +36,14 @@ class ServiceRequestController extends Controller
      */
     public function ongoingRequestDetails($language, $uuid)
     {
+
+        return \App\Models\Role::where('slug', 'cse-user')->with('users')
+        ->whereHas('users', function($query){
+            $query->where('job_availability', 'Yes');
+        })
+        ->firstOrFail();
+
+
         return view('admin.requests.pending.show', [
             'cses'    =>  \App\Models\Role::where('slug', 'cse-user')->with('users')->firstOrFail(),
         ]);
@@ -74,11 +79,13 @@ class ServiceRequestController extends Controller
     public function show($language, $uuid)
     {
 
-        // return ServiceRequest::where('uuid', $uuid)->with(['price', 'service', 'service.subServices'])->firstOrFail();
+        // return \App\Models\Cse::where('job_availability', 'Yes')->with('user', 'user.ratings')->get();
+
+        // $service_request = ServiceRequest::where('uuid', $uuid)->with(['price', 'service', 'service.subServices', 'client', 'service_request_cancellation', 'invoice', 'serviceRequestMedias', 'serviceRequestProgresses', 'serviceRequestReports', 'toolRequest'])->firstOrFail();
 
         return view('admin.requests.pending.show', [
-            'serviceRequest'    =>  ServiceRequest::where('uuid', $uuid)->with(['price', 'service', 'service.subServices'])->firstOrFail(),
-            'cses'    =>  \App\Models\Role::where('slug', 'cse-user')->with('users')->firstOrFail(),
+            'serviceRequest'    =>  ServiceRequest::where('uuid', $uuid)->with(['price', 'service', 'service.subServices', 'client', 'serviceRequestMedias'])->firstOrFail(),
+            'cses'    =>  \App\Models\Cse::where('job_availability', 'Yes')->with('user', 'user.ratings')->get(),
         ]);
     }
 
@@ -118,8 +125,8 @@ class ServiceRequestController extends Controller
 
 
     public function markCompletedRequest(Request $request, $language, $id){
-   
-        $requestExists =  \App\Models\ServiceRequest::where('uuid', $id)->firstOrFail();
+
+        $requestExists =  ServiceRequest::where('uuid', $id)->firstOrFail();
 
          $updateMarkasCompleted = $this->markCompletedRequestTrait(Auth::id(), $id);
 
@@ -127,9 +134,13 @@ class ServiceRequestController extends Controller
 
             $this->log('request', 'Informational', Route::currentRouteAction(), auth()->user()->account->last_name . ' ' . auth()->user()->account->first_name  . ') marked '.$requestExists->unique_id.' service request as completed.');
 
+            //Record service request progress of `Admin marked job as completed`
+            ServiceRequestProgress::storeProgress(auth()->user()->id, $requestExists->id, 4, \App\Models\SubStatus::where('uuid', 'ce316687-62d8-45a9-a1b9-f75da104fc18')->firstOrFail()->id);
+
             return redirect()->route('admin.requests.index', app()->getLocale())->with('success', $requestExists->unique_id.' was marked as completed successfully.');
+
         }else{
-           
+
          //activity log
             return back()->with('error', 'An error occurred while trying to mark '.$requestExists->unique_id.' service request as completed.');
         }

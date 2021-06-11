@@ -37,7 +37,7 @@
                         <td class="tx-color-03">{{ $service_request['client_security_code'] }}
                         </td>
                     </tr>
-                    
+
                     <tr>
                         <td class="tx-medium">CSE's Assigned</td>
                         <td class="tx-color-03">
@@ -98,7 +98,7 @@
             </table>
 
             <div class="divider-text">Media Files</div>
-            @if (!empty($service_request['serviceRequestMedias']))
+            @if (count($service_request['serviceRequestMedias']) > 0)
             <div class="row row-xs">
                 <ul id="lightgallery" class="list-unstyled row">
                     @foreach ($service_request['serviceRequestMedias'] as $item)
@@ -107,7 +107,7 @@
                 </ul>
             </div>
             @else
-            <h3>Files have not been uploaded for this request.</h3>
+            <h5 class="mt-4">Files have not been uploaded for this request.</h5>
             @endif
         </div><!-- df-example -->
     </div>
