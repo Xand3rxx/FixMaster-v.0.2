@@ -18,7 +18,7 @@
                     displayMessage(data, 'success');
                 },
                 catch: function(error) {
-                    alert(error.data);
+                    displayMessage(error.data, 'error');
                 }
             });
             // User service requuest client_id
@@ -41,7 +41,7 @@
             event.preventDefault();
             let route = $(this).attr('data-url');
             let batchNumber = $(this).attr('data-batch-number');
-            
+
             $.ajax({
                 url: route,
                 beforeSend: function() {

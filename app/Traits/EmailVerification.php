@@ -37,7 +37,6 @@ trait EmailVerification
      */
     public function verify(Request $request)
     {
-
         if (!hash_equals((string) $request->route('id'), (string) $request->user()->uuid)) {
             throw new AuthorizationException;
         }
