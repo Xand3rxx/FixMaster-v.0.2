@@ -1,3 +1,8 @@
+
+      <h3>Indicate Causal Agent</h3>
+    <section>
+        <div class="form-row mt-4">
+            <div class="form-group col-md-12">
 <div class="divider-text">Technicians  </div>
    @if(!empty($service_request['service_request_assignees']))
    <ul class="list-group wd-md-100p">
@@ -100,3 +105,8 @@
                                                 </div>
                                          </li>
                                          </ul>
+
+                                                     
+                                 </div>
+                             </div>
+                         </section>

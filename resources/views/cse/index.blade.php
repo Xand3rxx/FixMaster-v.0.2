@@ -57,7 +57,7 @@
           <div class="card-body pd-lg-25">
             <div class="row">
               <x-card cardtitle="Completed Jobs" :cardnumber="$completed" />
-              <x-card cardtitle="Ongoing Jobs" :cardnumber="$ongoing" />
+              <x-card cardtitle="Ongoing Jobs" :cardnumber="(int)$ongoing+(int)$warrantOngoing" />
               <x-card cardtitle="Canceled Jobs" :cardnumber="$canceled" />
             </div>
           </div>

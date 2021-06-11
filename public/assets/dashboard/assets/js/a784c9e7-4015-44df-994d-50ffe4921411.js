@@ -147,7 +147,9 @@ $(document).ready(function() {
     return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
   }
 
+
   if($('#delivery_fee').val()){
     getTotalAmount();
   }
  
+

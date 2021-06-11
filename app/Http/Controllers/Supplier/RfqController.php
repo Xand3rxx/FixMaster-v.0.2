@@ -84,7 +84,7 @@ class RfqController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request){
+    public function unique_id(Request $request){
         //Send Quote for a specific RFQ
         //Validate user input fields
         $this->validateRequest();

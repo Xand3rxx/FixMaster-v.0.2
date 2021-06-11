@@ -1,5 +1,9 @@
 
 
+  
+                        <h3>Material Acceptance</h3>
+                        <section>
+                        <small class="text-danger">This portion will display only if the CSE initially executed a RFQ, the Client paid for the components and the Supplier has made the delivery.</small>
 
 
                             <h5>Update RFQ Status</h5>
@@ -150,9 +154,9 @@
                             <td class="tx-medium">{{ !empty($item->unit_of_measurement) ? $item->unit_of_measurement : 'UNAVAILABLE' }}</td>
                             <td class="text-center">
                               @if(!empty($item->image))
-                              <a href="#rfqImageDetails" data-toggle="modal" class="text-info" title="View {{ $item->component_name }} image" data-batch-number="{{ $item->id }}" data-url="{{ route('supplier.rfq_details_image', ['image'=>$item->id, 'locale'=>app()->getLocale()]) }}" id="rfq-image-details"> View</a>
                               @else
-                                    -
+                              <a href="#rfqImageDetails" data-toggle="modal" class="text-info" title="View {{ $item['component_name'] }} image" data-batch-number="{{ $item->id }}" data-url="{{ route('cse.rfq_waranty_details_image', ['image'=>$item->id, 'locale'=>app()->getLocale()]) }}" id="rfq-image-details"> View</a>
+
                               @endif
                             </td>
                             <td class="tx-medium text-center">{{ !empty($item->amount) ? number_format($item->amount) : $rfqDetail->total_amount  }}</td>
@@ -189,5 +193,10 @@
 
 
                             
-                    
+                            </section>
+
+
+
+
+
                        

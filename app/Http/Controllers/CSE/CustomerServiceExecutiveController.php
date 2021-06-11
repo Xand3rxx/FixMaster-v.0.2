@@ -9,6 +9,7 @@ use App\Models\Account;
 use App\Models\Contact;
 use App\Models\ServiceRequest;
 use App\Models\ServiceRequestAssigned;
+use App\Models\ServiceRequestWarrantyIssued;
 use App\Models\User;
 use App\Models\Cse;
 use Illuminate\Support\Facades\Route;
@@ -30,6 +31,8 @@ class CustomerServiceExecutiveController extends Controller
     public function index(Request $request)
     {
         $cse = ServiceRequestAssigned::where('user_id', $request->user()->id)->with('service_request')->get();
+        $cse_warranty = ServiceRequestWarrantyIssued::where('cse_id', $request->user()->id)->count();
+
         // Data Needed on dashboard page
         // 1. CSE Ratings
         // 2. CSE Earnings
@@ -45,6 +48,7 @@ class CustomerServiceExecutiveController extends Controller
             'ongoing' => $cse->filter(function ($each) {
                 return $each['service_request']['status_id'] == ServiceRequest::SERVICE_REQUEST_STATUSES['Ongoing'];
             })->count(),
+            'warrantOngoing' =>  isset($cse_warranty)? (int)$cse_warranty: 0,
             'available_requests' => Cse::isAvailable() ? ServiceRequest::where('status_id', ServiceRequest::SERVICE_REQUEST_STATUSES['Pending'])->with('service', 'address')->get() : []
         ]);
     }
@@ -146,14 +150,10 @@ class CustomerServiceExecutiveController extends Controller
 
     public function warranty_claims_list()
     {
-        // $warranties = \App\Models\ServiceRequestAssigned::with('service_request_warranty', 'user.account', 'service_request')
-        //     ->where(['status' => 'Active'])
-        //     ->get();
-            $warranties = \App\Models\ServiceRequestWarranty::with('user.account', 'service_request', 'warranty', 'service_request_warranty_issued')->orderBy('has_been_attended_to', 'ASC')->latest()->get();
-   
+        
 
         return view('cse.warranties.index', [
-            'issuedWarranties' =>  $warranties
+            'issuedWarranties' =>  \App\Models\ServiceRequestWarranty::with('user.account', 'service_request', 'warranty', 'service_request_warranty_issued')->orderBy('has_been_attended_to', 'ASC')->latest()->get(),
         ]);
     }
 
@@ -178,7 +178,7 @@ class CustomerServiceExecutiveController extends Controller
         $rfqWarranty        = \App\Models\Rfq::where(['issued_by'=> Auth::user()->id, 'service_request_id' => $service_request->id, 'type'=> 'Warranty'])->latest()->first();
         $rfqSupplierDispatch =   $rfqWarranty ? \App\Models\RfqSupplierDispatch::where(['rfq_id'=> $rfqWarranty->id, 'cse_status'=> 'Pending' ])->get(): null;
 
-   
+
 
         $scheduleDate =!empty($service_request->service_request_warranty->service_request_warranty_issued) ? 
         $service_request->service_request_warranty->service_request_warranty_issued->scheduled_datetime: '';
@@ -210,7 +210,7 @@ class CustomerServiceExecutiveController extends Controller
             'technician_list'  =>  \App\Models\Technician::all(),
             'suppliers'        =>  \App\Models\Rfq::where('service_request_id', $service_request->id)->with('rfqSupplies', 'rfqSuppliesInvoices','rfqBatches', 'rfqSupplierDispatches', 'serviceRequest')->first(),
             'requestReports'  => \App\Models\ServiceRequestReport::where('service_request_id', $service_request->id)->latest('created_at')->get(),
-            'RfqDispatchNotification' => $rfqWarranty? \App\Models\RfqDispatchNotification::where(['service_request_id' => $service_request->id, 'rfq_id'=>  $rfq->id ])->get(): [],
+            'RfqDispatchNotification' => $rfqWarranty? \App\Models\RfqDispatchNotification::where(['service_request_id' => $service_request->id, 'rfq_id'=>$rfq->id ])->get(): [],
             'causalAgent'  =>  $issued_id != '' ? \App\Models\ServiceRequestWarrantyReport::where([
                 'service_request_warranties_issued_id' => $issued_id ])
                 ->get(): [],
@@ -224,7 +224,7 @@ class CustomerServiceExecutiveController extends Controller
 
         ];
 
-        //dd( $variables['rfqDetails'] );
+       // dd($service_request->id, $rfq->id, $rfqWarranty,$variables['RfqDispatchNotification'] );
       
  
        

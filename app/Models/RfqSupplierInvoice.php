@@ -67,9 +67,9 @@ class RfqSupplierInvoice extends Model
         return $this->belongsTo(RfqSupplier::class, 'supplier_id', 'supplier_id');
     }
 
-    // public function supplierDispatches()
-    // {
-    //     return $this->hasMany(RfqSupplierDispatch::class, 'rfq_supplier_invoic');
-    // }
+    public function rfqInvoiceBatches()
+    {
+        return $this->hasMany(RfqSupplierInvoiceBatch::class, 'rfq_supplier_invoice_id', 'id');
+    }
 
 }
