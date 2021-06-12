@@ -57,17 +57,18 @@ table tbody td:nth-child(26) {
             </div>
           </div><!-- card-body -->
           <div class="table-responsive">
+
             <div class="row mt-1 mb-1 ml-1 mr-1">
                 <div class="col-md-4">
-                    <input value="{{ route("quality-assurance.disbursed_payments_sorting", app()->getLocale()) }}" type="hidden" id="route">
+                    <input value="{{ route("admin.payment_sorting", app()->getLocale()) }}" type="hidden" id="route">
                     <div class="form-group">
                         <label>Sort</label>
                         <select class="custom-select" id="sort_by_range">
                             <option value="None">Select...</option>
                             <option value="Date">Date</option>
-                            <option value="Month">Month</option>
-                            <option value="Year">Year</option>
-                            <option value="Date Range">Date Range</option>
+                            <option value="service_request">Service Request</option>
+                            <option value="type">Service Type</option>
+
                         </select>
                     </div>
                 </div><!--end col-->
@@ -81,52 +82,34 @@ table tbody td:nth-child(26) {
 
                 <div class="col-md-4 sort-by-year d-none">
                     <div class="form-group position-relative">
-                        <label>Specify Year <span class="text-danger">*</span></label>
+                        <label>Service Type <span class="text-danger">*</span></label>
                         <select class="form-control custom-select" id="sort_by_year">
                             <option value="">Select...</option>
-                            {{-- @foreach ($years as $year)
-                              <option value="{{ $year }}">{{ $year }}</option>
+                            {{-- @foreach ($pendingPayments as $data)
+                              <option value="{{ $data->service_type }}">{{ $data->service_type }}</option>
                             @endforeach --}}
                         </select>
                     </div>
                 </div>
 
-                <div class="col-md-4 sort-by-year d-none" id="sort-by-month">
+                <div class="col-md-4 sort-by-month d-none" id="sort-by-month">
                     <div class="form-group position-relative">
-                        <label>Specify Month <span class="text-danger">*</span></label>
+                        <label>Select Service Request <span class="text-danger">*</span></label>
                         <select class="form-control custom-select" id="sort_by_month">
                             <option value="">Select...</option>
-                            <option value="January">January</option>
-                            <option value="February">February</option>
-                            <option value="March">March</option>
-                            <option value="April">April</option>
-                            <option value="May">May</option>
-                            <option value="June">June</option>
-                            <option value="July">July</option>
-                            <option value="August">August</option>
-                            <option value="September">September</option>
-                            <option value="October">October</option>
-                            <option value="November">November</option>
-                            <option value="December">December</option>
+                           {{-- @if($serve->count() == 1)
+                                @foreach($serve as $ken)
+                                <option value="{{$ken['service_request_id']}}">{{$ken['service_request']['unique_id']}}</option>
+                                @endforeach
+                           @else
+                                @foreach ($pendingPayments as $output)
+                                   <option value="{{ $output->service_request_id }}">{{ $output->service_request->unique_id }}</option>
+                                @endforeach
+                           @endif --}}
                         </select>
                     </div>
                   </div>
-
-                <div class="col-md-4 date-range d-none">
-                    <div class="form-group position-relative">
-                        <label>From <span class="text-danger">*</span></label>
-                        <input id="date_from" type="date" class="form-control pl-5">
-                    </div>
-                </div>
-
-                <div class="col-md-4 date-range d-none">
-                    <div class="form-group position-relative">
-                        <label>To <span class="text-danger">*</span></label>
-                        <input id="date_to" type="date" class="form-control pl-5">
-                    </div>
-                </div>
               </div>
-
               <div id="sort_table">
               {{-- @include('quality-assurance._disbursed_table') --}}
 
@@ -275,9 +258,9 @@ table tbody td:nth-child(26) {
 </div>
 @endsection
 @section('scripts')
-<script src="{{ asset('assets/dashboard/assets/js/qa-payments-sortings.js') }}"></script>
+<script src="{{ asset('assets/dashboard/assets/js/admin-payments-sortings.js') }}"></script>
 
-<script>
+{{-- <script>
     $(document).ready(function() {
 
         $(document).on('click', '#payment-details', function(event) {
@@ -312,6 +295,6 @@ table tbody td:nth-child(26) {
             $(".modal-backdrop").remove();
         });
     });
-</script>
+</script> --}}
 @endsection
 

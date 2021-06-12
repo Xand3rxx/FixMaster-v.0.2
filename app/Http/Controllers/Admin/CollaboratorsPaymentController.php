@@ -29,8 +29,10 @@ class CollaboratorsPaymentController extends Controller
                          ->orderBy('created_at', 'DESC')
                          ->get();
 
+                    //$pendingmessage = 'Showing Pending Payments for '.\Carbon\Carbon::parse($specificDate, 'UTC')->isoFormat('LL');
                     $message = 'Showing Pending Payments for '.\Carbon\Carbon::parse($specificDate, 'UTC')->isoFormat('LL');
-                }
+
+                 }
 
                 return view('admin.payments._payment_table', compact('pendingPayments','message'));
 

@@ -96,7 +96,7 @@
                         <label>Select Service Request <span class="text-danger">*</span></label>
                         <select class="form-control custom-select" id="sort_by_month">
                             <option value="">Select...</option>
-                           @if($serve->count() == 1)
+                           @if($serve->count() > 1)
                                 @foreach($serve as $ken)
                                 <option value="{{$ken['service_request_id']}}">{{$ken['service_request']['unique_id']}}</option>
                                 @endforeach
@@ -108,20 +108,6 @@
                         </select>
                     </div>
                   </div>
-
-                <div class="col-md-4 date-range d-none">
-                    <div class="form-group position-relative">
-                        <label>From <span class="text-danger">*</span></label>
-                        <input id="date_from" type="date" class="form-control pl-5">
-                    </div>
-                </div>
-
-                <div class="col-md-4 date-range d-none">
-                    <div class="form-group position-relative">
-                        <label>To <span class="text-danger">*</span></label>
-                        <input id="date_to" type="date" class="form-control pl-5">
-                    </div>
-                </div>
               </div>
 
               <div id="sort_table">

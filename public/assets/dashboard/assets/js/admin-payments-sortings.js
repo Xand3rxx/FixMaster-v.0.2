@@ -112,7 +112,7 @@ $(document).ready(function() {
 console.log($month);
 
         sortTableData($userId, $sortLevel, $type, $date='', $year='', $month);
-      
+
     });
 
     // $('#date_from').change(function (){
@@ -145,16 +145,29 @@ console.log($month);
     // });
 
 
-    $('#requestExample, #paymentExample').DataTable({
-      'iDisplayLength': 10,
-      language: {
-            searchPlaceholder: 'Search...',
-            sSearch: '',
-            lengthMenu: '_MENU_ items/page',
-          }
-    });
+    // $('#requestExample, #paymentExample').DataTable({
+    //   'iDisplayLength': 100,
+    //   language: {
+    //         searchPlaceholder: 'Search...',
+    //         sSearch: '',
+    //         lengthMenu: '_MENU_ items/page',
+    //       }
+    // });
 
   });
+
+  $(".selectAllBoxes").click(function(event){
+
+    if(this.checked){
+        $(".checkBoxes").each(function(){
+            this.checked = true;
+        })
+    }else{
+      $(".checkBoxes").each(function(){
+            this.checked = false;
+        })
+    }
+})
 
   function sortTableData($userId, $sortLevel, $type='', $date, $year='', $month='', $dateFrom, $dateTo){
     //Get sorting route
@@ -205,18 +218,5 @@ console.log($month);
               }
         });
 
-
-        $(".selectAllBoxes").click(function(event){
-
-            if(this.checked){
-                $(".checkBoxes").each(function(){
-                    this.checked = true;
-                })
-            }else{
-              $(".checkBoxes").each(function(){
-                    this.checked = false;
-                })
-            }
-        })
   }
 
