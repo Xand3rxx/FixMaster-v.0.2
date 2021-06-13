@@ -16,7 +16,7 @@ use App\Models\Contact;
 use App\Traits\RegisterPaymentTransaction;
 use App\Traits\GenerateUniqueIdentity as Generator;
 
-use Session; 
+use Session;
 
 use App\Http\Controllers\Client\ClientController;
 use App\Http\Controllers\InvoiceController;
@@ -99,7 +99,7 @@ class PaystackController extends Controller
                $data['original_name'] = json_encode($originalName);
                // return $data;
 
-       // $request->session()->put('order_data', $request); 
+       // $request->session()->put('order_data', $request);
        $request->session()->put('order_data', $request->except(['media_file']));
        $request->session()->put('medias', $data);
     }
@@ -175,7 +175,7 @@ class PaystackController extends Controller
 
         $paymentRecord = Session::get('collaboratorPayment');
 
-        
+
         $reference = $request->get('reference', '');
 
         if (!$reference) {

@@ -2,21 +2,21 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\URL;
+use Image;
+use App\Models\Service;
+use App\Models\Category;
 use App\Traits\Loggable;
+use App\Models\SubService;
 use App\Traits\ImageUpload;
 use Illuminate\Support\Str;
-use Auth;
-use Route;
-use Image;
-use DB;
-use App\Models\Category;
-use App\Models\Service;
-use App\Models\SubService;
-use Illuminate\Support\Facades\Validator;
+use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\URL;
+use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Validator;
 
 class ServiceController extends Controller
 {
@@ -61,7 +61,7 @@ class ServiceController extends Controller
         return view('admin.service.create', [
             'categories'  =>  Category::ActiveCategories()->get()
         ]);
-        
+
     }
 
     /**
@@ -79,7 +79,7 @@ class ServiceController extends Controller
 
         //Set `createService` to false before Db transaction
         (bool) $createService  = false;
-        
+
         // Set DB to rollback DB transacations if error occurs
         DB::transaction(function () use ($request, &$createService) {
 
@@ -106,10 +106,10 @@ class ServiceController extends Controller
                 foreach($request->sub_service_name as $item => $value){
 
                     SubService::create([
-                        'user_id'       =>  Auth::id(), 
-                        'service_id'    =>  $createService->id, 
-                        'name'          =>  $request->sub_service_name[$item], 
-                        'labour_cost'   =>  $request->labour_cost[$item], 
+                        'user_id'       =>  Auth::id(),
+                        'service_id'    =>  $createService->id,
+                        'name'          =>  $request->sub_service_name[$item],
+                        'labour_cost'   =>  $request->labour_cost[$item],
                         'cost_type'     =>  $request->cost_type[$item],
                     ]);
                 }
@@ -160,12 +160,12 @@ class ServiceController extends Controller
             'diagnosis_subsequent_hour_charge'  =>   'required|numeric',
             'image'                             =>   'required|mimes:jpg,png,jpeg,gif,svg|max:512',
             'description'                       =>   'required',
-            'sub_service_name'                  =>   'required|array|min:1', 
-            'sub_service_name.*'                =>   'required|string|distinct|unique:sub_services,name', 
-            'labour_cost'                       =>   'required|array|min:1', 
-            'labour_cost.*'                     =>   'required|numeric', 
-            'cost_type'                         =>   'required|array|min:1', 
-            'cost_type.*'                       =>   'required|in:Fixed,Variable', 
+            'sub_service_name'                  =>   'required|array|min:1',
+            'sub_service_name.*'                =>   'required|string|distinct|unique:sub_services,name',
+            'labour_cost'                       =>   'required|array|min:1',
+            'labour_cost.*'                     =>   'required|numeric',
+            'cost_type'                         =>   'required|array|min:1',
+            'cost_type.*'                       =>   'required|in:Fixed,Variable',
         ]);
     }
 
@@ -216,9 +216,9 @@ class ServiceController extends Controller
             'diagnosis_subsequent_hour_charge'  =>   'required|numeric',
             'image'                             =>   'sometimes|mimes:jpg,png,jpeg,gif,svg|max:512',
             'description'                       =>   'required',
-            'sub_service_name'                  =>   'required|array', 
-            // 'sub_service_name.*'                =>   'required|string|distinct|unique:sub_services,name,'.$request->sub_service_id[0].',id', 
-            // 'sub_service_name.*'          =>   Rule::unique('sub_services', 'name')->ignore($request->sub_service_id[0]), 
+            'sub_service_name'                  =>   'required|array',
+            // 'sub_service_name.*'                =>   'required|string|distinct|unique:sub_services,name,'.$request->sub_service_id[0].',id',
+            // 'sub_service_name.*'          =>   Rule::unique('sub_services', 'name')->ignore($request->sub_service_id[0]),
         ]);
 
         //Validate if name is unique updating and creating of record
@@ -231,7 +231,7 @@ class ServiceController extends Controller
 
         //Set `updateService` to false before Db transaction
         (bool) $updateService  = false;
-        
+
         DB::transaction(function () use ($request, $validate, $uuid, $service, &$updateService) {
 
             //Image storage directory
@@ -275,10 +275,10 @@ class ServiceController extends Controller
                         'id'    => $request->sub_service_id[$item] ?? $service->id,
                     ],
                     [
-                        'user_id'       =>  Auth::id(), 
-                        'service_id'    =>  $service->id, 
-                        'name'          =>  $request->sub_service_name[$item], 
-                        'labour_cost'   =>  $request->labour_cost[$item], 
+                        'user_id'       =>  Auth::id(),
+                        'service_id'    =>  $service->id,
+                        'name'          =>  $request->sub_service_name[$item],
+                        'labour_cost'   =>  $request->labour_cost[$item],
                         'cost_type'     =>  $request->cost_type[$item],
                     ]
                 );

@@ -98,6 +98,7 @@ tr.bd-warning {
                                     <th>Job Ref.</th>
                                     <th>Client</th>
                                     <th class="text-center">Amount</th>
+                                    <th class="text-center">Payment Status</th>
                                     <th>Scheduled Date</th>
                                     <th>Date Created</th>
                                     <th class="text-center">Action</th>
@@ -115,9 +116,10 @@ tr.bd-warning {
                                     <td class="tx-color-03 tx-center"> {{ $loop->iteration }} </td>
                                     <td class="tx-medium"> {{ $request['unique_id'] }} </td>
                                     <td class="tx-medium"> {{ !empty($request['client']['account']['first_name']) ? Str::title($request['client']['account']['first_name'] .' '. $request['client']['account']['last_name']) : 'UNAVAILABLE' }} </td>
-                                    
+
                                     <td class="tx-medium text-center">₦{{ number_format($request['total_amount']) }}<br><span class="text-success">({{ $request['price']['name'] }})</span></td>
-                                   
+                                    <td class="{{ (($request['payment_statuses']['status'] == 'pending') ? 'text-warning' : (($request['payment_statuses']['status'] == 'success') ? 'text-success' : (($request['payment_statuses']['status'] == 'failed') ? 'text-danger' : 'text-danger'))) }}">{{ ucfirst($request['payment_statuses']['status']) }}({{ ucfirst($request['payment_statuses']['payment_channel']) }})
+                                    </td>
                                     <td class="text-medium">{{ !empty($request['preferred_time']) ? Carbon\Carbon::parse($request['preferred_time'])->isoFormat('MMMM Do YYYY, hh:mm:ssa') : 'Not Scheduled'}}</td>
                                     <td class="text-medium">{{ Carbon\Carbon::parse($request['created_at'])->isoFormat('MMMM Do YYYY, hh:mm:ssa') }}</td>
                                     <td class=" text-center">

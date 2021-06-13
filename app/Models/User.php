@@ -239,7 +239,7 @@ class User extends Authenticatable implements MustVerifyEmail
 
     public function userAverageRating()
     {
-        return round($this->ratings->avg('star'));
+        return round($this->ratings->avg('star'), 1);
     }
 
     public function supplierSentInvoices()
@@ -247,5 +247,9 @@ class User extends Authenticatable implements MustVerifyEmail
         return $this->hasMany(RfqSupplierInvoice::class, 'supplier_id');
     }
 
+    public function cses()
+    {
+        return $this->hasMany(Cse::class);
+    }
 
 }

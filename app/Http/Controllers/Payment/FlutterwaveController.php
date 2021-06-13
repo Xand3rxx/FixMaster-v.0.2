@@ -75,7 +75,7 @@ class FlutterwaveController extends Controller
                 'payment_for' => $request['payment_for'],
                 'invoiceUUID' => $request['uuid']
             ];
-    
+
             $request->session()->put('collaboratorPayment', $data);
         }
         if($request['payment_for'] === 'service-request'){
@@ -83,12 +83,12 @@ class FlutterwaveController extends Controller
                if ($Serviced_areas === null) {
                    return back()->with('error', 'sorry!, this area you selected is not serviced at the moment, please try another area');
                }
-        
+
                // upload multiple media files
                foreach($request->media_file as $key => $file)
                    {
                        $originalName[$key] = $file->getClientOriginalName();
-        
+
                        $fileName = sha1($file->getClientOriginalName() . time()) . '.'.$file->getClientOriginalExtension();
                        $filePath = public_path('assets/service-request-media-files');
                        $file->move($filePath, $fileName);
@@ -97,7 +97,7 @@ class FlutterwaveController extends Controller
                        $data['unique_name']   = json_encode($data);
                        $data['original_name'] = json_encode($originalName);
                        // return $data;
-        
+
                // $request->session()->put('order_data', $request);
                $request->session()->put('order_data', $request->except(['media_file']));
                $request->session()->put('medias', $data);
@@ -191,7 +191,7 @@ class FlutterwaveController extends Controller
     {
         $input_data = $request->all();
         $paymentRecord = Session::get('collaboratorPayment');
-        
+
         $trans_id = $request->get('tx_ref', '');
 
         $paymentDetails = Payment::where('reference_id', $trans_id)->orderBy('id', 'DESC')->first();

@@ -2,9 +2,9 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Seeder;
 use Illuminate\Support\Str;
-use DB;
+use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\DB;
 
 class StatusSeeder extends Seeder
 {
@@ -56,7 +56,7 @@ class StatusSeeder extends Seeder
                 'uuid'          =>  '8e4521a1-3329-4a76-b2fd-a674683002e3',
                 'status_id'     =>  1,
                 'name'          =>  'Pending',
-                'phase'         =>  1,
+                'phase'         =>  $phasePending++,
                 'recurrence'    =>  'No',
                 'status'        =>  'active',
             ),
@@ -65,7 +65,7 @@ class StatusSeeder extends Seeder
                 'uuid'          =>  '3f8d1494-a53b-4671-8447-10d3ca92b270',
                 'status_id'     =>  1,
                 'name'          =>  'FixMaster AI assigned a CSE',
-                'phase'         =>  2,
+                'phase'         =>  $phasePending++,
                 'recurrence'    =>  'No',
                 'status'        =>  'active',
             ),
@@ -74,17 +74,8 @@ class StatusSeeder extends Seeder
                 'uuid'          =>  '15f402e8-cb1c-48aa-ac0b-727a24d14c3d',
                 'status_id'     =>  1,
                 'name'          =>  'FixMaster AI assigned a Franchise as fallback',
-                'phase'         =>  3,
+                'phase'         =>  $phasePending++,
                 'recurrence'    =>  'No',
-                'status'        =>  'active',
-            ),
-            array(
-                'user_id'       =>  1,
-                'uuid'          =>  'dd415ab5-437a-46d5-93b1-84fbd4d67edf',
-                'status_id'     =>  1,
-                'name'          =>  'Fanchisee assigned a CSE',
-                'phase'         =>  4,
-                'recurrence'    =>  'Yes',
                 'status'        =>  'active',
             ),
             array(
@@ -92,7 +83,16 @@ class StatusSeeder extends Seeder
                 'uuid'          =>  '8ed4b1b6-b83c-4073-bb80-b10810566ad9',
                 'status_id'     =>  1,
                 'name'          =>  'FixMaster Admin assigned a CSE',
-                'phase'         =>  5,
+                'phase'         =>  $phasePending++,
+                'recurrence'    =>  'Yes',
+                'status'        =>  'active',
+            ),
+            array(
+                'user_id'       =>  1,
+                'uuid'          =>  'dd415ab5-437a-46d5-93b1-84fbd4d67edf',
+                'status_id'     =>  1,
+                'name'          =>  'Fanchisee assigned a CSE',
+                'phase'         =>  $phasePending++,
                 'recurrence'    =>  'Yes',
                 'status'        =>  'active',
             ),
@@ -412,7 +412,7 @@ class StatusSeeder extends Seeder
                 'recurrence'    =>  'Yes',
                 'status'        =>  'active',
             ),
-            
+
             array(
                 'user_id'       =>  1,
                 'uuid'          =>  '06dda2af-3831-41af-854d-595e4f6f6b77',
