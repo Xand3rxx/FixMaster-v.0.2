@@ -53,12 +53,12 @@ class PaystackController extends Controller
             'booking_fee'      => 'required',
             'payment_channel'  => 'required',
             'payment_for'     => 'required',
-            'myContact_id'    => 'required',
+            // 'myContact_id'    => 'required',
         ]);
 
-        $selectedContact = Contact::where('id', $request->myContact_id)->first();
 
-    if($request['payment_for'] === 'invoice'){
+
+    if($request['payment_for'] = 'invoice'){
         $data = [
             'logistics_cost' => $request['logistics_cost'],
             'retention_fee' => $request['retention_fee'],
@@ -79,7 +79,8 @@ class PaystackController extends Controller
 
         $request->session()->put('collaboratorPayment', $data);
     }
-    if($request['payment_for'] === 'service-request'){
+    $selectedContact = Contact::where('id', $request->myContact_id)->first();
+    if($request['payment_for'] == 'service-request'){
     $Serviced_areas = ServicedAreas::where('town_id', '=', $selectedContact['town_id'])->orderBy('id', 'DESC')->first();
        if ($Serviced_areas === null) {
            return back()->with('error', 'sorry!, this area you selected is not serviced at the moment, please try another area');
@@ -232,8 +233,7 @@ class PaystackController extends Controller
 
                 if($paymentDetails->update()){
                     // NUMBER 2: add more for other payment process
-
-                    if($paymentDetails['payment_for'] === 'invoice')
+                    if($paymentDetails['payment_for'] == 'invoice')
                     {
                         $savePayment = $invoice_controller->saveInvoiceRecord($paymentRecord, $paymentDetails);
                         if($savePayment){
@@ -245,13 +245,19 @@ class PaystackController extends Controller
                         }
                     }
 
-                    if($paymentDetails['payment_for'] === 'service-request'){
+                    if($paymentDetails['payment_for'] == 'service-request'){
                             $client_controller->saveRequest( $request->session()->get('order_data'), $request->session()->get('medias') );
                     }
+
+                    if($paymentDetails['payment_for'] == 'e-wallet'){
+                        $client_controller->addToWallet( $paymentDetails );
+                            return redirect()->route('client.wallet', app()->getLocale())->with('success', 'Fund successfully added!');
+                     }
+
                 }
             }else {
                 // NUMBER 3: add more for other payment process
-                if($paymentDetails['payment_for'] = 'service-request' ){
+                if($paymentDetails['payment_for'] == 'service-request' ){
                     return redirect()->route('client.services.list', app()->getLocale() )->with('error', 'Verification not successful, try again!');
                 }
 
@@ -259,7 +265,7 @@ class PaystackController extends Controller
 
         }else {
             // NUMBER 4: add more for other payment process
-            if($paymentDetails['payment_for'] = 'service-request' ){
+            if($paymentDetails['payment_for'] == 'service-request' ){
                 return redirect()->route('client.services.list', app()->getLocale() )->with('error', 'Could not initiate payment process because payment was cancelled, try again!');
             }
         }
@@ -268,22 +274,11 @@ class PaystackController extends Controller
         // if($paymentDetails['payment_for'] = 'service-request' ){
         //     return redirect()->route('client.services.list', app()->getLocale() )->with('error', 'there was an error, please try again!');
         // }
+        // if($paymentDetails['payment_for'] = 'e-wallet' ){
+        //     return redirect()->route('client.wallet', app()->getLocale() )->with('error', 'there was an error, please try again!');
+        // }
 
     }
-
-
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    // public function verify()
-    // {
-    //     //
-    //     // echo $payment;
-    //     // dd(json_decode($payment));
-    //     return view('payment.flutterwave-start');
-    // }
 
 
     /**

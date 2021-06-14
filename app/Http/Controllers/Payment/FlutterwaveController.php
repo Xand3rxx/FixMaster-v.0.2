@@ -12,6 +12,7 @@ use App\Models\Payment;
 use App\Models\PaymentGateway;
 use App\Models\Client;
 use App\Models\ServicedAreas;
+use App\Models\Contact;
 use App\Traits\AddCollaboratorPayment;
 
 use App\Traits\RegisterPaymentTransaction;
@@ -78,8 +79,10 @@ class FlutterwaveController extends Controller
 
             $request->session()->put('collaboratorPayment', $data);
         }
+
+        $selectedContact = Contact::where('id', $request->myContact_id)->first();
         if($request['payment_for'] === 'service-request'){
-            $Serviced_areas = ServicedAreas::where('town_id', '=', $request['town_id'])->orderBy('id', 'DESC')->first();
+             $Serviced_areas = ServicedAreas::where('town_id', '=', $selectedContact['town_id'])->orderBy('id', 'DESC')->first();
                if ($Serviced_areas === null) {
                    return back()->with('error', 'sorry!, this area you selected is not serviced at the moment, please try another area');
                }
@@ -238,9 +241,10 @@ class FlutterwaveController extends Controller
                 $client_controller = new ClientController;
                 $invoice_controller = new InvoiceController;
 
-                if($paymentDetails->update()){
+                if($paymentDetails->update())
+                {
                     // NUMBER 2: add more for other payment process
-                    if($paymentDetails['payment_for'] = 'invoice')
+                    if($paymentDetails['payment_for'] == 'invoice')
                     {
                         $savePayment = $invoice_controller->saveInvoiceRecord($paymentRecord, $paymentDetails);
                         if($savePayment){
@@ -252,16 +256,20 @@ class FlutterwaveController extends Controller
                         }
                     }
 
-                    if($paymentDetails['payment_for'] = 'service-request'){
-                            $client_controller->saveRequest( $request->session()->get('order_data') );
+                    if($paymentDetails['payment_for'] == 'service-request')
+                    {
+                        $client_controller->saveRequest( $request->session()->get('order_data'), $request->session()->get('medias') );
                     }
-                    if($paymentDetails['payment_for'] = 'e-wallet'){
-                        $client_controller->saveRequest( $request->session()->get('order_data') );
-                    }
+
+                    if($paymentDetails['payment_for'] == 'e-wallet')
+                    {
+                        $client_controller->addToWallet( $paymentDetails );
+                        return redirect()->route('client.wallet', app()->getLocale())->with('success', 'Fund successfully added!');
+                     }
                 }
             }else {
                 // NUMBER 3: add more for other payment process
-                if($paymentDetails['payment_for'] = 'service-request' ){
+                if($paymentDetails['payment_for'] == 'service-request' ){
                     return redirect()->route('client.services.list', app()->getLocale() )->with('error', 'Verification not successful, try again!');
                 }
 
