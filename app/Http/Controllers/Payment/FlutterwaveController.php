@@ -240,7 +240,7 @@ class FlutterwaveController extends Controller
 
                 if($paymentDetails->update()){
                     // NUMBER 2: add more for other payment process
-                    if($paymentDetails['payment_for'] = 'invoice')
+                    if($paymentDetails['payment_for'] === 'invoice')
                     {
                         $savePayment = $invoice_controller->saveInvoiceRecord($paymentRecord, $paymentDetails);
                         if($savePayment){
@@ -251,7 +251,7 @@ class FlutterwaveController extends Controller
                             return redirect()->route('invoice', [app()->getLocale(), $paymentRecord['invoiceUUID']])->with('error', 'Invoice payment was unsuccessful!');
                         }
                     }
-                    else if($paymentDetails['payment_for'] = 'service-request' ){
+                    else if($paymentDetails['payment_for'] === 'service-request' ){
 
                             $client_controller->saveRequest( $request->session()->get('order_data') );
                             // $client_controller->saveRequest( $request->session()->get('medias') );

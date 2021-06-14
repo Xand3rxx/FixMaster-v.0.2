@@ -408,7 +408,7 @@ Route::prefix('/client')->middleware('monitor.clientservice.request.changes')->g
         Route::put('/requests/update/{id}',        [ClientController::class, 'update'])->name('client.update_request');
 
         // Client Warranty Invoice Decision
-        Route::put('/update-warranty/{invoice:uuid}', [InvoiceController::class, 'updateInvoice'])->name('decision');
+        Route::put('/update-warranty/{invoice:uuid}', [InvoiceController::class, 'updateInvoice'])->name('warranty_decision');
 
 
         Route::post('servicesRequest',              [ClientController::class, 'serviceRequest'])->name('services.serviceRequest');

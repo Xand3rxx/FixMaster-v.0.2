@@ -328,7 +328,7 @@ class InvoiceController extends Controller
         }
     }
 
-    public function saveInvoiceRecord($paymentRecord, $paymentDetails) 
+    public function saveInvoiceRecord($paymentRecord, $paymentDetails)
     {
         // dd($paymentRecord);
         $booking_fee = $paymentRecord['booking_fee'];
@@ -390,6 +390,16 @@ class InvoiceController extends Controller
                 'amount' => $booking_fee,
                 'unique_id' => static::generate('invoices', 'REF-'),
                 'payment_type' => $paymentType,
+                'status' => 'success'
+            ]);
+
+            ServiceRequestPayment::create([
+                'user_id' => $invoice['client_id'],
+                'payment_id' => $paymentDetails['id'],
+                'service_request_id' => $invoice['service_request_id'],
+                'amount' => $actual_material_cost,
+                'unique_id' => static::generate('invoices', 'REF-'),
+                'payment_type' => 'rfq',
                 'status' => 'success'
             ]);
 

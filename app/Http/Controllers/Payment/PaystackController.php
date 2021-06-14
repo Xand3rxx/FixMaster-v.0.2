@@ -173,7 +173,7 @@ class PaystackController extends Controller
 
         $paymentRecord = Session::get('collaboratorPayment');
 
-        
+
         $reference = $request->get('reference', '');
 
         if (!$reference) {
@@ -183,7 +183,6 @@ class PaystackController extends Controller
         $paymentDetails = Payment::where('reference_id', $reference)->orderBy('id', 'DESC')->first();
 
         if( $input_data['reference']){
-
             // $reference = $request->get('reference', '');
             $reference = isset($_GET['reference']) ? $_GET['reference'] : '';
             $curl = curl_init();
@@ -231,7 +230,7 @@ class PaystackController extends Controller
                 if($paymentDetails->update()){
                     // NUMBER 2: add more for other payment process
 
-                    if($paymentDetails['payment_for'] = 'invoice')
+                    if($paymentDetails['payment_for'] === 'invoice')
                     {
                         $savePayment = $invoice_controller->saveInvoiceRecord($paymentRecord, $paymentDetails);
                         if($savePayment){
@@ -243,7 +242,7 @@ class PaystackController extends Controller
                         }
                     }
 
-                    else if($paymentDetails['payment_for'] = 'service-request'){
+                    else if($paymentDetails['payment_for'] === 'service-request'){
 
                             $client_controller->saveRequest( $request->session()->get('order_data') );
 
