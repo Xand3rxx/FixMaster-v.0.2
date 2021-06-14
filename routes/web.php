@@ -379,13 +379,13 @@ Route::prefix('/client')->name('client.')->middleware('verified', 'monitor.clien
     Route::get('payments',                           [ClientController::class, 'payments'])->name('payments');
     Route::get('payment/details/{payment:id}',   [ClientController::class, 'paymentDetails'])->name('payment.details');
 
-    Route::any('/ipnpaystack',                       [ClientController::class, 'paystackIPN'])->name('ipn.paystack');
-    Route::get('/apiRequest',                            [ClientController::class, 'apiRequest'])->name('ipn.paystackApiRequest');
-    // for payment
-    Route::any('/serviceRequestpaystack',                [ClientController::class, 'initiatePayment'])->name('serviceRequest.initiatePayment');
-    Route::get('/serviceRequestVerify',                  [ClientController::class, 'verifyPayment'])->name('serviceRequest.verifyPayment');
-    Route::any('/ipnflutter',                            [ClientController::class, 'flutterIPN'])->name('ipn.flutter');
     // Route::any('/ipnpaystack',                       [ClientController::class, 'paystackIPN'])->name('ipn.paystack');
+    // Route::get('/apiRequest',                            [ClientController::class, 'apiRequest'])->name('ipn.paystackApiRequest');
+    // // for payment
+    // Route::any('/serviceRequestpaystack',                [ClientController::class, 'initiatePayment'])->name('serviceRequest.initiatePayment');
+    // Route::get('/serviceRequestVerify',                  [ClientController::class, 'verifyPayment'])->name('serviceRequest.verifyPayment');
+    // Route::any('/ipnflutter',                            [ClientController::class, 'flutterIPN'])->name('ipn.flutter');
+    // // Route::any('/ipnpaystack',                       [ClientController::class, 'paystackIPN'])->name('ipn.paystack');
 
     // Service request SECTION
     Route::get('/services',                     [ClientController::class, 'services'])->name('services.list');

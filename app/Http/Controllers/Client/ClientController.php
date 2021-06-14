@@ -239,20 +239,9 @@ class ClientController extends Controller
               switch ($paymentRecord->payment_channel) {
 
                   case 'paystack':
-                    // Use paymentcontroller method in this controller
-                    // $return = $this->initiatePayment($request, $generatedVal, $paymentRecord, $user);
                     $return = $paystack_controller->initiate($payment_id);
-
-                    // $return = redirect()->route('client.ipn.paystack', app()->getLocale());
                   break;
                   case 'flutterwave':
-                    // $this->initiatePayment();
-                    // $return = redirect()->route('client.ipn.flutter', app()->getLocale());
-
-                    // $flutter['amount'] = $paymentRecord->amount;
-                    // $flutter['track'] = Session::get('Track');
-                    // $client = User::find(auth()->user()->id);
-                    // // $return = $this->initiate($request, $generatedVal, $paymentRecord, $user);
                     $return = $flutterwave_controller->initiate($payment_id);
 
                   break;
@@ -450,6 +439,8 @@ class ClientController extends Controller
                         $query->orderBy('created_at', 'ASC');
             })->get();
 
+            // return $myServiceRequests[0]['service_requests'];
+
         return view('client.services.list', [
             'myServiceRequests' =>  $myServiceRequests,
         ]);
@@ -582,6 +573,7 @@ class ClientController extends Controller
         $service_request->has_client_rated      = 'No';
         $service_request->has_cse_rated         = 'No';
         $service_request->created_at            = Carbon::now()->toDateTimeString();
+        $service_request->contactme_status      = $request['contacted'];
         // $service_request->updated_at         = Carbon::now()->toDateTimeString();
 
         if ($service_request->save()) {

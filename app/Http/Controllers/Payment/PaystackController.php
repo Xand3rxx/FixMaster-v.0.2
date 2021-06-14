@@ -86,23 +86,27 @@ class PaystackController extends Controller
            return back()->with('error', 'sorry!, this area you selected is not serviced at the moment, please try another area');
        }
 
-       // upload multiple media files
-       foreach($request->media_file as $key => $file)
-           {
-               $originalName[$key] = $file->getClientOriginalName();
+       if ($request->media_file)
+       {
+            // upload multiple media files
+            foreach($request->media_file as $key => $file)
+            {
+                $originalName[$key] = $file->getClientOriginalName();
 
-               $fileName = sha1($file->getClientOriginalName() . time()) . '.'.$file->getClientOriginalExtension();
-               $filePath = public_path('assets/service-request-media-files');
-               $file->move($filePath, $fileName);
-               $data[$key] = $fileName;
-           }
-               $data['unique_name']   = json_encode($data);
-               $data['original_name'] = json_encode($originalName);
-               // return $data;
+                $fileName = sha1($file->getClientOriginalName() . time()) . '.'.$file->getClientOriginalExtension();
+                $filePath = public_path('assets/service-request-media-files');
+                $file->move($filePath, $fileName);
+                $data[$key] = $fileName;
+            }
+                $data['unique_name']   = json_encode($data);
+                $data['original_name'] = json_encode($originalName);
 
-       // $request->session()->put('order_data', $request);
-       $request->session()->put('order_data', $request->except(['media_file']));
-       $request->session()->put('medias', $data);
+                // $request->session()->put('order_data', $request);
+                $request->session()->put('order_data', $request->except(['media_file']));
+                $request->session()->put('medias', $data);
+       }
+
+
     }
 
 
@@ -247,6 +251,7 @@ class PaystackController extends Controller
 
                     if($paymentDetails['payment_for'] == 'service-request'){
                             $client_controller->saveRequest( $request->session()->get('order_data'), $request->session()->get('medias') );
+                            return redirect()->route('client.services.list', app()->getLocale())->with('success', 'Service request was successful');
                     }
 
                     if($paymentDetails['payment_for'] == 'e-wallet'){
